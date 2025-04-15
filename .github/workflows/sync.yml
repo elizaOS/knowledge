@@ -1,0 +1,120 @@
+name: Sync Knowledge Sources
+
+on:
+  schedule:
+    - cron: '0 4 * * *'  # Run daily at 4 AM UTC
+  workflow_dispatch:  # Allow manual triggering
+
+jobs:
+  sync-sources:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Fetch all history for proper comparisons
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+      
+      # Step 1: Create directory structure if it doesn't exist
+      - name: Ensure directories exist
+        run: |
+          mkdir -p docs
+          mkdir -p github/day
+          mkdir -p github/week
+          mkdir -p github/month
+          mkdir -p news
+      
+      # Step 2: ElizaOS Docs
+      - name: Sync ElizaOS Documentation
+        run: |
+          # Clone the repo temporarily
+          git clone -b jin-docs-v2 --depth 1 https://github.com/elizaOS/eliza.git temp-elizaos
+          
+          # Use tar to find and copy markdown files while preserving directory structure
+          find temp-elizaos/packages/docs -name "*.md" -o -name "*.mdx" | tar -cf - -T - | tar -xf - --strip-components=3 -C docs/
+          
+          # Clean up
+          rm -rf temp-elizaos
+      
+      # Step 3: GitHub Activity Logs
+      - name: Sync GitHub Activity Logs
+        run: |
+          # Clone the repo temporarily
+          git clone -b _data --single-branch https://github.com/elizaos/elizaos.github.io.git temp-github-data
+          
+          # Use rsync to copy only new/changed files
+          rsync -av temp-github-data/github/day/ github/day/
+          rsync -av temp-github-data/github/week/ github/week/
+          rsync -av temp-github-data/github/month/ github/month/
+          
+          # Clean up
+          rm -rf temp-github-data
+      
+      # Step 4: AI News
+      - name: Sync AI News
+        run: |
+          # Clone the repo temporarily
+          git clone -b gh-pages --single-branch https://github.com/M3-org/ai-news.git temp-ai-news
+          
+          # Get the current date
+          CURRENT_DATE=$(date +%Y-%m-%d)
+          
+          # Copy only files from the last 30 days
+          for i in {0..30}; do
+            DATE=$(date -d "$CURRENT_DATE -$i days" +%Y-%m-%d)
+            
+            if [ -f "temp-ai-news/elizaos/md/$DATE.md" ]; then
+              # Only copy if the file is new or changed
+              if [ ! -f "news/$DATE.md" ] || ! cmp -s "temp-ai-news/elizaos/md/$DATE.md" "news/$DATE.md"; then
+                echo "Updating news/$DATE.md"
+                cp "temp-ai-news/elizaos/md/$DATE.md" "news/$DATE.md"
+              fi
+            fi
+          done
+          
+          # Clean up
+          rm -rf temp-ai-news
+      
+      # Step 5: Generate metrics about the sync
+      - name: Generate sync metrics
+        run: |
+          echo "# Knowledge Sync Report" > sync-report.md
+          echo "Generated at: $(date)" >> sync-report.md
+          echo "" >> sync-report.md
+          
+          echo "## File Counts" >> sync-report.md
+          echo "- Docs: $(find docs -type f -name "*.md" | wc -l) files" >> sync-report.md
+          echo "- GitHub activity (day): $(find github/day -type f -name "*.md" | wc -l) files" >> sync-report.md
+          echo "- GitHub activity (week): $(find github/week -type f -name "*.md" | wc -l) files" >> sync-report.md
+          echo "- GitHub activity (month): $(find github/month -type f -name "*.md" | wc -l) files" >> sync-report.md
+          echo "- News: $(find news -type f -name "*.md" | wc -l) files" >> sync-report.md
+          echo "" >> sync-report.md
+          
+          echo "## Latest Files" >> sync-report.md
+          echo "### Latest News" >> sync-report.md
+          ls -t news/*.md | head -5 | xargs -n 1 basename >> sync-report.md
+          echo "" >> sync-report.md
+          
+          echo "### Latest GitHub Activity (Day)" >> sync-report.md
+          ls -t github/day/*.md | head -5 | xargs -n 1 basename >> sync-report.md
+      
+      # Step 6: Commit and push changes
+      - name: Commit and push if changes
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          
+          git add docs/ github/ news/ sync-report.md
+          
+          # Check if there are any changes
+          if git diff --staged --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -m "Daily Knowledge Sync: $(date +%Y-%m-%d)"
+            git push
+          fi
