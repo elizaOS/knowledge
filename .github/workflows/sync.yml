@@ -60,10 +60,13 @@ jobs:
           # Clone the repo temporarily
           git clone -b _data --single-branch https://github.com/elizaos/elizaos.github.io.git temp-github-data
           
-          # Use rsync to copy only new/changed files
-          rsync -av temp-github-data/github/day/ github/day/
-          rsync -av temp-github-data/github/week/ github/week/
-          rsync -av temp-github-data/github/month/ github/month/
+          # Create directories if they don't exist
+          mkdir -p github/day github/week github/month
+          
+          # Copy files from the correct paths
+          rsync -av temp-github-data/data/elizaos_eliza/summaries/daily/ github/day/
+          rsync -av temp-github-data/data/elizaos_eliza/summaries/weekly/ github/week/
+          rsync -av temp-github-data/data/elizaos_eliza/summaries/monthly/ github/month/
           
           # Clean up
           rm -rf temp-github-data
