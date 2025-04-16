@@ -28,6 +28,7 @@ jobs:
           mkdir -p github/week
           mkdir -p github/month
           mkdir -p news
+          mkdir -p daily-silk
       
       # Step 2: ElizaOS Docs
       - name: Sync ElizaOS Documentation
@@ -41,7 +42,19 @@ jobs:
           # Clean up
           rm -rf temp-elizaos
       
-      # Step 3: GitHub Activity Logs
+      # Step 3: Daily Silk Docs
+      - name: Sync Daily Silk Documentation
+        run: |
+          # Clone the repo temporarily
+          git clone --depth 1 https://github.com/madjin/daily-silk.git temp-daily-silk
+          
+          # Copy only markdown files from data directory
+          find temp-daily-silk/data -name "*.md" | tar -cf - -T - | tar -xf - --strip-components=2 -C daily-silk/
+          
+          # Clean up
+          rm -rf temp-daily-silk
+      
+      # Step 4: GitHub Activity Logs
       - name: Sync GitHub Activity Logs
         run: |
           # Clone the repo temporarily
@@ -55,7 +68,7 @@ jobs:
           # Clean up
           rm -rf temp-github-data
       
-      # Step 4: AI News
+      # Step 5: AI News
       - name: Sync AI News
         run: |
           # Clone the repo temporarily
@@ -80,7 +93,7 @@ jobs:
           # Clean up
           rm -rf temp-ai-news
       
-      # Step 5: Generate metrics about the sync
+      # Step 6: Generate metrics about the sync
       - name: Generate sync metrics
         run: |
           echo "# Knowledge Sync Report" > sync-report.md
@@ -103,7 +116,7 @@ jobs:
           echo "### Latest GitHub Activity (Day)" >> sync-report.md
           ls -t github/day/*.md | head -5 | xargs -n 1 basename >> sync-report.md
       
-      # Step 6: Commit and push changes
+      # Step 7: Commit and push changes
       - name: Commit and push if changes
         run: |
           git config --local user.email "action@github.com"
