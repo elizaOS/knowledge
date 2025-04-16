@@ -5,6 +5,10 @@ on:
     - cron: '0 4 * * *'  # Run daily at 4 AM UTC
   workflow_dispatch:  # Allow manual triggering
 
+# Add permissions configuration
+permissions:
+  contents: write  # Allow pushing to the repository
+
 jobs:
   sync-sources:
     runs-on: ubuntu-latest
@@ -14,6 +18,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0  # Fetch all history for proper comparisons
+          ssh-key: ${{ secrets.GH_PAT }}  # Use PAT as SSH key
       
       - name: Setup Node.js
         uses: actions/setup-node@v3
@@ -132,5 +137,5 @@ jobs:
             echo "No changes to commit"
           else
             git commit -m "Daily Knowledge Sync: $(date +%Y-%m-%d)"
-            git push
+            git push git@github.com:${{ github.repository }}.git
           fi
