@@ -29,9 +29,7 @@ jobs:
       - name: Ensure directories exist
         run: |
           mkdir -p docs
-          mkdir -p github/day
-          mkdir -p github/week
-          mkdir -p github/month
+          mkdir -p github
           mkdir -p news
           mkdir -p daily-silk
       
@@ -65,13 +63,8 @@ jobs:
           # Clone the repo temporarily
           git clone -b _data --single-branch https://github.com/elizaos/elizaos.github.io.git temp-github-data
           
-          # Create directories if they don't exist
-          mkdir -p github/day github/week github/month
-          
           # Copy files from the correct paths
-          rsync -av temp-github-data/data/elizaos_eliza/summaries/day/ github/day/
-          rsync -av temp-github-data/data/elizaos_eliza/summaries/week/ github/week/
-          rsync -av temp-github-data/data/elizaos_eliza/summaries/month/ github/month/
+          rsync -av temp-github-data/data/elizaos_eliza/ github/
           
           # Clean up
           rm -rf temp-github-data
@@ -130,7 +123,7 @@ jobs:
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
           
-          git add docs/ github/ news/ sync-report.md
+          git add docs/ github/ news/ daily-silk/ sync-report.md
           
           # Check if there are any changes
           if git diff --staged --quiet; then
