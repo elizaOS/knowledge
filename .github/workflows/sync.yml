@@ -30,7 +30,6 @@ jobs:
         run: |
           mkdir -p docs
           mkdir -p github
-          mkdir -p news
           mkdir -p daily-silk
       
       # Step 2: ElizaOS Docs
@@ -68,33 +67,8 @@ jobs:
           
           # Clean up
           rm -rf temp-github-data
-      
-      # Step 5: AI News
-      - name: Sync AI News
-        run: |
-          # Clone the repo temporarily
-          git clone -b gh-pages --single-branch https://github.com/M3-org/ai-news.git temp-ai-news
-          
-          # Get the current date
-          CURRENT_DATE=$(date +%Y-%m-%d)
-          
-          # Copy only files from the last 30 days
-          for i in {0..30}; do
-            DATE=$(date -d "$CURRENT_DATE -$i days" +%Y-%m-%d)
-            
-            if [ -f "temp-ai-news/elizaos/md/$DATE.md" ]; then
-              # Only copy if the file is new or changed
-              if [ ! -f "news/$DATE.md" ] || ! cmp -s "temp-ai-news/elizaos/md/$DATE.md" "news/$DATE.md"; then
-                echo "Updating news/$DATE.md"
-                cp "temp-ai-news/elizaos/md/$DATE.md" "news/$DATE.md"
-              fi
-            fi
-          done
-          
-          # Clean up
-          rm -rf temp-ai-news
-      
-      # Step 6: Generate metrics about the sync
+           
+      # Step 5: Generate metrics about the sync
       - name: Generate sync metrics
         run: |
           echo "# Knowledge Sync Report" > sync-report.md
@@ -103,17 +77,11 @@ jobs:
           
           echo "## File Counts" >> sync-report.md
           echo "- Docs: $(find docs -type f -name "*.md" | wc -l) files" >> sync-report.md
-          echo "- GitHub activity (day): $(find github/summaries/day -type f -name "*.md" | wc -l) files" >> sync-report.md
-          echo "- GitHub activity (week): $(find github/summaries/week -type f -name "*.md" | wc -l) files" >> sync-report.md
-          echo "- GitHub activity (month): $(find github/summaries/month -type f -name "*.md" | wc -l) files" >> sync-report.md
-          echo "- News: $(find news -type f -name "*.md" | wc -l) files" >> sync-report.md
+          echo "- GitHub activity: $(find github -type f -name "*.md" | wc -l) files" >> sync-report.md
           echo "" >> sync-report.md
           
           echo "## Latest Files" >> sync-report.md
-          echo "### Latest News" >> sync-report.md
-          ls -t news/*.md | head -5 | xargs -n 1 basename >> sync-report.md
-          echo "" >> sync-report.md
-          
+
           echo "### Latest GitHub Activity (Day)" >> sync-report.md
           ls -t github/summaries/day/*.md | head -5 | xargs -n 1 basename >> sync-report.md
       
@@ -123,7 +91,7 @@ jobs:
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
           
-          git add docs/ github/ news/ daily-silk/ sync-report.md
+          git add docs/ github/ daily-silk/ sync-report.md
           
           # Check if there are any changes
           if git diff --staged --quiet; then
