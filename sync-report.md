@@ -1,24 +1,14 @@
 # Knowledge Sync Report
-Generated at: Sat Apr 19 04:49:14 UTC 2025
+Generated at: Sun Apr 20 04:02:31 UTC 2025
 
 ## File Counts
 - Docs: 812 files
-- GitHub activity (day): 200 files
-- GitHub activity (week): 29 files
-- GitHub activity (month): 7 files
-- News: 170 files
+- GitHub activity: 237 files
 
 ## Latest Files
-### Latest News
-2025-04-06.md
-2025-04-07.md
-2025-04-08.md
-2025-04-09.md
-2025-04-10.md
-
 ### Latest GitHub Activity (Day)
-2025-04-03.md
-2025-04-04.md
-2025-04-05.md
-2025-04-06.md
-2025-04-07.md
+2025-04-16.md
+2025-04-17.md
+2025-04-18.md
+2025-04-19.md
+2025-03-27.md
