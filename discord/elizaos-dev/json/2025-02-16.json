@@ -1,0 +1,167 @@
+{
+  "type": "dailySummary",
+  "title": "Daily Report - 2025-02-16",
+  "categories": [
+    {
+      "title": "ElizaOS Plugin Development, Installation, and Technical Issues",
+      "content": [
+        {
+          "text": "### Plugin Contribution Process\nSeveral users discussed contributing plugins to the `elizaos-plugins` registry. The process involves creating a separate repository for the plugin, submitting a PR to update `index.json`, and waiting for approval. \n\n- **[vincent2412_]** asked about submitting a new plugin. **[dankvr]** confirmed it should go to `elizaos-plugins/registry`.\n- **[pravn1729]** requested help copying a repo into `elizaos-plugins`. **[odilitime]** clarified that a separate repo should be created for the plugin, and a PR should update `index.json`. **[pravn1729]** confirmed completion.\n- **[flaneurofmetaverses]** submitted a PR and asked for review.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1327493511406293016"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Plugin Installation & Activation\nAfter merging a plugin into the registry, users must install it using:\nsh\nnpx elizaos plugins install @elizaos-plugins/plugin-name\n\nand add it to the character file.\n\n- **[asi123aa]** asked how to activate a merged plugin. **[odilitime]** provided the command and instructions.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1327493511406293016"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Technical Issues & Solutions\n- **Dependency Issues on Windows**: Users faced `pnpm install` issues. Switching to WSL2 helped, but some unmet peer dependencies persisted.\n- **Docker Build Issues**: Solution: Use `pnpm docker` to build and run.\n- **Plugin Installation Issues**: Some plugins (e.g., `plugin-trustdb`) caused failures. Solution: Exclude problematic plugins.\n- **Twitter Client Issues**: Solution: Install `@elizaos-plugins/client-twitter` and add it to the `plugins` list.\n- **RAG Knowledge Setup**: Knowledge should be stored in `characters/knowledge/agent-name`. PDFs are not supported.\n- **Real-Time Crypto Data for Agents**: Requires a database, an Eliza provider, and defined actions for data processing.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1324089429727514674"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### New Plugin & Feature Development\n- **Unreal Engine Plugin**: **[zaperox]** announced a plugin for interacting with Eliza instances from Unreal Engine.\n- **Token Prediction Plugin**: **[dorianjanezic]** shared a token prediction plugin using a feedback loop for evaluation. **[rick02533]** offered to help test.\n- **Tech-Support Bot Using ElizaOS**: **[chris.troutner]** proposed a tech-support bot using ElizaOS, focusing on JavaScript, Bitcoin, and GitHub. Plans to run models locally using **Ollama** on a **NVIDIA GeForce 3060 (12GB VRAM)** and support **Telegram and Nostr**.\n- **Web3 Narrative Automation**: **[shivam_18795]** is working on a Web3 content automation platform using ElizaOS and Langchain, allowing users to edit drafts, schedule posts, and analyze engagement.\n- **AI Agent Platform**: **[dtb0x]** is developing `aigent.sh`, a platform making AI agents accessible to non-technical users, powered by ElizaOS.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1327493511406293016"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Action Items\n#### **Technical Tasks**\n1. **Review and merge PRs for new plugins** (**[flaneurofmetaverses]**, **[pravn1729]**).\n2. **Investigate and resolve `ERR_PNPM_WORKSPACE_PKG_NOT_FOUND` issue** (**[nittile0997]**).\n3. **Develop and test Unreal Engine plugin for ElizaOS** (**[zaperox]**).\n4. **Improve token prediction plugin with reinforcement learning** (**[dorianjanezic]**).\n5. **Build a tech-support bot using ElizaOS, focusing on JavaScript, Bitcoin, and GitHub** (**[chris.troutner]**).\n6. **Develop a Nostr plugin for ElizaOS** (**[chris.troutner]**).\n\n#### **Documentation Needs**\n7. **Clarify plugin submission process in official documentation** (**[pravn1729]**).\n8. **Document plugin activation steps in ElizaOS docs** (**[asi123aa]**).\n\n#### **Feature Requests**\n9. **Support for Unreal Engine integration** (**[zaperox]**).\n10. **Reinforcement learning framework for token prediction** (**[dorianjanezic]**).\n11. **Tech-support bot framework for ElizaOS** (**[chris.troutner]**).\n12. **Nostr integration for ElizaOS** (**[chris.troutner]**).\n13. **Web3 marketing automation tool using ElizaOS** (**[shivam_18795]**).\n14. **AI agent platform improvements based on community feedback** (**[dtb0x]**).",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1327493511406293016",
+            "https://discord.com/channels/1051457140637827122/1324089429727514674"
+          ],
+          "images": [],
+          "videos": []
+        }
+      ],
+      "topic": "elizaos"
+    },
+    {
+      "title": "ElizaOS Development Updates and Technical Discussions",
+      "content": [
+        {
+          "text": "### Plugin Development & Integration\n- **News & Current Events Plugin**: Suggested using an RSS feed provider.\n- **Discord Client Installation**: Requires adding `@elizaos-plugins/client-discord` as a plugin.\n- **Twitter Client Issues**: Needs both `plugin-twitter` and `client-twitter` installed.\n- **Local AI Model Support**: `plugin-local-ai` supports Ollama API for local models.\n- **Multi-Agent Setup**: V2 allows multiple agents with separate API tokens.\n- **New Plugins Added**: Sonic blockchain, distributed storage, and token price-fetching plugins were introduced.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1320246527268098048",
+            "https://discord.com/channels/1051457140637827122/1323745969115893780"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Bug Fixes & Debugging\n- **Docker Build Issues**: Fixed path issues in `node_modules`.\n- **Memory Issues in RAG**: SQLite and Supabase ingestion problems; reverted to SQLite.\n- **Embedding Errors**: Fixed invalid input warnings due to empty strings.\n- **Twitter API Changes**: Cloudflare security updates affecting login.\n- **Out-of-Memory Bug Fix**: Resolved an OOM issue caused by a dead loop.\n- **Broken Plugin Registry Links**: Reported and under investigation.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1320246527268098048",
+            "https://discord.com/channels/1051457140637827122/1323745969115893780"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Documentation & Onboarding\n- **New Documentation Site**: `eliza.how` launched with improved structure.\n- **REST API Documentation**: Swagger integration attempted but replaced with a simpler page.\n- **Plugin Registry Cleanup**: Identified duplicate and missing plugins.\n- **Clarified Plugin Submission Process**: Plugins should be submitted to the registry repo with necessary config changes.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1320246527268098048",
+            "https://discord.com/channels/1051457140637827122/1323745969115893780"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Feature Enhancements & Requests\n- **Agent Memory Management**: No built-in memory deletion; manual DB edits required.\n- **Multi-Agent Role Management**: V2 introduces namespaced API tokens for different agent roles.\n- **Automated Plugin Ratings**: Proposal for agents to rate plugin actions based on success.\n- **Webhooks for External Integration**: Suggested for connecting agents to external services.\n- **Reflection Mode for Twitter Plugin**: Added for evaluating post appropriateness.\n- **Command-line Tools for Plugin Discovery**: Proposed for easier plugin management.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1320246527268098048",
+            "https://discord.com/channels/1051457140637827122/1323745969115893780"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Action Items\n#### Technical Tasks\n1. Fix Docker build issues.\n2. Resolve Twitter plugin failures.\n3. Improve memory management (add deletion feature).\n4. Fix embedding input errors.\n5. Investigate Cloudflare blocking Twitter logins.\n6. Improve plugin installation process.\n7. Fix SQLite module issues.\n8. Investigate and fix OOM bug.\n\n#### Documentation Needs\n9. Update REST API documentation.\n10. Clarify multi-agent setup in docs.\n11. Add guide for local AI model setup.\n12. Improve plugin registry documentation.\n13. Document best practices for avoiding Twitter bans.\n\n#### Feature Requests\n14. Automated plugin ratings based on success.\n15. Webhooks for external integration.\n16. Improve agent role management in V2.\n17. Add support for OpenAI Responses API.\n18. Enhance REST API security with auth keys.\n19. Improve frontend UI for documentation.\n20. Add support for MCP client plugin.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1320246527268098048",
+            "https://discord.com/channels/1051457140637827122/1323745969115893780"
+          ],
+          "images": [],
+          "videos": []
+        }
+      ],
+      "topic": "bug fixes"
+    },
+    {
+      "title": "ElizaOS Development Updates and Community Discussions",
+      "content": [
+        {
+          "text": "### Plugin Development & Integration\n- **News & Current Events Plugin**: Suggested using an RSS feed provider.\n- **Discord & Twitter Client Installation**: Requires specific plugins (`@elizaos-plugins/client-discord`, `plugin-twitter`).\n- **Local AI Model Support**: `plugin-local-ai` supports Ollama API.\n- **Multi-Agent Setup**: V2 allows multiple agents with separate API tokens.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1320246527268098048",
+            "https://discord.com/channels/1051457140637827122/1327493511406293016"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Bug Fixes & Debugging\n- **Docker Build Issues**: Fixed path issues in `node_modules`.\n- **Memory Issues in RAG**: SQLite and Supabase ingestion problems; reverted to SQLite.\n- **Embedding Errors**: Fixed invalid input warnings due to empty strings.\n- **Twitter API Changes**: Cloudflare security updates affecting login.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1324089429727514674",
+            "https://discord.com/channels/1051457140637827122/1323745969115893780"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Documentation & Onboarding\n- **New Documentation Site**: `eliza.how` launched with improved structure.\n- **REST API Documentation**: Swagger integration replaced with a simpler page.\n- **Plugin Registry Cleanup**: Identified duplicate and missing plugins.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1320246527268098048",
+            "https://discord.com/channels/1051457140637827122/1327493511406293016"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Feature Enhancements & Requests\n- **Agent Memory Management**: No built-in memory deletion; manual DB edits required.\n- **Multi-Agent Role Management**: V2 introduces namespaced API tokens.\n- **Automated Plugin Ratings**: Proposal for agents to rate plugin actions.\n- **Webhooks for External Integration**: Suggested for connecting agents to external services.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1320246527268098048",
+            "https://discord.com/channels/1051457140637827122/1323745969115893780"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Help Interactions\n- **Docker Build Fix**: Debugged and fixed Docker path issues.\n- **Twitter Plugin Debugging**: Identified missing dependencies causing failures.\n- **Local AI Model Setup**: Identified `plugin-local-ai` for Ollama API.\n- **Multi-Agent Setup Guidance**: Explained namespaced API tokens for multiple agents.\n- **Embedding Error Fix**: Debugged empty input warnings.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1324089429727514674",
+            "https://discord.com/channels/1051457140637827122/1323745969115893780"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Action Items\n#### Technical Tasks\n1. **Fix Docker Build Issues**\n2. **Resolve Twitter Plugin Failures**\n3. **Improve Memory Management (Add Deletion Feature)**\n4. **Fix Embedding Input Errors**\n5. **Ensure Multi-Agent Namespacing Works Properly**\n6. **Investigate Cloudflare Blocking Twitter Logins**\n7. **Improve Plugin Installation Process**\n8. **Fix SQLite Module Issues**\n\n#### Documentation Needs\n9. **Update REST API Documentation**\n10. **Clarify Multi-Agent Setup in Docs**\n11. **Add Guide for Local AI Model Setup**\n12. **Improve Plugin Registry Documentation**\n13. **Document Best Practices for Avoiding Twitter Bans**\n\n#### Feature Requests\n14. **Automated Plugin Ratings Based on Success**\n15. **Webhooks for External Integration**\n16. **Improve Agent Role Management in V2**\n17. **Add Support for OpenAI Responses API**\n18. **Enhance REST API Security with Auth Keys**\n19. **Improve Frontend UI for Documentation**\n20. **Add Support for MCP Client Plugin**",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1320246527268098048",
+            "https://discord.com/channels/1051457140637827122/1327493511406293016",
+            "https://discord.com/channels/1051457140637827122/1324089429727514674",
+            "https://discord.com/channels/1051457140637827122/1323745969115893780"
+          ],
+          "images": [],
+          "videos": []
+        }
+      ],
+      "topic": "Misceleanous"
+    }
+  ],
+  "date": 1739664000
+}

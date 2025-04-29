@@ -1,0 +1,125 @@
+{
+  "type": "dailySummary",
+  "title": "Daily Report - 2025-03-02",
+  "categories": [
+    {
+      "title": "ElizaOS Development Updates and Technical Discussions",
+      "content": [
+        {
+          "text": "### Technical Discussions & Problem-Solving\n\n- **Retrieval-Augmented Generation (RAG) Issues**: OpenRouter lacks embedding support, so database-based embeddings were implemented. (`odilitime`, `dankvr`)\n- **Docker Deployment Issues**: Debugging missing `ts-node` module and incorrect paths in the container. (`hashwarlock`, `mr.stark_`)\n- **Twitter Client Issues**: Shadowbanning due to missing 'automated profile' setting. (`definiteoptimist`)\n- **Plugin Registry Issues**: Missing `plugin-image`, `plugin-video`, and `plugin-tts` from the registry. (`0xn1c0`, `odilitime`)\n- **Eliza V2 Migration & CLI Issues**: `npx @elizaos/cli start` fails due to missing dependencies. (`dankvr`, `odilitime`)\n- **Local LLM Support**: No clear plugin for Ollama API, but `plugin-local-ai` was found and configured for DeepSeek models. (`chris.troutner`)\n- **Multi-Agent Setup**: Running multiple agents with separate Twitter accounts using namespaced environment variables. (`new.moon`)\n- **Eliza Diary Network Proposal**: A decentralized network for agents and plugins to register, share trust scores, and train LLMs. (`doriand0963`, `vkaykun`)\n",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1320246527268098048",
+            "https://discord.com/channels/1051457140637827122/1327493511406293016"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### New Plugins & Projects\n\n- **Unreal Engine Plugin**: Enables communication between Unreal Engine and Eliza instances. (`zaperox`)\n- **Token Prediction Plugin**: Uses a feedback loop for evaluation and reinforcement learning. (`dorianjanezic`)\n- **Tech-Support Bot**: Focuses on JavaScript, Bitcoin, and GitHub, running models locally with Ollama. (`chris.troutner`)\n- **Web3 Narrative Marketing Automation**: Uses ElizaOS and Langchain for automated content generation and scheduling. (`shivam_18795`)\n- **Aigent.sh**: A platform making AI agents accessible to non-technical users, powered by ElizaOS. (`dtb0x`)\n",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1327493511406293016"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Action Items\n\n#### **Technical Tasks**\n1. Fix Docker deployment issues. (`mr.stark_`, `hashwarlock`)\n2. Resolve Twitter client shadowban issues. (`definiteoptimist`)\n3. Re-add missing plugins (`plugin-image`, `plugin-video`, `plugin-tts`) to the registry. (`0xn1c0`, `odilitime`)\n4. Fix `npx @elizaos/cli start` command in V2. (`dankvr`)\n5. Ensure `plugin-local-ai` is properly documented for Ollama support. (`chris.troutner`)\n6. Improve multi-agent support with namespaced environment variables. (`new.moon`)\n\n#### **Documentation Needs**\n7. Update installation guide to reflect `eliza.how`. (`dankvr`)\n8. Clarify REST API setup using `client-direct`. (`odilitime`)\n9. Add a guide for setting up local LLMs with Ollama. (`chris.troutner`)\n10. Improve documentation on embedding setup. (`dankvr`)\n\n#### **Feature Requests**\n11. Add a way to delete recent memories as an admin. (`new.moon`)\n12. Implement a Twitter post deduplication mechanism. (`rtzavalon`)\n13. Improve support for multi-agent setups. (`shivam_18795`)\n14. Enhance CLI error messages for missing dependencies. (`dankvr`)\n15. Improve front-end UI for documentation. (`dankvr`)\n",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1320246527268098048",
+            "https://discord.com/channels/1051457140637827122/1327493511406293016"
+          ],
+          "images": [],
+          "videos": []
+        }
+      ],
+      "topic": "plugins"
+    },
+    {
+      "title": "ElizaOS Plugin Development and Issues",
+      "content": [
+        {
+          "text": "Several discussions took place regarding plugin testing, installation, and development for ElizaOS. Users faced issues with plugin installation, database integration, and API endpoints for agent creation. `odilitime` provided guidance on installing plugins correctly using `npx elizaos plugins add @elizaos-plugins/client-discord`. Additionally, `magicred1_` suggested using a database adapter for agent creation.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1324089429727514674"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "A major issue was reported with broken plugin links after merging PR #95 in the official plugin registry. `odilitime` confirmed it was not an issue with the PR itself and agreed to investigate. Additionally, `pravn1729` inquired about the plugin submission process, and `odilitime` clarified that plugins should be hosted in personal GitHub repositories and linked in `registry/index.json`.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1323745969115893780"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "Several new plugins and features were introduced, including an AI-powered executor plugin (`teoloki`), a Mem0 AI SDK provider (`whysosaket`), a token price-fetching plugin (`0xmattsroka`), and a distributed storage plugin (`fforbeck`). Additionally, `krustev.alexander` and `tadeuchi` submitted PRs to enhance the Twitter plugin with reflection mode and tweet metadata retrieval.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1323745969115893780"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "Users encountered various technical issues, including a Chrome headless mode bug affecting the browser plugin (`mindxploit`), an infinite loop in the Twitch client (`funboy`), and `ragKnowledge` not working as expected (`newbx0_02229`). `k_benny` suggested filtering out agent responses to resolve the Twitch issue, while `rick02533` advised setting `ragKnowledge=false` for string arrays.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1324089429727514674"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "Documentation and versioning concerns were raised. `hish1639` asked when PR #3958 would be included in a release, but no response was provided. `dankvr` submitted a large documentation update, and `pravn1729` requested clarification on the plugin submission process and Git-based distribution model.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1323745969115893780"
+          ],
+          "images": [],
+          "videos": []
+        }
+      ],
+      "topic": "plugin"
+    },
+    {
+      "title": "ElizaOS Development Updates and Technical Discussions",
+      "content": [
+        {
+          "text": "### Technical Discussions & Problem-Solving\n- **Retrieval-Augmented Generation (RAG) Issues**: OpenRouter lacks embedding support, so database-based embeddings were implemented. (`odilitime`, `dankvr`)\n- **Docker Deployment Issues**: Debugging missing `ts-node` module and incorrect paths in the container. (`hashwarlock`, `mr.stark_`)\n- **Twitter Client Issues**: Shadowbanning due to missing 'automated profile' setting. (`definiteoptimist`)\n- **Plugin Registry Issues**: Missing `plugin-image`, `plugin-video`, and `plugin-tts`. (`0xn1c0`, `odilitime`)\n- **Eliza V2 Migration & CLI Issues**: `npx @elizaos/cli start` fails due to missing dependencies. (`dankvr`, `odilitime`)\n- **Local LLM Support**: `plugin-local-ai` configured for DeepSeek models. (`chris.troutner`)\n- **Multi-Agent Setup**: Running multiple agents with separate Twitter accounts using environment variables. (`new.moon`)",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1320246527268098048",
+            "https://discord.com/channels/1051457140637827122/1327493511406293016"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### New Plugins & Features\n- **Unreal Engine Plugin**: Enables communication between Unreal Engine and Eliza instances. (`zaperox`)\n- **Token Prediction Plugin**: Uses a feedback loop for evaluation and market behavior analysis. (`dorianjanezic`)\n- **Tech-Support Bot**: Focuses on JavaScript, Bitcoin, and GitHub, with local model execution. (`chris.troutner`)\n- **Web3 Narrative Marketing Automation**: Uses ElizaOS and Langchain for automated content generation. (`shivam_18795`)\n- **AI Agent Platform**: `aigent.sh` makes AI agents accessible to non-technical users. (`dtb0x`)",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1327493511406293016"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Plugin Registry & Submission Process\n- **Broken Plugin Links**: After merging PR #95, links on the official plugin registry were broken. (`odilitime`, `flaneurofmetaverses`)\n- **Plugin Submission Process**: Plugins should be hosted in personal GitHub repositories and linked in `registry/index.json`. (`pravn1729`, `odilitime`)\n- **New Plugins**: AI-powered executor, Mem0 AI SDK provider, token price-fetching plugin, and distributed storage plugin. (`teoloki`, `whysosaket`, `0xmattsroka`, `fforbeck`)\n- **Bug Fixes**: Character plugin loading fix and Twitter plugin enhancements. (`dtb0x`, `krustev.alexander`, `tadeuchi`)",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1323745969115893780"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Action Items\n#### Technical Tasks\n1. Fix Docker deployment issues. (`mr.stark_`, `hashwarlock`)\n2. Resolve Twitter client shadowban issues. (`definiteoptimist`)\n3. Re-add missing plugins (`plugin-image`, `plugin-video`, `plugin-tts`). (`0xn1c0`, `odilitime`)\n4. Fix `npx @elizaos/cli start` command in V2. (`dankvr`)\n5. Ensure `plugin-local-ai` is properly documented. (`chris.troutner`)\n6. Investigate why bots respond in unintended languages. (`phonique_`)\n7. Fix newline issues in responses. (`redvoid8344`)\n8. Improve error handling for missing RAG directories. (`martingrey1`)\n9. Fix authentication issues with Akash Chat API. (`aiflowml`)\n10. Improve plugin installation process in V2. (`4n7m4n`)\n\n#### Documentation Needs\n11. Update installation guide to reflect `eliza.how`. (`dankvr`)\n12. Document how to run multiple agents with different Twitter accounts. (`new.moon`)\n13. Clarify REST API setup using `client-direct`. (`odilitime`)\n14. Add a guide for setting up local LLMs with Ollama. (`chris.troutner`)\n15. Improve documentation on embedding setup. (`dankvr`)\n\n#### Feature Requests\n16. Add a way to delete recent memories as an admin. (`new.moon`)\n17. Implement a Twitter post deduplication mechanism. (`rtzavalon`)\n18. Improve support for multi-agent setups. (`shivam_18795`)\n19. Enhance CLI error messages for missing dependencies. (`dankvr`)\n20. Improve front-end UI for documentation. (`dankvr`)",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1320246527268098048",
+            "https://discord.com/channels/1051457140637827122/1323745969115893780"
+          ],
+          "images": [],
+          "videos": []
+        }
+      ],
+      "topic": "Misceleanous"
+    }
+  ],
+  "date": 1740873600
+}

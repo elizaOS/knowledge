@@ -1,0 +1,99 @@
+{
+  "type": "dailySummary",
+  "title": "Daily Report - 2025-02-23",
+  "categories": [
+    {
+      "title": "ElizaOS Plugin Development and Technical Updates",
+      "content": [
+        {
+          "text": "### Technical Discussions & Decisions\n- **Plugin System Updates**: The old method of importing plugins is deprecated. Plugins should now be added as strings in the `plugins[]` array.\n- **Discord & Twitter Client Issues**: Users reported issues with the Discord client in v0.25.8 and the Twitter client, which was removed from the core and must now be installed separately.\n- **Docker Issues**: Missing dependencies (`ts-node`, `adapter-pglite`) were reported, and a fix was proposed to modify the Dockerfile.\n- **Memory Management & RAG**: Users faced issues embedding knowledge into the RAG system and dealing with duplicate memories.\n- **CLI & Plugin Registry**: The plugin registry was updated to remove duplicate or outdated entries, and `npx elizaos plugins add` was failing due to missing dependencies.\n- **V2 Migration**: V2 requires migration, with `npx elizaos start` replacing `eliza-starter` and CLI improvements like `npm create eliza` for project setup.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1320246527268098048",
+            "https://discord.com/channels/1051457140637827122/1323745969115893780"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Plugin Registry & Contributions\n- **Plugin Submission Process**: Users were guided on submitting plugins by creating a separate repo, modifying `index.json`, and submitting a PR.\n- **New Plugins Submitted**: Several new plugins were introduced, including a Twitter client with reflection mode, a Sonic blockchain plugin, a DexPaprika plugin for fetching token prices, and a Distributed Storage Plugin.\n- **Plugin Registry Issues**: Broken links were reported in the plugin registry, and missing plugins were discussed.\n- **Feature Additions**: New features like post-processing support for character objects and Mem0 as a provider in the Vercel AI SDK were introduced.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1327493511406293016",
+            "https://discord.com/channels/1051457140637827122/1323745969115893780"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Help Interactions & Action Items\n- **Help Provided**: Users received guidance on installing plugins, fixing memory issues, and debugging Docker builds.\n- **Action Items**:\n  - Fix Docker build issues and missing dependencies.\n  - Improve memory handling to prevent OOM issues.\n  - Investigate broken links in the plugin registry.\n  - Enhance Twitter plugin with reflection mode and post data retrieval.\n  - Improve documentation on plugin installation, V2 migration, and REST API usage.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1320246527268098048",
+            "https://discord.com/channels/1051457140637827122/1327493511406293016",
+            "https://discord.com/channels/1051457140637827122/1323745969115893780"
+          ],
+          "images": [],
+          "videos": []
+        }
+      ],
+      "topic": "plugin"
+    },
+    {
+      "title": "ElizaOS Plugin Development and Technical Updates",
+      "content": [
+        {
+          "text": "### Plugin System Updates\n- The old method of importing plugins (`import { Plugin } from \"@elizaos/plugin\"`) is deprecated. Plugins should now be added as strings in the `plugins[]` array.\n- The plugin registry process was clarified: contributors must create a separate repository, modify `index.json`, and submit a PR.\n- A cleanup of duplicate and outdated plugins in the registry was proposed.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1320246527268098048",
+            "https://discord.com/channels/1051457140637827122/1327493511406293016"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Plugin Installation & Activation\n- Users faced issues installing and activating plugins. The correct process is:\n  - Run `npx elizaos plugins install @elizaos-plugins/plugin-name`.\n  - Add the plugin to the `plugins` array in the character file.\n- Some plugins, like `plugin-trustdb`, caused installation failures and needed to be excluded.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1320246527268098048",
+            "https://discord.com/channels/1051457140637827122/1324089429727514674"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Technical Issues & Fixes\n- **Docker Issues**: Users reported missing dependencies (`ts-node`, `adapter-pglite`). A revised Dockerfile was proposed to resolve these issues.\n- **Memory Management & RAG**: Users struggled with embedding knowledge into the RAG system. OpenRouter does not support embeddings, but the database does.\n- **SQLite Module Errors**: Running `pnpm add better-sqlite3@latest --force` and `npm rebuild better-sqlite3` was suggested as a fix.\n- **Twitter Client Issues**: The Twitter client was removed from the core and must now be installed separately using `npx elizaos plugins install client-twitter`.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1320246527268098048",
+            "https://discord.com/channels/1051457140637827122/1324089429727514674"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### New Plugin Developments\n- **Unreal Engine Plugin**: A new plugin was announced to enable communication between Unreal Engine and ElizaOS.\n- **Token Prediction Plugin**: A plugin using a feedback loop for token price evaluation was introduced, with requests for feedback and collaboration.\n- **Tech-Support Bot**: A bot using ElizaOS for JavaScript, Bitcoin, and GitHub support was proposed, with plans to integrate with Telegram and Nostr.\n- **AI Agent Platform**: `aigent.sh`, a platform making AI agents accessible, was introduced and is rolling out daily updates.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1327493511406293016"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### V2 Migration & CLI Updates\n- V2 requires migration, and an auto-migration tool is planned.\n- `npx elizaos start` will replace `eliza-starter`.\n- CLI improvements include `npm create eliza` for project setup.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1320246527268098048"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Documentation & Feature Requests\n- **Documentation Needs**:\n  - Update REST API documentation.\n  - Clarify V2 migration steps.\n  - Improve plugin installation guides.\n  - Document best practices for Twitter bot setup.\n- **Feature Requests**:\n  - Implement a memory deletion feature.\n  - Add a \"make a new plugin\" CLI flow.\n  - Support multiple plugin installations at once.\n  - Improve Docker image size and build times.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1320246527268098048",
+            "https://discord.com/channels/1051457140637827122/1324089429727514674"
+          ],
+          "images": [],
+          "videos": []
+        }
+      ],
+      "topic": "Misceleanous"
+    }
+  ],
+  "date": 1740268800
+}

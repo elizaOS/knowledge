@@ -1,0 +1,127 @@
+{
+  "type": "dailySummary",
+  "title": "Daily Report - 2025-01-16",
+  "categories": [
+    {
+      "title": "ElizaOS Development and Plugin Updates",
+      "content": [
+        {
+          "text": "### Technical Discussions & Decisions\n- **Quick Intel Plugin**: Finalizing tweaks before PR submission, requiring an API key.\n- **RAG Knowledge System**: Issues with knowledge retrieval in the latest develop branch, with ongoing investigations.\n- **Twitter Spaces Feature**: ICE connection failures and inconsistent behavior, with proposed fixes.\n- **Discord Client Migration**: Now requires installation as a plugin instead of a client.\n- **Docker Issues**: Path issues in the container preventing module resolution, with proposed fixes.\n- **Plugin Registry Migration**: Some plugins (image, video, and TTS) are missing and scheduled for re-addition.\n- **Eliza v2 Migration**: Requires a structured migration process, with CLI tools being developed.\n- **Twitter API Issues**: Cloudflare security changes affecting login in Docker environments.\n- **Memory Management**: No built-in memory deletion, but `runtime.messageManager.removeMemory` can be used.\n- **Multi-Agent Setup**: Namespacing secrets in `.env` allows multiple agents with different credentials.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1320246527268098048"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Web3 and AI Integrations\n- **Token Against Humanity ($TAH) Development**: AI agent 'CC' will autonomously engage on social platforms, with 50% of revenue shared with $TAH holders. Seeking integration with ElizaOS.\n- **HyperParams Protocol**: Open-source protocol for AI agent validation and performance tuning, with a whitepaper submitted to Arxiv and ACL.\n- **Web3 Structured Output Parser for Langchain**: Initial implementation shared, with discussions on adding validation for hex addresses and token amounts.\n- **ElizaOS Plugin Contributions**: Multiple plugins submitted and merged, including Berachain, Safe multisig validator, and OmniFlix integrations.\n- **Token Prediction Plugin**: Uses reinforcement learning for token price predictions, with example predictions shared.\n- **Tech-Support AI Bot on ElizaOS**: Focus on JavaScript, Bitcoin, and GitHub support, with plans to integrate with Telegram and Nostr.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1327493511406293016"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### ElizaOS v2 Updates\n- **Telegram Support**: Not included in v2; exists in a private repo.\n- **Goal Evaluator**: Persistent goals stored in DB; `createGoal` function is unused, possibly under development.\n- **Knowledge Updates**: Requires deleting `db.sqlite` and restarting the agent.\n- **Deferred Execution**: Suggested using `setTimeout`, but a built-in scheduling feature was proposed.\n- **Node Version Issues**: Required updating to v23.3.0; some users downgraded the agent package to 0.1.8 to resolve errors.\n- **Plugin Installation Issues**: Some plugins (e.g., `plugin-trustdb`) caused failures; excluding them resolved issues.\n- **RAG Knowledge**: Requires `characters/knowledge/agent-name` directory; `.pdf` files unsupported.\n- **Twitter Client Issues**: Required installing `@elizaos-plugins/client-twitter` and adding it to `plugins`.\n- **WebSocket Events**: Suggested calling `processActions` in runtime for real-time event handling.\n- **Custom Plugins**: Should implement the `Provider` interface and be added to `plugins` in `character.json`.\n- **Hosting**: Can run on a standard VPS; Next.js integration possible if using a long-running server.\n- **V2 Release**: Expected within a week; modularization and improvements planned.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1324089429727514674"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Action Items\n#### Technical Tasks\n1. Fix RAG Knowledge Retrieval\n2. Stabilize Twitter Spaces Feature\n3. Resolve Docker Path Issues\n4. Re-add Missing Plugins to Registry\n5. Improve Memory Management (Delete Functionality)\n6. Fix Twitter API Login in Docker\n7. Implement Authentication for REST API\n8. Fix SQLite Module Errors\n9. Implement built-in action scheduling\n10. Investigate RAG knowledge retrieval inconsistencies\n\n#### Documentation Needs\n11. Update Plugin Installation Guide\n12. Improve RAG Knowledge Documentation\n13. Clarify Multi-Agent Setup\n14. Document Twitter Formatting Best Practices\n15. Add Swagger API Documentation\n\n#### Feature Requests\n16. Auto-Migration Tool for v2\n17. Multi-Agent Namespacing in `.env`\n18. Custom Service for Auto-Replying to Twitter Accounts\n19. MCP Client Plugin for Eliza\n20. Support for OpenAI Responses API",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1320246527268098048",
+            "https://discord.com/channels/1051457140637827122/1327493511406293016",
+            "https://discord.com/channels/1051457140637827122/1324089429727514674"
+          ],
+          "images": [],
+          "videos": []
+        }
+      ],
+      "topic": "plugins"
+    },
+    {
+      "title": "ElizaOS Development Updates and Plugin Enhancements",
+      "content": [
+        {
+          "text": "### **Technical Discussions, Fixes, and Enhancements**\n\n- **Plugin Fixes & Maintenance:**\n  - Multiple plugins were fixed, refactored, and linted, including `plugin-twitter`, `plugin-zerion`, and `plugin-tee-marlin`.\n  - `plugin-twitter` received a callback feature for posted tweets.\n  - `plugin-dexpaprika` was introduced for fetching token prices, and `plugin-near` for NEAR AI integration.\n\n- **New Features & Enhancements:**\n  - WhatsApp chat support was added for character generation.\n  - Post-processing support was introduced for character objects.\n  - `messageManager` was made public in the Telegram client for direct plugin interaction.\n  - Mem0 was added as a provider in the Vercel AI SDK.\n\n- **Infrastructure & Tooling:**\n  - The organization mandated the use of Linear for project management.\n  - Plugins will now be distributed via Git instead of NPM.\n  - A Telegram <=> Linear bot was proposed for ticket management.\n  - Biome was added for linting and formatting across multiple plugins.\n\n- **Bug Fixes & Optimizations:**\n  - Fixed an out-of-memory bug in v0.25.8.\n  - Resolved an \"Invalid array length\" error in knowledge processing.\n  - Fixed a bug related to loading character plugins from remote URLs.\n\n- **Plugin Registry & Contributions:**\n  - Clarified the process for adding plugins to the registry.\n  - Investigated broken links in the plugin registry.\n  - Confirmed that plugins should be submitted to the registry repo, not the main repo.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1323745969115893780",
+            "https://discord.com/channels/1051457140637827122/1324089429727514674"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### **Frequently Asked Questions (FAQ)**\n\n1. **How do I obtain an API token for ElizaOS Telegram integration?**\n   - Use Telegram’s BotFather to generate a token.\n\n2. **How do I fix the 'delete the db' equivalent in Eliza starter?**\n   - Delete `data/db.sqlite` if using SQLite.\n\n3. **How do I schedule actions in ElizaOS?**\n   - Use `setTimeout` similar to the Twitter client.\n\n4. **How do I install the Twitter client plugin?**\n   - Install `@elizaos-plugins/client-twitter` and add it to `plugins`.\n\n5. **Why is my agent defaulting to the Eliza character?**\n   - Check for bracket errors in the character file.\n\n6. **How do I integrate Twilio for SMS communication?**\n   - Found PR #2139 implementing Twilio support.\n\n7. **How do I fix 'JSON file is not valid against the schema' error?**\n   - Ensure `knowledge` is an array, not an object.\n\n8. **How do I make every agent response a TTS reply?**\n   - Modify the character file’s system prompt.\n\n9. **How do I add a plugin in Eliza starter?**\n   - Use `npx elizaos plugins install <plugin-name>`.\n\n10. **How do I fetch real-time data using WebSockets?**\n    - Use `processActions` in the agent’s runtime.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1323745969115893780",
+            "https://discord.com/channels/1051457140637827122/1324089429727514674"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### **Community Assistance & Help Interactions**\n\n1. **Helped resolve a startup error by updating Node to v23.3.0.**\n2. **Guided a user on obtaining a Telegram API token using BotFather.**\n3. **Clarified the installation process for the Twitter client plugin.**\n4. **Debugged RAG knowledge storage and recommended using `.md` files instead of `.pdf`.**\n5. **Provided guidance on handling WebSocket events in ElizaOS.**\n6. **Explained the PR submission process and the use of the `develop` branch.**\n7. **Investigated broken plugin registry links and confirmed the submission process was correct.**\n8. **Reviewed and merged PRs related to dependency management and plugin fixes.**",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1323745969115893780",
+            "https://discord.com/channels/1051457140637827122/1324089429727514674"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### **Action Items & Next Steps**\n\n#### **Technical Tasks**\n1. **Fix broken plugin registry links.**\n2. **Resolve PR conflicts for pending merges.**\n3. **Implement Telegram <=> Linear bot for ticket management.**\n4. **Refactor `plugin-starknet` for better stability.**\n5. **Fix `plugin-twitter` double posting issue.**\n6. **Improve `plugin-near` AI integration.**\n7. **Enhance `plugin-dexpaprika` API support.**\n8. **Fix `plugin-multiversx` maintainer access.**\n9. **Investigate `plugin-kaia` removal.**\n10. **Fix `plugin-news` broken registry links.**\n\n#### **Documentation Needs**\n11. **Enforce README files for all plugins.**\n12. **Update Twitter plugin documentation.**\n13. **Clarify `.env` variable handling for plugins.**\n14. **Document Biome linting setup.**\n15. **Improve character plugin loading documentation.**\n\n#### **Feature Requests**\n16. **Add post-processing support for character objects.**\n17. **Enable file upload & camera input in client UI.**\n18. **Support Nvidia inference in ElizaOS.**\n19. **Implement AI-powered PR review automation.**\n20. **Develop a local voice assistant for ElizaOS.**",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1323745969115893780",
+            "https://discord.com/channels/1051457140637827122/1324089429727514674"
+          ],
+          "images": [],
+          "videos": []
+        }
+      ],
+      "topic": "plugin"
+    },
+    {
+      "title": "ElizaOS Development Updates and Technical Discussions",
+      "content": [
+        {
+          "text": "### Summary of Key Technical Discussions and Decisions\n\n- **Plugin Development & Fixes**: Multiple plugins were fixed, refactored, and merged, including `plugin-twitter`, `plugin-zerion`, and `plugin-tee-marlin`. New plugins such as `plugin-dexpaprika` (for token prices) and `plugin-near` (for NEAR AI integration) were introduced.\n- **Infrastructure & Tooling**: Discussions on using **CodeRabbit** and **Windsurf** for PR reviews. **Biome** was added for linting and formatting. A Telegram <=> Linear bot was proposed for ticket management.\n- **Database & Memory Management**: Issues with `db.sqlite` were resolved by deleting and restarting the agent. Memory deletion was discussed, with `runtime.messageManager.removeMemory` as a workaround.\n- **Twitter Spaces & API Issues**: ICE connection failures were reported. Fixes were proposed to improve error handling and memory storage.\n- **Docker Build Failures**: Issues with missing dependencies and incorrect paths were identified. A revised Dockerfile was proposed.\n- **RAG Knowledge System**: Knowledge retrieval issues were reported in the latest develop branch. Logging improvements were suggested.\n- **Eliza v2 Migration**: Migration to v2 requires a structured process, with a CLI tool (`npx elizaos start`) replacing `eliza-starter`.\n- **Web3 & AI Integrations**: The **HyperParams Protocol** was introduced for AI agent validation. A **Web3 Structured Output Parser** was developed for Langchain.\n- **Tech-Support AI Bot**: A bot focusing on JavaScript, Bitcoin, and GitHub support was proposed, with plans to integrate with Telegram and Nostr.\n",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1320246527268098048",
+            "https://discord.com/channels/1051457140637827122/1327493511406293016",
+            "https://discord.com/channels/1051457140637827122/1324089429727514674",
+            "https://discord.com/channels/1051457140637827122/1323745969115893780"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### FAQ & Help Interactions\n\n1. **How do I install the Discord client?** Install it as a plugin: `npx elizaos plugins add @elizaos-plugins/client-discord` and add it to the character file.\n2. **Why is my Twitter agent not posting?** Ensure both `plugin-twitter` and `client-twitter` are installed and listed in `plugins`.\n3. **How do I enable RAG knowledge retrieval?** Ensure `ragKnowledge: true` is set in the character config and that knowledge directories are correctly configured.\n4. **How do I fix Docker build failures?** The issue is related to missing dependencies and incorrect module paths. A revised Dockerfile was proposed.\n5. **How do I migrate to Eliza v2?** A migration tool is planned, but manual migration is required for now.\n6. **How do I integrate Twilio for SMS?** Set up a webhook and forward messages to the agent.\n7. **How do I prevent my agent from repeating messages?** Adjust `frequency_penalty` and `presence_penalty` in `modelConfig`.\n8. **How do I secure my agent’s REST API?** Implement an authentication key in the `.env` file and require it for API requests.\n",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1320246527268098048",
+            "https://discord.com/channels/1051457140637827122/1327493511406293016",
+            "https://discord.com/channels/1051457140637827122/1324089429727514674"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Action Items\n\n#### **Technical Tasks**\n1. Fix Twitter Spaces ICE connection failures.\n2. Improve memory management to prevent looping issues.\n3. Debug Docker build failures and module path issues.\n4. Re-add missing plugins to the registry.\n5. Implement authentication for REST API endpoints.\n\n#### **Documentation Needs**\n6. Update RAG knowledge documentation.\n7. Improve plugin installation guides.\n8. Add a migration guide for v2.\n\n#### **Feature Requests**\n9. Implement a memory deletion feature in the UI.\n10. Add MCP client plugin for Eliza.\n11. Improve Twitter client to prevent duplicate posts.\n12. Enhance CLI for better plugin management.\n13. Add support for OpenAI Responses API.\n14. Improve local LLM support for Ollama.\n15. Implement a webhook-based Twitter scraper.\n16. Add a UI for managing agent memory.\n17. Improve Discord client installation process.\n18. Enhance Eliza’s ability to format tweets.\n19. Add a feature to prevent foreign language responses.\n20. Improve API security for hosted agents.\n",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1320246527268098048",
+            "https://discord.com/channels/1051457140637827122/1327493511406293016",
+            "https://discord.com/channels/1051457140637827122/1324089429727514674",
+            "https://discord.com/channels/1051457140637827122/1323745969115893780"
+          ],
+          "images": [],
+          "videos": []
+        }
+      ],
+      "topic": "Misceleanous"
+    }
+  ],
+  "date": 1736985600
+}

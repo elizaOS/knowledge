@@ -1,0 +1,127 @@
+{
+  "type": "dailySummary",
+  "title": "Daily Report - 2025-01-18",
+  "categories": [
+    {
+      "title": "ElizaOS Development Updates and Plugin Contributions",
+      "content": [
+        {
+          "text": "The ElizaOS community has been actively working on new features, bug fixes, and plugin integrations. Key developments include the introduction of the HyperParams protocol for AI validation, a Web3 Structured Output Parser, and multiple plugin contributions.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1327493511406293016",
+            "https://discord.com/channels/1051457140637827122/1320246527268098048"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "Several new plugins were developed and merged, including a Safe Multisig Validator, a token prediction plugin, and an Unreal Engine integration for ElizaOS. Contributors also worked on improving Web3 parsing and AI-driven marketing automation.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1327493511406293016"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "Technical discussions covered issues such as Twitter Spaces ICE connection failures, RAG knowledge retrieval problems, and Docker build issues. Solutions were proposed, including improved error handling and dependency management.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1320246527268098048"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "Community members contributed to improving ElizaOS infrastructure, including plugin testing automation, dependency management with pnpm, and Biome linting for consistent formatting. Documentation updates were also suggested for plugin submission and installation.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1323745969115893780"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "Action items include enhancing Web3 Structured Output Parser validation, implementing reinforcement learning in the token prediction plugin, and improving AI model selection for character generation. Additional feature requests include AI-driven content optimization and better plugin discovery tools.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1327493511406293016",
+            "https://discord.com/channels/1051457140637827122/1323745969115893780"
+          ],
+          "images": [],
+          "videos": []
+        }
+      ],
+      "topic": "plugins"
+    },
+    {
+      "title": "RAG Knowledge System Issues",
+      "content": [
+        {
+          "text": "Users redvoid8344 and mr.stark_ reported issues with RAG knowledge retrieval. The system expects knowledge files to be stored in `characters/knowledge/agent-name`, and `.pdf` files are not supported—only `.md` format works. Additionally, large knowledge directories may cause memory issues.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1324089429727514674"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "A workaround was suggested: instead of using `directory` references, each file should be declared separately as `path`. This may help resolve retrieval inconsistencies.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1324089429727514674"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "To improve the situation, dankvr committed to enhancing the documentation for RAG knowledge setup.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1324089429727514674"
+          ],
+          "images": [],
+          "videos": []
+        }
+      ],
+      "topic": "rag knowledge"
+    },
+    {
+      "title": "ElizaOS Development Updates and Technical Discussions",
+      "content": [
+        {
+          "text": "### Summary of Technical Discussions and Decisions\n\n- **Plugin Installation Issues**: Users faced errors installing plugins via `npx elizaos plugins add`. The issue was linked to missing dependencies and incorrect registry entries. `plugin-trustdb` was identified as a cause of failures.\n- **Twitter Client Issues**: Users reported login failures due to Cloudflare security changes. A fix is still pending.\n- **Docker Build Failures**: Users encountered missing module errors (`ERR_MODULE_NOT_FOUND`). A revised Dockerfile was proposed to resolve path issues.\n- **Memory Management & RAG Issues**: Problems with RAG knowledge retrieval and memory duplication were reported. Debugging efforts focused on embedding models and database configurations.\n- **Multi-Agent Setup**: Users discussed running multiple agents with separate environments. The recommended approach was to use namespaced environment variables.\n- **Local LLM Support (Ollama, DeepSeek, etc.)**: Users sought to integrate local LLMs via Ollama. The `plugin-local-ai` was identified as the correct plugin, requiring specific environment variables.\n- **Discord Client Setup**: Users struggled to configure the Discord client. The correct approach was to install it via `npx elizaos plugins add @elizaos-plugins/client-discord` and add it to the character file.\n- **Eliza V2 Migration**: Discussions on migrating to V2 highlighted the need for an auto-migration tool for plugins. V2 introduces a new CLI (`npx elizaos start`) and improved multi-agent support.\n- **REST API Security**: A proposal was made to add authentication to the REST API using an `AUTH_KEY` in the `.env` file.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1320246527268098048",
+            "https://discord.com/channels/1051457140637827122/1324089429727514674"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### FAQ (Most Significant Questions & Answers)\n\n1. **How does Eliza handle message history to avoid repeating commands?**\n   - Most clients include the last 20 messages in the prompt. Vector search retrieves relevant memories.\n2. **Should we start using V2 or wait for it to merge into main?**\n   - V2 is in beta. It’s not stable for production but can be used for testing.\n3. **How do I run multiple agents with different Twitter accounts?**\n   - Use namespaced environment variables for each agent (e.g., `TWITTER_USERNAME_AGENT1`, `TWITTER_USERNAME_AGENT2`).\n4. **What’s the best LLM for character-based Twitter posting?**\n   - Claude (Anthropic) and Llama 405 perform best for character consistency.\n5. **How do I install my custom plugin in Eliza?**\n   - Add it to `packages/`, then install it with `pnpm add @elizaos-plugins/plugin-name`.\n6. **How do I secure the REST API?**\n   - Add an `AUTH_KEY` to `.env` and require it for API requests.\n7. **How do I integrate Eliza with Next.js?**\n   - Use `client-direct` to expose a REST API for frontend interaction.\n8. **How do I make Eliza post formatted tweets?**\n   - Modify the character file to include structured templates.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1320246527268098048",
+            "https://discord.com/channels/1051457140637827122/1327493511406293016"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Help Interactions (Significant Community Assistance)\n\n1. **[odilitime → 4n7m4n]** Helped debug message history and memory management for a security agent plugin.\n2. **[odilitime → benquik]** Explained how to run multiple agents with separate Twitter accounts.\n3. **[chris.troutner → ownedsk]** Provided a working solution for using Ollama with Eliza.\n4. **[odilitime → ad_dev]** Guided on installing and configuring the Discord client.\n5. **[hashwarlock → mr.stark_]** Helped debug Docker build failures and proposed a revised Dockerfile.\n6. **[rick02533 → martingrey1]** Assisted in fixing RAG directory path issues.\n7. **[shivam_18795 → kalaudius]** Helped troubleshoot SQLite module errors.\n8. **[shivam_18795 → jungleheart_33753]** Provided insights on multi-agent setups.\n9. **[shivam_18795 → jungleheart_33753]** Explained how to integrate Eliza with Next.js.\n10. **[shivam_18795 → jungleheart_33753]** Assisted in setting up real-time event monitoring.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1324089429727514674",
+            "https://discord.com/channels/1051457140637827122/1323745969115893780"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Action Items\n\n#### **Technical Tasks**\n1. **Fix Docker Build Issues** (mr.stark_, hashwarlock)\n2. **Improve Twitter Client Stability** (odilitime)\n3. **Enhance Memory Management & RAG Retrieval** (m1337d)\n4. **Implement REST API Authentication** (cjft)\n5. **Fix Plugin Installation Errors (`npx elizaos plugins add`)** (odilitime)\n\n#### **Documentation Needs**\n6. **Update Plugin Installation Guide** (dankvr)\n7. **Improve Multi-Agent Setup Documentation** (new.moon)\n8. **Add REST API Security Guide** (cjft)\n9. **Clarify RAG Knowledge Setup** (dankvr)\n10. **Document Ollama Integration** (chris.troutner)\n\n#### **Feature Requests**\n11. **Auto-Migration Tool for V2** (new.moon)\n12. **Support for MCP Client Plugin** (jungleheart_33753)\n13. **Improve Twitter Formatting Options** (phonique_)\n14. **Add Webhooks for External Integrations** (jungleheart_33753)\n15. **Enhance Plugin Registry Searchability** (odilitime)",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1320246527268098048",
+            "https://discord.com/channels/1051457140637827122/1327493511406293016"
+          ],
+          "images": [],
+          "videos": []
+        }
+      ],
+      "topic": "Misceleanous"
+    }
+  ],
+  "date": 1737158400
+}

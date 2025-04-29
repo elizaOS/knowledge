@@ -1,0 +1,152 @@
+{
+  "type": "dailySummary",
+  "title": "Daily Report - 2025-02-22",
+  "categories": [
+    {
+      "title": "ElizaOS Plugin Development, Issues, and Fixes",
+      "content": [
+        {
+          "text": "### Plugin Registry & Plugin Behavior\n- Discussions focused on improving the plugin registry, including surfacing available actions to developers.\n- Prefixing actions with plugin names was suggested as a temporary fix for plugin ambiguity.\n- Some plugins (e.g., `plugin-llama`, `plugin-image`, `plugin-video`, `plugin-tts`) were missing and needed to be re-added.\n- `pravn1729` and `vincent2412_` sought guidance on submitting plugins, with `odilitime` clarifying the process.\n- `flaneurofmetaverses` reported broken links in the registry, which `odilitime` investigated.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1320246527268098048",
+            "https://discord.com/channels/1051457140637827122/1323745969115893780"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Plugin Installation & Activation\n- Users asked how to install and activate plugins after merging them into the registry.\n- `odilitime` provided the command: `npx elizaos plugins install @elizaos-plugins/plugin-name` and instructed users to add it to the character file.\n- `asi123aa` and `pravn1729` confirmed successful installations.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1327493511406293016"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Technical Issues & Fixes\n- **Docker Issues**: Builds were failing due to missing dependencies and incorrect paths. `mr.stark_` and `hashwarlock` debugged and proposed fixes.\n- **Twitter Client Issues**: Users reported issues with the Twitter client setup in v2. `odilitime` suggested installing `client-twitter` separately.\n- **Memory & Embedding Issues**: Users faced memory issues with RAG and embedding input validation errors. `phonique_` provided debugging steps.\n- **SQLite Module Errors**: `kalaudius` shared a fix for SQLite module errors using `pnpm add better-sqlite3@latest --force` and `npm rebuild better-sqlite3`.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1320246527268098048",
+            "https://discord.com/channels/1051457140637827122/1323745969115893780"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### New Plugins & Feature Additions\n- **New Plugins Submitted**:\n  - `teoloki` submitted an AI Executor plugin.\n  - `thopate_vijay` submitted a Sonic blockchain plugin.\n  - `0xmattsroka` submitted a DexPaprika plugin for fetching token prices.\n  - `fforbeck` submitted a Distributed Storage Plugin.\n- **Feature Additions**:\n  - `bt.wood` introduced post-processing support for character objects.\n  - `krustev.alexander` added a reflection mode to the Twitter client.\n  - `whysosaket` added Mem0 as a provider in the Vercel AI SDK.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1323745969115893780"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Documentation & Migration\n- `dankvr` launched `eliza.how` for updated documentation and started documenting REST API endpoints.\n- `new.moon` confirmed that v2 requires migration, with an auto-migration tool planned for plugins.\n- `redvoid8344` added documentation on using custom plugins outside the official registry.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1320246527268098048",
+            "https://discord.com/channels/1051457140637827122/1323745969115893780"
+          ],
+          "images": [],
+          "videos": []
+        }
+      ],
+      "topic": "plugin"
+    },
+    {
+      "title": "Plugin Installation Issues in ElizaOS",
+      "content": [
+        {
+          "text": "Users encountered multiple issues when installing plugins in ElizaOS. `redvoid8344` reported failures while installing `plugin-coingecko` and `plugin-node`. `odilitime` identified `plugin-trustdb` as the root cause and suggested removing it to resolve installation failures.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1324089429727514674"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "To install `plugin-coingecko`, `odilitime` recommended using `npx elizaos plugins install @elizaos-plugins/client-coingecko`. If issues persist, excluding `plugin-trustdb` was suggested as a workaround.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1324089429727514674"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "Users also faced confusion regarding the installation of `client-twitter`. `robbie3920` struggled with connecting it, and `odilitime` clarified that `@elizaos-plugins/client-twitter` should be installed and added to `plugins`, not `clients`.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1324089429727514674"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "Similarly, `phonique_` had trouble connecting the Discord client. `odilitime` confirmed that Discord clients must be listed in both `clients` and `plugins` to function correctly.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1324089429727514674"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "To improve documentation, `youngphlo` suggested clarifying the difference between `clients` and `plugins` in installation guides. Additionally, `mindxploit` proposed adding better error logging for plugin installation failures.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1324089429727514674"
+          ],
+          "images": [],
+          "videos": []
+        }
+      ],
+      "topic": "plugin installation"
+    },
+    {
+      "title": "ElizaOS Development Updates and Plugin Management",
+      "content": [
+        {
+          "text": "### Technical Discussions & Decisions\n- **Plugin Registry & Plugin Behavior**: Updates were discussed to improve plugin visibility and resolve action ambiguity. Missing plugins (`plugin-llama`, `plugin-image`, etc.) need to be re-added.\n- **Eliza v2 Migration**: The v2 CLI (`npx elizaos start`) will replace `eliza-starter`, with an auto-migration tool planned. New project structure includes namespaced environment variables.\n- **Docker Issues**: Builds were failing due to missing dependencies and incorrect paths. A revised Dockerfile was tested to ensure proper execution.\n- **Twitter Client Issues**: Users faced setup issues in v2. The `client-twitter` plugin must be installed separately, and shadowbanning was reported due to missing 'automated profile' settings.\n- **Memory & Embedding Issues**: Users reported memory issues with RAG and embedding input validation errors. OpenRouter does not support embeddings, but the database does.\n- **Local AI Model Support**: The `plugin-local-ai` plugin supports Ollama API for local LLMs, requiring specific environment variables.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1320246527268098048",
+            "https://discord.com/channels/1051457140637827122/1324089429727514674"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Concrete Solutions & Implementations\n- **Plugin Registry Fixes**: PRs were created to re-add missing plugins and update descriptions.\n- **Docker Fixes**: A new Dockerfile was proposed to ensure dependencies are installed correctly.\n- **Twitter Client Fixes**: Users must install `plugin-twitter` and `client-twitter` separately and enable 'automated profile' settings.\n- **Memory & Embedding Fixes**: Users were advised to check embedding model configurations and debug memory usage.\n- **Local AI Model Integration**: The `plugin-local-ai` plugin was identified as the correct solution for Ollama API, with proper environment variable setup provided.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1320246527268098048",
+            "https://discord.com/channels/1051457140637827122/1324089429727514674"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Plugin Development & Contributions\n- **Plugin Registry Contribution**: Developers discussed adding plugins to the registry, requiring a separate repo and PR updates to `index.json`.\n- **Unreal Engine Plugin**: A project integrating ElizaOS with Unreal Engine was shared.\n- **Token Prediction Plugin**: A plugin using a feedback loop for evaluation was introduced, with testing and collaboration requested.\n- **Tech-Support Bot**: A bot using ElizaOS for JavaScript, Bitcoin, and GitHub support was proposed, with plans for Telegram and Nostr integration.\n- **Web3 Narrative Automation**: A marketing automation tool using ElizaOS and Langchain was introduced, seeking early testers.\n- **AI Agent Platform**: `aigent.sh`, a platform making AI agents accessible, was launched with daily updates.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1327493511406293016"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Help Interactions\n- **Plugin Registry Submission**: `pravn1729` received guidance on adding a plugin.\n- **Plugin Activation**: `asi123aa` was helped with activating a merged plugin.\n- **Token Prediction Plugin Testing**: `dorianjanezic` requested feedback, with `rick02533` volunteering to test.\n- **Web3 Narrative Automation Feedback**: `shivam_18795` sought testers, with `rick02533` showing interest.\n- **Tech-Support Bot Collaboration**: `chris.troutner` invited developers to collaborate.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1327493511406293016"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Action Items\n#### **Technical Tasks**\n1. Fix Docker build issues related to missing dependencies.\n2. Ensure `client-twitter` and `plugin-twitter` are properly documented.\n3. Investigate and fix embedding input validation errors.\n4. Improve memory management to prevent redundant actions.\n5. Fix SQLite module installation issues.\n\n#### **Documentation Needs**\n6. Update plugin registry to include missing plugins.\n7. Improve installation guide for v2.\n8. Add documentation for multi-agent setups.\n9. Document how to integrate Ollama with Eliza.\n10. Improve REST API documentation.\n\n#### **Feature Requests**\n11. Add a way to delete recent memories as an admin.\n12. Implement a Twitter post deduplication mechanism.\n13. Improve support for local AI models in v2.\n14. Add a CLI command for plugin management.\n15. Improve system prompt handling for better response formatting.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1320246527268098048",
+            "https://discord.com/channels/1051457140637827122/1324089429727514674",
+            "https://discord.com/channels/1051457140637827122/1327493511406293016"
+          ],
+          "images": [],
+          "videos": []
+        }
+      ],
+      "topic": "Misceleanous"
+    }
+  ],
+  "date": 1740182400
+}

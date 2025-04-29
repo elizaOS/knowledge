@@ -1,0 +1,209 @@
+{
+  "type": "dailySummary",
+  "title": "Daily Report - 2025-02-06",
+  "categories": [
+    {
+      "title": "ElizaOS Plugin Development, Web3 Parsing, and RAG Knowledge Enhancements",
+      "content": [
+        {
+          "text": "AIFlowML released the HyperParams.io whitepaper, submitting it to Arxiv and ACL. Meanwhile, Willthesis2 developed a Web3 StructuredOutputParser for LangChain and is exploring AutoOutputParser. R_cubed suggested adding validation for hex addresses and error handling for malformed responses.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1327493511406293016"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "R_cubed proposed using chain-of-density parsing to normalize token standards and contract ABIs, reducing the need for custom parsers. Additionally, plugin development efforts included Cuongnguyenthai integrating plugin-berachain, Mati1131 submitting a PR for plugin-safe-validator, and Blockeater requesting maintainer access for plugin-omniflix.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1327493511406293016"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "Dorianjanezic built a token prediction plugin using a feedback loop and is considering reinforcement learning. Chris.troutner proposed a tech-support bot using ElizaOS, focusing on JavaScript, Bitcoin, and GitHub, with plans for a Nostr plugin. Zaperox is developing a plugin to connect Unreal Engine with Eliza instances.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1327493511406293016"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "Several users faced technical issues, including `_marsh07` investigating `ragKnowledge` storage, `redvoid8344` encountering plugin installation failures due to `plugin-trustdb`, and `robbie3920` struggling with Twitter client setup. Odilitime provided solutions, including clarifying that `ragKnowledge` is initialized at startup and cannot be changed dynamically.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1324089429727514674"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "WebSocket event handling was discussed, with `ualp.` asking about triggering actions based on WebSocket events. Odilitime suggested using `processActions` in the agent’s runtime. Additionally, `mindxploit` reported `plugin-browser` failing due to Chrome’s headless mode changes.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1324089429727514674"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "Technical discussions included `teacoat` requesting guidance on structuring character and custom plugins outside the main repo, `xy0613` struggling with `plugin-rabbi-trader` due to missing API keys, and `sonichuinu` asking how to run a plugin externally. Odilitime provided solutions, including modifying `agent/package.json` to import external workspaces.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1320246527268098048"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "Docker deployment issues were discussed, with `mr.stark_` facing path issues in Docker builds. `hashwarlock` suggested modifying the Dockerfile to ensure correct paths. Additionally, `4n7m4n` asked about message history and memory, with Odilitime explaining that memory is included by default but can be omitted in prompts.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1320246527268098048"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "Discussions on multi-agent setups included `benquik` wanting separate environments for multiple agents, with `new.moon` explaining namespacing in `.env`. `chris.troutner` found that `plugin-local-ai` supports the Ollama API but isn’t listed in the registry.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1320246527268098048"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "Several action items were identified, including fixing `plugin-trustdb` installation issues, updating `plugin-browser` for Chrome’s new headless mode, improving WebSocket event handling, and enhancing RAG knowledge documentation. Additionally, feature requests included supporting dynamic RAG knowledge updates and improving Twitter client post formatting.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1324089429727514674",
+            "https://discord.com/channels/1051457140637827122/1320246527268098048"
+          ],
+          "images": [],
+          "videos": []
+        }
+      ],
+      "topic": "plugins"
+    },
+    {
+      "title": "ElizaOS Plugin Development and Maintenance Updates",
+      "content": [
+        {
+          "text": "### Key Updates\n- **Plugin Maintenance Requests:** `robert.yan` and `superxy` requested maintainer access for `plugin-near` and `plugin-multiversx`, respectively. `odilitime` sent an invite, but `superxy` did not receive it.\n- **NEAR AI Integration:** `robert.yan` submitted a PR (#3275) to add NEAR AI as a model provider to Eliza, pending for over a week.\n- **PR Reviews & Merges:** Multiple PRs were reviewed and merged, including bug fixes (`.boolkeys` fixed 'Invalid array length' error, `v1xingyue` fixed an OOM bug), documentation updates (`dankvr`), and feature additions (`bt.wood` added post-processing support for character objects).\n- **Plugin Registry Updates:** `vincent2412_` clarified the process for adding plugins to the registry instead of the main repo. `flaneurofmetaverses` reported broken links in the registry, which `odilitime` acknowledged.\n- **Dependency Management:** `dtb0x` proposed stricter dependency management with `pnpm`, which was merged.\n- **Twitter Plugin Enhancements:** `krustev.alexander` added a reflection mode, `tadeuchi` added a callback for posted tweets.\n- **New Plugins:** `0xmattsroka` submitted a plugin for fetching on-chain token prices, `fforbeck` added a distributed storage plugin.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1323745969115893780",
+            "https://discord.com/channels/1051457140637827122/1327493511406293016"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### FAQ\n1. **How do I apply for maintainer access to a plugin repo?**\n   - Open an issue in the relevant plugin repo and request access.\n2. **Should I submit my plugin PR to the main repo or the registry?**\n   - Submit the plugin PR to the registry repo and configuration changes to the main repo.\n3. **Can I push branches directly to the main repo?**\n   - No, you must fork the repo and submit a PR.\n4. **Should PRs be made to the `develop` or `main` branch?**\n   - PRs should be made to the `develop` branch.\n5. **How do I define environment variables for my plugin?**\n   - Define them in your plugin’s `package.json` and submit a PR for `.env.example` in the main repo.\n6. **Why is my plugin’s link broken in the registry?**\n   - The registry page is not linking correctly; `odilitime` is investigating.\n7. **How do I distribute my plugin if it was removed from the registry?**\n   - Create your own repo and submit a PR to `elizaos-plugins/registry`.\n8. **Does ElizaOS distribute plugins via npm?**\n   - No, plugins are distributed via Git.\n9. **What version will my merged PR be included in?**\n   - It will be included in the next release; check the release notes.\n10. **How do I fix unmet dependencies when using `pnpm`?**\n    - Use stricter dependency management to ensure all required packages are installed.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1323745969115893780",
+            "https://discord.com/channels/1051457140637827122/1327493511406293016"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Action Items\n#### Technical Tasks\n1. **Fix broken links in the plugin registry** (`flaneurofmetaverses`).\n2. **Improve `pnpm` dependency management** (`dtb0x`).\n3. **Investigate and fix OOM issue in Eliza** (`v1xingyue`).\n4. **Enhance Twitter plugin with callback support** (`tadeuchi`).\n5. **Implement post-processing support for character objects** (`bt.wood`).\n6. **Review and merge AI provider PR for Mem0** (`whysosaket`).\n7. **Ensure proper versioning for Twitter plugin** (`tadeuchi`).\n8. **Fix double tweet posting issue (if confirmed)** (`redvoid8344`).\n9. **Improve plugin discovery in the registry** (`odilitime`).\n10. **Enhance AI-news aggregation** (`dankvr`).\n\n#### Documentation Needs\n11. **Update official documentation for PR submission process** (`bealers`).\n12. **Clarify plugin submission guidelines in registry docs** (`vincent2412_`).\n13. **Document stricter `pnpm` dependency management** (`dtb0x`).\n14. **Add guidelines for AI provider integration** (`whysosaket`).\n15. **Improve documentation on plugin versioning** (`tadeuchi`).\n\n#### Feature Requests\n16. **Add command-line tools for plugin discovery and installation** (`odilitime`).\n17. **Enhance AI agent capabilities for blockchain execution** (`teoloki`).\n18. **Improve Twitter plugin with reflection mode** (`krustev.alexander`).\n19. **Support fetching on-chain token prices in Eliza** (`0xmattsroka`).\n20. **Integrate distributed storage plugin** (`fforbeck`).",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1323745969115893780",
+            "https://discord.com/channels/1051457140637827122/1327493511406293016"
+          ],
+          "images": [],
+          "videos": []
+        }
+      ],
+      "topic": "plugin"
+    },
+    {
+      "title": "ElizaOS Plugin Development and Technical Issues",
+      "content": [
+        {
+          "text": "Users encountered various technical issues while setting up and running ElizaOS plugins. Common problems included missing API keys, incorrect environment variable settings, and plugin installation failures. Solutions involved ensuring `.env` files were correctly configured, modifying Dockerfiles for proper dependency installation, and using the correct plugin installation commands.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1320246527268098048",
+            "https://discord.com/channels/1051457140637827122/1324089429727514674"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "Several users faced issues with the Twitter and Discord clients. The Twitter client was moved to a plugin-based system, requiring installation via `npx elizaos plugins install @elizaos-plugins/client-twitter`. Users also reported repeated posts, which could be mitigated by adjusting `modelConfig` settings. The Discord client required similar installation steps.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1320246527268098048",
+            "https://discord.com/channels/1051457140637827122/1324089429727514674"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "Plugin development and maintenance were key discussion points. Users requested guidance on structuring external plugins, adding plugins to the registry, and submitting PRs. Maintainer access was granted for several plugins, and new plugins such as `plugin-safe-validator`, `plugin-omniflix`, and `plugin-dexpaprika` were submitted.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1327493511406293016",
+            "https://discord.com/channels/1051457140637827122/1323745969115893780"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "Memory management and Retrieval-Augmented Generation (RAG) knowledge storage were discussed. Users had issues with memory retrieval and embedding errors, which were resolved by ensuring `USE_OPENAI_EMBEDDING` was set correctly and checking `.env` configurations. The system expects knowledge files in `characters/knowledge/agent-name`.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1320246527268098048",
+            "https://discord.com/channels/1051457140637827122/1324089429727514674"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "Docker deployment issues were reported, with users facing missing dependencies and incorrect paths. Solutions included modifying the Dockerfile to ensure dependencies were installed correctly and paths were properly set.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1320246527268098048"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "Multi-agent setups were discussed, with users wanting to run multiple agents with different Twitter accounts. The recommended solution was to use namespaced environment variables for each agent and load them dynamically in the character file.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1320246527268098048"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "Ollama API integration was explored, with users wanting to use it for local LLMs. The solution was to use `plugin-local-ai` and set `OLLAMA_SERVER_URL` in `.env`. However, the plugin was not listed in the registry, requiring manual installation.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1320246527268098048"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "Web3 structured output parsing and chain-of-density parsing were discussed. Users explored ways to normalize token standards and contract ABIs, reducing the need for custom parsers. Error handling for malformed Web3 responses was also suggested.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1327493511406293016"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "A tech-support bot using ElizaOS was proposed, focusing on JavaScript, Bitcoin, and GitHub, with plans for a Nostr plugin. Additionally, a plugin to connect Unreal Engine with Eliza instances was in development.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1327493511406293016"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "Users requested improvements to the plugin registry, including fixing broken links and improving plugin discovery. Additionally, stricter dependency management with `pnpm` was proposed and merged.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1323745969115893780"
+          ],
+          "images": [],
+          "videos": []
+        }
+      ],
+      "topic": "Misceleanous"
+    }
+  ],
+  "date": 1738800000
+}

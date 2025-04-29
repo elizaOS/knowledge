@@ -1,0 +1,90 @@
+{
+  "type": "dailySummary",
+  "title": "Daily Report - 2025-01-22",
+  "categories": [
+    {
+      "title": "ElizaOS Development Updates and Plugin Integrations",
+      "content": [
+        {
+          "text": "### Key Technical Discussions & Decisions\n- **Multi-Agent Workflow**: ElizaOS supports both single-agent multitasking and multi-agent setups, allowing different agents to handle distinct tasks.\n- **Search Integration for Eliza**: A provider model was proposed to inject live search results into LLM responses instead of just returning URLs.\n- **Plugin System & Dynamic Context Providers**: A generic 'getContext' plugin was suggested to allow API integrations without writing new plugins, though security risks and API return type standardization were concerns.\n- **Twitter Spaces Issues**: ICE connection failures and early disconnections were addressed with improved error handling and memory storage adjustments.\n- **Build Issues on Windows**: Switching to Git Bash instead of the VS Code terminal resolved build failures.\n- **RAG Knowledge Issues**: Debugging showed knowledge retrieval was working, but LLM responses omitted key details.\n- **Docker Build Failures**: Adjustments to the Dockerfile ensured dependencies were installed correctly.\n- **Discord & Twitter Client Migration**: Clients are now plugins, requiring manual installation and configuration.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1320246527268098048",
+            "https://discord.com/channels/1051457140637827122/1324089429727514674"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Plugin Development & Contributions\n- **New Plugins**: Several plugins were submitted and merged, including Safe Validator, Berachain, OmniFlix, and Token Prediction.\n- **Token Prediction Plugin**: Built with a feedback loop for evaluation, with plans to integrate reinforcement learning.\n- **Unreal Engine Plugin**: A plugin is in development to enable communication between Unreal Engine and Eliza instances.\n- **Tech-Support Bot**: A bot is being developed using ElizaOS, focusing on JavaScript, Bitcoin, and GitHub integration, with plans to run models locally using Ollama.\n- **Distributed Storage Plugin**: A new plugin for distributed storage was submitted.\n- **Plugin Registry & Contribution Process**: Clarifications were provided on submitting plugins to the registry repo instead of the main repo.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1327493511406293016",
+            "https://discord.com/channels/1051457140637827122/1323745969115893780"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Common Issues & Fixes\n- **Character Defaulting Issue**: Some users reported their agent defaulting to Eliza due to bracket errors in the character file.\n- **Plugin Installation Errors**: Issues with installing plugins like `@elizaos/plugin-solana-agent-kit` were resolved by checking package.json and using `pnpm docker` for builds.\n- **WebSocket Event Handling**: Users were advised to use `processActions` for real-time event handling.\n- **RAG Knowledge Storage**: Users struggled with configuring RAG knowledge storage, with `.pdf` files not working and `.md` files being required.\n- **Twitter Plugin Issues**: Users had trouble connecting the Twitter client due to confusion between `plugin-twitter` and `client-twitter`.\n- **Real-Time DeFi Data**: Users explored integrating real-time DeFi data into agents for yield opportunity detection and automated trading.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1324089429727514674",
+            "https://discord.com/channels/1051457140637827122/1320246527268098048"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Action Items\n#### Technical Tasks\n1. **Fix Twitter Spaces ICE connection issues**\n2. **Improve RAG knowledge retrieval**\n3. **Fix Docker build failures**\n4. **Ensure `composeState` works correctly in plugins**\n5. **Fix SQLite module errors**\n6. **Investigate OpenRouter defaulting to Llama**\n7. **Resolve Twitter Plugin Confusion (`plugin-twitter` vs. `client-twitter`)**\n\n#### Documentation Needs\n8. **Update Twitter client setup guide**\n9. **Clarify RAG knowledge setup**\n10. **Improve REST API documentation**\n11. **Add guide for running multiple agents with different Twitter accounts**\n12. **Document Ollama integration**\n\n#### Feature Requests\n13. **Add a 'getContext' plugin for dynamic API integrations**\n14. **Implement a memory deletion feature in the UI**\n15. **Improve Twitter post formatting options**\n16. **Add a built-in method to prevent duplicate Twitter posts**\n17. **Support multi-agent setups with independent environments**",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1320246527268098048",
+            "https://discord.com/channels/1051457140637827122/1327493511406293016"
+          ],
+          "images": [],
+          "videos": []
+        }
+      ],
+      "topic": "plugins"
+    },
+    {
+      "title": "ElizaOS: Technical Updates, Plugin Development, and Issue Resolutions",
+      "content": [
+        {
+          "text": "### Key Technical Discussions & Decisions\n- **Multi-Agent Workflow**: ElizaOS supports both single-agent multitasking and multi-agent setups, allowing different agents to handle distinct tasks such as user interaction, data analysis, and trading signal generation.\n- **Search Integration for Eliza**: A provider model was proposed to inject live search results into LLM responses instead of just returning URLs.\n- **Plugin System & Dynamic Context Providers**: A generic 'getContext' plugin was suggested to allow API integrations without writing new plugins, though concerns were raised about security risks and API return type standardization.\n- **Twitter Spaces Issues**: ICE connection failures and early disconnections were reported. PR #2686 was submitted to improve error handling and memory storage adjustments.\n- **Build Issues on Windows**: Switching to Git Bash instead of the VS Code terminal resolved build failures. Removing `plugin-avail` and `akashPlugin` also helped.\n- **RAG Knowledge Issues**: Debugging showed that knowledge retrieval was working, but LLM responses omitted key details.\n- **Docker Build Failures**: `pnpm install` was failing due to missing dependencies. Adjustments to the Dockerfile resolved the issue.\n- **Discord & Twitter Client Migration**: Clients are now plugins, requiring users to add `@elizaos-plugins/client-discord` and `@elizaos-plugins/client-twitter` to the character file.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1320246527268098048",
+            "https://discord.com/channels/1051457140637827122/1324089429727514674"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Plugin Development & Fixes\n- **Twilio SMS Plugin**: A Twilio plugin for SMS communication was proposed but was already implemented in PR #2139.\n- **Plugin Registry & Contribution Process**: New plugins should be submitted to the registry repo instead of the main repo. Environment variables should be updated in `.env.example`.\n- **Twitter Client Enhancements**: A reflection mode was added to extract valuable insights from conversations.\n- **Post-Processing for Character Objects**: `postProcessors` were introduced to avoid modifying the `plugins` field.\n- **Memory Optimization**: An out-of-memory bug in v0.25.8 was fixed by adjusting `splitChunks/splitText`.\n- **Distributed Storage Plugin**: A new distributed storage plugin was submitted.\n- **Plugin Registry Link Issues**: Broken links in the plugin registry were reported and acknowledged for investigation.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1323745969115893780"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Common Issues & Resolutions\n- **ICE Connection Errors in Spaces**: The error occurs when an agent creates a space and no one joins. A workaround is to ensure at least one participant joins. PR #2686 was submitted to improve handling.\n- **Build Errors with pnpm**: Adding specific package overrides in `pnpm` resolved build errors.\n- **Twitter Image Vision Bug**: Image recognition worked on Telegram but not Twitter. Investigation was assigned.\n- **Docker Build Issues**: Debugging revealed incorrect module paths. A revised Dockerfile was tested to resolve missing dependencies.\n- **Discord Client Not Starting**: Ensuring the Discord client was added as a plugin, not a client, resolved the issue.\n- **Twitter Client Not Posting**: Installing both `plugin-twitter` and `client-twitter` fixed the issue.\n- **Ollama API Integration**: `plugin-local-ai` supports Ollama API, and the necessary `.env` configuration was provided.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1320246527268098048"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Action Items\n#### Technical Tasks\n1. **Fix Twitter Spaces ICE connection issues**\n2. **Improve RAG knowledge retrieval**\n3. **Fix Docker build failures**\n4. **Ensure `composeState` works correctly in plugins**\n5. **Fix SQLite module errors**\n6. **Investigate Twitter image vision bug**\n7. **Resolve Twitter client post duplication issue**\n8. **Fix Telegram API connection issue for IPv4-only setups**\n\n#### Documentation Needs\n9. **Update Twitter client setup guide**\n10. **Clarify RAG knowledge setup**\n11. **Improve REST API documentation**\n12. **Add guide for running multiple agents with different Twitter accounts**\n13. **Document Ollama integration**\n14. **Improve Discord client setup documentation**\n15. **Add troubleshooting guide for `pnpm` build errors**\n\n#### Feature Requests\n16. **Add a 'getContext' plugin for dynamic API integrations**\n17. **Implement a memory deletion feature in the UI**\n18. **Improve Twitter post formatting options**\n19. **Add a built-in method to prevent duplicate Twitter posts**\n20. **Support multi-agent setups with independent environments**",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1320246527268098048",
+            "https://discord.com/channels/1051457140637827122/1324089429727514674",
+            "https://discord.com/channels/1051457140637827122/1323745969115893780"
+          ],
+          "images": [],
+          "videos": []
+        }
+      ],
+      "topic": "Misceleanous"
+    }
+  ],
+  "date": 1737504000
+}

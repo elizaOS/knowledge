@@ -1,0 +1,141 @@
+{
+  "type": "dailySummary",
+  "title": "Daily Report - 2025-02-19",
+  "categories": [
+    {
+      "title": "ElizaOS: Technical Discussions, Issues, and Solutions",
+      "content": [
+        {
+          "text": "### Technical Discussions & Decisions\n- **Eliza Starter vs. Eliza**: `eliza-starter` is a lightweight version for agent deployment without plugin development. It lacks a web interface, which was identified as an oversight.\n- **Plugin Registry & Metadata**: Discussions on improving plugin metadata storage, including adding descriptions and images to `package.json` instead of the registry index.\n- **Multi-Agent System**: `RAG knowledge` supports shared memory across multiple agents. A modular approach with sub-agents was debated for scalability.\n- **Plugin Installation & Management**: `npx elizaos plugins install` is the new method for adding plugins. Some plugins were missing from the registry and needed re-adding.\n- **Docker Issues**: Multiple users reported Docker build failures due to missing dependencies and incorrect paths. A revised Dockerfile was proposed.\n- **Twitter Client Issues**: Users faced issues with Twitter integration, including double responses and shadow bans. Solutions included setting accounts as 'automated' and adjusting model parameters.\n- **Discord Client Setup**: The Discord client was moved to a plugin format, requiring `\"plugins\": [\"@elizaos-plugins/client-discord\"]` in the character file.\n- **Memory Management & Repetition**: Issues with agents repeating messages were linked to memory retrieval. Solutions included adjusting `composeState` and prompt engineering.\n- **REST API Documentation**: Swagger was considered but abandoned in favor of a simpler REST API documentation page.\n- **V2 Migration**: V2 introduces a CLI (`npx elizaos start`) and a new plugin system. Migration tools are planned.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1320246527268098048",
+            "https://discord.com/channels/1051457140637827122/1324089429727514674"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Concrete Solutions & Implementations\n- **Plugin Metadata**: Move descriptions and images to `package.json` instead of the registry index.\n- **Docker Fixes**: Adjust paths and ensure dependencies are installed correctly.\n- **Twitter Fixes**: Adjust `modelConfig` parameters (`temperature`, `frequency_penalty`, `presence_penalty`) to reduce redundancy.\n- **Discord Fixes**: Use `npx elizaos plugins install @elizaos-plugins/client-discord` and update the character file.\n- **Memory Fixes**: Ensure `composeState` is used correctly and log LLM prompts for debugging.\n- **REST API Docs**: A new documentation page was created instead of using Swagger.\n- **V2 CLI**: `npx elizaos start` replaces `eliza-starter`.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1320246527268098048",
+            "https://discord.com/channels/1051457140637827122/1324089429727514674"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### FAQ\n1. **What is the difference between `eliza` and `eliza-starter`?**\n   - `eliza-starter` is a lightweight version for deploying agents without plugin development.\n2. **How do I install a plugin in ElizaOS?**\n   - Use `npx elizaos plugins install @elizaos-plugins/plugin-name`.\n3. **Why is my Twitter bot posting duplicate messages?**\n   - Adjust `modelConfig` parameters (`temperature`, `frequency_penalty`, `presence_penalty`) in the character file.\n4. **How do I run the Discord client in the latest version?**\n   - Add `@elizaos-plugins/client-discord` to the `plugins` array in the character file.\n5. **How do I use a locally hosted LLM with Eliza?**\n   - Use the `plugin-local-ai` plugin and set `OLLAMA_SERVER_URL` in `.env`.\n6. **How do I avoid my Twitter bot getting shadowbanned?**\n   - Mark the account as 'automated' in Twitter settings.\n7. **How do I delete a memory from Eliza?**\n   - Use `runtime.messageManager.removeMemory`.\n8. **How do I set up Eliza on AWS?**\n   - Use Docker or SST for deployment.\n9. **How do I configure multiple agents with different Twitter accounts?**\n   - Use namespaced environment variables for each agent.\n10. **How do I integrate voice features with Eliza?**\n   - Use OpenAI’s TTS API and connect it to the agent.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1320246527268098048",
+            "https://discord.com/channels/1051457140637827122/1324089429727514674"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Action Items\n#### **Technical Tasks**\n1. Fix Docker build issues.\n2. Improve plugin metadata storage.\n3. Debug Twitter client double responses.\n4. Fix SQLite module errors.\n5. Improve REST API documentation.\n\n#### **Documentation Needs**\n6. Update installation guides.\n7. Add a migration guide for V2.\n8. Improve multi-agent setup documentation.\n\n#### **Feature Requests**\n9. Add a memory deletion feature.\n10. Implement a Twitter auto-reply service.\n11. Improve V2 CLI usability.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1320246527268098048",
+            "https://discord.com/channels/1051457140637827122/1324089429727514674"
+          ],
+          "images": [],
+          "videos": []
+        }
+      ],
+      "topic": "plugins"
+    },
+    {
+      "title": "ElizaOS Plugin Development and Enhancements",
+      "content": [
+        {
+          "text": "### Plugin Contribution Process\nSeveral users discussed contributing plugins to the `elizaos-plugins` registry. The process involves creating a separate repository for the plugin, submitting a PR to update `index.json`, and waiting for approval. [odilitime] clarified this process. Additionally, [vincent2412_] confirmed that new plugins should be submitted to `elizaos-plugins/registry`, not the main `elizaOS` repo.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1327493511406293016",
+            "https://discord.com/channels/1051457140637827122/1323745969115893780"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Plugin Installation & Activation\n[asi123aa] asked how to activate a merged plugin. [odilitime] explained that users need to run:\nsh\nnpx elizaos plugins install @elizaos-plugins/plugin-name\n\nand add it to the character file.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1327493511406293016"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### New Plugins and Enhancements\n- **Token Prediction Plugin**: [dorianjanezic] shared a token prediction plugin using a feedback loop for evaluation and seeks to implement reinforcement learning. [rick02533] offered to help test.\n- **Tech-Support Bot**: [chris.troutner] proposed a tech-support bot using ElizaOS, focusing on JavaScript, Bitcoin, and GitHub. He plans to separate knowledge from bot code, run models locally with Ollama, and integrate with Telegram and Nostr.\n- **Unreal Engine Plugin**: [zaperox] announced a plugin enabling communication between Unreal Engine and Eliza instances.\n- **Web3 Narrative Automation**: [shivam_18795] is developing a Web3 content automation platform using ElizaOS and Langchain, allowing users to edit drafts, schedule posts, and analyze engagement.\n- **On-Chain Token Price Plugin**: [0xmattsroka] submitted a plugin for fetching token prices across 20+ chains.\n- **Distributed Storage Plugin**: [fforbeck] submitted a plugin for distributed storage.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1327493511406293016",
+            "https://discord.com/channels/1051457140637827122/1323745969115893780"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Technical Fixes and Improvements\n- **Dependency Management Improvement**: [dtb0x] proposed stricter dependency management using `pnpm`, ensuring each package explicitly declares its dependencies. [odilitime] merged the change.\n- **Out-of-Memory Bug Fix**: [v1xingyue] fixed an OOM issue in v0.25.8 by adjusting `splitChunks/splitText`. [odilitime] confirmed the fix.\n- **Broken Plugin Registry Links**: [flaneurofmetaverses] reported broken links in the plugin registry. [odilitime] acknowledged the issue but needed further investigation.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1323745969115893780"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Action Items\n- **Update Plugin Contribution Docs** – Clarify that plugins must be in separate repos and require `index.json` updates.\n- **Fix Plugin Activation Docs** – Add `npx elizaos plugins install` command to documentation.\n- **Investigate `ERR_PNPM_WORKSPACE_PKG_NOT_FOUND`** – Debug issue with `@elizaos/client-discord`.\n- **Develop Nostr Plugin for ElizaOS** – Enable tech-support bot integration.\n- **Enhance Token Prediction Plugin** – Implement reinforcement learning.\n- **Improve Web3 Automation Platform** – Optimize Langchain integration.\n- **Fix broken plugin registry links** – Investigate and resolve linking issues.\n- **Improve Plugin Registry Approval Process** – Reduce wait times for new plugins.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1327493511406293016",
+            "https://discord.com/channels/1051457140637827122/1323745969115893780"
+          ],
+          "images": [],
+          "videos": []
+        }
+      ],
+      "topic": "plugin"
+    },
+    {
+      "title": "ElizaOS Development Updates and Plugin Management",
+      "content": [
+        {
+          "text": "### 1. Summary\n\n#### **Technical Discussions & Decisions**\n- **Eliza Starter vs. Eliza**: `eliza-starter` is a lightweight version for agent deployment without plugin development. It lacks a web interface, which was identified as an oversight.\n- **Plugin Registry & Metadata**: Discussions on improving plugin metadata storage, including adding descriptions and images to `package.json` instead of the registry index.\n- **Multi-Agent System**: `RAG knowledge` supports shared memory across multiple agents. A modular approach with sub-agents was debated for scalability.\n- **Plugin Installation & Management**: `npx elizaos plugins install` is the new method for adding plugins. Some plugins were missing from the registry and needed re-adding.\n- **Docker Issues**: Multiple users reported Docker build failures due to missing dependencies and incorrect paths. A revised Dockerfile was proposed.\n- **Twitter Client Issues**: Users faced issues with Twitter integration, including double responses and shadow bans. Solutions included setting accounts as \"automated\" and adjusting model parameters.\n- **Discord Client Setup**: The Discord client was moved to a plugin format, requiring `\"plugins\": [\"@elizaos-plugins/client-discord\"]` in the character file.\n- **Memory Management & Repetition**: Issues with agents repeating messages were linked to memory retrieval. Solutions included adjusting `composeState` and prompt engineering.\n- **REST API Documentation**: Swagger was considered but abandoned in favor of a simpler REST API documentation page.\n- **V2 Migration**: V2 introduces a CLI (`npx elizaos start`) and a new plugin system. Migration tools are planned.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1320246527268098048",
+            "https://discord.com/channels/1051457140637827122/1327493511406293016",
+            "https://discord.com/channels/1051457140637827122/1324089429727514674"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### 2. FAQ\n\n1. **Q:** What is the difference between `eliza` and `eliza-starter`?  \n   **A:** `eliza-starter` is a lightweight version for deploying agents without plugin development. *(Asked by leo_l_150, answered by odilitime)*  \n\n2. **Q:** How do I install a plugin in ElizaOS?  \n   **A:** Use `npx elizaos plugins install @elizaos-plugins/plugin-name`. *(Asked by multiple users, answered by odilitime)*  \n\n3. **Q:** Why is my Twitter bot posting duplicate messages?  \n   **A:** Adjust `modelConfig` parameters (`temperature`, `frequency_penalty`, `presence_penalty`) in the character file. *(Asked by rtzavalon, answered by odilitime)*  \n\n4. **Q:** How do I run the Discord client in the latest version?  \n   **A:** Add `@elizaos-plugins/client-discord` to the `plugins` array in the character file. *(Asked by ad_dev, answered by odilitime)*  \n\n5. **Q:** How do I use a locally hosted LLM with Eliza?  \n   **A:** Use the `plugin-local-ai` plugin and set `OLLAMA_SERVER_URL` in `.env`. *(Asked by chris.troutner, answered by chris.troutner)*  \n\n6. **Q:** How do I avoid my Twitter bot getting shadowbanned?  \n   **A:** Mark the account as \"automated\" in Twitter settings. *(Asked by bpetes, answered by definiteoptimist)*  \n\n7. **Q:** How do I delete a memory from Eliza?  \n   **A:** Use `runtime.messageManager.removeMemory`. *(Asked by fixzzee, answered by new.moon)*  \n\n8. **Q:** How do I set up Eliza on AWS?  \n   **A:** Use Docker or SST for deployment. *(Asked by julianneuss, answered by definiteoptimist)*  \n\n9. **Q:** How do I configure multiple agents with different Twitter accounts?  \n   **A:** Use namespaced environment variables for each agent. *(Asked by benquik, answered by new.moon)*  \n\n10. **Q:** How do I integrate voice features with Eliza?  \n   **A:** Use OpenAI’s TTS API and connect it to the agent. *(Asked by syntronyx, answered by new.moon)*",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1320246527268098048",
+            "https://discord.com/channels/1051457140637827122/1327493511406293016"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### 3. Help Interactions\n\n1. **Docker Build Issues**: `mr.stark_` and `hashwarlock` debugged Docker build failures and proposed fixes.  \n2. **Twitter Bot Shadowban**: `bpetes` received advice on marking accounts as \"automated\" to avoid bans.  \n3. **Memory Management**: `fixzzee` learned how to delete unwanted memories from `new.moon`.  \n4. **Multi-Agent Setup**: `benquik` got guidance from `new.moon` on running multiple agents with different Twitter accounts.  \n5. **Local LLM Integration**: `chris.troutner` figured out how to use Ollama with Eliza and shared the solution.  \n6. **REST API Setup**: `x4ndar` was directed to the new API documentation by `odilitime`.  \n7. **SQLite Errors**: `kalaudius` found a fix for SQLite module issues and shared it.  \n8. **V2 Installation Issues**: `4n7m4n` reported `npx` errors, leading to a GitHub issue for tracking.  \n9. **Plugin Registry Fixes**: `dankvr` worked on cleaning up the plugin registry and metadata.  \n10. **Documentation Contributions**: `552020` was encouraged to update outdated tutorials.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1320246527268098048",
+            "https://discord.com/channels/1051457140637827122/1324089429727514674"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### 4. Action Items\n\n#### **Technical Tasks**\n1. Fix Docker build issues (`mr.stark_`, `hashwarlock`).  \n2. Improve plugin metadata storage (`dankvr`).  \n3. Debug Twitter client double responses (`odilitime`).  \n4. Fix SQLite module errors (`kalaudius`).  \n5. Improve REST API documentation (`dankvr`).  \n\n#### **Documentation Needs**\n6. Update installation guides (`dankvr`).  \n7. Add a migration guide for V2 (`new.moon`).  \n8. Improve multi-agent setup documentation (`new.moon`).  \n\n#### **Feature Requests**\n9. Add a memory deletion feature (`new.moon`).  \n10. Implement a Twitter auto-reply service (`nerdylabs`).  \n11. Improve V2 CLI usability (`dankvr`).",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1320246527268098048",
+            "https://discord.com/channels/1051457140637827122/1323745969115893780"
+          ],
+          "images": [],
+          "videos": []
+        }
+      ],
+      "topic": "Misceleanous"
+    }
+  ],
+  "date": 1739923200
+}

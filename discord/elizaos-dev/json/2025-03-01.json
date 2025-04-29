@@ -1,0 +1,231 @@
+{
+  "type": "dailySummary",
+  "title": "Daily Report - 2025-03-01",
+  "categories": [
+    {
+      "title": "ElizaOS Plugin Development and AI Integrations",
+      "content": [
+        {
+          "text": "### Plugin Activation and Registry Issues\n- Users faced issues activating plugins after merging them into the ElizaOS registry.\n- Solution provided: Run `npx elizaos plugins install @elizaos-plugins/plugin-name` and add it to the character file.\n- Missing plugins (`plugin-image`, `plugin-video`, `plugin-tts`) were flagged for re-addition.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1327493511406293016",
+            "https://discord.com/channels/1051457140637827122/1320246527268098048"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### New Plugin Developments\n- **Unreal Engine Plugin**: Enables communication between Unreal Engine and Eliza instances.\n- **Token Prediction Plugin**: Uses a feedback loop for evaluation and seeks community feedback.\n- **Local LLM Support**: Ollama and DeepSeek models were configured for local AI execution.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1327493511406293016",
+            "https://discord.com/channels/1051457140637827122/1320246527268098048"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### AI-Powered Projects\n- **Tech-Support Bot**: Focuses on JavaScript, Bitcoin, and GitHub, running locally with Ollama, and integrating with Telegram and Nostr.\n- **Web3 Narrative Marketing Automation**: Uses ElizaOS and Langchain for automated content generation and scheduling.\n- **AI Agent Platform (Aigent.sh)**: Aims to make AI agents accessible to non-technical users, powered by ElizaOS.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1327493511406293016"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Technical Issues and Solutions\n- **Retrieval-Augmented Generation (RAG) Issues**: OpenRouter lacks embedding support; switched to database-based embeddings.\n- **Docker Deployment Issues**: Fixed missing `ts-node` module and incorrect paths.\n- **Twitter Client Issues**: Shadowbans were resolved by enabling the 'automated profile' setting.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1320246527268098048"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Action Items\n- **Technical Tasks**: Fix plugin activation documentation, develop a Nostr plugin, improve token prediction accuracy, and enhance Web3 automation.\n- **Documentation Needs**: Update ElizaOS plugin installation guide, document local AI model setup, and clarify REST API setup.\n- **Feature Requests**: Add a plugin discovery UI, support scheduled content posting, and improve AI-generated summaries in token prediction reports.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1327493511406293016",
+            "https://discord.com/channels/1051457140637827122/1320246527268098048"
+          ],
+          "images": [],
+          "videos": []
+        }
+      ],
+      "topic": "plugins"
+    },
+    {
+      "title": "ElizaOS Plugin Development and Issues",
+      "content": [
+        {
+          "text": "Several updates and issues were discussed regarding ElizaOS plugins. A key issue was broken links in the official plugin registry after merging PR #95, which odilitime confirmed and is investigating. Additionally, pravn1729 inquired about adding plugins to the registry, and odilitime clarified the process of creating a personal repo and submitting a PR.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1323745969115893780"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "Multiple plugin enhancements were introduced, including a reflection mode for the Twitter client (PR #14 by krustev.alexander) and a callback for retrieving posted tweet info (PR #1 by tadeuchi). Other new plugins include the Sonic blockchain plugin (PR #97 by thopate_vijay), an onchain token price plugin (PR #109 by 0xmattsroka), and a distributed storage plugin (PR #111 by fforbeck).",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1323745969115893780"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "Bug fixes included resolving an issue with loading character plugins from remote URLs (PR #3890 by dtb0x). Additionally, redvoid8344 asked if PR #14 fixed a double tweet posting issue, but krustev.alexander had not encountered the problem.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1323745969115893780"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "Discussions also covered plugin installation and testing. thopate_vijay asked about testing a plugin in direct client mode, and odilitime clarified the installation process using `npx elizaos plugins add @elizaos-plugins/client-discord`. Additionally, robbie3920 faced issues with Twitter and Discord clients, which were resolved by installing the correct plugins.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1324089429727514674"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "Other technical discussions included integrating real-time DeFi data into agents, defining providers in ElizaOS, and handling API endpoints for agent creation. Additionally, issues with Chrome headless mode, Twitch client infinite loops, and `ragKnowledge` not working were raised, with some receiving resolutions.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1324089429727514674"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "Action items include fixing broken plugin links, reviewing and merging pending PRs, clarifying plugin submission and distribution documentation, and improving plugin registry validation to prevent broken links in the future.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1323745969115893780",
+            "https://discord.com/channels/1051457140637827122/1324089429727514674"
+          ],
+          "images": [],
+          "videos": []
+        }
+      ],
+      "topic": "plugin"
+    },
+    {
+      "title": "Plugin Installation Issues in ElizaOS",
+      "content": [
+        {
+          "text": "Users have reported multiple issues with plugin installation in ElizaOS. The command `npx elizaos plugins add` fails to install dependencies for some plugins due to missing entries in `package.json`. Additionally, some plugins depend on archived dependencies, such as `plugin-di`, which causes installation failures.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1320246527268098048"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "A registry cleanup is needed due to duplicate and inconsistent plugin names, such as `plugin-solana-agent-kit` vs. `plugin-solana-agentkit`. This inconsistency can lead to installation failures or confusion when adding plugins.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1320246527268098048"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "Some plugins, such as `plugin-llama`, are private and not available via NPM, making them difficult to install. Additionally, `@elizaos/plugin-sql@^0.25.6` is missing from the registry, causing installation failures.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1320246527268098048"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "Users have also faced issues with client configuration. For example, incorrect plugin naming in `character.json` prevented the Twitter client from working. The correct installation command is `npx elizaos plugins install @elizaos-plugins/client-twitter`, and the correct plugin name must be used in the configuration.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1324089429727514674"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "There is confusion over whether clients should be listed under `clients` or `plugins`. Some clients require being in both sections, leading to misconfigurations. Documentation updates have been suggested to clarify this.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1324089429727514674"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "To resolve missing dependencies when installing plugins, users should ensure no existing folder exists in `/packages` before installation. Additionally, submitting a PR to `elizaos-plugins/registry` can help update the plugin registry.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1320246527268098048"
+          ],
+          "images": [],
+          "videos": []
+        }
+      ],
+      "topic": "plugin installation"
+    },
+    {
+      "title": "ElizaOS Plugin Issues, V2 Migration, and Community Contributions",
+      "content": [
+        {
+          "text": "### Plugin Installation & Registry Issues\n- Several users reported issues with `npx elizaos plugins add`, failing due to missing dependencies in `package.json`.\n- Archived plugins (`plugin-di`) caused installation failures.\n- Duplicate and inconsistent plugin names in the registry (`plugin-solana-agent-kit` vs. `plugin-solana-agentkit`) need cleanup.\n- `plugin-image`, `plugin-video`, and `plugin-tts` are missing from the registry and need to be re-added.\n- `@elizaos/plugin-sql@^0.25.6` is missing from the registry, causing installation failures.\n- `odilitime` confirmed that ElizaOS distributes plugins via Git, not npm.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1320246527268098048",
+            "https://discord.com/channels/1051457140637827122/1323745969115893780"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Docker Deployment Issues\n- `docker compose up` fails due to incorrect module paths (`adapter-pglite` not found).\n- `pnpm install` step is missing in the Dockerfile, causing missing dependencies.\n- Hardcoded paths in the codebase may be causing module resolution failures.\n- `hashwarlock` and `mr.stark_` debugged and proposed a revised Dockerfile.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1320246527268098048"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Twitter Client Issues\n- `client-twitter` is not working in the latest versions.\n- Twitter bots running Eliza are getting shadowbanned due to missing 'automated profile' settings.\n- `modelConfig` settings in character JSON may not be applied correctly.\n- `krustev.alexander` added a reflection mode to the Twitter client.\n- `tadeuchi` added a callback to retrieve posted tweet info.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1320246527268098048",
+            "https://discord.com/channels/1051457140637827122/1323745969115893780"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Retrieval-Augmented Generation (RAG) Issues\n- `eliza-news` folder ingestion fails, possibly due to large document sizes.\n- OpenRouter does not support embeddings, requiring a database-based solution.\n- `dankvr` confirmed RAG was working after switching to database-based embeddings.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1320246527268098048"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### V2 Migration & CLI Issues\n- `npx elizaos start` replaces `eliza-starter`.\n- `plugin-local-ai` supports Ollama API for local LLMs.\n- Some plugins (`plugin-llama`) are private and not available via NPM.\n- `npx @elizaos/cli start` fails due to missing dependencies.\n- `dankvr` and `odilitime` identified registry issues and missing plugin versions.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1320246527268098048"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Community Contributions & New Plugins\n- `zaperox` shared a new Unreal Engine plugin for ElizaOS.\n- `dorianjanezic` introduced a token prediction plugin using a feedback loop.\n- `chris.troutner` is building a tech-support bot using ElizaOS, focusing on JavaScript, Bitcoin, and GitHub.\n- `shivam_18795` is developing a Web3 Narrative Marketing Automation platform using ElizaOS and Langchain.\n- `dtb0x` introduced `aigent.sh`, an AI agent platform powered by ElizaOS.\n- `thopate_vijay` submitted a PR for a new Sonic blockchain plugin.\n- `0xmattsroka` introduced a plugin for fetching token prices across 20+ chains.\n- `fforbeck` submitted a PR for a distributed storage plugin.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1327493511406293016",
+            "https://discord.com/channels/1051457140637827122/1323745969115893780"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Action Items\n#### **Technical Tasks**\n1. Fix `npx elizaos plugins add` dependency resolution.\n2. Resolve Docker module path issues (`adapter-pglite`).\n3. Ensure `modelConfig` settings are applied correctly.\n4. Fix `client-twitter` functionality.\n5. Investigate RAG ingestion failures.\n6. Re-add missing plugins (`plugin-image`, `plugin-video`, `plugin-tts`) to the registry.\n7. Fix `npx @elizaos/cli start` command in V2.\n\n#### **Documentation Needs**\n8. Update installation instructions for V2 (`eliza.how`).\n9. Add guide for running multiple agents with different Twitter accounts.\n10. Document Ollama integration with `plugin-local-ai`.\n\n#### **Feature Requests**\n11. Add `removeMemory` admin command.\n12. Improve Twitter bot detection evasion strategies.\n13. Improve plugin registry validation to prevent broken links.\n14. Enhance AI-news aggregation with more sources.\n15. Improve front-end UI for documentation.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1320246527268098048",
+            "https://discord.com/channels/1051457140637827122/1323745969115893780"
+          ],
+          "images": [],
+          "videos": []
+        }
+      ],
+      "topic": "Misceleanous"
+    }
+  ],
+  "date": 1740787200
+}

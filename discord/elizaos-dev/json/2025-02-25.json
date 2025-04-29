@@ -1,0 +1,243 @@
+{
+  "type": "dailySummary",
+  "title": "Daily Report - 2025-02-25",
+  "categories": [
+    {
+      "title": "ElizaOS Plugin Development and Registry Updates",
+      "content": [
+        {
+          "text": "### Plugin Registry Contribution Process\n- [pravn1729] requested help adding a plugin to the ElizaOS plugin registry.\n- [odilitime] clarified that a separate repo is needed for the plugin, and a PR should update `index.json`.\n- [pravn1729] confirmed the changes were made and provided the new repo link.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1327493511406293016"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Plugin Installation & Activation\n- [asi123aa] asked how to activate a merged plugin.\n- [odilitime] provided the command: `npx elizaos plugins install @elizaos-plugins/plugin-name` and instructed to add it to the character file.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1327493511406293016"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Unreal Engine Plugin\n- [zaperox] announced a plugin enabling communication between Unreal Engine and Eliza instances.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1327493511406293016"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Token Prediction Plugin\n- [dorianjanezic] shared a token prediction plugin using a feedback loop for evaluation.\n- Provided an example prediction with detailed market analysis.\n- Requested feedback and collaboration.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1327493511406293016"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Tech-Support Bot on ElizaOS\n- [chris.troutner] proposed a tech-support bot using ElizaOS, focusing on JavaScript, Bitcoin, and GitHub.\n- Plans to separate knowledge from bot code and run models locally using Ollama.\n- Interested in developing a Nostr plugin for tech support.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1327493511406293016"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### AI Agent Platform\n- [dtb0x] introduced `aigent.sh`, a platform making AI agents accessible, powered by ElizaOS.\n- Rolling out daily updates and open to feedback.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1327493511406293016"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Plugin Installation Status & Bug Fixes\n- [v1xingyue] submitted PR #3660 to display plugin installation status.\n- [v1xingyue] fixed an OOM issue in PR #3722 by adjusting `splitChunks/splitText`.\n- [dtb0x] fixed a loading issue for remote character plugins in PR #3890.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1323745969115893780"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Custom Plugin Documentation\n- [redvoid8344] added documentation on using non-registry plugins in PR #3735.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1323745969115893780"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Plugin Registry Issues\n- [flaneurofmetaverses] reported broken links after PR #95.\n- [odilitime] confirmed the issue was not on their end but did not provide an immediate fix.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1323745969115893780"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### New Plugin Submissions\n- [thopate_vijay] submitted PR #97 for a Sonic Blockchain Plugin.\n- [0xmattsroka] submitted PR #109 for fetching token prices.\n- [fforbeck] submitted PR #111 for a distributed storage plugin.\n- [whysosaket] added Mem0 as a provider in PR #3927.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1323745969115893780"
+          ],
+          "images": [],
+          "videos": []
+        }
+      ],
+      "topic": "plugin"
+    },
+    {
+      "title": "ElizaOS Technical Updates and Fixes",
+      "content": [
+        {
+          "text": "### Technical Discussions & Decisions\n\n- **Eliza Desktop App**: Discussion on wrapping Eliza as a desktop app using Electron or Tauri.\n- **Discord Client Issues**: Users faced issues running the Discord client on v0.25.8 and v2. Fixes included installing `client-discord` via `npx elizaos plugins install @elizaos-plugins/client-discord` and ensuring correct bot permissions.\n- **Twitter Client Issues**: Twitter integration in v2 required installing `plugin-twitter` and `client-twitter` and setting correct API keys.\n- **Docker Issues**: Debugging build failures due to missing dependencies and incorrect paths. A revised Dockerfile was tested.\n- **CLI & Plugin Registry**: Improvements to CLI commands and plugin registry consistency. Issues with `npx elizaos plugins add` were identified.\n- **Memory Management**: Users inquired about message history and memory handling. Memory can be manually removed using `runtime.messageManager.removeMemory`.\n- **V2 Migration**: Migration from v1 to v2 is required, with an auto-migration tool planned.\n- **Local AI Models**: `plugin-local-ai` was identified as the correct plugin for using Ollama with Eliza.\n- **Documentation & API**: Improvements to REST API documentation and onboarding guides were discussed.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1320246527268098048"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Concrete Solutions & Implementations\n\n- **Docker Fixes**: A revised Dockerfile was proposed to resolve missing dependencies.\n- **Twitter Plugin Fix**: Installing `plugin-twitter` and `client-twitter` resolved issues.\n- **Memory Removal**: `runtime.messageManager.removeMemory` can delete specific memories.\n- **V2 CLI Commands**: `npx elizaos start` will replace `eliza-starter`.\n- **Local AI Integration**: Environment variables were provided for using Ollama with Eliza.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1320246527268098048"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### FAQ\n\n1. **How do I install the Discord client in v2?** Use `npx elizaos plugins install @elizaos-plugins/client-discord`.\n2. **How do I make Twitter work in the latest version?** Install `plugin-twitter` and `client-twitter` using `npx elizaos plugins add`.\n3. **Is there a migration process from v1 to v2?** Yes, an auto-migration tool for plugins is planned.\n4. **How do I remove a memory from Eliza?** Use `runtime.messageManager.removeMemory`.\n5. **How do I use a locally hosted LLM with Eliza?** Use `plugin-local-ai` and set `OLLAMA_SERVER_URL` in `.env`.\n6. **How do I fix Docker build failures?** Ensure dependencies are installed and paths are correct. A revised Dockerfile was tested.\n7. **How do I integrate voice features with Eliza?** Use OpenAI’s API and configure the voice model in the character file.\n8. **How do I install a custom plugin in Eliza?** Clone the plugin repo, install dependencies, and add it to the character file.\n9. **How do I set up an API endpoint for my frontend?** Use `client-direct` to expose REST API endpoints.\n10. **How do I fix SQLite module errors?** Run `pnpm add better-sqlite3@latest --force` and `npm rebuild better-sqlite3`.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1320246527268098048"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Help Interactions\n\n1. **[odilitime] helped [ad_dev] install the Discord client** by providing the correct `npx` command.\n2. **[michaellewisnzlagent] resolved Twitter client issues** by installing `plugin-twitter` and `client-twitter`.\n3. **[hashwarlock] assisted [mr.stark_] with Docker issues**, testing a revised Dockerfile.\n4. **[new.moon] explained memory removal** using `runtime.messageManager.removeMemory`.\n5. **[chris.troutner] helped [ownedsk] integrate Ollama** by providing correct environment variables.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1320246527268098048"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Action Items\n\n#### **Technical Tasks**\n1. **Fix Discord client installation issues in v2** — [4n7m4n]\n2. **Resolve Twitter client inconsistencies in v2** — [ad_dev]\n3. **Improve Docker build process** — [hashwarlock]\n4. **Fix `npx elizaos plugins add` errors** — [dankvr]\n5. **Ensure memory removal is documented and accessible** — [new.moon]\n6. **Investigate SQLite module errors** — [kalaudius]\n7. **Improve multi-agent environment setup documentation** — [new.moon]\n8. **Fix embedding input validation errors** — [phonique_]\n9. **Ensure Ollama plugin is properly registered** — [chris.troutner]\n10. **Fix REST API authentication issues** — [cjft]\n\n#### **Documentation Needs**\n11. **Update CLI documentation for v2** — [dankvr]\n12. **Improve REST API documentation** — [dankvr]\n13. **Clarify Twitter client setup in v2** — [michaellewisnzlagent]\n14. **Document multi-agent setup** — [new.moon]\n15. **Add troubleshooting guide for Docker issues** — [hashwarlock]\n\n#### **Feature Requests**\n16. **Auto-migration tool for v2** — [new.moon]\n17. **Improve memory management UI** — [new.moon]\n18. **Add support for MCP client plugin** — [jungleheart_33753]\n19. **Enhance local AI model support** — [chris.troutner]\n20. **Improve plugin registry consistency** — [dankvr]",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1320246527268098048"
+          ],
+          "images": [],
+          "videos": []
+        }
+      ],
+      "topic": "discord"
+    },
+    {
+      "title": "Plugin Installation Issues and Solutions",
+      "content": [
+        {
+          "text": "Users encountered issues installing plugins like `plugin-coingecko` and `plugin-twitter`. The correct installation method is `npx elizaos plugins install <plugin-name>` instead of `pnpm install`. Some plugins, such as `plugin-trustdb`, were broken and needed to be excluded.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1324089429727514674"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "For version `0.25.8+`, `npx elizaos plugins install plugin-coingecko` is the recommended installation method. Using `pnpm install @elizaos-plugins/plugin-coingecko -w` caused errors.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1324089429727514674"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "Excluding `plugin-trustdb` resolved installation failures. This plugin was identified as the cause of multiple issues.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1324089429727514674"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "To install the Telegram client, use `npx elizaos plugins install @elizaos-plugins/client-telegram` and configure the bot token in `.env`.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1324089429727514674"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "For the Twitter client, install `@elizaos-plugins/client-twitter` and ensure it is correctly listed in `character.json`.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1324089429727514674"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "Users faced login issues with the Twitter plugin due to dynamic plugin updates. Ensuring the correct plugin was installed and configured resolved the problem.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1324089429727514674"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "To improve plugin installation, better error handling and clearer documentation were suggested.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1324089429727514674"
+          ],
+          "images": [],
+          "videos": []
+        }
+      ],
+      "topic": "plugin installation"
+    },
+    {
+      "title": "ElizaOS Development Updates and Issue Resolutions",
+      "content": [
+        {
+          "text": "### Technical Discussions & Solutions\n\n- **Discord Client Issues**: Users faced difficulties running the Discord client on v0.25.8 and v2. The solution involved installing `client-discord` via `npx elizaos plugins install @elizaos-plugins/client-discord`, adding it to `plugins` in `defaultCharacter.ts`, and ensuring correct bot permissions.\n- **Twitter Client Issues**: The Twitter client required installing `plugin-twitter` and `client-twitter` via `npx elizaos plugins add`, adding them to `plugins` in `character.json`, and ensuring correct API keys in `.env`.\n- **Docker Build Failures**: Issues were resolved by running `pnpm install --no-frozen-lockfile` inside the container, adjusting the Dockerfile, and fixing hardcoded paths.\n- **Memory Management & RAG**: Users experienced memory loops and embedding mismatches. Fixes included using `composeState` properly, debugging memory injection, and ensuring embeddings matched expected sizes.\n- **Plugin Registry Issues**: Some plugins were missing or duplicated. The solution involved updating `index.json` in the plugin registry and removing duplicate entries.\n- **REST API & Documentation**: Missing REST API documentation was addressed by adding Swagger and improving onboarding guides.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1320246527268098048",
+            "https://discord.com/channels/1051457140637827122/1324089429727514674"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### FAQ\n\n1. **How do I install the Discord client?** `npx elizaos plugins install @elizaos-plugins/client-discord`.\n2. **What permissions does the Discord bot need?** 'View Channels', 'Send Messages', 'Read Message History'.\n3. **How do I install the Twitter client?** `npx elizaos plugins add @elizaos-plugins/plugin-twitter`.\n4. **Why is my Twitter bot not posting?** Ensure `client-twitter` is in `plugins` and API keys are set in `.env`.\n5. **How do I fix Docker build failures?** Run `pnpm install --no-frozen-lockfile` inside the container.\n6. **How do I avoid memory loops in my plugin?** Use `composeState` and check `packages/core/src/generation.ts`.\n7. **How do I remove a memory entry?** Use `runtime.messageManager.removeMemory`.\n8. **How do I install the CLI tool?** `npm install -g elizaos-cli`.\n9. **How do I start an agent with a specific character?** `npx elizaos start --character myCharacter.json`.\n10. **How do I configure multiple agents with different Twitter accounts?** Use namespaced environment variables.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1320246527268098048",
+            "https://discord.com/channels/1051457140637827122/1324089429727514674"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Help Interactions\n\n- `odilitime` helped `ad_dev` fix Discord client installation.\n- `michaellewisnzlagent` resolved Twitter client setup issues.\n- `hashwarlock` debugged Docker build failures.\n- `new.moon` explained how to remove memory entries.\n- `odilitime` clarified multiple agent setup with namespaced env variables.\n- `phonique_` received help fixing embedding errors.\n- `julianneuss` shared AWS deployment experience.\n- `mr.stark_` and `hashwarlock` debugged `ts-node` errors in Docker.\n- `odilitime` explained OpenRouter embedding limitations.\n- `dankvr` provided guidance on installing the latest Eliza version.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1320246527268098048",
+            "https://discord.com/channels/1051457140637827122/1324089429727514674"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Action Items\n\n#### Technical Tasks\n1. **Fix Docker build issues** (`mr.stark_`).\n2. **Resolve Twitter client issues in v2** (`odilitime`).\n3. **Improve memory management to prevent loops** (`4n7m4n`).\n4. **Fix embedding size mismatches** (`phonique_`).\n5. **Ensure correct plugin registry entries** (`dankvr`).\n6. **Fix `pnpm start:client` issues** (`dankvr`).\n7. **Resolve `@elizaos/plugin-sql@^0.25.6` versioning issue** (`dankvr`).\n\n#### Documentation Needs\n8. **Add REST API documentation** (`dankvr`).\n9. **Improve onboarding guides** (`dankvr`).\n10. **Clarify multiple agent setup** (`new.moon`).\n11. **Document OpenRouter embedding limitations** (`odilitime`).\n12. **Update plugin installation instructions** (`odilitime`).\n\n#### Feature Requests\n13. **Add a 'make a new plugin' CLI command** (`odilitime`).\n14. **Support multiple plugin install/remove in CLI** (`odilitime`).\n15. **Improve Twitter bot behavior to avoid bans** (`definiteoptimist`).\n16. **Enable memory deletion via admin commands** (`new.moon`).\n17. **Add support for Ollama API in v2** (`chris.troutner`).\n18. **Improve CLI error handling** (`dankvr`).\n19. **Enhance plugin showcase UI** (`dankvr`).\n20. **Implement auto-migration tool for v1 to v2** (`new.moon`).",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1320246527268098048",
+            "https://discord.com/channels/1051457140637827122/1324089429727514674"
+          ],
+          "images": [],
+          "videos": []
+        }
+      ],
+      "topic": "Misceleanous"
+    }
+  ],
+  "date": 1740441600
+}

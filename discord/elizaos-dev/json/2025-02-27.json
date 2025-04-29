@@ -1,0 +1,159 @@
+{
+  "type": "dailySummary",
+  "title": "Daily Report - 2025-02-27",
+  "categories": [
+    {
+      "title": "ElizaOS Development Updates and Plugin Contributions",
+      "content": [
+        {
+          "text": "### Technical Discussions & Decisions\n- **Web3 Login Security**: Concerns were raised about Web3 login signing exposing private keys.\n- **AI News Aggregator**: Configuration updates and Twitter activity data requests.\n- **Plugin Management**: Suggestions for a streamlined plugin creation and management process.\n- **Eliza Container Registry**: Made public for broader accessibility.\n- **Launchpad Token Standards**: Ensuring compliance with Solana SPL standards.\n- **Plugin Maintenance**: Identified the need for maintainers for certain repositories.\n- **REST API Documentation**: Requests for improved documentation and Swagger support.\n- **Plugin Registry Cleanup**: Addressing duplicate plugin entries.\n- **Docker Issues**: Debugging build failures due to incorrect module paths.\n- **Memory Management**: Discussions on handling message history.\n- **Twitter Plugin Issues**: Reports of malfunctions and subsequent fixes.\n- **RAG Knowledge Embedding**: Troubleshooting document ingestion issues.\n- **V2 Migration**: Confirmation of migration requirements and an auto-migration tool.\n- **Local AI Model Support**: Integration with Ollama API for local LLMs.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1320246527268098048"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Concrete Solutions & Implementations\n- **Docker Fixes**: Revised Dockerfile to resolve module path issues.\n- **Twitter Plugin Fix**: Correct plugin installation resolved issues.\n- **Memory Deletion**: Implemented `runtime.messageManager.removeMemory` for memory management.\n- **REST API Documentation**: Basic documentation page created.\n- **Plugin Registry Update**: Cleanup of duplicate entries.\n- **RAG System Fix**: Identified and resolved document ingestion issues.\n- **Local AI Model Integration**: Provided environment variables for configuring Ollama.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1320246527268098048"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Plugin Registry Contributions\n- **Adding Plugins**: Guidance on creating a separate repository and updating `index.json`.\n- **Plugin Installation & Activation**: Instructions on installing and activating plugins.\n- **Unreal Engine Plugin**: Development of a plugin for Unreal Engine integration.\n- **Token Prediction Plugin**: Development and testing of a market prediction tool.\n- **Tech-Support Bot**: Proposal for a bot focused on JavaScript, Bitcoin, and GitHub support.\n- **AI Agent Platform**: Introduction of `aigent.sh`, an AI agent platform powered by ElizaOS.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1327493511406293016"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Action Items\n#### Technical Tasks\n1. **Fix Docker Build Issues**\n2. **Resolve Twitter Plugin Issues**\n3. **Improve Memory Management**\n4. **Fix RAG Knowledge Embedding**\n5. **Update Plugin Registry**\n\n#### Documentation Needs\n6. **REST API Documentation**\n7. **V2 Migration Guide**\n8. **Local AI Model Setup Guide**\n9. **Multiple Agent Setup Guide**\n10. **Twitter Bot Best Practices**\n\n#### Feature Requests\n11. **'Make a New Plugin' Flow**\n12. **Multiple Plugin Install/Remove**\n13. **Auto-Migration Tool for V2**\n14. **Swagger API Documentation**\n15. **Memory Deletion UI**",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1320246527268098048",
+            "https://discord.com/channels/1051457140637827122/1327493511406293016"
+          ],
+          "images": [],
+          "videos": []
+        }
+      ],
+      "topic": "ai"
+    },
+    {
+      "title": "Plugin Registry Issues and Enhancements",
+      "content": [
+        {
+          "text": "An out-of-memory (OOM) bug in Eliza OS (v0.25.8) was fixed by [v1xingyue] by modifying `splitChunks/splitText`. The issue was caused by a dead loop consuming all memory. [odilitime] confirmed the fix.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1323745969115893780"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "Broken links were reported in the official plugin registry after PR #95 was merged. [flaneurofmetaverses] raised the issue, and [odilitime] confirmed it was not due to their mistake and agreed to investigate.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1323745969115893780"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "[pravn1729] inquired about the removal of the plugin-kaia chain (PR #61). [odilitime] advised creating a personal repo and submitting a PR to the registry, confirming that GitHub is used for distribution instead of npm.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1323745969115893780"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "Enhancements were made to the Twitter plugin: [krustev.alexander] added a reflection mode for evaluating post appropriateness (PR #14), and [tadeuchi] added a callback to retrieve posted tweet info (PR #1) and submitted a PR to register a forked Twitter plugin (PR #108).",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1323745969115893780"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "Several new plugins were submitted, including a Sonic Blockchain Plugin ([thopate_vijay], PR #97), an AIXecutor Plugin for AI-powered node validators ([teoloki], PR #103), a Mem0 AI SDK Provider ([whysosaket], PR #3927), a DexPaprika Price Fetcher ([0xmattsroka], PR #109), and a Distributed Storage Plugin ([fforbeck], PR #111).",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1323745969115893780"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "[dtb0x] fixed a bug related to loading character plugins from remote URLs (PR #3890).",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1323745969115893780"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "[dankvr] set up AI-news aggregation for multiple Discord channels and submitted a documentation update (PR #3772).",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1323745969115893780"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "[hish1639] inquired about the version in which their merged PR (#3958) would be included, but no response was provided.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1323745969115893780"
+          ],
+          "images": [],
+          "videos": []
+        }
+      ],
+      "topic": "plugin registry"
+    },
+    {
+      "title": "ElizaOS Development Updates and Technical Discussions",
+      "content": [
+        {
+          "text": "### Technical Discussions & Decisions\n- **Web3 Login Security**: Concerns were raised about Web3 login signing exposing private keys.\n- **AI News Aggregator**: Configuration updates and Twitter activity data requests were discussed.\n- **Plugin Management**: A new plugin creation flow and multiple plugin install/remove features were proposed.\n- **Eliza Container Registry**: The registry was made public.\n- **Launchpad Token Standards**: Ensuring Solana SPL compliance for launched tokens was emphasized.\n- **Plugin Maintenance**: The `plugin-di` repository needed a maintainer.\n- **REST API Documentation**: Swagger support was requested.\n- **Plugin Registry Cleanup**: Duplicate plugin entries were identified and a cleanup was proposed.\n- **Docker Issues**: Debugging of build failures due to incorrect module paths.\n- **Memory Management**: Discussions on Eliza’s memory system and message history handling.\n- **Twitter Plugin Issues**: Multiple reports of the Twitter client not functioning properly.\n- **RAG Knowledge Embedding**: Issues with document ingestion and embedding were discussed.\n- **V2 Migration**: Migration requirements and an auto-migration tool for plugins were confirmed.\n- **Local AI Model Support**: The `plugin-local-ai` supports Ollama API for local LLMs.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1320246527268098048",
+            "https://discord.com/channels/1051457140637827122/1324089429727514674"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Concrete Solutions & Implementations\n- **Docker Fixes**: A revised Dockerfile was proposed to resolve module path issues.\n- **Twitter Plugin Fix**: Issues were resolved by installing the correct plugins.\n- **Memory Deletion**: `runtime.messageManager.removeMemory` was confirmed as a method to delete memories.\n- **REST API Documentation**: A basic documentation page was created.\n- **Plugin Registry Update**: A PR was submitted to clean up duplicate plugin entries.\n- **RAG System Fix**: The `eliza-news` folder was identified as causing document ingestion issues.\n- **Local AI Model Integration**: Environment variables for configuring Ollama with Eliza were provided.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1320246527268098048",
+            "https://discord.com/channels/1051457140637827122/1323745969115893780"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Plugin Development & Enhancements\n- **New Plugins**: Several new plugins were submitted, including a Sonic Blockchain Plugin, AIXecutor Plugin, Mem0 AI SDK Provider, DexPaprika Price Fetcher, and a Distributed Storage Plugin.\n- **Bug Fixes**: A fix for loading character plugins from remote URLs was submitted.\n- **Twitter Plugin Enhancements**: A reflection mode for evaluating post appropriateness and a callback for retrieving posted tweet info were added.\n- **Plugin Registry Issues**: Broken links in the official plugin registry were reported and are under investigation.\n- **Plugin-Kaia Chain Removal**: Guidance was provided on re-adding removed plugins via personal repositories.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1323745969115893780",
+            "https://discord.com/channels/1051457140637827122/1327493511406293016"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Action Items\n#### **Technical Tasks**\n1. **Fix Docker Build Issues**\n2. **Resolve Twitter Plugin Issues**\n3. **Improve Memory Management**\n4. **Fix RAG Knowledge Embedding**\n5. **Update Plugin Registry**\n6. **Investigate and fix broken links in the plugin registry**\n7. **Ensure OOM bug fix is stable in v0.25.8**\n8. **Review and merge new plugin PRs**\n\n#### **Documentation Needs**\n9. **REST API Documentation**\n10. **V2 Migration Guide**\n11. **Local AI Model Setup Guide**\n12. **Multiple Agent Setup Guide**\n13. **Twitter Bot Best Practices**\n\n#### **Feature Requests**\n14. **'Make a New Plugin' Flow**\n15. **Multiple Plugin Install/Remove**\n16. **Auto-Migration Tool for V2**\n17. **Swagger API Documentation**\n18. **Memory Deletion UI**",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1320246527268098048",
+            "https://discord.com/channels/1051457140637827122/1323745969115893780",
+            "https://discord.com/channels/1051457140637827122/1327493511406293016"
+          ],
+          "images": [],
+          "videos": []
+        }
+      ],
+      "topic": "Misceleanous"
+    }
+  ],
+  "date": 1740614400
+}

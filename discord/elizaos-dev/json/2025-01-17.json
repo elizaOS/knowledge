@@ -1,0 +1,241 @@
+{
+  "type": "dailySummary",
+  "title": "Daily Report - 2025-01-17",
+  "categories": [
+    {
+      "title": "ElizaOS Development Updates and Plugin Enhancements",
+      "content": [
+        {
+          "text": "The ElizaOS community has been actively working on plugin development, infrastructure improvements, and technical fixes. Key discussions focused on resolving database issues, integrating Telegram bots, enhancing goal evaluators, and improving plugin installations.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1324089429727514674"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "Several plugins were fixed, refactored, or introduced, including `plugin-twitter`, `plugin-zerion`, `plugin-tee-marlin`, and `plugin-dexpaprika` for token price fetching. Additionally, `plugin-near` was developed for NEAR AI integration, and `plugin-twitter` received a callback feature for posted tweets.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1323745969115893780"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "Infrastructure improvements included the adoption of `Biome` for linting and formatting, discussions on using `CodeRabbit` and `Windsurf` for PR reviews, and a proposal for a Telegram <=> Linear bot for ticket management. Additionally, plugin distribution is now handled via Git instead of npm.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1323745969115893780"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "Technical challenges such as WebSocket event handling, RAG knowledge storage, and Node version compatibility were addressed. Solutions included using `processActions` for WebSocket events, storing knowledge in `.md` files instead of `.pdf`, and updating Node to v23.3.0.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1324089429727514674"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "Documentation efforts were emphasized, with requests to enforce README files for all plugins, clarify `.env` variable handling, and improve Twitter plugin setup guides. Additionally, a new `WhatsApp chat-to-character` script was introduced.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1323745969115893780"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "Feature requests included deferred execution of actions, real-time DeFi data analysis, improved multi-agent workflows, and better Twilio integration for SMS communication. Additionally, support for Instagram clients and Nvidia inference in ElizaOS was discussed.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1323745969115893780"
+          ],
+          "images": [],
+          "videos": []
+        }
+      ],
+      "topic": "plugin"
+    },
+    {
+      "title": "Summary of Technical Discussions, Decisions, and Problem-Solving",
+      "content": [
+        {
+          "text": "### Twitter Spaces Issues\nMultiple users reported ICE connection failures and inconsistent behavior when using Twitter Spaces. A fix was proposed by **0xn1c0**, improving user ID handling and memory storage to prevent crashes when no one joins a space. PR #2686 was submitted.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1320246527268098048"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Plugin Installation Issues\nSeveral users faced issues installing plugins using `npx elizaos plugins add`. The problem was traced to missing dependencies in some plugins' `package.json` files. **odilitime** is working on a fix.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1320246527268098048"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Docker Build Failures\nUsers encountered missing module errors (`ERR_MODULE_NOT_FOUND`) when running Eliza in Docker. The issue was linked to incorrect paths in the container. **mr.stark_** and **hashwarlock** proposed a revised Dockerfile to fix the issue.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1320246527268098048"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Memory Management & RAG Issues\nUsers reported problems with RAG knowledge retrieval and memory duplication. Debugging efforts included checking embedding models and database configurations. **km711** confirmed that knowledge retrieval worked in v0.1.8 but failed in the develop branch.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1320246527268098048"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Multi-Agent Setup\nUsers discussed running multiple agents with separate environments. The recommended approach was to use namespaced environment variables for each agent (e.g., `TWITTER_USERNAME_AGENT1`, `TWITTER_USERNAME_AGENT2`).",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1320246527268098048"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Local LLM Support (Ollama, DeepSeek, etc.)\nUsers sought to integrate local LLMs via Ollama. The `plugin-local-ai` was identified as the correct plugin, requiring specific environment variables. **chris.troutner** provided configuration details.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1320246527268098048"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Discord Client Setup\nUsers struggled to configure the Discord client. The correct approach was to install it via `npx elizaos plugins add @elizaos-plugins/client-discord` and add it to the character file under `plugins`.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1320246527268098048"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Eliza V2 Migration\nDiscussions on migrating to V2 highlighted the need for an auto-migration tool for plugins. V2 introduces a new CLI (`npx elizaos start`) and improved multi-agent support. **new.moon** confirmed that manual migration is required for now.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1320246527268098048"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### REST API Security\nA proposal was made to add authentication to the REST API using an `AUTH_KEY` in the `.env` file. **cjft** is working on implementing this feature.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1320246527268098048"
+          ],
+          "images": [],
+          "videos": []
+        }
+      ],
+      "topic": "technical discussions"
+    },
+    {
+      "title": "AI and Web3 Development Updates",
+      "content": [
+        {
+          "text": "The HyperParams protocol, introduced by [aiflowml], is an on/off-chain system for validation, performance tuning, and certification of AI agents. The whitepaper has been submitted to Arxiv and ACL and is now publicly available.",
+          "sources": [
+            "https://github.com/AIFlowML/hyperparams/blob/main/Hyperparams_WP_final_arxiv.pdf"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "[willthesis2] developed a Web3 StructuredOutputParser for Langchain and shared the code. [r_cubed] suggested adding validation for hex addresses and error handling for malformed responses.",
+          "sources": [
+            "https://github.com/willjrho/mezolangchainplayground/blob/main/web3StructuredOutputParser.py"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "Several users submitted PRs for new plugins to the ElizaOS plugin registry. [odilitime] reviewed and merged multiple PRs, providing guidance on best practices for PR structure and repository setup.",
+          "sources": [],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "[dorianjanezic] developed a token prediction plugin using a feedback loop for evaluation and is exploring reinforcement learning. Example predictions were shared, and feedback was requested.",
+          "sources": [],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "[zaperox] announced a plugin to connect Unreal Engine with Eliza instances.",
+          "sources": [
+            "https://github.com/CrucibleNetworksLtd/Eliza-Plugin-Unreal"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "[chris.troutner] proposed a tech-support bot using ElizaOS, focusing on JavaScript, Bitcoin, and GitHub integration, with plans to run local models using Ollama.",
+          "sources": [],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "Community discussions included questions about HyperParams security, plugin installation, and Web3 AI agent validation. Users also sought feedback on AI and Web3 projects, including a Web3 marketing automation tool and an AI agent platform.",
+          "sources": [],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "Action items include improving the Web3 StructuredOutputParser, implementing reinforcement learning in the token prediction plugin, developing the Unreal Engine plugin, and integrating ElizaOS into Web3 marketing automation tools.",
+          "sources": [],
+          "images": [],
+          "videos": []
+        }
+      ],
+      "topic": "ai"
+    },
+    {
+      "title": "ElizaOS Technical Discussions and Development Updates",
+      "content": [
+        {
+          "text": "### Summary of Technical Discussions, Decisions, and Problem-Solving\n\n- **Plugin Installation Issues**: Users faced issues installing plugins due to missing dependencies in `package.json`. Fixes were proposed to improve installation reliability.\n- **Twitter Client Issues**: Users reported failures in Twitter posting. The solution involved ensuring both `plugin-twitter` and `client-twitter` were installed and added to the character file.\n- **Docker Build Failures**: Errors related to missing modules (`ERR_MODULE_NOT_FOUND`) were traced to incorrect paths in the container. A revised Dockerfile was proposed.\n- **Memory Management & RAG Issues**: Problems with RAG knowledge retrieval and memory duplication were debugged, focusing on embedding models and database configurations.\n- **Multi-Agent Setup**: Users discussed running multiple agents with separate environments using namespaced environment variables.\n- **Local LLM Support (Ollama, DeepSeek, etc.)**: The `plugin-local-ai` plugin was identified as the correct integration method, requiring specific environment variables.\n- **Discord Client Setup**: Users struggled with configuration. The correct approach was to install it via `npx elizaos plugins add @elizaos-plugins/client-discord` and add it to the character file.\n- **Eliza V2 Migration**: Discussions highlighted the need for an auto-migration tool for plugins. V2 introduces a new CLI (`npx elizaos start`) and improved multi-agent support.\n- **REST API Security**: A proposal was made to add authentication to the REST API using an `AUTH_KEY` in the `.env` file.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1320246527268098048",
+            "https://discord.com/channels/1051457140637827122/1324089429727514674"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### FAQ (Most Significant Questions & Answers)\n\n1. **How do I install the Discord client?**\n   - Install it as a plugin: `npx elizaos plugins add @elizaos-plugins/client-discord` and add it to `plugins` in the character file.\n\n2. **Why is my Twitter agent not posting?**\n   - Ensure both `plugin-twitter` and `client-twitter` are installed and listed in `plugins` in the character file.\n\n3. **How do I run multiple agents with different Twitter accounts?**\n   - Use namespaced environment variables for each agent, e.g., `TWITTER_USERNAME_AGENT1`, `TWITTER_USERNAME_AGENT2`.\n\n4. **How do I enable RAG knowledge retrieval?**\n   - Ensure `ragKnowledge: true` is set in the character config and that knowledge directories are correctly configured.\n\n5. **Why is my Docker build failing?**\n   - The issue is related to missing dependencies and incorrect module paths. A revised Dockerfile was proposed.\n\n6. **How do I use a locally hosted LLM with Ollama?**\n   - Use the `plugin-local-ai` plugin and set `USE_LOCAL_AI=true` in the `.env` file.\n\n7. **How do I prevent my Twitter agent from repeating posts?**\n   - Adjust `frequency_penalty` and `presence_penalty` in the character file under `modelConfig`.\n\n8. **How do I delete a memory from the agent?**\n   - Use `runtime.messageManager.removeMemory`.\n\n9. **How do I set up an API endpoint for my agent?**\n   - Use `client-direct` to expose a REST API.\n\n10. **How do I install missing plugins like `plugin-birdeye`?**\n    - Some plugins were removed from the registry but are being re-added.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1320246527268098048",
+            "https://discord.com/channels/1051457140637827122/1324089429727514674"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Help Interactions (Significant Community Assistance)\n\n1. **odilitime helped 4n7m4n** debug memory management issues in a security agent plugin.\n2. **hashwarlock assisted mr.stark_** in debugging Docker build failures.\n3. **new.moon guided benquik** on running multiple agents with different Twitter accounts.\n4. **acul4688 provided a fix** for Telegram client connection issues on IPv4-only setups.\n5. **chris.troutner helped ownedsk** configure Ollama for local LLM hosting.\n6. **dankvr fixed documentation issues** and improved the plugin showcase.\n7. **michaellucas_entelect shared a fix** for Twitter client installation.\n8. **odilitime helped jungleheart_33753** find missing plugins in the registry.\n9. **definiteoptimist offered AWS deployment guidance** for Eliza agents.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1320246527268098048",
+            "https://discord.com/channels/1051457140637827122/1324089429727514674"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Action Items\n\n#### **Technical Tasks**\n1. Fix Twitter Spaces ICE connection failures (**0xn1c0**)\n2. Improve memory management to prevent looping issues (**4n7m4n**)\n3. Debug Docker build failures and module path issues (**mr.stark_**, **hashwarlock**)\n4. Re-add missing plugins to the registry (**odilitime**)\n5. Implement authentication for REST API endpoints (**cjft**)\n\n#### **Documentation Needs**\n6. Update RAG knowledge documentation (**dankvr**)\n7. Improve plugin installation guides (**odilitime**)\n8. Add a migration guide for v2 (**new.moon**)\n\n#### **Feature Requests**\n9. Implement a memory deletion feature in the UI (**fixzzee**)\n10. Add MCP client plugin for Eliza (**jungleheart_33753**)\n11. Improve Twitter client to prevent duplicate posts (**rtzavalon**)\n12. Enhance CLI for better plugin management (**dankvr**)\n13. Add support for OpenAI Responses API (**0xn1c0**)\n14. Improve local LLM support for Ollama (**chris.troutner**)\n15. Implement a webhook-based Twitter scraper (**volenn**)\n16. Add a UI for managing agent memory (**new.moon**)\n17. Improve Discord client installation process (**phonique_**)\n18. Enhance Eliza’s ability to format tweets (**phonique_**)\n19. Add a feature to prevent foreign language responses (**phonique_**)\n20. Improve API security for hosted agents (**cjft**)",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1320246527268098048",
+            "https://discord.com/channels/1051457140637827122/1324089429727514674"
+          ],
+          "images": [],
+          "videos": []
+        }
+      ],
+      "topic": "Misceleanous"
+    }
+  ],
+  "date": 1737072000
+}

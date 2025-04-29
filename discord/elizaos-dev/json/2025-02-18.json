@@ -1,0 +1,152 @@
+{
+  "type": "dailySummary",
+  "title": "Daily Report - 2025-02-18",
+  "categories": [
+    {
+      "title": "ElizaOS: Plugin Development, Deployment, and Technical Issues",
+      "content": [
+        {
+          "text": "### Summary\n\n#### **Technical Discussions & Decisions**\n- **Plugin Contribution & Installation**: Users discussed contributing plugins to the `elizaos-plugins` registry. The process involves creating a separate repository, submitting a PR to update `index.json`, and waiting for approval. To install a plugin, users must run `npx elizaos plugins install @elizaos-plugins/plugin-name` and add it to the character file.\n- **Docker Deployment Issues**: Several users reported issues with Docker builds, particularly missing dependencies and incorrect paths. The recommended solution is to use `pnpm docker` for building and running.\n- **Multi-Agent System**: Discussions on using multiple agents with shared memory for specialized tasks.\n- **RAG Knowledge Integration**: Some confusion around how knowledge is stored and retrieved. `.md` files work, but `.pdf` files do not.\n- **Twitter & Discord Plugin Issues**: Users reported redundant posts, shadowbanning, and connection issues. Solutions include adjusting `modelConfig` settings and ensuring the correct plugin is installed.\n- **Local AI Models**: Identified `plugin-local-ai` as the correct plugin for using local models like DeepSeek and Ollama.\n- **Tech-Support Bot**: A proposal for a tech-support bot using ElizaOS, focusing on JavaScript, Bitcoin, and GitHub, with plans to integrate with Telegram and Nostr.\n- **Web3 Narrative Automation**: A project using ElizaOS and Langchain to automate content creation, scheduling, and engagement analysis.\n\n#### **Concrete Solutions & Implementations**\n- **Fixing Twitter Plugin Issues**: Adjust `modelConfig` settings in character JSON to reduce redundancy.\n- **Fixing Telegram IPv6 Issues**: Modify Telegram client to force IPv4.\n- **Fixing Docker Issues**: Adjust Dockerfile to ensure correct paths and dependencies.\n- **Fixing SQLite Issues**: Run `pnpm add better-sqlite3@latest --force` and `npm rebuild better-sqlite3`.\n- **Fixing Plugin Installation Failures**: Exclude `plugin-trustdb`, which is causing issues.\n\n### FAQ\n1. **How do I add a plugin to ElizaOS?**\n   - Submit a PR to the plugin registry.\n2. **Does ElizaOS support Twitter DMs?**\n   - No, due to API limitations.\n3. **How do I install the Discord client in v2?**\n   - Add it as a plugin, not a client.\n4. **How do I fix SQLite module errors?**\n   - Run `pnpm add better-sqlite3@latest --force` and `npm rebuild better-sqlite3`.\n5. **How do I use a local AI model with ElizaOS?**\n   - Use `plugin-local-ai` and configure `OLLAMA_SERVER_URL`.\n6. **How do I prevent Twitter post duplication?**\n   - Ensure the plugin is set as a provider, not an action.\n7. **How do I run multiple agents with different Twitter accounts?**\n   - Use namespaced environment variables.\n8. **How do I contribute to ElizaOS documentation?**\n   - PRs are welcome; documentation is in the main repo.\n9. **How do I fix Docker build issues?**\n   - Adjust Dockerfile to ensure correct paths and dependencies.\n10. **How do I use RAG knowledge in ElizaOS?**\n   - Place documents in the knowledge directory.\n\n### Action Items\n#### **Technical Tasks**\n1. Fix Docker build issues.\n2. Fix Twitter plugin redundancy issues.\n3. Fix Discord client installation in v2.\n4. Fix SQLite module errors.\n5. Fix Telegram IPv6 issues.\n6. Fix RAG knowledge directory issues.\n7. Fix Twitter post duplication.\n8. Fix OpenRouter API key not being pulled.\n9. Fix Plugin Registry issues.\n10. Fix Ollama plugin installation.\n\n#### **Documentation Needs**\n11. Update Plugin Installation Guide.\n12. Update RAG Knowledge Documentation.\n13. Update Docker Deployment Guide.\n14. Update Multi-Agent Setup Guide.\n15. Update Twitter Plugin Configuration Guide.\n16. Add REST API Documentation.\n\n#### **Feature Requests**\n17. Add Memory Deletion Feature.\n18. Add Auto-Migration Tool for v2 Plugins.\n19. Add MCP Client Plugin.\n20. Improve Plugin Registry Search & Filtering.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1320246527268098048",
+            "https://discord.com/channels/1051457140637827122/1327493511406293016",
+            "https://discord.com/channels/1051457140637827122/1324089429727514674"
+          ],
+          "images": [],
+          "videos": []
+        }
+      ],
+      "topic": "elizaos"
+    },
+    {
+      "title": "Dependency Management Improvements",
+      "content": [
+        {
+          "text": "A stricter dependency management approach using `pnpm` was proposed by dtb0x. This ensures that each package explicitly declares its dependencies, preventing unintended cross-dependencies and improving maintainability. The change was merged by odilitime.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1323745969115893780"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "lefrog_dont_code and dtb0x discussed the benefits of this approach, with lefrog_dont_code agreeing that it results in a cleaner dependency structure.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1323745969115893780"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "dtb0x later asked odilitime to review a PR related to character plugin loading fixes, which may be connected to dependency management improvements. However, no response was recorded at the time.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1323745969115893780"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "Documentation updates were suggested to clarify the new dependency management approach with `pnpm`, ensuring developers understand the changes and their impact.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1323745969115893780"
+          ],
+          "images": [],
+          "videos": []
+        }
+      ],
+      "topic": "dependency management"
+    },
+    {
+      "title": "ElizaOS: Technical Discussions, Issues, and Solutions",
+      "content": [
+        {
+          "text": "### Technical Discussions & Decisions\n- **Cloudflare AI Gateway**: Even unauthenticated gateways require a bearer token.\n- **Eliza.gg Replacement**: Community is actively working on a replacement.\n- **Eliza Starter vs. Eliza**: Starter is a lightweight version for quick deployment but lacks a web interface.\n- **Hosting Eliza Agents**: AWS with SST and Docker is a common setup.\n- **Multi-Agent System**: Discussed using a unified memory store with sub-agents for task delegation.\n- **Plugin Registry Issues**: Some plugins have duplicate or inconsistent names.\n- **Twitter Client Issues**: Users reported problems with Twitter integration in the latest version.\n- **Docker Deployment Issues**: Several users faced path-related issues preventing Eliza from running in Docker.\n- **Ollama API Support**: Plugin-local-ai supports Ollama, but it’s not listed in the registry.\n- **V2 Migration**: Requires changes, but an auto-migration tool is planned.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1320246527268098048",
+            "https://discord.com/channels/1051457140637827122/1324089429727514674"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Concrete Solutions & Implementations\n- **Fix for Twitter Double Messaging**: Identified as an issue with action vs. provider setup.\n- **Discord Client Installation**: Needs to be added as a plugin, not a client.\n- **Fix for SQLite Issues**: Running `pnpm add better-sqlite3@latest --force` and `npm rebuild better-sqlite3` resolved installation problems.\n- **Docker Fixes**: Adjusted Dockerfile to ensure correct paths and dependencies.\n- **Plugin Metadata Fix**: Moving descriptions and images to package.json for better organization.\n- **New Documentation Site**: `eliza.how` launched with improved structure and guides.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1320246527268098048"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Common Issues & Fixes\n- **Twitter Client Connection Issues**: Users mistakenly used `plugin-twitter` instead of `@elizaos-plugins/client-twitter`.\n- **Docker Build Errors**: Resolved by using `pnpm docker`.\n- **RAG Knowledge System**: `.md` files work, but `.pdf` files do not.\n- **Plugin Installation Issues**: `plugin-trustdb` caused installation failures; removing it resolved the issue.\n- **Telegram Client Setup**: Requires `npx elizaos plugins install @elizaos-plugins/client-telegram` and a token from BotFather.\n- **Custom Plugin Development**: Requires defining providers in `packages/core/src/providers.ts`.\n- **DeFi Data Integration**: Requires collecting, storing, and defining actions for real-time data.\n- **Client vs. Plugin Confusion**: Clients should be listed under `plugins`.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1324089429727514674"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Action Items\n#### **Technical Tasks**\n1. Fix Docker Deployment Issues.\n2. Resolve Twitter Client Bugs.\n3. Improve Plugin Registry Organization.\n4. Fix SQLite Installation Issues.\n5. Ensure Ollama Plugin is Public.\n6. Fix REST API Authentication.\n7. Improve Multi-Agent Setup Documentation.\n8. Fix Twitter Double Messaging Issue.\n9. Improve Embedding Error Handling.\n10. Fix Discord Client Installation Process.\n\n#### **Documentation Needs**\n11. Update Plugin Installation Guide.\n12. Clarify Multi-Agent Setup.\n13. Improve REST API Documentation.\n14. Add Ollama API Setup Guide.\n15. Fix Twitter Client Documentation.\n16. Improve Docker Setup Guide.\n\n#### **Feature Requests**\n17. Add Auto-Migration Tool for V2.\n18. Improve Plugin Metadata Handling.\n19. Enhance Twitter Client to Avoid Duplicates.\n20. Add Admin Controls for Memory Deletion.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1320246527268098048",
+            "https://discord.com/channels/1051457140637827122/1324089429727514674"
+          ],
+          "images": [],
+          "videos": []
+        }
+      ],
+      "topic": "eliza"
+    },
+    {
+      "title": "ElizaOS Development Updates and Technical Discussions",
+      "content": [
+        {
+          "text": "### Technical Discussions & Decisions\n- **ElizaOS Twitter DM Support**: Not currently supported due to API limitations.\n- **Agent Registry & Communication Protocol**: Proposal for an agent registry using AI16Z token and PGP signatures.\n- **Plugin System & Registry**: Developers must submit PRs to add plugins.\n- **Cloudflare AI Gateway**: Requires a bearer token even for unauthenticated requests.\n- **Eliza.gg Replacement**: Being actively developed due to poor knowledge retention in the previous version.\n- **Eliza Starter vs. Main Repo**: Starter repo is for quick agent setup but lacks a web interface.\n- **Docker Deployment Issues**: Users reported missing dependencies and incorrect paths.\n- **Multi-Agent System**: Discussion on using multiple agents with shared memory.\n- **RAG Knowledge Integration**: Some confusion around knowledge storage and retrieval.\n- **Twitter Plugin Issues**: Reports of redundant posts and shadowbanning.\n- **Discord Client Issues**: Requires adding as a plugin instead of a client.\n- **Ollama & Local AI Models**: `plugin-local-ai` is the correct plugin for local models like DeepSeek.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1320246527268098048",
+            "https://discord.com/channels/1051457140637827122/1327493511406293016"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Concrete Solutions & Implementations\n- **Plugin Installation**: Use `npx elizaos plugins install <plugin-name>`.\n- **Fixing Twitter Plugin Issues**: Adjust `modelConfig` settings in character JSON.\n- **Fixing Telegram IPv6 Issues**: Modify Telegram client to force IPv4.\n- **Fixing Docker Issues**: Adjust Dockerfile to ensure correct paths and dependencies.\n- **Multi-Agent Setup**: Use namespaced environment variables.\n- **Fixing SQLite Issues**: Run `pnpm add better-sqlite3@latest --force` and `npm rebuild better-sqlite3`.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1320246527268098048",
+            "https://discord.com/channels/1051457140637827122/1324089429727514674"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Plugin Development & Registry Issues\n- **Plugin Contribution Process**: Developers must create a separate repository, update `index.json`, and submit a PR.\n- **Plugin Installation & Activation**: Use `npx elizaos plugins install @elizaos-plugins/plugin-name` and add it to the character file.\n- **Plugin Registry Issues**: Some plugins have duplicate or inconsistent names.\n- **New Plugins Submitted**: Includes blockchain integrations, AI providers, and Twitter enhancements.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1323745969115893780",
+            "https://discord.com/channels/1051457140637827122/1327493511406293016"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Bug Fixes & Feature Enhancements\n- **Fix for Twitter Double Messaging**: Identified as an issue with action vs. provider setup.\n- **Fix for SQLite Issues**: Running `pnpm add better-sqlite3@latest --force` and `npm rebuild better-sqlite3` resolved installation problems.\n- **Docker Fixes**: Adjusted Dockerfile to ensure correct paths and dependencies.\n- **New Documentation Site**: `eliza.how` launched with improved structure and guides.\n- **New Features**: Added `postProcessors` for character objects, plugin install checking, and Mem0 as a provider in the Vercel AI SDK.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1320246527268098048",
+            "https://discord.com/channels/1051457140637827122/1323745969115893780"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Action Items\n#### **Technical Tasks**\n1. **Fix Docker Build Issues** (hashwarlock, mr.stark_)\n2. **Resolve Twitter Client Bugs** (odilitime)\n3. **Improve Plugin Registry Organization** (dankvr)\n4. **Fix SQLite Installation Issues** (kalaudius)\n5. **Ensure Ollama Plugin is Public** (chris.troutner)\n6. **Fix REST API Authentication** (cjft)\n7. **Improve Multi-Agent Setup Documentation** (new.moon)\n8. **Fix Twitter Double Messaging Issue** (odilitime)\n9. **Improve Embedding Error Handling** (phonique_)\n10. **Fix Discord Client Installation Process** (4n7m4n)\n\n#### **Documentation Needs**\n11. **Update Plugin Installation Guide** (odilitime)\n12. **Clarify Multi-Agent Setup** (new.moon)\n13. **Improve REST API Documentation** (dankvr)\n14. **Add Ollama API Setup Guide** (chris.troutner)\n15. **Fix Twitter Client Documentation** (odilitime)\n16. **Improve Docker Setup Guide** (hashwarlock)\n\n#### **Feature Requests**\n17. **Add Auto-Migration Tool for V2** (new.moon)\n18. **Improve Plugin Metadata Handling** (dankvr)\n19. **Enhance Twitter Client to Avoid Duplicates** (rtzavalon)\n20. **Add Admin Controls for Memory Deletion** (fixzzee)",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1320246527268098048",
+            "https://discord.com/channels/1051457140637827122/1323745969115893780"
+          ],
+          "images": [],
+          "videos": []
+        }
+      ],
+      "topic": "Misceleanous"
+    }
+  ],
+  "date": 1739836800
+}

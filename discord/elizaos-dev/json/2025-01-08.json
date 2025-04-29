@@ -1,0 +1,290 @@
+{
+  "type": "dailySummary",
+  "title": "Daily Report - 2025-01-08",
+  "categories": [
+    {
+      "title": "ElizaOS Development Updates and Technical Discussions",
+      "content": [
+        {
+          "text": "### Key Technical Discussions & Decisions\n- **Decentralized Compute Agent**: [crackedoutdev] is developing an agent using Akash, Ceramic, IPFS, and Helius API for Solana. The Solana contracts and agent functions are complete but require refinement.\n- **SAIOS Infrastructure**: [icjr] is building a no-code interface for Eliza, hosting UI on IPFS/Arweave and agent servers on Akash.\n- **HyperParams Protocol**: [aiflowml] is launching HyperParams, an on/off-chain validation and performance tuning protocol for AI agents. The whitepaper has been submitted to Arxiv and ACL.\n- **Web3 Structured Output Parser**: [willthesis2] developed a Web3 StructuredOutputParser for Langchain, with feedback from [r_cubed] on validation and error handling.\n- **Plugin Development & Merging**: Multiple users ([cuongnguyenthai], [mati1131], [blockeater], [pravn1729]) submitted and merged plugins into the ElizaOS plugin registry, with guidance from [odilitime].\n- **Token Prediction Plugin**: [dorianjanezic] created a token prediction plugin using reinforcement learning for structured market analysis.\n- **Tech Support Bot**: [chris.troutner] is developing a tech-support bot using Eliza, focusing on JavaScript, Bitcoin, and GitHub, with plans for a Nostr plugin.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1327493511406293016"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Concrete Solutions & Implementations\n- **Plugin Installation**: [odilitime] provided the command `npx elizaos plugins install @elizaos-plugins/plugin-name` for installing Eliza plugins.\n- **Plugin Contribution Process**: Fork `elizaos-plugins`, create a directory, add code, and submit a PR following the registry pattern.\n- **Handling Web3 Data Parsing**: [r_cubed] suggested using chain-of-density for normalizing token standards and contract ABIs.\n- **Security for LLM Agents**: [willthesis2] discussed security concerns for LLM agents, considering wrapper solutions like Venice.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1327493511406293016"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Plugin System Migration & Docker Optimization\n- **Docker Image Optimization**: [m1337d] reduced the Eliza Docker image size to 2.3GB (~50% reduction). Further testing is required.\n- **Plugin System Migration**: Plugins have been moved to separate repositories under [elizaos-plugins]. Installation now requires `npx elizaos plugins add <plugin-name>`.\n- **Twitter Client Issues**: [ninja_dev] reported Cloudflare blocking Twitter logins for agents running in Docker. [m1337d] is investigating potential fixes.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1320246527268098048"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Action Items\n#### Technical Tasks\n1. **Refine decentralized compute agent** – [crackedoutdev]\n2. **Improve Web3 StructuredOutputParser** – [willthesis2]\n3. **Implement chain-of-density for token parsing** – [r_cubed]\n4. **Enhance token prediction plugin with reinforcement learning** – [dorianjanezic]\n5. **Develop Nostr plugin for tech support bot** – [chris.troutner]\n6. **Fix Twitter login issues in Docker** – [ninja_dev, m1337d]\n7. **Re-add missing plugins (image, video, tts) to the registry** – [odilitime]\n8. **Improve RAG knowledge retrieval** – [km711, odilitime]\n9. **Fix memory leaks in multi-agent setups** – [m1337d]\n10. **Improve Twitter post formatting options** – [phonique_]",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1327493511406293016",
+            "https://discord.com/channels/1051457140637827122/1320246527268098048"
+          ],
+          "images": [],
+          "videos": []
+        }
+      ],
+      "topic": "plugins"
+    },
+    {
+      "title": "ElizaOS: Troubleshooting and Enhancements",
+      "content": [
+        {
+          "text": "### CUDA Error in Local LLM Execution\nUsers encountered a CUDA error when running a local LLM with Eliza. The issue was suspected to be memory-related, as GPU memory spiked and crashed. No definitive solution was found.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1324089429727514674"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Twitter Client Issues\nUsers faced multiple issues with the Twitter client, including:\n- `@elizaos/client-twitter` module not found. Solution: Install via `pnpm add @elizaos/client-twitter`.\n- Twitter posting failed, possibly due to 2FA.\n- 'Media parameter is missing' error when posting images. Solution: Ensure the image file is correctly passed to Twitter’s upload endpoint.\n- AI posts text but not images. Solution: Add `\"ALWAYS RESPONDS WITH AN IMAGE\"` in the character bio.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1324089429727514674"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Plugin Integration and Execution Issues\n- Users faced errors when integrating new plugins. Solution: Check `pnpm dev` for hints.\n- Confusion over whether to install `client-twitter` or `plugin-twitter`. Solution: `client-twitter` is required for login.\n- Web search plugin registered but did not execute. Solution: Ensure `TAVILY_API_KEY` is set and try clearing agent data.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1324089429727514674"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Database and Memory Management\n- Users asked if a database or Redis is required for memory persistence. Solution: Without a DB adapter, only conversation context is retained.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1324089429727514674"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### RAG Knowledge Issues\n- Users found inconsistent behavior when using RAG knowledge. Solution: Knowledge must be stored in `characters/knowledge/[agent-name]` in `.md` format for proper retrieval.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1324089429727514674"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### WebSocket Event Handling\n- Users attempted to trigger actions based on WebSocket events but found that normal constructs didn’t support it. Solution: Call `processActions` manually.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1324089429727514674"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Deferred Action Execution\n- Users wanted to schedule actions but found no built-in scheduling mechanism. Solution: Use `setTimeout`, but a built-in scheduler is preferable.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1324089429727514674"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Hosting on VPS\n- Users asked how to keep Eliza running on a VPS. Solution: Use `pm2` to manage the process (`pm2 start pnpm -- start`).",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1324089429727514674"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Telegram API Token Setup\n- Users were unclear on how to obtain a Telegram API token. Solution: Use [BotFather](https://telegram.me/BotFather) to generate a token.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1324089429727514674"
+          ],
+          "images": [],
+          "videos": []
+        }
+      ],
+      "topic": "plugin"
+    },
+    {
+      "title": "Plugin Management in ElizaOS",
+      "content": [
+        {
+          "text": "Discussions around plugin management in ElizaOS focused on improving organization and efficiency. Contributors debated whether to split plugins into separate packages to reduce repository size, but no final decision was made. The new plugin registry system was introduced, requiring all new plugins to be submitted there instead of the main repository.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1323745969115893780"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "Several improvements were made to existing plugins. The Solana plugin was enhanced for smoother transactions, and the Twitter client received a reflection mode to extract valuable information before posting. Additionally, a new plugin, `plugin-dexpaprika`, was introduced for fetching token prices.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1323745969115893780"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "To maintain quality, contributors were advised against merging multiple plugins in a single pull request. Automated linting and formatting were also introduced to ensure consistency across plugins.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1323745969115893780"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "Several issues were addressed, including fixing broken links in the plugin registry and resolving dependency management problems in `pnpm`. Additionally, discussions were held on enforcing README files for all plugins to improve documentation.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1323745969115893780"
+          ],
+          "images": [],
+          "videos": []
+        }
+      ],
+      "topic": "plugin management"
+    },
+    {
+      "title": "ElizaOS Development Updates and Technical Discussions",
+      "content": [
+        {
+          "text": "### Plugin System Overhaul\nElizaOS has migrated its plugin system to a separate registry (`elizaos-plugins`). Users must now install plugins using `npx elizaos plugins add <plugin-name>`. Some plugins, such as `plugin-birdeye`, `plugin-image`, `plugin-video`, and `plugin-tts`, were missing from the registry but are being restored.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1320246527268098048"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Twitter Client Issues\nUsers reported login failures due to Cloudflare security changes. Workarounds include using fresh accounts, setting accounts as 'automated,' and adjusting API keys. Additionally, some users faced issues with Twitter image posting, requiring correct media parameter handling.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1320246527268098048",
+            "https://discord.com/channels/1051457140637827122/1324089429727514674"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Docker Deployment Issues\nRecent updates caused path mismatches in Docker builds, preventing module resolution. Fixes involve modifying the Dockerfile to ensure correct paths and dependencies. Additionally, efforts were made to reduce the Docker image size by 50%.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1320246527268098048"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### RAG Knowledge System\nUsers faced issues with RAG knowledge ingestion, particularly with SQLite and Supabase. Some reported missing embeddings and hallucinations. Knowledge must be stored in `characters/knowledge/agent-name` for proper retrieval.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1320246527268098048",
+            "https://discord.com/channels/1051457140637827122/1324089429727514674"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Multi-Agent Support\nUsers explored running multiple agents with separate environments, particularly for Twitter bots. Solutions involve namespacing secrets in `.env` and character files.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1320246527268098048"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Fine-Tuning & LLMs\nUsers experimented with DeepSeek, OpenRouter, and local Ollama models. Some faced issues with embedding mismatches and API key handling.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1320246527268098048"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### REST API & Security\nThere were calls for API authentication via bearer tokens to secure production deployments. Users were advised to implement authentication in `api.ts`.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1320246527268098048"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Decentralized Compute Agent\nA decentralized compute agent is being developed using Akash, Ceramic, IPFS, and Helius API for Solana. The Solana contracts and agent functions are complete, but further refinement is needed.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1327493511406293016"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Plugin Development & Merging\nMultiple users submitted and merged plugins into the ElizaOS plugin registry. Guidance was provided on PR structure and best practices.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1327493511406293016"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### HyperParams Protocol\nA new protocol for on/off-chain validation and performance tuning of AI agents is being developed. A whitepaper has been submitted to Arxiv and ACL.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1327493511406293016"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Web3 Structured Output Parser\nA Web3 StructuredOutputParser for Langchain was built, with discussions on adding validation for hex addresses and error handling.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1327493511406293016"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Memory Management Fixes\nUsers investigated duplicate memory entries and proposed fixes for V2.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1320246527268098048"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### CUDA Error in Local LLM Execution\nUsers encountered a CUDA error when running a local LLM with Eliza. The issue was suspected to be memory-related, as GPU memory spiked and crashed. No definitive solution was found.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1324089429727514674"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Telegram API Token for Eliza\nUsers needed guidance on obtaining a Telegram API token. The solution was to use [BotFather](https://telegram.me/BotFather) to generate a token.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1324089429727514674"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Deferred Execution of Actions\nUsers requested a built-in scheduling mechanism for actions. A workaround using `setTimeout` was suggested.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1324089429727514674"
+          ],
+          "images": [],
+          "videos": []
+        }
+      ],
+      "topic": "Misceleanous"
+    }
+  ],
+  "date": 1736294400
+}

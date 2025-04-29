@@ -1,0 +1,117 @@
+{
+  "type": "dailySummary",
+  "title": "Daily Report - 2025-01-31",
+  "categories": [
+    {
+      "title": "ElizaOS Plugin System, Technical Issues, and Development Updates",
+      "content": [
+        {
+          "text": "The ElizaOS plugin system has been updated to use `npx elizaos plugins install <plugin-name>`, replacing the previous monolithic approach. Several users reported issues with Twitter login and API restrictions, with solutions including marking accounts as automated and using different login methods. Docker-related issues were also discussed, with a revised Dockerfile proposed to fix missing dependencies and incorrect paths.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1320246527268098048"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "Memory management and message history handling were key discussion points, with the `composeState` function identified as a critical component. Users explored running multiple agents with separate environments, particularly for different Twitter accounts. The `plugin-local-ai` was confirmed as the correct plugin for running local models via Ollama.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1320246527268098048"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "The ElizaOS v2 migration introduces a new CLI (`npx elizaos start`) and a more modular plugin system. Migration tools are being developed to assist users in transitioning from v1 to v2. Additionally, a REST API authentication mechanism was proposed, requiring an `AUTH_KEY` for secure access.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1320246527268098048"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "Several plugins were developed and integrated into the ElizaOS ecosystem, including a Web3 Structured Output Parser, a Safe multisig validator plugin, and a token prediction plugin. The Web3 parser was improved with validation for hex addresses and error handling for malformed responses. A Nostr plugin was also proposed to support tech-support bots.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1327493511406293016"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "Technical discussions also covered Biome linting and formatting improvements, conflict resolution in `package.json`, and dependency management with `pnpm`. Users requested maintainer roles for various plugins, and broken links in the plugin registry were reported and acknowledged.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1323745969115893780"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "Action items include fixing Docker path issues, improving Twitter client stability, enhancing multi-agent support, and adding REST API authentication. Documentation updates were also requested for plugin installation, multi-agent configuration, and v2 migration steps.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1320246527268098048",
+            "https://discord.com/channels/1051457140637827122/1327493511406293016",
+            "https://discord.com/channels/1051457140637827122/1323745969115893780"
+          ],
+          "images": [],
+          "videos": []
+        }
+      ],
+      "topic": "plugins"
+    },
+    {
+      "title": "Plugin Installation Issues in ElizaOS",
+      "content": [
+        {
+          "text": "Users encountered issues installing plugins such as `@elizaos/plugin-solana-agent-kit`, `plugin-trustdb`, and `plugin-coingecko`. The primary solution involved ensuring the correct package name and using the command `npx elizaos plugins install <plugin-name>`.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1324089429727514674"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "Some users faced conflicts and unmet peer dependency errors when installing plugins. `odilitime` clarified that these warnings are often harmless, but users should check for incorrect package names and conflicting dependencies.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1324089429727514674"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "To debug installation failures, `odilitime` recommended verifying package names, checking for conflicting plugins, and ensuring the correct installation command is used.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1324089429727514674"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "Users were confused about whether to list clients under `clients` or `plugins`. `odilitime` clarified that clients should be installed as plugins and added to `plugins` in `character.json` for proper functionality.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1324089429727514674"
+          ],
+          "images": [],
+          "videos": []
+        }
+      ],
+      "topic": "plugin installation"
+    },
+    {
+      "title": "ElizaOS Plugin System, Technical Issues, and Feature Enhancements",
+      "content": [
+        {
+          "text": "### Summary\n\nThe discussions focused on various technical issues, feature enhancements, and plugin management for ElizaOS. Key topics included:\n\n- **Plugin System Overhaul**: The new plugin system requires installation via `npx elizaos plugins install <plugin-name>`, replacing the previous monolithic approach. Some plugins were missing from the registry but were later restored.\n- **Twitter Client Issues**: Users faced login failures due to Twitter's security measures. Solutions included marking the agent as automated and using different accounts.\n- **Docker Issues**: Several users reported problems running ElizaOS in Docker due to missing dependencies and incorrect paths. A revised Dockerfile was proposed to fix these issues.\n- **Memory Management & RAG**: Users struggled with embedding and memory retrieval. Solutions included ensuring correct `.env` settings and verifying database configurations.\n- **Multi-Agent Setup**: Users explored running multiple agents with separate configurations. The new v2 system supports namespaced secrets for different agents.\n- **Local LLM Support**: Users sought to integrate Ollama and DeepSeek models. The `plugin-local-ai` was identified as the correct plugin for this.\n- **Discord Client Issues**: Users had trouble setting up the Discord client. The correct approach is to install it as a plugin and add it to the character file.\n- **REST API & Authentication**: Users requested authentication for REST API endpoints. A proposal was made to add an `AUTH_KEY` to secure API access.\n- **Eliza v2 Migration**: Users asked about migrating from v1 to v2. A migration tool is planned, and v2 introduces a new CLI (`npx elizaos start`).\n\n### FAQ\n\n1. **How do I install a plugin?** Use `npx elizaos plugins install <plugin-name>`.\n2. **Why is my Twitter bot getting banned?** Mark the account as automated and avoid excessive posting.\n3. **How do I install the Discord client?** Use `npx elizaos plugins add @elizaos-plugins/client-discord` and add it to `plugins` in the character file.\n4. **How do I run multiple agents with different Twitter accounts?** Use namespaced environment variables for each agent.\n5. **How do I use a local LLM like Ollama?** Install `plugin-local-ai` and configure `.env` with `OLLAMA_SERVER_URL`.\n6. **Why is my agent repeating messages?** Adjust `frequency_penalty` and `presence_penalty` in `modelConfig`.\n7. **How do I enable RAG knowledge?** Set `knowledge` in the character file and ensure embeddings are configured.\n8. **How do I secure the REST API?** Add an `AUTH_KEY` to `.env` and modify API routes to require authentication.\n9. **Why is my Docker build failing?** Ensure `pnpm install` runs inside the container and check for missing dependencies.\n10. **How do I migrate from v1 to v2?** A migration tool is planned. Use `npx elizaos start` for v2.\n\n### Help Interactions\n\n- **Docker Build Fix**: Debugged missing dependencies and incorrect paths.\n- **Twitter Login Issues**: Discussed Twitter security measures and suggested using different accounts.\n- **Discord Client Setup**: Helped multiple users install and configure the Discord client.\n- **Local LLM Integration**: Identified `plugin-local-ai` as the correct plugin for Ollama integration.\n- **Preventing Tweet Repetition**: Adjusted `modelConfig` settings to reduce redundancy.\n- **Multi-Agent Setup**: Explained how to use namespaced secrets for running multiple agents.\n- **RAG Knowledge Issues**: Helped set up the correct knowledge directory.\n- **REST API Security**: Proposed adding an `AUTH_KEY` to secure API endpoints.\n- **Embedding Errors**: Debugged embedding issues by checking `.env` settings.\n- **Plugin Development**: Provided guidance on creating and installing custom plugins.\n\n### Action Items\n\n#### **Technical Tasks**\n1. **Fix Docker Build Issues**\n2. **Restore Missing Plugins in Registry**\n3. **Improve Twitter Client Stability**\n4. **Fix Double Response Bug**\n5. **Enhance RAG Knowledge Retrieval**\n6. **Improve Multi-Agent Support**\n7. **Add REST API Authentication**\n8. **Fix Embedding Size Mismatch**\n9. **Improve Plugin Installation Process**\n10. **Fix Discord Client Setup Issues**\n\n#### **Documentation Needs**\n11. **Update Twitter Client Setup Guide**\n12. **Add Multi-Agent Configuration Guide**\n13. **Improve RAG Knowledge Documentation**\n14. **Document REST API Security Best Practices**\n15. **Clarify Plugin Development Process**\n16. **Add Guide for Local LLM Integration**\n17. **Improve Docker Deployment Guide**\n18. **Document v2 Migration Steps**\n\n#### **Feature Requests**\n19. **Add Support for OpenAI Responses API**\n20. **Implement Admin-Controlled Memory Deletion**",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1320246527268098048",
+            "https://discord.com/channels/1051457140637827122/1324089429727514674",
+            "https://discord.com/channels/1051457140637827122/1323745969115893780"
+          ],
+          "images": [],
+          "videos": []
+        }
+      ],
+      "topic": "Misceleanous"
+    }
+  ],
+  "date": 1738281600
+}

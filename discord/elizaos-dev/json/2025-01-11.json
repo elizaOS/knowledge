@@ -1,0 +1,70 @@
+{
+  "type": "dailySummary",
+  "title": "Daily Report - 2025-01-11",
+  "categories": [
+    {
+      "title": "ElizaOS Development and Plugin Integrations",
+      "content": [
+        {
+          "text": "### Key Technical Discussions & Decisions\n- **Decentralized Compute Agent**: [crackedoutdev] is developing a decentralized compute agent using Akash, Ceramic, IPFS, and Helius API for Solana. The Solana contracts and agent functions are complete but unstable, requiring further refinement.\n- **SAIOS Infrastructure**: [icjr] is building SAIOS, a no-code interface for Eliza, hosting UI on IPFS/Arweave and agent servers on Akash. Users provide their own LLM API keys.\n- **HyperParams Protocol**: [aiflowml] launched HyperParams, an on/off-chain validation and performance tuning protocol for AI agents. The whitepaper has been submitted to Arxiv and ACL.\n- **Web3 Structured Output Parser**: [willthesis2] developed a Web3 StructuredOutputParser for Langchain, with plans to extend it to Eliza. [r_cubed] suggested adding validation for hex addresses and error handling for malformed responses.\n- **Plugin Development & Integration**:\n  - [cuongnguyenthai] integrated **plugin-berachain** into ElizaOS plugins.\n  - [mati1131] developed **plugin-safe-validator** for reviewing Safe multisig transactions.\n  - [blockeater] submitted **plugin-omniflix** and requested maintainer access.\n  - [zaperox] is developing an **Unreal Engine plugin** for Eliza.\n  - [dorianjanezic] built a **token prediction plugin** using reinforcement learning.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1327493511406293016"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Concrete Solutions & Implementations\n- **Plugin Installation**: [odilitime] provided the command to install ElizaOS plugins:\n  npx elizaos plugins install @elizaos-plugins/plugin-name\n- **PR Best Practices**: [odilitime] and [r_cubed] emphasized clean commit structures, clear descriptions, and proper folder paths for ElizaOS plugin contributions.\n- **Security for LLM Agents**: [willthesis2] discussed security concerns for public LLM agents and potential solutions like system instructions and wrapper models.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1327493511406293016"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### FAQ\n1. **[willthesis2] → [aiflowml]**: When will the HyperParams whitepaper be released?\n   - **[aiflowml]**: Submitted to Arxiv and ACL, now public.\n2. **[willthesis2] → [r_cubed]**: How does chain-of-density help with Web3 structured outputs?\n   - **[r_cubed]**: It normalizes token standards and contract ABIs, reducing the need for custom parsers.\n3. **[cuongnguyenthai] → [r_cubed]**: How do I fork the ElizaOS plugins repo?\n   - **[r_cubed]**: Click \"Fork\" on GitHub, clone locally, and follow the registry pattern.\n4. **[00xlucian] → [odilitime]**: How do I update .env parameters for a plugin?\n   - **[odilitime]**: Submit a PR to `eliza/.env.example`.\n5. **[asi123aa] → [odilitime]**: How do I activate a merged plugin?\n   - **[odilitime]**: Use `npx elizaos plugins install @elizaos-plugins/plugin-name` and add it to the character file.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1327493511406293016"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Help Interactions\n1. **[r_cubed] → [cuongnguyenthai]**: Guided on forking and submitting a PR for **plugin-berachain**.\n2. **[odilitime] → [mati1131]**: Reviewed and merged **plugin-safe-validator** PR.\n3. **[r_cubed] → [willthesis2]**: Suggested validation and error handling for Web3 StructuredOutputParser.\n4. **[odilitime] → [blockeater]**: Merged **plugin-omniflix** PR and granted maintainer access.\n5. **[odilitime] → [00xlucian]**: Explained how to update `.env` parameters for plugins.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1327493511406293016"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Action Items\n#### **Technical Tasks**\n1. **Refine Decentralized Compute Agent** – [crackedoutdev]\n2. **Improve Web3 StructuredOutputParser** – [willthesis2]\n3. **Implement Chain-of-Density Parsing for Web3 Data** – [r_cubed]\n4. **Enhance Token Prediction Plugin with Reinforcement Learning** – [dorianjanezic]\n5. **Develop Nostr Plugin for ElizaOS** – [chris.troutner]\n6. **Finalize and Deploy HyperParams Protocol** – [aiflowml]\n7. **Integrate Eliza with Unreal Engine** – [zaperox]\n8. **Improve Security for Public LLM Agents** – [willthesis2]\n\n#### **Documentation Needs**\n9. **Update Plugin Contribution Guide** – [odilitime]\n10. **Document Best Practices for Web3 Data Parsing** – [r_cubed]\n11. **Add `.env` Configuration Guide for Plugins** – [odilitime]\n\n#### **Feature Requests**\n12. **One-Click AWS Deploy for ElizaOS** – [m1337d]\n13. **Eliza Integration for RabbitHoles Project** – [sashimikun.]\n14. **Tech-Support Bot on ElizaOS** – [chris.troutner]\n15. **Web3 Narrative Marketing Automation** – [shivam_18795]\n16. **Decentralized AI Agent Management UI** – [icjr]\n17. **Social API for HyperParams** – [aiflowml]\n18. **Plugin Registry UI Improvements** – [odilitime]\n19. **Automated Plugin Validation System** – [odilitime]\n20. **Enhanced Plugin Discovery & Search** – [odilitime]",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1327493511406293016"
+          ],
+          "images": [],
+          "videos": []
+        }
+      ],
+      "topic": "plugins"
+    },
+    {
+      "title": "ElizaOS Technical Discussions and Development Updates",
+      "content": [
+        {
+          "text": "### Summary of Technical Discussions, Decisions, and Problem-Solving\n\n#### **Key Technical Issues & Fixes**\n- **RAG Knowledge Retrieval Issues**: Users faced inconsistencies in retrieving knowledge. Solutions included verifying file structures, clearing `db.sqlite`, and improving logging for fragment matching.\n- **Twitter Client Issues**: Cloudflare security changes caused login failures. Solutions involved manual login, API key verification, and marking accounts as automated.\n- **Discord Client Setup**: The new version requires installing Discord as a plugin instead of a client.\n- **Docker Build Issues**: Users encountered module path issues. A revised Dockerfile was proposed to ensure correct paths and dependencies.\n- **Plugin Registry & Installation**: Some plugins were missing from the registry. Users were advised to install them manually or wait for updates.\n- **Multi-Agent Setup**: Users explored running multiple agents with separate Twitter accounts using namespaced environment variables.\n- **Memory Management & Deletion**: Users requested a way to delete specific memories. Solutions included using `runtime.messageManager.removeMemory` or manually editing the database.\n- **Eliza v2 Migration**: Introduced a new CLI (`npx elizaos start`) and a modular plugin system.\n- **Local LLM Support (Ollama, DeepSeek)**: Users sought to run local models via Ollama. The `plugin-local-ai` was identified as the correct plugin.\n- **REST API Security**: A request was made to add API key authentication for hosted agents.\n\n#### **Web3 & Plugin Development**\n- **Decentralized Compute Agent**: Built using Akash, Ceramic, IPFS, and Helius API for Solana. The agent is unstable and requires refinement.\n- **SAIOS Infrastructure**: A no-code interface for Eliza, hosting UI on IPFS/Arweave and agent servers on Akash.\n- **HyperParams Protocol**: A validation and performance tuning protocol for AI agents.\n- **Web3 Structured Output Parser**: Built for Langchain, with plans to extend to Eliza.\n- **Plugin Contributions**: Several new plugins were developed, including `plugin-berachain`, `plugin-safe-validator`, and `plugin-omniflix`.\n- **Unreal Engine Plugin**: A plugin to connect Unreal Engine with Eliza instances is in development.\n- **Token Prediction Plugin**: Built using reinforcement learning.\n\n#### **Action Items**\n- **Fix Twitter Spaces ICE connection errors**\n- **Improve RAG knowledge retrieval logging**\n- **Fix Docker build path issues**\n- **Implement API key authentication for REST API**\n- **Fix Twitter client login issues due to Cloudflare**\n- **Improve memory management and deletion features**\n- **Ensure missing plugins are added to the registry**\n- **Fix double response issue in Twitter client**\n- **Improve handling of repeated actions in plugins**\n- **Fix embedding model mismatch errors**",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1320246527268098048",
+            "https://discord.com/channels/1051457140637827122/1327493511406293016",
+            "https://discord.com/channels/1051457140637827122/1324089429727514674",
+            "https://discord.com/channels/1051457140637827122/1323745969115893780"
+          ],
+          "images": [],
+          "videos": []
+        }
+      ],
+      "topic": "Misceleanous"
+    }
+  ],
+  "date": 1736553600
+}

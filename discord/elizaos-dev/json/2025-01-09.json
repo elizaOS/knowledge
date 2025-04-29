@@ -1,0 +1,171 @@
+{
+  "type": "dailySummary",
+  "title": "Daily Report - 2025-01-09",
+  "categories": [
+    {
+      "title": "ElizaOS Development Updates and Technical Discussions",
+      "content": [
+        {
+          "text": "### **Technical Discussions & Solutions**\n- **Docker Image Optimization**: The Eliza Docker image was reduced to 2.3GB (~50% reduction) by [m1337d]. Further testing is required.\n- **Twitter Client Issues**: Cloudflare is blocking Twitter logins for agents running in Docker. [m1337d] is investigating fixes. [mr.stark_] noted that X has been banning accounts running ElizaOS for months. [odilitime] suggested marking accounts as automated.\n- **Plugin System Migration**: Plugins were moved to separate repositories under `elizaos-plugins`. Users must install them manually using `npx elizaos plugins add <plugin-name>`.\n- **RAG Knowledge System**: Issues with knowledge retrieval were reported. [odilitime] confirmed RAG should work across multiple agents. PDF ingestion is currently unsupported.\n- **Multi-Agent Setup**: Users asked about running multiple agents with different Twitter accounts. [new.moon] suggested using namespaced environment variables.\n- **Eliza V2 Migration**: V2 requires migration but will include an auto-migration tool. The new CLI command `npx elizaos start` will replace `eliza-starter`.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1320246527268098048"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### **Web3 & Plugin Development**\n- **Decentralized Compute Agent**: [crackedoutdev] is building an agent using Akash, Ceramic, IPFS, and Helius API for Solana.\n- **SAIOS Platform**: [icjr] is developing a no-code infrastructure for Eliza, hosting UI on IPFS/Arweave and agent servers on Akash.\n- **HyperParams Protocol**: [aiflowml] is launching an open-source protocol for agent validation and performance tuning.\n- **Token Prediction Plugin**: [dorianjanezic] is working on a reinforcement learning framework for token predictions.\n- **Safe Validator Plugin**: [mati1131] built an AI agent to review Safe multisig transactions.\n- **Unreal Engine Plugin**: [zaperox] is developing a plugin to enable communication between Unreal Engine and Eliza instances.\n- **Nostr Plugin for Tech Support Bot**: [chris.troutner] is planning a Nostr plugin for a tech-support bot using Eliza.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1327493511406293016"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### **Recent Fixes & Improvements**\n- **ESLint Fixes**: [aiflowml] fixed all ESLint issues in PR #2143.\n- **Instagram Image Upload**: [0xspit] fixed an issue with Instagram image uploads but suggested a better system for handling images.\n- **Solana Plugin Fixes**: [sunsakis] improved the Solana plugin for ElizaOS.\n- **WhatsApp Chat to Character Conversion**: [xluiscumbi] developed `chats2character.js` to generate character schemas from WhatsApp conversations.\n- **Memory Leak Fix**: [v1xingyue] fixed an OOM bug in v0.25.8.\n- **Distributed Storage Plugin**: [fforbeck] submitted a PR to add a distributed storage plugin.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1323745969115893780"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### **Action Items & Feature Requests**\n#### **Technical Tasks**\n1. Fix Twitter login issues in Docker ([m1337d]).\n2. Improve RAG knowledge retrieval ([km711], [odilitime]).\n3. Fix memory leaks in multi-agent setups ([m1337d]).\n4. Improve Twitter post formatting options ([phonique_]).\n5. Fix `.env` handling for plugins ([00xlucian]).\n\n#### **Documentation Needs**\n6. Update plugin installation guide ([dankvr]).\n7. Improve multi-agent setup guide ([new.moon]).\n8. Document Ollama integration ([chris.troutner]).\n9. Clarify RAG knowledge setup ([redvoid8344]).\n\n#### **Feature Requests**\n10. Add Web3 login support ([odilitime]).\n11. Enable agent-to-agent messaging ([doriand0963]).\n12. Implement API key authentication for REST API ([ad_dev]).\n13. Support OpenAI’s new Responses API ([0xn1c0]).\n14. Improve Twitter ban avoidance strategies ([mr.stark_]).",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1320246527268098048",
+            "https://discord.com/channels/1051457140637827122/1327493511406293016",
+            "https://discord.com/channels/1051457140637827122/1323745969115893780"
+          ],
+          "images": [],
+          "videos": []
+        }
+      ],
+      "topic": "plugins"
+    },
+    {
+      "title": "ElizaOS Plugin and Integration Issues",
+      "content": [
+        {
+          "text": "### Twitter Client Integration Issues\n- **Problem:** `@elizaos/client-twitter` module not found.\n- **Solution:** Ensure the package is installed via `pnpm add @elizaos/client-twitter` and included in `package.json`.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1324089429727514674"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Twitter Image Posting Issue\n- **Problem:** 'media parameter is missing' error when posting images.\n- **Solution:** Ensure the image file is correctly passed to Twitter’s upload endpoint.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1324089429727514674"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Web Search Plugin Not Triggering\n- **Problem:** Plugin registers but does not execute.\n- **Solution:** Ensure `TAVILY_API_KEY` is correctly set and try clearing agent data.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1324089429727514674"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### RAG Knowledge System Issues\n- **Problem:** Agent does not use knowledge from `.md` files.\n- **Solution:** Ensure knowledge files are in `characters/knowledge/[agent-name]` and use `.md` format. `.pdf` files are not supported.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1324089429727514674"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Hosting on VPS\n- **Problem:** Agent stops running when inactive.\n- **Solution:** Use `pm2` to keep the process alive (`pm2 start pnpm -- start`).",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1324089429727514674"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Deferred Execution of Actions\n- **Problem:** No built-in scheduling for actions.\n- **Solution:** Implement a delay using `setTimeout` in the action handler. A built-in scheduling feature is suggested.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1324089429727514674"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Telegram API Token for Eliza\n- **Problem:** No clear documentation on obtaining the API token.\n- **Solution:** Use [BotFather](https://telegram.me/BotFather) to generate a token.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1324089429727514674"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Plugin Installation Issues\n- **Problem:** Some users struggled with installing and integrating plugins.\n- **Solution:** Use `npx elizaos plugins install @elizaos-plugins/[plugin-name]` and check if the plugin appears in `npx elizaos plugins list`.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1324089429727514674"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Feature Requests\n- **Built-in action scheduling**\n- **Support for Instagram client**\n- **Improved Twitter personality consistency**\n- **Real-time DeFi data integration**\n- **Enhanced multi-agent workflows**",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1324089429727514674"
+          ],
+          "images": [],
+          "videos": []
+        }
+      ],
+      "topic": "plugin"
+    },
+    {
+      "title": "ElizaOS Development Updates and Technical Discussions",
+      "content": [
+        {
+          "text": "### **Technical Discussions & Solutions**\n- **Docker Image Optimization**: The Eliza Docker image was reduced to 2.3GB (~50% reduction). Further testing is required.\n- **Twitter Client Issues**: Cloudflare is blocking Twitter logins for agents running in Docker. Suggested solutions include using different IPs and marking accounts as automated.\n- **Plugin System Migration**: Plugins have been moved to separate repositories, requiring manual installation using `npx elizaos plugins add <plugin-name>`.\n- **RAG Knowledge System**: Users reported issues with knowledge retrieval. Solutions include ensuring correct directory paths and using `.md` or `.txt` files.\n- **Multi-Agent Setup**: Running multiple agents with different Twitter accounts requires namespaced environment variables.\n- **Eliza V2 Migration**: The new CLI (`npx elizaos start`) replaces `eliza-starter`, and an auto-migration tool is in development.\n- **Web3 & Decentralized Compute**: Development of a decentralized compute agent using Akash, Ceramic, IPFS, and Helius API for Solana is ongoing.\n- **New Plugin Contributions**: Several new plugins were submitted, including Safe Validator, Unreal Engine, and Web3 structured output parsers.\n- **Memory Management & Performance Optimization**: RAM/CPU usage was reduced from 12GB+ to 2GB, and memory leaks in multi-agent setups are being addressed.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1320246527268098048",
+            "https://discord.com/channels/1051457140637827122/1327493511406293016",
+            "https://discord.com/channels/1051457140637827122/1324089429727514674",
+            "https://discord.com/channels/1051457140637827122/1323745969115893780"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### **FAQ (Most Significant Questions & Answers)**\n1. **How do I install a plugin in the new system?** Use `npx elizaos plugins add <plugin-name>`.\n2. **Why is my Twitter agent not working?** Ensure Twitter is added as a plugin, not a client, and check API credentials.\n3. **How do I enable RAG knowledge?** Ensure correct directory structure (`characters/agent-name/knowledge/`).\n4. **How do I run ElizaOS with a local LLM (Ollama, DeepSeek)?** Use `plugin-local-ai` and set `USE_LOCAL_AI=true` in `.env`.\n5. **How do I prevent my Twitter agent from getting banned?** Mark the account as automated and avoid excessive posting.\n6. **How do I make my agent post formatted tweets?** Improve character file details and use a better LLM (Anthropic, Llama 405).",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1320246527268098048",
+            "https://discord.com/channels/1051457140637827122/1327493511406293016"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### **Help Interactions (Significant Community Support)**\n- **m1337d** helped **ninja_dev** debug Docker Twitter login issues.\n- **odilitime** assisted **benquik** in setting up multiple agents with different Twitter accounts.\n- **new.moon** guided **phonique_** on improving tweet formatting.\n- **odilitime** helped **4n7m4n** debug memory management in plugins.\n- **hashwarlock** worked with **mr.stark_** to fix Docker build issues.\n- **dankvr** provided documentation updates for plugin installation.\n- **chris.troutner** helped **ownedsk** configure Ollama for local AI models.\n- **definiteoptimist** assisted **shivam_18795** with multi-agent setup.\n- **acul4688** reported and fixed Telegram IPv6 connection issues.\n- **odilitime** provided guidance on securing REST API endpoints.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1320246527268098048",
+            "https://discord.com/channels/1051457140637827122/1324089429727514674"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### **Action Items (Technical Tasks, Documentation Needs, Feature Requests)**\n#### **Technical Tasks**\n1. **Fix Twitter login issues in Docker** (ninja_dev, m1337d).\n2. **Re-add missing plugins (image, video, tts) to the registry** (odilitime).\n3. **Improve RAG knowledge retrieval** (km711, odilitime).\n4. **Fix memory leaks in multi-agent setups** (m1337d).\n5. **Improve Twitter post formatting options** (phonique_).\n\n#### **Documentation Needs**\n6. **Update plugin installation guide** (dankvr).\n7. **Add REST API security documentation** (cjft).\n8. **Improve multi-agent setup guide** (new.moon).\n9. **Document Ollama integration** (chris.troutner).\n10. **Clarify RAG knowledge setup** (redvoid8344).\n\n#### **Feature Requests**\n11. **Add Web3 login support** (odilitime).\n12. **Enable agent-to-agent messaging** (doriand0963).\n13. **Implement API key authentication for REST API** (ad_dev).\n14. **Support OpenAI’s new Responses API** (0xn1c0).\n15. **Improve Twitter ban avoidance strategies** (mr.stark_).",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1320246527268098048",
+            "https://discord.com/channels/1051457140637827122/1327493511406293016",
+            "https://discord.com/channels/1051457140637827122/1324089429727514674",
+            "https://discord.com/channels/1051457140637827122/1323745969115893780"
+          ],
+          "images": [],
+          "videos": []
+        }
+      ],
+      "topic": "Misceleanous"
+    }
+  ],
+  "date": 1736380800
+}

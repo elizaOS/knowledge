@@ -1,0 +1,142 @@
+{
+  "type": "dailySummary",
+  "title": "Daily Report - 2025-03-17",
+  "categories": [
+    {
+      "title": "Eliza Plugin Development and AI Integrations",
+      "content": [
+        {
+          "text": "Several key developments and discussions have taken place around Eliza plugin development and AI integrations. Notable updates include the integration of Langchain with Eliza, a token prediction plugin, a tech-support bot using Eliza, and the launch of an AI agent platform called `aigent.sh`. Additionally, multiple plugin submissions and technical issues were discussed.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1327493511406293016",
+            "https://discord.com/channels/1051457140637827122/1323745969115893780",
+            "https://discord.com/channels/1051457140637827122/1320246527268098048"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Key Plugin Developments:\n- **Langchain + Eliza Integration**: A basic product has been implemented, with plans to onboard early testers.\n- **Token Prediction Plugin**: A feedback-loop-based plugin was shared, with plans to integrate reinforcement learning.\n- **Tech-Support Bot on Eliza**: A bot focused on JavaScript, Bitcoin, and GitHub is in development, with plans for Telegram and Nostr support.\n- **AI Agent Platform (`aigent.sh`)**: Aimed at non-technical users, with daily updates and open feedback requests.\n- **Twitter Plugin PR**: A pull request was submitted to add a Twitter plugin fork to the registry.\n- **Distributed Storage Plugin PR**: A pull request was submitted for a Distributed Storage Plugin.\n- **AI-News Aggregation**: A system was set up to summarize discussions from specific Discord channels.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1327493511406293016",
+            "https://discord.com/channels/1051457140637827122/1323745969115893780"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Technical Issues and Solutions:\n- **SQLite Module Error**: A missing bindings file issue was resolved with `pnpm add better-sqlite3@latest --force` and `npm rebuild better-sqlite3`.\n- **Eliza V2 Plugin Support for Ollama API**: No official plugin exists, but `plugin-local-ai` was found as a workaround.\n- **Eliza V2 Stability**: Confirmed to be in beta and not stable for business use.\n- **CLI Installation Issues**: An `npm error notarget` issue was reported and linked to GitHub issue #3989.\n- **MCP Client Plugin for Eliza**: No existing plugin was found.\n- **Tweet Scraping Tools**: `n8n` was suggested as a self-hosted solution.\n- **Eliza Agent Wallets on EVM Chains**: Confirmed support for multiple EVM chains.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1320246527268098048"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Action Items:\n#### Technical Tasks:\n1. Improve Langchain + Eliza integration.\n2. Implement reinforcement learning in the token prediction plugin.\n3. Develop a Nostr plugin for the tech-support bot.\n4. Fix broken links in the Eliza Plugin Registry.\n5. Review and merge Twitter and Distributed Storage Plugin PRs.\n6. Investigate CommonJS compatibility for Eliza.\n7. Ensure `plugin-local-ai` is documented for Ollama API support.\n8. Resolve `npm error notarget` for `@elizaos/plugin-sql@^0.25.6`.\n\n#### Documentation Needs:\n9. Document Langchain + Eliza integration for testers.\n10. Provide setup guides for token prediction and AI-news aggregation.\n11. Clarify tweet scraping automation options in Eliza docs.\n12. Improve Eliza’s documentation for new contributors.\n\n#### Feature Requests:\n13. Enhance Twitter plugin to support additional metadata retrieval.\n14. Improve Eliza’s multi-agent support.\n15. Develop an official Ollama API plugin.\n16. Create an MCP client plugin for Eliza.\n17. Improve Eliza’s response formatting options.\n18. Add a feature for near-instant tweet scraping.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1327493511406293016",
+            "https://discord.com/channels/1051457140637827122/1323745969115893780",
+            "https://discord.com/channels/1051457140637827122/1320246527268098048"
+          ],
+          "images": [],
+          "videos": []
+        }
+      ],
+      "topic": "plugin"
+    },
+    {
+      "title": "Integrating Real-Time Crypto Data into an Agent",
+      "content": [
+        {
+          "text": "Discussions focused on integrating real-time DeFi/crypto data into an agent for automated decision-making and actions, such as posting to Twitter or responding to Discord queries.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1324089429727514674"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "Key steps identified for implementation:\n1. Obtain or create a structured database of crypto data.\n2. Convert the database into an Eliza provider to feed the agent.\n3. Define actions to detect and act on yield opportunities.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1324089429727514674"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "Alternative approach suggested by rick02533: Break the process into three stages—data collection, storage, and usage.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1324089429727514674"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "Challenges: nb1121 requested example implementations, but behnammby stated that the relevant code was from a client project and is unavailable. However, behnammby offered to check for related resources.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1324089429727514674"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "Action items identified:\n- Implement a crypto data collection and storage system.\n- Convert the database into an Eliza provider.\n- Define actions for detecting and acting on opportunities.\n- Enable automated posting to Twitter and responding to Discord queries.\n- Document the process for setting up a crypto data provider and structuring data for Eliza integration.\n- Provide example implementations or non-client-specific code snippets if possible.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1324089429727514674"
+          ],
+          "images": [],
+          "videos": []
+        }
+      ],
+      "topic": "crypto"
+    },
+    {
+      "title": "ElizaOS Development and Plugin Updates",
+      "content": [
+        {
+          "text": "### Key Technical Discussions & Solutions\n- **Twitter Client on v2**: Suggested using webhooks.\n- **SQLite Module Error**: Resolved by running `pnpm add better-sqlite3@latest --force` and `npm rebuild better-sqlite3`.\n- **Ollama API Support**: Initially missing in v2 plugins, but `plugin-local-ai` was found and configured.\n- **V2 Stability**: Confirmed to be in beta and not production-ready.\n- **Discord Client Installation Issue**: Error related to missing `@elizaos/plugin-sql@^0.25.6`, tracked in GitHub.\n- **EVM Chain Support**: Confirmed support for multiple chains.\n- **CLI and Documentation Issues**: Multiple issues reported, with requests for contribution guidance.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1320246527268098048"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Langchain + Eliza Integration\n- **Langchain + Eliza**: A basic product was implemented and is being improved.\n- **Token Prediction Plugin**: A feedback-loop-based plugin was shared, with plans for reinforcement learning.\n- **Tech-Support Bot on Eliza**: Proposed for JavaScript, Bitcoin, and GitHub support, with plans for Telegram and Nostr integration.\n- **AI Agent Platform**: `aigent.sh` introduced as an AI agent platform for non-technical users.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1327493511406293016"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Crypto Data Integration\n- **Real-Time Crypto Data for Agents**: Suggested using a database, converting it into an Eliza provider, and defining actions for yield opportunities.\n- **Example Code Request**: No example code available due to client confidentiality.\n- **RAGKnowledge Configuration**: Clarified that `ragKnowledge=false` should be set for an array of strings, avoiding unnecessary embeddings.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1324089429727514674"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Plugin and Registry Updates\n- **Twitter Plugin PR**: Submitted to add a Twitter plugin fork with post-fetching functionality.\n- **Broken Link Issue**: Reported in the plugin registry, awaiting resolution.\n- **Distributed Storage Plugin PR**: Submitted and awaiting review.\n- **AI-News Aggregation**: Configured to summarize discussions from specific Discord channels.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1323745969115893780"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Nostr Plugin and Local AI Execution\n- **Tech-Support Bot on ElizaOS**: Plans to build a bot with JavaScript, Bitcoin, and GitHub support.\n- **Local AI Model Execution**: Successfully tested AI models on a GeForce 3060 with 12GB VRAM.\n- **Nostr Plugin Development**: No official plugin exists, but collaboration is sought.\n- **New Open Source Project**: A repository will be created after the first v2 dev school episode.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1327493511406293016"
+          ],
+          "images": [],
+          "videos": []
+        }
+      ],
+      "topic": "Misceleanous"
+    }
+  ],
+  "date": 1742169600
+}

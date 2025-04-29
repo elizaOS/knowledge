@@ -1,0 +1,154 @@
+{
+  "type": "dailySummary",
+  "title": "Daily Report - 2025-02-28",
+  "categories": [
+    {
+      "title": "Docker Issues in ElizaOS",
+      "content": [
+        {
+          "text": "Several users reported issues with Docker builds for ElizaOS, particularly related to missing dependencies and incorrect module paths. The primary problems include:\n\n- `docker compose up` fails due to incorrect module paths, specifically `adapter-pglite` not being found.\n- `ts-node` module not found errors.\n- Missing `pnpm install` step in the Dockerfile, leading to dependency resolution failures.\n- Hardcoded paths in the codebase causing module resolution issues.\n\nA revised Dockerfile was tested but did not fully resolve the path issues. Contributors `mr.stark_` and `hashwarlock` worked on debugging these problems, identifying missing dependencies and incorrect paths as the root causes. Further improvements are needed to ensure a stable Docker build process.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1320246527268098048"
+          ],
+          "images": [],
+          "videos": []
+        }
+      ],
+      "topic": "docker issues"
+    },
+    {
+      "title": "ElizaOS Plugin Development and AI Integrations",
+      "content": [
+        {
+          "text": "### Plugin Registry Contribution\n[pravn1729] requested help adding a plugin to the ElizaOS registry. [odilitime] explained that a separate repository is required, and a PR should update `index.json`. [pravn1729] confirmed the changes and provided the new repo link.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1327493511406293016"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Plugin Installation\n[asi123aa] asked how to activate a merged plugin. [odilitime] provided the command: `npx elizaos plugins install @elizaos-plugins/plugin-name` and advised adding it to the character file.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1327493511406293016"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Unreal Engine Plugin\n[zaperox] announced a plugin enabling communication between Unreal Engine and Eliza instances. [GitHub link](https://github.com/CrucibleNetworksLtd/Eliza-Plugin-Unreal).",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1327493511406293016"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Token Prediction Plugin\n[dorianjanezic] introduced a token prediction plugin using a feedback loop for evaluation. He shared example predictions and sought collaboration. [rick02533] offered to help test.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1327493511406293016"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Tech-Support Bot\n[chris.troutner] proposed a tech-support bot using ElizaOS, focusing on JavaScript, Bitcoin, and GitHub. He plans to run models locally with Ollama and develop a Nostr plugin for decentralized communication.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1327493511406293016"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Web3 Narrative Marketing Automation\n[shivam_18795] is developing a platform using ElizaOS and Langchain for automated content generation, scheduling, and feedback loops. He seeks testers and early access sign-ups via [trymeo.fun](https://trymeo.fun).",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1327493511406293016"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### AI Agent Platform\n[dtb0x] introduced [aigent.sh](https://aigent.sh), an AI agent platform powered by ElizaOS, aimed at non-technical users. He is rolling out daily updates and seeks feedback.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1327493511406293016"
+          ],
+          "images": [],
+          "videos": []
+        }
+      ],
+      "topic": "elizaos"
+    },
+    {
+      "title": "Memory Issues in Eliza OS",
+      "content": [
+        {
+          "text": "An out-of-memory (OOM) bug in Eliza OS was fixed by [v1xingyue] in PR #3722. The issue was caused by a dead loop in `splitChunks/splitText`, which consumed all available memory. This fix resolved CI memory issues.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1323745969115893780"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "[redvoid8344] encountered a JavaScript heap out-of-memory error while processing RAG knowledge. The issue was mitigated by setting `export NODE_OPTIONS=\"--max-old-space-size=6144\"`. Additionally, an 'Invalid array length' error was fixed via a PR, but the agent still does not respond correctly based on knowledge markdown files.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1324089429727514674"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "To prevent future OOM issues, [v1xingyue] suggested improving memory handling in Eliza OS. This includes optimizing memory allocation and preventing infinite loops in text processing functions.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1323745969115893780"
+          ],
+          "images": [],
+          "videos": []
+        }
+      ],
+      "topic": "memory issues"
+    },
+    {
+      "title": "ElizaOS Plugin Development and Technical Issues",
+      "content": [
+        {
+          "text": "### Plugin Development and Registry Updates\n- Several users contributed new plugins, including a Sonic blockchain plugin, an Unreal Engine integration, and a token prediction plugin.\n- Issues with the plugin registry were reported, including broken links and missing dependencies.\n- The removal of `plugin-kaia` was discussed, with guidance on re-adding it via a personal repository.\n- The Twitter plugin received enhancements, including a reflection mode and a callback for retrieving tweet info.\n- Documentation updates were made to clarify plugin installation and activation processes.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1327493511406293016",
+            "https://discord.com/channels/1051457140637827122/1323745969115893780"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Technical Issues and Fixes\n- Memory management issues were identified, with `composeState` causing infinite loops and out-of-memory errors.\n- Docker builds faced path issues, missing dependencies, and incorrect module resolutions.\n- Twitter client issues included shadowbanning and incorrect `modelConfig` settings.\n- RAG (Retrieval-Augmented Generation) faced ingestion failures due to large document sizes and OpenRouter's lack of embedding support.\n- The transition to ElizaOS v2 required migration, with some plugins missing from the registry.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1320246527268098048",
+            "https://discord.com/channels/1051457140637827122/1324089429727514674"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### API and Client Configuration\n- Users discussed API endpoints for agent creation, with `/agents/:agentId/set` identified as a possible solution.\n- The distinction between `clients` and `plugins` in configuration files caused confusion, prompting documentation updates.\n- The browser plugin faced issues due to Chrome's headless mode changes.\n- Real-time data integration was explored, with suggestions for using providers to fetch and inject data dynamically.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1324089429727514674"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Action Items\n- Fix broken links in the plugin registry.\n- Investigate and resolve Docker build issues.\n- Improve documentation on plugin installation and activation.\n- Address Twitter client shadowbanning and `modelConfig` inconsistencies.\n- Enhance RAG ingestion support for large documents.\n- Clarify API usage for agent creation and real-time data integration.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1320246527268098048",
+            "https://discord.com/channels/1051457140637827122/1323745969115893780"
+          ],
+          "images": [],
+          "videos": []
+        }
+      ],
+      "topic": "Misceleanous"
+    }
+  ],
+  "date": 1740700800
+}

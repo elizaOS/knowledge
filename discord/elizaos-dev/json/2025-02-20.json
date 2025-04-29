@@ -1,0 +1,142 @@
+{
+  "type": "dailySummary",
+  "title": "Daily Report - 2025-02-20",
+  "categories": [
+    {
+      "title": "ElizaOS Plugin Development and Contribution Process",
+      "content": [
+        {
+          "text": "### Plugin Contribution Process\n- New plugins should be submitted to `elizaos-plugins/registry`, not the main `elizaOS` repo.\n- Configuration variables should be added via PR to the main repo.\n- Each plugin requires a separate repository, and a PR should update `index.json` in the registry.\n- Plugin activation requires running `npx elizaos plugins install @elizaos-plugins/plugin-name` and adding it to the character file.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1327493511406293016",
+            "https://discord.com/channels/1051457140637827122/1323745969115893780"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### New Plugin Development\n- **Unreal Engine Plugin**: A plugin is being developed to integrate ElizaOS with Unreal Engine.\n- **Token Prediction Plugin**: A plugin using a feedback loop and reinforcement learning for market predictions is in progress.\n- **Distributed Storage Plugin**: A plugin for decentralized storage has been submitted.\n- **On-Chain Token Price Plugin**: A plugin fetching token prices across 20+ chains has been introduced.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1327493511406293016",
+            "https://discord.com/channels/1051457140637827122/1323745969115893780"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Bug Fixes & Improvements\n- **Out-of-Memory Bug Fix**: Adjustments to `splitChunks/splitText` resolved an OOM issue in v0.25.8.\n- **Plugin Registry Issues**: Broken links in the registry were reported and are under investigation.\n- **Twitter Plugin Enhancements**: Reflection mode and callback support for retrieving posted tweet info were added.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1323745969115893780"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### New Projects & Integrations\n- **Tech-Support Bot**: A bot using ElizaOS for JavaScript, Bitcoin, and GitHub support is being developed.\n- **Web3 Marketing Automation**: A project integrating ElizaOS with Langchain for automated content generation.\n- **AI Agent Platform**: `aigent.sh`, an AI agent platform powered by ElizaOS, has been launched.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1327493511406293016"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Action Items\n- **Fix broken plugin registry links**.\n- **Improve plugin submission documentation**.\n- **Enhance token prediction plugin with reinforcement learning**.\n- **Develop a Nostr plugin for decentralized communication**.\n- **Improve Web3 marketing automation with ElizaOS**.\n- **Enhance plugin registry UI for better discoverability**.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1323745969115893780",
+            "https://discord.com/channels/1051457140637827122/1327493511406293016"
+          ],
+          "images": [],
+          "videos": []
+        }
+      ],
+      "topic": "plugin"
+    },
+    {
+      "title": "ElizaOS: Technical Updates, Plugin Management, and RAG Knowledge Issues",
+      "content": [
+        {
+          "text": "### Technical Discussions & Decisions\n- **Eliza Starter vs. Eliza**: `eliza-starter` is a lightweight version for agent deployment without plugin development. It lacks a web interface, which was identified as an oversight.\n- **Plugin Registry & Metadata**: Discussions on improving plugin metadata storage, including adding descriptions and images to `package.json` instead of the registry index.\n- **Multi-Agent System**: `RAG knowledge` supports shared memory across multiple agents. A modular approach with sub-agents was debated for scalability.\n- **Plugin Installation & Management**: `npx elizaos plugins install` is the new method for adding plugins. Some plugins were missing from the registry and needed re-adding.\n- **Docker Issues**: Multiple users reported Docker build failures due to missing dependencies and incorrect paths. A revised Dockerfile was proposed.\n- **Twitter Client Issues**: Users faced issues with Twitter integration, including double responses and shadow bans. Solutions included setting accounts as 'automated' and adjusting model parameters.\n- **Discord Client Setup**: The Discord client was moved to a plugin format, requiring `\"plugins\": [\"@elizaos-plugins/client-discord\"]` in the character file.\n- **Memory Management & Repetition**: Issues with agents repeating messages were linked to memory retrieval. Solutions included adjusting `composeState` and prompt engineering.\n- **REST API Documentation**: Swagger was considered but abandoned in favor of a simpler REST API documentation page.\n- **V2 Migration**: V2 introduces a CLI (`npx elizaos start`) and a new plugin system. Migration tools are planned.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1320246527268098048",
+            "https://discord.com/channels/1051457140637827122/1324089429727514674"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Plugin Issues & Fixes\n- **Plugin Installation Errors**: Users faced issues installing plugins like `plugin-coingecko` and `plugin-node`. `plugin-trustdb` was identified as the cause and should be excluded.\n- **Twitter Client Setup**: Users struggled with `client-twitter` vs. `plugin-twitter`. `client-twitter` should be installed and added to the `plugins` list.\n- **Discord Client Issues**: Users had trouble connecting. `client-discord` must be installed and added to `plugins`.\n- **RAG Knowledge Issues**:\n  - **Directory Structure**: Knowledge files must be in `characters/knowledge/agent-name`.\n  - **Processing Errors**: RAG was not retrieving knowledge correctly, requiring documentation updates.\n  - **Embedding Model Issues**: Some users faced errors when using multiple `.md` files.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1320246527268098048",
+            "https://discord.com/channels/1051457140637827122/1324089429727514674"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Development & Debugging\n- **Knowledge Processing Fix**: Modifications to `packages/core/src/knowledge.ts` were suggested to handle short text chunks properly.\n- **Memory Issues**: A JavaScript heap out-of-memory error was fixed by increasing `NODE_OPTIONS`.\n- **Provider Implementation**: Guidance was provided on defining providers in `packages/core/src/providers.ts`.\n- **Feature Requests & Documentation Needs**:\n  - **RAG Documentation Update**: Improvements to RAG setup documentation were committed.\n  - **Plugin Readme Centralization**: A suggestion was made to consolidate plugin documentation.\n  - **Clarification on Clients vs. Plugins**: Users found the new structure confusing, prompting a README update.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1320246527268098048",
+            "https://discord.com/channels/1051457140637827122/1324089429727514674"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Action Items\n#### **Technical Tasks**\n1. Fix Docker build issues.\n2. Improve plugin metadata storage.\n3. Debug Twitter client double responses.\n4. Fix SQLite module errors.\n5. Improve REST API documentation.\n\n#### **Documentation Needs**\n6. Update installation guides.\n7. Add a migration guide for V2.\n8. Improve multi-agent setup documentation.\n\n#### **Feature Requests**\n9. Add a memory deletion feature.\n10. Implement a Twitter auto-reply service.\n11. Improve V2 CLI usability.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1320246527268098048",
+            "https://discord.com/channels/1051457140637827122/1324089429727514674"
+          ],
+          "images": [],
+          "videos": []
+        }
+      ],
+      "topic": "plugins"
+    },
+    {
+      "title": "ElizaOS Development Updates and Plugin Management",
+      "content": [
+        {
+          "text": "### Technical Discussions & Decisions\n- **Plugin Registry & Metadata**: Plugin metadata should be stored in `package.json` instead of the registry index. Descriptions and images were proposed for better visibility.\n- **Plugin Installation & Management**: `npx elizaos plugins install` is the standard method for adding plugins. Some plugins were missing from the registry and needed re-adding.\n- **Twitter Client Issues**: Users faced issues with Twitter integration, including double responses and shadow bans. Solutions included setting accounts as 'automated' and adjusting model parameters.\n- **Discord Client Setup**: The Discord client was moved to a plugin format, requiring `@elizaos-plugins/client-discord` in the character file.\n- **Memory Management & RAG**: Issues with agents repeating messages were linked to memory retrieval. Solutions included adjusting `composeState` and prompt engineering.\n- **Docker Issues**: Multiple users reported Docker build failures due to missing dependencies and incorrect paths. A revised Dockerfile was proposed.\n- **V2 Migration & CLI**: V2 introduces a CLI (`npx elizaos start`) and a new plugin system. Migration tools are planned.\n- **Local AI Model Support**: `plugin-local-ai` was identified as the correct plugin for using Ollama API with local models.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1320246527268098048",
+            "https://discord.com/channels/1051457140637827122/1327493511406293016",
+            "https://discord.com/channels/1051457140637827122/1324089429727514674",
+            "https://discord.com/channels/1051457140637827122/1323745969115893780"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Concrete Solutions & Implementations\n- **Plugin Metadata**: Store descriptions and images in `package.json` instead of the registry index.\n- **Docker Fixes**: Adjust paths and ensure dependencies are installed correctly.\n- **Twitter Fixes**: Adjust `modelConfig` parameters (`temperature`, `frequency_penalty`, `presence_penalty`) to reduce redundancy.\n- **Discord Fixes**: Use `npx elizaos plugins install @elizaos-plugins/client-discord` and update the character file.\n- **Memory Fixes**: Ensure `composeState` is used correctly and log LLM prompts for debugging.\n- **REST API Docs**: A new documentation page was created instead of using Swagger.\n- **V2 CLI**: `npx elizaos start` replaces `eliza-starter`.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1320246527268098048",
+            "https://discord.com/channels/1051457140637827122/1327493511406293016"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Help Interactions\n- **Docker Build Issues**: `mr.stark_` and `hashwarlock` debugged Docker build failures and proposed fixes.\n- **Twitter Bot Shadowban**: `bpetes` received advice on marking accounts as 'automated' to avoid bans.\n- **Memory Management**: `fixzzee` learned how to delete unwanted memories from `new.moon`.\n- **Multi-Agent Setup**: `benquik` got guidance from `new.moon` on running multiple agents with different Twitter accounts.\n- **Local LLM Integration**: `chris.troutner` figured out how to use Ollama with Eliza and shared the solution.\n- **REST API Setup**: `x4ndar` was directed to the new API documentation by `odilitime`.\n- **SQLite Errors**: `kalaudius` found a fix for SQLite module issues and shared it.\n- **V2 Installation Issues**: `4n7m4n` reported `npx` errors, leading to a GitHub issue for tracking.\n- **Plugin Registry Fixes**: `dankvr` worked on cleaning up the plugin registry and metadata.\n- **Documentation Contributions**: `552020` was encouraged to update outdated tutorials.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1320246527268098048",
+            "https://discord.com/channels/1051457140637827122/1324089429727514674"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Action Items\n#### **Technical Tasks**\n1. Fix Docker build issues (`mr.stark_`, `hashwarlock`).\n2. Improve plugin metadata storage (`dankvr`).\n3. Debug Twitter client double responses (`odilitime`).\n4. Fix SQLite module errors (`kalaudius`).\n5. Improve REST API documentation (`dankvr`).\n\n#### **Documentation Needs**\n6. Update installation guides (`dankvr`).\n7. Add a migration guide for V2 (`new.moon`).\n8. Improve multi-agent setup documentation (`new.moon`).\n\n#### **Feature Requests**\n9. Add a memory deletion feature (`new.moon`).\n10. Implement a Twitter auto-reply service (`nerdylabs`).\n11. Improve V2 CLI usability (`dankvr`).",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1320246527268098048",
+            "https://discord.com/channels/1051457140637827122/1323745969115893780"
+          ],
+          "images": [],
+          "videos": []
+        }
+      ],
+      "topic": "Misceleanous"
+    }
+  ],
+  "date": 1740009600
+}

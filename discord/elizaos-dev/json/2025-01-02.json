@@ -1,0 +1,255 @@
+{
+  "type": "dailySummary",
+  "title": "Daily Report - 2025-01-02",
+  "categories": [
+    {
+      "title": "Technical Discussions and Implementations in ElizaOS",
+      "content": [
+        {
+          "text": "### Plugin System Overhaul\n- Plugins were moved to a separate registry (`elizaos-plugins`), requiring `npx elizaos plugins install <plugin>` for installation.\n- Several plugins were debugged and re-added, including `plugin-birdeye` and `plugin-rabbi-trader`.\n- Users faced confusion between `plugin-twitter` and `client-twitter`; `client-twitter` is required for login and posting.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1320246527268098048",
+            "https://discord.com/channels/1051457140637827122/1323745969115893780"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Twitter Client Issues\n- Multiple users reported login failures due to Cloudflare security updates.\n- Workarounds included using different IPs, manually logging in, and ensuring correct API credentials.\n- Twitter plugin enhancements were discussed, including reflection mode and callback support for posted tweets.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1320246527268098048",
+            "https://discord.com/channels/1051457140637827122/1323745969115893780"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Docker Issues\n- Users faced missing dependencies (`ts-node`, `adapter-pglite`) when running ElizaOS in Docker.\n- Fixes included modifying the Dockerfile to ensure correct paths and dependencies.\n- A missing Docker Compose file in `eliza-starter` was identified as a major issue.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1320246527268098048",
+            "https://discord.com/channels/1051457140637827122/1323745969115893780"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Memory Management & RAG\n- Users reported issues with RAG knowledge retrieval due to incorrect directory paths and embedding configurations.\n- Fixes included ensuring knowledge files are stored in `characters/knowledge/agent-name` and using `.md` format.\n- `runtime.messageManager.removeMemory` was identified as a way to delete unwanted memories.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1320246527268098048",
+            "https://discord.com/channels/1051457140637827122/1324089429727514674"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Multi-Agent Setup\n- Users explored running multiple agents with separate `.env` files for different Twitter accounts.\n- Namespaced secrets (e.g., `AGENT1_TWITTER_USERNAME`, `AGENT2_TWITTER_USERNAME`) were suggested as a solution.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1320246527268098048"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### REST API Security\n- A proposal was made to add API key authentication for production deployments.\n- Users discussed modifying `api.ts` to require authentication via an `AUTH_KEY` in `.env`.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1320246527268098048"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Node Version Compatibility Issues\n- Errors were reported due to Node.js 23.3.0 incompatibility.\n- The recommended solution was to downgrade to Node.js 20.15.0 (LTS) using `nvm install 20.15.0`.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1324089429727514674"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Telegram Bot Looping Issue\n- `generateMessageResponse` was found to be looping indefinitely.\n- Users were advised to check for circular references, missing termination conditions, or recursive function errors.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1324089429727514674"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Solana Trading Bot Architecture\n- Users discussed designing a bot for trading meme coins.\n- A modular microservices architecture was proposed, using Rust for performance, Jupiter aggregator for routing, and probabilistic trade selection.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1324089429727514674"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### New Features & Enhancements\n- **Character Post-Processing**: Added `postProcessors` field to avoid modifying `plugins`.\n- **WhatsApp Chat to Character**: Script to generate character profiles from WhatsApp conversations.\n- **AI Model Providers**: Added Nvidia inference, Mem0 AI, and NEAR AI as model providers.\n- **Telegram Client Hooks**: Enabled plugins to interact directly with Telegram.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1323745969115893780"
+          ],
+          "images": [],
+          "videos": []
+        }
+      ],
+      "topic": "technical discussions"
+    },
+    {
+      "title": "ElizaOS Development and Plugin Integration Updates",
+      "content": [
+        {
+          "text": "### Key Technical Discussions & Decisions\n- **Decentralized Compute Agent**: Built using Akash, Ceramic, IPFS, and Helius API for Solana. Contracts and agent functions are complete but need refinement. Plans to open-source post-launch.\n- **SAIOS Infrastructure**: Aims to simplify Eliza framework usage with a UI hosted on IPFS/Arweave and agent servers on Akash. Provides full configuration control over AI agents.\n- **HyperParams Protocol**: Open-source protocol for agent validation, performance tuning, and certification. Whitepaper submitted to Arxiv and ACL.\n- **Web3 Structured Output Parser**: Developed for Langchain, with plans to extend to Eliza. Discussed error handling and validation for Web3 data.\n- **Plugin Development & Integration**:\n  - **Plugin-Berachain**: PR submitted and merged into ElizaOS plugins registry.\n  - **Plugin-Safe-Validator**: AI agent for reviewing Safe multisig transactions. PR submitted and merged.\n  - **Plugin-OmniFlix**: PR submitted and merged. Maintainer access requested and granted.\n  - **Plugin-Token-Prediction**: AI-driven token prediction with reinforcement learning plans.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1327493511406293016",
+            "https://discord.com/channels/1051457140637827122/1323745969115893780"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Concrete Solutions & Implementations\n- **Plugin Installation Process**: `npx elizaos plugins install @elizaos-plugins/plugin-name` and add to character file.\n- **GitHub Contribution Workflow**: Fork repo, create plugin directory, follow registry pattern, submit PR. Example PR provided.\n- **Handling .env Dependencies**: Submit a PR to `eliza/.env.example` for environment variable changes.\n- **Create-Eliza Proposal**: A new onboarding tool similar to `create-react-app` to simplify setup.\n- **Feature Comparison for CoinGecko & CoinMarketCap**: A structured analysis was suggested before merging.\n- **Improved PR Review Process**: Use of CodeRabbit and other AI tools to speed up reviews.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1327493511406293016",
+            "https://discord.com/channels/1051457140637827122/1323745969115893780"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### FAQ\n1. **How do I install an ElizaOS plugin?**\n   - Run `npx elizaos plugins install @elizaos-plugins/plugin-name` and add it to the character file.\n2. **How do I fork the ElizaOS plugins repo?**\n   - Go to `github.com/elizaos-plugins`, click \"Fork\", then clone your fork locally.\n3. **How do I submit a plugin PR?**\n   - Follow the structure of PR #35 in `elizaos-plugins/registry`.\n4. **How do I update .env variables for my plugin?**\n   - Submit a PR to `eliza/.env.example`.\n5. **How do I activate a merged plugin?**\n   - Install it using `npx elizaos plugins install` and add it to the character file.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1327493511406293016",
+            "https://discord.com/channels/1051457140637827122/1323745969115893780"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Help Interactions\n- **Guidance on PR submissions**: Multiple users were assisted in structuring and submitting PRs for ElizaOS plugins.\n- **Plugin Activation Support**: Users were guided on installing and activating plugins in ElizaOS.\n- **Error Handling in Web3 Parsing**: Suggestions were provided for improving structured output parsing in Web3 applications.\n- **Maintainer Access Requests**: Maintainer access was granted to plugin developers upon request.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1327493511406293016",
+            "https://discord.com/channels/1051457140637827122/1323745969115893780"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Action Items\n#### Technical Tasks\n1. **Refine decentralized compute agent** – Improve contract management and data reading capabilities.\n2. **Improve Web3 StructuredOutputParser** – Add validation for hex addresses and error handling.\n3. **Implement chain-of-density parsing for token data** – Standardize token data parsing.\n4. **Develop reinforcement learning for token prediction plugin** – Enhance accuracy of token predictions.\n5. **Build Nostr plugin for tech support bot** – Enable decentralized communication for tech support.\n6. **Enhance HyperParams validation and certification system** – Improve AI agent validation.\n7. **Integrate Eliza into Unreal Engine plugin** – Expand Eliza’s capabilities into gaming.\n8. **Improve error handling in Web3 agent parsing** – Strengthen data validation mechanisms.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1327493511406293016",
+            "https://discord.com/channels/1051457140637827122/1323745969115893780"
+          ],
+          "images": [],
+          "videos": []
+        }
+      ],
+      "topic": "plugins"
+    },
+    {
+      "title": "ElizaOS Development Updates and Technical Discussions",
+      "content": [
+        {
+          "text": "### Plugin System Overhaul\nElizaOS has migrated its plugin system to a separate registry (`elizaos-plugins`). Users must now install plugins using `npx elizaos plugins install <plugin-name>` and add them to the character file. This change improves modularity and maintainability.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1320246527268098048",
+            "https://discord.com/channels/1051457140637827122/1323745969115893780"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Twitter Client Issues\nUsers reported login failures due to Cloudflare security updates. Workarounds include using different IPs, ensuring correct API keys, and manually logging in. Additionally, duplicate tweet issues were identified and are under investigation.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1320246527268098048",
+            "https://discord.com/channels/1051457140637827122/1323745969115893780"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Docker Issues and Fixes\nSeveral users faced missing dependencies (`ts-node`, `adapter-pglite`) when running ElizaOS in Docker. Fixes included modifying the Dockerfile to ensure correct paths and dependencies. A multi-stage Dockerfile with Alpine base was recommended for consistency.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1320246527268098048",
+            "https://discord.com/channels/1051457140637827122/1324089429727514674"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Memory Management & RAG Knowledge Retrieval\nUsers reported issues with RAG knowledge retrieval. Fixes included ensuring correct directory paths (`characters/agent-name/knowledge/`) and embedding configurations. The `runtime.messageManager.removeMemory` function was identified as a way to delete unwanted memories.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1320246527268098048",
+            "https://discord.com/channels/1051457140637827122/1324089429727514674"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Multi-Agent Support\nUsers explored running multiple agents with separate `.env` files and namespaced secrets. This allows different agents to operate independently with unique configurations.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1320246527268098048"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### REST API Security Enhancements\nA proposal was made to add API key authentication for production deployments. Users were advised to add an `AUTH_KEY` to `.env` and modify `api.ts` to require authentication.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1320246527268098048"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Local AI Model Integration\nOllama and DeepSeek were tested as local AI providers. Users were advised to install `plugin-local-ai` and set `OLLAMA_SERVER_URL` in `.env` for proper configuration.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1320246527268098048"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Eliza v2 Migration\nEliza v2 introduces a new CLI (`npx elizaos start`), replacing `eliza-starter`. Migration tools for plugins were discussed, and users were encouraged to update their configurations accordingly.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1320246527268098048"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Web3 and Decentralized Compute Agent\nA decentralized compute agent is being developed using Akash, Ceramic, IPFS, and Helius API for Solana. The project aims to provide a fully decentralized AI agent hosting framework.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1327493511406293016"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Plugin Development & Integration\nSeveral new plugins were introduced, including Binance, CoinGecko, CoinMarketCap, DexScreener, and Safe Validator. The plugin registry has been migrated to `elizaos-plugins`, and new submissions must follow the updated PR process.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1323745969115893780",
+            "https://discord.com/channels/1051457140637827122/1327493511406293016"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Telegram & Linear Bot Integration\nA proposal was made to integrate Telegram with Linear for ticket tracking. This would allow users to manage support requests directly from Telegram.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1323745969115893780"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### CI/CD and Dependency Management\nIssues with `pnpm-lock.yaml` updates causing conflicts were reported. Users were advised to update dependencies only when `package.json` changes to avoid unnecessary conflicts.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1323745969115893780"
+          ],
+          "images": [],
+          "videos": []
+        }
+      ],
+      "topic": "Misceleanous"
+    }
+  ],
+  "date": 1735776000
+}

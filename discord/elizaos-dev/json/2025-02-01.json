@@ -1,0 +1,137 @@
+{
+  "type": "dailySummary",
+  "title": "Daily Report - 2025-02-01",
+  "categories": [
+    {
+      "title": "ElizaOS Development & Plugin Updates",
+      "content": [
+        {
+          "text": "### Technical Discussions & Problem-Solving\n- **Twitter Client Issues**: Users faced login failures due to Twitter's security measures. Solutions included marking the agent as automated and using different accounts.\n- **Plugin Installation & Management**: The new plugin system requires `npx elizaos plugins add <plugin-name>`. Some plugins like `plugin-twitter` and `plugin-discord` were missing from the registry but were later restored.\n- **Docker Issues**: Users reported issues running ElizaOS in Docker, particularly missing dependencies and incorrect paths. A revised Dockerfile was proposed to fix these.\n- **Memory Management & RAG**: Users struggled with embedding and memory retrieval. Solutions included ensuring correct `.env` settings and verifying database configurations.\n- **Multi-Agent Setup**: Users explored running multiple agents with separate configurations. The new v2 system supports namespaced secrets for different agents.\n- **Local LLM Support**: Users sought to integrate Ollama and DeepSeek models. The `plugin-local-ai` was identified as the correct plugin for this.\n- **Discord Client Issues**: Users had trouble setting up the Discord client. The correct approach is to install it as a plugin and add it to the character file.\n- **REST API & Authentication**: Users requested authentication for REST API endpoints. A proposal was made to add an `AUTH_KEY` to secure API access.\n- **Eliza v2 Migration**: Users asked about migrating from v1 to v2. A migration tool is planned, and v2 introduces a new CLI (`npx elizaos start`).",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1320246527268098048",
+            "https://discord.com/channels/1051457140637827122/1327493511406293016"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Plugin Development & Contributions\n- **New Plugins**: Several new plugins were developed and merged, including `plugin-berachain`, `plugin-safe-validator`, `plugin-omniflix`, and `plugin-token-prediction`.\n- **Web3 Structured Output Parser**: A Web3 StructuredOutputParser for Langchain was developed, with suggestions to add validation for hex addresses and error handling for malformed responses.\n- **Chain-of-Density Parsing**: Proposed as a method to normalize token standards and contract ABIs, reducing the need for custom parsers.\n- **Nostr Plugin Proposal**: A proposal was made to develop a Nostr plugin for a tech-support bot using ElizaOS, focusing on JavaScript, Bitcoin, and GitHub integration.\n- **Token Prediction Plugin**: A token prediction plugin was developed with a feedback loop for evaluation, with plans to integrate reinforcement learning.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1327493511406293016"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Action Items & Feature Requests\n#### **Technical Tasks**\n1. **Fix Docker Build Issues** (mr.stark_, hashwarlock)\n2. **Restore Missing Plugins in Registry** (odilitime)\n3. **Improve Twitter Client Stability** (odilitime)\n4. **Fix Double Response Bug** (definiteoptimist)\n5. **Enhance RAG Knowledge Retrieval** (odilitime)\n6. **Improve Multi-Agent Support** (new.moon)\n7. **Add REST API Authentication** (cjft)\n8. **Fix Embedding Size Mismatch** (phonique_)\n9. **Improve Plugin Installation Process** (dankvr)\n10. **Fix Discord Client Setup Issues** (odilitime)\n\n#### **Feature Requests**\n11. **Support for OpenAI Responses API** (0xn1c0)\n12. **Implement Admin-Controlled Memory Deletion** (fixzzee)\n13. **Develop a Nostr Plugin for ElizaOS** (chris.troutner)\n14. **Enhance Safe Validator Plugin with Additional Security Checks** (mati1131)\n15. **Improve ElizaOS Plugin Registry Submission Guidelines** (odilitime)\n16. **Support for Unreal Engine Integration with ElizaOS** (zaperox)\n17. **Enhance ElizaOS AI Agent Capabilities for Web3 Marketing** (shivam_18795)\n18. **Improve ElizaOS Plugin Dependency Management** (00xlucian)\n19. **Develop a Plugin for Structured Web3 Data Parsing** (willthesis2)\n20. **Expand ElizaOS AI Agent Use Cases for Non-Technical Users** (dtb0x)",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1320246527268098048",
+            "https://discord.com/channels/1051457140637827122/1327493511406293016"
+          ],
+          "images": [],
+          "videos": []
+        }
+      ],
+      "topic": "plugins"
+    },
+    {
+      "title": "RAG Knowledge System in Eliza",
+      "content": [
+        {
+          "text": "Users faced challenges configuring the RAG (Retrieval-Augmented Generation) knowledge system in Eliza. The primary issues included ensuring knowledge files were correctly placed, using the right file format, and verifying embedding settings.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1324089429727514674"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "To properly configure RAG knowledge, users should store knowledge files in `characters/knowledge/agent-name` and use `.md` format instead of PDFs. Embedding must also be enabled for the system to function correctly.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1324089429727514674"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "Some users reported that their agents were not responding with RAG knowledge. The solution involved verifying that the knowledge files were correctly placed and ensuring the system was set to use them.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1324089429727514674"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "A feature request was made to support `.pdf` files in the RAG knowledge system, as currently, only `.md` files are supported.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1324089429727514674"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "Documentation improvements were suggested to clarify the setup process, including directory structure, file formats, and embedding settings.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1324089429727514674"
+          ],
+          "images": [],
+          "videos": []
+        }
+      ],
+      "topic": "rag knowledge"
+    },
+    {
+      "title": "ElizaOS Plugin Development, Technical Issues, and Feature Enhancements",
+      "content": [
+        {
+          "text": "The discussions focused on plugin development, technical troubleshooting, and feature enhancements for ElizaOS. Several users reported issues with plugin installation, Docker builds, and API security, while others contributed new plugins and improvements.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1320246527268098048",
+            "https://discord.com/channels/1051457140637827122/1327493511406293016",
+            "https://discord.com/channels/1051457140637827122/1324089429727514674",
+            "https://discord.com/channels/1051457140637827122/1323745969115893780"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Plugin Development & Fixes\n- Multiple plugins received bug fixes, including `plugin-allora`, `plugin-akash`, `plugin-agentkit`, and `plugin-abstract`.\n- New plugins were introduced, such as `plugin-dexpaprika` for on-chain token price fetching and `plugin-safe-validator` for reviewing Safe multisig transactions.\n- A new process was clarified for adding plugins: they should be submitted to the registry repo instead of the main repo.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1327493511406293016",
+            "https://discord.com/channels/1051457140637827122/1323745969115893780"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Technical Issues & Solutions\n- **Docker Issues**: Users faced missing dependencies and incorrect paths. Solution: Ensure `pnpm install` runs inside the container.\n- **Twitter Client Issues**: Login failures due to security changes. Solution: Use different accounts and check API keys.\n- **Memory Management**: Agents repeating actions. Solution: Use `composeState` and check message history.\n- **API Security**: Implemented API key security for port 3000 by modifying `api.ts` and `.env`.\n- **RAG Knowledge System**: Users struggled with configuring RAG knowledge. Solution: Ensure `.md` files are used and stored in `characters/knowledge/agent-name`.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1320246527268098048",
+            "https://discord.com/channels/1051457140637827122/1324089429727514674"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Feature Enhancements\n- **Twitter Client Update**: Added a reflection mode to extract valuable information from conversations.\n- **Telegram Client Update**: `messageManager` was made public to allow plugins to interact with Telegram.\n- **Post-Processing for Character Objects**: Introduced a `postProcessors` field to avoid modifying the `plugins` field.\n- **Improved Plugin Installation Checks**: A new feature was added to display plugin installation checks.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1323745969115893780"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Action Items\n- **Fix Docker Build Issues** (mr.stark_)\n- **Improve Plugin Installation Process** (odilitime)\n- **Enhance RAG Knowledge Retrieval** (dankvr)\n- **Fix Twitter Client Authentication Issues** (ninja_dev)\n- **Improve API Security** (cjft)\n- **Fix Embedding Errors** (phonique_)\n- **Improve Discord Client Setup** (odilitime)\n- **Enhance Plugin Registry** (0xn1c0)",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1320246527268098048",
+            "https://discord.com/channels/1051457140637827122/1324089429727514674"
+          ],
+          "images": [],
+          "videos": []
+        }
+      ],
+      "topic": "Misceleanous"
+    }
+  ],
+  "date": 1738368000
+}

@@ -1,0 +1,70 @@
+{
+  "type": "dailySummary",
+  "title": "Daily Report - 2025-02-14",
+  "categories": [
+    {
+      "title": "ElizaOS Technical Discussions and Development Updates",
+      "content": [
+        {
+          "text": "### Technical Discussions & Solutions\n- **Twitter Client Issues**: Users faced redundancy in automated tweets and connection failures. Solutions included deleting the SQLite database, adjusting `frequency_penalty`, and ensuring `@elizaos-plugins/client-twitter` was installed correctly.\n- **Discord Client Setup**: Users struggled to install and run the Discord client on v0.25.8. Solution: `npx elizaos plugins install @elizaos-plugins/client-discord` and adding it to the character file.\n- **Docker Deployment Issues**: Users faced missing dependencies and incorrect paths. Solutions included modifying the Dockerfile and using `pnpm docker` to build and run the container.\n- **Memory Management & RAG**: Users discussed embedding issues and memory retrieval inconsistencies. Solutions involved checking `.env` settings and ensuring embeddings were correctly configured.\n- **Plugin Installation & Registry**: Some plugins were missing from the registry (`plugin-image`, `plugin-video`, `plugin-tts`). Users were advised to install them manually or wait for registry updates.\n- **Multi-Agent Setup**: Users explored running multiple agents with different Twitter accounts. Solution: Use namespaced environment variables for each agent.\n- **Local LLM Integration**: Users wanted to use Ollama with ElizaOS. Solution: Use `plugin-local-ai` with the correct `.env` settings.\n- **V2 Migration**: V2 introduces a new CLI (`npx elizaos start`). Users were advised to wait for stability before migrating production setups.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1320246527268098048",
+            "https://discord.com/channels/1051457140637827122/1324089429727514674"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Plugin Development & Contributions\n- **Plugin Submission Process**: Plugins should be submitted to `elizaos-plugins/registry`, not the main repo. Configuration variables go in `.env.example` and `package.json`.\n- **Plugin Installation Issues**: Some plugins (e.g., `plugin-trustdb`) caused installation failures. Solution: Exclude problematic plugins to proceed with installation.\n- **New Plugins**: Users submitted various plugins, including a token prediction plugin, Unreal Engine integration, and a Web3 marketing automation tool.\n- **Maintainer Requests**: Several users requested maintainer access for plugins. Requests were processed manually by `odilitime`.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1327493511406293016"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Action Items\n#### **Technical Tasks**\n1. **Fix Twitter redundancy issues**\n2. **Improve Discord client installation documentation**\n3. **Fix Docker deployment issues**\n4. **Ensure RAG knowledge works correctly**\n5. **Fix embedding input validation errors**\n6. **Improve multi-agent setup documentation**\n7. **Ensure Twitter client works in v2**\n8. **Fix SQLite module installation issues**\n9. **Improve REST API authentication**\n10. **Fix OpenAI model configuration issues**\n\n#### **Documentation Needs**\n11. **Update installation guide for v2**\n12. **Add a guide for using local LLMs with Ollama**\n13. **Improve RAG knowledge documentation**\n14. **Add a guide for setting up voice interaction**\n15. **Document best practices for Twitter automation**\n\n#### **Feature Requests**\n16. **Add MCP client plugin**\n17. **Improve memory management and retrieval**\n18. **Add support for OpenAI's new Responses API**\n19. **Improve plugin registry visibility**\n20. **Add a way to delete recent memories as an admin**",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1323745969115893780"
+          ],
+          "images": [],
+          "videos": []
+        }
+      ],
+      "topic": "plugins"
+    },
+    {
+      "title": "ElizaOS: Technical Discussions, Plugin Management, and Feature Development",
+      "content": [
+        {
+          "text": "### Technical Discussions & Solutions\n- **Twitter Client Issues**: Users faced redundancy in automated tweets. Solutions included deleting the SQLite database, trying different models, and adding more examples to the character file.\n- **Discord Client Setup**: Users struggled to install and run the Discord client on v0.25.8. Solution: `npx elizaos plugins install @elizaos-plugins/client-discord` and adding it to the character file.\n- **Docker Deployment Issues**: Several users faced issues running ElizaOS in Docker due to missing dependencies and incorrect paths. Solutions included modifying the Dockerfile to ensure dependencies were installed correctly.\n- **Memory Management & RAG**: Users discussed embedding issues and memory retrieval inconsistencies. Solutions involved checking `.env` settings and ensuring embeddings were correctly configured.\n- **Plugin Installation & Registry**: Some plugins were missing from the registry (`plugin-image`, `plugin-video`, `plugin-tts`). Users were advised to install them manually or wait for registry updates.\n- **Multi-Agent Setup**: Users explored running multiple agents with different Twitter accounts. Solution: Use namespaced environment variables for each agent.\n- **Local LLM Integration**: Users wanted to use Ollama with ElizaOS. Solution: Use `plugin-local-ai` with the correct `.env` settings.\n- **V2 Migration**: V2 introduces a new CLI (`npx elizaos start`). Users were advised to wait for stability before migrating production setups.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1320246527268098048",
+            "https://discord.com/channels/1051457140637827122/1324089429727514674"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Plugin Management & Development\n- **Plugin Registry Updates**: Several users submitted PRs to the `elizaos-plugins/registry` repository to add new plugins. [odilitime] reviewed and merged them.\n- **Maintainer Access Requests**: [blockeater] and [bt.wood] requested maintainer access for specific plugin repositories. [odilitime] granted access.\n- **Plugin Submission Process**: [pravn1729] clarified the correct process for submitting a plugin, which involves creating a separate repository and updating `index.json`.\n- **Plugin Activation**: [asi123aa] asked how to activate a merged plugin. [odilitime] provided the command: `npx elizaos plugins install @elizaos-plugins/plugin-name` and instructed to add it to the character file.\n- **Token Prediction Plugin**: [dorianjanezic] shared a token prediction plugin using a feedback loop for evaluation and requested feedback on implementing reinforcement learning.\n- **Tech-Support Bot**: [chris.troutner] proposed a tech-support bot using ElizaOS, focusing on JavaScript, Bitcoin, and GitHub. He plans to run models locally with Ollama and integrate with Telegram and Nostr.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1327493511406293016",
+            "https://discord.com/channels/1051457140637827122/1323745969115893780"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Feature Requests & Upcoming Enhancements\n- **NEAR AI Integration**: PR #3275 adds NEAR AI as a model provider to Eliza. Pending for over a week, expected to merge soon.\n- **Post-Processing Support**: PR #3686 introduces `postProcessors` for character objects, allowing future refinements.\n- **Out-of-Memory Bug Fix**: PR #3722 resolves a memory leak caused by a dead loop.\n- **New AI Provider**: PR #3927 adds Mem0 as a provider in the Vercel AI SDK, introducing a memory layer.\n- **Distributed Storage Plugin**: PR #111 adds a new storage plugin to the registry.\n- **Command-line Tools for Plugin Discovery**: Upcoming release will include CLI tools for easier plugin management.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1323745969115893780"
+          ],
+          "images": [],
+          "videos": []
+        }
+      ],
+      "topic": "Misceleanous"
+    }
+  ],
+  "date": 1739491200
+}

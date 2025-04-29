@@ -1,0 +1,212 @@
+{
+  "type": "dailySummary",
+  "title": "Daily Report - 2025-02-12",
+  "categories": [
+    {
+      "title": "ElizaOS Plugin Development and Maintenance Updates",
+      "content": [
+        {
+          "text": "### Plugin PR Merges & Best Practices\n- Several plugin-related PRs were submitted and merged, including `.env` updates, dependency management improvements, and bug fixes.\n- Maintainer access was requested and granted for multiple plugins, including `plugin-omniflix`, `plugin-near`, and `plugin-multiversx`.\n- Developers were guided on submitting new plugins to the `elizaos-plugins/registry` instead of the main `elizaOS` repo.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1327493511406293016",
+            "https://discord.com/channels/1051457140637827122/1323745969115893780"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Plugin Installation & Activation\n- Users were instructed on how to activate merged plugins using the command:\n  sh\n  npx elizaos plugins install @elizaos-plugins/plugin-name\n  \n  and adding them to the character file.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1327493511406293016"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### New Plugin Development\n- A plugin for Unreal Engine to interact with Eliza instances was announced.\n- A token prediction plugin was introduced, with plans for reinforcement learning integration.\n- A tech-support bot using ElizaOS was proposed, focusing on JavaScript, Bitcoin, and GitHub, with plans for Telegram and Nostr integration.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1327493511406293016"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Plugin Registry & Documentation\n- Developers were reminded to submit new plugins to `elizaos-plugins/registry` and ensure registry entries point to personal GitHub repos.\n- Broken links in the plugin registry were reported and acknowledged.\n- Documentation updates were suggested for plugin activation, maintainer access requests, and environment variable definitions.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1323745969115893780"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Technical Fixes & Enhancements\n- Dependency management in `pnpm` was improved to make package usage stricter.\n- An out-of-memory (OOM) bug in v0.25.8 was fixed.\n- Post-processing support for character objects was introduced.\n- A reflection mode for the Twitter client was added to evaluate post appropriateness.\n- A plugin for fetching on-chain token prices was submitted.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1323745969115893780"
+          ],
+          "images": [],
+          "videos": []
+        }
+      ],
+      "topic": "plugin"
+    },
+    {
+      "title": "Memory Management in ElizaOS",
+      "content": [
+        {
+          "text": "Users reported issues with redundant responses and excessive memory storage in ElizaOS agents. The primary solution involved using `runtime.messageManager.removeMemory` to delete unwanted memories. Additionally, adjusting `modelConfig` parameters such as `temperature`, `frequency_penalty`, and `presence_penalty` helped reduce duplicate responses.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1320246527268098048"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "A feature request was made to implement an admin UI for managing agent memories, allowing users to delete recent memories more efficiently. This would improve control over stored data and prevent unnecessary repetition in responses.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1320246527268098048"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "Users also discussed embedding failures related to memory storage. Ensuring correct database configurations and improving documentation on memory management best practices were suggested as solutions.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1320246527268098048"
+          ],
+          "images": [],
+          "videos": []
+        }
+      ],
+      "topic": "memory management"
+    },
+    {
+      "title": "ElizaOS: Troubleshooting and Feature Discussions",
+      "content": [
+        {
+          "text": "Users discussed various technical issues and feature improvements related to ElizaOS, including WebSocket event handling, RAG knowledge storage, plugin installation, and real-time data integration.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1324089429727514674"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "A recurring issue was the Twitter post template, where `_marsh07` asked about the source of `{{topic}}`. `odilitime` clarified that it is randomly chosen from `composeState` in `runtime.ts`.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1324089429727514674"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "WebSocket event handling was another key discussion. `ualp.` wanted to trigger actions based on real-time liquidity events, and `odilitime` explained that WebSocket events should call `processActions` in the agent’s runtime.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1324089429727514674"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "RAG knowledge storage was investigated by `_marsh07`, who found that `knowledgeRoot` is set in `runtime.ts` but cannot be changed dynamically. `redvoid8344` confirmed that knowledge files should be stored in `characters/knowledge/agent-name`.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1324089429727514674"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "Several users faced plugin installation issues. `redvoid8344` identified `plugin-trustdb` as a cause, and removing it resolved the problem. `lefrog_dont_code` also faced dependency mismatches on Windows, which `odilitime` suggested resolving by using WSL2.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1324089429727514674"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "Twitter client integration was a common confusion point. `robbie3920` struggled with setup, and `odilitime` clarified that `@elizaos-plugins/client-twitter` should be installed and added to `plugins`, not `clients`.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1324089429727514674"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "Provider implementation was discussed by `robbie3920`, who asked how to use providers for real-time data. `odilitime` explained that providers fetch external data and inject it into LLM prompts.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1324089429727514674"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "Docker build issues were reported by `lefrog_dont_code`, and `odilitime` suggested using `pnpm docker` to build and run the project.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1324089429727514674"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "Custom plugin development was another topic of interest. `m_devansh` and `asi123aa` asked about structuring plugins, and `odilitime` suggested looking at `plugin-bootstrap` and `plugin-video-generation` as examples.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1324089429727514674"
+          ],
+          "images": [],
+          "videos": []
+        }
+      ],
+      "topic": "twitter"
+    },
+    {
+      "title": "ElizaOS Plugin Development, Issue Resolution, and Feature Enhancements",
+      "content": [
+        {
+          "text": "### Plugin System Overhaul and Migration\nElizaOS introduced a new plugin system (V2), requiring migration for existing plugins. Auto-migration tools are planned to ease the transition. Users must now explicitly install plugins such as `plugin-twitter` and `client-twitter` using `npx elizaos plugins add @elizaos-plugins/plugin-twitter`.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1320246527268098048"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Plugin Contribution and Maintenance\nSeveral users requested maintainer access for plugins, including `plugin-near` and `plugin-multiversx`. PRs were submitted for new plugins such as a token prediction plugin, a Twitter reflection mode, and a memory layer for AI models. The plugin registry process was clarified, requiring submissions to `elizaos-plugins/registry` instead of the main repo.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1327493511406293016",
+            "https://discord.com/channels/1051457140637827122/1323745969115893780"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Technical Issue Resolutions\n- **Docker Build Failures**: Users faced missing dependencies and incorrect paths. A revised Dockerfile was proposed.\n- **SQLite Module Errors**: Running `pnpm add better-sqlite3@latest --force` and `npm rebuild better-sqlite3` resolved missing bindings.\n- **Memory Management**: Adjusting `modelConfig` parameters (`temperature`, `frequency_penalty`, `presence_penalty`) helped prevent redundant responses.\n- **Twitter Plugin Issues**: Users needed to install both `plugin-twitter` and `client-twitter` explicitly.\n- **Windows Dependency Issues**: Using WSL2 resolved `pnpm install` errors.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1320246527268098048",
+            "https://discord.com/channels/1051457140637827122/1324089429727514674"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Feature Enhancements and Requests\n- **Multi-Agent Setup**: New environment variable structures allow multiple agents to run independently with separate credentials.\n- **Local AI Model Support**: `plugin-local-ai` was confirmed for Ollama API but was not listed in the registry.\n- **Tech-Support Bot Proposal**: A bot using ElizaOS for JavaScript, Bitcoin, and GitHub support was proposed, with plans for Telegram and Nostr integration.\n- **WebSocket Event Handling**: Users discussed triggering actions based on real-time liquidity events using `processActions` in the agent’s runtime.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1320246527268098048",
+            "https://discord.com/channels/1051457140637827122/1324089429727514674"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Documentation and Process Improvements\n- **Plugin Activation Guide**: Users were instructed to install plugins using `npx elizaos plugins install @elizaos-plugins/plugin-name` and add them to the character file.\n- **Registry Submission Process**: New plugins should be submitted to `elizaos-plugins/registry`, not `elizaOS`.\n- **Memory Management Best Practices**: Users were advised to use `runtime.messageManager.removeMemory` to delete unwanted memories.\n- **REST API Documentation**: Swagger integration was abandoned in favor of a simpler documentation page.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1327493511406293016",
+            "https://discord.com/channels/1051457140637827122/1323745969115893780"
+          ],
+          "images": [],
+          "videos": []
+        }
+      ],
+      "topic": "Misceleanous"
+    }
+  ],
+  "date": 1739318400
+}

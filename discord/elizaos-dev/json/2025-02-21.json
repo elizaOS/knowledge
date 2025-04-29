@@ -1,0 +1,120 @@
+{
+  "type": "dailySummary",
+  "title": "Daily Report - 2025-02-21",
+  "categories": [
+    {
+      "title": "ElizaOS Plugin Development, Issues, and Enhancements",
+      "content": [
+        {
+          "text": "### Plugin Registry & Contribution Process\n- Developers must submit plugins to the `elizaos-plugins` registry, not the main repo.\n- A separate repository is required for each plugin, and a PR must update `index.json`.\n- `odilitime` clarified that plugins are distributed via Git, not npm.\n- `asi123aa` asked how to activate a merged plugin, and `odilitime` provided the command:\n  sh\n  npx elizaos plugins install @elizaos-plugins/plugin-name\n  \n  and advised adding it to the character file.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1327493511406293016",
+            "https://discord.com/channels/1051457140637827122/1323745969115893780"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Plugin Development & New Features\n- `zaperox` is developing an Unreal Engine plugin for ElizaOS.\n- `dorianjanezic` is building a token prediction plugin with reinforcement learning.\n- `chris.troutner` is working on a tech-support bot using ElizaOS, focusing on JavaScript, Bitcoin, and GitHub.\n- `shivam_18795` is automating Web3 narrative marketing with ElizaOS and Langchain.\n- `dtb0x` launched `aigent.sh`, an AI agent platform powered by ElizaOS.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1327493511406293016"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Bug Fixes & Merges\n- `.boolkeys` fixed an 'Invalid array length' error in knowledge processing (`PR #3652`).\n- `v1xingyue` fixed an OOM bug in `v0.25.8` (`PR #3722`).\n- `dtb0x` fixed a bug in loading character plugins from remote URLs (`PR #3890`).\n- `flaneurofmetaverses` reported broken links in the plugin registry, and `odilitime` confirmed the issue is under investigation.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1323745969115893780"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Twitter Client Issues & Fixes\n- Users (`sherlock0x`, `ad_dev`, `robbie3920`) reported issues with the Twitter client.\n- `odilitime` confirmed that Twitter should be added as a plugin, not a client.\n- `rtzavalon` suggested adjusting `frequency_penalty` and `presence_penalty` to prevent duplicate posts.\n- `krustev.alexander` added a reflection mode to the Twitter client (`PR #14`).",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1320246527268098048"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Docker Deployment Issues & Fixes\n- `mr.stark_` and `hashwarlock` debugged Docker issues, identifying path mismatches in module resolution.\n- `hashwarlock` proposed a revised Dockerfile to fix missing dependencies.\n- `pnpm install --no-frozen-lockfile` was added to prevent missing modules.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1320246527268098048"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Memory Management & RAG Issues\n- `4n7m4n` struggled with memory handling in plugins.\n- `odilitime` explained that message history is included by default but can be omitted by prompts.\n- `runtime.messageManager.removeMemory` can be used to delete unwanted memories.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1320246527268098048"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Local AI Model Support\n- `chris.troutner` identified `plugin-local-ai` as the correct plugin for using Ollama API with local models.\n- Users must configure `OLLAMA_SERVER_URL` in their environment variables.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1320246527268098048"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Action Items\n#### Technical Tasks\n1. Fix Docker deployment issues (`mr.stark_`, `hashwarlock`).\n2. Improve Twitter client documentation (`odilitime`).\n3. Ensure plugin registry consistency (`dankvr`).\n4. Fix SQLite module errors (`kalaudius`).\n5. Improve REST API security (`cjft`).\n6. Fix Eliza's response language enforcement (`phonique_`).\n7. Resolve V2 installation issues (`dankvr`).\n8. Fix double response behavior (`definiteoptimist`).\n9. Improve plugin installation process (`odilitime`).\n10. Fix RAG knowledge path issues (`martingrey1`).",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1320246527268098048"
+          ],
+          "images": [],
+          "videos": []
+        }
+      ],
+      "topic": "plugin"
+    },
+    {
+      "title": "ElizaOS Plugin Development, Issues, and Enhancements",
+      "content": [
+        {
+          "text": "### Plugin Development & Contribution\n- Developers discussed the process of submitting plugins to the ElizaOS plugin registry. Plugins must be in a separate repository, and a PR should update `index.json`.\n- `vincent2412_`, `pravn1729`, and `asi123aa` sought clarification on plugin submission and activation.\n- `zaperox` is developing an Unreal Engine plugin, while `dorianjanezic` is working on a token prediction plugin with reinforcement learning.\n- `chris.troutner` is building a tech-support bot using ElizaOS, focusing on JavaScript, Bitcoin, and GitHub, with plans to integrate with Nostr.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1327493511406293016",
+            "https://discord.com/channels/1051457140637827122/1323745969115893780"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Technical Issues & Fixes\n- **Plugin Installation Issues**: `plugin-trustdb` was causing installation failures, and `odilitime` suggested its removal.\n- **RAG Knowledge Issues**: `.pdf` files do not work for RAG knowledge; `.md` format is recommended. `mr.stark_` and `redvoid8344` tested RAG knowledge but found inconsistencies.\n- **Twitter Client Issues**: Users faced issues with `client-twitter`. `odilitime` clarified that it must be installed separately and added to `plugins`.\n- **Docker Deployment Issues**: `mr.stark_` and `hashwarlock` debugged Docker issues, identifying path mismatches in module resolution. A revised Dockerfile was proposed.\n- **Memory Management**: `4n7m4n` struggled with memory handling in plugins. `odilitime` explained that message history is included by default but can be omitted by prompts.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1320246527268098048",
+            "https://discord.com/channels/1051457140637827122/1324089429727514674"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Feature Additions & Enhancements\n- **New Plugins**: `0xmattsroka` contributed a DexPaprika plugin for fetching on-chain token prices, and `fforbeck` submitted a Distributed Storage Plugin.\n- **Twitter Plugin Enhancements**: `krustev.alexander` added reflection mode, and `tadeuchi` added callback support for Twitter plugin posts.\n- **Local AI Model Support**: `plugin-local-ai` was identified as the correct plugin for using Ollama API with local models.\n- **CLI & V2 Migration**: `new.moon` confirmed that V2 requires migration but will include an auto-migration tool. `dankvr` worked on CLI improvements, including `npx elizaos start`.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1320246527268098048",
+            "https://discord.com/channels/1051457140637827122/1323745969115893780"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Documentation & Action Items\n- **Documentation Updates**: `dankvr` committed to improving RAG documentation and testing. `odilitime` clarified plugin installation steps.\n- **Security Enhancements**: `cjft` suggested adding an `AUTH_KEY` to `.env` to secure REST API endpoints.\n- **Upcoming Fixes**:\n  - Fix Docker deployment issues (`mr.stark_`, `hashwarlock`).\n  - Improve Twitter client documentation (`odilitime`).\n  - Fix SQLite module errors (`kalaudius`).\n  - Improve REST API security (`cjft`).\n  - Fix Eliza's response language enforcement (`phonique_`).",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1320246527268098048",
+            "https://discord.com/channels/1051457140637827122/1324089429727514674"
+          ],
+          "images": [],
+          "videos": []
+        }
+      ],
+      "topic": "Misceleanous"
+    }
+  ],
+  "date": 1740096000
+}

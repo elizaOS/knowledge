@@ -1,0 +1,179 @@
+{
+  "type": "dailySummary",
+  "title": "Daily Report - 2025-01-01",
+  "categories": [
+    {
+      "title": "Technical Discussions and Implementations in ElizaOS",
+      "content": [
+        {
+          "text": "### Plugin System Overhaul\nElizaOS moved plugins to a separate registry (`elizaos-plugins`), requiring explicit installation using `npx elizaos plugins install`. This change improves modularity but requires users to update their configurations.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1320246527268098048"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Twitter Client Issues\nUsers reported login failures due to Cloudflare security updates. Workarounds included using different IPs or manually logging in. Additionally, Twitter client plugins required explicit installation and configuration.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1320246527268098048",
+            "https://discord.com/channels/1051457140637827122/1324089429727514674"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Docker Issues and Fixes\nSeveral users faced missing dependencies (`ts-node`, `adapter-pglite`) when running ElizaOS in Docker. Fixes included modifying the Dockerfile to ensure proper dependency installation and using a multi-stage build for consistency.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1320246527268098048",
+            "https://discord.com/channels/1051457140637827122/1324089429727514674"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Memory Management & RAG Knowledge Retrieval\nUsers encountered issues with RAG knowledge retrieval, often due to incorrect embedding models or database configurations. Fixes included ensuring proper directory structures and embedding generation before storage.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1320246527268098048",
+            "https://discord.com/channels/1051457140637827122/1324089429727514674"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Multi-Agent Support\nUsers explored running multiple agents with separate `.env` files and namespaced secrets, allowing different configurations for each agent.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1320246527268098048"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Eliza v2 Migration\nMigration from v1 to v2 required replacing `eliza-starter` with `npx elizaos start`. Users also needed to explicitly install plugins for Discord and Telegram clients.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1320246527268098048"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Local AI Models\nOllama and DeepSeek were tested as local AI providers, requiring specific `.env` configurations. Users needed to install `plugin-local-ai` and set `OLLAMA_SERVER_URL`.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1320246527268098048"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### REST API Security\nA proposal was made to add API key authentication for production deployments. Users were advised to add an `AUTH_KEY` to `.env` and modify `api.ts` to require authentication.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1320246527268098048"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Solana Trading Bot Architecture\nA discussion on designing a bot for trading meme coins led to a modular microservices architecture using Rust for performance, Jupiter aggregator for routing, and probabilistic trade selection.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1324089429727514674"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Node Version Compatibility Issues\nErrors due to Node.js 23.3.0 incompatibility were resolved by downgrading to Node.js 20.15.0 (LTS) using `nvm install 20.15.0`.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1324089429727514674"
+          ],
+          "images": [],
+          "videos": []
+        }
+      ],
+      "topic": "technical discussions"
+    },
+    {
+      "title": "ElizaOS Development Updates",
+      "content": [
+        {
+          "text": "### Key Technical Discussions & Decisions\n- **Decentralized Compute Agent**: Built using Akash, Ceramic, IPFS, and Helius API for Solana. Contracts and agent functions are complete but need refinement. Plans to open-source post-launch.\n- **SAIOS Infrastructure**: Aims to simplify Eliza framework usage with a UI hosted on IPFS/Arweave and agent servers on Akash. Provides full configuration control over AI agents.\n- **HyperParams Protocol**: Open-source protocol for agent validation, performance tuning, and certification. Whitepaper submitted to Arxiv and ACL.\n- **Web3 Structured Output Parser**: Developed for Langchain, with plans to extend to Eliza. Discussed error handling and validation for Web3 data.\n- **Plugin Development & Integration**:\n  - **Plugin-Berachain**: PR submitted and merged into ElizaOS plugins registry.\n  - **Plugin-Safe-Validator**: AI agent for reviewing Safe multisig transactions. PR submitted and merged.\n  - **Plugin-OmniFlix**: PR submitted and merged. Maintainer access requested and granted.\n  - **Plugin-Token-Prediction**: AI-driven token prediction with reinforcement learning plans.\n- **Eliza Starter Repo Issues**: Several PRs remain unreviewed, causing onboarding friction. Proposal to either maintain it or replace it with a `create-eliza` tool.\n- **CoinGecko vs. CoinMarketCap Plugins**: Discussion on whether PR #1761 duplicates PR #1382. A feature comparison was suggested.\n- **Binance Plugin**: PR #1812 adds price checks, trading, and wallet balance features.\n- **Dexscreener Plugin**: PR #1816 adds token price tracking.\n- **Rabbi Trader Plugin**: PR #1800 removes external dependencies, aligns with new PG schema, and improves error handling.\n- **Knowledge Graph Agents**: Proposal to test locally before deploying to a VPS.\n- **Plugin Maintenance**: Multiple PRs fixing issues in various plugins (e.g., Twitter, OpenAI, Binance, Solana).\n- **Onboarding & Documentation**: Issues with `pnpm-lock.yaml` updates causing conflicts. Proposal to improve dependency management.\n- **Telegram & Linear Bot**: Proposal to integrate Telegram with Linear for ticket tracking.\n- **Plugin Registry Migration**: Plugins are now maintained in `elizaos-plugins` instead of the main repo.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1327493511406293016",
+            "https://discord.com/channels/1051457140637827122/1323745969115893780"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Concrete Solutions & Implementations\n- **Plugin Installation Process**: `npx elizaos plugins install @elizaos-plugins/plugin-name` and add to character file.\n- **GitHub Contribution Workflow**: Fork repo, create plugin directory, follow registry pattern, submit PR. Example PR provided.\n- **Handling .env Dependencies**: Submit a PR to `eliza/.env.example` for environment variable changes.\n- **Create-Eliza Proposal**: A new onboarding tool similar to `create-react-app` to simplify setup.\n- **Feature Comparison for CoinGecko & CoinMarketCap**: A structured analysis was suggested before merging.\n- **Plugin Fixes**: Multiple PRs addressing linting, dependency issues, and missing functionality.\n- **Improved PR Review Process**: Use of CodeRabbit and other AI tools to speed up reviews.\n- **Plugin Registry Standardization**: New plugins must be submitted to `elizaos-plugins/registry`.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1327493511406293016",
+            "https://discord.com/channels/1051457140637827122/1323745969115893780"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Action Items\n#### Technical Tasks\n1. Improve decentralized compute agent’s contract management.\n2. Expand SAIOS infrastructure for Eliza framework.\n3. Finalize and promote HyperParams certification API.\n4. Extend Web3 Structured Output Parser to Eliza.\n5. Implement reinforcement learning in token prediction plugin.\n6. Develop Unreal Engine plugin for Eliza.\n7. Integrate Eliza into Web3 marketing automation tool.\n8. Develop tech-support bot using Eliza and Nostr.\n9. Fix `eliza-starter` onboarding issues.\n10. Compare CoinGecko & CoinMarketCap plugins.\n11. Review Binance plugin PR #1812.\n12. Fix missing `docker-compose` in `eliza-starter`.\n13. Investigate broken plugin registry links.\n14. Improve dependency management in `pnpm-lock.yaml`.\n15. Fix Twitter plugin issues.\n16. Fix Telegram bot integration.\n17. Improve PR review process with CodeRabbit.\n18. Fix Solana plugin issues.\n\n#### Documentation Needs\n19. Update `.env.example` documentation for plugin dependencies.\n20. Document best practices for Web3 data validation in Eliza.\n21. Improve plugin installation and activation guide.\n22. Update `eliza-starter` README.\n23. Document plugin submission process.\n24. Improve onboarding guide.\n25. Add missing README files for plugins.\n\n#### Feature Requests\n26. Security rails for Web3 AI agents.\n27. Chain-of-density approach for token data parsing.\n28. AI-driven content scheduling and feedback loop.\n29. Reinforcement learning framework for token prediction.\n30. Nostr plugin for Eliza tech-support bot.\n31. Improved plugin discovery in ElizaOS.\n32. Maintainer access request process improvement.\n33. Streamlined contributor role assignment.\n34. Community testing framework for Eliza integrations.\n35. Create `create-eliza` onboarding tool.\n36. Add Telegram <=> Linear bot integration.\n37. Support local voice models for Eliza Home.\n38. Improve Twitter client reflection mode.\n39. Add Mem0 as a provider.\n40. Enhance WhatsApp-to-Character script.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1327493511406293016",
+            "https://discord.com/channels/1051457140637827122/1323745969115893780"
+          ],
+          "images": [],
+          "videos": []
+        }
+      ],
+      "topic": "plugins"
+    },
+    {
+      "title": "ElizaOS Development Updates and Community Discussions",
+      "content": [
+        {
+          "text": "### Technical Discussions & Decisions\n- **Plugin System Overhaul**: Plugins were moved to a separate registry (`elizaos-plugins`), requiring explicit installation.\n- **Decentralized Compute Agent**: Built using Akash, Ceramic, IPFS, and Helius API for Solana, with plans to open-source post-launch.\n- **SAIOS Infrastructure**: A UI hosted on IPFS/Arweave with agent servers on Akash for simplified Eliza framework usage.\n- **HyperParams Protocol**: Open-source protocol for agent validation, performance tuning, and certification.\n- **Web3 Structured Output Parser**: Developed for Langchain, with plans to extend to Eliza.\n- **Memory Management & RAG**: Issues with knowledge retrieval were addressed by ensuring correct embedding models and database configurations.\n- **Multi-Agent Support**: Users explored running multiple agents with separate `.env` files and namespaced secrets.\n- **Docker Issues**: Dependency issues (`ts-node`, `adapter-pglite`) were resolved by modifying the Dockerfile.\n- **REST API Security**: A proposal was made to add API key authentication for production deployments.\n- **Eliza Starter Repo Issues**: PRs remain unreviewed, causing onboarding friction. A `create-eliza` tool was proposed as a replacement.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1320246527268098048",
+            "https://discord.com/channels/1051457140637827122/1327493511406293016",
+            "https://discord.com/channels/1051457140637827122/1324089429727514674",
+            "https://discord.com/channels/1051457140637827122/1323745969115893780"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Concrete Implementations & Fixes\n- **Plugin Registry Fixes**: Several plugins were re-added (`plugin-birdeye`, `plugin-rabbi-trader`).\n- **Docker Fixes**: Adjustments to the Dockerfile ensured dependencies were correctly installed.\n- **Twitter Client Fixes**: Workarounds for login issues included using different IPs and ensuring correct credentials.\n- **Memory Cleanup**: Users found that `runtime.messageManager.removeMemory` could be used to delete unwanted memories.\n- **RAG Fixes**: Adjustments to embedding models and database configurations improved knowledge retrieval.\n- **Create-Eliza Proposal**: A new onboarding tool similar to `create-react-app` to simplify setup.\n- **Feature Comparison for CoinGecko & CoinMarketCap**: A structured analysis was suggested before merging PRs.\n- **Improved PR Review Process**: Use of CodeRabbit and other AI tools to speed up reviews.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1320246527268098048",
+            "https://discord.com/channels/1051457140637827122/1327493511406293016",
+            "https://discord.com/channels/1051457140637827122/1324089429727514674",
+            "https://discord.com/channels/1051457140637827122/1323745969115893780"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### FAQ\n1. **How do I install a plugin in v2?** Use `npx elizaos plugins install <plugin-name>` and add it to the `plugins` array in the character file.\n2. **Why is my Twitter client not working?** Twitter increased security; try logging in manually or using a different IP.\n3. **How do I run multiple agents with different Twitter accounts?** Use namespaced secrets in `.env` (e.g., `AGENT1_TWITTER_USERNAME`, `AGENT2_TWITTER_USERNAME`).\n4. **How do I enable Discord in v2?** Install `client-discord` as a plugin and add it to the character file.\n5. **Why is my agent repeating tweets?** Increase `frequency_penalty` and `presence_penalty` in `modelConfig`.\n6. **How do I use local AI models like Ollama?** Use `plugin-local-ai` and set `OLLAMA_SERVER_URL` in `.env`.\n7. **How do I secure the REST API?** Add an `AUTH_KEY` to `.env` and modify `api.ts` to require authentication.\n8. **Why is my RAG knowledge not working?** Ensure the correct directory structure (`characters/agent-name/knowledge/`).\n9. **How do I remove a memory from the agent?** Use `runtime.messageManager.removeMemory`.\n10. **How do I make my agent post formatted tweets?** Use a better LLM (Anthropic, Llama 405) and refine the character file.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1320246527268098048",
+            "https://discord.com/channels/1051457140637827122/1327493511406293016",
+            "https://discord.com/channels/1051457140637827122/1324089429727514674",
+            "https://discord.com/channels/1051457140637827122/1323745969115893780"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Action Items\n#### **Technical Tasks**\n1. **Fix Docker Build Issues**\n2. **Improve Twitter Client Login Handling**\n3. **Fix RAG Knowledge Retrieval Issues**\n4. **Improve Memory Cleanup API**\n5. **Fix Twitter Image Vision Issues**\n6. **Compare CoinGecko & CoinMarketCap plugins**\n7. **Fix Telegram bot integration**\n8. **Improve PR review process with CodeRabbit**\n9. **Fix Solana plugin issues**\n10. **Improve dependency management in `pnpm-lock.yaml`**\n\n#### **Documentation Needs**\n11. **Update Plugin Installation Docs**\n12. **Add REST API Security Guide**\n13. **Improve RAG Knowledge Documentation**\n14. **Clarify Multi-Agent Setup Guide**\n15. **Document Ollama Integration**\n\n#### **Feature Requests**\n16. **Add API Key Authentication for REST API**\n17. **Enable Twitter DM Replies**\n18. **Improve Tweet Formatting Options**\n19. **Support OpenAI Responses API**\n20. **Add MCP Client Plugin**",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1320246527268098048",
+            "https://discord.com/channels/1051457140637827122/1327493511406293016",
+            "https://discord.com/channels/1051457140637827122/1324089429727514674",
+            "https://discord.com/channels/1051457140637827122/1323745969115893780"
+          ],
+          "images": [],
+          "videos": []
+        }
+      ],
+      "topic": "Misceleanous"
+    }
+  ],
+  "date": 1735689600
+}

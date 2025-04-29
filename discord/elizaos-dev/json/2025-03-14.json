@@ -1,0 +1,243 @@
+{
+  "type": "dailySummary",
+  "title": "Daily Report - 2025-03-14",
+  "categories": [
+    {
+      "title": "ElizaOS Development Updates and Issues",
+      "content": [
+        {
+          "text": "### Voice Feature Integration\n- `syntronyx` inquired about connecting voice features to an agent using OpenAI API, but no direct solution was provided.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1320246527268098048"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Authentication for Hosted Agents\n- `cjft` suggested adding an `AUTH_KEY` in `.env` to secure API endpoints.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1320246527268098048"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Plugin Registry Issues\n- `0xn1c0` and `thelowmays9527` noted that `plugin-image`, `plugin-video`, and `plugin-tts` were missing from the registry.\n- `martingrey1` provided a repo link for `plugin-image-generation`.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1320246527268098048"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Eliza v2 Development & Stability\n- `m1337d` mentioned rebasing V2 on V1, highlighting major rewrites and documentation confusion.\n- `0xn1c0` asked if V2 was stable for production; `chris.troutner` confirmed it was in beta and not production-ready.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1320246527268098048"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Local AI Model Support\n- `chris.troutner` found that `plugin-local-ai` supports Ollama API but is not listed in the registry.\n- He provided necessary environment variables for setup.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1320246527268098048"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### SQLite Module Error\n- `kalaudius`, `tamadekk`, and `omkardixit` faced an SQLite module error.\n- `kalaudius` resolved it with:\n  sh\n  pnpm add better-sqlite3@latest --force\n  npm rebuild better-sqlite3\n  ",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1320246527268098048"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Twitter Client Issues\n- `sherlock0x` and `ad_dev` reported issues with `client-twitter`.\n- `0x__________` asked about making Twitter replies reference processed posts.\n- No resolution was provided.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1320246527268098048"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Discord Client Installation Issue\n- `4n7m4n` faced an error with `npx @elizaos/cli create`, related to missing `@elizaos/plugin-sql@^0.25.6`.\n- `dankvr` linked an issue report.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1320246527268098048"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Documentation & Frontend Improvements\n- `dankvr` requested help improving the docs frontpage and fixing broken links.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1320246527268098048"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### New Plugin Submissions\n- `whysosaket` submitted a PR to add Mem0 as a provider in the Vercel AI SDK.\n- `0xmattsroka` created a DexPaprika plugin for fetching on-chain token prices.\n- `tadeuchi` submitted a PR for a Twitter plugin that fetches post data.\n- `fforbeck` submitted a PR for a distributed storage plugin.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1323745969115893780"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Stripe Integration\n- `definiteoptimist` worked on integrating Stripe for an MVP launch.\n- `brickolascage` asked if Stripe works with WooCommerce.\n- `odilitime` confirmed compatibility.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1320246527268098048"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Action Items\n#### Technical Tasks\n1. Fix missing plugins (`plugin-image`, `plugin-video`, `plugin-tts`) in registry.\n2. Resolve `client-twitter` installation issues.\n3. Fix `npx @elizaos/cli create` error with `@elizaos/plugin-sql@^0.25.6`.\n4. Ensure `npx @elizaos/cli start` works properly.\n5. Investigate `pnpm start:client` port 5005 issue.\n6. Improve V2 stability before merging to main.\n7. Fix `plugin-llama` availability on NPM.\n8. Ensure `plugin-local-ai` is listed in the registry.\n9. Fix Eliza responding in foreign languages despite settings.\n10. Investigate multi-agent support in Eliza.\n\n#### Documentation Needs\n11. Clarify installation steps for Eliza V2.\n12. Improve documentation on using locally hosted LLMs.\n13. Update docs to reflect `npm run start` instead of `npx @elizaos/cli start`.\n14. Clarify how to pull PR changes from `develop` into a project.\n15. Improve documentation on setting up Discord client.\n16. Fix broken links on the docs frontpage.\n\n#### Feature Requests\n17. Add official support for Ollama API in V2.\n18. Develop an MCP client plugin for Eliza.\n19. Improve authentication options for hosted agents.\n20. Enhance plugin system for better discoverability.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1320246527268098048",
+            "https://discord.com/channels/1051457140637827122/1323745969115893780"
+          ],
+          "images": [],
+          "videos": []
+        }
+      ],
+      "topic": "plugins"
+    },
+    {
+      "title": "Recent Developments in AI Plugins and Integrations",
+      "content": [
+        {
+          "text": "Several AI-related projects and plugins are in development, focusing on integrations with Eliza, Langchain, and other platforms.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1327493511406293016",
+            "https://discord.com/channels/1051457140637827122/1323745969115893780"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "A Langchain + Eliza integration is being developed by `shivam_18795`, with early testing preparations underway. Additionally, `chris.troutner` is working on an open-source tech-support bot using Eliza, with plans to support Telegram and Nostr.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1327493511406293016"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "`dorianjanezic` has built a token prediction plugin with a feedback loop and is seeking collaboration, particularly on reinforcement learning integration. `dtb0x` introduced `aigent.sh`, an AI agent platform powered by ElizaOS, and is looking for feedback.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1327493511406293016"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "New plugins have been submitted to Eliza's Plugin Registry, including an on-chain token price plugin by `0xmattsroka`, a Twitter plugin update by `tadeuchi`, and a distributed storage plugin by `fforbeck`. Additionally, `dankvr` has set up AI-news aggregation for multiple Discord channels.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1323745969115893780"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "Issues and requests for feedback include a broken plugin link reported by `flaneurofmetaverses`, a version inquiry by `hish1639` regarding their merged PR, and a request for PR reviews from `fforbeck` and `0xmattsroka`.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1323745969115893780"
+          ],
+          "images": [],
+          "videos": []
+        }
+      ],
+      "topic": "plugin"
+    },
+    {
+      "title": "ElizaOS Development Updates and Issues",
+      "content": [
+        {
+          "text": "Several users reported issues with missing plugins (`plugin-image`, `plugin-video`, `plugin-tts`) in the registry. Additionally, `plugin-local-ai` was found to support Ollama API but was not listed in the registry.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1320246527268098048"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "Users faced installation issues with `client-twitter`, `@elizaos/plugin-sql@^0.25.6`, and SQLite module errors. Fixes were provided for SQLite (`pnpm add better-sqlite3@latest --force` and `npm rebuild better-sqlite3`), but Twitter client issues remain unresolved.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1320246527268098048"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "Eliza v2 was confirmed to be in beta and not stable for production. Users asked about its stability and whether they should use `main` or `v2-develop` for new projects.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1320246527268098048"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "A token prediction plugin was developed using a feedback loop for price movement predictions. The developer sought feedback on reinforcement learning integration.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1327493511406293016"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "A tech-support bot using Eliza was proposed, focusing on JavaScript, Bitcoin, and GitHub. The developer planned to run models locally using Ollama and sought collaboration on a Nostr plugin.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1327493511406293016"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "A new AI agent platform, `aigent.sh`, was introduced to make AI agents accessible to non-technical users. The developer sought feedback and early testers.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1327493511406293016"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "Users discussed integrating real-time DeFi data into AI agents. A three-step approach was suggested: collecting data, converting it into an Eliza provider, and defining actions for opportunity detection.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1324089429727514674"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "A Twitch chatbot issue was resolved by ensuring actions/evaluators return JSON instead of plain text to prevent infinite response loops.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1324089429727514674"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "Several new plugins were proposed, including a DexPaprika plugin for fetching token prices, a Twitter plugin update, and a distributed storage plugin. Users requested reviews and feedback.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1323745969115893780"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "A broken link issue in the plugin registry was reported and confirmed. Users requested clarification on versioning for merged PRs.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1323745969115893780"
+          ],
+          "images": [],
+          "videos": []
+        }
+      ],
+      "topic": "Misceleanous"
+    }
+  ],
+  "date": 1741910400
+}

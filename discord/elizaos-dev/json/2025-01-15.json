@@ -1,0 +1,95 @@
+{
+  "type": "dailySummary",
+  "title": "Daily Report - 2025-01-15",
+  "categories": [
+    {
+      "title": "ElizaOS Development and AI Integration Updates",
+      "content": [
+        {
+          "text": "### Key Technical Discussions & Decisions\n- **Token Against Humanity ($TAH) Development:** AI agent 'CC' will autonomously engage on social platforms, powered by the 'Legion Protocol'. 50% of revenue will be shared with token holders. Integration with the ELIZA framework is being explored.\n- **HyperParams Protocol:** Open-source AI validation and performance tuning framework. Whitepaper submitted to Arxiv and ACL. API planned for social platforms to verify AI agent certificates.\n- **Web3 Structured Output Parser for Langchain:** Initial implementation shared, with discussions on adding validation for hex addresses and token amounts. Chain-of-density approach suggested for normalizing token standards.\n- **ElizaOS Plugin Contributions:** Multiple plugins submitted and merged, including Berachain support, AI-based Safe multisig transaction validation, and OmniFlix integration. Best practices for submitting and maintaining plugins were discussed.\n- **Token Prediction Plugin:** Uses reinforcement learning for token price predictions. Initial results shared, showing market manipulation detection. Seeking feedback and collaboration for further improvements.\n- **Tech-Support AI Bot on ElizaOS:** Focus on JavaScript, Bitcoin, and GitHub support. Plans to run models locally using Ollama and integrate with Telegram and Nostr.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1327493511406293016"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Technical Issues & Fixes\n- **Quick Intel Plugin:** Finalizing tweaks before PR submission. Requires API key for access.\n- **RAG Knowledge System:** Issues with knowledge retrieval in the latest develop branch. Investigations ongoing.\n- **Twitter Spaces Feature:** ICE connection failures and inconsistent behavior. Fixes proposed but not fully stable.\n- **Discord Client Migration:** Now requires installation as a plugin instead of a client.\n- **Docker Issues:** Path issues in container preventing module resolution. Fixes proposed.\n- **Plugin Registry Migration:** Some plugins missing from the registry, including image, video, and TTS.\n- **Eliza v2 Migration:** Requires a structured migration process. CLI tools being developed.\n- **Twitter API Issues:** Cloudflare security changes affecting login in Docker environments.\n- **Memory Management:** No built-in memory deletion, but `runtime.messageManager.removeMemory` can be used.\n- **Multi-Agent Setup:** Namespacing secrets in `.env` allows multiple agents with different credentials.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1320246527268098048"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Action Items\n#### Technical Tasks\n1. Integrate Token Against Humanity ($TAH) with the ELIZA framework.\n2. Finalize and publish HyperParams API for social agent verification.\n3. Extend Web3 Structured Output Parser to ElizaOS.\n4. Research chain-of-density for token standard normalization.\n5. Implement reinforcement learning in token prediction plugin.\n6. Develop a tech-support AI bot using ElizaOS.\n7. Build Unreal Engine plugin for ElizaOS integration.\n8. Improve Web3 narrative automation tool with ElizaOS.\n9. Enhance AI agent accessibility via Aigent.sh.\n10. Grant maintainer access for plugin contributors.\n\n#### Documentation Needs\n11. Document best practices for Web3 structured output parsing.\n12. Update ElizaOS plugin submission guidelines.\n13. Publish HyperParams whitepaper and API documentation.\n14. Document Berachain plugin integration steps.\n15. Provide security specs for Safe multisig validator plugin.\n\n#### Feature Requests\n16. Add error handling for Web3 structured output parsing.\n17. Implement chain-of-density parsing for token data.\n18. Enable AI-driven content scheduling in Web3 marketing tool.\n19. Develop a Nostr plugin for decentralized AI support.\n20. Improve token prediction plugin with real-time feedback loops.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1327493511406293016",
+            "https://discord.com/channels/1051457140637827122/1320246527268098048"
+          ],
+          "images": [],
+          "videos": []
+        }
+      ],
+      "topic": "plugins"
+    },
+    {
+      "title": "ElizaOS Plugin Development and Maintenance",
+      "content": [
+        {
+          "text": "### Summary of Plugin Development and Maintenance\n\n#### **Key Technical Discussions & Decisions**\n- **Plugin Fixes & Maintenance**: Multiple plugins were refactored, linted, and fixed for compatibility. (aiflowml, odilitime)\n- **Plugin Registry Migration**: Plugins now require separate repositories and must be added to the registry instead of the main repo. (odilitime)\n- **New Plugin Features**: \n  - **Solana Plugin**: Improved to support native SOL and SPL transfers. (sunsakis)\n  - **DexPaprika Plugin**: Fetches on-chain token prices. (0xmattsroka)\n  - **Distributed Storage Plugin**: Added to the registry. (fforbeck)\n  - **Mem0 AI Provider**: Added to the Vercel AI SDK. (whysosaket)\n  - **Twitter Plugin Enhancements**: Added reflection mode and callback for posted tweets. (krustev.alexander, tadeuchi)\n- **Bug Fixes & Optimizations**:\n  - Fixed an out-of-memory bug in v0.25.8. (v1xingyue)\n  - Resolved an \"Invalid array length\" error in knowledge processing. (.boolkeys)\n  - Fixed a bug related to loading character plugins from remote URLs. (dtb0x)\n- **Documentation & Process Improvements**:\n  - Request to mandate README files for all plugins. (doriand0963)\n  - Clarified the process for adding plugins to the registry. (vincent2412_)\n  - Investigated broken links in the plugin registry. (flaneurofmetaverses)\n\n#### **FAQ**\n1. **How do I add a plugin to the registry?**\n   - Submit a PR to the registry repo and update `.env` variables in the main repo. (odilitime)\n2. **Why are plugins being moved to separate repositories?**\n   - To improve maintainability and allow independent updates. (odilitime)\n3. **How do I fix broken links in the plugin registry?**\n   - The issue is under investigation. (flaneurofmetaverses, odilitime)\n4. **How do I publish a plugin on npm?**\n   - Plugins are distributed via Git, not npm. (odilitime)\n5. **How do I enforce README files for plugins?**\n   - A request has been made to mandate them. (doriand0963)\n\n#### **Action Items**\n- **Technical Tasks**:\n  1. Fix broken plugin registry links. (flaneurofmetaverses)\n  2. Resolve conflicts in `package.json` for multiple plugins. (aiflowml, odilitime)\n  3. Improve dependency management in `pnpm`. (dtb0x)\n  4. Fix Twitter plugin double posting issue. (redvoid8344)\n  5. Ensure all plugins have README files. (doriand0963)\n- **Documentation Needs**:\n  6. Update official docs on PR submission process. (odilitime)\n  7. Clarify plugin versioning policy. (tadeuchi)\n  8. Document new AI provider Mem0. (whysosaket)\n- **Feature Requests**:\n  9. Enhance plugin discovery with command-line tools. (odilitime)\n  10. Improve AI-assisted PR review process. (aiflowml, odilitime)\n  11. Add post-processing support for character objects. (bt.wood)\n  12. Improve local voice processing for Eliza Home. (freytes, odilitime)",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1324089429727514674",
+            "https://discord.com/channels/1051457140637827122/1323745969115893780"
+          ],
+          "images": [],
+          "videos": []
+        }
+      ],
+      "topic": "plugin"
+    },
+    {
+      "title": "ElizaOS Development and Plugin Ecosystem Updates",
+      "content": [
+        {
+          "text": "### Technical Discussions & Problem-Solving\n- **Twitter Client Issues**: Users faced problems with the Twitter client not working. Solutions included ensuring the correct plugin (`@elizaos-plugins/plugin-twitter`) was installed and configured.\n- **Discord Client Setup**: The Discord client now requires installation as a plugin instead of a client.\n- **Docker Deployment Issues**: Users encountered missing dependencies and incorrect paths. A revised Dockerfile was proposed to fix module resolution issues.\n- **Memory Management & RAG**: Issues with knowledge ingestion and retrieval were reported. Solutions included verifying directory paths and ensuring embeddings were correctly configured.\n- **Multi-Agent Setup**: Users explored running multiple agents with separate environments. The recommended approach is to use namespaced environment variables.\n- **Plugin Registry & Installation**: Some plugins were missing from the registry (`plugin-image`, `plugin-video`, `plugin-tts`). Users were advised to install them manually or wait for updates.\n- **Authentication & API Key Issues**: Several users faced authentication errors with OpenAI, Akash, and other APIs. Solutions included ensuring API keys were correctly formatted and included the `Bearer` prefix.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1320246527268098048",
+            "https://discord.com/channels/1051457140637827122/1324089429727514674"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Plugin Development & Contributions\n- **New Plugins & Enhancements**: \n  - `plugin-berachain` (Berachain support)\n  - `plugin-safe-validator` (AI-based Safe multisig transaction validation)\n  - `plugin-omniflix` (OmniFlix integration)\n  - `plugin-dexpaprika` (On-chain token price fetching)\n  - `plugin-mem0` (Mem0 AI provider for Vercel AI SDK)\n- **Plugin Registry Migration**: Plugins now require separate repositories and must be added to the registry instead of the main repo.\n- **Plugin Documentation Enforcement**: A request was made to mandate README files for all plugins.\n- **Fixes & Maintenance**: Multiple plugins were refactored, linted, and fixed for compatibility.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1323745969115893780",
+            "https://discord.com/channels/1051457140637827122/1327493511406293016"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Infrastructure & Tooling\n- **ElizaOS v2 Code Access**: The v2 core code is in a private repository, not the public `elizaOS/eliza` repo.\n- **CLI Tooling for v2**: `npx elizaos start` will replace `eliza-starter`.\n- **Deferred Execution of Actions**: Users requested a built-in scheduling feature instead of relying on `setTimeout`.\n- **WebSocket Event Handling**: Users wanted to trigger actions based on WebSocket events. The recommended approach is to call `processActions` directly.\n- **Hosting ElizaOS**: It can run on a long-running server, and Next.js integration is possible.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1324089429727514674",
+            "https://discord.com/channels/1051457140637827122/1320246527268098048"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Action Items\n#### **Technical Tasks**\n1. **Fix Twitter client issues**\n2. **Resolve Discord client installation problems**\n3. **Improve Docker deployment stability**\n4. **Enhance memory management and RAG retrieval**\n5. **Fix authentication issues with various APIs**\n6. **Ensure proper plugin installation via `npx elizaos plugins add`**\n7. **Investigate Cloudflare blocking Twitter logins in Docker**\n8. **Fix embedding input validation errors**\n\n#### **Documentation Needs**\n9. **Update Twitter client setup guide**\n10. **Add a guide for running multiple agents with different environments**\n11. **Improve RAG knowledge documentation**\n12. **Document REST API authentication methods**\n13. **Clarify plugin installation and registry usage**\n\n#### **Feature Requests**\n14. **Add support for MCP integration**\n15. **Implement a memory deletion feature in the UI**\n16. **Enable auto-reply to specific Twitter accounts**\n17. **Improve fine-tuning support for custom models**\n18. **Enhance REST API security with API key authentication**\n19. **Develop a migration tool for v1 to v2**\n20. **Optimize Docker images for faster builds and smaller sizes**",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1320246527268098048",
+            "https://discord.com/channels/1051457140637827122/1323745969115893780"
+          ],
+          "images": [],
+          "videos": []
+        }
+      ],
+      "topic": "Misceleanous"
+    }
+  ],
+  "date": 1736899200
+}

@@ -1,0 +1,205 @@
+{
+  "type": "dailySummary",
+  "title": "Daily Report - 2025-02-26",
+  "categories": [
+    {
+      "title": "ElizaOS: Plugin Issues, RAG System, and Technical Fixes",
+      "content": [
+        {
+          "text": "### Discord Client Issues & Fixes\nUsers faced issues running the Discord client on v0.25.8 and v2. Fixes included ensuring `client-discord` was installed, adding it to the `plugins` array, setting correct bot permissions, and configuring `.env` variables properly.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1320246527268098048"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### CLI Tool Development\nA roadmap was established for CLI improvements, including search functionality, plugin management, and a unified tool for v1 and v2. The team decided to start from v2 CLI and publish tools to npm.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1320246527268098048"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Docker Issues & Fixes\nDocker builds were failing due to missing dependencies and incorrect paths. Fixes included running `pnpm install --no-frozen-lockfile` inside the container, adjusting the Dockerfile, and fixing hardcoded paths.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1320246527268098048"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Twitter Client Issues\nUsers reported that the Twitter client was not working in v2. Fixes involved installing `plugin-twitter` and `client-twitter`, adding them to `plugins`, and ensuring correct API keys were set in `.env`.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1320246527268098048"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Memory Management & RAG Issues\nUsers experienced memory loops and embedding mismatches. Fixes included using `composeState` properly, debugging memory injection, and ensuring embeddings matched expected sizes.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1320246527268098048",
+            "https://discord.com/channels/1051457140637827122/1324089429727514674"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Plugin Registry Issues\nSome plugins were missing or duplicated in the registry. Fixes included updating `index.json` and removing duplicate entries.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1320246527268098048"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### REST API & Documentation\nThe REST API documentation was missing. Fixes included adding Swagger or an alternative API documentation tool and improving onboarding guides.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1320246527268098048"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### RAG Knowledge System Issues\nUsers struggled with loading `.md` files into the knowledge system, as the LLM did not reference them correctly. `.pdf` files were confirmed to be unsupported. Fixes included updating documentation and testing different directory configurations.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1324089429727514674"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Plugin and Client Configuration Issues\nUsers faced confusion regarding plugin installation commands (`add` vs. `install`). The correct Twitter client plugin was clarified, and documentation updates were suggested.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1324089429727514674"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Other Technical Issues\nDiscussions included training agents to fetch datasets, integrating real-time DeFi data, and fixing Twitch bot response loops. Solutions involved using providers, deduplication, and modifying session history settings.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1324089429727514674"
+          ],
+          "images": [],
+          "videos": []
+        }
+      ],
+      "topic": "plugins"
+    },
+    {
+      "title": "ElizaOS Plugin Development and Contributions",
+      "content": [
+        {
+          "text": "### Plugin Registry Contribution Process\n- [pravn1729] requested help adding a plugin to the ElizaOS plugin registry.\n- [odilitime] clarified that a separate repo is needed for the plugin, and a PR should update `index.json`.\n- [pravn1729] confirmed the changes were made and provided the new repo link.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1327493511406293016"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Plugin Installation & Activation\n- [asi123aa] asked how to activate a merged plugin.\n- [odilitime] provided the command: `npx elizaos plugins install @elizaos-plugins/plugin-name` and instructed to add it to the character file.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1327493511406293016"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Unreal Engine Plugin\n- [zaperox] shared a plugin enabling communication between Unreal Engine and ElizaOS instances.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1327493511406293016"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Token Prediction Plugin\n- [dorianjanezic] developed a token prediction plugin using a feedback loop for evaluation.\n- Shared an example prediction and analysis of token price movements.\n- Requested feedback and collaboration.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1327493511406293016"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Tech-Support Bot on ElizaOS\n- [chris.troutner] proposed a tech-support bot using ElizaOS, focusing on JavaScript, Bitcoin, and GitHub.\n- Plans to separate knowledge from bot code and run models locally using Ollama.\n- Interested in developing a Nostr plugin for tech support.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1327493511406293016"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### AI Agent Platform\n- [dtb0x] introduced `aigent.sh`, a platform making AI agents accessible, powered by ElizaOS.\n- Rolling out daily updates and open to feedback.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1327493511406293016"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Plugin Development and Bug Fixes\n- [bt.wood] introduced `postProcessors` in PR #3686 to avoid modifying `plugins`. [odilitime] merged it, suggesting future iterations.\n- [v1xingyue] fixed an OOM issue in v0.25.8 (PR #3722) by adjusting `splitChunks/splitText`. [odilitime] confirmed the fix.\n- [redvoid8344] added documentation on using custom plugins outside the official registry (PR #3735).\n- [flaneurofmetaverses] reported broken links after PR #95. [odilitime] confirmed the issue was not on their end but did not provide an immediate fix.\n- [pravn1729] asked about a removed plugin. [odilitime] advised creating a personal repo and updating `registry/index.json` accordingly.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1323745969115893780"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### New Plugin Submissions\n- [thopate_vijay] submitted a PR for a new blockchain plugin (PR #97).\n- [teoloki] submitted a PR for an AI-powered executor plugin for node validators (PR #103), which [odilitime] merged.\n- [tadeuchi] added a callback to retrieve tweet info after posting (PR #1).\n- [dtb0x] fixed a bug when loading character plugins from remote URLs (PR #3890).\n- [whysosaket] added Mem0 as a provider in the Vercel AI SDK (PR #3927).\n- [0xmattsroka] submitted a PR for a plugin fetching token prices across 20+ chains (PR #109).\n- [fforbeck] submitted a PR to add a distributed storage plugin (PR #111).",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1323745969115893780"
+          ],
+          "images": [],
+          "videos": []
+        }
+      ],
+      "topic": "plugin"
+    },
+    {
+      "title": "ElizaOS: Plugin Management, RAG Knowledge, and Technical Fixes",
+      "content": [
+        {
+          "text": "### Plugin Management and Registry Updates\n- Users discussed contributing to the ElizaOS plugin registry, with guidance provided on creating separate repositories and updating `index.json`.\n- Several new plugins were submitted, including a Sonic Blockchain Plugin, AI Executor Plugin, and Mem0 AI SDK Provider.\n- Issues with broken links in the plugin registry were reported and are under investigation.\n- A request was made to improve the plugin installation process, including a 'make a new plugin' flow and support for multiple plugin installs/removals.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1327493511406293016",
+            "https://discord.com/channels/1051457140637827122/1323745969115893780"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### RAG Knowledge System Issues\n- Users faced challenges with `.md` files not being referenced correctly in the RAG system.\n- `.pdf` files were confirmed as unsupported, and `.md` files must be used.\n- Debugging efforts focused on embedding mismatches and directory-based knowledge retrieval.\n- A documentation update was proposed to clarify RAG knowledge setup and troubleshooting steps.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1324089429727514674"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Technical Fixes and Enhancements\n- A memory management issue causing out-of-memory (OOM) errors was fixed by modifying `splitChunks/splitText`.\n- Docker build failures were debugged and resolved by adjusting module paths.\n- The Twitter client faced multiple issues, including incorrect plugin configurations and post duplication concerns.\n- A callback was added to the Twitter plugin to retrieve tweet information after posting.\n- The Eliza container registry was made public.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1320246527268098048",
+            "https://discord.com/channels/1051457140637827122/1323745969115893780"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Documentation and Feature Requests\n- Requests were made for improved REST API documentation, including Swagger support.\n- A V2 migration guide was proposed, along with an auto-migration tool for plugins.\n- Enhancements were suggested for the Twitter plugin, including reflection mode for evaluating posts.\n- A request was made to improve the plugin registry UI to detect and report broken links automatically.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1320246527268098048",
+            "https://discord.com/channels/1051457140637827122/1323745969115893780"
+          ],
+          "images": [],
+          "videos": []
+        }
+      ],
+      "topic": "Misceleanous"
+    }
+  ],
+  "date": 1740528000
+}

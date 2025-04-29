@@ -1,0 +1,99 @@
+{
+  "type": "dailySummary",
+  "title": "Daily Report - 2025-02-17",
+  "categories": [
+    {
+      "title": "ElizaOS: Plugin Development, Platform Support, and Technical Issues",
+      "content": [
+        {
+          "text": "### Plugin Contribution and Installation\n- Users discussed contributing plugins to the `elizaos-plugins` registry. The process involves creating a separate repository, updating `index.json`, and submitting a PR.\n- After merging, plugins must be installed using `npx elizaos plugins install @elizaos-plugins/plugin-name` and added to the character file.\n- Some users faced installation failures due to broken plugins like `plugin-trustdb`, which should be excluded.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1327493511406293016",
+            "https://discord.com/channels/1051457140637827122/1320246527268098048"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Technical Issues and Solutions\n- **Docker Build Issues**: Users faced missing dependencies and incorrect paths. Solution: Use `pnpm docker` to build and run.\n- **SQLite Errors**: Running `pnpm add better-sqlite3@latest --force` and `npm rebuild better-sqlite3` resolved issues.\n- **Twitter Plugin Issues**: Redundant posts and shadowbanning were reported. Adjusting `modelConfig` settings helped mitigate the problem.\n- **Telegram IPv6 Issues**: Modifying the Telegram client to force IPv4 resolved connection problems.\n- **Discord Client in v2**: Needs to be added as a plugin instead of a client.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1320246527268098048",
+            "https://discord.com/channels/1051457140637827122/1324089429727514674"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### AI and Plugin Development\n- **Token Prediction Plugin**: A feedback loop-based plugin for market behavior analysis is being developed, with plans to implement reinforcement learning.\n- **Tech-Support Bot**: A bot focused on JavaScript, Bitcoin, and GitHub is in development, with plans to integrate with Telegram and Nostr.\n- **Unreal Engine Plugin**: A plugin enabling communication between Unreal Engine and Eliza instances is under development.\n- **Web3 Narrative Automation**: A platform using ElizaOS and Langchain for content automation, scheduling, and engagement analysis is being built.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1327493511406293016"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Platform Support and Hosting\n- **Multi-Platform Support**: ElizaOS supports Discord, Twitter, Telegram, and Farcaster. Users can find clients in the registry.\n- **Hosting Preferences**: Ubuntu 24.04 is commonly used, sometimes with an Nvidia GPU.\n- **Local AI Models**: `plugin-local-ai` is the recommended plugin for running local models like DeepSeek.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1324089429727514674",
+            "https://discord.com/channels/1051457140637827122/1320246527268098048"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Documentation and Feature Requests\n- **Documentation Needs**: Clarifications are needed for plugin installation, RAG knowledge setup, and Twitter client configuration.\n- **Feature Requests**: Users requested persistent chat history, `.pdf` support in RAG knowledge, and improved error logging for plugin installations.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1324089429727514674",
+            "https://discord.com/channels/1051457140637827122/1320246527268098048"
+          ],
+          "images": [],
+          "videos": []
+        }
+      ],
+      "topic": "elizaos"
+    },
+    {
+      "title": "ElizaOS: Technical Discussions, Plugin Management, and Deployment Issues",
+      "content": [
+        {
+          "text": "### Technical Discussions & Solutions\n- **Dependency Issues & Build Failures**: Users faced issues like `basex is not a function` and missing `ts-node` in Docker builds. Solutions included clean installs (`rm -rf node_modules; pnpm store prune; reinstall`) and adjusting Dockerfile paths.\n- **Plugin Installation & Management**: Users discussed installing plugins like `client-discord` and `client-twitter` in v2. The correct method is `npx elizaos plugins install @elizaos-plugins/plugin-name`.\n- **Memory Management & RAG Integration**: Agents were repeating responses due to ineffective memory usage. The fix involved using `runtime.messageManager.removeMemory`.\n- **Multi-Agent Setup**: Users configured multiple agents using namespaced environment variables.\n- **Twitter Client Issues**: Bots were getting shadowbanned, and the solution was marking accounts as 'automated' in Twitter settings.\n- **Local LLM Support**: Users set up local AI models using `plugin-local-ai` with environment variables like `OLLAMA_SERVER_URL`.\n- **REST API & Authentication**: A proposal was made to add `AUTH_KEY` to `.env` for securing API requests.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1320246527268098048",
+            "https://discord.com/channels/1051457140637827122/1324089429727514674"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Plugin Contribution & Development\n- **Plugin Submission Process**: Users must create a separate repository, update `index.json`, and submit a PR to the `elizaos-plugins` registry.\n- **New Plugins & Features**: Contributions included a token prediction plugin, Unreal Engine integration, and a Web3 content automation platform.\n- **Plugin Registry Issues**: Some users reported broken links in the registry, which are under investigation.\n- **PR Workflow**: PRs should be submitted to the `develop` branch instead of `main`.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1327493511406293016",
+            "https://discord.com/channels/1051457140637827122/1323745969115893780"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Deployment & Hosting Challenges\n- **Docker Build Issues**: Users faced missing dependencies and incorrect paths. Solutions included using `pnpm docker` and modifying Dockerfiles.\n- **Hosting Preferences**: Ubuntu 24.04 and VPS/dedicated servers were commonly used.\n- **Real-Time Data Integration**: Users discussed integrating real-time DeFi data into agents by collecting, storing, and defining usage.\n- **Twitter Plugin Issues**: Some users experienced redundant posts and shadowbanning, which were mitigated by adjusting `modelConfig` settings.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1324089429727514674",
+            "https://discord.com/channels/1051457140637827122/1323745969115893780"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Action Items\n- **Technical Fixes**: Resolve Docker build issues, fix Twitter plugin redundancy, and improve RAG knowledge retrieval.\n- **Documentation Updates**: Clarify plugin installation, update REST API authentication, and improve multi-agent setup guides.\n- **Feature Requests**: Add memory deletion via UI, enhance plugin registry search, and support `.pdf` files in RAG knowledge.",
+          "sources": [
+            "https://discord.com/channels/1051457140637827122/1320246527268098048",
+            "https://discord.com/channels/1051457140637827122/1327493511406293016"
+          ],
+          "images": [],
+          "videos": []
+        }
+      ],
+      "topic": "Misceleanous"
+    }
+  ],
+  "date": 1739750400
+}
