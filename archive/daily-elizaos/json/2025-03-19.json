@@ -1,0 +1,264 @@
+{
+  "type": "dailySummary",
+  "title": "Daily Report - 2025-03-19",
+  "categories": [
+    {
+      "title": "ElizaOS Development and Issues Summary",
+      "content": [
+        {
+          "text": "### ElizaOS v2 Beta Rollout and Issues\n- The v2 beta has launched, but stability issues persist due to merging multiple repositories into a single core repo. The team is actively fixing bugs to ensure Spartan functions properly in v2.\n- Major improvements include a new GUI, Tauri app, CLI, and in-browser editor. The API has been simplified with runtime-based operations, and character files are no longer required.\n- Some community members expressed concerns that DegenSpartan AI’s progress appears stalled due to its dependency on ElizaOS v2. The team clarified that all development efforts are focused on v2, making them inseparable.",
+          "sources": [
+            "https://discord.com/channels/1253563208833433701/1308149076893630555",
+            "https://discord.com/channels/1253563208833433701/1301363808421543988"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Technical Issues and Fixes\n- **Knowledge Directory Issues**: Users struggled with configuring the knowledge directory for RAG-based responses. Solution: Place knowledge files in `characters/knowledge/<your_directory>` and ensure `.md` format for better processing.\n- **Supabase RAG Knowledge Issues**: `search_knowledge` function was missing in the latest version. Suggested fix: Generate embeddings for vector search.\n- **Plugin-SQL Errors**: Users faced issues with `plugin-sql` in v2. Suggested fix: Use `npm install -g @elizaos/cli@1.0.0-beta.1`.\n- **OAuth2 Plugin Authentication**: Suggested solution: Use a custom API for handling access/refresh tokens.\n- **Token Limit Exceeded**: Users encountered GPT-4o token limit errors. Suggested fix: Reduce input/output tokens.\n- **Debugging Eliza Actions**: Users struggled with Eliza not executing actions. Suggested fix: Check `shouldHandle` method and watch Nader’s tutorial.",
+          "sources": [
+            "https://discord.com/channels/1253563208833433701/1300025221834739744"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Binance Listing Risks\n- There was a discussion about Degen’s listing on Binance Alpha. Concerns were raised that Binance has recently delisted multiple projects, including one with the ticker 'ELIZA,' emphasizing the need for better team performance and communication to maintain the listing.",
+          "sources": [
+            "https://discord.com/channels/1253563208833433701/1308149076893630555"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Documentation and Community Feedback\n- **Launchpad Application Process**: Some developers were unaware of the process. The application link was shared.\n- **Documentation Update**: `llms.txt` was added to the documentation, but its accuracy was questioned.\n- **Community Feedback on V2**: The CN community requested clearer onboarding documentation.\n- **Launchpad Announcement Visibility**: The announcement was only in Discord, leading to low visibility on Twitter/Telegram.",
+          "sources": [
+            "https://discord.com/channels/1253563208833433701/1301363808421543988"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Action Items\n#### Technical Tasks\n1. Fix Spartan bugs in ElizaOS v2.\n2. Stabilize ElizaOS v2 core repo after merging multiple repositories.\n3. Implement embedding generation for vector search in Supabase RAG.\n4. Investigate Twitter mention search issue.\n5. Fix ElizaOS AI agent quoting unrelated tweets.\n6. Improve GPT-4o token handling to avoid exceeding limits.\n7. Fix UUID constraint issue in Supabase Adapter.\n\n#### Documentation Needs\n8. Clarify knowledge directory setup in docs.\n9. Update docs on installing the latest ElizaOS version.\n10. Add debugging guide for Eliza actions.\n11. Document OAuth2 authentication for plugins.\n12. Improve ElizaOS V2 onboarding documentation.\n\n#### Feature Requests\n13. Improve runtime-based API documentation.\n14. Enhance GUI and in-browser editor usability.\n15. Improve error messages for `npx elizaos start` failures.\n16. Provide a migration guide for v0.25 to v2.\n17. Increase visibility of the launchpad announcement on Twitter/Telegram.",
+          "sources": [
+            "https://discord.com/channels/1253563208833433701/1300025221834739744",
+            "https://discord.com/channels/1253563208833433701/1308149076893630555",
+            "https://discord.com/channels/1253563208833433701/1301363808421543988"
+          ],
+          "images": [],
+          "videos": []
+        }
+      ],
+      "topic": "elizaos"
+    },
+    {
+      "title": "Fixes and Improvements in ElizaOS",
+      "content": [
+        {
+          "text": "A missing comma between regex expressions was fixed to prevent syntax errors. The expressions are now properly separated.",
+          "sources": [
+            "https://github.com/elizaOS/eliza/pull/3987"
+          ],
+          "images": [
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/pull/3987"
+          ],
+          "videos": []
+        },
+        {
+          "text": "An error in the plugin-tee was addressed by removing `TEEVendors`, which no longer exists in the core.",
+          "sources": [
+            "https://github.com/elizaOS/eliza/pull/3982"
+          ],
+          "images": [
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/pull/3982"
+          ],
+          "videos": []
+        },
+        {
+          "text": "A typo in a parameter name was corrected from 'initalData' to 'initialData' for proper spelling.",
+          "sources": [
+            "https://github.com/elizaOS/eliza/pull/3984"
+          ],
+          "images": [
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/pull/3984"
+          ],
+          "videos": []
+        }
+      ],
+      "topic": "fix"
+    },
+    {
+      "title": "Cryptocurrency Trading and Documentation Enhancements",
+      "content": [
+        {
+          "text": "The discussion primarily focuses on cryptocurrency trading, with users analyzing token movements, investment strategies, and project viability. Key tokens discussed include LYRA Model Context Protocol (MCPOS/SOL), Eddy (EDDY/SOL), Themis AI 69 (TMAI/SOL), and wesawdotfun (WESAW/SOL). Users track price trends, speculate on future performance, and discuss entry/exit strategies. AI's role in crypto trading is also highlighted, with mentions of a 'second wave of AI utilities' and concerns about ai16z's potential to short squeeze.",
+          "sources": [
+            "https://discord.com/channels/1253563208833433701/1299989396874854440"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "Users reflect on missed opportunities, such as exiting PVS/SOL too early, and discuss factors like developer activity and token gating as indicators of project strength. There are also discussions on tracking wallet movements and leveraging AI for trading insights. Community members share investment confirmations, market analysis, and token research insights.",
+          "sources": [
+            "https://discord.com/channels/1253563208833433701/1299989396874854440"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "In a separate discussion, users explore documentation improvements. A suggestion is made to enhance documentation by providing Claude (an AI assistant) with context from a documentation page to generate SVGs. This method could improve visual aids in documentation. Additionally, CUDA's presence in PyTorch is briefly mentioned but not elaborated upon.",
+          "sources": [
+            "https://discord.com/channels/1253563208833433701/1328592959444095038"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "Action items include improving real-time token tracking bots, developing AI-based trading signals, and enhancing documentation visuals using AI-generated SVGs. Users also suggest tracking developer activity and wallet movements more effectively.",
+          "sources": [
+            "https://discord.com/channels/1253563208833433701/1299989396874854440",
+            "https://discord.com/channels/1253563208833433701/1328592959444095038"
+          ],
+          "images": [],
+          "videos": []
+        }
+      ],
+      "topic": "ai"
+    },
+    {
+      "title": "Client Updates and Fixes",
+      "content": [
+        {
+          "text": "A fix was implemented to make the client use a relative URL instead of hardcoding 'localhost'. This change also addresses an issue with Firefox, where 'crypto.randomUUID' is only available in an HTTPS context, ensuring better compatibility for users on HTTP.",
+          "sources": [
+            "https://github.com/elizaOS/eliza/pull/3979"
+          ],
+          "images": [
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/pull/3979"
+          ],
+          "videos": []
+        },
+        {
+          "text": "A new feature was introduced for the GUI client, adding support for room functionality.",
+          "sources": [
+            "https://github.com/elizaOS/eliza/pull/3983"
+          ],
+          "images": [
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/pull/3983"
+          ],
+          "videos": []
+        }
+      ],
+      "topic": "client"
+    },
+    {
+      "title": "Crypto Market Update",
+      "content": [
+        {
+          "text": "The current price of Wrapped Bitcoin (WBTC) is $82,596.38, reflecting its value in the market.",
+          "sources": [
+            "Symbol: WBTC"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "The current price of ai16z is $0.1713, showing its latest market valuation.",
+          "sources": [
+            "Symbol: ai16z"
+          ],
+          "images": [],
+          "videos": []
+        }
+      ],
+      "topic": "crypto market"
+    },
+    {
+      "title": "ElizaOS Development and Community Discussions",
+      "content": [
+        {
+          "text": "The ElizaOS v2 beta rollout has introduced a major refactor, including a new GUI, Tauri app, CLI, and in-browser editor. The API has been simplified with runtime-based operations, eliminating the need for character files. However, stability issues persist due to merging multiple repositories into a single core repo, and the team is actively working on bug fixes.",
+          "sources": [
+            "https://discord.com/channels/1253563208833433701/1308149076893630555",
+            "https://discord.com/channels/1253563208833433701/1301363808421543988"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "DegenSpartan AI's progress is closely tied to ElizaOS v2, leading to concerns about delays. Additionally, discussions about Binance listing risks highlighted that Binance has recently delisted multiple projects, emphasizing the need for strong team performance and communication.",
+          "sources": [
+            "https://discord.com/channels/1253563208833433701/1308149076893630555"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "The ElizaOS launchpad application process was shared, but some developers were unaware of it. Community feedback from the CN region requested clearer onboarding documentation. Additionally, concerns were raised about the low visibility of the launchpad announcement outside of Discord.",
+          "sources": [
+            "https://discord.com/channels/1253563208833433701/1301363808421543988"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "Several technical improvements were discussed, including automating Clanktank episode production, improving runtime-based API documentation, and enhancing the GUI and in-browser editor usability. Additionally, AWS Bedrock limits were still pending an increase to support more Claude AI tasks.",
+          "sources": [
+            "https://discord.com/channels/1253563208833433701/1301363808421543988"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "Development efforts focused on package improvements, including fixing an error in plugin-tee, addressing missing commas in regex expressions, and making the client use a relative URL for better Firefox compatibility. A total of 6 contributors merged 5 PRs.",
+          "sources": [
+            "https://github.com/elizaOS/eliza/pull/3982",
+            "https://github.com/elizaOS/eliza/pull/3987",
+            "https://github.com/elizaOS/eliza/pull/3979"
+          ],
+          "images": [
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/pull/3982",
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/pull/3987",
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/pull/3979"
+          ],
+          "videos": []
+        },
+        {
+          "text": "Additional minor fixes included correcting a typo in a parameter name and updating a broken link in the README.md file.",
+          "sources": [
+            "https://github.com/elizaOS/eliza/pull/3984",
+            "https://github.com/elizaOS/eliza/pull/3985"
+          ],
+          "images": [
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/pull/3984",
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/pull/3985"
+          ],
+          "videos": []
+        },
+        {
+          "text": "A discussion on debugging ElizaOS v2 remotely was shared, providing a method using `bun --verbose --inspect-brk` for remote debugging.",
+          "sources": [
+            "https://github.com/elizaOS/eliza/issues/3978"
+          ],
+          "images": [
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/issues/3978"
+          ],
+          "videos": []
+        },
+        {
+          "text": "A request was made for examples of plugins as defined in `package.json` under the 'eliza' section with type='plugin'.",
+          "sources": [
+            "https://github.com/elizaOS/eliza/issues/3981"
+          ],
+          "images": [
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/issues/3981"
+          ],
+          "videos": []
+        }
+      ],
+      "topic": "Misceleanous"
+    }
+  ],
+  "date": 1742342400
+}

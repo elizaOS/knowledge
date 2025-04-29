@@ -1,0 +1,212 @@
+{
+  "type": "dailySummary",
+  "title": "Daily Report - 2025-04-20",
+  "categories": [
+    {
+      "title": "Auto.fun Launch and Technical Issues Summary",
+      "content": [
+        {
+          "text": "# Auto.fun Launch Overview\n\nAuto.fun, a new platform by Eliza Labs, launched on April 20th with significant attention but also faced several technical challenges. The platform allows users to create and trade tokens with a bonding curve mechanism that provides initial price stability and automated graduation to Raydium when reaching sufficient liquidity.\n\n## Key Features\n- Bonding curve with 28 SOL initial virtual reserves\n- Automatic graduation to Raydium when reaching 113 SOL in reserves (85 SOL + 28 SOL virtual reserve)\n- 6 SOL flat fee for graduation\n- LP tokens for graduated coins are locked with a 90/10 token split for creators and Auto.fun\n- Token creation and importing existing tokens\n- Token-gated chat functionality\n\n## Launch Challenges\nThe launch experienced several technical issues that the team has been working to resolve:\n1. Problems with token visibility for early-created tokens\n2. Migration delays for tokens that reached 100% bonding\n3. Liquidity issues with some tokens showing as \"locked\" or untradeable\n4. Website loading and stability problems\n5. Issues with wallet connections\n\nThe development team has been working continuously (with some team members reporting being awake for 40+ hours) to address these issues.",
+          "sources": [
+            "https://discord.com/channels/1253563208833433701/1253563209462448241",
+            "https://discord.com/channels/1253563208833433701/1361442528813121556",
+            "https://discord.com/channels/1253563208833433701/1362864274862768450",
+            "https://discord.com/channels/1253563208833433701/1301363808421543988"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "# Technical Issues and Support\n\nUsers reported several specific issues with the platform:\n\n## Token Creation and Visibility Issues\n- Many users created tokens that didn't appear in their \"coins created\" section\n- Some tokens showed in holdings but couldn't be traded\n- Error messages like \"Error fetching swap amount from Jupiter\" and \"Error Loading Token\" were common\n- Some users reported their SOL being \"stuck\" in created tokens\n\n## Migration Issues\n- Several tokens that reached 100% bonding were stuck in \"migrating\" status for extended periods\n- Users repeatedly asked for updates on when migrations would complete\n\n## Support Response\nThe team acknowledged these issues and provided updates:\n- \"We're working to fix token visibility and migrations. None of your SOL is lost.\"\n- \"We're working on a way to batch update everyone whose experiencing this issue.\"\n- \"We are quickly building tools to audit tokens for various situations.\"\n\nUsers were encouraged to post their token contract addresses in the support channel for tracking and resolution.",
+          "sources": [
+            "https://discord.com/channels/1253563208833433701/1362864274862768450",
+            "https://discord.com/channels/1253563208833433701/1361442528813121556"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "# Platform Economics and Future Plans\n\nThe team shared insights about the platform's economics and future plans:\n\n## Tokenomics\n- The platform collects 10% of bonded LP fees\n- These fees will be used to buy back $ai16z from the open market\n- Buybacks will be reinvested in ai16z LP to create deeper ecosystem liquidity\n- A more detailed tokenomics article is planned for release\n\n## Future Improvements\nUsers and team members suggested several improvements:\n- Better filters (by volume, age, verified status, holders, etc.)\n- Improved sorting options to see tokens close to bonding\n- Better token discovery features\n- A formal verification process for tokens\n\n## Related Projects\nThere were also discussions about related projects and timelines:\n- ElizaOS V2 is expected to launch the week following auto.fun\n- The team is working on integrating various AI agents with the platform\n- There are plans for featured project launches in the coming weeks",
+          "sources": [
+            "https://discord.com/channels/1253563208833433701/1301363808421543988",
+            "https://discord.com/channels/1253563208833433701/1361442528813121556",
+            "https://discord.com/channels/1253563208833433701/1308149076893630555"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "# Technical Support for ElizaOS Developers\n\nSeparate from the auto.fun launch, there were some technical discussions about ElizaOS development:\n\n## Embedding Issues\nA user reported problems using Gemini with eliza-starter for Telegram integration:\n\nERROR: Failed to generate embedding:\nERROR: Failed to initialize BGE model:\nERROR: Local embedding failed:\nWARN: Local embedding failed, falling back to remote\nERROR: API Response: \nERROR: Full error details:\nError: Embedding API Error: 404 Not Found\n\n\n## Plugin Architecture Questions\nAnother user was investigating how event handling works in Discord and Telegram plugins:\n- Confusion about how events like MESSAGE_SENT and MESSAGE_RECEIVED are emitted and subscribed to\n- Questions about callback behavior in plugin-bootstrap\n- Discovered that plugin-bootstrap serves as the central event receiver\n\n## Feature Requests\nA user requested functionality for AI agents to attach random images from a specified folder when creating posts or replies.",
+          "sources": [
+            "https://discord.com/channels/1253563208833433701/1300025221834739744",
+            "https://discord.com/channels/1253563208833433701/1300756641406521416"
+          ],
+          "images": [],
+          "videos": []
+        }
+      ],
+      "topic": "discord"
+    },
+    {
+      "title": "Auto.fun Platform Launch: Issues and Development Status",
+      "content": [
+        {
+          "text": "# Auto.fun Platform Overview\n\nAuto.fun is a newly launched platform for token creation and trading on the Solana blockchain. The platform enables users to create tokens with customizable addresses (with a \"FUN\" suffix), establish liquidity pools, and eventually migrate tokens to decentralized exchanges like Raydium or Meteora. The platform uses a bonding curve mechanism with 28 SOL initial virtual reserves, requiring 85 SOL (plus the virtual 28) to graduate to Raydium with a 6 SOL fee.",
+          "sources": [
+            "https://discord.com/channels/1253563208833433701/1253563209462448241",
+            "https://discord.com/channels/1253563208833433701/1361442528813121556",
+            "https://discord.com/channels/1253563208833433701/1362864274862768450"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "# Launch Issues and Technical Challenges\n\nThe Auto.fun launch has been experiencing significant technical difficulties:\n\n1. **Site Stability Issues**: The platform has gone down multiple times due to high traffic load, with users reporting redirects and CPU usage problems.\n\n2. **Token Migration Problems**: Many users report tokens stuck in \"migrating\" status for extended periods (12+ hours). The migration process is supposed to be automatic when tokens reach 100% bonding, but many tokens are stuck.\n\n3. **Indexing Issues**: Tokens created during the platform launch have indexing problems where they don't appear in \"coins created\" sections or show proper liquidity pools.\n\n4. **Trading Interface Errors**: Users are encountering errors like \"Error fetching swap amount from Jupiter\" when attempting to trade tokens.\n\n5. **Missing Liquidity**: Several users report their SOL was taken during token creation but no liquidity pool was established.\n\n6. **Display Issues**: Problems with market cap display and token balance/value caching have been reported.\n\nThe development team has acknowledged these issues and is working on fixes, particularly focusing on a batch update for affected tokens. They've clarified that user funds are not lost despite the technical problems.",
+          "sources": [
+            "https://discord.com/channels/1253563208833433701/1253563209462448241",
+            "https://discord.com/channels/1253563208833433701/1361442528813121556",
+            "https://discord.com/channels/1253563208833433701/1362864274862768450",
+            "https://discord.com/channels/1253563208833433701/1301363808421543988"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "# Platform Tokenomics and Features\n\nAuto.fun's tokenomics include:\n\n- The platform collects 10% of bonded LP fees to buy back $ai16z tokens from the open market\n- These funds are reinvested in ai16z LP to create deeper ecosystem liquidity\n- The platform is designed to support AI agents and ecosystem projects\n\nKey features include:\n- Token creation with customizable addresses\n- Bonding curve mechanism for liquidity provision\n- Automatic migration to DEXes when bonding thresholds are met\n- Token verification system (currently manual and limited to vetted partners)\n\nThe development team has mentioned that a formal tokenomics article is forthcoming, and they're prioritizing platform stability before a more formal announcement.",
+          "sources": [
+            "https://discord.com/channels/1253563208833433701/1301363808421543988",
+            "https://discord.com/channels/1253563208833433701/1362864274862768450"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "# Development Status and Roadmap\n\nThe Auto.fun development team (including users esk3nder, new.moon, and accelxr) is actively working on fixes and communicating with users about the status. They've reportedly been on a 40+ hour development call addressing the launch issues.\n\nPriority fixes include:\n1. Resolving token migration issues for stuck tokens\n2. Fixing indexing problems for tokens created at launch\n3. Addressing Jupiter integration errors with price detection\n4. Improving search filters and indexing functionality\n5. Fixing wallet connection issues after social login\n\nPlanned features and improvements include:\n1. Better token discovery mechanisms\n2. Interactive filters (volume, age, verified, holders)\n3. Formal verification process documentation\n4. Comprehensive tokenomics documentation\n5. Improved user experience with features like a disconnect wallet button",
+          "sources": [
+            "https://discord.com/channels/1253563208833433701/1253563209462448241",
+            "https://discord.com/channels/1253563208833433701/1361442528813121556",
+            "https://discord.com/channels/1253563208833433701/1362864274862768450",
+            "https://discord.com/channels/1253563208833433701/1301363808421543988"
+          ],
+          "images": [],
+          "videos": []
+        }
+      ],
+      "topic": "solana"
+    },
+    {
+      "title": "Recent Pull Requests in elizaOS/eliza Repository",
+      "content": [
+        {
+          "text": "Three recent pull requests have been submitted to the elizaOS/eliza repository addressing various fixes:\n\n1. PR #4327 by wtfsayo aims to normalize plugin commands across v1 and v2 versions.\n\n2. PR #4325 by UD1sto fixes GPU recognition issues specifically in Docker container environments.\n\n3. PR #4326 by detrina addresses an error in the MemoryCacheAdapter.md documentation file.",
+          "sources": [
+            "https://github.com/elizaOS/eliza/pull/4327",
+            "https://github.com/elizaOS/eliza/pull/4325",
+            "https://github.com/elizaOS/eliza/pull/4326"
+          ],
+          "images": [
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/pull/4327",
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/pull/4325",
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/pull/4326"
+          ],
+          "videos": []
+        }
+      ],
+      "topic": "pull_request"
+    },
+    {
+      "title": "elizaos/eliza GitHub Activity (April 20-21, 2025)",
+      "content": [
+        {
+          "text": "Between April 20-21, 2025, the elizaos/eliza repository saw moderate activity with 3 new pull requests, of which 1 was merged. There were no new issues reported during this period. The repository maintained an active community with 6 contributors working on the project during this timeframe.",
+          "sources": [
+            "text: From 2025-04-20 to 2025-04-21, elizaos/eliza had 3 new PRs (1 merged), 0 new issues, and 6 active contributors."
+          ],
+          "images": [],
+          "videos": []
+        }
+      ],
+      "topic": "github_summary"
+    },
+    {
+      "title": "Added Default Agents Based on Organization",
+      "content": [
+        {
+          "text": "A pull request (#4323) was merged that adds default agents based on the organization. This update allows the system to automatically assign agents according to organizational settings.",
+          "sources": [
+            "https://github.com/elizaOS/eliza/pull/4323"
+          ],
+          "images": [],
+          "videos": []
+        }
+      ],
+      "topic": "completed_items"
+    },
+    {
+      "title": "Top Contributors for elizaOS/eliza",
+      "content": [
+        {
+          "text": "The provided source only mentions 'Top contributors for elizaOS/eliza' without providing any specific details about who these contributors are or their contributions. Without additional information, it's not possible to generate a detailed summary of the top contributors to the elizaOS/eliza project.",
+          "sources": [
+            "text: Top contributors for elizaOS/eliza"
+          ],
+          "images": [],
+          "videos": []
+        }
+      ],
+      "topic": "contributors"
+    },
+    {
+      "title": "Auto.fun Launch and Technical Issues",
+      "content": [
+        {
+          "text": "Auto.fun, a token creation and trading platform on Solana, was recently launched by the ElizaOS team. The platform uses a bonding curve mechanism with 28 SOL initial virtual reserves, requiring 85 SOL (plus the virtual 28) to graduate to Raydium with a 6 SOL fee. The launch saw significant traffic but also experienced several technical issues.",
+          "sources": [
+            "https://discord.com/channels/1253563208833433701/1362864274862768450",
+            "https://discord.com/channels/1253563208833433701/1361442528813121556"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "Major issues reported by users include:\n\n1. Token Migration Issues: Many tokens stuck in \"migrating\" status for extended periods (12+ hours).\n2. Indexing Problems: Tokens created during launch not appearing in \"coins created\" sections.\n3. Trading Interface Problems: Users unable to access trading interfaces, seeing errors like \"Error fetching swap amount from Jupiter.\"\n4. Missing Liquidity: SOL taken during token creation but no liquidity pool established.\n\nThe development team acknowledged these issues and has been working continuously to fix them, with some team members reportedly on a 40+ hour development call.",
+          "sources": [
+            "https://discord.com/channels/1253563208833433701/1362864274862768450",
+            "https://discord.com/channels/1253563208833433701/1361442528813121556"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "The team clarified that user funds are not lost despite the technical problems. They're working on a batch update for affected tokens and prioritizing fixes before driving more traffic to the platform. The official launch announcement and promotion is planned for Monday after resolving the remaining known issues.",
+          "sources": [
+            "https://discord.com/channels/1253563208833433701/1301363808421543988",
+            "https://discord.com/channels/1253563208833433701/1362864274862768450"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "Regarding tokenomics, the platform collects 10% of the bonded LPs fees, then buys back $ai16z from the open market to reinvest in ai16z LP, creating deeper ecosystem liquidity. A more detailed tokenomics article is planned for release soon.",
+          "sources": [
+            "https://discord.com/channels/1253563208833433701/1301363808421543988"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "Feature requests from the community include better token filtering options (by volume, age, verification status, holders), sorting tokens by \"most filled\" to see which are close to bonding, and allowing AI agents to attach random images from a designated folder when creating posts.",
+          "sources": [
+            "https://discord.com/channels/1253563208833433701/1301363808421543988",
+            "https://discord.com/channels/1253563208833433701/1361442528813121556",
+            "https://discord.com/channels/1253563208833433701/1300756641406521416"
+          ],
+          "images": [],
+          "videos": []
+        }
+      ],
+      "topic": "Misceleanous"
+    }
+  ],
+  "date": 1745107200
+}

@@ -1,0 +1,661 @@
+{
+  "type": "dailySummary",
+  "title": "Daily Summary for 2025-01-08",
+  "categories": [
+    {
+      "title": "Recent Bug Fixes and Issues in ElizaOS",
+      "content": [
+        {
+          "text": "A bug in the `client-telegram` context was identified where leftover code from `client-twitter` was polluting the context. This issue caused variables like `twitterUserName`, `currentPost`, and `formattedConversation` to be present when they shouldn't be. The expected behavior is a cleaner context without these unnecessary variables.",
+          "sources": [
+            "https://github.com/elizaOS/eliza/issues/1972"
+          ],
+          "images": [
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/issues/1972"
+          ],
+          "videos": []
+        },
+        {
+          "text": "Users reported that their agent was not scheduling tweets as expected. Logs showed warnings about unsupported Node.js versions and deprecated modules. The expected behavior was for the agent to log memory and then schedule a tweet, but it failed to do so.",
+          "sources": [
+            "https://github.com/elizaOS/eliza/issues/1952"
+          ],
+          "images": [
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/issues/1952"
+          ],
+          "videos": []
+        },
+        {
+          "text": "A fix was implemented to correct the auto-generated README for the Abstract plugin, ensuring accurate documentation.",
+          "sources": [
+            "https://github.com/elizaOS/eliza/pull/1963"
+          ],
+          "images": [
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/pull/1963"
+          ],
+          "videos": []
+        },
+        {
+          "text": "A bug was fixed to prevent repeated logins when using `client-twitter`. The fix ensures that the session is reused, preventing security alerts caused by multiple logins.",
+          "sources": [
+            "https://github.com/elizaOS/eliza/pull/1974"
+          ],
+          "images": [
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/pull/1974"
+          ],
+          "videos": []
+        },
+        {
+          "text": "Users encountered an error when integrating Discord due to disallowed intents. The issue arose when running the agent with Discord as a client, causing a crash.",
+          "sources": [
+            "https://github.com/elizaOS/eliza/issues/1940"
+          ],
+          "images": [
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/issues/1940"
+          ],
+          "videos": []
+        },
+        {
+          "text": "The `TWITTER_DRY_RUN` setting was found to only impact posts but still allowed replies to be sent. The expected behavior was for no tweets or messages to be posted at all when this setting was enabled.",
+          "sources": [
+            "https://github.com/elizaOS/eliza/issues/1962"
+          ],
+          "images": [
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/issues/1962"
+          ],
+          "videos": []
+        },
+        {
+          "text": "New plugins and actions were not available to existing users unless the SQLite database was deleted. The expected behavior was for new plugins to be accessible after a service restart.",
+          "sources": [
+            "https://github.com/elizaOS/eliza/issues/1949"
+          ],
+          "images": [
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/issues/1949"
+          ],
+          "videos": []
+        },
+        {
+          "text": "A `SqliteError` occurred when creating a new memory from a News API response. The error was related to zero-length vectors not being supported.",
+          "sources": [
+            "https://github.com/elizaOS/eliza/issues/1986"
+          ],
+          "images": [
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/issues/1986"
+          ],
+          "videos": []
+        },
+        {
+          "text": "The browser client did not automatically scroll down or focus the input field after a character response. A fix was proposed to resolve this issue.",
+          "sources": [
+            "https://github.com/elizaOS/eliza/issues/1977"
+          ],
+          "images": [
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/issues/1977"
+          ],
+          "videos": []
+        },
+        {
+          "text": "A memory leak was identified in `getLocalEmbedding`, where memory usage increased significantly and was not released. This issue was particularly problematic for environments with limited resources.",
+          "sources": [
+            "https://github.com/elizaOS/eliza/issues/1942"
+          ],
+          "images": [
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/issues/1942"
+          ],
+          "videos": []
+        },
+        {
+          "text": "The `composeContext` function was found to omit memories when exceeding 50 items with the SQLite adapter, leading to incorrect state data.",
+          "sources": [
+            "https://github.com/elizaOS/eliza/issues/1971"
+          ],
+          "images": [
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/issues/1971"
+          ],
+          "videos": []
+        },
+        {
+          "text": "A fix was implemented for the `pglite` database adapter, adding missing implementations for knowledge-related functions.",
+          "sources": [
+            "https://github.com/elizaOS/eliza/pull/2004"
+          ],
+          "images": [
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/pull/2004"
+          ],
+          "videos": []
+        },
+        {
+          "text": "A translation type issue was resolved, though it remains untested for potential impact on transcription.",
+          "sources": [
+            "https://github.com/elizaOS/eliza/pull/1996"
+          ],
+          "images": [
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/pull/1996"
+          ],
+          "videos": []
+        },
+        {
+          "text": "A minor bug in the PostgreSQL schema was fixed by ensuring `isShared` was properly quoted.",
+          "sources": [
+            "https://github.com/elizaOS/eliza/pull/2008"
+          ],
+          "images": [
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/pull/2008"
+          ],
+          "videos": []
+        },
+        {
+          "text": "A bug preventing the Auto Client from working was fixed.",
+          "sources": [
+            "https://github.com/elizaOS/eliza/pull/2007"
+          ],
+          "images": [
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/pull/2007"
+          ],
+          "videos": []
+        },
+        {
+          "text": "The Starknet plugin was found to be outdated and non-functional due to broken references.",
+          "sources": [
+            "https://github.com/elizaOS/eliza/issues/2028"
+          ],
+          "images": [
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/issues/2028"
+          ],
+          "videos": []
+        },
+        {
+          "text": "The `@elizaos/adapter-postgres` package did not bundle `schema.sql`, causing database initialization failures. A fix was implemented to include the missing files.",
+          "sources": [
+            "https://github.com/elizaOS/eliza/issues/2009",
+            "https://github.com/elizaOS/eliza/pull/2030"
+          ],
+          "images": [
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/issues/2009",
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/pull/2030"
+          ],
+          "videos": []
+        },
+        {
+          "text": "CUDA was not being detected correctly, causing transcription to run on the CPU even when CUDA was installed.",
+          "sources": [
+            "https://github.com/elizaOS/eliza/issues/1994"
+          ],
+          "images": [
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/issues/1994"
+          ],
+          "videos": []
+        }
+      ],
+      "topic": "bug"
+    },
+    {
+      "title": "Eliza AI Development and Community Updates",
+      "content": [
+        {
+          "text": "An AI artifact accidentally turning into a memecoin is a recurring phenomenon in the crypto AI space.",
+          "sources": [
+            "https://twitter.com/ai16zdao/status/1877008724977479921"
+          ],
+          "images": [
+            "https://pbs.twimg.com/media/Ggx5XGjXQAEYxyg.png"
+          ],
+          "videos": []
+        },
+        {
+          "text": "Developers have already integrated Eliza into Roblox, expanding its use cases in gaming and virtual environments.",
+          "sources": [
+            "https://twitter.com/dankvr/status/1877119010078064887"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "A discussion on the ethics of promoting memecoins in the crypto AI space, with a call for fair contributions to open-source projects.",
+          "sources": [
+            "https://twitter.com/dankvr/status/1877010139191951570"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "A weekly standup has been hosted for the past eight weeks, allowing builders in open-source AI and social agents to share updates. Thousands of participants tune in regularly.",
+          "sources": [
+            "https://twitter.com/dankvr/status/1877001608120160717"
+          ],
+          "images": [
+            "https://pbs.twimg.com/media/Ggxxe2NXAAARYXd.jpg"
+          ],
+          "videos": []
+        },
+        {
+          "text": "Eliza has gained significant traction with 10.5k stars, 2.7k forks, and hundreds of teams building on it. It has been a major contributor to the Solana AI hackathon, with a quarter of submissions based on it.",
+          "sources": [
+            "https://twitter.com/dankvr/status/1876999689486143880"
+          ],
+          "images": [
+            "https://pbs.twimg.com/media/GgxvbFUXQAEv6ka.jpg"
+          ],
+          "videos": []
+        },
+        {
+          "text": "Efforts are being made to streamline technical documentation to improve AI agent onboarding and question-answering capabilities.",
+          "sources": [
+            "https://twitter.com/dankvr/status/1876837817331908805"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "A new feature has been added to support EternalAI as a provider, offering decentralized AI inference as an alternative to centralized AI services.",
+          "sources": [
+            "https://github.com/elizaOS/eliza/pull/1948"
+          ],
+          "images": [
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/pull/1948"
+          ],
+          "videos": []
+        },
+        {
+          "text": "Debug logging for context has been introduced in Eliza, allowing developers to better understand how AI agents generate responses.",
+          "sources": [
+            "https://github.com/elizaOS/eliza/pull/1980"
+          ],
+          "images": [
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/pull/1980"
+          ],
+          "videos": []
+        },
+        {
+          "text": "A reported issue where an AI agent generates tweets but does not publish them to Twitter is under investigation.",
+          "sources": [
+            "https://github.com/elizaOS/eliza/issues/1958"
+          ],
+          "images": [
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/issues/1958"
+          ],
+          "videos": []
+        },
+        {
+          "text": "A user seeks guidance on deploying an AI agent after encountering issues with repository modifications not persisting.",
+          "sources": [
+            "https://github.com/elizaOS/eliza/issues/1932"
+          ],
+          "images": [
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/issues/1932"
+          ],
+          "videos": []
+        },
+        {
+          "text": "A new plugin has been added to integrate Allora Network, enabling Eliza agents to leverage real-time, self-improving AI inferences for market insights.",
+          "sources": [
+            "https://github.com/elizaOS/eliza/pull/1955"
+          ],
+          "images": [
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/pull/1955"
+          ],
+          "videos": []
+        }
+      ],
+      "topic": "ai"
+    },
+    {
+      "title": "Recent Fixes and Improvements in ElizaOS",
+      "content": [
+        {
+          "text": "A fix was implemented to resolve an issue in the C3PO character file where message examples were incorrectly formatted. Additionally, character validation handling has been improved. This update aims to address issues reported by users who were copying C3PO as a template.",
+          "sources": [
+            "https://github.com/elizaOS/eliza/pull/1951"
+          ],
+          "images": [
+            "https://github.com/user-attachments/assets/2a7fa7c8-d903-4d40-8ce0-3a32c5158a66",
+            "https://github.com/user-attachments/assets/600c956c-5432-4b25-b414-2171145d7300"
+          ],
+          "videos": []
+        },
+        {
+          "text": "An improvement was made to Twitter paragraph splitting when containing URLs. The function now accounts for Twitter's URL length constraints by replacing URLs with placeholders before splitting and restoring them afterward. This ensures better formatting of tweets.",
+          "sources": [
+            "https://github.com/elizaOS/eliza/pull/1947"
+          ],
+          "images": [
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/pull/1947"
+          ],
+          "videos": []
+        },
+        {
+          "text": "An unused variable, X_SERVER_URL, was removed from the codebase as it was a remnant of legacy code. Additionally, documentation was updated to reflect changes in provider and model selection.",
+          "sources": [
+            "https://github.com/elizaOS/eliza/pull/1930"
+          ],
+          "images": [
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/pull/1930"
+          ],
+          "videos": []
+        },
+        {
+          "text": "Logs displayed during agent startup were cleaned up for better readability. Instead of multiple 'SUCCESS' messages, logs now provide a clearer and more structured output.",
+          "sources": [
+            "https://github.com/elizaOS/eliza/pull/1973"
+          ],
+          "images": [
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/pull/1973"
+          ],
+          "videos": []
+        },
+        {
+          "text": "The incomplete DefiLlama plugin was removed, and improvements were made to the Solana and Rabbi Trader plugins to enhance their functionality.",
+          "sources": [
+            "https://github.com/elizaOS/eliza/pull/2027"
+          ],
+          "images": [
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/pull/2027"
+          ],
+          "videos": []
+        },
+        {
+          "text": "The .env.sample file was updated to improve the deployer experience by adjusting default plugins while maintaining the expected format.",
+          "sources": [
+            "https://github.com/elizaOS/eliza/pull/1999"
+          ],
+          "images": [
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/pull/1999"
+          ],
+          "videos": []
+        },
+        {
+          "text": "A minor update was made to fix typos in the Russian README file to enhance documentation clarity.",
+          "sources": [
+            "https://github.com/elizaOS/eliza/pull/2026"
+          ],
+          "images": [
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/pull/2026"
+          ],
+          "videos": []
+        },
+        {
+          "text": "The README file for the plugin-web-search was moved to the correct directory to align with project standards, making it easier for developers to find relevant documentation.",
+          "sources": [
+            "https://github.com/elizaOS/eliza/pull/1992"
+          ],
+          "images": [
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/pull/1992"
+          ],
+          "videos": []
+        }
+      ],
+      "topic": "improvement"
+    },
+    {
+      "title": "Crypto Market Price Update",
+      "content": [
+        {
+          "text": "The cryptocurrency market has seen fluctuations in the prices of major assets. Wrapped Bitcoin (WBTC) experienced a decline from $96,815.99 to $95,062.89. Similarly, Wrapped Ethereum (WETH) dropped from $3,380.18 to $3,327.40. Solana (SOL) also saw a decrease, moving from $202.11 to $197.49. The ai16z token followed the trend, falling from $1.87 to $1.71.",
+          "sources": [
+            "WBTC: $96815.999752 → $95062.8904499",
+            "WETH: $3380.18036931 → $3327.39604252",
+            "SOL: $202.108380308 → $197.494023627",
+            "ai16z: $1.87346995958 → $1.71436367511"
+          ],
+          "images": [],
+          "videos": []
+        }
+      ],
+      "topic": "crypto market"
+    },
+    {
+      "title": "Testing Improvements in ElizaOS",
+      "content": [
+        {
+          "text": "Several updates have been made to improve the testing structure of ElizaOS. These changes include restructuring tests for the core package, adding tests for the Twitter plugin and Twitter client, and introducing a comprehensive test suite for the embedding module.",
+          "sources": [
+            "https://github.com/elizaOS/eliza/pull/1989",
+            "https://github.com/elizaOS/eliza/pull/1976",
+            "https://github.com/elizaOS/eliza/pull/1959",
+            "https://github.com/elizaOS/eliza/pull/1944"
+          ],
+          "images": [
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/pull/1989",
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/pull/1976",
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/pull/1959",
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/pull/1944"
+          ],
+          "videos": []
+        },
+        {
+          "text": "The core package tests were outdated and failing due to changes in the codebase. A fix was implemented to update these tests and align them with the current structure.",
+          "sources": [
+            "https://github.com/elizaOS/eliza/issues/1988",
+            "https://github.com/elizaOS/eliza/pull/1989"
+          ],
+          "images": [
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/issues/1988",
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/pull/1989"
+          ],
+          "videos": []
+        },
+        {
+          "text": "New tests were added for the Twitter plugin and Twitter client as part of an effort to improve the project's structure. These tests ensure better coverage and reliability.",
+          "sources": [
+            "https://github.com/elizaOS/eliza/pull/1976",
+            "https://github.com/elizaOS/eliza/pull/1959"
+          ],
+          "images": [
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/pull/1976",
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/pull/1959"
+          ],
+          "videos": []
+        },
+        {
+          "text": "A comprehensive test suite was introduced for the embedding module, covering local vs. remote embeddings, cached embeddings, error scenarios, and fallback logic.",
+          "sources": [
+            "https://github.com/elizaOS/eliza/pull/1944"
+          ],
+          "images": [
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/pull/1944"
+          ],
+          "videos": []
+        }
+      ],
+      "topic": "tests"
+    },
+    {
+      "title": "Discussion on Various Topics",
+      "content": [
+        {
+          "text": "@notthreadguy @degenspartanai thoughts?",
+          "sources": [
+            "https://twitter.com/ai16zdao/status/1876841801534857605"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "@Lionnell55 @carlwheezor @himgajria @shawmakesmagic Read the thread I posted above if you want more info",
+          "sources": [
+            "https://twitter.com/dankvr/status/1877039870029296073"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "@0xPaid @tubbycatsnft yeah got a few ideas, will dm!",
+          "sources": [
+            "https://twitter.com/dankvr/status/1876807725113331786"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "It looks like the provided chat transcript consists almost entirely of messages from a single user, \"Captain Hook,\" with no visible technical discussions, problem-solving, or meaningful interactions. The only other message is from \"yikesawjeez,\" asking how to add a bot to their server, but there is no response to that question.\n\nSince there is no substantive technical discussion, problem-solving, or collaboration in the provided transcript, I cannot generate a meaningful analysis in the requested format.\n\nIf you have a different chat log with actual technical discussions, decisions, and problem-solving, please provide that, and I will be happy to analyze it accordingly.",
+          "sources": [
+            "https://discord.com/channels/1253563208833433701/1326603270893867064"
+          ],
+          "images": [],
+          "videos": []
+        }
+      ],
+      "topic": "discussion"
+    },
+    {
+      "title": "Blockchain Developments and Token Distribution Updates",
+      "content": [
+        {
+          "text": "Even if a project is just a memecoin and unrelated to AI, tokens can still be sent. The blockchain and autonomous investor will track all inbound contributions. Future phases are being considered.",
+          "sources": [
+            "https://twitter.com/dankvr/status/1877105352501498216"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "The developer has sent 50% of the tokens to the DAO, ensuring that all 83,000 holders are included.",
+          "sources": [
+            "https://twitter.com/dankvr/status/1877083617265889466"
+          ],
+          "images": [
+            "https://pbs.twimg.com/media/Ggy9cbRW0AEbBX2.png"
+          ],
+          "videos": []
+        },
+        {
+          "text": "A new feature has been added to support the Fraxtal chain in the Eliza project, expanding its compatibility with EVM-based blockchains.",
+          "sources": [
+            "https://github.com/elizaOS/eliza/pull/1954"
+          ],
+          "images": [
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/pull/1954"
+          ],
+          "videos": []
+        },
+        {
+          "text": "Improvements have been made to the Cosmos plugin for Eliza, allowing agents to perform transfer actions on Cosmos SDK-based blockchains. The update enhances flexibility and expands functionality for platforms like Osmosis, Cosmos Hub, and Akash.",
+          "sources": [
+            "https://github.com/elizaOS/eliza/pull/1934"
+          ],
+          "images": [
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/pull/1934"
+          ],
+          "videos": []
+        }
+      ],
+      "topic": "blockchain"
+    },
+    {
+      "title": "Common Issues and Updates in ElizaOS with pnpm",
+      "content": [
+        {
+          "text": "Users have reported encountering errors when running pnpm commands on macOS M3. Specifically, the command 'pnpm start:client' results in an error stating that the command is not found. The error message suggests an alternative command, 'pnpm start:service:all', but running this results in another failure due to a missing 'pm2' dependency. The issue occurs after following the standard setup steps, including cloning the repository, installing dependencies, and building the project.",
+          "sources": [
+            "https://github.com/elizaOS/eliza/issues/1990"
+          ],
+          "images": [
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/issues/1990"
+          ],
+          "videos": []
+        },
+        {
+          "text": "Another issue has been reported when running 'pnpm start' on a Windows 10 system using WSL 2. The error message indicates that the required 'wrtc' binary could not be found in any expected paths. This issue may be related to compatibility between the '@roamhq/wrtc' module and the user's development environment, which includes Node.js v23.0.0 and pnpm v9.15.2. The user is seeking guidance on whether additional configurations are needed to resolve this issue.",
+          "sources": [
+            "https://github.com/elizaOS/eliza/issues/1965"
+          ],
+          "images": [
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/issues/1965"
+          ],
+          "videos": []
+        },
+        {
+          "text": "A new GitHub Actions workflow has been introduced to check the consistency of the pnpm lockfile with package.json. This improvement aims to prevent installation failures caused by outdated lockfiles, which can negatively impact new users trying to set up the project. The workflow will automatically fail PRs with inconsistent lockfiles and provide instructions on how to resolve the issue. This change enhances the development process by ensuring dependencies remain up to date before merging changes.",
+          "sources": [
+            "https://github.com/elizaOS/eliza/pull/2015"
+          ],
+          "images": [
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/pull/2015"
+          ],
+          "videos": []
+        },
+        {
+          "text": "A user inquired about updating from version v0.1.7-alpha.2 to v0.1.7. They asked whether using 'git checkout $(git describe --tags --abbrev=0)' followed by 'pnpm install' is the correct approach for upgrading to the latest release.",
+          "sources": [
+            "https://github.com/elizaOS/eliza/issues/2035"
+          ],
+          "images": [
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/issues/2035"
+          ],
+          "videos": []
+        }
+      ],
+      "topic": "pnpm"
+    },
+    {
+      "title": "Roblox Engagement and DAO Token Distribution",
+      "content": [
+        {
+          "text": "Roblox's engagement numbers are astonishing, with 380 million being highlighted as an impressive figure.",
+          "sources": [
+            "https://twitter.com/dankvr/status/1877121457353830696"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "50% of the supply was sent to the DAO, ensuring that no partners missed out on the distribution.",
+          "sources": [
+            "https://twitter.com/dankvr/status/1877088672719204419"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "A referenced tweet includes an image, though no additional context is provided.",
+          "sources": [
+            "https://twitter.com/dankvr/status/1876844133773373670"
+          ],
+          "images": [
+            "https://pbs.twimg.com/media/GgvjyeXWUAAhvna.png"
+          ],
+          "videos": []
+        }
+      ],
+      "topic": "response"
+    },
+    {
+      "title": "Enhancements and Fixes in ElizaOS Embedding and Chat Systems",
+      "content": [
+        {
+          "text": "A new embedding model provider, Heurist, has been added to ElizaOS. This update introduces the HEURIST_EMBEDDING_MODEL configuration with BAAI/bge-large-en-v1.5 as the default model. The integration supports 1024-dimension vectors and includes remote embedding functionality. Additionally, model configurations have been updated to use meta-llama/llama-3.3-70b-instruct and FLUX.1-dev. Documentation updates are required to reflect these changes.",
+          "sources": [
+            "https://github.com/elizaOS/eliza/pull/1933"
+          ],
+          "images": [
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/pull/1933"
+          ],
+          "videos": []
+        },
+        {
+          "text": "A fix has been implemented to optimize RAM usage in the embedding process. Previously, the BGE embedding model was initialized multiple times, leading to excessive RAM consumption (8-12GB). The new approach introduces a singleton pattern, ensuring the model is initialized only once, reducing RAM usage to under 1GB. This change does not affect the API or user interface but significantly improves performance.",
+          "sources": [
+            "https://github.com/elizaOS/eliza/pull/1950"
+          ],
+          "images": [
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/pull/1950"
+          ],
+          "videos": []
+        },
+        {
+          "text": "A bug has been reported where the chat system enters an infinite loop when using the llama_local model. The issue does not occur with OpenAI models. The problem appears to be related to the model initialization and response generation process, requiring further investigation and a potential fix.",
+          "sources": [
+            "https://github.com/elizaOS/eliza/issues/2002"
+          ],
+          "images": [
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/issues/2002"
+          ],
+          "videos": []
+        }
+      ],
+      "topic": "model"
+    }
+  ],
+  "date": 1736294400
+}

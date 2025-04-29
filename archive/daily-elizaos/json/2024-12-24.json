@@ -1,0 +1,427 @@
+{
+  "type": "dailySummary",
+  "title": "Daily Summary for 2024-12-24",
+  "categories": [
+    {
+      "title": "Recent Plugin Enhancements and Additions in ElizaOS",
+      "content": [
+        {
+          "text": "A new feature has been introduced to dynamically import plugins in ElizaOS, reducing memory usage and improving efficiency. This change ensures that plugins are only loaded when needed, based on environment variables and secrets.",
+          "sources": [
+            "https://github.com/elizaOS/eliza/pull/1383"
+          ],
+          "images": [
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/pull/1383"
+          ],
+          "videos": []
+        },
+        {
+          "text": "Sample plugin documentation has been added to improve clarity and usability. This documentation will serve as a reference for future plugin development and integration.",
+          "sources": [
+            "https://github.com/elizaOS/eliza/pull/1385"
+          ],
+          "images": [
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/pull/1385"
+          ],
+          "videos": []
+        },
+        {
+          "text": "A Cosmos plugin has been added, allowing agents to interact with Cosmos SDK-based chains such as Osmosis, Cosmos Hub, and Akash. This enhances ElizaOS's blockchain capabilities.",
+          "sources": [
+            "https://github.com/elizaOS/eliza/pull/1393",
+            "https://github.com/elizaOS/eliza/pull/1426"
+          ],
+          "images": [
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/pull/1393",
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/pull/1426"
+          ],
+          "videos": []
+        },
+        {
+          "text": "A new plugin for Metaplex Bubblegum has been introduced, enabling agents to mint, transfer, and update metadata for compressed NFTs (cNFTs) on Solana.",
+          "sources": [
+            "https://github.com/elizaOS/eliza/pull/1386"
+          ],
+          "images": [
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/pull/1386"
+          ],
+          "videos": []
+        },
+        {
+          "text": "A proposal has been made to integrate the FerePro plugin, which would enhance ElizaOS's research and Q&A capabilities for crypto-related topics such as token research, investment decisions, and trading actions.",
+          "sources": [
+            "https://github.com/elizaOS/eliza/issues/1405"
+          ],
+          "images": [
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/issues/1405"
+          ],
+          "videos": []
+        },
+        {
+          "text": "The AlienX chain has been added to the EVM plugin, introducing new types without affecting existing functionalities.",
+          "sources": [
+            "https://github.com/elizaOS/eliza/pull/1438"
+          ],
+          "images": [
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/pull/1438"
+          ],
+          "videos": []
+        },
+        {
+          "text": "Logging improvements have been made to the Coinbase plugin, ensuring better consistency and debugging capabilities.",
+          "sources": [
+            "https://github.com/elizaOS/eliza/pull/1429"
+          ],
+          "images": [
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/pull/1429"
+          ],
+          "videos": []
+        },
+        {
+          "text": "Liquid staking support has been added to the Solana plugin, allowing users to stake SOL across multiple protocols without needing to manually compare APYs or switch platforms.",
+          "sources": [
+            "https://github.com/elizaOS/eliza/pull/1435",
+            "https://github.com/elizaOS/eliza/issues/1434"
+          ],
+          "images": [
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/pull/1435",
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/issues/1434"
+          ],
+          "videos": []
+        },
+        {
+          "text": "A Twitter plugin has been introduced, enabling agents to post tweets. It includes authentication handling, character limit enforcement, and error logging.",
+          "sources": [
+            "https://github.com/elizaOS/eliza/pull/1422"
+          ],
+          "images": [
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/pull/1422"
+          ],
+          "videos": []
+        },
+        {
+          "text": "A Birdeye plugin has been added, expanding ElizaOS's ability to query on-chain data and provide insights into trending tokens, wallet activities, and market movements.",
+          "sources": [
+            "https://github.com/elizaOS/eliza/pull/1417"
+          ],
+          "images": [
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/pull/1417"
+          ],
+          "videos": []
+        },
+        {
+          "text": "A Thirdweb plugin has been introduced, integrating with the Nebula API to allow natural language queries across 2000+ blockchains.",
+          "sources": [
+            "https://github.com/elizaOS/eliza/pull/1418"
+          ],
+          "images": [
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/pull/1418"
+          ],
+          "videos": []
+        }
+      ],
+      "topic": "plugin"
+    },
+    {
+      "title": "Fix: Duplicate Tweet Scheduling Issue in Eliza Twitter Client",
+      "content": [
+        {
+          "text": "A bug in the Eliza Twitter client caused the `generateNewTweetLoop` method to be called twice in the `start` method of `/packages/client-twitter/src/post.ts`. This resulted in multiple independent tweet scheduling loops, leading to duplicate tweets being posted. The issue was due to redundant method calls at lines 174 and 190 without conditional checks.",
+          "sources": [
+            "https://github.com/elizaOS/eliza/issues/1395"
+          ],
+          "images": [
+            "https://github.com/user-attachments/assets/0ebe87aa-ff46-488d-9961-90daf43b5aab"
+          ],
+          "videos": []
+        },
+        {
+          "text": "Multiple pull requests were submitted to resolve this issue by moving the second `generateNewTweetLoop()` call inside the `if (enableActionProcessing)` condition. This ensures that only a single scheduling loop is initialized, preventing duplicate tweets and redundant log messages.",
+          "sources": [
+            "https://github.com/elizaOS/eliza/pull/1402",
+            "https://github.com/elizaOS/eliza/pull/1401",
+            "https://github.com/elizaOS/eliza/pull/1396"
+          ],
+          "images": [
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/pull/1402",
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/pull/1401",
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/pull/1396"
+          ],
+          "videos": []
+        },
+        {
+          "text": "Testing steps included configuring the Twitter client with `POST_IMMEDIATELY=true`, observing tweet logs, and verifying that only one tweet is scheduled at a time. The fix was classified as a low-risk change with minimal impact on other functionalities.",
+          "sources": [
+            "https://github.com/elizaOS/eliza/pull/1402",
+            "https://github.com/elizaOS/eliza/pull/1401",
+            "https://github.com/elizaOS/eliza/pull/1396"
+          ],
+          "images": [],
+          "videos": []
+        }
+      ],
+      "topic": "bug"
+    },
+    {
+      "title": "Crypto Market Price Update",
+      "content": [
+        {
+          "text": "The latest cryptocurrency prices show fluctuations across various assets. Wrapped Bitcoin (WBTC) saw an increase from $94,529.47 to $98,377.44. Similarly, Wrapped Ethereum (WETH) rose from $3,416.80 to $3,492.58. Solana (SOL) also experienced an upward trend, moving from $189.88 to $196.97. Meanwhile, ai16z increased from $0.6670 to $0.7915.",
+          "sources": [
+            "WBTC: $94,529.47 → $98,377.44",
+            "WETH: $3,416.80 → $3,492.58",
+            "SOL: $189.88 → $196.97",
+            "ai16z: $0.6670 → $0.7915"
+          ],
+          "images": [],
+          "videos": []
+        }
+      ],
+      "topic": "crypto market"
+    },
+    {
+      "title": "Recent Chore Updates in ElizaOS Repository",
+      "content": [
+        {
+          "text": "A new update allows scoped PR titles, enabling titles like `chore(postgres-adapter): fix it`. This change was introduced to improve clarity in PR naming conventions.",
+          "sources": [
+            "https://github.com/elizaOS/eliza/issues/1413",
+            "https://github.com/elizaOS/eliza/pull/1414"
+          ],
+          "images": [
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/issues/1413",
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/pull/1414"
+          ],
+          "videos": []
+        },
+        {
+          "text": "Prettier formatting has been applied to all package.json files to improve code consistency and facilitate the review process for upcoming changes.",
+          "sources": [
+            "https://github.com/elizaOS/eliza/pull/1412"
+          ],
+          "images": [
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/pull/1412"
+          ],
+          "videos": []
+        },
+        {
+          "text": "Tests have been split to improve organization and maintainability.",
+          "sources": [
+            "https://github.com/elizaOS/eliza/pull/1390"
+          ],
+          "images": [
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/pull/1390"
+          ],
+          "videos": []
+        },
+        {
+          "text": "Integration test steps now require approval before execution, adding an extra layer of validation.",
+          "sources": [
+            "https://github.com/elizaOS/eliza/pull/1388"
+          ],
+          "images": [
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/pull/1388"
+          ],
+          "videos": []
+        },
+        {
+          "text": "CI trigger conditions have been modified to optimize workflow execution.",
+          "sources": [
+            "https://github.com/elizaOS/eliza/pull/1387"
+          ],
+          "images": [
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/pull/1387"
+          ],
+          "videos": []
+        }
+      ],
+      "topic": "chore"
+    },
+    {
+      "title": "Chat Functionality and Bot Integration",
+      "content": [
+        {
+          "text": "The provided chat transcripts contain minimal meaningful discussion. The only notable message is from a user asking how to add a bot to their server, but no response was recorded.",
+          "sources": [
+            "https://discord.com/channels/1253563208833433701/1326603270893867064"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "A feature request was submitted regarding the removal of chat functionality from the terminal. The user expressed frustration over the additional steps required for testing and debugging, suggesting that chat be reinstated in the terminal or an alternative command be provided to enable it.",
+          "sources": [
+            "https://github.com/elizaOS/eliza/issues/1421"
+          ],
+          "images": [
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/issues/1421"
+          ],
+          "videos": []
+        }
+      ],
+      "topic": "chat"
+    },
+    {
+      "title": "Database Adaptors and Issues in Eliza Agent",
+      "content": [
+        {
+          "text": "Users encountered an issue with the `better-sqlite3` module when running the Eliza agent on v0170 alpha 1. The error was caused by a mismatch in Node.js versions, leading to an `ERR_DLOPEN_FAILED` error. The issue was resolved by updating `better-sqlite3` in the `packages/adapter-sqlite` directory.",
+          "sources": [
+            "https://github.com/elizaOS/eliza/issues/1407"
+          ],
+          "images": [
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/issues/1407"
+          ],
+          "videos": []
+        },
+        {
+          "text": "A user faced difficulties replacing the default SQLite database with Supabase. The issue stemmed from the `initializeDatabase` function returning an undefined database object, preventing the agent from starting and posting tweets. The expected behavior was for the agent to start, post tweets, and store them in Supabase correctly.",
+          "sources": [
+            "https://github.com/elizaOS/eliza/issues/1389"
+          ],
+          "images": [
+            "https://github.com/user-attachments/assets/7240d314-0b98-4b14-a8bd-f466d17d93f4",
+            "https://github.com/user-attachments/assets/4079d3a0-bea7-4101-a2f2-14a23f2adf0b"
+          ],
+          "videos": []
+        },
+        {
+          "text": "A new MongoDB adapter was introduced, allowing users to store agent data in MongoDB Atlas. This feature provides cloud storage and vector search capabilities. The implementation follows the same structure as other database adapters, requiring users to add a connection string and database name to the `.env` file. The change is considered low-risk and adds flexibility for users who prefer MongoDB.",
+          "sources": [
+            "https://github.com/elizaOS/eliza/pull/1427"
+          ],
+          "images": [
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/pull/1427"
+          ],
+          "videos": []
+        }
+      ],
+      "topic": "agent"
+    },
+    {
+      "title": "README Translations and Automation",
+      "content": [
+        {
+          "text": "A new script has been implemented to keep README translations synchronized automatically. This script uses GPT-4o to update and translate all README files whenever the English README.md file changes. It integrates with GitHub CI for automation, ensuring that all translated versions remain up to date. However, there is a medium risk associated with this change, as errors in the translation script could propagate incorrect information across all language files. The script requires GitHub repository secrets, including a GitHub Personal Access Token and an OpenAI API key, to function properly.",
+          "sources": [
+            "https://github.com/elizaOS/eliza/pull/1432"
+          ],
+          "images": [
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/pull/1432"
+          ],
+          "videos": []
+        },
+        {
+          "text": "A Tagalog translation of the main README.md file has been added as README_TG.md. This translation includes all main sections, proper Tagalog character rendering, and formatting while maintaining all links and functionality from the original README. The change is categorized as low risk since it only involves documentation updates. Reviewers are encouraged to verify the formatting, check that all links are functional, and ensure that the Tagalog text renders properly.",
+          "sources": [
+            "https://github.com/elizaOS/eliza/pull/1420"
+          ],
+          "images": [
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/pull/1420"
+          ],
+          "videos": []
+        },
+        {
+          "text": "A request was made to add Tagalog language support to the project's documentation. The goal was to improve accessibility for Filipino developers by providing a complete Tagalog translation of the README file. The translation includes all sections, proper formatting, and the addition of Tagalog to the language selector. This change ensures that Filipino developers can read the documentation in their native language, making the project more inclusive.",
+          "sources": [
+            "https://github.com/elizaOS/eliza/issues/1419"
+          ],
+          "images": [
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/issues/1419"
+          ],
+          "videos": []
+        }
+      ],
+      "topic": "readme"
+    },
+    {
+      "title": "ElizaOS Repository Updates",
+      "content": [
+        {
+          "text": "A discussion was raised regarding the Node.js version requirement in the ElizaOS repository. The current Long-Term Support (LTS) version of Node.js is 22, but the package.json file specifies Node 23. The reason for this requirement is unclear and is being questioned.",
+          "sources": [
+            "https://github.com/elizaOS/eliza/issues/1411"
+          ],
+          "images": [
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/issues/1411"
+          ],
+          "videos": []
+        },
+        {
+          "text": "A pull request was submitted to fix a typo in the `eliza-in-tee.md` documentation. The PR follows the standard template, including sections for risks, background, and testing steps. No major changes were introduced beyond the typo correction.",
+          "sources": [
+            "https://github.com/elizaOS/eliza/pull/1428"
+          ],
+          "images": [
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/pull/1428"
+          ],
+          "videos": []
+        }
+      ],
+      "topic": "update"
+    },
+    {
+      "title": "TypeScript Configuration and Slack Client Type Issues",
+      "content": [
+        {
+          "text": "The TypeScript configuration in the core package has 'strict' mode set to false, which can lead to potential bugs in a modern TypeScript project. It is recommended to inherit settings from '@total-typescript/tsconfig' to follow best practices.",
+          "sources": [
+            "https://github.com/elizaOS/eliza/issues/1409"
+          ],
+          "images": [
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/issues/1409"
+          ],
+          "videos": []
+        },
+        {
+          "text": "A TypeScript type error was found in the Slack client when handling message attachments. The 'attachments' property in the 'Content' interface was not providing all required properties of the 'Media' type, leading to type mismatches. The fix involves ensuring all required properties such as 'id', 'url', 'title', 'source', 'description', and 'text' are included in the attachment creation.",
+          "sources": [
+            "https://github.com/elizaOS/eliza/issues/1384"
+          ],
+          "images": [
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/issues/1384"
+          ],
+          "videos": []
+        }
+      ],
+      "topic": "typescript"
+    },
+    {
+      "title": "Standardizing Boolean Values in .env Files",
+      "content": [
+        {
+          "text": "The `.env` file in the project contained inconsistencies in how boolean values were represented. Some variables used 'YES' and 'NO', while others used 'true' and 'false'. This inconsistency could lead to parsing issues and human errors.",
+          "sources": [
+            "https://github.com/elizaOS/eliza/issues/1391"
+          ],
+          "images": [
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/issues/1391"
+          ],
+          "videos": []
+        },
+        {
+          "text": "A pull request was created to standardize boolean values in the `.env` file by replacing 'YES' and 'NO' with 'true' and 'false'. This change ensures consistency across the codebase and removes the need for the `parseBooleanFromText` function.",
+          "sources": [
+            "https://github.com/elizaOS/eliza/pull/1392"
+          ],
+          "images": [
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/pull/1392"
+          ],
+          "videos": []
+        },
+        {
+          "text": "Reviewers are advised to check the `.env` file to confirm that all boolean variables now use 'true' or 'false'. Additionally, they should verify that the `parseBooleanFromText` function is no longer used and test the affected functionality to ensure proper behavior.",
+          "sources": [
+            "https://github.com/elizaOS/eliza/pull/1392"
+          ],
+          "images": [
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/pull/1392"
+          ],
+          "videos": []
+        }
+      ],
+      "topic": "boolean"
+    }
+  ],
+  "date": 1734998400
+}

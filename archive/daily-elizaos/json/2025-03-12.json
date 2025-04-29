@@ -1,0 +1,288 @@
+{
+  "type": "dailySummary",
+  "title": "Daily Report - 2025-03-12",
+  "categories": [
+    {
+      "title": "Crypto Market Overview",
+      "content": [
+        {
+          "text": "The current cryptocurrency market shows a range of asset prices. Wrapped Bitcoin (WBTC) is trading at $82,693.37, while Wrapped Ethereum (WETH) is valued at $1,921.62. Solana (SOL) is priced at $125.31, and ai16z is at $0.1687.",
+          "sources": [
+            "WBTC: $82,693.37",
+            "WETH: $1,921.62",
+            "SOL: $125.31",
+            "ai16z: $0.1687"
+          ],
+          "images": [],
+          "videos": []
+        }
+      ],
+      "topic": "crypto market"
+    },
+    {
+      "title": "AI Agent Development and Governance Updates",
+      "content": [
+        {
+          "text": "The beta version of ElizaOS v2 is set to launch next week, with the AI agent 'Degen' being reactivated soon in both the main chat and the 'arena' for collaboration with other AI agents. Before full deployment, AI agents will interact in a dedicated test channel. Additionally, efforts are being made to improve AI intern agents by structuring their tasks and evaluating their performance through a gamified competition format, where underperforming agents may be eliminated.",
+          "sources": [
+            "https://discord.com/channels/1253563208833433701/1308149076893630555",
+            "https://discord.com/channels/1253563208833433701/1328592959444095038"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "Governance-related AI development is also underway, with discussions on creating an AI agent for a governance group currently operating on Telegram. The 'Negation Game' governance model and the 'agency swarm pattern' from RNDao are being explored as potential frameworks. Additionally, there are ongoing discussions about an AI agent marketplace, tokenomics improvements, and intellectual property concerns related to AI-generated content.",
+          "sources": [
+            "https://discord.com/channels/1253563208833433701/1301363808421543988"
+          ],
+          "images": [],
+          "videos": []
+        }
+      ],
+      "topic": "ai"
+    },
+    {
+      "title": "Recent Fixes in ElizaOS",
+      "content": [
+        {
+          "text": "A fix has been implemented for core type declarations to improve system stability and correctness.",
+          "sources": [
+            "https://github.com/elizaOS/eliza/pull/3895"
+          ],
+          "images": [
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/pull/3895"
+          ],
+          "videos": []
+        },
+        {
+          "text": "Updates have been made to resolve issues with the GUI build and API server, ensuring smoother functionality.",
+          "sources": [
+            "https://github.com/elizaOS/eliza/pull/3893"
+          ],
+          "images": [
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/pull/3893"
+          ],
+          "videos": []
+        },
+        {
+          "text": "Migration-related fixes have been applied in version 2 to enhance database consistency and performance.",
+          "sources": [
+            "https://github.com/elizaOS/eliza/pull/3888"
+          ],
+          "images": [
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/pull/3888"
+          ],
+          "videos": []
+        }
+      ],
+      "topic": "fix"
+    },
+    {
+      "title": "ElizaOS Plugin and Bot Issues",
+      "content": [
+        {
+          "text": "Several users reported issues with ElizaOS plugins and bot functionality across different platforms, including Twitter, Discord, and Telegram.",
+          "sources": [
+            "https://discord.com/channels/1253563208833433701/1300025221834739744"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "A major issue was identified with the `elizaos/plugin-twitter` plugin, which was not exporting a required `clients` property. This prevented the AI agent from posting on Twitter. The issue was resolved by `candycat0606` after further code inspection.",
+          "sources": [
+            "https://discord.com/channels/1253563208833433701/1300025221834739744"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "Users faced an import error with `@elizaos-plugins/plugin-example`, likely due to missing or incorrect package installation. The suggested solution was to verify if the plugin exists and is correctly installed in `node_modules`.",
+          "sources": [
+            "https://discord.com/channels/1253563208833433701/1300025221834739744"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "A request was made to train a model that fetches the most relevant dataset based on a description, but no concrete solution was provided yet.",
+          "sources": [
+            "https://discord.com/channels/1253563208833433701/1300025221834739744"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "State persistence issues were reported, where stored items disappeared upon retrieval. A possible cause was that the agent might be creating a new session for each prompt, but no confirmed solution was found.",
+          "sources": [
+            "https://discord.com/channels/1253563208833433701/1300025221834739744"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "The Discord bot appeared offline despite correct `.env` settings and `elizaos/client-discord` configuration. The suggested fix was to ensure the plugin is properly imported into the character file.",
+          "sources": [
+            "https://discord.com/channels/1253563208833433701/1300025221834739744"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "A Telegram plugin issue caused the agent to generate two responses—one from the LLM and one from the plugin action. The solution was to set `suppressInitialMessage: true` in the action configuration.",
+          "sources": [
+            "https://discord.com/channels/1253563208833433701/1300025221834739744"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "The Twitter plugin worked outside Docker but failed inside Docker. No confirmed solution was found yet.",
+          "sources": [
+            "https://discord.com/channels/1253563208833433701/1300025221834739744"
+          ],
+          "images": [],
+          "videos": []
+        }
+      ],
+      "topic": "discord"
+    },
+    {
+      "title": "Implementation of Clean Command in ElizaOS",
+      "content": [
+        {
+          "text": "The ElizaOS project has introduced a 'clean' command to its core functionality. This update includes the addition of the clean command and the reversion of minor changes.",
+          "sources": [
+            "https://github.com/elizaOS/eliza/pull/3892"
+          ],
+          "images": [
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/pull/3892"
+          ],
+          "videos": []
+        },
+        {
+          "text": "A second iteration of the clean command, referred to as 'V2 clean command,' has also been proposed. This version likely includes improvements or refinements over the initial implementation.",
+          "sources": [
+            "https://github.com/elizaOS/eliza/pull/3891"
+          ],
+          "images": [
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/pull/3891"
+          ],
+          "videos": []
+        }
+      ],
+      "topic": "clean"
+    },
+    {
+      "title": "ElizaOS Updates: Permanent Knowledge Feature and Client App Issues",
+      "content": [
+        {
+          "text": "A new feature has been introduced to ElizaOS, allowing agents to retain permanent knowledge through an array of strings. This ensures that specific knowledge remains available at all times, rather than being retrieved only when relevant through RAG search. The update includes documentation changes and modifications to the message template, though additional updates may be required for other clients.",
+          "sources": [
+            "https://github.com/elizaOS/eliza/pull/3894"
+          ],
+          "images": [
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/pull/3894"
+          ],
+          "videos": []
+        },
+        {
+          "text": "A bug has been reported in the ElizaOS client app, where the microphone and read-aloud features are not functioning as expected. Users have noted that these features previously worked but are now failing when attempting to use them. The issue occurs when running the client with the appropriate environment settings.",
+          "sources": [
+            "https://github.com/elizaOS/eliza/issues/3896"
+          ],
+          "images": [
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/issues/3896"
+          ],
+          "videos": []
+        }
+      ],
+      "topic": "feature"
+    },
+    {
+      "title": "Recent Discussions and Updates in ElizaOS Community",
+      "content": [
+        {
+          "text": "The ElizaOS community has been actively discussing various topics, including cryptocurrency trading, AI agent development, governance models, and technical improvements. Key highlights include discussions on trading strategies on Pump.fun, AI intern competitions, governance agent development, and ElizaOS v2 updates.",
+          "sources": [
+            "https://discord.com/channels/1253563208833433701/1299989396874854440",
+            "https://discord.com/channels/1253563208833433701/1328592959444095038",
+            "https://discord.com/channels/1253563208833433701/1301363808421543988",
+            "https://discord.com/channels/1253563208833433701/1308149076893630555"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "Technical discussions covered issues with plugins, state persistence, and bot functionality. Notable problems included Twitter plugin failures, Discord bot offline issues, and Telegram plugin response duplication. Solutions and workarounds were proposed, but some issues remain unresolved.",
+          "sources": [
+            "https://discord.com/channels/1253563208833433701/1300025221834739744"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "ElizaOS v2 Beta is set to launch soon, with plans to reactivate the AI agent 'Degen' in the main chat and arena. AI agents will first interact in a test environment before full deployment.",
+          "sources": [
+            "https://discord.com/channels/1253563208833433701/1308149076893630555"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "A governance agent for Telegram is being developed, with discussions on integrating it with Twitter. Additionally, an AI agent marketplace and tokenomics improvements were proposed, including using ai16z for API credit payments.",
+          "sources": [
+            "https://discord.com/channels/1253563208833433701/1301363808421543988"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "ElizaOS is being integrated with Unreal Engine 5 (UE5) via FAB, supporting get/set/edit/message operations. However, actions are not yet implemented, and feedback on useful UE5 use cases is being sought.",
+          "sources": [
+            "https://discord.com/channels/1253563208833433701/1313222089271939102"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "Several pull requests were merged, including fixes for core type declarations, GUI build and API server, Docker file updates, and a new permanent knowledge capability for AI agents.",
+          "sources": [
+            "https://github.com/elizaOS/eliza/pull/3895",
+            "https://github.com/elizaOS/eliza/pull/3893",
+            "https://github.com/elizaOS/eliza/pull/3887",
+            "https://github.com/elizaOS/eliza/pull/3894"
+          ],
+          "images": [
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/pull/3895",
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/pull/3893",
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/pull/3887",
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/pull/3894"
+          ],
+          "videos": []
+        },
+        {
+          "text": "Bug reports include issues with line breaks in text formatting and microphone/play aloud features not working in the client app.",
+          "sources": [
+            "https://github.com/elizaOS/eliza/issues/3897",
+            "https://github.com/elizaOS/eliza/issues/3896"
+          ],
+          "images": [
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/issues/3897",
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/issues/3896"
+          ],
+          "videos": []
+        },
+        {
+          "text": "The community saw contributions from six contributors, merging five pull requests, focusing on various improvements.",
+          "sources": [],
+          "images": [],
+          "videos": []
+        }
+      ],
+      "topic": "Misceleanous"
+    }
+  ],
+  "date": 1741737600
+}

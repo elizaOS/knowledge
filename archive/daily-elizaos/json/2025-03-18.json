@@ -1,0 +1,289 @@
+{
+  "type": "dailySummary",
+  "title": "Daily Report - 2025-03-18",
+  "categories": [
+    {
+      "title": "Fixes and Improvements in ElizaOS",
+      "content": [
+        {
+          "text": "Fixed an issue where AI writer was not re-rendering correctly.",
+          "sources": [
+            "https://github.com/elizaOS/eliza/pull/3969"
+          ],
+          "images": [
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/pull/3969"
+          ],
+          "videos": []
+        },
+        {
+          "text": "Implemented real-time display of thought messages.",
+          "sources": [
+            "https://github.com/elizaOS/eliza/pull/3967"
+          ],
+          "images": [
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/pull/3967"
+          ],
+          "videos": []
+        },
+        {
+          "text": "Refactored bubble layout to prevent elements from sticking together in short messages.",
+          "sources": [
+            "https://github.com/elizaOS/eliza/pull/3965"
+          ],
+          "images": [
+            "https://github.com/user-attachments/assets/7a45fc70-d5de-46e9-a8d3-e8db49373e31",
+            "https://github.com/user-attachments/assets/6ecc0fb7-3549-42af-8088-2825997fe80c",
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/pull/3965"
+          ],
+          "videos": []
+        },
+        {
+          "text": "Made a small fix to a button label.",
+          "sources": [
+            "https://github.com/elizaOS/eliza/pull/3964"
+          ],
+          "images": [
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/pull/3964"
+          ],
+          "videos": []
+        },
+        {
+          "text": "Fixed log display and API-related issues.",
+          "sources": [
+            "https://github.com/elizaOS/eliza/pull/3971"
+          ],
+          "images": [
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/pull/3971"
+          ],
+          "videos": []
+        },
+        {
+          "text": "Corrected a timeout comment to reflect the correct duration of 120 seconds instead of 60.",
+          "sources": [
+            "https://github.com/elizaOS/eliza/pull/3968"
+          ],
+          "images": [
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/pull/3968"
+          ],
+          "videos": []
+        }
+      ],
+      "topic": "fix"
+    },
+    {
+      "title": "Casual Chat Logs Without Technical Content",
+      "content": [
+        {
+          "text": "The provided chat transcripts primarily consist of casual conversations, jokes, and speculation on various topics such as cryptocurrency projects, Nvidia, AMD, and CUDA. There are no meaningful technical discussions, problem-solving efforts, or structured development-related exchanges.",
+          "sources": [
+            "https://discord.com/channels/1253563208833433701/1299989396874854440",
+            "https://discord.com/channels/1253563208833433701/1308149076893630555",
+            "https://discord.com/channels/1253563208833433701/1328592959444095038"
+          ],
+          "images": [],
+          "videos": []
+        }
+      ],
+      "topic": "casual"
+    },
+    {
+      "title": "Technical Issues and Solutions in WebSocket API, RAG Knowledge, and Plugin Dependencies",
+      "content": [
+        {
+          "text": "### WebSocket API Integration\n- WebSockets were recently added to a development branch, enabling direct API access for chat terminals.\n- Decision made to replace REST API with WebSockets for better integration.\n- Implementation available in Shaw’s v2 branch but not yet merged into `develop`.",
+          "sources": [
+            "https://discord.com/channels/1253563208833433701/1300025221834739744"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### RAG Knowledge Implementation Issues\n- Users faced issues loading knowledge files, especially PDFs.\n- Solutions:\n  - Ensure `\"enableRag\": true` is set in `character.json`.\n  - Verify correct file paths and directory structure.\n  - Use `mkdir -p ./characters/knowledge/biotic/` to create missing directories.\n  - Set correct file permissions (`chmod 755` for directories, `chmod 644` for files).\n  - Adjust knowledge paths in `character.json` to avoid incorrect relative paths.",
+          "sources": [
+            "https://discord.com/channels/1253563208833433701/1300025221834739744"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Plugin & Dependency Issues\n- `@elizaos/plugin-sql@^0.25.6` not found.\n- Solution: Manually install dependencies and adjust `package.json`.",
+          "sources": [
+            "https://discord.com/channels/1253563208833433701/1300025221834739744"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Discord Bot Configuration\n- Bot failing to connect to the correct text channel.\n- Solutions:\n  - Ensure the channel ID is in the correct format (numeric, no `#`).\n  - Verify bot permissions.\n  - Restart the bot after `.env` changes.",
+          "sources": [
+            "https://discord.com/channels/1253563208833433701/1300025221834739744"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Telegram & EVM Plugin Issue\n- Transactions worked in the terminal but not via Telegram.\n- Solution: Switching from a local LLaMA model to OpenAI resolved the issue.",
+          "sources": [
+            "https://discord.com/channels/1253563208833433701/1300025221834739744"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### GitHub Personal Access Token Requirement\n- CLI requested a GitHub token unexpectedly.\n- No resolution found in chat; requires further investigation.",
+          "sources": [
+            "https://discord.com/channels/1253563208833433701/1300025221834739744"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Action Items\n#### Technical Tasks\n1. Merge WebSocket API into `develop`.\n2. Fix `@elizaos/plugin-sql@^0.25.6` dependency issue.\n3. Investigate GitHub token requirement in CLI.\n4. Fix Telegram-EVM plugin execution issue.\n5. Resolve Docker model loading error.\n\n#### Documentation Needs\n6. Update RAG knowledge setup guide.\n7. Clarify WebSocket API usage in docs.\n8. Add troubleshooting steps for Discord bot setup.\n9. Document Twitter rate limit settings.\n10. Clarify Coingecko API integration steps.\n\n#### Feature Requests\n11. Improve RAG support for PDFs.\n12. Add better error messages for missing knowledge directories.\n13. Enhance CLI to handle missing dependencies more gracefully.\n14. Improve Telegram-EVM plugin compatibility.\n15. Add WebSocket-based chat terminal example.",
+          "sources": [
+            "https://discord.com/channels/1253563208833433701/1300025221834739744"
+          ],
+          "images": [],
+          "videos": []
+        }
+      ],
+      "topic": "discord"
+    },
+    {
+      "title": "New Feature: Clear Logs Method and API",
+      "content": [
+        {
+          "text": "Development efforts introduced a new 'clear logs' method and API, alongside five bug fixes. The update was part of a broader development cycle involving nine contributors who merged eight pull requests, focusing on various improvements.",
+          "sources": [
+            "https://github.com/elizaOS/eliza/pull/3974"
+          ],
+          "images": [
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/pull/3974"
+          ],
+          "videos": []
+        }
+      ],
+      "topic": "development"
+    },
+    {
+      "title": "Chore Updates: Connection Status & Plugin Storage S3 Test Coverage",
+      "content": [
+        {
+          "text": "A recent update simplifies the connection status handling in the project, streamlining the process for better efficiency.",
+          "sources": [
+            "https://github.com/elizaOS/eliza/pull/3973"
+          ],
+          "images": [
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/pull/3973"
+          ],
+          "videos": []
+        },
+        {
+          "text": "Enhancements have been made to the plugin storage S3 test coverage, ensuring comprehensive validation of various functionalities. The update includes structured tests for types, plugins, and the AwsS3Service, covering initialization, core functionality, and error handling. The testing approach utilizes Vitest with proper AWS SDK mocking to simulate different conditions and edge cases.",
+          "sources": [
+            "https://github.com/elizaOS/eliza/pull/3976"
+          ],
+          "images": [
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/pull/3976"
+          ],
+          "videos": []
+        }
+      ],
+      "topic": "chore"
+    },
+    {
+      "title": "Documentation Updates",
+      "content": [
+        {
+          "text": "Versioning has been added to the documentation, allowing users to switch between v0.25.9 and v1.0.0-alpha.",
+          "sources": [
+            "https://github.com/elizaOS/eliza/pull/3963"
+          ],
+          "images": [
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/pull/3963"
+          ],
+          "videos": []
+        },
+        {
+          "text": "A terminology fix was made in the documentation, replacing 'CONFIGURACIONES' with 'CONFIGURACIÓN' for improved clarity in Spanish.",
+          "sources": [
+            "https://github.com/elizaOS/eliza/pull/3970"
+          ],
+          "images": [
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/pull/3970"
+          ],
+          "videos": []
+        }
+      ],
+      "topic": "documentation"
+    },
+    {
+      "title": "Crypto Market Update",
+      "content": [
+        {
+          "text": "The current price of Wrapped Bitcoin (WBTC) is $83,847.71, reflecting its value in the market.",
+          "sources": [
+            "Symbol: WBTC, Current Price: $83847.7053263"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "The current price of ai16z is $0.20199, indicating its position in the crypto market.",
+          "sources": [
+            "Symbol: ai16z, Current Price: $0.201992668382"
+          ],
+          "images": [],
+          "videos": []
+        }
+      ],
+      "topic": "crypto market"
+    },
+    {
+      "title": "ElizaOS Development and Community Updates",
+      "content": [
+        {
+          "text": "Recent discussions in the ElizaOS community covered various technical and organizational topics. Key updates include the integration of WebSockets for API access, troubleshooting RAG knowledge implementation, resolving plugin dependency issues, and improving Discord bot configuration. Additionally, Telegram and EVM plugin issues were addressed, and a GitHub personal access token requirement was noted but remains unresolved.",
+          "sources": [
+            "https://discord.com/channels/1253563208833433701/1300025221834739744"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "ElizaOS v2 Beta has been delayed to next Monday, with improvements in UX and developer experience. Discussions also covered marketing and communication issues, tokenomics concerns, and DAO community engagement. Plans to improve documentation, news aggregation, and contributor tracking were proposed.",
+          "sources": [
+            "https://discord.com/channels/1253563208833433701/1301363808421543988"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "Recent development efforts included new features such as a clear logs method and API, along with five bug fixes. A total of nine contributors merged eight pull requests, focusing on various improvements.",
+          "sources": [
+            "https://github.com/elizaOS/eliza/pull/3974",
+            "https://github.com/elizaOS/eliza/pull/3969",
+            "https://github.com/elizaOS/eliza/pull/3967",
+            "https://github.com/elizaOS/eliza/pull/3965",
+            "https://github.com/elizaOS/eliza/pull/3964",
+            "https://github.com/elizaOS/eliza/pull/3971",
+            "https://github.com/elizaOS/eliza/pull/3977",
+            "https://github.com/elizaOS/eliza/pull/3966"
+          ],
+          "images": [
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/pull/3974",
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/pull/3969",
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/pull/3967",
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/pull/3965",
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/pull/3964",
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/pull/3971",
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/pull/3977",
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/pull/3966"
+          ],
+          "videos": []
+        }
+      ],
+      "topic": "Misceleanous"
+    }
+  ],
+  "date": 1742256000
+}

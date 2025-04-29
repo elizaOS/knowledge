@@ -1,0 +1,232 @@
+{
+  "type": "dailySummary",
+  "title": "Daily Report - 2025-03-17",
+  "categories": [
+    {
+      "title": "Summary of Recent Discussions and Issues",
+      "content": [
+        {
+          "text": "Several Discord chat transcripts were analyzed, but most lacked meaningful technical discussions or problem-solving interactions. Some messages included project promotions, greetings, and minor exchanges without substantive content.",
+          "sources": [
+            "https://discord.com/channels/1253563208833433701/1326603270893867064",
+            "https://discord.com/channels/1253563208833433701/1300756641406521416",
+            "https://discord.com/channels/1253563208833433701/1308149076893630555"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "A fix was implemented for the 'plugin-local-ai' configuration. The update removed R1 and added DeepHermes. Model downloads now occur only when interacting with the agent rather than during initialization. The chat and tokenizer functionalities were confirmed to be working.",
+          "sources": [
+            "https://github.com/elizaOS/eliza/pull/3953"
+          ],
+          "images": [
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/pull/3953"
+          ],
+          "videos": []
+        },
+        {
+          "text": "An issue was reported regarding Discord messages disappearing randomly after being sent using callback(). The problem occurs when sending multiple messages back-to-back, with some messages vanishing unexpectedly. The expected behavior is for all messages to remain visible in the chat.",
+          "sources": [
+            "https://github.com/elizaOS/eliza/issues/3952"
+          ],
+          "images": [
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/issues/3952"
+          ],
+          "videos": [
+            "https://drive.google.com/file/d/1BgjRX4UCPKi4Mk73WG7gnyfq--AdIxhm/view?usp=sharing"
+          ]
+        }
+      ],
+      "topic": "chat"
+    },
+    {
+      "title": "Fix Missing `await` for Tweet Scraping",
+      "content": [
+        {
+          "text": "A missing `await` in the tweet scraping function was causing issues by returning a promise instead of actual tweet data. This has been fixed by adding the missing `await`, ensuring that tweets load correctly.",
+          "sources": [
+            "https://github.com/elizaOS/eliza/commit/0bbfaf70b21a7ab9011b6efe760005cac10ab0d4",
+            "https://github.com/elizaOS/eliza/pull/3960",
+            "https://github.com/elizaOS/eliza/commit/908fff3a14bb2c0c12bc34b9946477cda8de48e4"
+          ],
+          "images": [
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/commit/0bbfaf70b21a7ab9011b6efe760005cac10ab0d4",
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/pull/3960",
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/commit/908fff3a14bb2c0c12bc34b9946477cda8de48e4"
+          ],
+          "videos": []
+        }
+      ],
+      "topic": "fix"
+    },
+    {
+      "title": "ElizaOS Development, Technical Issues, and Future Plans",
+      "content": [
+        {
+          "text": "### Key Technical Discussions & Solutions\n- **Twitter Client Integration Issue:** Users reported that the Twitter client is not working in the latest ElizaOS version. No direct fix was provided, but users discussed manually importing the Twitter plugin.\n- **Plugin Installation Issues (Paradex Plugin):** The `@elizaos/plugin-para` fails to build due to missing `@elizaos/core`. Solutions include using `npx elizaos plugins add` instead of `pnpm add`, ensuring the plugin is correctly added to the character file, and updating `@elizaos/core`.\n- **WebSocket Support for API Access:** WebSockets were recently added to a Shaw v2 branch, improving API access for chat terminals. This feature is not yet merged into `develop` but is available in Shaw’s v2 branches.\n- **RAG Knowledge Directory Issues:** Users faced errors due to missing knowledge directories. Solutions include ensuring the directory exists (`mkdir -p ./characters/knowledge/biotic/`), enabling `\"enableRag\": true` in `character.json`, and setting correct file permissions (`chmod 755` for directories, `chmod 644` for files).\n- **Model Download Corruption (Llama Local):** The Llama model downloads but gets corrupted and re-downloads repeatedly. No confirmed fix, but users suggested trying alternative local models.",
+          "sources": [
+            "https://discord.com/channels/1253563208833433701/1300025221834739744"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### ElizaOS V2 Development & Marketing\n- **ElizaOS V2 Beta Release Delay:** The beta release was delayed to next Monday. Shaw is actively coding, and the update will significantly improve the tech experience.\n- **ElizaOS Functionality:** The platform enables AI agents to communicate and assist users without requiring coding. The V2 update will enhance customization and deployment.\n- **Marketing & Promotion:** Discussion on co-marketing with BNB Chain and promoting ElizaOS when V2 launches. Binance app now displays Binance Alpha Token ($ai16z).\n- **Sqd.ai Plugin:** Inquiry about the integration of a plugin from sqd.ai and its data provisioning quality. No clear resolution.",
+          "sources": [
+            "https://discord.com/channels/1253563208833433701/1301363808421543988"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "### Tokenless Project Participation in ElizaOS\n- **Tokenless Project Integration:** Users questioned how projects without tokens can integrate into ElizaOS’s model. No concrete solution was provided, but discussion suggested potential subscription-based access models.\n- **Subscription-Based Monetization:** Some members speculated that projects might adopt fixed subscription fees instead of tokens, aligning with CZ’s perspective on sustainable project funding.\n- **ElizaOS Launchpad Mechanics:** No definitive answer was given on how tokenless projects would fit into the ElizaOS flywheel, indicating a need for further clarification or documentation.",
+          "sources": [
+            "https://discord.com/channels/1253563208833433701/1328592959444095038"
+          ],
+          "images": [],
+          "videos": []
+        }
+      ],
+      "topic": "elizaos"
+    },
+    {
+      "title": "Enhancements to Agent Memory and Interaction in Eliza Framework",
+      "content": [
+        {
+          "text": "A new feature has been introduced to the Eliza framework that allows users to view and edit an agent's memories. This enhancement improves the agent's ability to recall past interactions, making conversations more personalized and adaptive.",
+          "sources": [
+            "https://github.com/elizaOS/eliza/pull/3954"
+          ],
+          "images": [
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/pull/3954"
+          ],
+          "videos": []
+        },
+        {
+          "text": "Another update focuses on improving agent interactions by analyzing past conversations and assigning user scores. The system stores conversations, reviews inactive ones, and assigns scores based on interaction quality. These scores influence future interactions, making the agent more friendly or hostile depending on past engagements. Currently, this feature is implemented in the Twitter client but can be extended to other clients.",
+          "sources": [
+            "https://github.com/elizaOS/eliza/pull/3962"
+          ],
+          "images": [
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/pull/3962"
+          ],
+          "videos": []
+        }
+      ],
+      "topic": "agent"
+    },
+    {
+      "title": "Chore and Feature Updates in Plugin Development",
+      "content": [
+        {
+          "text": "Recent development efforts focused on improving test coverage and package functionality. A key update involved enhancing test coverage for the plugin-bootstrap package, particularly for goal and fact evaluators. This included fixing failing tests, improving TypeScript type handling, and expanding test cases from 4 to 13 for fact evaluators. The overall test suite now includes 26 passing tests, ensuring better reliability and regression detection.",
+          "sources": [
+            "https://github.com/elizaOS/eliza/pull/3959"
+          ],
+          "images": [
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/pull/3959"
+          ],
+          "videos": []
+        },
+        {
+          "text": "Additional development work included improvements to the plugin-local-ai package, the introduction of a new feature allowing users to view and edit an agent’s memories, and the resolution of one bug. These updates were contributed by 13 developers across four merged pull requests.",
+          "sources": [],
+          "images": [],
+          "videos": []
+        }
+      ],
+      "topic": "improvements"
+    },
+    {
+      "title": "Crypto Market Update",
+      "content": [
+        {
+          "text": "The current price of WBTC is $82,423.27, while ai16z is valued at $0.1952.",
+          "sources": [
+            "Symbol: WBTC - Current Price: $82,423.27",
+            "Symbol: ai16z - Current Price: $0.1952"
+          ],
+          "images": [],
+          "videos": []
+        }
+      ],
+      "topic": "crypto market"
+    },
+    {
+      "title": "ElizaOS Development and Community Discussions",
+      "content": [
+        {
+          "text": "The ElizaOS community has been actively discussing various technical topics, including token trading, AI-managed tokens, and market analytics. Key discussions included rug pull detection, token prediction models, and the development of a token analytics terminal. Additionally, there were conversations about ElizaOS V2 development, its delayed beta release, and its enhanced AI agent capabilities.",
+          "sources": [
+            "https://discord.com/channels/1253563208833433701/1326603270893867064",
+            "https://discord.com/channels/1253563208833433701/1299989396874854440",
+            "https://discord.com/channels/1253563208833433701/1300025221834739744",
+            "https://discord.com/channels/1253563208833433701/1328592959444095038",
+            "https://discord.com/channels/1253563208833433701/1301363808421543988"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "Several technical improvements and bug fixes were implemented in ElizaOS. Notable updates include support for custom embedding servers, fixes for plugin-local-ai, and enhancements to memory management for AI agents. Additionally, a fix was applied to resolve missing `await` in tweet scraping, and a new system prompt feature was introduced.",
+          "sources": [
+            "https://github.com/elizaOS/eliza/pull/3958",
+            "https://github.com/elizaOS/eliza/pull/3953",
+            "https://github.com/elizaOS/eliza/pull/3960",
+            "https://github.com/elizaOS/eliza/pull/3954",
+            "https://github.com/elizaOS/eliza/pull/3961"
+          ],
+          "images": [
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/pull/3958",
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/pull/3953",
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/pull/3960",
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/pull/3954",
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/pull/3961"
+          ],
+          "videos": []
+        },
+        {
+          "text": "A new feature was introduced to enhance agent interactions based on user history. This feature, currently implemented in the Twitter client, allows the agent to store and analyze conversations, assign user scores, and adjust interactions accordingly. The scoring system makes interactions feel more personalized and human-like.",
+          "sources": [
+            "https://github.com/elizaOS/eliza/pull/3962"
+          ],
+          "images": [
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/pull/3962"
+          ],
+          "videos": []
+        },
+        {
+          "text": "Several issues were reported, including Discord messages disappearing randomly and missing dependencies for `opus.node`. Additionally, a request was made for a CLI tool to perform preflight checks on ElizaOS components, such as LLM functionality, Twitter login, and plugin loading.",
+          "sources": [
+            "https://github.com/elizaOS/eliza/issues/3952",
+            "https://github.com/elizaOS/eliza/issues/3955",
+            "https://github.com/elizaOS/eliza/issues/3956"
+          ],
+          "images": [
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/issues/3952",
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/issues/3955",
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/issues/3956"
+          ],
+          "videos": []
+        },
+        {
+          "text": "Development efforts focused on package improvements, new features, and bug fixes, with contributions from 13 developers. Major work included enhancements to plugin-local-ai, memory management, and test coverage improvements.",
+          "sources": [
+            "https://github.com/elizaOS/eliza/pull/3959",
+            "https://github.com/elizaOS/eliza/pull/3951",
+            "https://github.com/elizaOS/eliza/pull/3950"
+          ],
+          "images": [
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/pull/3959",
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/pull/3951",
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/pull/3950"
+          ],
+          "videos": []
+        }
+      ],
+      "topic": "Misceleanous"
+    }
+  ],
+  "date": 1742169600
+}

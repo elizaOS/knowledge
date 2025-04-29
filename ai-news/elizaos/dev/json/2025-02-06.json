@@ -1,0 +1,39 @@
+{
+  "server": "elizaOS Development",
+  "title": "elizaOS Development Discord - 2025-02-06",
+  "date": 1738800000,
+  "stats": {
+    "totalMessages": 151,
+    "totalUsers": 23
+  },
+  "categories": [
+    {
+      "channelId": "1320246527268098048",
+      "channelName": "💬｜general",
+      "summary": "# Discord Chat Analysis\n\n## 1. Summary\nThe chat primarily revolves around users trying to implement and troubleshoot the Rabbi-Trader plugin for Eliza. Multiple users (xingyen, Blue Shark) encounter similar issues with plugin configuration, environment variables, and runtime setup. Odilitime provides guidance on required environment variables for the Rabbi-Trader plugin, including SOLANA_PRIVATE_KEY, BIRDEYE_API_KEY, and others. There are discussions about plugin architecture, with users asking how to structure custom plugins outside the main Eliza repository. The conversation also touches on how to properly initialize the AgentRuntime for the Rabbi-Trader plugin. Mike D shares his development roadmap focusing on modular, composable architecture using nix/guix. A user named tiero expresses interest in becoming a maintainer for the plugin-bitcoin component.\n\n## 2. FAQ\nQ: How can I stop the agent or quit? (asked by xingyen) A: Unanswered\nQ: What environment variables do I need to set for the Rabbi-Trader plugin? (asked by Blue Shark) A: SOLANA_PRIVATE_KEY, SOLANA_PUBLIC_KEY, ENABLE_TRADING=true, ENABLE_POSITION_MONITORING=true, TRADING_INTERVAL=300000, BIRDEYE_API_KEY, DEFINED_API_KEY, etc. (answered by Odilitime)\nQ: Is the index.ts in the plugin the overall operation flow of the entire plugin? (asked by xingyen) A: agent/src/index.ts is like where the program starts, packages/core/runtime is where most of the engine lives (answered by Odilitime)\nQ: Where can I find the \"intifaceplugin\" to fill \"import {}\" in plugin-rabbi-trader file? (asked by xingyen) A: Unanswered\nQ: How can I run a plugin from outside the repo? (asked by sonichu) A: agent/package.json just needs to import the external workspace (answered by Odilitime)\nQ: Where can I get the Dexscreener_watchlist_id? (asked by Blue Shark) A: Not sure, one was given to me (answered by Odilitime)\nQ: What is the link to doc about custom plugins? (asked by AD) A: Unanswered\nQ: How can I set the runtime before using the createRabbiTraderPlugin()? (asked by Blue Shark) A: Odilitime provided code snippet showing how to initialize AgentRuntime and pass it to createRabbiTraderPlugin (answered by Odilitime)\nQ: Is there any plugin for token analysis like bundle etc? (asked by AD) A: Unanswered\n\n## 3. Help Interactions\nHelper: Odilitime | Helpee: xingyen, Blue Shark | Context: Setting up Rabbi-Trader plugin environment variables | Resolution: Provided list of required environment variables and explained they should be in .env file\nHelper: Odilitime | Helpee: Blue Shark | Context: Setting up runtime for Rabbi-Trader plugin | Resolution: Shared code snippet showing how to initialize AgentRuntime and pass it to createRabbiTraderPlugin\nHelper: Odilitime | Helpee: Nero | Context: How to structure plugins in separate repos | Resolution: Pointed to elizaos-plugins GitHub repository as reference\nHelper: SotoAlt | BOSSU | Helpee: xingyen | Context: Birdeye API pricing | Resolution: Informed that free plan doesn't work for their needs, basic plan costs $100/month\n\n## 4. Action Items\nTechnical: Create a guide on how to architect plugins to work outside the main repo | Description: How to structure custom characters and plugins in separate repositories | Mentioned By: pluto\nTechnical: Implement proper runtime initialization for Rabbi-Trader plugin | Description: Fix issues with createRabbiTraderPlugin and runtime setup | Mentioned By: Blue Shark\nTechnical: Rebase Eliza and get voice modules running | Description: Make modules optional and loadable without error | Mentioned By: Mike D\nTechnical: Revisit and test Bedrock integration | Description: Part of Mike D's development roadmap | Mentioned By: Mike D\nTechnical: Build each module separately for composability | Description: Create modules for all architectures as nix/guix/docker images | Mentioned By: Mike D\nFeature: Consider moving to Twitter API | Description: Current Twitter implementation has problems | Mentioned By: rubinovitz\nFeature: Create tool to turn any REST API into actions for Eliza | Description: Building a plugin to utilize REST APIs | Mentioned By: rnine\nDocumentation: Document all available settings across plugins | Description: Create comprehensive list of configuration options | Mentioned By: sonichu",
+      "messageCount": 144,
+      "userCount": 18
+    },
+    {
+      "channelId": "1324089429727514674",
+      "channelName": "🤖｜agent-dev-school",
+      "summary": "The chat segment is extremely brief, containing only two messages. One user (imtnf) posted a thank you message, and another user (Kenk) announced an available slot for community demos on February 13th, mentioning that details were provided elsewhere but not included in the transcript.",
+      "messageCount": 3,
+      "userCount": 2
+    },
+    {
+      "channelId": "1323745969115893780",
+      "channelName": "📥｜pull-requests",
+      "summary": "Cesar Rodriguez submitted a pull request (#3314) to the elizaOS/eliza repository. The PR makes the messageManager public on the Telegram client, enabling plugins to directly interact with Telegram. This change follows a similar implementation pattern already used for Twitter. The modification will allow developers to create hooks, cron jobs, and actions that can trigger posts on Telegram, enhancing the platform's integration capabilities.",
+      "messageCount": 1,
+      "userCount": 1
+    },
+    {
+      "channelId": "1327493511406293016",
+      "channelName": "🎤｜plug-your-projects",
+      "summary": "# Analysis of \"🎤｜plug-your-projects\" Channel\n\n## 1. Summary\nThe chat segment is very brief, consisting of only two messages. A user named \"dreadwulf\" inquired about the release of a whitepaper (WP). In response, \"AIFlow.ML @ ElizaOS\" confirmed that the whitepaper for HyperParams.io has been released and shared a GitHub link to the document (Hyperparams_WP_final_arxiv.pdf). They also mentioned that the whitepaper has been submitted to arXiv and ACL (Association for Computational Linguistics), suggesting this is an academic or technical paper related to AI or machine learning.\n\n## 2. FAQ\nQ: Did you release the WP yet? (asked by dreadwulf) A: WP released and submitted to Arxiv and ACL (answered by AIFlow.ML @ ElizaOS)\n\n## 3. Help Interactions\nHelper: AIFlow.ML @ ElizaOS | Helpee: dreadwulf | Context: User asking about whitepaper availability | Resolution: Provided GitHub link to the released whitepaper and confirmed submission to arXiv and ACL\n\n## 4. Action Items\nDocumentation: Review HyperParams.io whitepaper at provided GitHub link | Mentioned By: AIFlow.ML @ ElizaOS",
+      "messageCount": 3,
+      "userCount": 2
+    }
+  ]
+}
