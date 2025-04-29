@@ -21,9 +21,9 @@ jobs:
           token: ${{ secrets.GH_PAT }}  # Use PAT for authentication
       
       - name: Setup Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
-          node-version: '18'
+          node-version: '23'
       
       # Step 1: Create directory structure if it doesn't exist
       - name: Ensure directories exist
@@ -31,6 +31,7 @@ jobs:
           mkdir -p docs
           mkdir -p github
           mkdir -p daily-silk
+          mkdir -p ai-news
       
       # Step 2: ElizaOS Docs
       - name: Sync ElizaOS Documentation
@@ -68,7 +69,20 @@ jobs:
           # Clean up
           rm -rf temp-github-data
            
-      # Step 5: Generate metrics about the sync
+      # Step 5: Sync AI News (ElizaOS & Hyperfy)
+      - name: Sync AI News (ElizaOS & Hyperfy)
+        run: |
+          # Clone the repo temporarily
+          git clone -b gh-pages --depth 1 https://github.com/M3-org/ai-news.git temp-ai-news
+          
+          # Copy the elizaos and hyperfy folders
+          rsync -av --delete temp-ai-news/elizaos/ ai-news/elizaos/
+          rsync -av --delete temp-ai-news/hyperfy/ ai-news/hyperfy/
+          
+          # Clean up
+          rm -rf temp-ai-news
+
+      # Step 6: Generate metrics about the sync
       - name: Generate sync metrics
         run: |
           echo "# Knowledge Sync Report" > sync-report.md
@@ -78,6 +92,8 @@ jobs:
           echo "## File Counts" >> sync-report.md
           echo "- Docs: $(find docs -type f -name "*.md" | wc -l) files" >> sync-report.md
           echo "- GitHub activity: $(find github -type f -name "*.md" | wc -l) files" >> sync-report.md
+          echo "- Daily Silk: $(find daily-silk -type f -name "*.md" | wc -l) files" >> sync-report.md
+          echo "- AI News: $(find ai-news -type f | wc -l) files" >> sync-report.md
           echo "" >> sync-report.md
           
           echo "## Latest Files" >> sync-report.md
@@ -91,7 +107,7 @@ jobs:
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
           
-          git add docs/ github/ daily-silk/ sync-report.md
+          git add docs/ github/ daily-silk/ ai-news/ sync-report.md
           
           # Check if there are any changes
           if git diff --staged --quiet; then
