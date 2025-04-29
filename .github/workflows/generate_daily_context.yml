@@ -1,0 +1,39 @@
+name: Generate Daily Context Map
+
+on:
+  schedule:
+    # Runs daily at 5:00 UTC
+    - cron: '0 5 * * *'
+  workflow_dispatch: # Allows manual triggering
+
+jobs:
+  generate-context:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write # Need permission to write back to the repo
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set execute permission for script
+        run: chmod +x scripts/generate_context_map.sh
+
+      - name: Run context generation script
+        run: ./scripts/generate_context_map.sh
+
+      - name: Configure Git
+        run: |
+          git config --global user.name 'GitHub Actions Bot'
+          git config --global user.email 'actions@github.com'
+
+      - name: Commit and push if changes
+        run: |
+          # Check if the file was created/modified
+          if [[ `git status --porcelain the-council/*.json` ]]; then
+            git add the-council/$(date +%Y-%m-%d).json
+            git commit -m "Automated: Generate context map for $(date +%Y-%m-%d)"
+            git push
+          else
+            echo "No changes to commit."
+          fi 
