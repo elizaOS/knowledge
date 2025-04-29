@@ -22,6 +22,9 @@ jobs:
       - name: Run context generation script
         run: ./scripts/generate_context_map.sh
 
+      - name: Create daily.json permalink
+        run: cp the-council/$(date +%Y-%m-%d).json the-council/daily.json
+
       - name: Configure Git
         run: |
           git config --global user.name 'GitHub Actions Bot'
@@ -29,9 +32,9 @@ jobs:
 
       - name: Commit and push if changes
         run: |
-          # Check if the file was created/modified
-          if [[ `git status --porcelain the-council/*.json` ]]; then
-            git add the-council/$(date +%Y-%m-%d).json
+          # Check if the specific daily file or permalink file was created/modified
+          if [[ `git status --porcelain the-council/$(date +%Y-%m-%d).json the-council/daily.json` ]]; then
+            git add the-council/$(date +%Y-%m-%d).json the-council/daily.json
             git commit -m "Automated: Generate context map for $(date +%Y-%m-%d)"
             git push
           else
