@@ -20,12 +20,11 @@ elizaos publish [options]
 
 | Option                      | Description                                               |
 | --------------------------- | --------------------------------------------------------- |
-| `-r, --registry <registry>` | Target registry (default: "elizaOS/registry")             |
-| `-n, --npm`                 | Publish to npm instead of GitHub                          |
-| `-t, --test`                | Test publish process without making changes               |
+| `-t, --test`                | Run publish tests without actually publishing             |
+| `-n, --npm`                 | Publish to npm                                            |
+| `-s, --skip-registry`       | Skip publishing to the registry                           |
 | `-p, --platform <platform>` | Specify platform compatibility (node, browser, universal) |
 | `--dry-run`                 | Generate registry files locally without publishing        |
-| `--skip-registry`           | Skip publishing to the registry                           |
 
 ## Publishing Process
 
@@ -192,8 +191,3 @@ If your package fails validation:
 1. Ensure your `package.json` contains name, version, and description
 2. For plugins, ensure the name includes `plugin-`
 3. Make sure your package has a proper entry point
-
-## Related Commands
-
-- [`plugin`](./plugins.md): Manage plugin publishing
-- [`project`](./projects.md): Manage projects
