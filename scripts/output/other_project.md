@@ -1,0 +1,1 @@
+# Exciting developments in the ElizaOS ecosystem this week! Our team wrapped up 29 PRs with significant improvements to the agent framework, including enhanced Discord typing indicators, Anthropic API validation, and scopable knowledge implementation. Exciting to see such momentum! #ElizaOSv2 #AIAgents #OpenSourceAI
