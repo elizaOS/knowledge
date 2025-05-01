@@ -61,7 +61,7 @@ jobs:
 
       - name: Create council_context_daily.json permalink
         if: steps.council_gen.outputs.council_json_file
-        run: cp "${{ steps.council_gen.outputs.council_json_file }}" the-council/daily.json
+        run: cp "${{ steps.council_gen.outputs.council_json_file }}" the-council/council_daily.json
 
       - name: Configure Git
         run: |
@@ -72,7 +72,7 @@ jobs:
         run: |
           # Define the files to check and add
           DAILY_COUNCIL_FILE="the-council/council_context_$(date +%Y-%m-%d).json"
-          PERMALINK_COUNCIL_FILE="the-council/daily.json"
+          PERMALINK_COUNCIL_FILE="the-council/council_daily.json"
 
           # Check if the specific daily file or permalink file was created/modified
           # Use git status --porcelain to reliably detect changes
