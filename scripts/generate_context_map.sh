@@ -1,14 +1,17 @@
 #!/usr/bin/env bash
 
 # Script to generate a JSON file containing aggregated content from relevant source files.
-# Usage: ./scripts/generate_context_map.sh
+# Usage: ./scripts/generate_context_map.sh [YYYY-MM-DD]
+# If no date is provided, defaults to the current date.
 
 set -e
 
-# Determine the date for the filename (today's date)
-OUTPUT_DATE=$(date +%Y-%m-%d)
-# Updated output filename to include the date
-OUTPUT_FILE="the-council/${OUTPUT_DATE}.json"
+# Determine the target date (use argument or default to today)
+TARGET_DATE=${1:-$(date +%Y-%m-%d)}
+echo "Generating context map for date: $TARGET_DATE"
+
+# Updated output filename to include the target date
+OUTPUT_FILE="the-council/${TARGET_DATE}.json"
 TMP_DIR=$(mktemp -d)
 
 # Cleanup temporary directory on exit
@@ -97,6 +100,7 @@ get_recent_md_content_to_file() {
     local dir="$1"
     local days="$2"
     local output_temp_file="$3"
+    local target_date_ref="$4" # Added: Pass the target date for reference
     local temp_dates=$(mktemp -p "$TMP_DIR")
     local all_json_objects=""
 
@@ -106,9 +110,10 @@ get_recent_md_content_to_file() {
         return
     fi
 
-    # Generate date strings
+    # Generate date strings relative to the target date
     for i in $(seq 0 $((days - 1))); do
-        date -d "-$i days" +%Y-%m-%d >> "$temp_dates"
+        # Use the target date as the reference for calculating past dates
+        date -d "$target_date_ref -$i days" +%Y-%m-%d >> "$temp_dates"
     done
 
     # Iterate through target dates (already sorted chronologically)
@@ -143,28 +148,28 @@ echo "Aggregating context..."
 # Define source directories
 AI_NEWS_DISCORD_MD="ai-news/elizaos/discord/md"
 AI_NEWS_DEV_MD="ai-news/elizaos/dev/md"
-GITHUB_STATS_WEEK="github/stats/week"
-GITHUB_STATS_MONTH="github/stats/month"
+# GITHUB_STATS_WEEK="github/stats/week" # Removed: Not needed for council context
+# GITHUB_STATS_MONTH="github/stats/month" # Removed: Not needed for council context
 GITHUB_SUMMARIES_WEEK="github/summaries/week"
 GITHUB_SUMMARIES_MONTH="github/summaries/month"
 
 # Define temporary file paths
 DISCORD_MD_TMP="$TMP_DIR/discord_md.json"
 DEV_MD_TMP="$TMP_DIR/dev_md.json"
-STATS_WEEK_TMP="$TMP_DIR/stats_week.json"
-STATS_MONTH_TMP="$TMP_DIR/stats_month.json"
+# STATS_WEEK_TMP="$TMP_DIR/stats_week.json" # Removed
+# STATS_MONTH_TMP="$TMP_DIR/stats_month.json" # Removed
 SUMMARIES_WEEK_TMP="$TMP_DIR/summaries_week.json"
 SUMMARIES_MONTH_TMP="$TMP_DIR/summaries_month.json"
 
 # Generate content JSON arrays into temporary files
-echo "Processing Discord MD (last 7 days)..."
-get_recent_md_content_to_file "$AI_NEWS_DISCORD_MD" 7 "$DISCORD_MD_TMP"
-echo "Processing Dev MD (last 7 days)..."
-get_recent_md_content_to_file "$AI_NEWS_DEV_MD" 7 "$DEV_MD_TMP"
-echo "Processing GitHub Stats Week (latest)..."
-get_latest_file_content_to_file "$GITHUB_STATS_WEEK" "$STATS_WEEK_TMP"
-echo "Processing GitHub Stats Month (latest)..."
-get_latest_file_content_to_file "$GITHUB_STATS_MONTH" "$STATS_MONTH_TMP"
+echo "Processing Discord MD (last 3 days relative to $TARGET_DATE)..."
+get_recent_md_content_to_file "$AI_NEWS_DISCORD_MD" 3 "$DISCORD_MD_TMP" "$TARGET_DATE" # Pass TARGET_DATE
+echo "Processing Dev MD (last 3 days relative to $TARGET_DATE)..."
+get_recent_md_content_to_file "$AI_NEWS_DEV_MD" 3 "$DEV_MD_TMP" "$TARGET_DATE" # Pass TARGET_DATE
+# echo "Processing GitHub Stats Week (latest)..." # Removed
+# get_latest_file_content_to_file "$GITHUB_STATS_WEEK" "$STATS_WEEK_TMP" # Removed
+# echo "Processing GitHub Stats Month (latest)..." # Removed
+# get_latest_file_content_to_file "$GITHUB_STATS_MONTH" "$STATS_MONTH_TMP" # Removed
 echo "Processing GitHub Summaries Week (latest)..."
 get_latest_file_content_to_file "$GITHUB_SUMMARIES_WEEK" "$SUMMARIES_WEEK_TMP"
 echo "Processing GitHub Summaries Month (latest)..."
@@ -173,26 +178,25 @@ get_latest_file_content_to_file "$GITHUB_SUMMARIES_MONTH" "$SUMMARIES_MONTH_TMP"
 
 echo "Constructing final JSON..."
 # Construct the final JSON using jq --slurpfile
+# Removed stats_week and stats_month from --slurpfile arguments and the JSON structure
 jq -n \
   --slurpfile discord_md "$DISCORD_MD_TMP" \
   --slurpfile dev_md "$DEV_MD_TMP" \
-  --slurpfile stats_week "$STATS_WEEK_TMP" \
-  --slurpfile stats_month "$STATS_MONTH_TMP" \
   --slurpfile summaries_week "$SUMMARIES_WEEK_TMP" \
   --slurpfile summaries_month "$SUMMARIES_MONTH_TMP" \
   '{
     "ai-news": {
       "elizaos": {
         # $varname from --slurpfile is already an array
-        "discord_md_last_7_days": $discord_md[0],
-        "dev_md_last_7_days": $dev_md[0]
+        "discord_md_last_3_days": $discord_md[0], # Updated key name
+        "dev_md_last_3_days": $dev_md[0] # Updated key name
       }
     },
     "github": {
-      "stats": {
-        "week": $stats_week[0],
-        "month": $stats_month[0]
-      },
+      # "stats": { # Removed stats section
+      #   "week": $stats_week[0],
+      #   "month": $stats_month[0]
+      # },
       "summaries": {
         "week": $summaries_week[0],
         "month": $summaries_month[0]

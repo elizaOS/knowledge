@@ -96,3 +96,25 @@ This repository uses GitHub Actions to automatically update content from various
 3. Set an appropriate schedule for updates
 4. Test the action to ensure it correctly updates the repository
 
+---
+
+## Strategic Context Summaries (For AI Council & Background)
+
+These summaries encapsulate the core mission, vision, and key initiatives, derived from project blog posts.
+
+### Auto.fun Introduction Summary (`docs/blog/autofun-intro.mdx`)
+
+Auto.fun is an AI-native, creator-first token launchpad designed for sustainable AI/crypto projects. It aims to balance fair community access with project funding needs through mechanisms like bonding curves and liquidity NFTs. Key features include a no-code agent builder, AI-generated marketing tools, and integration with the elizaOS ecosystem. It serves as a core product driving value back to the native token ($ai16z) through buybacks and liquidity pairing.
+
+### ElizaOS Mission Summary (`docs/blog/mission.mdx`)
+
+The elizaOS mission is to build an extensible, modular, open-source AI agent framework for Web2/Web3, seeing agents as steps toward AGI. Core values are Autonomy, Modularity, and Decentralization. Key products include the framework itself, DegenSpartanAI (trading agent), Autonomous Investor/Trust Marketplace (social trading intelligence), and the Agent Marketplace/auto.fun (launchpad).
+
+### ElizaOS Reintroduction Summary (`docs/blog/reintroduction.mdx`)
+
+elizaOS is an open-source "operating system for AI agents" aimed at decentralizing AI development away from corporate control. It's built on three pillars: 1) The Eliza Framework (TypeScript toolkit for persistent, interoperable agents), 2) AI-Enhanced Governance (building autonomous DAOs), and 3) Eliza Labs (R&D for future capabilities like v2, Trust Marketplace, auto.fun, DegenSpartanAI, Eliza Studios). The native Solana token coordinates the ecosystem and captures value. The vision is an intelligent internet built on open protocols and collaboration.
+
+### Taming Information Summary (`docs/blog/taming_info.mdx`)
+
+Addresses the challenge of information scattered across platforms (Discord, GitHub, X). Proposes using AI agents as "bridges" to collect, wrangle (summarize/tag), and distribute information in various formats (JSON, MD, RSS, dashboards, 3D shows). Showcases an AI News system and AI Assistants for tech support as examples. Emphasizes treating documentation as a first-class citizen to empower AI assistants and streamline community operations.
+
