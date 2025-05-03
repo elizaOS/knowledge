@@ -35,9 +35,10 @@ jobs:
       
       # Step 2: ElizaOS Docs
       - name: Sync ElizaOS Documentation
+        continue-on-error: true # Added for robustness
         run: |
           # Clone the repo temporarily
-          git clone -b jin-docs-v2 --depth 1 https://github.com/elizaOS/eliza.git temp-elizaos
+          git clone -b v2-develop --depth 1 https://github.com/elizaOS/eliza.git temp-elizaos # Changed branch
           
           # Use tar to find and copy markdown files while preserving directory structure
           find temp-elizaos/packages/docs -name "*.md" -o -name "*.mdx" | tar -cf - -T - | tar -xf - --strip-components=3 -C docs/
@@ -47,6 +48,7 @@ jobs:
       
       # Step 3: Daily Silk Docs
       - name: Sync Daily Silk Documentation
+        continue-on-error: true # Added for robustness
         run: |
           # Clone the repo temporarily
           git clone --depth 1 https://github.com/madjin/daily-silk.git temp-daily-silk
@@ -59,6 +61,7 @@ jobs:
       
       # Step 4: GitHub Activity Logs
       - name: Sync GitHub Activity Logs
+        continue-on-error: true # Added for robustness
         run: |
           # Clone the repo temporarily
           git clone -b _data --single-branch https://github.com/elizaos/elizaos.github.io.git temp-github-data
@@ -71,9 +74,10 @@ jobs:
            
       # Step 5: Sync AI News (ElizaOS & Hyperfy)
       - name: Sync AI News (ElizaOS & Hyperfy)
+        continue-on-error: true # Added for robustness
         run: |
           # Clone the repo temporarily
-          git clone -b gh-pages --depth 1 https://github.com/M3-org/ai-news.git temp-ai-news
+          git clone -b gh-pages https://github.com/M3-org/ai-news.git temp-ai-news
           
           # Copy the elizaos and hyperfy folders
           rsync -av --delete temp-ai-news/elizaos/ ai-news/elizaos/
