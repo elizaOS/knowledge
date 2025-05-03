@@ -33,6 +33,7 @@ Activity logs from [ElizaOS/elizaos.github.io](https://github.com/elizaos/elizao
 
 Tip: here's a command to turn the JSON stats files into a single text file:
 
+Stats
 ```bash
 jq -r '                     
   "\n=== \(.interval.intervalStart) ===",
@@ -46,6 +47,17 @@ jq -r '
   "\nTop Contributors:",
   ([.topContributors[]? | "\(.username) (score: \(.totalScore | floor))"] | .[:3] | .[])
 ' github/stats/month/stats_2025-04*.json > monthly-github-stats.txt
+```
+
+User summaries
+```bash
+jq -r '                       
+  map(select(.date | startswith("2025"))) |
+  group_by(.date)[] |
+  ("=== " + (.[0].date) + " ==="),
+  (.[] | .summary, "---"),
+  ""
+' user_summaries.json > user_summaries.txt
 ```
 
 ### News
