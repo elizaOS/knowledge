@@ -66,10 +66,12 @@ echo "Processing content through specified prompts..."
 # Iterate through the command-line arguments (prompt filenames)
 for prompt_name in "$@"; do
     prompt_file="$PROMPTS_DIR/$prompt_name"
+    TODAY_DATE=$(date +%Y-%m-%d) # Get current date
 
     if [ -f "$prompt_file" ]; then
         # Use prompt filename (without extension) for the output markdown file
-        output_file="hackmd/${prompt_name%.*}.md"
+        # Prepend date to the filename
+        output_file="hackmd/${TODAY_DATE}-${prompt_name%.*}.md" # NEW Path with Date
 
         echo "  - Using prompt: $prompt_name -> $output_file"
 
