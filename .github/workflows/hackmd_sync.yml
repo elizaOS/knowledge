@@ -2,25 +2,26 @@ name: Sync Generated Content to HackMD
 
 on:
   workflow_run:
-    # Triggers after these workflows succeed
-    workflows: ["Generate Daily Council Context", "Generate Daily Context Map"]
+    # Triggers after the main sync workflow succeeds
+    workflows: ["Sync Knowledge Sources"]
     types:
       - completed
 
 permissions:
-  actions: read # Needed to download artifacts
-  contents: read # Needed to checkout the code
+  contents: read # Needed to checkout the specific commit
 
 jobs:
   sync_to_hackmd:
-    name: Upload Content to HackMD
+    name: Upload Summaries to HackMD
     if: github.event.workflow_run.conclusion == 'success' # Only run on success
     runs-on: ubuntu-latest
 
     steps:
-      # Get the code
-      - name: Checkout repository
+      # Checkout the SPECIFIC commit associated with the triggering workflow run
+      - name: Checkout specific commit from triggering workflow
         uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.workflow_run.head_sha }}
 
       # Setup Python environment
       - name: Set up Python
@@ -34,46 +35,51 @@ jobs:
           python -m pip install --upgrade pip
           python -m pip install requests python-dotenv
 
-      # Download the output from the trigger workflow
-      - name: Download generated content artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: generated-content # Assumed artifact name
-          path: ./generated_content # Download location
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          run-id: ${{ github.event.workflow_run.id }}
-
-      # Extract file path and type from metadata.json (REQUIRED)
-      - name: Read metadata and determine file path/type
-        id: metadata
-        run: |
-          METADATA_FILE="./generated_content/metadata.json"
-          if [[ ! -f "$METADATA_FILE" ]]; then
-            echo "::error::Metadata file not found at $METADATA_FILE"
-            exit 1
-          fi
-          echo "Metadata file found: $METADATA_FILE"
-          # Use jq with -e to exit non-zero if key is null or missing
-          # Extract values, fail step if keys missing/null
-          FILE_PATH=$(jq -e -r '.file' "$METADATA_FILE")
-          CONTENT_TYPE=$(jq -e -r '.type' "$METADATA_FILE")
-
-          # Construct full path relative to workspace root
-          FULL_FILE_PATH="./generated_content/$FILE_PATH"
-          echo "Content file path: $FULL_FILE_PATH"
-          echo "Content type: $CONTENT_TYPE"
-
-          # Set outputs for the next step
-          echo "file_path=$FULL_FILE_PATH" >> $GITHUB_OUTPUT
-          echo "content_type=$CONTENT_TYPE" >> $GITHUB_OUTPUT
-        shell: bash
-
-      # Run the actual upload script (REQUIRED)
-      - name: Run HackMD Upload Script
-        # Note: No 'if' needed here; previous step fails job if metadata invalid
+      # Define the files to upload and their types/target books
+      - name: Upload specified markdown summaries
         env:
           HACKMD_API_TOKEN: ${{ secrets.HACKMD_API_TOKEN }} # Needs repo secret
         run: |
-          echo "Running upload script..."
-          python3 scripts/hackmd.py upload --file "${{ steps.metadata.outputs.file_path }}" --type "${{ steps.metadata.outputs.content_type }}"
-          # Script handles its own logging and exits non-zero on failure 
+          # Define files and their corresponding types
+          declare -A files_to_upload
+          # Community Book targets
+          files_to_upload["hackmd/weekly_newsletter.md"]="newsletter"
+          files_to_upload["hackmd/autofun_prompt.md"]="strategic" # Mapping prompt name to type
+          files_to_upload["hackmd/elizaos_prompt.md"]="strategic" # Mapping prompt name to type
+          files_to_upload["hackmd/discord_announcement.md"]="announcement"
+          # Feedback/Planning Book targets
+          files_to_upload["hackmd/user_feedback.md"]="feedback"
+          files_to_upload["hackmd/workload_planning.md"]="dev"
+          files_to_upload["hackmd/documentation_gap.md"]="dev"
+
+          echo "Checking for and uploading specified markdown files..."
+          exit_code=0
+
+          for file_path in "${!files_to_upload[@]}"; do
+            content_type=${files_to_upload[$file_path]}
+            echo "- Checking for $file_path (Type: $content_type)"
+
+            if [[ -f "$file_path" ]]; then
+              echo "  File found. Uploading..."
+              python3 scripts/hackmd.py upload --file "$file_path" --type "$content_type"
+              upload_status=$?
+              if [[ $upload_status -ne 0 ]]; then
+                echo "::error::Failed to upload $file_path (Type: $content_type)"
+                exit_code=1 # Mark overall failure if any upload fails
+              else
+                echo "  Successfully uploaded $file_path"
+              fi
+            else
+              echo "  File not found at commit ${{ github.event.workflow_run.head_sha }}. Skipping upload."
+              # Decide if missing file should cause failure (currently it doesn't)
+            fi
+          done
+
+          # Exit with non-zero code if any upload failed
+          if [[ $exit_code -ne 0 ]]; then
+             echo "::error::One or more HackMD uploads failed."
+             exit $exit_code
+          fi
+          echo "Finished processing specified files."
+
+        shell: bash 

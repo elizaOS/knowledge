@@ -18,6 +18,7 @@ import logging
 import re
 from datetime import datetime
 from typing import Optional, Tuple, List, Dict, Any
+from pathlib import Path
 
 # --- Constants ---
 HACKMD_API_URL = "https://api.hackmd.io/v1"
@@ -28,6 +29,8 @@ TEAM_ID = "elizaos" # Hardcoded Team Path/ID as per PRD
 # You can create them using the `create-book-note` command.
 COUNCIL_BOOK_ID = "_uBNNBfeTIq3sx87nDW63w" # Hardcoded as per PRD - NEEDS ACTUAL ID
 COMMUNITY_BOOK_ID = "lNf9HbwqSEqes_pyrtls_Q" # Hardcoded as per PRD - NEEDS ACTUAL ID
+# Add a new book for internal feedback/planning
+FEEDBACK_PLANNING_BOOK_ID = "LcoRxe8CSgmyDXeyRXyIlQ" # Create with create-book-note --title "Internal Feedback & Planning"
 
 LOCAL_SYNC_DIR = "hackmd"
 
@@ -191,14 +194,24 @@ def upload_note_cmd(file_path: str, content_type: str) -> Optional[Tuple[str, st
 
     # Generate title and tags
     today_date = datetime.now().strftime("%Y-%m-%d")
-    title = f"{content_type.capitalize()}-{today_date}"
+    # Use filename stem for title if more descriptive than type?
+    file_stem = Path(file_path).stem
+    # Let's create a more descriptive title using the stem
+    title = f"{file_stem.replace('_', ' ').title()} - {today_date}"
     tags = [content_type]
+
+    # --- Determine which book to update based on type --- > MODIFIED <
+    book_id_to_update: Optional[str] = None
     if content_type == "council":
         book_id_to_update = COUNCIL_BOOK_ID
-        # tags.append("council") # Add specific tag if needed, auto type tag is added
-    else:
+    elif content_type in ['newsletter', 'strategic', 'announcement']:
         book_id_to_update = COMMUNITY_BOOK_ID
-        # tags.append("community") # Add specific tag if needed
+    elif content_type in ['feedback', 'dev']:
+        # Assuming workload_planning and documentation_gap are mapped to 'dev' type
+        book_id_to_update = FEEDBACK_PLANNING_BOOK_ID
+    else:
+        logging.warning(f"No specific book configured for content type '{content_type}'. Link will not be added to any book index.")
+    # --- End Book Selection ---
 
     # Determine permissions (default to team owner R/W, signed-in comment)
     read_permission = "owner"
@@ -229,19 +242,22 @@ def upload_note_cmd(file_path: str, content_type: str) -> Optional[Tuple[str, st
 
     if response_data and isinstance(response_data, dict) and 'id' in response_data:
         note_id = response_data['id']
-        # Construct the direct note URL (doesn't rely on publishLink which might not be set)
         note_url = f"{HACKMD_BASE_URL}/{note_id}"
         logging.info(f"Note created successfully: ID={note_id}, URL={note_url}")
 
-        # Update the appropriate book index note
-        book_updated = update_book(TEAM_ID, book_id_to_update, title, note_url)
-        if not book_updated:
-            # Log warning but proceed to publish attempt
-            logging.warning(f"Failed to update book '{book_id_to_update}' with the new note link, but attempting to publish note anyway.")
+        # --- Update the appropriate book index note (if determined) --- >> MODIFIED <<
+        if book_id_to_update:
+            book_updated = update_book(TEAM_ID, book_id_to_update, title, note_url)
+            if not book_updated:
+                # Log warning but proceed to publish attempt
+                logging.warning(f"Failed to update book '{book_id_to_update}' with the new note link, but attempting to publish note anyway.")
+            else:
+                logging.info(f"Successfully updated book '{book_id_to_update}'.")
         else:
-            logging.info(f"Successfully updated book '{book_id_to_update}'.")
+            logging.info("No target book index specified for this content type; skipping book update.")
+        # --- End Book Update --- 
 
-        # --- Immediately publish the note ---
+        # --- Immediately publish the note --- 
         logging.info(f"Proceeding to immediately publish note ID: {note_id}")
         publish_success = publish_note_cmd(note_id)
         if not publish_success:

@@ -69,7 +69,7 @@ for prompt_name in "$@"; do
 
     if [ -f "$prompt_file" ]; then
         # Use prompt filename (without extension) for the output markdown file
-        output_file="$OUTPUT_DIR/${prompt_name%.*}.md"
+        output_file="hackmd/${prompt_name%.*}.md"
 
         echo "  - Using prompt: $prompt_name -> $output_file"
 
