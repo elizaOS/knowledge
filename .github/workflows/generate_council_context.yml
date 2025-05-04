@@ -33,12 +33,12 @@ jobs:
           chmod +x scripts/generate_context_map.sh
           chmod +x scripts/generate_council_context.py
 
-      - name: Run context map generation script (for today)
-        id: map_gen
+      - name: Generate Daily Context Map (Input for Council)
         run: |
-          ./scripts/generate_context_map.sh
-          # Set output filename for next step
-          echo "lean_json_file=the-council/$(date +%Y-%m-%d).json" >> $GITHUB_OUTPUT
+          chmod +x scripts/aggregate-sources.sh
+          # Run the script for today's date (defaults to current)
+          # Output will be the-council/YYYY-MM-DD.json
+          ./scripts/aggregate-sources.sh
 
       - name: Run council context generation script
         id: council_gen

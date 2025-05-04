@@ -17,10 +17,16 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Set execute permission for script
-        run: chmod +x scripts/generate_context_map.sh
+        run: chmod +x scripts/aggregate-sources.sh
 
-      - name: Run context generation script
-        run: ./scripts/generate_context_map.sh
+      - name: Generate Daily Context Map
+        id: generate_map
+        run: chmod +x scripts/aggregate-sources.sh
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Run Context Map Script
+        run: ./scripts/aggregate-sources.sh
 
       - name: Create daily.json permalink
         run: cp the-council/$(date +%Y-%m-%d).json the-council/daily.json
