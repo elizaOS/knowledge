@@ -1,0 +1,110 @@
+name: Sync Generated Content to HackMD
+
+on:
+  workflow_run:
+    # Triggers after these workflows succeed
+    workflows: ["Generate Council Context", "Generate Daily Context"]
+    types:
+      - completed
+
+permissions:
+  actions: read # Needed to download artifacts
+  contents: read # Needed to checkout the code
+
+jobs:
+  sync_to_hackmd:
+    name: Upload Content to HackMD
+    if: github.event.workflow_run.conclusion == 'success' # Only run on success
+    runs-on: ubuntu-latest
+
+    steps:
+      # Security hardening - Good practice
+      - name: Harden Runner
+        uses: step-security/harden-runner@63c24ba6bd7ba022e95695ff85de572c04a18142 # v2.7.0
+        with:
+          egress-policy: audit # Keep as audit during testing, consider 'block' later
+
+      # Get the code
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # Setup Python environment
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+
+      # Install script dependencies
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          # Ensure correct pip for venv if system python is managed
+          # Using python -m pip is generally safer
+          python -m pip install requests python-dotenv
+
+      # Download the output from the trigger workflow
+      - name: Download generated content artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: generated-content # Assumed artifact name
+          path: ./generated_content # Download location
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          run-id: ${{ github.event.workflow_run.id }}
+
+      # Debugging step - Useful for testing, can remove later
+      - name: List downloaded files
+        run: ls -R ./generated_content
+
+      # Extract file path and type from metadata.json (REQUIRED)
+      - name: Read metadata and determine file path/type
+        id: metadata
+        run: |
+          # Installs jq if not present (should be on standard runners)
+          # sudo apt-get update && sudo apt-get install -y jq
+          METADATA_FILE="./generated_content/metadata.json"
+          if [[ -f "$METADATA_FILE" ]]; then
+            echo "Metadata file found: $METADATA_FILE"
+            # Use || true to prevent failure if jq fails on invalid JSON
+            FILE_PATH=$(jq -r '.file // empty' "$METADATA_FILE" || true)
+            CONTENT_TYPE=$(jq -r '.type // empty' "$METADATA_FILE" || true)
+
+            if [[ -z "$FILE_PATH" || -z "$CONTENT_TYPE" ]]; then
+               echo "::error::Could not parse 'file' or 'type' from $METADATA_FILE"
+               echo "metadata_found=false" >> $GITHUB_OUTPUT
+               exit 1 # Fail if metadata is incomplete
+            fi
+
+            FULL_FILE_PATH="./generated_content/$FILE_PATH"
+            echo "Content file path: $FULL_FILE_PATH"
+            echo "Content type: $CONTENT_TYPE"
+            echo "file_path=$FULL_FILE_PATH" >> $GITHUB_OUTPUT
+            echo "content_type=$CONTENT_TYPE" >> $GITHUB_OUTPUT
+            echo "metadata_found=true" >> $GITHUB_OUTPUT
+          else
+            echo "::error::Metadata file not found at $METADATA_FILE"
+            echo "metadata_found=false" >> $GITHUB_OUTPUT
+            exit 1 # Fail if metadata is missing
+          fi
+        shell: bash
+
+      # Run the actual upload script (REQUIRED)
+      - name: Run HackMD Upload Script
+        if: steps.metadata.outputs.metadata_found == 'true'
+        id: hackmd_upload # ID not strictly needed now, but harmless
+        env:
+          HACKMD_API_TOKEN: ${{ secrets.HACKMD_API_TOKEN }} # Needs repo secret
+        run: |
+          echo "Running upload script..."
+          # Use python3 explicitly if needed
+          python3 scripts/hackmd.py upload --file "${{ steps.metadata.outputs.file_path }}" --type "${{ steps.metadata.outputs.content_type }}"
+          # The script now handles logging success/failure and exit codes
+
+      # Optional: More specific failure notification step
+      # The job will fail anyway if the script exits non-zero,
+      # but this provides a custom error message point.
+      - name: Upload Failed Notification (Optional Refinement)
+        # This condition is slightly redundant if script fails job, but explicit
+        if: steps.hackmd_upload.outcome == 'failure' || steps.metadata.outputs.metadata_found == 'false'
+        run: |
+          echo "::error::HackMD upload step failed. Check previous steps logs."
+          # Potentially add integrations here (Slack etc.) 

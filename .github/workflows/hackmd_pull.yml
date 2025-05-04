@@ -1,0 +1,95 @@
+name: Pull and Publish HackMD Note
+
+on:
+  workflow_dispatch:
+    inputs:
+      note_id:
+        description: 'HackMD Note ID to pull and publish'
+        required: true
+        type: string
+
+permissions:
+  contents: write # To commit and push changes
+
+jobs:
+  pull_and_publish:
+    name: Pull, Save, Publish, and Commit
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Harden Runner
+        uses: step-security/harden-runner@63c24ba6bd7ba022e95695ff85de572c04a18142 # v2.7.0
+        with:
+          egress-policy: audit # TODO: change to 'egress-policy: block' after couple of runs
+
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install requests python-dotenv
+
+      - name: Pull HackMD Note Content
+        id: pull
+        env:
+          HACKMD_API_TOKEN: ${{ secrets.HACKMD_API_TOKEN }}
+        run: |
+          echo "Pulling note: ${{ github.event.inputs.note_id }}"
+          python scripts/hackmd.py pull --id "${{ github.event.inputs.note_id }}"
+          # Check exit code or script output for success
+          if [ $? -ne 0 ]; then
+            echo "::error::Failed to pull note content from HackMD."
+            exit 1
+          fi
+
+      - name: Mark Note as Published on HackMD
+        id: publish
+        env:
+          HACKMD_API_TOKEN: ${{ secrets.HACKMD_API_TOKEN }}
+        run: |
+          echo "Marking note as published: ${{ github.event.inputs.note_id }}"
+          python scripts/hackmd.py publish --id "${{ github.event.inputs.note_id }}"
+          # Check exit code or script output for success
+          if [ $? -ne 0 ]; then
+            echo "::error::Failed to mark note as published on HackMD."
+            # Decide if this should fail the workflow or just warn
+            # exit 1
+          fi
+
+      - name: Configure Git
+        run: |
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+
+      - name: Check for changes
+        id: git_status
+        run: |
+          git add hackmd/ # Stage changes in the hackmd directory
+          # Check if there are staged changes
+          if git diff --staged --quiet; then
+            echo "No changes to commit."
+            echo "changes_exist=false" >> $GITHUB_OUTPUT
+          else
+            echo "Changes detected in hackmd/ directory."
+            echo "changes_exist=true" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Commit and Push Changes
+        if: steps.git_status.outputs.changes_exist == 'true'
+        run: |
+          echo "Committing changes..."
+          git commit -m "Sync HackMD content for note ${{ github.event.inputs.note_id }}"
+          echo "Pushing changes..."
+          git push
+
+      - name: Notify Failure (Optional)
+        if: failure()
+        run: |
+          echo "::error::HackMD Pull & Publish workflow failed. Check logs."
+          # Add specific failure notifications if needed 
