@@ -53,7 +53,7 @@ To use the character, pass it with the `--characters` flag:
 
 ### Custom chain configuration
 
-Plugin allows you to pass you custom chain config to `createCosmosPlugin` function invoked in `../agent/src/index`.
+Plugin allows you to pass your custom chain config to `createCosmosPlugin` function invoked in `../agent/src/index`.
 
 Your custom configuration fulfills the interfaces from `chain-registry`
 
@@ -180,7 +180,7 @@ confirming / yes
 4. Agent calls action and responds after completing:
 
 ```
-Successfuly swapped 10 OSMO tokens to ATOM on chain cosmoshub.
+Successfully swapped 10 OSMO tokens to ATOM on chain cosmoshub.
 Transaction Hash: E84F36D6EEFAA6D7B70827F34EDAB83258BB86EFE33AEA1F4559D00B30CD3B50
 ```
 
@@ -211,7 +211,7 @@ confirming / yes
 ```
 I will now initiate the swap of 10 OSMO on the Osmosis chain to USDC on the Axelar chain. Please wait for the transaction to complete. If you need to swap more assets, feel free to let me know.
 
-Error occured. Swap was not performed. Please provide denom for coin: USDC, on Chain Name: axelar. It is necessary as the symbol USDC is not unique among coins on chain axelar.
+Error occurred. Swap was not performed. Please provide denom for coin: USDC, on Chain Name: axelar. It is necessary as the symbol USDC is not unique among coins on chain axelar.
 Select one from found assets:
 Symbol: USDC Desc: Circle's stablecoin on Axelar Denom: uusdc,
 Symbol: USDC Desc: Circle's stablecoin from Polygon on Axelar Denom: polygon-uusdc,
@@ -227,7 +227,7 @@ Swap 10 OSMO on osmosis to USDC with denom uusdc on axelar
 6. Action call and agent response:
 
 ```
-Successfuly swapped 10 OSMO tokens to USDC uusdc on chain axelar.
+Successfully swapped 10 OSMO tokens to USDC uusdc on chain axelar.
 Transaction Hash: E84F36D6EEFAA6D7B70827F34EDAB83258BB86EFE33AEA1F4559D00B30CD3B50
 ```
 
