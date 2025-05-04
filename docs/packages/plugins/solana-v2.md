@@ -50,7 +50,7 @@ The `Utils` class provides shared functionality across the plugin, offering flex
 
 #### 1. Set up your environment variables
 
-- In the root of the repositorty, copy `.env.example` to `.env`
+- In the root of the repository, copy `.env.example` to `.env`
 - Fill in the following parameters:
   - `SOLANA_PRIVATE_KEY`
   - `SOLANA_PUBLIC_KEY`
@@ -100,7 +100,7 @@ Follow the general installation and build steps from the README in the root of t
 
 #### 5. Run the agent
 
-Start the the agent with the following command:
+Start the agent with the following command:
 
 ```sh
 bun start --characters="characters/lpmanager.character.json"
