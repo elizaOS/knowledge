@@ -1,0 +1,57 @@
+name: Update HackMD Notes Weekly
+
+on:
+  schedule:
+    # Runs every Friday at 18:00 UTC (1 PM EST / 2 PM EDT)
+    - cron: '0 18 * * 5'
+  workflow_dispatch:
+
+jobs:
+  update_notes:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Install dependencies (Python & CLI)
+        run: |
+          # Install Python deps
+          python -m pip install --upgrade pip
+          pip install requests
+          npm install -g @hackmd/hackmd-cli
+
+      - name: Create new notes if needed
+        id: create_notes
+        env:
+          HMD_API_ACCESS_TOKEN: ${{ secrets.HMD_API_ACCESS_TOKEN }}
+
+        run: |
+          python scripts/create-hackmd.py --verbose
+
+      - name: Update notes content and book index
+        id: update_notes
+        env:
+          HMD_API_ACCESS_TOKEN: ${{ secrets.HMD_API_ACCESS_TOKEN }}
+          OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
+
+        run: |
+          python scripts/update-hackmd.py --verbose
+
+      - name: Commit updated files
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "chore: Update HackMD notes and backups"
+          file_pattern: "book.json hackmd/**/*.md"
+          commit_user_name: "github-actions[bot]"
+          commit_user_email: "github-actions[bot]@users.noreply.github.com"
+          commit_author: "github-actions[bot] <github-actions[bot]@users.noreply.github.com>" 
