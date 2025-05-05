@@ -24,6 +24,46 @@ MONTHLY_GOAL = os.environ.get(
 )
 # --- End Configuration ---
 
+def format_json_to_markdown(council_data):
+    """Formats the council context JSON into a Markdown string."""
+    if not isinstance(council_data, dict):
+        return "Error: Invalid council data format."
+
+    date_str = council_data.get("date", "Unknown Date")
+    title = f"# Council Briefing: {date_str}"
+    lines = [title]
+
+    theme = council_data.get("daily_focus_theme")
+    if theme:
+        lines.append(f"\n## Daily Focus Theme\n\n- {theme}")
+
+    points = council_data.get("key_strategic_points", [])
+    if points:
+        lines.append("\n## Key Strategic Points for Deliberation")
+        for i, point in enumerate(points):
+            lines.append(f"\n### {i+1}. {point.get('theme', 'N/A')}")
+            lines.append(f"\n**Summary:** {point.get('summary', 'N/A')}")
+            context = point.get('related_operational_context')
+            if context:
+                lines.append("\n**Related Context:**")
+                for ctx in context:
+                    lines.append(f"- `{ctx}`") # Format context as code
+            questions = point.get('potential_council_questions')
+            if questions:
+                lines.append("\n**Potential Questions:**")
+                for q in questions:
+                    lines.append(f"- {q}")
+
+    # Include Strategic Context and Monthly Goal for reference
+    strat_context = council_data.get("strategic_context_summary")
+    if strat_context:
+        lines.append(f"\n---\n**Reference: Strategic Context:** {strat_context}")
+    monthly_goal = council_data.get("monthly_goal")
+    if monthly_goal:
+         lines.append(f"\n**Reference: Monthly Goal:** {monthly_goal}")
+
+    return "\n".join(lines)
+
 def extract_content_from_json(data):
     """Recursively extracts 'content' field values from nested JSON."""
     contents = []
@@ -112,6 +152,12 @@ def main():
 
     input_path = args.input_lean_json_file
     output_path = args.output_council_json_file
+    # --- Add Markdown output path ---
+    output_markdown_dir = SCRIPT_DIR.parent / "hackmd" / "council"
+    output_markdown_dir.mkdir(parents=True, exist_ok=True)
+    # Determine markdown filename from input JSON filename stem (YYYY-MM-DD)
+    markdown_filename = input_path.stem + ".md"
+    output_markdown_path = output_markdown_dir / markdown_filename
 
     # --- Validations ---
     if not API_KEY:
@@ -166,20 +212,25 @@ def main():
     # Handle case with no content found
     if not aggregated_content:
         print("Warning: No content found in the input JSON file. Creating empty output.", file=sys.stderr)
-        empty_output = {
+        empty_output_json = {
             "date": date_str,
-            "strategic_context": strategic_context, # Include full context in empty output for reference
+            # "strategic_context": strategic_context, # Keep original JSON minimal
             "monthly_goal": MONTHLY_GOAL,
             "daily_focus_theme": "No operational data processed.",
             "key_strategic_points": []
         }
+        empty_output_md = f"# Council Briefing: {date_str}\n\nNo operational data processed."
         try:
             with open(output_path, 'w') as f:
-                json.dump(empty_output, f, indent=2)
-            print(f"Saved empty council context to: {output_path}")
+                json.dump(empty_output_json, f, indent=2)
+            # --- Write empty Markdown ---
+            with open(output_markdown_path, 'w') as f:
+                f.write(empty_output_md)
+            print(f"Saved empty council context JSON to: {output_path}")
+            print(f"Saved empty council context Markdown to: {output_markdown_path}")
             sys.exit(0)
         except Exception as e:
-            print(f"Error writing empty output file '{output_path}': {e}", file=sys.stderr)
+            print(f"Error writing empty output files: {e}", file=sys.stderr)
             sys.exit(1)
 
 
@@ -220,40 +271,69 @@ def main():
            "date" not in council_context_json:
              raise ValueError("LLM response JSON is missing required keys.")
 
+        # --- Format to Markdown ---
+        council_context_md = format_json_to_markdown(council_context_json)
+
     except requests.exceptions.RequestException as e:
         print(f"Error calling OpenRouter API: {e}", file=sys.stderr)
         # Optionally save error structure
-        error_output = {
+        error_output_json = {
             "date": date_str, "monthly_goal": MONTHLY_GOAL,
             "daily_focus_theme": f"Error generating context: API Request Failed ({e})",
             "key_strategic_points": []
         }
-        with open(output_path, 'w') as f: json.dump(error_output, f, indent=2)
+        error_output_md = f"# Council Briefing: {date_str}\n\nError generating context: API Request Failed ({e})"
+        try:
+            with open(output_path, 'w') as f: json.dump(error_output_json, f, indent=2)
+            # --- Write error Markdown ---
+            with open(output_markdown_path, 'w') as f: f.write(error_output_md)
+            print(f"Saved error context JSON to: {output_path}")
+            print(f"Saved error context Markdown to: {output_markdown_path}")
+        except Exception as write_e:
+             print(f"Error writing error output files: {write_e}", file=sys.stderr)
+
         sys.exit(1)
     except (json.JSONDecodeError, ValueError, KeyError, IndexError) as e:
         print(f"Error processing LLM response: {e}", file=sys.stderr)
         print(f"LLM Response Data: {response.text[:500]}...", file=sys.stderr) # Print first 500 chars of response
         # Optionally save error structure
-        error_output = {
+        error_output_json = {
             "date": date_str, "monthly_goal": MONTHLY_GOAL,
             "daily_focus_theme": f"Error generating context: Invalid LLM Response ({e})",
             "key_strategic_points": []
         }
-        with open(output_path, 'w') as f: json.dump(error_output, f, indent=2)
+        error_output_md = f"# Council Briefing: {date_str}\n\nError generating context: Invalid LLM Response ({e})"
+        try:
+            with open(output_path, 'w') as f: json.dump(error_output_json, f, indent=2)
+             # --- Write error Markdown ---
+            with open(output_markdown_path, 'w') as f: f.write(error_output_md)
+            print(f"Saved error context JSON to: {output_path}")
+            print(f"Saved error context Markdown to: {output_markdown_path}")
+        except Exception as write_e:
+             print(f"Error writing error output files: {write_e}", file=sys.stderr)
+
         sys.exit(1)
     except Exception as e:
          print(f"An unexpected error occurred: {e}", file=sys.stderr)
          sys.exit(1)
 
 
-    # Save the final JSON
+    # Save the final JSON and Markdown
     try:
+        # Save JSON
         with open(output_path, 'w') as f:
             json.dump(council_context_json, f, indent=2) # Pretty print with indent=2
+        print(f"Saved council context JSON to: {output_path}")
+
+        # Save Markdown
+        with open(output_markdown_path, 'w') as f:
+            f.write(council_context_md)
+        print(f"Saved council context Markdown to: {output_markdown_path}")
+
         print("Council context generated successfully.")
-        print(f"Saved council context to: {output_path}")
+
     except Exception as e:
-        print(f"Error writing final output file '{output_path}': {e}", file=sys.stderr)
+        print(f"Error writing final output files: {e}", file=sys.stderr)
         sys.exit(1)
 
 if __name__ == "__main__":
