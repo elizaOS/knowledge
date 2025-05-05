@@ -108,19 +108,41 @@ def make_api_request(endpoint: str, method: str = "GET", data: dict = None, head
 BOOK_TITLE = "Eliza Daily"
 HACKMD_BASE_URL = "https://hackmd.io"
 
-def generate_book_markdown(note_map: dict) -> str:
-    """Generates the markdown content for the index book."""
+def generate_book_markdown(note_map: dict, prompt_to_category: dict) -> str:
+    """Generates the markdown content for the index book, grouped by category."""
     header = f"# {BOOK_TITLE}\n\n<!-- Auto-generated index. Last updated: {datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ')} -->\n\n"
-    links = []
-    sorted_keys = sorted([k for k in note_map if k != BOOK_MAP_KEY])
-    for key in sorted_keys:
-        note_id = note_map.get(key)
-        if note_id:
-            display_title = ' '.join(word.capitalize() for word in key.split('-'))
+    content_sections = []
+
+    # Group notes by category
+    category_to_notes = {}
+    for prompt_name, note_id in note_map.items():
+        if prompt_name == BOOK_MAP_KEY or not note_id:
+            continue
+        # Use the map passed from main to find the category
+        category = prompt_to_category.get(prompt_name, "uncategorized")
+        if category not in category_to_notes:
+            category_to_notes[category] = []
+        category_to_notes[category].append((prompt_name, note_id))
+
+    if not category_to_notes:
+        return header + "*No content notes found in state file yet.*"
+
+    # Sort categories alphabetically
+    sorted_categories = sorted(category_to_notes.keys())
+
+    for category in sorted_categories:
+        # Create a capitalized H2 header for the category
+        category_header = f"## {' '.join(word.capitalize() for word in category.split('-'))}\n"
+        links = []
+        # Sort notes alphabetically by prompt name within the category
+        sorted_notes = sorted(category_to_notes[category], key=lambda item: item[0])
+        for prompt_name, note_id in sorted_notes:
+            display_title = ' '.join(word.capitalize() for word in prompt_name.split('-'))
             links.append(f"- [{display_title}]({HACKMD_BASE_URL}/{note_id})")
-    if not links:
-        links.append("*No content notes found in state file yet.*")
-    return header + "\n".join(links)
+        content_sections.append(category_header + "\n".join(links))
+
+    # Join category sections with double newlines
+    return header + "\n\n".join(content_sections)
 
 def aggregate_json_data(json_file: Path) -> str:
     """Reads a JSON file and aggregates all string values."""
@@ -182,6 +204,17 @@ def main():
         logging.error("State file is empty or failed to load.")
         sys.exit(1)
 
+    # --- Build Prompt-to-Category Mapping (Moved Before Book Update) ---
+    logging.info(f"Scanning '{PROMPTS_DIR}' to map prompts to categories...")
+    prompt_to_category = {}
+    for prompt_file in PROMPTS_DIR.rglob("*.txt"):
+        prompt_name = prompt_file.stem
+        relative_path = prompt_file.relative_to(PROMPTS_DIR)
+        category_tag = relative_path.parent.name if relative_path.parent != Path('.') else "uncategorized"
+        prompt_to_category[prompt_name] = category_tag
+        logging.debug(f"Mapped prompt '{prompt_name}' to category '{category_tag}'")
+    logging.info(f"Found {len(prompt_to_category)} prompts in category structure.")
+
     # --- Update Book Index First ---
     book_note_id = state.get(BOOK_MAP_KEY)
     if book_note_id:
@@ -194,7 +227,7 @@ def main():
             logging.info(f"   Successfully updated Book Index note content WITH TEST STRING.")
             # Now, immediately try with the real content (if the test worked)
             logging.info(f"   Attempting to update Book Index note with REAL content...")
-            real_book_content = generate_book_markdown(state)
+            real_book_content = generate_book_markdown(state, prompt_to_category)
             real_update_payload = {"content": real_book_content}
             real_patch_status_code, _ = make_api_request(f"/teams/{TEAM_PATH}/notes/{book_note_id}", method="PATCH", data=real_update_payload)
             if real_patch_status_code == 202:
@@ -249,7 +282,14 @@ def main():
             continue
 
         logging.info(f"-- Processing: {prompt_name} (Note ID: {note_id})")
-        prompt_file_path = PROMPTS_DIR / f"{prompt_name}.txt"
+        # Get category for prompt path
+        category_tag = prompt_to_category.get(prompt_name, None) # Get category from map
+        if not category_tag:
+            logging.error(f"   ERROR: Category not found for prompt '{prompt_name}' in mapping. Skipping.")
+            continue
+
+        # Construct the correct path using the category
+        prompt_file_path = PROMPTS_DIR / category_tag / f"{prompt_name}.txt"
 
         if not prompt_file_path.is_file():
             logging.error(f"   ERROR: Prompt file '{prompt_file_path}' not found. Skipping.")
@@ -303,7 +343,9 @@ def main():
         logging.info("   LLM content generated.")
 
         # --- Save Generated Content Locally ---
-        prompt_output_dir = OUTPUT_DIR / prompt_name
+        # Get category for output path
+        category_tag = prompt_to_category.get(prompt_name, "uncategorized") # Default if prompt somehow not found in scan
+        prompt_output_dir = OUTPUT_DIR / category_tag / prompt_name
         prompt_output_dir.mkdir(parents=True, exist_ok=True)
         output_filename = prompt_output_dir / f"{latest_date_str}.md"
         logging.info(f"   Saving generated content to {output_filename}...")
@@ -315,13 +357,30 @@ def main():
              logging.error(f"   ERROR: Failed to save content locally to {output_filename}: {e}")
              continue # Skip API update if we couldn't save locally
 
+        # --- Get Current HackMD Note Content ---
+        logging.info(f"   Fetching current content for note {note_id}...")
+        get_status_code, get_response_data = make_api_request(f"/teams/{TEAM_PATH}/notes/{note_id}", method="GET")
+        current_hackmd_content = ""
+        if get_status_code == 200 and get_response_data:
+            current_hackmd_content = get_response_data.get("content", "")
+            logging.info(f"   Successfully fetched current content (length: {len(current_hackmd_content)}).")
+        else:
+            logging.warning(f"   WARNING: Failed to fetch current content for note {note_id} (Status: {get_status_code}). Will overwrite instead of appending.")
+            # Proceeding will overwrite the note if PATCH succeeds
+
         # Log content being sent
         logging.debug(f"   DEBUG: Sending LLM content length: {len(llm_content)}")
         logging.debug(f"   DEBUG: Sending LLM content (start): {llm_content[:200]}...")
 
+        # --- Construct Appended Content ---
+        # Ensure newline separation, add date header
+        new_content_block = f"{llm_content}"
+        updated_hackmd_content = current_hackmd_content + new_content_block
+        logging.debug(f"   DEBUG: Total updated content length: {len(updated_hackmd_content)}")
+
         # --- Update HackMD Note Content ---
-        logging.info(f"   Attempting to update content for note {note_id} via API PATCH...")
-        update_payload = {"content": llm_content}
+        logging.info(f"   Attempting to update note {note_id} with appended content via API PATCH...")
+        update_payload = {"content": updated_hackmd_content}
         content_patch_status, _ = make_api_request(f"/teams/{TEAM_PATH}/notes/{note_id}", method="PATCH", data=update_payload)
 
         if content_patch_status == 202:
@@ -335,25 +394,6 @@ def main():
                 logging.info(f"   Successfully set permissions for note {note_id}.")
             else:
                  logging.warning(f"   WARNING: API PATCH call failed for permissions setting (Status: {perm_patch_status}).")
-
-            # --- Verification Step --- 
-            logging.info("   Waiting 5 seconds before verification...")
-            time.sleep(5)
-            logging.info(f"   Verifying content update for note {note_id} via API GET...")
-            get_status_code, get_response_data = make_api_request(f"/teams/{TEAM_PATH}/notes/{note_id}", method="GET")
-            
-            if get_status_code == 200 and get_response_data:
-                remote_content = get_response_data.get("content", "")
-                logging.info(f"   Verification GET successful (Status: {get_status_code}).")
-                logging.debug(f"   Remote content length: {len(remote_content)}")
-                if len(remote_content) > 0 and abs(len(remote_content) - len(llm_content)) < 50:
-                     logging.info("   VERIFICATION SUCCESS: Remote content appears to be updated.")
-                elif len(remote_content) == 0:
-                     logging.error("   VERIFICATION FAILED: Remote content is EMPTY after update.")
-                else:
-                     logging.warning("   VERIFICATION UNCERTAIN: Remote content length differs significantly from local content.")
-            else:
-                logging.error(f"   ERROR: Failed to fetch note details for verification (Status: {get_status_code}).")
 
         else:
             logging.error(f"   ERROR: API PATCH call failed for content update (Status: {content_patch_status}). Skipping permissions and permalink update.")
