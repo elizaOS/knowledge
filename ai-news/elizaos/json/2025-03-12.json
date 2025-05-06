@@ -3,10 +3,110 @@
   "title": "Daily Report - 2025-03-12",
   "categories": [
     {
+      "title": "Discord Channel Historical Summary",
+      "content": [
+        {
+          "text": "# ElizaOS Development and Community Updates\n\n## Technical Development\n- **ElizaOS v2 Beta Release**: Scheduled to go live next week, with the AI agent \"Degen\" being reactivated in the main chat and a dedicated \"arena\" for agent collaboration.\n- **Twitter Plugin Issues**: Users reported problems with the Twitter plugin not posting despite correct `.env` settings. The issue was identified as the `elizaos/plugin-twitter` plugin not exporting a `clients` property required by `agent/index.ts`.\n- **Discord Bot Issues**: Some users experienced problems with Discord bots appearing offline despite correct settings, and messages disappearing after being sent. The solution involves ensuring the plugin is properly imported into the character file and setting `suppressInitialMessage: true` in the action configuration.\n- **Telegram Plugin Issue**: Users reported the agent generating two responses—one from LLM and one from the plugin action. Setting `suppressInitialMessage: true` in the action configuration resolves this.\n- **Eliza on FAB for UE5**: Supports get/set/edit/message operations, works with both local and hosted instances, and is functional on Fleek instances. It's open source but currently lacks actions implementation.\n\n## Community and Governance\n- **AI Agent Marketplace & Tokenomics**: Discussions about creating an agent marketplace and using ai16z for API credit payments, with taxes and fees leading to token burns.\n- **Governance Agent Development**: Exploration of the \"Negation Game\" governance model and the \"agency swarm pattern\" from RNDao for developing a governance agent.\n- **Token Utility & Marketplace**: Proposals for a 3D agent marketplace for AI16z token utility, with emphasis on clear tokenomics and alignment with existing projects.\n- **Governance & DAO Bottlenecks**: Concerns that the DAO lacks real governance power, with exploration of alternatives including a wrapper contract for governance.\n- **Developer & Ecosystem Growth**: Plans for ecosystem grants to retain developers and open-sourcing an AI assistant trained on ElizaOS docs.\n\n## AI Agent Development\n- **AI Agent Interns**: Discussions about improving AI agent interns through structured tasks and evaluating their performance in a competition format where underperforming agents are eliminated.\n- **New Data Pipeline**: Implementation of a new data pipeline integrating AI news to provide agents with better market context, discovery, and sentiment analysis.\n- **Autonomous Investing**: Debates about the feasibility of autonomous investing functions, with acknowledgment of the complexity of quantitative trading but recognition of its potential value if successfully implemented.\n\n## Cryptocurrency Trading\n- **Pump.fun Platform**: Users discuss cryptocurrency trading strategies, monitoring large bids and dips to time entries and exits.\n- **D00dsdotWTF (DWTF) Token**: Discussions about staking mechanisms on GFM to earn SOL and DWTF fees, with an upcoming native staking platform allowing users to earn airdrops from new token launches.",
+          "sources": [
+            "https://discord.com/channels/1253563208833433701/1308149076893630555",
+            "https://discord.com/channels/1253563208833433701/1300025221834739744",
+            "https://discord.com/channels/1253563208833433701/1301363808421543988",
+            "https://discord.com/channels/1253563208833433701/1313222089271939102",
+            "https://discord.com/channels/1253563208833433701/1328592959444095038",
+            "https://discord.com/channels/1253563208833433701/1299989396874854440"
+          ],
+          "images": [],
+          "videos": []
+        }
+      ],
+      "topic": "discordchannelhistoricalsummary"
+    },
+    {
       "title": "Recent Pull Requests in the elizaOS/eliza Repository",
       "content": [
         {
-          "text": "Several pull requests have been submitted to the elizaOS/eliza repository, focusing on various improvements and fixes:\n\n1. Bug fixes and type declarations:\n   - PR #3898 and #3895 by wtfsayo address core type declarations and DTS generation issues\n   - PR #3903 by RiverZ-pingu fixes a typo in the core packages\n\n2. Feature enhancements:\n   - PR #3902 by tcm390 adds client WSS (WebSocket Secure) functionality\n   - PR #3907 by tcm390 implements GUI thumbnail features\n   - PR #3908 by wtfsayo adds UI display for agent actions and runtime logs\n   - PR #3905 by jmikedupont2 introduces local autodoc functionality\n\n3. Documentation improvements:\n   - PR #3906 by madjin performs a major cleanup of the documentation\n\nThese contributions demonstrate ongoing development efforts to enhance functionality, fix issues, and improve documentation in the Eliza project.",
+          "text": "Several pull requests have been submitted to the elizaOS/eliza repository focusing on bug fixes, improvements, and new features. These PRs address various aspects of the codebase including core functionality, GUI components, and Docker configurations.",
+          "sources": [],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "Core functionality improvements include fixing type declarations (PR #3895), fixing DTS generation (PR #3898), and adding a clean command to the core (PR #3892). A V2 clean command was also introduced in PR #3891. These changes help maintain code quality and improve developer experience.",
+          "sources": [
+            "https://github.com/elizaOS/eliza/pull/3895",
+            "https://github.com/elizaOS/eliza/pull/3898",
+            "https://github.com/elizaOS/eliza/pull/3892",
+            "https://github.com/elizaOS/eliza/pull/3891"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "Several bug fixes were implemented, including fixes for GUI build and API server (PR #3893), migration handling (PRs #3888 and #3889), and loading character plugins from remote URLs (PR #3890). A typo in the core package was also corrected (PR #3903).",
+          "sources": [
+            "https://github.com/elizaOS/eliza/pull/3893",
+            "https://github.com/elizaOS/eliza/pull/3888",
+            "https://github.com/elizaOS/eliza/pull/3889",
+            "https://github.com/elizaOS/eliza/pull/3890",
+            "https://github.com/elizaOS/eliza/pull/3903"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "New features include adding permanent knowledge capability (PR #3894), which allows adding permanent knowledge through an array of strings that remains available to an agent at all times, not just when relevant through RAG search. This feature was added with low risk as it's an optional parameter for character files.",
+          "sources": [
+            "https://github.com/elizaOS/eliza/pull/3894"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "Infrastructure improvements include updating Docker files for v2 (PR #3887) and optimizing the cleanup script with xargs for better performance when handling large lists of directories (PR #3900).",
+          "sources": [
+            "https://github.com/elizaOS/eliza/pull/3887",
+            "https://github.com/elizaOS/eliza/pull/3900"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "A significant enhancement to client communication was proposed in PR #3902, which implements WebSockets to handle client messages. This ensures each agent/user in the chat has their own socket connection managed by the WebSocketServer, with multi-agent room functionality planned for a future PR.",
+          "sources": [
+            "https://github.com/elizaOS/eliza/pull/3902"
+          ],
+          "images": [],
+          "videos": []
+        }
+      ],
+      "topic": "githubpullrequestcontributor"
+    },
+    {
+      "title": "Cryptocurrency Market Update",
+      "content": [
+        {
+          "text": "Current cryptocurrency prices show WBTC trading between $82,693.37 and $83,502.71, indicating some price volatility. WETH is valued between $1,908.05 and $1,921.62, showing a slight decrease. SOL is trading between $125.31 and $126.59, with a small upward movement. The ai16z token is priced between $0.17 and $0.18, also showing a slight increase.",
+          "sources": [
+            "Symbol: WBTC\n Current Price: $82693.3736568",
+            "Symbol: WBTC\n Current Price: $83502.7054354",
+            "Symbol: WETH\n Current Price: $1921.61515246",
+            "Symbol: WETH\n Current Price: $1908.05378386",
+            "Symbol: SOL\n Current Price: $125.30549186",
+            "Symbol: SOL\n Current Price: $126.589232509",
+            "Symbol: ai16z\n Current Price: $0.16870454486",
+            "Symbol: ai16z\n Current Price: $0.175810179629"
+          ],
+          "images": [],
+          "videos": []
+        }
+      ],
+      "topic": "crypto market"
+    },
+    {
+      "title": "Recent Pull Requests in the elizaOS/eliza Repository",
+      "content": [
+        {
+          "text": "Several pull requests have been submitted to the elizaOS/eliza repository, focusing on various improvements and fixes:\n\n- PR #3903 by RiverZ-pingu addresses a typo in the core packages.\n\n- PR #3902 by tcm390 adds WebSocket Secure (WSS) client functionality.\n\n- PR #3905 by jmikedupont2 introduces a feature related to local autodoc in version 2.\n\n- PRs #3898 and #3895 by wtfsayo fix issues with core type declarations and DTS generation.\n\n- PR #3906 by madjin performs a major cleanup of the documentation.\n\n- PR #3908 by wtfsayo adds UI functionality to display agent actions and runtime logs (first pass).\n\n- PR #3907 by tcm390 implements GUI thumbnail functionality.",
           "sources": [
             "https://github.com/elizaOS/eliza/pull/3903",
             "https://github.com/elizaOS/eliza/pull/3902",
@@ -68,30 +168,69 @@
       "topic": "completed_items"
     },
     {
-      "title": "Recent ElizaOS GitHub Issues",
+      "title": "Recent Tech and Blockchain Tweets",
       "content": [
         {
-          "text": "Three recent issues have been opened in the ElizaOS GitHub repository:\n\n1. Issue #3904: A suggestion to improve the documentation sitemap.xml priority, submitted by user madjin.\n\n2. Issue #3912: A report that the v2/autodoc fileUsageDoc is missing context, submitted by user jmikedupont2.\n\n3. Issue #3914: A suggestion regarding the usage of typebox for safety, also submitted by user jmikedupont2.\n\nThese issues appear to focus on documentation improvements and type safety in the ElizaOS project.",
-          "sources": [
-            "https://github.com/elizaOS/eliza/issues/3904",
-            "https://github.com/elizaOS/eliza/issues/3912",
-            "https://github.com/elizaOS/eliza/issues/3914"
-          ],
+          "text": "A user shared a creative idea about using Lightbeam, a tool that captures information about websites visited and their associated third-party trackers. They suggested exporting this data and visualizing it in an interactive format like a video game, 3D force graph, or WebXR experience. They specifically mentioned Space Invaders or Galaxiga as potential inspirations, where browser history could represent levels or enemies in the game.",
+          "sources": "https://twitter.com/dankvr/status/1899861617329742160",
           "images": [
-            "https://opengraph.githubassets.com/1/elizaOS/eliza/issues/3904",
-            "https://opengraph.githubassets.com/1/elizaOS/eliza/issues/3912",
-            "https://opengraph.githubassets.com/1/elizaOS/eliza/issues/3914"
+            "https://pbs.twimg.com/media/Gl2l9McXoAA2Sjc.jpg",
+            "https://pbs.twimg.com/media/Gl2pPfOXoAAQH-v.jpg"
           ],
+          "videos": []
+        },
+        {
+          "text": "ElizaOS shared two tweets: one about returning to their roots and encouraging followers to 'tune out the noise; keep building,' and another promoting a guide from Ankr that explains how to create a personal blockchain assistant in four steps, described as a '5 minute read.'",
+          "sources": "https://twitter.com/elizaOS/status/1899874813004366131, https://twitter.com/elizaOS/status/1899849495208161295",
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "The user 'dankvr' also posted two brief tweets mentioning other Twitter users, including one asking '@pet3rpan_ what does it mean??' and another tagging '@firecrawl_dev @n8n_io @itsmetamike' with the word 'peep'.",
+          "sources": "https://twitter.com/dankvr/status/1899896558814191865, https://twitter.com/dankvr/status/1899873038495076595",
+          "images": [],
           "videos": []
         }
       ],
-      "topic": "issue"
+      "topic": "tweet"
+    },
+    {
+      "title": "Recent GitHub Issues in the Eliza Project",
+      "content": [
+        {
+          "text": "Several issues have been reported in the Eliza project repository:\n\n1. **Line Break Bug**: There's a bug where line breaks are not properly converted to spaces, causing words to run together. For example, 'realityour' should be 'reality our'. This was highlighted in a tweet by @TineIsNotEliza.\n\n2. **Client App Audio Features Not Working**: Users reported that when using the client app, the microphone feature and read aloud functionality are not working as expected. The issue occurs when starting the Eliza server with the corresponding .env file.\n\n3. **Twitter Agent Startup Issue**: The Twitter plugin doesn't start because the 'twitterPlugin' doesn't have a 'clients' field in its configuration. This is causing initialization problems in the agent/src/index.ts file around line 602.\n\n4. **Documentation SEO Improvement Suggestion**: A suggestion was made to improve the sitemap.xml for better SEO by assigning different priority levels to various pages instead of giving everything a default 0.5 priority. The suggestion includes a code snippet that prioritizes the homepage, main documentation sections, and other content types accordingly.",
+          "sources": [
+            "https://github.com/elizaOS/eliza/issues/3897",
+            "https://github.com/elizaOS/eliza/issues/3896",
+            "https://github.com/elizaOS/eliza/issues/3901",
+            "https://github.com/elizaOS/eliza/issues/3904"
+          ],
+          "images": [],
+          "videos": []
+        }
+      ],
+      "topic": "githubissuecontributor"
+    },
+    {
+      "title": "GitHub Activity Summary",
+      "content": [
+        {
+          "text": "Recent GitHub activity shows 6 contributors were active, merging a total of 6 PRs (5 in one period and 1 in another). The work primarily consisted of various improvements to the project.",
+          "sources": [
+            "text: with 6 contributors merging 5 PRs. Major work included various improvements.",
+            "text: with 6 contributors merging 1 PRs. Major work included various improvements."
+          ],
+          "images": [],
+          "videos": []
+        }
+      ],
+      "topic": "githubsummary"
     },
     {
       "title": "ElizaOS GitHub Activity Update",
       "content": [
         {
-          "text": "Over the past two days (March 12-14, 2025), the elizaos/eliza repository showed significant development activity. On March 12-13, there were 5 new pull requests with 1 merged, followed by increased activity on March 13-14 with 8 new pull requests and 7 of those being merged. The repository maintained 2 new issues per day throughout this period, with a consistent team of 8 active contributors working on the project.",
+          "text": "Over the past two days (March 12-14, 2025), the elizaos/eliza repository showed significant development activity. On March 12-13, there were 5 new pull requests with 1 merged, followed by increased activity on March 13-14 with 8 new pull requests and 7 of them successfully merged. The repository maintained 2 new issues per day throughout this period, with a consistent team of 8 active contributors working on the project.",
           "sources": [
             0,
             1
@@ -106,7 +245,7 @@
       "title": "Top contributors for elizaOS/eliza",
       "content": [
         {
-          "text": "The provided sources mention 'Top contributors for elizaOS/eliza' but do not provide any specific details about who these contributors are or their contributions to the project. Without additional information, it's not possible to generate a detailed summary about the contributors to the elizaOS/eliza project.",
+          "text": "The provided sources mention 'Top contributors for elizaOS/eliza' but do not provide any specific details about who these contributors are or their contributions to the project. Without additional information, it's not possible to generate a detailed summary about the individual contributors, their roles, or the nature of their contributions to the elizaOS/eliza project.",
           "sources": [
             "Top contributors for elizaOS/eliza"
           ],

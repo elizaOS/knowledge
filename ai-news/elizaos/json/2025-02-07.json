@@ -3,43 +3,82 @@
   "title": "Daily Report - 2025-02-07",
   "categories": [
     {
+      "title": "DankVR and Shaw Discuss Web Tech, Hyperfy, and Eliza Development",
+      "content": [
+        {
+          "text": "DankVR shares information about Hyperfy.io, describing it as a web-based platform using technologies like ThreeJS, WebGL, and GLTF. They highlight Hyperfy's new .hyp file format for bundling apps with models and scripts, comparing it to smart GLBs or Unity prefabs. DankVR also mentions that Eliza agents can be dragged and dropped into Hyperfy for interactive experiences.",
+          "sources": [
+            "https://twitter.com/dankvr/status/1887967521409511661",
+            "https://twitter.com/dankvr/status/1887963579065974903",
+            "https://twitter.com/dankvr/status/1887961832297496737",
+            "https://twitter.com/dankvr/status/1887749880954736933"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "Shaw discusses updates to the Eliza project, including migrating to a plugin registry that allows developers to register plugins via CLI instead of PRing into Eliza core. Shaw also mentions moving characters to their own repository and switching to Bun. Shaw notes they'll be focusing on coding for v2 over the next couple months and won't be attending events, though other contributors will be available for speaking engagements including at Consensus Hong Kong.",
+          "sources": [
+            "https://twitter.com/shawmakesmagic/status/1887793981800526009",
+            "https://twitter.com/shawmakesmagic/status/1887762615260045800",
+            "https://twitter.com/shawmakesmagic/status/1887825105528459272",
+            "https://twitter.com/shawmakesmagic/status/1887748213811097877",
+            "https://twitter.com/shawmakesmagic/status/1887675156375450040"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "DankVR shares thoughts on community building, noting that financial gatekeeping (token-gated channels) often leads to less activity, while merit-based gatekeeping (skill-based membership) results in more activity but less coordination. They suggest finding a balance between both approaches.",
+          "sources": [
+            "https://twitter.com/dankvr/status/1887907885981532212"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "Both DankVR and Shaw make humorous comments about crypto applications, with Shaw joking about \"Digital horse racing except the horses die when they run out of tokens\" and DankVR responding to another user with \"bottle royale.\"",
+          "sources": [
+            "https://twitter.com/shawmakesmagic/status/1887957204327669950",
+            "https://twitter.com/dankvr/status/1887963993576194072"
+          ],
+          "images": [],
+          "videos": []
+        }
+      ],
+      "topic": "tweet"
+    },
+    {
       "title": "Recent Updates to Eliza Project",
       "content": [
         {
-          "text": "Several bug fixes have been implemented in the Eliza project. The core build was fixed to target node23 (PR #3371), the CLI build and init command were repaired (PR #3378), and an issue with yargs slice in character loading was resolved (PR #3374).",
+          "text": "Several improvements have been made to the Eliza project recently. The build system was fixed to properly target Node.js 23 (PR #3371), and CLI build and initialization commands were repaired (PR #3378). Character loading functionality was enhanced by fixing yargs slice issues (PR #3374) and adding support for loading character paths from the repository root (PR #3375).",
           "sources": [
             "https://github.com/elizaOS/eliza/pull/3371",
             "https://github.com/elizaOS/eliza/pull/3378",
-            "https://github.com/elizaOS/eliza/pull/3374"
+            "https://github.com/elizaOS/eliza/pull/3374",
+            "https://github.com/elizaOS/eliza/pull/3375"
           ],
           "images": [],
           "videos": []
         },
         {
-          "text": "New features were added to the project, including replacing pnpm with Bun (PR #2852) and adding adapter-sqlite to dependencies (PR #3357).",
-          "sources": [
-            "https://github.com/elizaOS/eliza/pull/2852",
-            "https://github.com/elizaOS/eliza/pull/3357"
-          ],
-          "images": [],
-          "videos": []
-        },
-        {
-          "text": "The codebase underwent refactoring efforts, with general cleanup (PR #3116) and refactoring of generation to reflect handler pattern (PR #3376).",
+          "text": "The project has undergone significant refactoring, including a general cleanup (PR #3116) and a refactoring of the generation code to follow a handler pattern (PR #3376). Package management has been improved by replacing pnpm with Bun (PR #2852).",
           "sources": [
             "https://github.com/elizaOS/eliza/pull/3116",
-            "https://github.com/elizaOS/eliza/pull/3376"
+            "https://github.com/elizaOS/eliza/pull/3376",
+            "https://github.com/elizaOS/eliza/pull/2852"
           ],
           "images": [],
           "videos": []
         },
         {
-          "text": "Other improvements include support for the Anthropic provider (PR #3364), implementation of generic model loading for OpenAI compatible endpoints (PR #3114), resolving a merge conflict (PR #3367), and adding functionality to try loading character path from repo root (PR #3375).",
+          "text": "Provider support has been expanded with the addition of Anthropic (PR #3364) and implementation of generic model loading for OpenAI-compatible endpoints (PR #3114). The adapter-sqlite package was also added to dependencies (PR #3357). A merge conflict was resolved in PR #3367.",
           "sources": [
             "https://github.com/elizaOS/eliza/pull/3364",
             "https://github.com/elizaOS/eliza/pull/3114",
-            "https://github.com/elizaOS/eliza/pull/3367",
-            "https://github.com/elizaOS/eliza/pull/3375"
+            "https://github.com/elizaOS/eliza/pull/3357",
+            "https://github.com/elizaOS/eliza/pull/3367"
           ],
           "images": [],
           "videos": []
@@ -51,7 +90,7 @@
       "title": "Recent Issues in the elizaOS/eliza GitHub Repository",
       "content": [
         {
-          "text": "Several users have reported UI and loading issues with the Eliza platform. Issue #3360 reports that the UI doesn't appear to load properly. In a related problem, Issue #3362 notes that using the command 'pnpm dev --characters' fails to load characters as expected. Issue #3385 describes an agent getting stuck on startup in Docker/Cloud environments with version 0.25.6-alpha.1.",
+          "text": "Several users have reported UI and loading issues with the Eliza platform. Issue #3360 reports that the UI doesn't appear to load properly, while issue #3362 indicates that the command 'pnpm dev --characters' fails to load characters as expected. Additionally, issue #3385 describes an agent getting stuck on startup in Docker/Cloud environments with version 0.25.6-alpha.1.",
           "sources": [
             "https://github.com/elizaOS/eliza/issues/3360",
             "https://github.com/elizaOS/eliza/issues/3362",
@@ -61,29 +100,29 @@
           "videos": []
         },
         {
-          "text": "There are multiple dependency and package-related issues. Issue #3365 reports missing dependencies (cors and multer) in the @elizaos/agent package. Issue #3380 describes problems using the plugin-evm, while Issue #3356 suggests creating an Eliza CLI where plugins are opt-in only, similar to Shadcn's approach.",
+          "text": "There are multiple dependency and package-related issues. Issue #3365 reports missing dependencies (cors and multer) in the @elizaos/agent package. Issue #3380 describes problems using the plugin-evm, and issue #3387 highlights confusion in the quick start documentation because eliza-starter is a different repository than the main eliza project.",
           "sources": [
             "https://github.com/elizaOS/eliza/issues/3365",
             "https://github.com/elizaOS/eliza/issues/3380",
-            "https://github.com/elizaOS/eliza/issues/3356"
+            "https://github.com/elizaOS/eliza/issues/3387"
           ],
           "images": [],
           "videos": []
         },
         {
-          "text": "Twitter integration is experiencing several issues. Issue #3384 reports that Twitter Actions are not processing correctly. Issue #3353 identifies a placeholder mismatch and image description format problem in the Twitter Search Template. Issue #3383 suggests enhancements to the Twitter AI Agent to improve human-like behavior and engagement efficiency.",
+          "text": "Twitter integration is experiencing several issues. Issue #3353 identifies a placeholder mismatch and image description format problem in the Twitter search template. Issue #3384 reports that Twitter actions are not processing correctly, and issue #3383 suggests enhancements to the Twitter AI agent's human-like behavior and engagement efficiency.",
           "sources": [
-            "https://github.com/elizaOS/eliza/issues/3384",
             "https://github.com/elizaOS/eliza/issues/3353",
+            "https://github.com/elizaOS/eliza/issues/3384",
             "https://github.com/elizaOS/eliza/issues/3383"
           ],
           "images": [],
           "videos": []
         },
         {
-          "text": "Documentation confusion has also been reported. Issue #3387 highlights confusion in the quick start guide because eliza-starter is a different repository, making it difficult for new users to get started correctly.",
+          "text": "A feature request has been submitted in issue #3356, proposing the creation of an Eliza CLI where plugins are opt-in only, similar to the approach used by Shadcn.",
           "sources": [
-            "https://github.com/elizaOS/eliza/issues/3387"
+            "https://github.com/elizaOS/eliza/issues/3356"
           ],
           "images": [],
           "videos": []
@@ -95,24 +134,40 @@
       "title": "Recent Pull Requests in elizaOS/eliza Repository",
       "content": [
         {
-          "text": "Several new features and improvements have been proposed to the elizaOS/eliza repository through recent pull requests. These include:\n\n- An update to DeepSeek (PR #3127)\n- Addition of a TradingView provider (PR #3372)\n- Implementation of bounty detail functionality (PR #3361)\n- Integration of Nillion frontend (PR #3391)\n- Task storage implementation (PR #3377)\n- A new Ether-Guild plugin (PR #3381)\n- Addition of a custom character chatterbox (PR #3382)\n- Refactoring of generation code to follow the handler pattern (PR #3376)\n\nThese pull requests represent ongoing development efforts to enhance the functionality and features of the Eliza platform.",
+          "text": "Several new features and improvements have been proposed to the elizaOS/eliza repository through recent pull requests. These include updates to deepseek (PR #3127), the addition of a TradingView provider (PR #3372), and bounty detail features (PR #3361).",
           "sources": [
             "https://github.com/elizaOS/eliza/pull/3127",
             "https://github.com/elizaOS/eliza/pull/3372",
-            "https://github.com/elizaOS/eliza/pull/3361",
-            "https://github.com/elizaOS/eliza/pull/3391",
-            "https://github.com/elizaOS/eliza/pull/3377",
-            "https://github.com/elizaOS/eliza/pull/3381",
-            "https://github.com/elizaOS/eliza/pull/3382",
-            "https://github.com/elizaOS/eliza/pull/3376"
+            "https://github.com/elizaOS/eliza/pull/3361"
           ],
           "images": [
             "https://opengraph.githubassets.com/1/elizaOS/eliza/pull/3127",
             "https://opengraph.githubassets.com/1/elizaOS/eliza/pull/3372",
-            "https://opengraph.githubassets.com/1/elizaOS/eliza/pull/3361",
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/pull/3361"
+          ],
+          "videos": []
+        },
+        {
+          "text": "Integration efforts continue with the Nillion frontend integration (PR #3391) and task storage implementation (PR #3377), both contributed by Okulon. Additionally, a new plugin called ether-guild has been proposed (PR #3381).",
+          "sources": [
+            "https://github.com/elizaOS/eliza/pull/3391",
+            "https://github.com/elizaOS/eliza/pull/3377",
+            "https://github.com/elizaOS/eliza/pull/3381"
+          ],
+          "images": [
             "https://opengraph.githubassets.com/1/elizaOS/eliza/pull/3391",
             "https://opengraph.githubassets.com/1/elizaOS/eliza/pull/3377",
-            "https://opengraph.githubassets.com/1/elizaOS/eliza/pull/3381",
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/pull/3381"
+          ],
+          "videos": []
+        },
+        {
+          "text": "User experience enhancements include a custom character chatterbox (PR #3382) and a refactoring of the generation code to follow the handler pattern (PR #3376), which should improve code organization and maintainability.",
+          "sources": [
+            "https://github.com/elizaOS/eliza/pull/3382",
+            "https://github.com/elizaOS/eliza/pull/3376"
+          ],
+          "images": [
             "https://opengraph.githubassets.com/1/elizaOS/eliza/pull/3382",
             "https://opengraph.githubassets.com/1/elizaOS/eliza/pull/3376"
           ],
@@ -140,7 +195,7 @@
       "title": "Top contributors for elizaOS/eliza",
       "content": [
         {
-          "text": "The provided sources mention 'Top contributors for elizaOS/eliza' but do not provide any specific details about who these contributors are or their contributions to the project. Without additional information, it's not possible to generate a detailed summary of the top contributors to the elizaOS/eliza repository.",
+          "text": "The provided sources mention 'Top contributors for elizaOS/eliza' but do not provide any specific details about who these contributors are or their contributions to the project. Without additional information, it's not possible to generate a detailed summary about the individual contributors, their roles, or the nature of their contributions to the elizaOS/eliza project.",
           "sources": [
             "Top contributors for elizaOS/eliza"
           ],

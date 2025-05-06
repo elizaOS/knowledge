@@ -3,24 +3,24 @@
   "title": "Daily Report - 2025-04-07",
   "categories": [
     {
-      "title": "Recent ElizaOS Updates and Bugfixes",
+      "title": "Recent ElizaOS Updates and Fixes",
       "content": [
         {
-          "text": "## Bugfixes\n\n- Replaced fastembed with a local embedding model (#4205)\n- Fixed runtime.registerPlugin functionality after initialization (#4189)\n- Resolved an issue with replying to tweets in interactions (#4231)\n- Fixed duplicate Provider Section appearing in prompts (#4228)\n- Addressed a UI issue (#4217)\n- Fixed OpenAI object JSON parse error (#4207)\n- Made npm create eliza and npx elizaos create functionally identical (#4185)",
+          "text": "## Bug Fixes\n\nSeveral important bug fixes have been implemented in recent pull requests:\n\n- Replaced fastembed with a local embedding model (PR #4205)\n- Fixed runtime.registerPlugin functionality after initialization (PR #4189)\n- Resolved an issue with replying to tweets in interactions (PR #4231)\n- Fixed duplicate Provider Section appearing in prompts (PR #4228)\n- Addressed OpenAI object JSON parse errors (PR #4207)\n- Made small UI improvements (PR #4217)\n- Aligned npm create eliza and npx elizaos create to be functionally identical (PR #4185)",
           "sources": [
             "https://github.com/elizaOS/eliza/pull/4205",
             "https://github.com/elizaOS/eliza/pull/4189",
             "https://github.com/elizaOS/eliza/pull/4231",
             "https://github.com/elizaOS/eliza/pull/4228",
-            "https://github.com/elizaOS/eliza/pull/4217",
             "https://github.com/elizaOS/eliza/pull/4207",
+            "https://github.com/elizaOS/eliza/pull/4217",
             "https://github.com/elizaOS/eliza/pull/4185"
           ],
           "images": [],
           "videos": []
         },
         {
-          "text": "## New Features\n\n- Added TypeScript to dev dependencies in plugin-starter (#4218)\n- Introduced a new Venice plugin (#4214)\n- Improved Reply Action to use pre-generated responses (#4213)\n- Added functionality to skip 'should respond' check for direct messages (#4212)",
+          "text": "## New Features\n\nSeveral new features have been added to enhance functionality:\n\n- Added TypeScript to dev dependencies in the plugin-starter (PR #4218)\n- Introduced a new Venice plugin (PR #4214)\n- Improved Reply Action to utilize pre-generated responses (PR #4213)\n- Added ability to skip 'should respond' checks for direct messages (PR #4212)",
           "sources": [
             "https://github.com/elizaOS/eliza/pull/4218",
             "https://github.com/elizaOS/eliza/pull/4214",
@@ -31,7 +31,7 @@
           "videos": []
         },
         {
-          "text": "## Documentation and Other Changes\n\n- Updated README.md for the Telegram plugin (#4219)\n- Improved environment loading and package installation process (#4216)\n- Updated CLI README documentation (#4208)",
+          "text": "## Documentation and Other Changes\n\nDocumentation and maintenance improvements include:\n\n- Updated README.md for the Telegram plugin (PR #4219)\n- Improved environment loading process and package installation (PR #4216)\n- Updated CLI README documentation (PR #4208)",
           "sources": [
             "https://github.com/elizaOS/eliza/pull/4219",
             "https://github.com/elizaOS/eliza/pull/4216",
@@ -44,62 +44,217 @@
       "topic": "completed_items"
     },
     {
+      "title": "Discord Channel Historical Summary",
+      "content": [
+        {
+          "text": "## ElizaOS Development and Technical Issues\n\nThe Discord channels contain extensive discussions about ElizaOS development, technical issues, and integration challenges. Users frequently reported problems with agent UI connectivity, Ollama configuration errors, and Twitter posting functionality. Key technical discussions included:\n\n- **Agent Integration**: Users explored importing ElizaOS as a module in custom backends, with REST API being recommended as the best approach.\n- **Plugin Issues**: Deterministic key generation problems were reported with @elizaos/plugin-tee, with suggestions to check parameters and cached data.\n- **Twitter Integration**: Multiple users faced issues with Twitter posting despite correct configurations, with better success reported in v1 compared to v2.\n- **LLM Configuration**: Problems with OpenRouter and Ollama/llama3.2 overriding custom settings were discussed, with solutions involving configuration adjustments and database resets.\n\nArchitectural improvements in v2 were highlighted, including cross-platform presence, elimination of chain switching, and support for workflows and dynamic characters. These changes aim to increase system flexibility and scalability.",
+          "sources": [
+            "https://discord.com/channels/1253563208833433701/1300025221834739744"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "## Spartan Development and Degen v2 Integration\n\nSpartan's development is being decoupled from Degen v2's timeline to allow independent progress. In v2, Spartan will include three exclusive plugins:\n\n1. Community-investor\n2. Autonomous trader\n3. Intel\n\nThese plugins aim to reduce reliance on external systems and enhance internal capabilities. Spartan is also undergoing a rebranding effort, including a new Twitter/X account, avatar, and branding assets. The promotion will not coincide with the auto.fun launch on April 14th but will occur sometime after that date. The team has decided not to proceed with previously selected designers for the long-term website and is focusing on a short-term web presence for now.",
+          "sources": [
+            "https://discord.com/channels/1253563208833433701/1308149076893630555"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "## AI-Generated Content and Video Production\n\nDiscussions around AI-generated video content featured prominently, with dankvr using Remotion to programmatically generate videos from GitHub pipeline data. Two approaches were compared:\n\n- **Unity-based method**: More tweakable with higher production effort\n- **Pure AI-based method**: Easier to iterate via prompts\n\nBoth use Eleven Labs for voice synthesis, with community feedback favoring the Unity approach for its variety and control. Hedra was mentioned as a promising platform for AI character animation, with upcoming features like multi-actor support and camera control.\n\nDankvr also proposed a collaborative Discord bot to crowdsource AI news content, using ChatGPT for image generation and automated summarization of real-time data.",
+          "sources": [
+            "https://discord.com/channels/1253563208833433701/1301363808421543988"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "## Twitter Posting Module Enhancement\n\nUser kren0420 outlined a plan to enhance a Twitter posting module by integrating multiple content input sources and implementing a reinforcement learning (RL)-inspired selection mechanism. The technical approach involves:\n\n- Scraping content from multiple sources (Twitter, news sites, Discord)\n- Randomly selecting one of these content flows to generate a post\n- Tracking engagement metrics (views, likes) from posted tweets\n- Using these metrics to adjust the selection weights of each content flow\n\nThis approach aims to optimize content generation by learning from audience engagement, thereby improving the effectiveness of automated Twitter posts.",
+          "sources": [
+            "https://discord.com/channels/1253563208833433701/1300756641406521416"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "## Solana Token Trading and Analysis\n\nThe Discord channels featured extensive real-time tracking and analysis of Solana-based meme and AI-themed tokens on platforms like pump.fun and dexscreener. Users frequently posted token addresses and price performance data, with automated bots providing updates on token metrics (market cap, % change, token name).\n\nKey technical discussions included:\n\n- **Liquidity Pulls**: Identification of potential rug-pulls through liquidity analysis\n- **Token Bundling**: Analysis of tokens that appeared \"bundled\" as part of multi-token contracts\n- **Scam Detection**: Flagging of suspicious links and tokens\n- **Derivative Tokens**: Tracking of successful derivatives of popular tokens\n- **Narrative-Driven Tokens**: Leveraging geopolitical narratives to drive token interest\n\nUsers employed various tools including smart wallet tracking, bot commands (.cc and .x), and social media monitoring to identify early token activity and make trading decisions.",
+          "sources": [
+            "https://discord.com/channels/1253563208833433701/1299989396874854440"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "## Visualization Development Planning\n\nUser yikesawjeez initiated a discussion about generating a visualization and potentially taking ownership of the task. The conversation focused on defining the intended audience, identifying important aspects of accuracy, and understanding who would be interpreting the data and what formats they find digestible.\n\nA preliminary plan was proposed:\n1. Generate a specification (spec) for the visualization\n2. Conduct a trial run to evaluate the quality of submissions or implementations\n\nThis suggests a structured approach to prototyping and evaluating visualization solutions based on user needs and data clarity.",
+          "sources": [
+            "https://discord.com/channels/1253563208833433701/1328592959444095038"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "## JSON Configuration Update\n\nA brief technical exchange indicated that an update using a new JSON file was successful, resolving a previous configuration issue. However, a secondary issue remained: the inability to drop (paste or share) links in the chat or interface. User yikesawjeez responded with \"ftfy\" (fixed that for you), implying that they implemented a fix for the link-dropping issue. This suggests a permissions or UI-related problem was addressed, possibly involving chat input sanitization, link parsing, or user role settings.",
+          "sources": [
+            "https://discord.com/channels/1253563208833433701/1313222089271939102"
+          ],
+          "images": [],
+          "videos": []
+        }
+      ],
+      "topic": "discordchannelhistoricalsummary"
+    },
+    {
+      "title": "Recent Twitter Activity from Tech Enthusiasts",
+      "content": [
+        {
+          "text": "Twitter user @dankvr shared thoughts on staying calm during challenging times, emphasizing focus on open source, AI, and crypto as enduring technologies. They also shared a video requesting URLs for screens they're building.",
+          "sources": [
+            "https://twitter.com/dankvr/status/1909276823902372320",
+            "https://twitter.com/dankvr/status/1909329570249294190"
+          ],
+          "images": [
+            "https://pbs.twimg.com/ext_tw_video_thumb/1909329315822469121/pu/img/jAFByASy7_YkEpsQ.jpg"
+          ],
+          "videos": [
+            "https://video.twimg.com/ext_tw_video/1909329315822469121/pu/vid/avc1/1280x720/d4__93vzdKaREKuz.mp4?tag=12"
+          ]
+        },
+        {
+          "text": "Twitter user @shawmakesmagic discussed technology and automation with philosophical questions like 'Will you ride the dire wolf or the mechanical tiger?' and 'The robots will make the stuff. The only question is: Whose robots?' They also mentioned cleaning up GitHub issues and improvements to their plugin system.",
+          "sources": [
+            "https://twitter.com/shawmakesmagic/status/1909332414389944687",
+            "https://twitter.com/shawmakesmagic/status/1909332214481137997",
+            "https://twitter.com/shawmakesmagic/status/1909041856413122894",
+            "https://twitter.com/shawmakesmagic/status/1909037535998955818"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "Various interactions between users included @dankvr asking if @PromptLLM and @apollonator3000 are related, and @autodotfun tweeting about 'bringing back fun when you need it the most.'",
+          "sources": [
+            "https://twitter.com/dankvr/status/1909351025586078146",
+            "https://twitter.com/autodotfun/status/1909303142040187261"
+          ],
+          "images": [],
+          "videos": []
+        }
+      ],
+      "topic": "tweet"
+    },
+    {
       "title": "Recent Pull Requests in the elizaOS/eliza Repository",
       "content": [
         {
-          "text": "Several new features have been added to the elizaOS/eliza repository. PR #4206 by jinbangyi introduces a Twitter client feature, while PR #4212 by tcm390 adds functionality to skip response checks for direct messages.",
+          "text": "Several pull requests have been submitted to the elizaOS/eliza repository, focusing on new features, bug fixes, and improvements:\n\n- A Twitter client feature was added by jinbangyi (PR #4206)\n- Local embedding model implementation replaced fastembed, contributed by 0xbbjoker (PR #4205)\n- CLI documentation was updated by wtfsayo (PR #4208)\n- A fix for the Starting Agent was submitted by HarshModi2005 (PR #4209)\n- Direct message handling was improved to skip response checks, implemented by tcm390 (PR #4212)\n- A hapi shot error was resolved by nitzansaar (PR #4232)\n- Test adapters were added by 0xbbjoker (PR #4227)\n- A Venice plugin feature was contributed by pierce403 (PR #4214)\n- An Anthropic JSON parsing issue was fixed by 0xbbjoker (PR #4222)\n\nThese contributions demonstrate active development across various components of the eliza project, including client interfaces, embedding models, documentation, and core functionality.",
           "sources": [
             "https://github.com/elizaOS/eliza/pull/4206",
-            "https://github.com/elizaOS/eliza/pull/4212"
+            "https://github.com/elizaOS/eliza/pull/4205",
+            "https://github.com/elizaOS/eliza/pull/4208",
+            "https://github.com/elizaOS/eliza/pull/4209",
+            "https://github.com/elizaOS/eliza/pull/4212",
+            "https://github.com/elizaOS/eliza/pull/4232",
+            "https://github.com/elizaOS/eliza/pull/4227",
+            "https://github.com/elizaOS/eliza/pull/4214",
+            "https://github.com/elizaOS/eliza/pull/4222"
           ],
           "images": [
             "https://opengraph.githubassets.com/1/elizaOS/eliza/pull/4206",
-            "https://opengraph.githubassets.com/1/elizaOS/eliza/pull/4212"
-          ],
-          "videos": []
-        },
-        {
-          "text": "Multiple bug fixes have been implemented. PR #4205 by 0xbbjoker replaces fastembed with a local embedding model, PR #4209 by HarshModi2005 addresses a Starting Agent issue, PR #4222 fixes an Anthropic JSON parsing problem, and PR #4232 by nitzansaar resolves a Hapi shot error.",
-          "sources": [
-            "https://github.com/elizaOS/eliza/pull/4205",
-            "https://github.com/elizaOS/eliza/pull/4209",
-            "https://github.com/elizaOS/eliza/pull/4222",
-            "https://github.com/elizaOS/eliza/pull/4232"
-          ],
-          "images": [
             "https://opengraph.githubassets.com/1/elizaOS/eliza/pull/4205",
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/pull/4208",
             "https://opengraph.githubassets.com/1/elizaOS/eliza/pull/4209",
-            "https://opengraph.githubassets.com/1/elizaOS/eliza/pull/4222",
-            "https://opengraph.githubassets.com/1/elizaOS/eliza/pull/4232"
-          ],
-          "videos": []
-        },
-        {
-          "text": "New plugins and testing improvements have been added. PR #4214 by pierce403 introduces a Venice plugin, while PR #4227 by 0xbbjoker adds test adapters, and PR #4233 by ai16z-demirix implements video understanding plugin tests.",
-          "sources": [
-            "https://github.com/elizaOS/eliza/pull/4214",
-            "https://github.com/elizaOS/eliza/pull/4227",
-            "https://github.com/elizaOS/eliza/pull/4233"
-          ],
-          "images": [
-            "https://opengraph.githubassets.com/1/elizaOS/eliza/pull/4214",
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/pull/4212",
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/pull/4232",
             "https://opengraph.githubassets.com/1/elizaOS/eliza/pull/4227",
-            "https://opengraph.githubassets.com/1/elizaOS/eliza/pull/4233"
-          ],
-          "videos": []
-        },
-        {
-          "text": "Documentation has also been improved with PR #4208 by wtfsayo updating the CLI readme.",
-          "sources": [
-            "https://github.com/elizaOS/eliza/pull/4208"
-          ],
-          "images": [
-            "https://opengraph.githubassets.com/1/elizaOS/eliza/pull/4208"
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/pull/4214",
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/pull/4222"
           ],
           "videos": []
         }
       ],
       "topic": "pull_request"
+    },
+    {
+      "title": "Recent ElizaOS GitHub Pull Requests",
+      "content": [
+        {
+          "text": "## Documentation and CLI Improvements\n\nA documentation fix was made to correct the CLI command syntax for the ElizaOS plugin subcommands. The previous documentation showed incorrect usage that resulted in \"subcommand not found\" errors. This was a low-risk change affecting only documentation with no impact on runtime or production behavior.\n\nAdditionally, a bug fix was implemented to resolve port availability issues when running `npx elizaos start`. The system now automatically checks for port availability and uses the next available port if the default one is already occupied, preventing the \"agents already exists\" error during setup.",
+          "sources": [
+            "https://github.com/elizaOS/eliza/pull/4200",
+            "https://github.com/elizaOS/eliza/pull/4199"
+          ],
+          "images": [
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/pull/4200",
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/pull/4199"
+          ],
+          "videos": []
+        },
+        {
+          "text": "## Plugin and Local-AI Enhancements\n\nSeveral changes were made to improve plugin functionality:\n- Enhanced plugin installation logic and strategy\n- Externalized fastembed and node-llama-cpp in local-ai\n- Removed remaining Ollama references in the local-ai plugin\n\nThese changes appear to be maintenance and enhancement work on the plugin system.",
+          "sources": [
+            "https://github.com/elizaOS/eliza/pull/4202",
+            "https://github.com/elizaOS/eliza/pull/4204",
+            "https://github.com/elizaOS/eliza/pull/4203"
+          ],
+          "images": [
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/pull/4202",
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/pull/4204",
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/pull/4203"
+          ],
+          "videos": []
+        },
+        {
+          "text": "## UI and Functionality Fixes\n\nUI improvements were made by darkening borders from default to gray-600 on input fields, text areas, and select elements, and enhancing focus states with thicker rings for better visibility and aesthetics.\n\nA bug in the `normalizeJsonString` function was fixed that previously caused extra quotation marks to be added to nested JSON objects during normalization, resulting in invalid JSON. This was addressed by updating the regular expression used for JSON normalization.\n\nWork has also begun on fixing the non-functional delete character button in the agent settings UI. This addresses database foreign key constraint issues that were causing timeouts, improves error handling, and adds timeouts to prevent UI hanging.",
+          "sources": [
+            "https://github.com/elizaOS/eliza/pull/4201",
+            "https://github.com/elizaOS/eliza/pull/4198",
+            "https://github.com/elizaOS/eliza/pull/4197"
+          ],
+          "images": [
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/pull/4201",
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/pull/4198",
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/pull/4197"
+          ],
+          "videos": []
+        }
+      ],
+      "topic": "githubpullrequestcontributor"
+    },
+    {
+      "title": "Crypto Market Update",
+      "content": [
+        {
+          "text": "Current cryptocurrency prices show variations across major tokens. WETH (Wrapped Ethereum) is trading between $1,552.20 and $1,579.21, showing some price volatility. WBTC (Wrapped Bitcoin) is valued between $78,142.47 and $79,055.92, demonstrating Bitcoin's continued strong market position. SOL (Solana) is priced between $105.84 and $106.91. The token ai16z is trading at a much lower price point, between $0.109 and $0.113.",
+          "sources": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "These price snapshots appear to be from different time points, showing the natural fluctuations in cryptocurrency markets. Bitcoin remains the highest-valued token by a significant margin, while Ethereum and Solana maintain their positions as leading altcoins.",
+          "sources": [
+            0,
+            1,
+            2,
+            4,
+            5,
+            6
+          ],
+          "images": [],
+          "videos": []
+        }
+      ],
+      "topic": "crypto market"
     },
     {
       "title": "Recent GitHub Issues in the elizaOS/eliza Repository",
@@ -129,7 +284,7 @@
       "title": "ElizaOS GitHub Activity Update",
       "content": [
         {
-          "text": "The elizaos/eliza repository showed increased activity between April 7-9, 2025. From April 7-8, there were 7 new PRs with 2 merged, 1 new issue, and 10 active contributors. Activity significantly increased the following day (April 8-9) with 17 new PRs (12 merged), 6 new issues, and 18 active contributors. This represents substantial growth in both contributions and contributor participation over the two-day period.",
+          "text": "The elizaos/eliza repository showed increased activity between April 7-9, 2025. From April 7-8, there were 7 new PRs with 2 merged, 1 new issue, and 10 active contributors. Activity significantly increased the following day (April 8-9) with 17 new PRs (12 merged), 6 new issues, and 18 active contributors. This represents substantial growth in both contributions and contributor engagement over the two-day period.",
           "sources": [
             0,
             1
@@ -153,6 +308,20 @@
         }
       ],
       "topic": "contributors"
+    },
+    {
+      "title": "Miscellaneous",
+      "content": [
+        {
+          "text": "Development focused on package improvements, specifically addressing documentation issues with the add, remove, and list plugin functionality. The work involved 5 contributors who merged 5 pull requests. Various improvements were made during this period.",
+          "sources": [
+            "text"
+          ],
+          "images": [],
+          "videos": []
+        }
+      ],
+      "topic": "Misceleanous"
     }
   ],
   "date": 1743984000

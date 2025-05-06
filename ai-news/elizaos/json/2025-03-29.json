@@ -3,10 +3,82 @@
   "title": "Daily Report - 2025-03-29",
   "categories": [
     {
+      "title": "AI Technology Discussions and Open Source Development",
+      "content": [
+        {
+          "text": "Several Twitter users are discussing AI technology, watermarking, and open source development. One user (@dankvr) shared multiple resources for people interested in researching AI technology, noting that these resources are being 'slept on' despite AI's rapid growth.",
+          "sources": "https://twitter.com/dankvr/status/1906038287698972796",
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "There's significant discussion about C2PA, a watermarking solution being implemented by major companies to track AI-generated content. Users can check ChatGPT-generated images for these watermarks using specific tools or exiftool to reveal C2PA in the metadata. This is compared to how printers use nearly invisible yellow ink to track printed documents.",
+          "sources": "https://twitter.com/dankvr/status/1906026862620406174, https://twitter.com/dankvr/status/1906026207738466476",
+          "images": [
+            "https://pbs.twimg.com/media/GnOQ2veWsAAoD5O.jpg",
+            "https://pbs.twimg.com/media/GnORBu2WsAAYmnA.jpg",
+            "https://pbs.twimg.com/media/GnORCXYWgAAP5eY.png"
+          ],
+          "videos": []
+        },
+        {
+          "text": "The importance of open source software is highlighted, with references to the Four Essential Freedoms of Free Software: the ability to run programs for any purpose, study and modify code, share copies, and share modified versions. Users are working on open source tools that can aggregate and summarize content from platforms like Discord, Twitter, and GitHub.",
+          "sources": "https://twitter.com/dankvr/status/1905849221548306886, https://twitter.com/dankvr/status/1905776587716616446",
+          "images": [
+            "https://pbs.twimg.com/media/GnLulgiXYAAc-Fh.jpg",
+            "https://pbs.twimg.com/media/GnKtbyVaUAAzCEM.jpg",
+            "https://pbs.twimg.com/media/GnKtdjhaUAADSqr.jpg",
+            "https://pbs.twimg.com/media/GnKtjnhb0AAE3JL.png",
+            "https://pbs.twimg.com/media/GnKtp7YasAA8XJI.jpg"
+          ],
+          "videos": []
+        },
+        {
+          "text": "Another user (@shawmakesmagic) discusses the value of open sourcing personal workflow tools, suggesting they contain high-variance data that could help future AI models assist humans in creating more nuanced programs. They also mention being deeply focused on building and coding, sometimes at the expense of maintaining connections.",
+          "sources": "https://twitter.com/shawmakesmagic/status/1906047339519000774, https://twitter.com/shawmakesmagic/status/1906049954860478496",
+          "images": [],
+          "videos": []
+        }
+      ],
+      "topic": "tweet"
+    },
+    {
+      "title": "Discord Channel Historical Summary",
+      "content": [
+        {
+          "text": "## ElizaOS Development and Troubleshooting\n\nThe ElizaOS Discord channels contained extensive discussions about plugin installation issues, database configuration, and integration with services like Discord and Twitter. Users frequently encountered problems with plugin visibility after installation via CLI and Bun. The recommended solution was to use git clone of the ElizaOS repo, switch to the v2-develop branch, and run bun install, bun run build, and bun start.\n\nCommon technical issues included:\n- SyntaxError related to importing EventEmitter from eventemitter3 due to CommonJS/ESM incompatibility\n- Twitter client failing to reply to users despite checking interactions (GitHub issue #4115)\n- Local AI configuration problems with the system defaulting to LLaMA models despite setting OpenAI or Anthropic API keys\n- \"No database adapter provided\" errors in v0.25.9\n- Crashes due to missing DISCORD_APPLICATION_ID and DISCORD_API_TOKEN\n- Dependency resolution errors during bun install\n- Rate limit issues with Anthropic API causing agent crashes\n\nThe community actively helped each other troubleshoot these issues, with users like dankvr and boudy__08 providing guidance on correct setup procedures and workarounds.",
+          "sources": [
+            "https://discord.com/channels/1253563208833433701/1300025221834739744"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "## Community Documentation and Onboarding Initiatives\n\nThere were significant discussions about improving ElizaOS's community documentation and onboarding processes. dankvr initiated structured questions to clarify the vision for community development, with contributors like amrali8 and pattatk providing detailed feedback.\n\nKey points included:\n- Creating dual-layered documentation (technical and non-technical)\n- Implementing a flowchart-based FAQ system with metadata-tagged plugin/article structure\n- Organizing the community structure to balance operational clarity with open-source flexibility\n- Integrating community documentation with technical documentation\n- Using LLMs to simplify existing documentation for non-technical users\n\nThere was also discussion about improving AI-generated summaries for the m3-org/ai-news project, with proposals to enhance the digestibility and reliability of AI-curated content. Suggestions included using LLMs to analyze sample files, generate prompt ideas, identify data gaps, and propose improvements.",
+          "sources": [
+            "https://discord.com/channels/1253563208833433701/1301363808421543988",
+            "https://discord.com/channels/1253563208833433701/1328592959444095038"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "## Tokenomics and Platform Integration Discussions\n\nThe Discord channels featured debates about tokenomics, particularly regarding ai16z token and its integration with the Auto.fun launchpad. There was confusion over whether ai16z is the native token of the launchpad, with clarification provided that ai16z is not a native token of Auto.fun, but the platform uses SOL to auto-buy ai16z, creating a value accrual mechanism.\n\nwitchwinter outlined a tokenomic model involving a two-pool system (SOL/Agent Token and ai16z buybacks from fees), designed to protect developers from initial liquidity issues. However, doriand0963 raised concerns about the model's effectiveness, questioning fee sustainability and developer compensation.\n\nIn other channels, users actively tracked token performance using Rick's bot, which provided live updates on price, volume, and percentage changes for various tokens. There were also discussions about market sentiment, whale behavior, and influencer impact on token visibility.",
+          "sources": [
+            "https://discord.com/channels/1253563208833433701/1301363808421543988",
+            "https://discord.com/channels/1253563208833433701/1299989396874854440"
+          ],
+          "images": [],
+          "videos": []
+        }
+      ],
+      "topic": "discordchannelhistoricalsummary"
+    },
+    {
       "title": "Recent Pull Requests in elizaOS/eliza Repository",
       "content": [
         {
-          "text": "Several pull requests have been merged into the elizaOS/eliza repository, focusing on plugin fixes, documentation improvements, and codebase enhancements.\n\nPlugin fixes include PR #4108 by wtfsayo that addresses Twitter plugin post generation issues and applies linter fixes, PR #4106 by 0xbbjoker that fixes the Telegram plugin, and PR #4118 by wtfsayo that improves how the Groq plugin handles retries gracefully.\n\nCode improvements include PR #4112 by wtfsayo that adds a monorepo command to the CLI, and PR #4110 also by wtfsayo that enhances component handling to prevent unnecessary fetching when components aren't required or mounted.\n\nDocumentation updates were made in PR #4114 by madjin to update the docs, and PR #4116 by 0xbryer to fix a typo in Thai text for a file path.",
+          "text": "Several pull requests have been merged into the elizaOS/eliza repository, focusing on plugin fixes, documentation improvements, and codebase enhancements.\n\nPlugin fixes include PR #4108 by wtfsayo that addresses Twitter plugin post generation issues and applies linter fixes, PR #4106 by 0xbbjoker that fixes the Telegram plugin, and PR #4118 by wtfsayo that improves how the Groq plugin handles retries gracefully.\n\nCode improvements include PR #4110 by wtfsayo that enhances component handling to prevent unnecessary fetching when components aren't required or mounted, and PR #4112 by wtfsayo that adds a monorepo command to the CLI.\n\nDocumentation updates were made in PR #4114 by madjin to update the docs, and PR #4116 by 0xbryer to fix a typo in Thai text for a file path.",
           "sources": [
             "https://github.com/elizaOS/eliza/pull/4108",
             "https://github.com/elizaOS/eliza/pull/4106",
@@ -49,7 +121,7 @@
           "videos": []
         },
         {
-          "text": "Other improvements include better component handling to optimize fetching operations and updated documentation.",
+          "text": "Other improvements include better component handling to optimize fetching operations (only fetching when required or mounted) and documentation updates.",
           "sources": [
             "https://github.com/elizaOS/eliza/pull/4110",
             "https://github.com/elizaOS/eliza/pull/4104"
@@ -61,31 +133,67 @@
       "topic": "completed_items"
     },
     {
-      "title": "Recent Issues in ElizaOS GitHub Repository",
+      "title": "ElizaOS Installation and Setup Issues",
       "content": [
         {
-          "text": "Several issues have been reported in the ElizaOS GitHub repository:\n\n1. Installation Dependency Error (#4109): Users are experiencing installation failures due to missing dependency @elizaos/plugin-sql@^0.25.\n\n2. Creation Error (#4107): When using 'npx elizaos create', users encounter an error message indicating that 'agents already exists'.\n\n3. Account Blocking Feature Request (#4117): A user is asking how to block and ban interactions with specific accounts in the system.\n\n4. Twitter Plugin Issues (#4115): The Twitter plugin is creating duplicate memories when mentions occur, and there are problems with null post interval configuration.\n\n5. CLI Improvement Suggestion (#4113): A feature request has been made to improve the CLI tool instructions for better user experience.",
+          "text": "Users are experiencing several installation and setup issues with ElizaOS:\n\n1. **Windows Build Failures**: The build process fails on Windows due to missing bash command, causing the extract-version script to exit with an error code.\n\n2. **Dependency Version Conflicts**: Multiple users report installation failures with npm due to missing dependency versions. Specifically, the CLI requires @elizaos/plugin-sql@^0.25.6, but this version doesn't exist in the npm registry. The available versions are only pre-releases for 1.0.0 (alpha and beta versions).\n\n3. **Documentation Issues**: The quickstart guide on eliza.how appears to be outdated or inaccurate. Users need to use the @beta tag when installing packages, but this isn't mentioned in the documentation.\n\n4. **Agent Creation Errors**: When running 'npx elizaos create' and then 'npx elizaos start', users encounter an error message indicating 'agents already exists'.",
           "sources": [
+            "https://github.com/elizaOS/eliza/issues/4094",
+            "https://github.com/elizaOS/eliza/issues/4105",
             "https://github.com/elizaOS/eliza/issues/4109",
-            "https://github.com/elizaOS/eliza/issues/4107",
-            "https://github.com/elizaOS/eliza/issues/4117",
-            "https://github.com/elizaOS/eliza/issues/4115",
-            "https://github.com/elizaOS/eliza/issues/4113"
+            "https://github.com/elizaOS/eliza/issues/4107"
+          ],
+          "images": [
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/issues/4094",
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/issues/4105",
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/issues/4109",
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/issues/4107"
+          ],
+          "videos": []
+        }
+      ],
+      "topic": "githubissuecontributor"
+    },
+    {
+      "title": "Crypto Market Update",
+      "content": [
+        {
+          "text": "The crypto market shows fluctuations in prices for two tracked cryptocurrencies. WBTC (Wrapped Bitcoin) is currently trading between $82,581.85 and $84,254.22, showing some volatility. Meanwhile, ai16z is trading at a much lower price point, between $0.16 and $0.18, also experiencing price movements.",
+          "sources": [
+            "Symbol: WBTC\n Current Price: $84254.2205784",
+            "Symbol: ai16z\n Current Price: $0.178719078205",
+            "Symbol: WBTC\n Current Price: $82581.8508252",
+            "Symbol: ai16z\n Current Price: $0.157911974396"
           ],
           "images": [],
           "videos": []
         }
       ],
-      "topic": "issue"
+      "topic": "crypto market"
+    },
+    {
+      "title": "GitHub Development Summary",
+      "content": [
+        {
+          "text": "Recent development involved 7 contributors merging 0 PRs in one period, and 5 contributors merging 4 PRs in another. Work focused on package improvements including Twitter plugin post generation and running linter. New features were added, such as a monorepo command to the CLI, along with 2 bug fixes. Overall, the development efforts centered around various improvements to the codebase.",
+          "sources": [
+            "text: with 7 contributors merging 0 PRs. Major work included various improvements.",
+            "text: Development focused on package improvements (twitter plugin post generation + ran linter), new features (add monorepo command to cli), 2 bug fixes. with 5 contributors merging 4 PRs. Major work included various improvements."
+          ],
+          "images": [],
+          "videos": []
+        }
+      ],
+      "topic": "githubsummary"
     },
     {
       "title": "ElizaOS GitHub Activity Update",
       "content": [
         {
-          "text": "The elizaos/eliza repository showed consistent activity over a two-day period. From March 29-30, 2025, there were 5 new pull requests (all merged) and 3 new issues, with 7 active contributors participating. The following day (March 30-31, 2025) saw 3 new pull requests (2 merged), 3 new issues, and an increase to 9 active contributors. Overall, the project maintained steady development momentum with growing contributor engagement.",
+          "text": "The elizaos/eliza repository showed consistent activity over a two-day period. From March 29-30, 2025, there were 5 new pull requests (all merged), 3 new issues, and 7 active contributors. The following day (March 30-31, 2025), activity continued with 3 new pull requests (2 merged), 3 new issues, and a slight increase to 9 active contributors.",
           "sources": [
-            0,
-            1
+            "From 2025-03-29 to 2025-03-30, elizaos/eliza had 5 new PRs (5 merged), 3 new issues, and 7 active contributors.",
+            "From 2025-03-30 to 2025-03-31, elizaos/eliza had 3 new PRs (2 merged), 3 new issues, and 9 active contributors."
           ],
           "images": [],
           "videos": []

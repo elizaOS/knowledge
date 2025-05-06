@@ -3,10 +3,121 @@
   "title": "Daily Report - 2025-03-22",
   "categories": [
     {
+      "title": "Recent ElizaOS Pull Requests Summary",
+      "content": [
+        {
+          "text": "## CLI and Agent Management Improvements\n\nSeveral fixes and improvements have been made to the CLI and agent management functionality:\n\n- Fixed the `npx elizaos agent` commands, ensuring all agent operations (start, stop, list, details, remove) now work as expected ([PR #4028](https://github.com/elizaOS/eliza/pull/4028))\n- Fixed the `--character` parameter in the CLI start command ([PR #4016](https://github.com/elizaOS/eliza/pull/4016))\n- Improved plugin installation experience with better name handling and clearer instructions when running under npx ([PR #4031](https://github.com/elizaOS/eliza/pull/4031))\n- Enhanced GitHub access token instructions with proper documentation links ([PR #4031](https://github.com/elizaOS/eliza/pull/4031))\n- Added partial agent update functionality to send only changed fields ([PR #4026](https://github.com/elizaOS/eliza/pull/4026))",
+          "sources": [
+            "https://github.com/elizaOS/eliza/pull/4028",
+            "https://github.com/elizaOS/eliza/pull/4016",
+            "https://github.com/elizaOS/eliza/pull/4031",
+            "https://github.com/elizaOS/eliza/pull/4026"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "## UI and Layout Enhancements\n\nMultiple improvements to the user interface and layout have been implemented:\n\n- Added a create button in the left panel for easy access ([PR #4013](https://github.com/elizaOS/eliza/pull/4013))\n- Improved profile UI and layout ([PR #4021](https://github.com/elizaOS/eliza/pull/4021))\n- Fixed profile overflow issue ([PR #4025](https://github.com/elizaOS/eliza/pull/4025))\n- Enhanced memory viewer with improved visualization ([PR #4027](https://github.com/elizaOS/eliza/pull/4027))\n- Adjusted grid size for better display ([PR #4015](https://github.com/elizaOS/eliza/pull/4015))\n- Updated agents status display in group chats and removed thumbnails for groups ([PR #4012](https://github.com/elizaOS/eliza/pull/4012))\n- Fixed profile picture display for group chats ([PR #4008](https://github.com/elizaOS/eliza/pull/4008))",
+          "sources": [
+            "https://github.com/elizaOS/eliza/pull/4013",
+            "https://github.com/elizaOS/eliza/pull/4021",
+            "https://github.com/elizaOS/eliza/pull/4025",
+            "https://github.com/elizaOS/eliza/pull/4027",
+            "https://github.com/elizaOS/eliza/pull/4015",
+            "https://github.com/elizaOS/eliza/pull/4012",
+            "https://github.com/elizaOS/eliza/pull/4008"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "## Stack and Room Improvements\n\nSeveral changes were made to improve the stack and room functionality:\n\n- Added maxStack back to the system ([PR #4014](https://github.com/elizaOS/eliza/pull/4014))\n- Fixed room stack issues ([PR #4011](https://github.com/elizaOS/eliza/pull/4011))\n- Improved stack visualization and functionality ([PR #4010](https://github.com/elizaOS/eliza/pull/4010))",
+          "sources": [
+            "https://github.com/elizaOS/eliza/pull/4014",
+            "https://github.com/elizaOS/eliza/pull/4011",
+            "https://github.com/elizaOS/eliza/pull/4010"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "## Bug Fixes and Technical Improvements\n\nVarious bug fixes and technical improvements have been implemented:\n\n- Fixed OpenAI speech-to-text functionality by changing from blob to file format, restoring functionality in GUI and Discord ([PR #4017](https://github.com/elizaOS/eliza/pull/4017))\n- Enhanced validation for PostgreSQL URL and improved UX for start and create operations ([PR #4007](https://github.com/elizaOS/eliza/pull/4007))\n- Fixed template variable inconsistency in `twitterPostTemplate` by standardizing on `{{AGENT_NAME}}` format ([PR #4029](https://github.com/elizaOS/eliza/pull/4029))\n- Removed duplicate JSON import to improve code cleanliness ([PR #4030](https://github.com/elizaOS/eliza/pull/4030))\n- Temporarily removed unneeded submodules and workflow ([PR #4019](https://github.com/elizaOS/eliza/pull/4019))\n- Removed characters submodule ([PR #4018](https://github.com/elizaOS/eliza/pull/4018))\n- Updated intro.md documentation to ensure code runs smoothly ([PR #4005](https://github.com/elizaOS/eliza/pull/4005))\n- Updated README.md with improved PR template ([PR #4006](https://github.com/elizaOS/eliza/pull/4006))",
+          "sources": [
+            "https://github.com/elizaOS/eliza/pull/4017",
+            "https://github.com/elizaOS/eliza/pull/4007",
+            "https://github.com/elizaOS/eliza/pull/4029",
+            "https://github.com/elizaOS/eliza/pull/4030",
+            "https://github.com/elizaOS/eliza/pull/4019",
+            "https://github.com/elizaOS/eliza/pull/4018",
+            "https://github.com/elizaOS/eliza/pull/4005",
+            "https://github.com/elizaOS/eliza/pull/4006"
+          ],
+          "images": [],
+          "videos": []
+        }
+      ],
+      "topic": "githubpullrequestcontributor"
+    },
+    {
+      "title": "Discord Channel Historical Summary",
+      "content": [
+        {
+          "text": "# Technical Discussions and Problem-Solving\n\n## Character Behavior and Configuration\n- **Character Behavior Fix**: A user resolved an issue where a character was using emojis and pirate talk in Discord but not in tweets by explicitly adding `\"never uses emoji\"` and `\"hates pirate talk\"` in the character file.\n- **Docker Character Loading Issue**: A user successfully started `1.0.0-beta.7` using `bun run start --character mycharacter.json`, but the Web UI only showed the default character.\n\n## CLI and Installation Issues\n- **CLI Version Fix**: Using `@elizaos/cli@beta` resolved CLI startup issues for some users.\n- **V2 CLI Plugin-SQL Error**: A user encountered a `plugin-sql` module not found error, which was fixed by running `rm -rf node_modules && rm package-lock.json && bun install`.\n- **Database Connection Issue**: Some users still faced DB connection errors after fixing the CLI startup.\n\n## Development and Automation\n- **Streaming Agent Responses**: A user asked about streaming agent responses like Claude or ChatGPT, but no solution was provided.\n- **Slash Commands**: A request for examples of registering and using slash commands received no response.\n- **Handling User Inputs**: Discussion on how to handle missing recipient addresses in ETH transactions, with advice to require user input each time while ensuring secure storage.\n- **Twitter Automation**: Some users sought help with Twitter automation in Eliza OS.\n- **EVM Plugin Issue**: A user reported that the EVM plugin could transfer but not bridge or swap via LiFi.\n\n# Creative and Business Applications\n\n## AI-Assisted Content Creation\n- **Automating Question Generation**: Discussion about replacing human assistants with AI for better accuracy and efficiency in generating questions.\n- **DAO Analysis & Script Generation**: A user provided DAO analysis and character descriptions to Claude, requesting script ideas inspired by Star Wars Jedi Council scenes.\n- **Animation Concept Development**: Exploration of generating ideas for animations using AI to create prompts for images that could be used in storyboarding.\n\n## Cryptocurrency and Token Discussions\n- **Token Scam Alert**: A user flagged a scam token on BSC.\n- **Investment Model Discussion**: Suggestions that partners should invest capital rather than freeload, with proposals for a stake-weighted reputation system.\n- **Conditional Token Mechanism**: Ideas for using MetaDAO or Polymarket conditional tokens to define rug pulls based on TWAP price thresholds.\n- **V2 Launch Timeline**: Questions about the timeline for V2 launch, with estimates of within two weeks.",
+          "sources": [
+            "https://discord.com/channels/1253563208833433701/1300025221834739744",
+            "https://discord.com/channels/1253563208833433701/1301363808421543988",
+            "https://discord.com/channels/1253563208833433701/1328592959444095038"
+          ],
+          "images": [],
+          "videos": []
+        }
+      ],
+      "topic": "discordchannelhistoricalsummary"
+    },
+    {
+      "title": "DankVR's Recent Activities: ElizaOS, Grok, and Crypto",
+      "content": [
+        {
+          "text": "DankVR published a concise overview comparing ElizaOS v1 and v2, sharing a link to the article along with an image.",
+          "sources": "https://twitter.com/dankvr/status/1903589597965099043",
+          "images": [
+            "https://pbs.twimg.com/media/GmrnvQIaUAAlVJ4.jpg"
+          ],
+          "videos": []
+        },
+        {
+          "text": "DankVR showcased Grok's image editor capabilities, noting its consistency across multiple example images.",
+          "sources": "https://twitter.com/dankvr/status/1903582821169447245",
+          "images": [
+            "https://pbs.twimg.com/media/GmriWfMbIAADMl_.jpg",
+            "https://pbs.twimg.com/media/GmriXsiXsAA5akr.jpg",
+            "https://pbs.twimg.com/media/GmriZDyXEAElUHO.jpg",
+            "https://pbs.twimg.com/media/GmribQgXsAEYlxd.jpg"
+          ],
+          "videos": []
+        },
+        {
+          "text": "DankVR started an ElizaOS blog documenting 12 weeks of Friday night spaces where developers shared progress on open source AI projects. They gathered notes and videos with help from YoungPhlo, describing it as 'crypto x AI history'.",
+          "sources": "https://twitter.com/dankvr/status/1903276205052223526",
+          "images": [
+            "https://pbs.twimg.com/media/GmnJJNPW0AA-TMr.jpg"
+          ],
+          "videos": []
+        },
+        {
+          "text": "DankVR expressed frustration about crypto adoption limitations, including limited payment options for cryptocurrencies, services locked behind credit cards, and questioned what's holding back privacy coins like Zcash and XMR.",
+          "sources": "https://twitter.com/dankvr/status/1903493107540238729 https://twitter.com/dankvr/status/1903472035101077883 https://twitter.com/dankvr/status/1903310447262023759",
+          "images": [],
+          "videos": []
+        }
+      ],
+      "topic": "tweet"
+    },
+    {
       "title": "ElizaOS Recent Updates",
       "content": [
         {
-          "text": "Several improvements have been made to the ElizaOS project recently, including both new features and bug fixes:\n\n**New Features:**\n- Fixed the 'add plugin command' in quickstart.md documentation (PR #4047)\n- Added drag & drop functionality for environment variable uploading (PR #4033)\n- Added redpill support (PR #4045)\n\n**Bug Fixes:**\n- Resolved issues with Discord voice functionality (PR #4036)\n- Fixed an opus-related issue (PR #4035)\n\n**Other Changes:**\n- Added Groq integration (PR #4044)",
+          "text": "Several improvements have been made to the ElizaOS project recently, including both new features and bug fixes:\n\n**New Features:**\n- Fixed the 'add plugin command' in quickstart.md documentation (PR #4047)\n- Added drag & drop functionality for environment file uploading (PR #4033)\n- Added RedPill support (PR #4045)\n\n**Bug Fixes:**\n- Resolved Discord voice issues (PR #4036)\n- Fixed Opus-related problems (PR #4035)\n\n**Other Changes:**\n- Added Groq integration (PR #4044)",
           "sources": [
             "https://github.com/elizaOS/eliza/pull/4047",
             "https://github.com/elizaOS/eliza/pull/4036",
@@ -22,22 +133,61 @@
       "topic": "completed_items"
     },
     {
-      "title": "Recent Pull Requests in the elizaOS/eliza Repository",
+      "title": "Recent ElizaOS GitHub Issues",
       "content": [
         {
-          "text": "Several bug fixes and improvements have been made to the elizaOS/eliza repository through recent pull requests:\n\n- PR #4036 and #4035 by tcm390 addressed issues with Discord voice functionality and fixed an opus-related problem.\n\n- PR #4047 by antman1p corrected the 'add plugin command' documentation in quickstart.md.\n\n- PR #4051 by ai16z-demirix focused on improving plugin browser test coverage and setup, categorized as a chore task.\n\n- PR #4052 by 0xbbjoker fixed an issue related to negative IDs in Telegram integration.",
+          "text": "Several issues have been reported in the ElizaOS GitHub repository:\n\n1. **Ollama LLM Response Parsing Fails (Issue #3993/4024)**: When using Ollama as the LLM engine in ElizaOS v1.0.0-beta.2, response parsing fails with a TypeError indicating that null is not an object. This occurs because parseJSONObjectFromText(response) returns null, suggesting the response from Ollama is not valid JSON. The issue happens despite Ollama working fine when tested via the Ollama WebUI. Environment variables were set to use Ollama text models with llama3.2:1b model.\n\n2. **Version Discrepancy in Client (Issue #4009/4023)**: There's a versioning issue in the client where the version is copied and built during client build, but then changed during publish. The solution proposed is to restructure the process to version, build, and then publish in that specific order.\n\n3. **CLI Agent List Command Failure (Issue #4020/4022)**: Users are experiencing errors when running 'npx elizaos agent list' command, which results in a 'fetch failed' error. The error trace shows the failure occurs in the undici module and propagates through the CLI command execution chain.",
+          "sources": [
+            "https://github.com/elizaOS/eliza/issues/4024",
+            "https://github.com/elizaOS/eliza/issues/4023",
+            "https://github.com/elizaOS/eliza/issues/4022",
+            "https://github.com/elizaOS/eliza/issues/4020",
+            "https://github.com/elizaOS/eliza/issues/4009"
+          ],
+          "images": [
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/issues/4024",
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/issues/4023",
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/issues/4022",
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/issues/4020",
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/issues/4009"
+          ],
+          "videos": []
+        }
+      ],
+      "topic": "githubissuecontributor"
+    },
+    {
+      "title": "Crypto Market Update",
+      "content": [
+        {
+          "text": "The crypto market shows WBTC (Wrapped Bitcoin) trading at prices between $83,729.89 and $83,913.50, indicating slight price fluctuation. Meanwhile, ai16z is trading at approximately $0.19-$0.20 per token, with a small price increase observed from $0.196957554996 to $0.199530767395.",
+          "sources": [
+            "Symbol: WBTC\n Current Price: $83913.5047565",
+            "Symbol: ai16z\n Current Price: $0.196957554996",
+            "Symbol: WBTC\n Current Price: $83729.8929082",
+            "Symbol: ai16z\n Current Price: $0.199530767395"
+          ],
+          "images": [],
+          "videos": []
+        }
+      ],
+      "topic": "crypto market"
+    },
+    {
+      "title": "Recent Bug Fixes in the Eliza Project",
+      "content": [
+        {
+          "text": "The Eliza project has seen several bug fixes recently through multiple pull requests. Developer tcm390 addressed issues with Discord voice functionality in PR #4036 and fixed an Opus-related problem in PR #4035. Meanwhile, contributor antman1p corrected documentation in the quickstart.md file related to the add plugin command in PR #4047. Additionally, developer 0xbbjoker resolved an issue with negative IDs in the Telegram integration through PR #4052. These fixes collectively improve the stability and functionality of the Eliza platform across different communication channels and documentation.",
           "sources": [
             "https://github.com/elizaOS/eliza/pull/4036",
             "https://github.com/elizaOS/eliza/pull/4035",
             "https://github.com/elizaOS/eliza/pull/4047",
-            "https://github.com/elizaOS/eliza/pull/4051",
             "https://github.com/elizaOS/eliza/pull/4052"
           ],
           "images": [
             "https://opengraph.githubassets.com/1/elizaOS/eliza/pull/4036",
             "https://opengraph.githubassets.com/1/elizaOS/eliza/pull/4035",
             "https://opengraph.githubassets.com/1/elizaOS/eliza/pull/4047",
-            "https://opengraph.githubassets.com/1/elizaOS/eliza/pull/4051",
             "https://opengraph.githubassets.com/1/elizaOS/eliza/pull/4052"
           ],
           "videos": []
@@ -46,32 +196,25 @@
       "topic": "pull_request"
     },
     {
-      "title": "Recent GitHub Issues in elizaOS/eliza Repository",
+      "title": "Development Update",
       "content": [
         {
-          "text": "Several issues have been reported in the elizaOS/eliza GitHub repository:\n\n1. Issue #4048: A user named Deadsg reported a Husky pre-commit error, which appears to be related to Git hooks configuration.\n\n2. Issue #4046: User ljiang22 encountered a SyntaxError when trying to import the 'generateText' function from '@elizaos/core', as this module does not provide the specified export.\n\n3. Issue #4049: User jmikedupont2 reported an 'AI_LoadAPIKeyError' indicating that the Anthropic API key is missing. The error suggests passing it using either the 'apiKey' parameter or the ANTHROPIC_API_KEY environment variable.\n\n4. Issue #4050: User Quanta-Naut is seeking help with the client-twitter functionality, specifically asking how to enable eliza to post images along with tweets.",
+          "text": "Development has focused on new features (including adding maxStack back) and bug fixes, with 13 contributors merging 15 PRs. The team fixed 7 bugs in total. Developer tcm390 is working on multiple improvements including the CLI agent command, profile overflow, OpenAI STT, grid size adjustment, room stack, and group chat functionalities.",
           "sources": [
-            "https://github.com/elizaOS/eliza/issues/4048",
-            "https://github.com/elizaOS/eliza/issues/4046",
-            "https://github.com/elizaOS/eliza/issues/4049",
-            "https://github.com/elizaOS/eliza/issues/4050"
+            "text: Development focused on new features (add maxStatck back), 7 bug fixes. with 13 contributors merging 15 PRs. Major work included tcm390 is currently working on fixing various issues and adding new features to the cli agent command, profile overflow, openai stt, grid size adjustment, and room stack.",
+            "text: Development focused on new features (add maxStatck back), 7 bug fixes. with 13 contributors merging 15 PRs. Major work included tcm390 is primarily focused on fixing various issues and adding new features related to the cli agent command, profile overflow, openai stt, grid size adjustment, room stack, and group chat functionalities."
           ],
-          "images": [
-            "https://opengraph.githubassets.com/1/elizaOS/eliza/issues/4048",
-            "https://opengraph.githubassets.com/1/elizaOS/eliza/issues/4046",
-            "https://opengraph.githubassets.com/1/elizaOS/eliza/issues/4049",
-            "https://opengraph.githubassets.com/1/elizaOS/eliza/issues/4050"
-          ],
+          "images": [],
           "videos": []
         }
       ],
-      "topic": "issue"
+      "topic": "githubsummary"
     },
     {
       "title": "ElizaOS GitHub Activity Update",
       "content": [
         {
-          "text": "Over the past two days (March 22-24, 2025), the elizaos/eliza repository showed consistent development activity. The project had a total of 3 new pull requests with 6 PRs merged. There were 4 new issues created during this period. The repository maintained active engagement with 8 contributors on the first day, decreasing slightly to 6 active contributors on the following day.",
+          "text": "Over the past two days (March 22-24, 2025), the elizaos/eliza repository showed consistent development activity. The project had a total of 3 new pull requests with 6 PRs merged. There were 4 new issues created during this period. The repository maintained active engagement with 8 contributors on the first day, decreasing slightly to 6 active contributors on the second day.",
           "sources": [
             "From 2025-03-22 to 2025-03-23, elizaos/eliza had 1 new PRs (4 merged), 3 new issues, and 8 active contributors.",
             "From 2025-03-23 to 2025-03-24, elizaos/eliza had 2 new PRs (2 merged), 1 new issues, and 6 active contributors."

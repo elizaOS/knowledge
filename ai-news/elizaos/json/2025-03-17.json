@@ -3,10 +3,85 @@
   "title": "Daily Report - 2025-03-17",
   "categories": [
     {
+      "title": "Recent ElizaOS Pull Requests Summary",
+      "content": [
+        {
+          "text": "## Custom Embedding Server Support\n\nA new feature has been added to support custom embedding servers. This allows users to deploy and use their own embedding servers through Cloudflare workers or any OpenAI-compatible embeddings service without modifying core code. The implementation includes a new `Custom` embedding provider type, configuration validation and loading, support for custom API endpoints, model names, and embedding dimensions. The feature is opt-in through environment variables such as `USE_CUSTOM_EMBEDDING`, `CUSTOM_EMBEDDING_DIMENSIONS`, `CUSTOM_EMBEDDING_MODEL`, `CUSTOM_EMBEDDING_ENDPOINT`, and `CUSTOM_EMBEDDING_API_KEY`.",
+          "sources": "https://github.com/elizaOS/eliza/pull/3958",
+          "images": [
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/pull/3958"
+          ],
+          "videos": []
+        },
+        {
+          "text": "## Agent Memory Management Improvements\n\nTwo significant PRs enhance agent memory capabilities:\n\n1. **View and Edit Agent Memories**: A new feature allowing users to view and edit memories associated with an agent.\n\n2. **Knowledge Management**: A new RAG Knowledge tab has been added to the GUI, accessible from the dropdown menu as a specific memory type called 'documents'. This implementation includes knowledge search functionality, RAG upload ability, and document management features. Users can upload documents which are then chunked for knowledge retrieval, and delete documents which also removes all related fragments.",
+          "sources": "https://github.com/elizaOS/eliza/pull/3954, https://github.com/elizaOS/eliza/pull/3950",
+          "images": [
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/pull/3954",
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/pull/3950"
+          ],
+          "videos": []
+        },
+        {
+          "text": "## User Interaction History for Agents\n\nA new feature enhances agent interactions based on user interaction history, making agents feel more human and genuine. The implementation works in two parts:\n\n1. Storing conversations and reviewing inactive ones\n2. Fetching user scores to define interaction tone\n\nThe system analyzes conversations after 45 minutes of inactivity and assigns scores to users. These scores are stored in the 'Account' table and used to modulate the agent's tone in future interactions. Users with positive scores experience friendlier interactions, while those with negative scores encounter a more reserved demeanor. Currently implemented for the Twitter client but could be extended to other clients.",
+          "sources": "https://github.com/elizaOS/eliza/pull/3962",
+          "images": [
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/pull/3962"
+          ],
+          "videos": []
+        },
+        {
+          "text": "## UI and UX Improvements\n\nSeveral PRs focus on improving the user interface and experience:\n\n1. **Bubble Layout Refactoring**: Fixed an issue where elements stick together for short messages\n2. **Real-time Thought Messages**: Enhanced to show thought messages in real time\n3. **AI Writer Rerender Issue Fix**: Resolved a rendering issue in the AI writer component\n4. **Connection Status Simplification**: Streamlined the connection status display\n5. **Documentation Versioning**: Added versioning for docs to switch between v0.25.9 and v1.0.0-alpha documentation",
+          "sources": "https://github.com/elizaOS/eliza/pull/3965, https://github.com/elizaOS/eliza/pull/3967, https://github.com/elizaOS/eliza/pull/3969, https://github.com/elizaOS/eliza/pull/3973, https://github.com/elizaOS/eliza/pull/3963",
+          "images": [
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/pull/3965",
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/pull/3967",
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/pull/3969",
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/pull/3973",
+            "https://github.com/user-attachments/assets/dd3059a1-a7cc-4d41-abf4-6f574fdba31c"
+          ],
+          "videos": []
+        },
+        {
+          "text": "## Bug Fixes and Technical Improvements\n\nSeveral PRs address bugs and technical issues:\n\n1. **LocalAI Plugin Fix**: Removed R1 from configuration and added DeepHermes, improving model download process\n2. **Tweet Scraping Fix**: Added missing `await` for tweet scraping to properly load tweet data\n3. **System Prompt Addition**: Added system prompt to object generation\n4. **Postgres Connection URL Fix**: Improved handling of Postgres connection URLs during project creation with proper validation and storage\n5. **Log Management Improvements**: Added clear logs method and API, improved log display, and removed SQLite dependencies with TEE Log",
+          "sources": "https://github.com/elizaOS/eliza/pull/3953, https://github.com/elizaOS/eliza/pull/3960, https://github.com/elizaOS/eliza/pull/3961, https://github.com/elizaOS/eliza/pull/3977, https://github.com/elizaOS/eliza/pull/3974, https://github.com/elizaOS/eliza/pull/3971, https://github.com/elizaOS/eliza/pull/3966",
+          "images": [
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/pull/3953",
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/pull/3960",
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/pull/3961",
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/pull/3977",
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/pull/3974",
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/pull/3971",
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/pull/3966"
+          ],
+          "videos": []
+        },
+        {
+          "text": "## Test Coverage Improvements\n\nTwo PRs focus on enhancing test coverage:\n\n1. **Plugin Bootstrap Tests**: Added comprehensive test coverage for Goal Evaluator and Fact Evaluator, fixing type issues and improving TypeScript implementation. The test suite now includes 26 passing tests across 3 test files.\n\n2. **Plugin Storage S3 Test Coverage**: Added extensive tests for the AWS S3 storage plugin, including validation of types, plugin functionality, and the AwsS3Service methods like uploadFile, generateSignedUrl, and uploadJson.",
+          "sources": "https://github.com/elizaOS/eliza/pull/3959, https://github.com/elizaOS/eliza/pull/3976",
+          "images": [
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/pull/3959",
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/pull/3976"
+          ],
+          "videos": []
+        },
+        {
+          "text": "## Documentation Updates\n\nTwo PRs focus on documentation improvements:\n\n1. **V2 Development Docs**: Added documentation for the V2 development version\n\n2. **Spanish Terminology Fix**: Corrected the term \"CONFIGURACIONES\" to \"CONFIGURACIÓN\" in the Spanish documentation for improved clarity",
+          "sources": "https://github.com/elizaOS/eliza/pull/3951, https://github.com/elizaOS/eliza/pull/3970",
+          "images": [
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/pull/3951",
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/pull/3970"
+          ],
+          "videos": []
+        }
+      ],
+      "topic": "githubpullrequestcontributor"
+    },
+    {
       "title": "Recent Updates to Eliza OS",
       "content": [
         {
-          "text": "# Recent Updates to Eliza OS\n\n## New Features\n- Added a clear logs method and API (PR #3974)\n- Implemented documentation versioning (PR #3963)\n\n## Bug Fixes\n- Fixed log display and APIs (PR #3971)\n- Resolved AIWriter rerendering issue (PR #3969)\n- Improved real-time display of thoughts messages (PR #3967)\n- Refactored bubble layout (PR #3965)\n- Fixed button label (PR #3964)\n- Fixed missing comma between regex expressions (PR #3987)\n- Corrected a typo (PR #3984)\n- Fixed error in plugin-tee (PR #3982)\n- Made client use relative URL & added Firefox fixes (PR #3979)\n- Fixed storage of PostgreSQL connection URL in global config (PR #3977)\n- Fixed terminology in docs: replaced \"CONFIGURACIONES\" with \"CONFIGURACIÓN\" (PR #3970)\n- Corrected an incorrect timeout comment (PR #3968)\n- Removed TEE logs output (PR #3966)\n\n## Other Improvements\n- Simplified connection status (PR #3973)\n- Updated README.md (PR #3985)\n- Implemented client knowledge management (PR #3950)\n\n## Testing\n- Added plugin bootstrap tests (PR #3959)",
+          "text": "# Recent Updates to Eliza OS\n\n## New Features\n- Added a clear logs method and API (PR #3974)\n- Implemented documentation versioning (PR #3963)\n\n## Bug Fixes\n- Fixed log display and APIs (PR #3971)\n- Resolved AIWriter rerendering issue (PR #3969)\n- Improved real-time display of thoughts messages (PR #3967)\n- Refactored bubble layout (PR #3965)\n- Fixed button label (PR #3964)\n- Fixed missing comma between regex expressions (PR #3987)\n- Corrected a typo (PR #3984)\n- Fixed error in plugin-tee (PR #3982)\n- Made client use relative URL & added Firefox fixes (PR #3979)\n- Fixed storage of PostgreSQL connection URL in global config (PR #3977)\n- Fixed terminology in docs: replaced \"CONFIGURACIONES\" with \"CONFIGURACIÓN\" (PR #3970)\n- Corrected an incorrect timeout comment (PR #3968)\n- Removed TEE logs output (PR #3966)\n\n## Other Changes\n- Simplified connection status (PR #3973)\n- Updated client knowledge management (PR #3950)\n- Updated README.md (PR #3985)\n\n## Testing\n- Added plugin bootstrap tests (PR #3959)",
           "sources": [
             "https://github.com/elizaOS/eliza/pull/3974",
             "https://github.com/elizaOS/eliza/pull/3973",
@@ -35,6 +110,90 @@
       "topic": "completed_items"
     },
     {
+      "title": "Discord Channel Historical Summary",
+      "content": [
+        {
+          "text": "# ElizaOS Development and Community Updates\n\n## Technical Developments\n\n### ElizaOS V2 Development\n- V2 beta release was delayed to the following Monday\n- Shaw is actively coding the update which will significantly improve the tech experience\n- The update enhances customization and deployment capabilities\n- WebSockets were recently added to a development branch, enabling direct API access for chat terminals\n- WebSockets will replace REST API for better integration\n\n### Technical Issues and Solutions\n\n#### RAG Knowledge Implementation\n- Users faced issues loading knowledge files, especially PDFs\n- Solutions include:\n  - Setting `\"enableRag\": true` in `character.json`\n  - Verifying correct file paths and directory structure\n  - Creating missing directories with `mkdir -p ./characters/knowledge/biotic/`\n  - Setting correct file permissions (`chmod 755` for directories, `chmod 644` for files)\n\n#### Plugin & Dependency Issues\n- Problems with missing dependencies like `@elizaos/plugin-sql@^0.25.6`\n- Solutions include manually installing dependencies and adjusting `package.json`\n\n#### Discord Bot Configuration\n- Issues with bots failing to connect to the correct text channel\n- Solutions include ensuring correct channel ID format and verifying bot permissions\n\n#### Telegram & EVM Plugin Issue\n- Transactions worked in terminal but not via Telegram\n- Switching from local LLaMA model to OpenAI resolved the issue\n\n## Community and Business Aspects\n\n### Token Trading and Market Analysis\n- Discussions around token prediction models with ~50% accuracy\n- Analysis of market cap trends, volume spikes, and holder distribution\n- Identification of potential rug pulls based on renamed Twitter accounts\n\n### Marketing & Communication\n- Gaps identified in ElizaOS's marketing strategy, including lack of continuous updates\n- Plans to improve documentation and news aggregation\n- Discussion on co-marketing with BNB Chain and promoting ElizaOS when V2 launches\n\n### Tokenomics & Utility\n- Questions raised about the utility of the AI16Z token\n- HackMD document with tokenomics details shared but acknowledged as work in progress\n- Emphasis on \"product first, then whitepaper\" strategy\n\n### DAO & Community Engagement\n- Proposal to create a \"DAO Organization\" working group\n- Plans to open a channel for partners\n- Suggestions for using AI agents to assist with DAO operations",
+          "sources": "https://discord.com/channels/1253563208833433701/1300025221834739744, https://discord.com/channels/1253563208833433701/1301363808421543988, https://discord.com/channels/1253563208833433701/1299989396874854440",
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "# Frequently Asked Questions\n\n## ElizaOS Functionality\n1. **What does ElizaOS do?**\n   - It's a platform for AI agents that communicate and assist users, allowing easy customization and deployment without coding.\n\n2. **When is ElizaOS v2 beta launching?**\n   - Next Monday (as of the time of discussion).\n\n3. **Will v2.0 support WebSocket connections for chat terminals?**\n   - Yes, WebSockets were recently added in Shaw's v2 branch.\n\n## Technical Implementation\n\n4. **Does ElizaOS support PDF knowledge files?**\n   - Yes, but `\"enableRag\": true` must be set, and PDFs must be in the correct directory.\n\n5. **Why is my RAG knowledge implementation failing?**\n   - Ensure `\"enableRag\": true` in `character.json`, correct file paths, and proper permissions.\n\n6. **Why is my bot not connecting to the correct Discord channel?**\n   - Ensure the channel ID is numeric, check bot permissions, and restart after `.env` changes.\n\n7. **How do I fix `@elizaos/plugin-sql@^0.25.6` not found?**\n   - Manually install dependencies and adjust `package.json`.\n\n## Token and Business Model\n\n8. **Why isn't ElizaOS v2 being actively promoted?**\n   - It's still in development, but hype will be built closer to launch.\n\n9. **Can AI16Z tokens be used for compute payments?**\n   - Not yet, but possibly after the launchpad is released.\n\n10. **Where can I find the official tokenomics document?**\n    - HackMD notes exist, but no finalized document yet.\n\n11. **What's the progress on tokenomics?**\n    - 75% complete, with AI aggregators being developed.",
+          "sources": "https://discord.com/channels/1253563208833433701/1300025221834739744, https://discord.com/channels/1253563208833433701/1301363808421543988",
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "# Action Items\n\n## Technical Tasks\n1. **Finalize ElizaOS v2 Beta**\n2. **Merge WebSocket API into `develop`**\n3. **Fix `@elizaos/plugin-sql@^0.25.6` dependency issue**\n4. **Investigate GitHub token requirement in CLI**\n5. **Fix Telegram-EVM plugin execution issue**\n6. **Resolve Docker model loading error**\n7. **Improve AI agent UX and dev experience**\n8. **Develop AI aggregator for content updates**\n9. **Implement AI agents for DAO operations**\n\n## Documentation Needs\n1. **Update RAG knowledge setup guide**\n2. **Clarify WebSocket API usage in docs**\n3. **Add troubleshooting steps for Discord bot setup**\n4. **Document Twitter rate limit settings**\n5. **Create an official tokenomics document**\n6. **Summarize ElizaOS v2 improvements over v1**\n7. **Improve accessibility of tokenomics info in docs**\n\n## Feature Requests\n1. **Improve RAG support for PDFs**\n2. **Add better error messages for missing knowledge directories**\n3. **Enhance CLI to handle missing dependencies more gracefully**\n4. **Improve Telegram-EVM plugin compatibility**\n5. **Add WebSocket-based chat terminal example**\n6. **Enable AI16Z tokens for compute payments**\n7. **Develop a Discord-integrated contributor tracking platform**\n8. **Enhance Twitter engagement strategy**\n9. **Create a DAO Organization working group**\n10. **Develop a seamless bounty payment system**",
+          "sources": "https://discord.com/channels/1253563208833433701/1300025221834739744, https://discord.com/channels/1253563208833433701/1301363808421543988",
+          "images": [],
+          "videos": []
+        }
+      ],
+      "topic": "discordchannelhistoricalsummary"
+    },
+    {
+      "title": "Shaw and DankVR Twitter Interactions",
+      "content": [
+        {
+          "text": "Shaw (@shawmakesmagic) has been working on a project called 'v2' and recently released a beta version. The project appears to be related to AI agents that can assist remote teams and communities. Shaw shared screenshots of the work in progress, mentioning that there will eventually be an app.exe so that 'anyone can run agents without any nerd crap.' Shaw also commented that while these agents could ideally be useful for communities and remote teams, realistically many people might use them 'to shill crap or do weird sex stuff.'",
+          "sources": [
+            "https://twitter.com/shawmakesmagic/status/1901498603534974993",
+            "https://twitter.com/shawmakesmagic/status/1901519622958170173"
+          ],
+          "images": [
+            "https://pbs.twimg.com/media/GmN5tSVa4AAxoYp.jpg",
+            "https://pbs.twimg.com/media/GmN5tSXbUAAiPl_.png",
+            "https://pbs.twimg.com/media/GmN6L4SbYAA64LH.jpg"
+          ],
+          "videos": []
+        },
+        {
+          "text": "Shaw also shared his experience with creating an MMO using a grid of 'DOs' where users could move between grid spaces, noting it was 'near infinite scalable as long as you also stack them when you reach a max user limit.' He provided some old code that might be helpful as Claude input.",
+          "sources": [
+            "https://twitter.com/shawmakesmagic/status/1901547444988752051",
+            "https://twitter.com/shawmakesmagic/status/1901547569844469965"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "In a humorous tweet, Shaw posted an image with the caption 'Her: So what do you do for work, Me: Uhhh....' He also shared context for another conversation with an image.",
+          "sources": [
+            "https://twitter.com/shawmakesmagic/status/1901547739613438330",
+            "https://twitter.com/shawmakesmagic/status/1901548309392884208"
+          ],
+          "images": [
+            "https://pbs.twimg.com/media/GmOnkIZa0AARYL4.jpg",
+            "https://pbs.twimg.com/media/GmOoGE8bIAAIpun.jpg"
+          ],
+          "videos": []
+        },
+        {
+          "text": "DankVR (@dankvr) has been active in various conversations, commenting on a post about 'the next era of agents,' complimenting someone's work ('Damn that turned out good'), asking about El Salvador, wondering about using a 360 camera for VR, and making a brief comment about a 'thinkchad.'",
+          "sources": [
+            "https://twitter.com/dankvr/status/1901760494215610580",
+            "https://twitter.com/dankvr/status/1901671658202542267",
+            "https://twitter.com/dankvr/status/1901648627203727748",
+            "https://twitter.com/dankvr/status/1901528363333726286",
+            "https://twitter.com/elizaOS/status/1901588898825806251"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "Shaw also expressed an opinion that 'If people stopped making L1s and starting making adblock for AI the world would be a much better place.'",
+          "sources": [
+            "https://twitter.com/shawmakesmagic/status/1901519275493585052"
+          ],
+          "images": [],
+          "videos": []
+        }
+      ],
+      "topic": "tweet"
+    },
+    {
       "title": "Recent Pull Requests in the elizaOS/eliza Repository",
       "content": [
         {
@@ -61,24 +220,76 @@
       "topic": "pull_request"
     },
     {
-      "title": "Recent GitHub Issues in the elizaOS/eliza Repository",
+      "title": "Eliza Platform Issues Summary",
       "content": [
         {
-          "text": "Three recent issues have been opened in the elizaOS/eliza GitHub repository:\n\n1. Issue #3972 by NBFinanceTech addresses raw newLine characters in tweets. This appears to be related to how the system handles line breaks in tweet content.\n\n2. Issue #3978 by jmikedupont2 is about remote debugging capabilities (v2), suggesting the user is looking for information on how to debug the application remotely.\n\n3. Issue #3981, also by jmikedupont2, is inquiring about plugin detection, specifically checking if a package is a plugin by looking for an 'eliza' section with type='plugin' in the package.json file.",
+          "text": "Several issues have been reported in the Eliza platform:\n\n1. **Discord Messages Disappearing**: Users report that messages sent to Discord using callback() randomly disappear after being sent. This occurs when sending 2-4 messages back-to-back, with some messages vanishing from the chat. A demonstration video has been provided.\n\n2. **V2 Preflight Check Request**: A request for a CLI tool that would perform preflight checks before starting the system, including verifying if the LLM is working, Twitter login functionality, Discord connectivity, and plugin loading status. This would help avoid the current delay in the start command that checks everything and generates a tweet.\n\n3. **Opus.node Module Error**: An error occurs when trying to find the opus.node module, affecting Discord voice functionality. The error shows failed attempts to locate various opus-related packages and modules.\n\n4. **Raw Newline Characters in Tweets**: The agent is creating tweets, replies, and quotes with raw '\\n' characters visible in the content instead of proper line breaks, as evidenced by specific tweet examples.",
           "sources": [
-            "https://github.com/elizaOS/eliza/issues/3972",
-            "https://github.com/elizaOS/eliza/issues/3978",
-            "https://github.com/elizaOS/eliza/issues/3981"
+            "https://github.com/elizaOS/eliza/issues/3952",
+            "https://github.com/elizaOS/eliza/issues/3956",
+            "https://github.com/elizaOS/eliza/issues/3955",
+            "https://github.com/elizaOS/eliza/issues/3972"
           ],
           "images": [
-            "https://opengraph.githubassets.com/1/elizaOS/eliza/issues/3972",
-            "https://opengraph.githubassets.com/1/elizaOS/eliza/issues/3978",
-            "https://opengraph.githubassets.com/1/elizaOS/eliza/issues/3981"
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/issues/3952",
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/issues/3956",
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/issues/3955",
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/issues/3972"
           ],
           "videos": []
         }
       ],
-      "topic": "issue"
+      "topic": "githubissuecontributor"
+    },
+    {
+      "title": "Crypto Market Update",
+      "content": [
+        {
+          "text": "WBTC (Wrapped Bitcoin) is currently trading at $83,847.71, up from an earlier price of $82,423.27, representing an increase of approximately 1.73%.",
+          "sources": [
+            0,
+            2
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "The ai16z token is currently valued at $0.20, having risen from $0.195, showing a gain of about 3.46%.",
+          "sources": [
+            1,
+            3
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "Both cryptocurrencies are showing positive price movement in the current market conditions.",
+          "sources": [
+            0,
+            1,
+            2,
+            3
+          ],
+          "images": [],
+          "videos": []
+        }
+      ],
+      "topic": "crypto market"
+    },
+    {
+      "title": "GitHub Development Summary",
+      "content": [
+        {
+          "text": "Recent development activities included both package improvements and new features. The plugin-local-ai package saw enhancements, and new capabilities were added to view and edit agent memories. Additionally, a clear logs method and API were implemented. The development effort included 6 bug fixes across projects, with contributions from a total of 22 developers who merged 12 pull requests. Various improvements were made as part of the major work.",
+          "sources": [
+            "text: Development focused on package improvements (plugin-local-ai), new features (view and edit memories of an agent), 1 bug fixes. with 13 contributors merging 4 PRs. Major work included various improvements.",
+            "text: Development focused on new features (add clear logs method and api), 5 bug fixes. with 9 contributors merging 8 PRs. Major work included various improvements."
+          ],
+          "images": [],
+          "videos": []
+        }
+      ],
+      "topic": "githubsummary"
     },
     {
       "title": "ElizaOS GitHub Activity Update",
@@ -99,7 +310,7 @@
       "title": "Top contributors for elizaOS/eliza",
       "content": [
         {
-          "text": "The provided sources mention 'Top contributors for elizaOS/eliza' but do not provide any specific details about who these contributors are, their contributions, or any statistics related to the project. Without additional information, I cannot provide a detailed summary of the top contributors to the elizaOS/eliza project.",
+          "text": "The provided sources mention 'Top contributors for elizaOS/eliza' but do not provide any specific details about who these contributors are or their contributions to the project. Without additional information, it's not possible to generate a detailed summary about the individual contributors, their roles, or the nature of their contributions to the elizaOS/eliza project.",
           "sources": [
             "Top contributors for elizaOS/eliza"
           ],

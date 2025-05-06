@@ -6,7 +6,7 @@
       "title": "ElizaOS GitHub Updates Summary",
       "content": [
         {
-          "text": "# Recent ElizaOS Repository Updates\n\n## Features\n- Added an update-cli command (PR #4170)\n- Added ID to metadata source (PR #4168)\n- Improved plugin installation management (PR #4177)\n- Enhanced CLI update and plugin installation with package manager (PR #4176)\n\n## Bug Fixes\n- Fixed knowledge manager scroll issue (PR #4175)\n- Resolved Twitter client creation failure (PR #4167)\n- Fixed Telegram 'get world' functionality (PR #4166)\n- Fixed Twitter interaction issues (PR #4165)\n- Fixed Telegram to ElizaOS data model synchronization (PR #4137)\n- Fixed version tag when importing plugins dynamically during runtime (PR #4183)\n- Fixed space action (PR #4182)\n\n## Refactoring & Other Changes\n- Refactored OpenAI plugin (PR #4169)\n- Implemented filtering for ignored Farcaster mentions (PR #4163)\n- Updated dependencies through npm and yarn (PR #4141)\n- Changed to camelCase on plugin export for local-ai (PR #4186)\n- Removed import logic from core (PR #4184)\n- Improved handling of dynamic-runtime import errors (PR #4179)\n- Addressed module path issues (PR #4178)\n- Updated documentation (PR #4114) and fixed documentation formatting (PR #4148)",
+          "text": "# Recent ElizaOS Updates\n\nRecent pull requests to the ElizaOS repository include several features, bugfixes, and other improvements:\n\n## Features\n- Added an update-cli command (PR #4170)\n- Added ID to metadata source (PR #4168)\n- Improved plugin installation management (PR #4177)\n- Enhanced CLI update and plugin installation with package manager (PR #4176)\n\n## Bugfixes\n- Fixed knowledge manager scroll issue (PR #4175)\n- Resolved Twitter client creation failure (PR #4167)\n- Fixed Telegram \"get world\" functionality (PR #4166)\n- Fixed Twitter interaction issues (PR #4165)\n- Fixed Telegram to ElizaOS data model synchronization (PR #4137)\n- Fixed version tag when importing plugins dynamically during runtime (PR #4183)\n- Fixed space action (PR #4182)\n\n## Refactoring and Other Changes\n- Refactored OpenAI plugin (PR #4169)\n- Filtered out ignored Farcaster mentions (PR #4163)\n- Updated documentation (PR #4114, PR #4148)\n- Bumped npm and yarn dependencies (PR #4141)\n- Changed to camelCase on plugin export for local-ai (PR #4186)\n- Removed import logic from core (PR #4184)\n- Improved handling of dynamic-runtime import errors (PR #4179)\n- Addressed module path issues (PR #4178)",
           "sources": [
             "https://github.com/elizaOS/eliza/pull/4175",
             "https://github.com/elizaOS/eliza/pull/4170",
@@ -36,16 +36,194 @@
       "topic": "completed_items"
     },
     {
+      "title": "Recent ElizaOS GitHub Pull Requests",
+      "content": [
+        {
+          "text": "## Feature Enhancements\n\nSeveral pull requests have been submitted to enhance ElizaOS features:\n\n- **Avatar Stack Enhancement** (PR #4162): Improves the avatar stack functionality.\n\n- **Clean API** (PR #4144): Removes unused APIs, with a request for @wtfsayo to review other potentially unused APIs they created.\n\n- **Event System Upgrade** (PR #4149): Replaces 'eventEmitter3' with 'evt' for better type safety and improved runtime compatibility. The new library (www.evt.land) offers more robust event handling capabilities.",
+          "sources": [
+            "https://github.com/elizaOS/eliza/pull/4162",
+            "https://github.com/elizaOS/eliza/pull/4144",
+            "https://github.com/elizaOS/eliza/pull/4149"
+          ],
+          "images": [
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/pull/4162",
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/pull/4144",
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/pull/4149"
+          ],
+          "videos": []
+        },
+        {
+          "text": "## Bug Fixes\n\n- **Twitter Integration Fixes** (PR #4155, #4151): Addresses multiple issues with Twitter interactions:\n  - Caches interaction cursors to prevent repeated checking of the same interactions\n  - Fixes duplicate memory creation when handling Twitter interactions\n  - Prevents server crashes related to Twitter functionality\n  - Ensures MESSAGE_RECEIVED events are only emitted when the agent decides to reply\n\n- **Database Transaction Deadlock** (PR #4142): Resolves an issue where database connections were getting stuck in \"idle in transaction\" state, causing system unresponsiveness. The fix removes problematic code in the `createWorld` method that was creating transactions without completing them.\n\n- **PGlite Migration Issues** (PR #4158, #4157): Fixes database migration problems caused by inconsistent usage of `Datadir`, ensuring proper handling across migrations.",
+          "sources": [
+            "https://github.com/elizaOS/eliza/pull/4155",
+            "https://github.com/elizaOS/eliza/pull/4151",
+            "https://github.com/elizaOS/eliza/pull/4142",
+            "https://github.com/elizaOS/eliza/pull/4158",
+            "https://github.com/elizaOS/eliza/pull/4157"
+          ],
+          "images": [
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/pull/4155",
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/pull/4151",
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/pull/4142",
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/pull/4158",
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/pull/4157"
+          ],
+          "videos": []
+        },
+        {
+          "text": "## Farcaster Integration Improvements\n\n- **Mention Filtering** (PR #4163): Fixes a bug where mentions that the agent chose to ignore weren't being saved to memory, potentially causing the system to reprocess the same mentions repeatedly. The fix properly implements code for non-response scenarios with appropriate error handling.\n\n- **Configuration Handling** (PR #4156): Enhances Farcaster configuration by checking both runtime settings and environment variables for FID configuration, and removes unnecessary debug logging of sensitive configuration data. These changes make the system more flexible and secure while maintaining backward compatibility.",
+          "sources": [
+            "https://github.com/elizaOS/eliza/pull/4163",
+            "https://github.com/elizaOS/eliza/pull/4156"
+          ],
+          "images": [
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/pull/4163",
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/pull/4156"
+          ],
+          "videos": []
+        },
+        {
+          "text": "## Developer Experience Improvements\n\n- **Project Plugin Loading** (PR #4150): Fixes an issue with project plugin attachment order, which is important for first-time developer experience.\n\n- **Plugin Installation Location** (PR #4154): Ensures plugins are created in the correct /packages directory when running the `npx elizaos create -t plugin xyz` command.\n\n- **Plugin Template Update** (PR #4161): Adds node_modules to .gitignore in the plugin-starter template, resolving issues when pushing plugin repositories to GitHub.\n\n- **Test Improvements** (PR #4152): Refactors test files according to comments in PR #4130, extracting repeatedly used strings into constant variables for better maintainability.\n\n- **Documentation Fix** (PR #4148): Removes an extra `~` in the code documentation that could potentially cause issues.",
+          "sources": [
+            "https://github.com/elizaOS/eliza/pull/4150",
+            "https://github.com/elizaOS/eliza/pull/4154",
+            "https://github.com/elizaOS/eliza/pull/4161",
+            "https://github.com/elizaOS/eliza/pull/4152",
+            "https://github.com/elizaOS/eliza/pull/4148"
+          ],
+          "images": [
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/pull/4150",
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/pull/4154",
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/pull/4161",
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/pull/4152",
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/pull/4148"
+          ],
+          "videos": []
+        },
+        {
+          "text": "## Maintenance\n\n- **Registry Update** (PR #4153): Updates the temporary hardcoded v2 registry.",
+          "sources": [
+            "https://github.com/elizaOS/eliza/pull/4153"
+          ],
+          "images": [
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/pull/4153"
+          ],
+          "videos": []
+        }
+      ],
+      "topic": "githubpullrequestcontributor"
+    },
+    {
+      "title": "Tech Enthusiasts Discuss Linux, Product Development, and Plugins",
+      "content": [
+        {
+          "text": "A Twitter user enthusiastically endorses Linux, stating it 'just works now' with most software including gaming running flawlessly. They mention that when issues arise, debugging is easier with LLMs. The user tried Mac but found the OS 'unbearable' and encourages others not to believe negative perceptions about Linux, calling it 'PEAK' currently. In a follow-up tweet, they note that while Proton/Valve fixed most gaming issues on Linux, VR on Linux is still 'rough around the edges' and understand why some might boot Windows for VR.",
+          "sources": [
+            "https://twitter.com/dankvr/status/1907816470907675004",
+            "https://twitter.com/dankvr/status/1907817900238397790"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "Shaw discusses product development, expressing enjoyment when 'the whole team just gets in the figma and starts building that shit like it's a multiplayer RTS game.' In another tweet, they compare Scrum to 'leading horses to water.' They also mention working with Jay on Hedera Eliza Plugins and suggest using Claude to generate content when someone was looking for something.",
+          "sources": [
+            "https://twitter.com/shawmakesmagic/status/1907899464226058680",
+            "https://twitter.com/shawmakesmagic/status/1907900719514153104",
+            "https://twitter.com/shawmakesmagic/status/1907930137531920452",
+            "https://twitter.com/shawmakesmagic/status/1907944331887214862"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "Various other tweets include brief exchanges, with one user praising 'concise clear markdown,' another mentioning 'Turn on, Plugin, Build out,' and some containing just mentions or short responses.",
+          "sources": [
+            "https://twitter.com/dankvr/status/1907846436235997680",
+            "https://twitter.com/elizaOS/status/1907828363529453615",
+            "https://twitter.com/dankvr/status/1907828613241504120",
+            "https://twitter.com/dankvr/status/1907819371415699484",
+            "https://twitter.com/shawmakesmagic/status/1907873109602087077"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "The collection includes a tweet with an image but no descriptive text.",
+          "sources": [
+            "https://twitter.com/dankvr/status/1907767796030669280",
+            "https://twitter.com/autodotfun/status/1907911360157200685"
+          ],
+          "images": [
+            "https://pbs.twimg.com/media/GnnAsxbWIAAukMx.jpg"
+          ],
+          "videos": []
+        }
+      ],
+      "topic": "tweet"
+    },
+    {
+      "title": "Cryptocurrency Price Update",
+      "content": [
+        {
+          "text": "Current cryptocurrency prices show fluctuations across major tokens. WETH (Wrapped Ethereum) is trading between $1,794.31 and $1,816.02, showing an upward movement. WBTC (Wrapped Bitcoin) has increased from $82,440.20 to $83,065.81. SOL (Solana) is relatively stable, moving slightly from $117.38 to $117.07. The ai16z token has decreased from $0.17 to $0.16.",
+          "sources": [
+            "Symbol: WETH\n Current Price: $1794.30955388",
+            "Symbol: WBTC\n Current Price: $82440.1955287",
+            "Symbol: SOL\n Current Price: $117.378570247",
+            "Symbol: ai16z\n Current Price: $0.171085831277",
+            "Symbol: WETH\n Current Price: $1816.01865656",
+            "Symbol: WBTC\n Current Price: $83065.8067017",
+            "Symbol: SOL\n Current Price: $117.06525837",
+            "Symbol: ai16z\n Current Price: $0.157963830078"
+          ],
+          "images": [],
+          "videos": []
+        }
+      ],
+      "topic": "crypto market"
+    },
+    {
+      "title": "Discord Channel Historical Summary",
+      "content": [
+        {
+          "text": "# ElizaOS v2 Technical Issues and Solutions\n\nMultiple users reported technical challenges with ElizaOS v2, particularly around plugin integration and Twitter functionality:\n\n## Plugin Issues\n- Missing plugins: Users encountered errors with missing @elizaos/plugin-sql and @elizaos/plugin-local-ai\n- Plugin loading bugs: Some agents continuously load and conversations disappear\n- Testing failures: npm run test failing due to missing plugin dependencies\n\n## Twitter Integration\n- In v2, the Twitter plugin doesn't need manual installation - just configure credentials in .env\n- ACTION_INTERVAL and TWITTER_POLL_INTERVAL not working properly in v2\n- Twitter client functionality is under repair\n\n## Migration Challenges\n- No clear migration path for transferring agent memory and tweetcache data to v2\n- Build failures on EC2 despite successful local builds\n- MODULE_NOT_FOUND errors during installation\n\n## Documentation Improvements\n- New video section added to Eliza documentation (https://eliza.how/community/videos)\n- Website refactoring: consolidating content from elizaos.ai into eliza.how\n- Potential implementation of Docusaurus for site management",
+          "sources": [
+            "https://discord.com/channels/1253563208833433701/1300025221834739744",
+            "https://discord.com/channels/1253563208833433701/1301363808421543988"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "# Meme Coin Trading and Analysis\n\nThe Pump.fun platform is being used for meme coin discovery, analysis, and trading. Key discussions included:\n\n## Technical Analysis\n- Liquidity block detection in tokens like $ALCH, $AI16Z, and $DEGENAI\n- Real-time token metrics tracking (market cap, % change, pairings)\n- Leveraged trading strategies and profit-taking approaches\n\n## Project Evaluation\n- Long-term conviction plays like AGIXT and Bork (54% staked)\n- GitHub updates and staking ratios as bullish indicators\n- Supply control issues in certain projects\n\n## Marketing Innovations\n- Figure's standardized prompt system for content generation\n- Social media impact on token price (tweets, OpenSea posts)\n- Viral momentum and KOL (Key Opinion Leader) engagement\n\n## Trading Strategies\n- Botting token holders (automation tools for holder activity)\n- Listing strategy for Jupiter's strict list\n- Leveraged positions and risk management",
+          "sources": [
+            "https://discord.com/channels/1253563208833433701/1299989396874854440"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "# Website Development and Tokenomics\n\n## Eliza Labs Website\n- Partner pages implemented using Docusaurus with content dynamically generated from JSON\n- Maintenance scripts cleaned and documented\n- Current partnership intake uses Typeform (Tally)\n- Plans for v2 include increased transparency and integration with Clank Tank\n\n## Tokenomics Strategy\n- Importance of aligning incentives with VCs, exchanges, and market makers\n- Buybacks alone insufficient to support token price\n- Need for hype, KOLs, and strategic partnerships\n- Proposal for revenue-generating launchpad to fund buybacks\n- Concerns about shorting pressure affecting price action\n\n## Project Management\n- Criticism of repeated two-week delays in auto.fun release\n- Need for better project management and transparent communication\n- Warning that short-term delays erode stakeholder trust",
+          "sources": [
+            "https://discord.com/channels/1253563208833433701/1301363808421543988"
+          ],
+          "images": [],
+          "videos": []
+        }
+      ],
+      "topic": "discordchannelhistoricalsummary"
+    },
+    {
       "title": "Recent Pull Requests in the elizaOS/eliza Repository",
       "content": [
         {
-          "text": "Several pull requests have been submitted to the elizaOS/eliza repository focusing on testing and plugin functionality improvements:\n\n- HarshModi2005 contributed two PRs related to testing: PR #4171 for Plugin-Bootstrap Test Suite and PR #4173 for Test Coverage for plugin-bootstrap.\n\n- ncale added message buttons functionality in PR #4174.\n\n- Instrumentation improvements were made by Samarthsinghal28 (PR #4172) and Imsharad, who added 100% instrumentation coverage for the Twitter plugin (PR #4190).\n\n- wtfsayo worked on plugin management with PR #4177 for better plugin install management and PR #4178 addressing module path issues.\n\n- yungalgo submitted PR #4185 to make 'npm create eliza' and 'npx elizaos create' functionally identical.",
+          "text": "Several pull requests have been submitted to the elizaOS/eliza repository focusing on plugin functionality, testing, and user interface improvements:\n\n- HarshModi2005 contributed two PRs (#4171 and #4173) focused on testing for the plugin-bootstrap component, adding both a test suite and improving test coverage.\n\n- User ncale submitted PR #4174 to add message buttons, enhancing the user interface capabilities.\n\n- Samarthsinghal28 added instrumentation functionality in PR #4172.\n\n- Developer wtfsayo made two contributions: PR #4177 improves plugin installation management, while PR #4178 attempts to address module path issues.\n\n- PR #4185 by yungalgo fixes an issue to make 'npm create eliza' and 'npx elizaos create' functionally identical, improving developer experience consistency.",
           "sources": [
             "https://github.com/elizaOS/eliza/pull/4171",
             "https://github.com/elizaOS/eliza/pull/4173",
             "https://github.com/elizaOS/eliza/pull/4174",
             "https://github.com/elizaOS/eliza/pull/4172",
-            "https://github.com/elizaOS/eliza/pull/4190",
             "https://github.com/elizaOS/eliza/pull/4177",
             "https://github.com/elizaOS/eliza/pull/4178",
             "https://github.com/elizaOS/eliza/pull/4185"
@@ -55,7 +233,6 @@
             "https://opengraph.githubassets.com/1/elizaOS/eliza/pull/4173",
             "https://opengraph.githubassets.com/1/elizaOS/eliza/pull/4174",
             "https://opengraph.githubassets.com/1/elizaOS/eliza/pull/4172",
-            "https://opengraph.githubassets.com/1/elizaOS/eliza/pull/4190",
             "https://opengraph.githubassets.com/1/elizaOS/eliza/pull/4177",
             "https://opengraph.githubassets.com/1/elizaOS/eliza/pull/4178",
             "https://opengraph.githubassets.com/1/elizaOS/eliza/pull/4185"
@@ -66,10 +243,36 @@
       "topic": "pull_request"
     },
     {
+      "title": "ElizaOS GitHub Issues Summary",
+      "content": [
+        {
+          "text": "Several issues have been reported in the ElizaOS GitHub repository:\n\n1. **Twitter Client Creation Failure**: Users are experiencing failures when attempting to create a Twitter client after purging the database and running the Twitter plugin.\n\n2. **Documentation URL 404 Error**: A documentation URL is returning a 404 error.\n\n3. **Model Provider Default Issue**: Despite changing the \"modelProvider\" to \"anthropic\" in the character JSON, the system defaults to OpenAI and produces an API key error message.\n\n4. **CLI Interface Availability**: A user is inquiring about the availability of the CLI interface that was present in earlier versions of Eliza, which they found convenient for interacting with agents.\n\n5. **Adjective Error**: Users are encountering validation errors related to adjectives when running AI agents, with error messages indicating \"Validation errors in adjectives: Required\".\n\n6. **Documentation Testing Task**: There's a task to test every command in the CLI section of the Eliza documentation for accuracy and report any issues found.",
+          "sources": [
+            "https://github.com/elizaOS/eliza/issues/4146",
+            "https://github.com/elizaOS/eliza/issues/4145",
+            "https://github.com/elizaOS/eliza/issues/4160",
+            "https://github.com/elizaOS/eliza/issues/4159",
+            "https://github.com/elizaOS/eliza/issues/4147",
+            "https://github.com/elizaOS/eliza/issues/4143"
+          ],
+          "images": [
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/issues/4146",
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/issues/4145",
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/issues/4160",
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/issues/4159",
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/issues/4147",
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/issues/4143"
+          ],
+          "videos": []
+        }
+      ],
+      "topic": "githubissuecontributor"
+    },
+    {
       "title": "ElizaOS GitHub Activity Update",
       "content": [
         {
-          "text": "The elizaos/eliza repository showed consistent activity over a two-day period. From April 3-4, 2025, there were 11 new pull requests with 12 merged, no new issues, and 14 active contributors. The following day (April 4-5, 2025) saw 13 new pull requests with 8 merged, 2 new issues, and 12 active contributors. Overall, the project maintained strong development momentum with a steady contributor base.",
+          "text": "The elizaos/eliza repository showed consistent activity over a two-day period. From April 3-4, 2025, there were 11 new PRs with 12 merged, no new issues, and 14 active contributors. The following day (April 4-5, 2025) saw 13 new PRs with 8 merged, 2 new issues, and 12 active contributors. Overall, the project maintained strong development momentum with a steady contributor base.",
           "sources": [
             0,
             1
@@ -84,7 +287,7 @@
       "title": "Top contributors for elizaOS/eliza",
       "content": [
         {
-          "text": "The provided sources mention 'Top contributors for elizaOS/eliza' but do not provide any specific details about who these contributors are or their contributions to the project. Without additional information, it's not possible to generate a detailed summary about the individual contributors, their roles, or the nature of their contributions to the elizaOS/eliza project.",
+          "text": "The provided sources mention 'Top contributors for elizaOS/eliza' but do not provide any specific details about who these contributors are or their contributions to the project. Without additional information, it's not possible to generate a detailed summary about the contributors to the elizaOS/eliza project.",
           "sources": [
             "Top contributors for elizaOS/eliza"
           ],
@@ -95,22 +298,18 @@
       "topic": "contributors"
     },
     {
-      "title": "Twitter Integration Issues in Eliza Project",
+      "title": "Miscellaneous",
       "content": [
         {
-          "text": "Two issues have been reported in the elizaOS/eliza GitHub repository related to Twitter integration:\n\n1. Issue #4181: Twitter interactions are being fetched, but reactions have not been implemented yet. This issue was reported by user tcm390.\n\n2. Issue #4180: Twitter space functionality is not working properly. This issue was also reported by user tcm390.\n\nBoth issues appear to be related to incomplete or non-functioning Twitter features in the Eliza project.",
+          "text": "Development included package improvements, with a focus on project plugin loading first (related to starter project). New features were added, including enhancements to the avatar stack. The update included 4 bug fixes, with contributions from 12 developers who merged 12 pull requests. Various other improvements were also implemented.",
           "sources": [
-            "https://github.com/elizaOS/eliza/issues/4181",
-            "https://github.com/elizaOS/eliza/issues/4180"
+            "text"
           ],
-          "images": [
-            "https://opengraph.githubassets.com/1/elizaOS/eliza/issues/4181",
-            "https://opengraph.githubassets.com/1/elizaOS/eliza/issues/4180"
-          ],
+          "images": [],
           "videos": []
         }
       ],
-      "topic": "issue"
+      "topic": "Misceleanous"
     }
   ],
   "date": 1743638400

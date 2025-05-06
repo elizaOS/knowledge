@@ -6,11 +6,10 @@
       "title": "Eliza Project Updates Summary",
       "content": [
         {
-          "text": "# New Features\n\nThe Eliza project has introduced several significant new features:\n\n- **Onchain Agent Transformer**: Transform Eliza agents into Solidity smart contracts deployable on 10+ blockchains (PR #2319)\n- **Character Loading Improvements**: Support for loading characters from URLs (PR #2281) and enabling multiple remote character URLs (PR #2328)\n- **Memory Management**: Added getMemoryByIds to database adapters (PR #2293)\n- **Echo Chambers**: Added dead room detection and conversation starter functionality (PR #2248)\n- **DexScreener Integration**: Added token price action functionality (PR #1865) and trending features (PR #2325)\n- **Image Generation**: Added safe_mode and cfg_scale for Venice image generation (PR #2354) and Groq image vision provider (PR #2342)\n- **RAG Knowledge**: Enhanced RAG knowledge handling capabilities (PR #2351)\n- **New Clients/Providers**: Added Instagram client (PR #1964) and Atoma provider (PR #2082)\n- **S3 Flexibility**: Improved S3 integration options (PR #2379)\n- **Testing Improvements**: Added tests for GitHub client (PR #2407), Slack client (PR #2404), and Solana plugin (PR #2345)",
+          "text": "# New Features\n\nThe Eliza project has introduced several significant new features:\n\n- **Onchain Agent Transformer**: Transform Eliza agents into Solidity smart contracts deployable on 10+ blockchains (PR #2319)\n- **Character Loading Improvements**: Support for loading characters from URLs (PR #2281) and enabling multiple remote character URLs (PR #2328)\n- **Memory Management**: Added getMemoryByIds to database adapters (PR #2293)\n- **Echo Chambers**: Added dead room detection and conversation starter functionality (PR #2248)\n- **DexScreener Integration**: Added token price action functionality (PR #1865) and trending features (PR #2325)\n- **Image Generation**: Added safe_mode and cfg_scale for Venice image generation (PR #2354) and Groq image vision provider (PR #2342)\n- **RAG Knowledge**: Enhanced RAG knowledge handling capabilities (PR #2351)\n- **New Clients/Providers**: Added Instagram client (PR #1964) and Atoma provider (PR #2082)\n- **S3 Flexibility**: Improved S3 integration options (PR #2379)",
           "sources": [
             "https://github.com/elizaOS/eliza/pull/2319",
             "https://github.com/elizaOS/eliza/pull/2281",
-            "https://github.com/elizaOS/eliza/pull/2328",
             "https://github.com/elizaOS/eliza/pull/2293",
             "https://github.com/elizaOS/eliza/pull/2248",
             "https://github.com/elizaOS/eliza/pull/1865",
@@ -21,53 +20,65 @@
             "https://github.com/elizaOS/eliza/pull/1964",
             "https://github.com/elizaOS/eliza/pull/2082",
             "https://github.com/elizaOS/eliza/pull/2379",
-            "https://github.com/elizaOS/eliza/pull/2407",
-            "https://github.com/elizaOS/eliza/pull/2404",
-            "https://github.com/elizaOS/eliza/pull/2345"
+            "https://github.com/elizaOS/eliza/pull/2328"
           ],
           "images": [],
           "videos": []
         },
         {
-          "text": "# Bug Fixes\n\nSeveral important bug fixes have been implemented:\n\n- **Environment Variables**: Fixed OPENROUTER_API_KEY environment variable in config (PR #2324)\n- **Memory Issues**: Fixed Farcaster memory issues (PR #2307)\n- **Configuration Handling**: Fixed issues with REMOTE_CHARACTER_URLS environment variable (PR #2382, PR #2384)\n- **Client Configuration**: Aligned base URL in client when API runs on different port (PR #2353)\n- **Docker**: Fixed Docker images, compose, and documentation (PR #2347)\n- **Plugin Issues**: Fixed typo in import statement for Solana AgentKit plugin (PR #2370) and set default Squid Router plugin throttle to 1000 (PR #2386)\n- **Package Updates**: Updated package.json of core package (PR #2301)\n- **Linting**: Fixed lint errors (PR #2400)",
+          "text": "# Bug Fixes\n\nSeveral important bug fixes have been implemented:\n\n- **Environment Variables**: Fixed OPENROUTER_API_KEY environment variable in config (PR #2324)\n- **Memory Issues**: Fixed Farcaster memory issues (PR #2307)\n- **Configuration Improvements**: \n  - Fixed alignment of base URL in client when API runs on different port (PR #2353)\n  - Prevented app crashes when REMOTE_CHARACTER_URLS is undefined (PR #2384, #2382)\n  - Set default Squid Router plugin throttle to 1000 (PR #2386)\n- **Import Fixes**: Corrected typo in import statement for Solana AgentKit plugin (PR #2370)\n- **Docker Issues**: Fixed docker images, compose, and documentation (PR #2347)\n- **Package Updates**: Updated package.json of core package (PR #2301)\n- **Reply Hallucinations**: Ensured RA Action reply does not hallucinate (PR #2355)",
           "sources": [
             "https://github.com/elizaOS/eliza/pull/2324",
             "https://github.com/elizaOS/eliza/pull/2307",
-            "https://github.com/elizaOS/eliza/pull/2382",
-            "https://github.com/elizaOS/eliza/pull/2384",
             "https://github.com/elizaOS/eliza/pull/2353",
-            "https://github.com/elizaOS/eliza/pull/2347",
-            "https://github.com/elizaOS/eliza/pull/2370",
+            "https://github.com/elizaOS/eliza/pull/2384",
+            "https://github.com/elizaOS/eliza/pull/2382",
             "https://github.com/elizaOS/eliza/pull/2386",
+            "https://github.com/elizaOS/eliza/pull/2370",
+            "https://github.com/elizaOS/eliza/pull/2347",
             "https://github.com/elizaOS/eliza/pull/2301",
-            "https://github.com/elizaOS/eliza/pull/2400"
+            "https://github.com/elizaOS/eliza/pull/2355"
           ],
           "images": [],
           "videos": []
         },
         {
-          "text": "# Refactoring and Documentation\n\nThe codebase has undergone significant refactoring and documentation improvements:\n\n- **Service Refactoring**: Websearch functionality refactored into a service (PR #2195)\n- **Client Configuration**: Farcaster client environment configuration refactored (PR #2087)\n- **Documentation Updates**: Multiple README updates (PR #2309, PR #2280, PR #2356, PR #2336)\n- **Internationalization**: Reorganized README translations into a dedicated i18n directory structure (PR #2149)\n- **Type Safety**: Improved type safety to prevent errors (PR #2220)\n- **Process Management**: Improved exit code handling after cleanup (PR #2398)",
+          "text": "# Testing and Code Quality\n\nSignificant improvements to testing and code quality have been made:\n\n- **New Tests**: Added tests for GitHub client (PR #2407), Slack client (PR #2404), and Solana plugin (PR #2345)\n- **Code Organization**: Moved existing tests to new __tests__ directory (PR #2404)\n- **Refactoring**: \n  - Refactored websearch into a service (PR #2195)\n  - Refactored Farcaster client environment configuration (PR #2087)\n- **Linting**: Fixed lint errors (PR #2400, #2368)\n- **Type Safety**: Implemented strict types to avoid errors (PR #2220)",
           "sources": [
+            "https://github.com/elizaOS/eliza/pull/2407",
+            "https://github.com/elizaOS/eliza/pull/2404",
+            "https://github.com/elizaOS/eliza/pull/2345",
             "https://github.com/elizaOS/eliza/pull/2195",
             "https://github.com/elizaOS/eliza/pull/2087",
-            "https://github.com/elizaOS/eliza/pull/2309",
-            "https://github.com/elizaOS/eliza/pull/2280",
-            "https://github.com/elizaOS/eliza/pull/2356",
-            "https://github.com/elizaOS/eliza/pull/2336",
-            "https://github.com/elizaOS/eliza/pull/2149",
-            "https://github.com/elizaOS/eliza/pull/2220",
-            "https://github.com/elizaOS/eliza/pull/2398"
+            "https://github.com/elizaOS/eliza/pull/2400",
+            "https://github.com/elizaOS/eliza/pull/2368",
+            "https://github.com/elizaOS/eliza/pull/2220"
           ],
           "images": [],
           "videos": []
         },
         {
-          "text": "# Other Updates\n\nAdditional miscellaneous updates include:\n\n- **Version Updates**: Preparation for version 0.1.9-alpha.1 (PR #2359)\n- **Description Improvements**: Enhanced descriptions throughout the codebase (PR #2394)\n- **Error Handling**: Improved startup error handling for environment misconfiguration (PR #2378)\n- **Translations**: Updated Turkish translation (PR #2334)",
+          "text": "# Documentation\n\nDocumentation has been enhanced across the project:\n\n- **README Updates**: Updated main README.md (PR #2309, #2280) and fixed formatting in Browser section (PR #2336)\n- **Translations**: Updated README_FR.md (PR #2356) and README_TR.md (PR #2334)\n- **Organization**: Reorganized README translations into a dedicated i18n directory structure (PR #2149)\n- **Client Documentation**: Fixed GitHub client README.md (PR #2346)\n- **Descriptions**: Improved descriptions throughout the project (PR #2394)",
+          "sources": [
+            "https://github.com/elizaOS/eliza/pull/2309",
+            "https://github.com/elizaOS/eliza/pull/2280",
+            "https://github.com/elizaOS/eliza/pull/2336",
+            "https://github.com/elizaOS/eliza/pull/2356",
+            "https://github.com/elizaOS/eliza/pull/2334",
+            "https://github.com/elizaOS/eliza/pull/2149",
+            "https://github.com/elizaOS/eliza/pull/2346",
+            "https://github.com/elizaOS/eliza/pull/2394"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "# Maintenance\n\nVarious maintenance tasks have been completed:\n\n- **Release Preparation**: Prepared for version 0.1.9-alpha.1 (PR #2359)\n- **Cleanup**: Improved exit code handling after positive cleanup (PR #2398)\n- **Error Handling**: Addressed startup errors from environment misconfiguration (PR #2378)\n- **Follow-up Work**: Completed sequel to PR #2275 (PR #2350)",
           "sources": [
             "https://github.com/elizaOS/eliza/pull/2359",
-            "https://github.com/elizaOS/eliza/pull/2394",
+            "https://github.com/elizaOS/eliza/pull/2398",
             "https://github.com/elizaOS/eliza/pull/2378",
-            "https://github.com/elizaOS/eliza/pull/2334"
+            "https://github.com/elizaOS/eliza/pull/2350"
           ],
           "images": [],
           "videos": []
@@ -76,10 +87,91 @@
       "topic": "completed_items"
     },
     {
+      "title": "DankVR and ShawMakesMagic on AI, Crypto, and Open Source",
+      "content": [
+        {
+          "text": "DankVR expressed excitement about a new $3,000 device releasing in May that can run 405b AI models locally when two are chained together, showing enthusiasm for local-first open source AI.",
+          "sources": [
+            "https://twitter.com/dankvr/status/1879558859771220463"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "DankVR shared a comprehensive analysis of crypto plugins in ElizaOS, identifying 23 distinct blockchain/crypto-focused plugins supporting various ecosystems including EVM-compatible chains. They used code2prompt to analyze the capabilities.",
+          "sources": [
+            "https://twitter.com/dankvr/status/1879545226928226587",
+            "https://twitter.com/dankvr/status/1879545534924611637",
+            "https://twitter.com/dankvr/status/1879546639230107871"
+          ],
+          "images": [
+            "https://pbs.twimg.com/media/GhV8SD6WAAAi1me.jpg"
+          ],
+          "videos": []
+        },
+        {
+          "text": "DankVR showcased a new preview of the Eliza contributor leaderboard with features like skill cards navigation, daily summaries, and URL-based filtering, describing it as making 'open source more like an MMORPG'.",
+          "sources": [
+            "https://twitter.com/dankvr/status/1879374351939817604"
+          ],
+          "images": [],
+          "videos": [
+            "https://video.twimg.com/ext_tw_video/1879369318825148416/pu/vid/avc1/1280x720/IlKY_mR7l4o1soix.mp4?tag=12"
+          ]
+        },
+        {
+          "text": "DankVR expressed desire for an 'AI intern' to scribe relevant information from group chats to help coordinate decisions and avoid the 'game of telephone' effect when people forget to take notes.",
+          "sources": [
+            "https://twitter.com/dankvr/status/1879553756435767719",
+            "https://twitter.com/dankvr/status/1879555566730957144"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "ShawMakesMagic highlighted a new v2 core for building lightweight, production-ready agents, crediting @bmgalego as a 'seriously cracked dev' and noting it should feel familiar to beginners while offering advanced capabilities.",
+          "sources": [
+            "https://twitter.com/shawmakesmagic/status/1879335754670772569",
+            "https://twitter.com/shawmakesmagic/status/1879545807747289490"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "ShawMakesMagic shared perspectives on AI development, suggesting that AGI won't come from one company or be one thing, comparing it to how 'humanity is not a brain.' They also discussed the concept of 'progressive automation' similar to 'progressive decentralization.'",
+          "sources": [
+            "https://twitter.com/shawmakesmagic/status/1879446605331619871",
+            "https://twitter.com/shawmakesmagic/status/1879383801593467070"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "ShawMakesMagic questioned the notion of autonomous agents, suggesting that many so-called autonomous systems are actually event-driven, with LLMs primarily helping to process unstructured data into structured output.",
+          "sources": [
+            "https://twitter.com/shawmakesmagic/status/1879331992816566273",
+            "https://twitter.com/shawmakesmagic/status/1879325459844145183"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "Both users showed interest in the intersection of AI, blockchain, and open source technologies, with a focus on practical applications and development frameworks.",
+          "sources": [
+            "https://twitter.com/dankvr/status/1879545226928226587",
+            "https://twitter.com/shawmakesmagic/status/1879335754670772569"
+          ],
+          "images": [],
+          "videos": []
+        }
+      ],
+      "topic": "tweet"
+    },
+    {
       "title": "Recent Issues in the elizaOS/eliza GitHub Repository",
       "content": [
         {
-          "text": "The elizaOS/eliza GitHub repository has several open issues related to various bugs and feature requests. These issues span different aspects of the system including:\n\n1. User Interface Issues:\n   - Issue #2316: Users experiencing duplicate responses to actions\n   - Issue #2395: Difficulty executing multiple dependent actions in response to a single user message\n\n2. Deployment and Environment Problems:\n   - Issue #2343: Bug when running in cloud from docker image\n   - Issue #2360: Startup failures on macOS\n   - Issue #2372: Twitter authentication failing on AWS EC2 instances with Error 399\n\n3. Performance Concerns:\n   - Issue #2311: Low performance under parallel requests\n\n4. Plugin-specific Issues:\n   - Issue #2320: Enhancement needed for query text extraction in the chainbase plugin\n   - Issue #2373: Bugs related to image description service in the node plugin\n\n5. Development and Configuration Issues:\n   - Issue #2339: Error with invalid schema\n   - Issue #2381: Bug in dev.sh script when loading characters with the --character parameter",
+          "text": "The elizaOS/eliza GitHub repository has several open issues related to various bugs and feature requests. These issues span different aspects of the system including:\n\n1. User Interface Issues:\n   - Issue #2316: Users experiencing duplicate responses to actions\n   - Issue #2395: Difficulty executing multiple dependent actions in response to a single user message\n\n2. Deployment and Environment Problems:\n   - Issue #2343: Bug when running in cloud from docker image\n   - Issue #2360: Startup failures on macOS\n   - Issue #2372: Twitter authentication failing on AWS EC2 instances with Error 399\n\n3. Performance Concerns:\n   - Issue #2311: Low performance under parallel requests\n\n4. Plugin-specific Issues:\n   - Issue #2320: Enhancement needed for query text extraction in the chainbase plugin\n   - Issue #2373: Bugs related to image description service in the node plugin\n\n5. Schema and Configuration Problems:\n   - Issue #2339: Error with invalid schema\n   - Issue #2381: Bug in dev.sh script when loading characters with the --character parameter",
           "sources": [
             "https://github.com/elizaOS/eliza/issues/2316",
             "https://github.com/elizaOS/eliza/issues/2343",
@@ -136,27 +228,6 @@
       "topic": "pull_request"
     },
     {
-      "title": "Crypto Market Price Update",
-      "content": [
-        {
-          "text": "Current cryptocurrency prices show significant movement across major tokens. WETH has increased from $3,223.66 to $3,449.15, representing a gain of approximately 7%. SOL has risen from $187.43 to $205.88, showing nearly a 10% increase. WBTC is now trading at $100,196.82, up from $96,293.01, marking about a 4% gain. The ai16z token has also seen positive movement, rising from $1.38 to $1.57, a substantial 14% increase.",
-          "sources": [
-            "Symbol: WETH\n Current Price: $3223.66203509",
-            "Symbol: SOL\n Current Price: $187.426536385",
-            "Symbol: WBTC\n Current Price: $96293.0066331",
-            "Symbol: ai16z\n Current Price: $1.38351196723",
-            "Symbol: WETH\n Current Price: $3449.1533145",
-            "Symbol: SOL\n Current Price: $205.875206839",
-            "Symbol: WBTC\n Current Price: $100196.819931",
-            "Symbol: ai16z\n Current Price: $1.57302917232"
-          ],
-          "images": [],
-          "videos": []
-        }
-      ],
-      "topic": "crypto market"
-    },
-    {
       "title": "ElizaOS GitHub Activity Update",
       "content": [
         {
@@ -175,7 +246,7 @@
       "title": "Top contributors for elizaOS/eliza",
       "content": [
         {
-          "text": "The provided sources mention 'Top contributors for elizaOS/eliza' but do not provide any specific details about who these contributors are or their contributions to the project. Without additional information, it's not possible to generate a detailed summary of the top contributors to the elizaOS/eliza repository.",
+          "text": "The provided sources mention 'Top contributors for elizaOS/eliza' but do not provide any specific details about who these contributors are or their contributions to the project. Without additional information, it's not possible to generate a detailed summary about the individual contributors, their roles, or the nature of their contributions to the elizaOS/eliza project.",
           "sources": [
             "Top contributors for elizaOS/eliza"
           ],
