@@ -1,0 +1,13 @@
+{
+    "name": "pr_reviews",
+    "columns": [
+        "id",
+        "pr_id",
+        "state",
+        "body",
+        "created_at",
+        "author",
+        "last_updated"
+    ],
+    "schema": "CREATE TABLE `pr_reviews` (\n\t`id` text PRIMARY KEY NOT NULL,\n\t`pr_id` text NOT NULL,\n\t`state` text NOT NULL,\n\t`body` text DEFAULT '',\n\t`created_at` text NOT NULL,\n\t`author` text,\n\t`last_updated` text DEFAULT CURRENT_TIMESTAMP NOT NULL,\n\tFOREIGN KEY (`pr_id`) REFERENCES `raw_pull_requests`(`id`) ON UPDATE no action ON DELETE no action,\n\tFOREIGN KEY (`author`) REFERENCES `users`(`username`) ON UPDATE no action ON DELETE no action\n)"
+}

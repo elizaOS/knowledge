@@ -1,0 +1,9 @@
+{
+    "name": "pull_request_labels",
+    "columns": [
+        "pr_id",
+        "label_id",
+        "last_updated"
+    ],
+    "schema": "CREATE TABLE `pull_request_labels` (\n\t`pr_id` text NOT NULL,\n\t`label_id` text NOT NULL,\n\t`last_updated` text DEFAULT CURRENT_TIMESTAMP NOT NULL,\n\tPRIMARY KEY(`pr_id`, `label_id`),\n\tFOREIGN KEY (`pr_id`) REFERENCES `raw_pull_requests`(`id`) ON UPDATE no action ON DELETE no action,\n\tFOREIGN KEY (`label_id`) REFERENCES `labels`(`id`) ON UPDATE no action ON DELETE no action\n)"
+}

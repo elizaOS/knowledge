@@ -1,0 +1,13 @@
+{
+    "name": "issue_comments",
+    "columns": [
+        "id",
+        "issue_id",
+        "body",
+        "created_at",
+        "updated_at",
+        "author",
+        "last_updated"
+    ],
+    "schema": "CREATE TABLE `issue_comments` (\n\t`id` text PRIMARY KEY NOT NULL,\n\t`issue_id` text NOT NULL,\n\t`body` text DEFAULT '',\n\t`created_at` text NOT NULL,\n\t`updated_at` text,\n\t`author` text,\n\t`last_updated` text DEFAULT CURRENT_TIMESTAMP NOT NULL,\n\tFOREIGN KEY (`issue_id`) REFERENCES `raw_issues`(`id`) ON UPDATE no action ON DELETE no action,\n\tFOREIGN KEY (`author`) REFERENCES `users`(`username`) ON UPDATE no action ON DELETE no action\n)"
+}

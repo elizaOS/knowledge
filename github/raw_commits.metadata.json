@@ -1,0 +1,20 @@
+{
+    "name": "raw_commits",
+    "columns": [
+        "oid",
+        "message",
+        "message_headline",
+        "committed_date",
+        "author_name",
+        "author_email",
+        "author_date",
+        "author",
+        "repository",
+        "additions",
+        "deletions",
+        "changed_files",
+        "pull_request_id",
+        "last_updated"
+    ],
+    "schema": "CREATE TABLE `raw_commits` (\n\t`oid` text PRIMARY KEY NOT NULL,\n\t`message` text NOT NULL,\n\t`message_headline` text,\n\t`committed_date` text NOT NULL,\n\t`author_name` text NOT NULL,\n\t`author_email` text NOT NULL,\n\t`author_date` text NOT NULL,\n\t`author` text,\n\t`repository` text NOT NULL,\n\t`additions` integer DEFAULT 0,\n\t`deletions` integer DEFAULT 0,\n\t`changed_files` integer DEFAULT 0,\n\t`pull_request_id` text,\n\t`last_updated` text DEFAULT CURRENT_TIMESTAMP NOT NULL,\n\tFOREIGN KEY (`author`) REFERENCES `users`(`username`) ON UPDATE no action ON DELETE no action,\n\tFOREIGN KEY (`pull_request_id`) REFERENCES `raw_pull_requests`(`id`) ON UPDATE no action ON DELETE no action\n)"
+}

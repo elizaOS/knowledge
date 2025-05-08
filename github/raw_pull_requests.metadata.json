@@ -1,0 +1,24 @@
+{
+    "name": "raw_pull_requests",
+    "columns": [
+        "id",
+        "number",
+        "title",
+        "body",
+        "state",
+        "merged",
+        "author",
+        "created_at",
+        "updated_at",
+        "closed_at",
+        "merged_at",
+        "repository",
+        "head_ref_oid",
+        "base_ref_oid",
+        "additions",
+        "deletions",
+        "changed_files",
+        "last_updated"
+    ],
+    "schema": "CREATE TABLE `raw_pull_requests` (\n\t`id` text PRIMARY KEY NOT NULL,\n\t`number` integer NOT NULL,\n\t`title` text NOT NULL,\n\t`body` text DEFAULT '',\n\t`state` text NOT NULL,\n\t`merged` integer DEFAULT 0 NOT NULL,\n\t`author` text NOT NULL,\n\t`created_at` text NOT NULL,\n\t`updated_at` text NOT NULL,\n\t`closed_at` text,\n\t`merged_at` text,\n\t`repository` text NOT NULL,\n\t`head_ref_oid` text,\n\t`base_ref_oid` text,\n\t`additions` integer DEFAULT 0,\n\t`deletions` integer DEFAULT 0,\n\t`changed_files` integer DEFAULT 0,\n\t`last_updated` text DEFAULT CURRENT_TIMESTAMP NOT NULL,\n\tFOREIGN KEY (`author`) REFERENCES `users`(`username`) ON UPDATE no action ON DELETE no action\n)"
+}

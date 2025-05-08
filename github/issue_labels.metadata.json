@@ -1,0 +1,9 @@
+{
+    "name": "issue_labels",
+    "columns": [
+        "issue_id",
+        "label_id",
+        "last_updated"
+    ],
+    "schema": "CREATE TABLE `issue_labels` (\n\t`issue_id` text NOT NULL,\n\t`label_id` text NOT NULL,\n\t`last_updated` text DEFAULT CURRENT_TIMESTAMP NOT NULL,\n\tPRIMARY KEY(`issue_id`, `label_id`),\n\tFOREIGN KEY (`issue_id`) REFERENCES `raw_issues`(`id`) ON UPDATE no action ON DELETE no action,\n\tFOREIGN KEY (`label_id`) REFERENCES `labels`(`id`) ON UPDATE no action ON DELETE no action\n)"
+}

@@ -1,0 +1,15 @@
+{
+    "name": "raw_commit_files",
+    "columns": [
+        "id",
+        "sha",
+        "filename",
+        "additions",
+        "deletions",
+        "changes",
+        "changeType",
+        "patch",
+        "last_updated"
+    ],
+    "schema": "CREATE TABLE `raw_commit_files` (\n\t`id` text PRIMARY KEY NOT NULL,\n\t`sha` text NOT NULL,\n\t`filename` text NOT NULL,\n\t`additions` integer DEFAULT 0,\n\t`deletions` integer DEFAULT 0,\n\t`changes` integer DEFAULT 0,\n\t`changeType` text,\n\t`patch` text,\n\t`last_updated` text DEFAULT CURRENT_TIMESTAMP NOT NULL,\n\tFOREIGN KEY (`sha`) REFERENCES `raw_commits`(`oid`) ON UPDATE no action ON DELETE no action\n)"
+}

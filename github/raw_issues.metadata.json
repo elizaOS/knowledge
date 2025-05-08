@@ -1,0 +1,18 @@
+{
+    "name": "raw_issues",
+    "columns": [
+        "id",
+        "number",
+        "title",
+        "body",
+        "state",
+        "locked",
+        "author",
+        "created_at",
+        "updated_at",
+        "closed_at",
+        "repository",
+        "last_updated"
+    ],
+    "schema": "CREATE TABLE `raw_issues` (\n\t`id` text PRIMARY KEY NOT NULL,\n\t`number` integer NOT NULL,\n\t`title` text NOT NULL,\n\t`body` text DEFAULT '',\n\t`state` text NOT NULL,\n\t`locked` integer DEFAULT 0,\n\t`author` text NOT NULL,\n\t`created_at` text NOT NULL,\n\t`updated_at` text NOT NULL,\n\t`closed_at` text,\n\t`repository` text NOT NULL,\n\t`last_updated` text DEFAULT CURRENT_TIMESTAMP NOT NULL,\n\tFOREIGN KEY (`author`) REFERENCES `users`(`username`) ON UPDATE no action ON DELETE no action\n)"
+}

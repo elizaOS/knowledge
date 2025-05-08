@@ -1,0 +1,14 @@
+{
+    "name": "user_tag_scores",
+    "columns": [
+        "id",
+        "username",
+        "tag",
+        "score",
+        "level",
+        "progress",
+        "points_to_next",
+        "last_updated"
+    ],
+    "schema": "CREATE TABLE `user_tag_scores` (\n\t`id` text PRIMARY KEY NOT NULL,\n\t`username` text NOT NULL,\n\t`tag` text NOT NULL,\n\t`score` real DEFAULT 0 NOT NULL,\n\t`level` integer DEFAULT 0 NOT NULL,\n\t`progress` real DEFAULT 0 NOT NULL,\n\t`points_to_next` real DEFAULT 0 NOT NULL,\n\t`last_updated` text DEFAULT CURRENT_TIMESTAMP NOT NULL,\n\tFOREIGN KEY (`username`) REFERENCES `users`(`username`) ON UPDATE no action ON DELETE no action,\n\tFOREIGN KEY (`tag`) REFERENCES `tags`(`name`) ON UPDATE no action ON DELETE no action\n)"
+}
