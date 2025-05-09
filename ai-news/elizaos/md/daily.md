@@ -1,28 +1,31 @@
-# Eliza Repository Activity (2025-05-07)
+# ElizaOS GitHub Activity (2025-05-08)
 
-## Pull Request Activity
+## Repository Activity Summary
+- 17 new pull requests with 12 merged
+- 1 new issue reported
+- 14 active contributors participating
 
-### Bug Fixes and Improvements
-- Fix for BM25 implemented along with dependency updates (PR #4411)
-- Cleaner load-plugin code implemented (PR #4478)
-- Existing utilities utilized for monorepo resolution (PR #4468)
-- Bun installation ensured in the update-docs process (PR #4474)
+## Recent Pull Requests
 
-### Reverts
-- Plugin loading code rolled back (PR #4477)
-- ESM type declarations in Core reverted (PR #4475)
-- ESM type generation in SQL, Bootstrap & OpenAI packages reverted (PR #4473)
+### Code Maintenance
+- Removed StudioLM support to focus on llama.cpp
+- Deleted all memories API and client hooks
+- Removed plugin-elevenlabs AI from the monorepo
+- Implemented real drizzle ORM for database operation types
 
-### Documentation
-- Docstrings added to `monorepo-resolve` (PR #4469)
+### Bug Fixes
+- Fixed type errors in CLI and replaced deprecated fs.exists
+- Fixed PGLite directory issues
+- Fixed runtime type
+- Fixed publish CLI options for platform and skip-registry
+- Fixed missing .gitignore in plugins created with global CLI installation
 
-### New Features
-- PM (Project Management) agent feature introduced (PR #4471)
-- Test setup and coverage for OpenAI plugins added (PR #4481)
-- Worker.js client build issue fixed (PR #4476)
-- Bootstrap export issues addressed (PR #4472)
+### Documentation & Features
+- Added docstrings to fix-pglite-dir
+- Added docstrings to combined-ELI2-279-ELI2-280/fix-publish-cli-options
+- Updated documentation to prefer direct usage instead of npx
+- Added Indonesian README translations (PRs #4485 and #4487)
+- Introduced Eddy DevRel Agent feature
 
-## GitHub Activity Summary
-- 16 new pull requests created
-- 8 pull requests merged
-- 23 active contributors working on the project
+## Issues
+- Issue #4486: Agent hangs after core initialization and REST API binding with Anthropic + Twitter configuration
