@@ -1,31 +1,30 @@
-# ElizaOS GitHub Activity (2025-05-08)
+# elizaOS/eliza Repository Activity (2025-05-09)
 
-## Repository Activity Summary
-- 17 new pull requests with 12 merged
-- 1 new issue reported
-- 14 active contributors participating
+## Completed Pull Requests
+
+- Bug fixes:
+  - Fixed issues with TTS manager and transcribe functionality [GitHub PR #4496](https://github.com/elizaOS/eliza/pull/4496)
+  - Fixed problem with deleting agents that have been in a room [GitHub PR #4510](https://github.com/elizaOS/eliza/pull/4510)
+  - Enhanced message handling and text escaping by adding null checks [GitHub PR #4508](https://github.com/elizaOS/eliza/pull/4508)
+- Documentation updates:
+  - Modified README.md file [GitHub PR #4483](https://github.com/elizaOS/eliza/pull/4483)
+  - Created new README_IND.md file [GitHub PR #4488](https://github.com/elizaOS/eliza/pull/4488)
+- Release:
+  - Merged PR #4501 for the 0.25.19 release [GitHub PR #4501](https://github.com/elizaOS/eliza/pull/4501)
 
 ## Recent Pull Requests
 
-### Code Maintenance
-- Removed StudioLM support to focus on llama.cpp
-- Deleted all memories API and client hooks
-- Removed plugin-elevenlabs AI from the monorepo
-- Implemented real drizzle ORM for database operation types
+- User odilitime submitted:
+  - Release preparation for version 0.25.19 [GitHub PR #4501](https://github.com/elizaOS/eliza/pull/4501)
+  - Feature addition adding plugin specification wrappers [GitHub PR #4505](https://github.com/elizaOS/eliza/pull/4505)
 
-### Bug Fixes
-- Fixed type errors in CLI and replaced deprecated fs.exists
-- Fixed PGLite directory issues
-- Fixed runtime type
-- Fixed publish CLI options for platform and skip-registry
-- Fixed missing .gitignore in plugins created with global CLI installation
+## New Issues
 
-### Documentation & Features
-- Added docstrings to fix-pglite-dir
-- Added docstrings to combined-ELI2-279-ELI2-280/fix-publish-cli-options
-- Updated documentation to prefer direct usage instead of npx
-- Added Indonesian README translations (PRs #4485 and #4487)
-- Introduced Eddy DevRel Agent feature
+- OLLAMA support issue opened by user nabz-polo [GitHub Issue #4503](https://github.com/elizaOS/eliza/issues/4503)
 
-## Issues
-- Issue #4486: Agent hangs after core initialization and REST API binding with Anthropic + Twitter configuration
+## Repository Activity Summary (May 9-10, 2025)
+
+- 12 new pull requests
+- 6 merged pull requests
+- 1 new issue opened
+- 20 contributors participating
