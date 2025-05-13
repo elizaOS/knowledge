@@ -1,49 +1,38 @@
-# Daily Report - 2025-05-11
+# Daily Report - 2025-05-12
 
-## Completed Items in elizaOS/eliza
+## Completed Items
 
-- **Bugfixes:**
-  - Fixed JSON serialization in pglite to handle invalid Unicode escape sequences in logs
-  - Fixed Twitter functionality in V2
-  - Implemented Shaw bugfixes
-  - Fixed pglite migrations in two separate PRs
-  - Enforced TypeScript on /cli and /plugin-sql directories, fixing missing DB functions
-- **Features and Enhancements:**
-  - Added Jimmy PM agent functionality
-  - Refactored model handling in AgentRuntime to support provider and priority
-- **Refactoring and Maintenance:**
-  - Cleaned eliza cache before running CI
-  - Cleaned up the-org ENV and Agent loading
-- **Other Changes:**
-  - Removed plugin-solana from monorepo
-  - Updated npm and yarn dependencies across 2 directories
-  - Disabled loading instrumentation when not enabled
-  - Removed broken release link in changelog
-  - Updated to newer bun setup
-- **Documentation:**
-  - Removed redundant word in solana-v2.md
-- Sources: https://github.com/elizaOS/eliza/pull/4458, https://github.com/elizaOS/eliza/pull/4471, https://github.com/elizaOS/eliza/pull/4513, https://github.com/elizaOS/eliza/pull/4507, https://github.com/elizaOS/eliza/pull/4506, https://github.com/elizaOS/eliza/pull/4502, https://github.com/elizaOS/eliza/pull/4523, https://github.com/elizaOS/eliza/pull/4520, https://github.com/elizaOS/eliza/pull/4515, https://github.com/elizaOS/eliza/pull/4532, https://github.com/elizaOS/eliza/pull/4531, https://github.com/elizaOS/eliza/pull/4530, https://github.com/elizaOS/eliza/pull/4529, https://github.com/elizaOS/eliza/pull/4527, https://github.com/elizaOS/eliza/pull/4526, https://github.com/elizaOS/eliza/pull/4524
+- Several bug fixes and improvements were recently completed in the Eliza project:
+  - A chore PR (#4549) was merged to ensure consistent environment naming for the project manager agent
+  - PR #4548 fixed agent response issues and improved logging/tracing in the bootstrap plugin
+  - PR #4547 addressed a bad environment resolution bug
+  - PR #4546 removed banner display and improved help command formatting by showing -h and --help on the same line
+  - A temporary fix (PR #4544) was implemented with a passthrough function to prevent LLM plugins from breaking
+  - PR #4541 fixed an integration test import issue
+  - PR #4537 resolved an error related to issue #4336 where TEXT_EMBEDDING was not properly handled
+- Sources: https://github.com/elizaOS/eliza/pull/4549, https://github.com/elizaOS/eliza/pull/4548, https://github.com/elizaOS/eliza/pull/4547, https://github.com/elizaOS/eliza/pull/4546, https://github.com/elizaOS/eliza/pull/4544, https://github.com/elizaOS/eliza/pull/4541, https://github.com/elizaOS/eliza/pull/4537
 
 ## Pull Requests for elizaOS/eliza
 
-- ChristopherTrimboli submitted PR #4512 focusing on cleaning up the organization agent and environment loading code
-- 0xbbjoker submitted PR #4533 addressing a fix by adding missing extensions for migrations
-- Sources: https://github.com/elizaOS/eliza/pull/4512, https://github.com/elizaOS/eliza/pull/4533
+- Four pull requests are currently open in the repository:
+  - PR #4554 by @0xbbjoker adds MySQL functionality to the 'degen' component
+  - User @yungalgo has submitted three related PRs (#4535, #4538, and #4543) implementing CLI commands for plugins and agents as part of ELIZA290 Part 2
+- Sources: https://github.com/elizaOS/eliza/pull/4554, https://github.com/elizaOS/eliza/pull/4538, https://github.com/elizaOS/eliza/pull/4535, https://github.com/elizaOS/eliza/pull/4543
 
-## GitHub Summary for elizaOS/eliza
+## GitHub Summary
 
-- 10 new pull requests submitted between May 11-12, 2025
-- 16 pull requests merged during this period
-- 1 new issue opened
-- 13 active contributors working on the project
+- From May 12-13, 2025, the elizaos/eliza repository saw:
+  - 20 new pull requests with 7 of them merged
+  - 1 new issue
+  - 11 active contributors working on the project
 - Sources: githubStatsSummary
 
 ## Issues for elizaOS/eliza
 
-- User AndreaRettaroli opened Issue #4528 titled 'Improve Eliza in TEE oasis'
-- The issue relates to the Eliza project in a Trusted Execution Environment (TEE) oasis context
-- Sources: https://github.com/elizaOS/eliza/issues/4528
+- Issue #4536 has been opened by user @BinaryBluePeach
+- The issue is titled "Cannot find module '@elizaos/core' or its corresponding type declarations"
+- Sources: https://github.com/elizaOS/eliza/issues/4536
 
 ## Miscellaneous
 
-- Information about top contributors for the elizaOS/eliza GitHub repository was provided
+- Information about top contributors for the elizaOS/eliza GitHub repository is available
