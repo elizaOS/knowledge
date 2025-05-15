@@ -1,42 +1,36 @@
-# Daily Report - 2025-05-13
+# Daily Report - 2025-05-14
 
 ## Completed Items in elizaOS/eliza
 
-- Bugfixes addressed build issues for Discord plugin and messaging service after a merge conflict (#4552)
-- Fixed TEE updates for CI (#4572)
-- Updated Telegram messageManager tests to expect MarkdownV2 (#4570)
-- Added commit SHA to CLI cache action (#4571)
-- Implemented support for third-party plugin installation (#4568)
-- Upgraded the CLI agent command (#4560)
-- Removed REST /ping for websocket status checks in the client (#4551)
-- Returned to regular dev command (#4566)
-- Used the latest v2 plugin list for tests (#4564)
-- Enabled strict types with adjusted guards for the Telegram plugin (#4559)
-- Sources: https://github.com/elizaOS/eliza/pull/4552, https://github.com/elizaOS/eliza/pull/4551, https://github.com/elizaOS/eliza/pull/4572, https://github.com/elizaOS/eliza/pull/4571, https://github.com/elizaOS/eliza/pull/4570, https://github.com/elizaOS/eliza/pull/4568, https://github.com/elizaOS/eliza/pull/4566, https://github.com/elizaOS/eliza/pull/4564, https://github.com/elizaOS/eliza/pull/4560, https://github.com/elizaOS/eliza/pull/4559
+- Recent completed items include several features, bugfixes, and other improvements
+- Features added:
+  - Plugin-specification submodule (PR #4553)
+  - Tests for the create-eliza command (PR #4582)
+  - Improved git repository plugin installation support (PR #4577)
+- Bugfixes:
+  - Community manager configuration to use plugin-local-ai by default (PR #4557)
+  - Scoping of worldId and entityId (PR #4581)
+  - LLM response parsing to support custom fields and clean up empty message headers (PR #4580)
+- Other improvements:
+  - Addition of Autofun Buy and Sell through contract functionality (PR #4397)
+  - Removal of log spam during client build (PR #4584)
+- Sources: https://github.com/elizaOS/eliza/pull/4397, https://github.com/elizaOS/eliza/pull/4553, https://github.com/elizaOS/eliza/pull/4557, https://github.com/elizaOS/eliza/pull/4584, https://github.com/elizaOS/eliza/pull/4582, https://github.com/elizaOS/eliza/pull/4581, https://github.com/elizaOS/eliza/pull/4580, https://github.com/elizaOS/eliza/pull/4577
 
 ## Pull Requests for elizaOS/eliza
 
-- Samarthsinghal28 added a Polygon Plugin (#4573)
-- Y4NK33420 implemented Polygon Gas Oracle Integration (#4574)
-- 0xbbjoker fixed build issues for the Discord plugin and service mess after merge conflicts (#4552)
-- ChristopherTrimboli fixed the Create room API (#4558)
-- HarshModi2005 addressed Issue 451 (#4575)
-- Sources: https://github.com/elizaOS/eliza/pull/4573, https://github.com/elizaOS/eliza/pull/4575, https://github.com/elizaOS/eliza/pull/4552, https://github.com/elizaOS/eliza/pull/4574, https://github.com/elizaOS/eliza/pull/4558
+- Three recent pull requests have been submitted:
+  - PR #4582 by wtfsayo adds tests for the create-eliza command
+  - PR #4577 by wtfsayo improves git repository plugin installation support
+  - PR #4583 by yungalgo introduces CLI start command functionality
+- Sources: https://github.com/elizaOS/eliza/pull/4582, https://github.com/elizaOS/eliza/pull/4577, https://github.com/elizaOS/eliza/pull/4583
 
-## Issues for elizaOS/eliza
+## GitHub Activity for elizaOS/eliza
 
-- samgermain requested to make a publish to npm (#4562)
-- K1mc4n reported an error from CI activity (#4561)
-- K1mc4n indicated a problem with a missing path 'packages/docs/i18n/readme/' (#4565)
-- Sources: https://github.com/elizaOS/eliza/issues/4562, https://github.com/elizaOS/eliza/issues/4561, https://github.com/elizaOS/eliza/issues/4565
-
-## GitHub Summary
-
-- 16 new pull requests were created (10 merged)
-- 3 new issues were opened
-- 17 active contributors participated in the project
+- From May 14 to May 15, 2025, the repository had:
+  - 9 new pull requests with 8 merged
+  - 16 active contributors working on the repository
 - Sources: githubStatsSummary
 
 ## Miscellaneous
 
-- Information about top contributors for the elizaOS/eliza GitHub repository was provided
+- Information about top contributors for the elizaOS/eliza GitHub repository was mentioned
