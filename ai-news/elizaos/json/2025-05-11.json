@@ -6,7 +6,7 @@
       "title": "Summary for completed_items",
       "content": [
         {
-          "text": "Recent completed items in the elizaOS/eliza repository include several bugfixes, features, refactors, and other changes:\n\nBugfixes:\n- Fixed JSON serialization in pglite to handle invalid Unicode escape sequences in logs (PR #4458)\n- Fixed Twitter functionality in V2 (PR #4506)\n- Implemented Shaw bugfixes (PR #4515)\n- Fixed pglite migrations in two separate PRs (#4531, #4532)\n- Enforced TypeScript on /cli and /plugin-sql directories, fixing missing DB functions (PR #4529)\n\nFeatures and Enhancements:\n- Added Jimmy PM agent functionality (PR #4471)\n- Refactored model handling in AgentRuntime to support provider and priority (PR #4507)\n\nRefactoring and Maintenance:\n- Cleaned eliza cache before running CI (PR #4523)\n- Cleaned up the-org ENV and Agent loading (PR #4524)\n\nOther Changes:\n- Removed plugin-solana from monorepo (PR #4513)\n- Updated npm and yarn dependencies across 2 directories (PR #4502)\n- Disabled loading instrumentation when not enabled (PR #4530)\n- Removed broken release link in changelog (PR #4527)\n- Updated to newer bun setup (PR #4526)\n\nDocumentation:\n- Removed redundant word in solana-v2.md (PR #4520)",
+          "text": "Recent completed items in the elizaOS/eliza repository include several bugfixes, features, refactors, and other changes:\n\nBugfixes:\n- Fixed JSON serialization in pglite to handle invalid Unicode escape sequences in logs (PR #4458)\n- Fixed Twitter functionality in V2 (PR #4506)\n- Implemented Shaw bugfixes (PR #4515)\n- Fixed pglite migrations in two separate PRs (#4531, #4532)\n- Enforced TypeScript on /cli and /plugin-sql, fixing missing DB functions (PR #4529)\n- Fixed agent response and improved logging/tracing in bootstrap plugin (PR #4548)\n- Fixed bad environment resolution (PR #4547)\n- Removed banner display and improved help command formatting (PR #4546)\n- Added passthrough function to prevent LLM plugins from breaking (PR #4544)\n- Fixed integration test import (PR #4541)\n- Fixed error associated with issue #4336 related to TEXT_EMBEDDING (PR #4537)\n\nFeatures and Enhancements:\n- Added Jimmy PM agent functionality (PR #4471)\n- Refactored model handling in AgentRuntime to support provider and priority (PR #4507)\n\nMaintenance and Other Changes:\n- Removed plugin-solana from monorepo (PR #4513)\n- Updated npm and yarn dependencies across directories (PR #4502)\n- Cleaned eliza cache before running CI (PR #4523)\n- Disabled loading instrumentation when not enabled (PR #4530)\n- Removed broken release link in changelog (PR #4527)\n- Updated to newer Bun setup (PR #4526)\n- Cleaned up the-org ENV and Agent loading (PR #4524)\n- Implemented consistent environment naming for project manager agent (PR #4549)\n\nDocumentation:\n- Removed redundant word in solana-v2.md (PR #4520)",
           "sources": [
             "https://github.com/elizaOS/eliza/pull/4458",
             "https://github.com/elizaOS/eliza/pull/4471",
@@ -23,7 +23,14 @@
             "https://github.com/elizaOS/eliza/pull/4529",
             "https://github.com/elizaOS/eliza/pull/4527",
             "https://github.com/elizaOS/eliza/pull/4526",
-            "https://github.com/elizaOS/eliza/pull/4524"
+            "https://github.com/elizaOS/eliza/pull/4524",
+            "https://github.com/elizaOS/eliza/pull/4549",
+            "https://github.com/elizaOS/eliza/pull/4548",
+            "https://github.com/elizaOS/eliza/pull/4547",
+            "https://github.com/elizaOS/eliza/pull/4546",
+            "https://github.com/elizaOS/eliza/pull/4544",
+            "https://github.com/elizaOS/eliza/pull/4541",
+            "https://github.com/elizaOS/eliza/pull/4537"
           ],
           "images": [],
           "videos": []
@@ -32,18 +39,92 @@
       "topic": "completed_items"
     },
     {
+      "title": "Thematic Twitter Activity Summary",
+      "content": [
+        {
+          "theme_title": "Cryptocurrency Security and Best Practices",
+          "text": "User @dankvr shared extensive cryptocurrency security advice in a thread, starting with a \"Crypto beginner pack\" for different investment levels. For those with $5k+, he recommends a hardware wallet, notebook and pen, spare device for crypto transactions, Google Voice, and learning OPSEC. At $15k+, he suggests adding home defense/cameras and steel seed phrase storage. For $100k+, he recommends multisig/multiple hardware wallets and a burner device when traveling. In follow-up tweets, @dankvr emphasized additional security practices including deleting unused apps, keeping software updated, being aware of various attack vectors (evil maid attacks, phishing, etc.), using strong passwords via a password manager, avoiding SMS 2FA, and maintaining privacy about crypto holdings. When asked about the spare device recommendation, @dankvr clarified it could be \"an old laptop and fresh OS on spare hard drive.\" In a separate conversation, @dankvr discussed potential wallet security issues with another user, asking about software updates and other potential vulnerabilities. @dankvr also warned about a social engineering scam by sharing a post from @thedefiedge about hackers using the compromised @Cointelegraph account to send DMs with phishing links to a typosquatted domain \"Cointetegraph\" attempting to steal X account credentials.",
+          "sources": [
+            "https://twitter.com/dankvr/status/1921424072702939243",
+            "https://twitter.com/dankvr/status/1921427867902115848",
+            "https://twitter.com/dankvr/status/1921563852975595883",
+            "https://twitter.com/dankvr/status/1921404375060123729",
+            "https://twitter.com/dankvr/status/1921406106972152213",
+            "https://twitter.com/thedefiedge/status/1921039988848030021"
+          ],
+          "images": [
+            "https://pbs.twimg.com/media/GqpDvH6XMAAPadU.jpg"
+          ],
+          "videos": []
+        },
+        {
+          "theme_title": "Bitcoin as an Investment Asset",
+          "text": "Several tweets discussed Bitcoin's role as an investment asset. User @dankvr retweeted a post from @izebel_eth stating that \"the endgame for bitcoin is as the greatest collateral asset invented\" describing it as \"gold that you can store for free, and borrow against permissionlessly.\" In a separate conversation, @shawmakesmagic asked @0xMert_ about how someone makes money with Bitcoin, specifically wondering if they just hold it without selling. User @shawmakesmagic also retweeted a post from @anothercohen with an enthusiastic \"Holy shit we are so back\" message that included what appears to be a Bitcoin-related image.",
+          "sources": [
+            "https://twitter.com/izebel_eth/status/1921553179973451834",
+            "https://twitter.com/shawmakesmagic/status/1921579874487017806",
+            "https://twitter.com/anothercohen/status/1921258658945552790"
+          ],
+          "images": [
+            "https://pbs.twimg.com/media/Gqq4YtMaIAAcWIk.jpg",
+            "https://pbs.twimg.com/media/GqmukYBXUAIZcTb.jpg"
+          ],
+          "videos": []
+        },
+        {
+          "theme_title": "AI Agents and Development",
+          "text": "User @shawmakesmagic shared several tweets about AI agents and development tools. He promoted \"The Org,\" a tool built on Eliza that allows users to \"Track the progress of your team, help your customers 24/7 and stay on top of your calendar without checking your phone\" with one-click agents for Discord, Telegram, Slack, or Teams that can be set up quickly. He also highlighted how Eliza can be deployed to enable users to chat with documentation in minutes, providing an example and source code to get started. Additionally, @shawmakesmagic mentioned an \"Auto Agent Dev\" and shared a link to build \"an autonomous agent to take over your computer,\" warning that \"it has full access to everything!\" He also praised a launch by commenting \"Best launch so far, these guys are crushing it\" in reference to a quoted tweet from @comput3ai about \"Gud tech.\" User @elizaOS, likely connected to the Eliza platform, tweeted \"trust me - this is the plan\" with an accompanying image, and in a separate tweet stated that \"alignment ≠ conformity.\"",
+          "sources": [
+            "https://twitter.com/shawmakesmagic/status/1921657337019773332",
+            "https://twitter.com/shawmakesmagic/status/1921662570764681485",
+            "https://twitter.com/shawmakesmagic/status/1921663179555279029",
+            "https://twitter.com/shawmakesmagic/status/1921638239288373352",
+            "https://twitter.com/shawmakesmagic/status/1921603549013692696",
+            "https://twitter.com/comput3ai/status/1921602632092676217",
+            "https://twitter.com/elizaOS/status/1921531985283133712",
+            "https://twitter.com/elizaOS/status/1921575522129383672"
+          ],
+          "images": [
+            "https://pbs.twimg.com/media/GqsXxI4aQAANpkx.jpg",
+            "https://pbs.twimg.com/media/Gqsd5MjboAAnGdT.png",
+            "https://pbs.twimg.com/media/GqhQPoPWgAA8B0u.jpg"
+          ],
+          "videos": []
+        },
+        {
+          "theme_title": "Web Browsers and Technology",
+          "text": "User @dankvr commented on web browsers in a conversation with @gakonst and @zooko, stating that \"the brave team is receptive and quick to implement ideas based on user feedback\" and suggesting that \"one day of using it and some thoughtful constructive criticism would go a long way towards making it good fast.\" He encouraged supporting \"our allies\" in this context. In another conversation, @dankvr responded to @Higgisp and @theo with the statement \"There is no second best,\" possibly in reference to browser or technology preferences.",
+          "sources": [
+            "https://twitter.com/dankvr/status/1921614528342524123",
+            "https://twitter.com/dankvr/status/1921636791901110779"
+          ],
+          "images": [],
+          "videos": []
+        }
+      ],
+      "topic": "twitter_activity"
+    },
+    {
       "title": "Pull Requests for the repository",
       "repository_name": "elizaOS/eliza",
       "content": [
         {
-          "text": "Two pull requests have been submitted to the elizaOS/eliza repository. PR #4512 by ChristopherTrimboli focuses on cleaning up the organization agent and environment loading code. PR #4533 by 0xbbjoker addresses a fix by adding missing extensions for migrations.",
+          "text": "Several pull requests have been submitted to the elizaOS/eliza repository:\n\n1. PR #4512 by ChristopherTrimboli focuses on cleaning up organization agent and environment loading code.\n\n2. PR #4533 by 0xbbjoker addresses a fix for adding missing extensions for migrations.\n\n3. PR #4554, also by 0xbbjoker, adds MySQL support to the 'degen' component.\n\n4. PRs #4535, #4538, and #4543 by yungalgo are all related to the same feature implementation: 'ELIZA290/part-2-plugins-agent-cli-commands', with PR #4543 specifically labeled as 'ELIZA290/part-2-cli-plugins-agent-fresh'.",
           "sources": [
             "https://github.com/elizaOS/eliza/pull/4512",
-            "https://github.com/elizaOS/eliza/pull/4533"
+            "https://github.com/elizaOS/eliza/pull/4533",
+            "https://github.com/elizaOS/eliza/pull/4554",
+            "https://github.com/elizaOS/eliza/pull/4538",
+            "https://github.com/elizaOS/eliza/pull/4535",
+            "https://github.com/elizaOS/eliza/pull/4543"
           ],
           "images": [
             "https://opengraph.githubassets.com/1/elizaOS/eliza/pull/4512",
-            "https://opengraph.githubassets.com/1/elizaOS/eliza/pull/4533"
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/pull/4533",
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/pull/4554",
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/pull/4538",
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/pull/4535",
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/pull/4543"
           ],
           "videos": []
         }
@@ -54,9 +135,10 @@
       "title": "Summary for github_summary",
       "content": [
         {
-          "text": "From May 11-12, 2025, the elizaos/eliza repository had 10 new pull requests with 16 merged PRs, 1 new issue, and 13 active contributors working on the project.",
+          "text": "GitHub activity for elizaos/eliza repository over two days:\n\nMay 11-12, 2025: 10 new PRs with 16 merged, 1 new issue, and 13 active contributors.\n\nMay 12-13, 2025: 20 new PRs with 7 merged, 1 new issue, and 11 active contributors.",
           "sources": [
-            "githubStatsSummary"
+            "source 1 (githubStatsSummary)",
+            "source 2 (githubStatsSummary)"
           ],
           "images": [],
           "videos": []
@@ -69,12 +151,14 @@
       "repository_name": "elizaOS/eliza",
       "content": [
         {
-          "text": "Issue #4528 has been opened by user AndreaRettaroli titled 'Improve Eliza in TEE oasis'. The issue relates to the Eliza project in a Trusted Execution Environment (TEE) oasis context.",
+          "text": "Two issues have been reported in the elizaOS/eliza repository. Issue #4528 by AndreaRettaroli focuses on improving Eliza in TEE oasis. Issue #4536 by BinaryBluePeach reports an error where the system cannot find the module '@elizaos/core' or its corresponding type declarations.",
           "sources": [
-            "https://github.com/elizaOS/eliza/issues/4528"
+            "https://github.com/elizaOS/eliza/issues/4528",
+            "https://github.com/elizaOS/eliza/issues/4536"
           ],
           "images": [
-            "https://opengraph.githubassets.com/1/elizaOS/eliza/issues/4528"
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/issues/4528",
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/issues/4536"
           ],
           "videos": []
         }
@@ -82,16 +166,19 @@
       "topic": "issue"
     },
     {
-      "title": "Summary for Misceleanous",
+      "title": "Summary for github_other",
       "content": [
         {
-          "text": "The source provides information about the top contributors for the elizaOS/eliza GitHub repository. However, no specific details about the contributors or their contributions are provided in the source text.",
-          "sources": [],
+          "text": "The sources provide information about the top contributors for the GitHub repository elizaOS/eliza. However, both sources appear to be identical and contain only the heading 'Top contributors for elizaOS/eliza' without listing the actual contributors.",
+          "sources": [
+            "source 1",
+            "source 2"
+          ],
           "images": [],
           "videos": []
         }
       ],
-      "topic": "Misceleanous"
+      "topic": "github_other"
     }
   ],
   "date": 1746921600
