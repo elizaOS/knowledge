@@ -16,17 +16,19 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x' # Use a recent Python version
+
       - name: Set execute permission for script
-        run: chmod +x scripts/aggregate-sources.sh
+        run: chmod +x scripts/aggregate_sources.py
 
       - name: Generate Daily Context Map
         id: generate_map
-        run: chmod +x scripts/aggregate-sources.sh
+        run: ./scripts/aggregate_sources.py # Changed from .sh to .py
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Run Context Map Script
-        run: ./scripts/aggregate-sources.sh
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # GITHUB_TOKEN is usually not needed by the script itself
 
       - name: Create daily.json permalink
         run: cp the-council/$(date +%Y-%m-%d).json the-council/daily.json
@@ -41,7 +43,7 @@ jobs:
           # Check if the specific daily file or permalink file was created/modified
           if [[ `git status --porcelain the-council/$(date +%Y-%m-%d).json the-council/daily.json` ]]; then
             git add the-council/$(date +%Y-%m-%d).json the-council/daily.json
-            git commit -m "Automated: Generate context map for $(date +%Y-%m-%d)"
+            git commit -m "Automated: Generate context map for $(date +%Y-%m-%d) via Python"
             git push
           else
             echo "No changes to commit."
