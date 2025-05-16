@@ -22,16 +22,22 @@ LOG_LEVEL = logging.INFO # Or logging.DEBUG for more verbose output
 # Source File Paths (relative to WORKSPACE_ROOT)
 AI_NEWS_ELIZAOS_JSON_DIR = WORKSPACE_ROOT / "ai-news/elizaos/json"
 AI_NEWS_ELIZAOS_MD_DIR = WORKSPACE_ROOT / "ai-news/elizaos/md"
-AI_NEWS_DISCORD_JSON_DIR = WORKSPACE_ROOT / "ai-news/elizaos/discord/json"
-AI_NEWS_DISCORD_MD_DIR = WORKSPACE_ROOT / "ai-news/elizaos/discord/md"
-AI_NEWS_DEV_JSON_DIR = WORKSPACE_ROOT / "ai-news/elizaos/dev/json"
-AI_NEWS_DEV_MD_DIR = WORKSPACE_ROOT / "ai-news/elizaos/dev/md"
+AI_NEWS_ELIZAOS_DISCORD_JSON_DIR = WORKSPACE_ROOT / "ai-news/elizaos/discord/json"
+AI_NEWS_ELIZAOS_DISCORD_MD_DIR = WORKSPACE_ROOT / "ai-news/elizaos/discord/md"
+AI_NEWS_ELIZAOS_DEV_JSON_DIR = WORKSPACE_ROOT / "ai-news/elizaos/dev/json"
+AI_NEWS_ELIZAOS_DEV_MD_DIR = WORKSPACE_ROOT / "ai-news/elizaos/dev/md"
 
 GITHUB_SUMMARIES_DAY_DIR = WORKSPACE_ROOT / "github/summaries/day"
 GITHUB_SUMMARIES_WEEK_DIR = WORKSPACE_ROOT / "github/summaries/week"
 GITHUB_SUMMARIES_MONTH_DIR = WORKSPACE_ROOT / "github/summaries/month"
 GITHUB_STATS_MONTH_DIR = WORKSPACE_ROOT / "github/stats/month"
 GITHUB_USER_SUMMARIES_FILE = WORKSPACE_ROOT / "github/user_summaries.ndjson"
+
+# List of AI News base directories to identify them
+AI_NEWS_BASE_DIRS = [
+    AI_NEWS_ELIZAOS_JSON_DIR.parent.parent, # ai-news/elizaos
+    AI_NEWS_HYPERFY_JSON_DIR.parent.parent # ai-news/hyperfy (assuming it might exist or follow same pattern)
+]
 
 # --- Logging Setup ---
 logging.basicConfig(level=LOG_LEVEL, format='%(asctime)s - %(levelname)s - %(message)s')
@@ -101,13 +107,57 @@ def create_file_entry(file_path: Path, content_override: Optional[Union[str, Dic
     
     return {"filename": filename, "content": content}
 
+# Helper function to check if a path is an AI News path
+def is_ai_news_source(file_path_obj: Path) -> bool:
+    try:
+        # Check if the file_path_obj is relative to any of the AI_NEWS_BASE_DIRS
+        for base_dir in AI_NEWS_BASE_DIRS:
+            if file_path_obj.is_relative_to(base_dir):
+                return True
+    except ValueError: # Not relative
+        pass
+    # Check specific directory variables as well, as parent check might not cover all cases if structure is flat
+    ai_news_dirs_to_check = [
+        AI_NEWS_ELIZAOS_JSON_DIR, AI_NEWS_ELIZAOS_MD_DIR,
+        AI_NEWS_ELIZAOS_DISCORD_JSON_DIR, AI_NEWS_ELIZAOS_DISCORD_MD_DIR,
+        AI_NEWS_ELIZAOS_DEV_JSON_DIR, AI_NEWS_ELIZAOS_DEV_MD_DIR,
+        AI_NEWS_HYPERFY_JSON_DIR, AI_NEWS_HYPERFY_MD_DIR
+    ]
+    for specific_dir in ai_news_dirs_to_check:
+        try:
+            if file_path_obj.is_relative_to(specific_dir.parent): # check against parent of specific dir
+                 if file_path_obj.name.startswith(specific_dir.name): # and file name matches dir name (e.g. json / md)
+                    return True
+        except ValueError:
+            pass
+        # Direct check if file_path_obj itself is one of these directories
+        if file_path_obj == specific_dir:
+            return True
+            
+    return False
 
-def get_specific_date_file_content(directory: Path, target_date: datetime.date, extension: str) -> Dict[str, Any]:
-    """Gets content for a file named YYYY-MM-DD.ext in the given directory."""
-    filename = f"{target_date.strftime('%Y-%m-%d')}.{extension.lstrip('.')}"
+# --- Getter Functions ---
+def get_specific_date_file_content(
+    directory: Path,
+    file_prefix: str,
+    file_suffix: str,
+    processing_date: datetime,
+    is_json: bool = False,
+    key_name: str = "file_content"
+) -> dict:
+    """
+    Reads a file for a specific date (YYYY-MM-DD format for filename).
+    For AI News sources, it fetches data from the previous day.
+    """
+    target_date = processing_date
+    if is_ai_news_source(directory):
+        target_date = processing_date - timedelta(days=1)
+        logging.debug(f"Adjusted target date for AI News source {directory} to {target_date.strftime('%Y-%m-%d')} from {processing_date.strftime('%Y-%m-%d')}")
+
+    date_str = target_date.strftime("%Y-%m-%d")
+    filename = f"{file_prefix}{date_str}{file_suffix}"
     file_path = directory / filename
-    logging.debug(f"Attempting to get specific date file: {file_path}")
-    return create_file_entry(file_path)
+    return create_file_entry(file_path, is_json, key_name)
 
 def get_latest_file_content(directory: Path) -> Dict[str, Any]:
     """Gets content for the most recent file (lexicographically) in a directory."""
@@ -124,25 +174,51 @@ def get_latest_file_content(directory: Path) -> Dict[str, Any]:
     logging.debug(f"Attempting to get latest file: {latest_file_path} from {directory}")
     return create_file_entry(latest_file_path)
 
-def get_recent_files_content(directory: Path, target_date: datetime.date, days: int, extension: str = "md") -> List[Dict[str, Any]]:
-    """Gets content for files from the last N days with a specific extension."""
-    if not directory.is_dir():
-        logging.warning(f"Directory not found for recent files: {directory}")
-        return []
+def get_recent_files_content(
+    directory: Path,
+    file_prefix: str,
+    file_suffix: str,
+    processing_date: datetime,
+    num_days: int,
+    is_json: bool = False,
+) -> dict:
+    """
+    Reads files from the last N days, including the processing_date.
+    For AI News sources, date range is shifted back by one day.
+    """
+    entries = {}
+    
+    base_date_for_loop = processing_date
+    if is_ai_news_source(directory):
+        base_date_for_loop = processing_date - timedelta(days=1)
+        logging.debug(f"Adjusted base date for recent files (AI News) in {directory} to {base_date_for_loop.strftime('%Y-%m-%d')}")
 
-    recent_files_data = []
-    for i in range(days):
-        current_date = target_date - timedelta(days=i)
-        entry = get_specific_date_file_content(directory, current_date, extension)
-        # Only add if it's not an empty dict or doesn't solely contain an error for file not found
-        # (it will always have 'filename' from get_specific_date_file_content)
-        if entry.get("error") != "File not found": # If other errors or success, include it.
-             recent_files_data.append(entry)
-        elif entry.get("content") is not None: # If somehow no error but content exists.
-            recent_files_data.append(entry)
+    for i in range(num_days):
+        current_target_date = base_date_for_loop - timedelta(days=i)
+        date_str = current_target_date.strftime("%Y-%m-%d")
+        descriptive_key_date_str = (processing_date - timedelta(days=i if not is_ai_news_source(directory) else i+1)).strftime('%Y-%m-%d')
+        
+        filename = f"{file_prefix}{date_str}{file_suffix}"
+        file_path = directory / filename
+        
+        # Use a descriptive key that reflects the intended date from the perspective of the overall aggregation
+        key_name = f"{directory.name}_{descriptive_key_date_str}"
+        
+        # For AI news, the actual file date is current_target_date, but we label it as if it's for descriptive_key_date_str
+        # No, the key name should be based on the actual file's date for clarity of what's being presented
+        # Let's re-think the key. The content is from current_target_date.
+        # The key in the output should ideally reflect the day it *pertains to* in the context of the report.
+        # If report is for 2025-05-16, and AI News is from 2025-05-15, the key could be ai_news_2025-05-15
+        # or ai_news_day_minus_1.
+        # The current get_specific_date_file_content uses the original processing_date for the key.
+        # Let's make keys consistent: the key reflects the date of the data *in the file*.
 
-    # Sort by date, most recent first (filename will be YYYY-MM-DD.ext)
-    return sorted(recent_files_data, key=lambda x: x.get("filename",""), reverse=True)
+        key_name_for_output = f"{directory.name.lower().replace(' ','_')}_{date_str}"
+
+
+        entry = create_file_entry(file_path, is_json, key_name_for_output) # use key_name_for_output here
+        entries.update(entry) # create_file_entry returns a dict, so update
+    return entries
 
 def extract_github_monthly_stats(directory: Path, target_year_month: str) -> str:
     """Extracts content of the stats_YYYY-MM.json file in the given directory."""
@@ -271,17 +347,17 @@ def main():
     final_context["github"] = {"summaries": {}, "extracted_data": {}}
 
     # Populate using the new helper functions
-    final_context["ai_news"]["elizaos"]["discord_md_last_3_days"] = get_recent_files_content(AI_NEWS_DISCORD_MD_DIR, target_date, 3, "md")
-    final_context["ai_news"]["elizaos"]["dev_md_last_3_days"] = get_recent_files_content(AI_NEWS_DEV_MD_DIR, target_date, 3, "md")
+    final_context["ai_news"]["elizaos"]["discord_md_last_3_days"] = get_recent_files_content(AI_NEWS_ELIZAOS_DISCORD_MD_DIR, "", ".md", target_date, 3, False)
+    final_context["ai_news"]["elizaos"]["dev_md_last_3_days"] = get_recent_files_content(AI_NEWS_ELIZAOS_DEV_MD_DIR, "", ".md", target_date, 3, False)
     
-    final_context["ai_news"]["elizaos"]["daily_elizaos_json"] = get_specific_date_file_content(AI_NEWS_ELIZAOS_JSON_DIR, target_date, "json")
-    final_context["ai_news"]["elizaos"]["daily_elizaos_md"] = get_specific_date_file_content(AI_NEWS_ELIZAOS_MD_DIR, target_date, "md")
-    final_context["ai_news"]["elizaos"]["daily_discord_json"] = get_specific_date_file_content(AI_NEWS_DISCORD_JSON_DIR, target_date, "json")
-    final_context["ai_news"]["elizaos"]["daily_discord_md"] = get_specific_date_file_content(AI_NEWS_DISCORD_MD_DIR, target_date, "md")
-    final_context["ai_news"]["elizaos"]["daily_dev_json"] = get_specific_date_file_content(AI_NEWS_DEV_JSON_DIR, target_date, "json")
-    final_context["ai_news"]["elizaos"]["daily_dev_md"] = get_specific_date_file_content(AI_NEWS_DEV_MD_DIR, target_date, "md")
+    final_context["ai_news"]["elizaos"]["daily_elizaos_json"] = get_specific_date_file_content(AI_NEWS_ELIZAOS_JSON_DIR, "", ".json", target_date, True)
+    final_context["ai_news"]["elizaos"]["daily_elizaos_md"] = get_specific_date_file_content(AI_NEWS_ELIZAOS_MD_DIR, "", ".md", target_date, False)
+    final_context["ai_news"]["elizaos"]["daily_discord_json"] = get_specific_date_file_content(AI_NEWS_ELIZAOS_DISCORD_JSON_DIR, "", ".json", target_date, True)
+    final_context["ai_news"]["elizaos"]["daily_discord_md"] = get_specific_date_file_content(AI_NEWS_ELIZAOS_DISCORD_MD_DIR, "", ".md", target_date, False)
+    final_context["ai_news"]["elizaos"]["daily_dev_json"] = get_specific_date_file_content(AI_NEWS_ELIZAOS_DEV_JSON_DIR, "", ".json", target_date, True)
+    final_context["ai_news"]["elizaos"]["daily_dev_md"] = get_specific_date_file_content(AI_NEWS_ELIZAOS_DEV_MD_DIR, "", ".md", target_date, False)
 
-    final_context["github"]["summaries"]["daily"] = get_specific_date_file_content(GITHUB_SUMMARIES_DAY_DIR, target_date, "md")
+    final_context["github"]["summaries"]["daily"] = get_specific_date_file_content(GITHUB_SUMMARIES_DAY_DIR, "", ".md", target_date, False)
     final_context["github"]["summaries"]["week"] = get_latest_file_content(GITHUB_SUMMARIES_WEEK_DIR)
     final_context["github"]["summaries"]["month"] = get_latest_file_content(GITHUB_SUMMARIES_MONTH_DIR)
 
