@@ -30,15 +30,16 @@ jobs:
 
       - name: Set execute permission for scripts
         run: |
-          chmod +x scripts/generate_context_map.sh
           chmod +x scripts/generate_council_context.py
 
       - name: Generate Daily Context Map (Input for Council)
+        id: aggregate_step
         run: |
           chmod +x scripts/aggregate-sources.sh
           # Run the script for today's date (defaults to current)
           # Output will be the-council/YYYY-MM-DD.json
           ./scripts/aggregate-sources.sh
+          echo "aggregated_json_file=the-council/$(date +%Y-%m-%d).json" >> $GITHUB_OUTPUT
 
       - name: Run council context generation script
         id: council_gen
@@ -48,7 +49,7 @@ jobs:
           # Pass other context env vars if needed (using secrets or vars)
           # COUNCIL_MONTHLY_GOAL: ${{ vars.COUNCIL_MONTHLY_GOAL_VAR || 'Default Goal' }}
         run: |
-          INPUT_FILE="${{ steps.map_gen.outputs.lean_json_file }}"
+          INPUT_FILE="${{ steps.aggregate_step.outputs.aggregated_json_file }}"
           OUTPUT_FILE="the-council/council_context_$(date +%Y-%m-%d).json"
           if [ -f "$INPUT_FILE" ]; then
             ./scripts/generate_council_context.py "$INPUT_FILE" "$OUTPUT_FILE"
