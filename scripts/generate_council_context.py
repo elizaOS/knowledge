@@ -15,7 +15,7 @@ OPENROUTER_API_ENDPOINT = "https://openrouter.ai/api/v1/chat/completions"
 
 # Determine the script's directory to find related files
 SCRIPT_DIR = Path(__file__).parent.resolve()
-STRATEGIC_CONTEXT_FILE = SCRIPT_DIR / "prompts/north-star.txt"
+STRATEGIC_CONTEXT_FILE = SCRIPT_DIR / "prompts/strategy/north-star.txt"
 
 # Monthly Goal (more dynamic, can still use Env Var or default)
 MONTHLY_GOAL = os.environ.get(
@@ -64,19 +64,33 @@ def format_json_to_markdown(council_data):
 
     return "\n".join(lines)
 
-def extract_content_from_json(data):
-    """Recursively extracts 'content' field values from nested JSON."""
-    contents = []
+def extract_all_text_values(data: any, current_path: str = "", excluded_paths: list = None) -> list[tuple[str, str]]:
+    """Recursively flattens the input data and extracts all non-empty string values,
+       along with their constructed dot-notation path.
+       Skips paths if the current_path starts with any of the excluded_paths.
+    """
+    if excluded_paths is None:
+        excluded_paths = []
+
+    # Check if current_path should be excluded
+    for excluded_path in excluded_paths:
+        if current_path.startswith(excluded_path):
+            # logging.debug(f"Skipping excluded path: {current_path}") # Add logging if needed
+            return []
+
+    items = []
     if isinstance(data, dict):
         for key, value in data.items():
-            if key == 'content' and isinstance(value, str) and value:
-                contents.append(value)
-            else:
-                contents.extend(extract_content_from_json(value))
+            new_path = f"{current_path}.{key}" if current_path else key
+            items.extend(extract_all_text_values(value, new_path, excluded_paths))
     elif isinstance(data, list):
-        for item in data:
-            contents.extend(extract_content_from_json(item))
-    return contents
+        for i, item in enumerate(data):
+            # For lists, we might append index or handle differently. Here, we pass current_path.
+            # Or, decide if list items should have paths like current_path.[i]
+            items.extend(extract_all_text_values(item, current_path, excluded_paths))
+    elif isinstance(data, str) and data.strip():
+        items.append((current_path, data.strip()))
+    return items
 
 def construct_prompt(strategic_context, monthly_goal, date_str, aggregated_content):
     """Constructs the prompt for the LLM API call."""
@@ -196,8 +210,17 @@ def main():
         print(f"Error reading input file '{input_path}': {e}", file=sys.stderr)
         sys.exit(1)
 
-    # Extract content
-    content_list = extract_content_from_json(lean_data)
+    # Extract content using the new comprehensive text extraction
+    # Define paths to exclude if necessary, e.g., metadata fields not useful for the briefing
+    # For now, let's assume we don't have specific paths to exclude from general text aggregation for the council prompt.
+    # If aggregate_sources.py includes filenames directly, we might want to exclude those from the LLM context.
+    # Example: excluded_from_llm_context_paths = ["ai_news.elizaos.discord_md_last_3_days.filename"]
+    extracted_text_tuples = extract_all_text_values(lean_data) # No exclusions by default for now
+    
+    # Join the extracted text, perhaps with their paths for context if desired, or just values.
+    # For simplicity, let's join just the values, similar to the old behavior but more inclusive.
+    # Consider if including paths in the aggregated_content would be useful for the LLM.
+    content_list = [text_val for path, text_val in extracted_text_tuples]
     aggregated_content = "\n\n---\n\n".join(content_list)
 
     # Extract date from filename

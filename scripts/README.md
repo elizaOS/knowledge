@@ -54,6 +54,38 @@ The output is another JSON file, typically named `the-council/council_context_YY
 
 **Dependencies**: Python 3, `requests` library.
 
+This Python script takes the aggregated daily JSON (typically produced by `aggregate_sources.py`) and processes it with a sophisticated LLM prompt (defined in `scripts/prompts/strategy/north-star.txt` and combined with monthly goals) to produce a structured JSON briefing for the elizaOS Agent Council. It identifies key strategic themes, discussion points, and potential questions based on the day's operational data evaluated against strategic objectives. The script now uses a comprehensive text extraction method to gather all textual data from its input JSON, ensuring a richer context for the LLM. It also generates a Markdown version of the briefing suitable for HackMD.
+
+---
+
+## `extract_facts.py`
+
+**Purpose**: Generates a categorized intelligence briefing by extracting key facts and insights from the aggregated daily JSON data.
+
+**Details**:
+This script takes the comprehensive JSON output from `aggregate_sources.py` and uses a specialized LLM prompt (`scripts/prompts/news_show/fact_extraction_prompt.txt`) to perform a deep analysis of the entire dataset in a single LLM call. It aims to distill the most significant information into a structured JSON output, organized by thematic categories such as Twitter news, GitHub updates (new issues/PRs, overall focus), Discord updates, user feedback, strategic insights, and market analysis. The output includes an overall summary and, for each extracted piece of information, `source_keys` tracing back to the original data in the input JSON. This script is designed to produce actionable intelligence for briefings or to power other content generation processes.
+
+**Typical Usage**:
+```bash
+python scripts/extract-facts.py -i path/to/aggregated_output.json -o path/to/fact_briefing.json
+```
+
+---
+
+## `create-hackmd.py`
+
+**Purpose**: Generates a HackMD note from a template and a given content.
+
+**Details**:
+This Python script takes a template file and a content string as input, and generates a complete HackMD note from them. The template file is typically a plain text file with placeholders that are replaced with the provided content.
+
+**Usage**:
+```bash
+./scripts/create-hackmd.py -t path/to/template.txt -c "This is the content to be inserted into the template."
+```
+
+**Dependencies**: Python 3.
+
 ---
 
 ## `tweet-summarizer.sh`

@@ -112,10 +112,10 @@ if [ -n "$PROMPT_FILE" ]; then
   PROMPT_TEMPLATE=$(cat "$PROMPT_FILE")
 elif [ "$BRAND" = "autofun" ]; then
   # Use auto.fun prompt
-  PROMPT_TEMPLATE=$(cat "$(dirname "$0")/prompts/autofun_prompt.txt")
+  PROMPT_TEMPLATE=$(cat "$(dirname "$0")/prompts/comms/autofun_prompt.txt")
 else
   # Use elizaOS prompt
-  PROMPT_TEMPLATE=$(cat "$(dirname "$0")/prompts/elizaOS.txt")
+  PROMPT_TEMPLATE=$(cat "$(dirname "$0")/prompts/comms/elizaos_prompt.txt")
 fi
 
 # Create a temporary file for the prompt with placeholders replaced

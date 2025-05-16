@@ -304,8 +304,17 @@ def main():
             continue
 
         prompt_title_case = ' '.join(word.capitalize() for word in prompt_name.split('-'))
-        prompt_instructions = f"Generate content suitable for a '{prompt_title_case}' document for the date {latest_date_str}, based on the provided aggregated data and the specific instructions in the template below. Output *only* the content requested by the template, without any preamble or extra formatting unless the template asks for it."
-        final_llm_prompt = f"{prompt_instructions}\n\n**Template Instructions:**\n{prompt_template}\n\n**Aggregated Data for {latest_date_str}:**\n```\n{aggregated_content}\n```"
+        prompt_instructions = (
+            f"Generate content suitable for a '{prompt_title_case}' document for the date {latest_date_str}, "
+            f"based on the provided aggregated data and the specific instructions in the template below.\\n\\n"
+            f"IMPORTANT: Your response MUST be structured into two parts:\\n"
+            f"1. The main content, as requested by the template. This should be directly usable as the body of a document.\\n"
+            f"2. A section explicitly titled '==SUPPORTING_EVIDENCE_START==' followed by key snippets from the 'Aggregated Data for {latest_date_str}' "
+            f"that directly support your generated main content. Each snippet should be clearly quoted or demarcated. "
+            f"End this section with '==SUPPORTING_EVIDENCE_END=='.\\n\\n"
+            f"Output *only* these two parts. Do not include any other preamble or explanation unless the template specifically asks for it within the main content part."
+        )
+        final_llm_prompt = f"{prompt_instructions}\\n\\n**Template Instructions:**\\n{prompt_template}\\n\\n**Aggregated Data for {latest_date_str}:**\\n```\\n{aggregated_content}\\n```"
 
         logging.info(f"   Calling LLM ({LLM_MODEL})...")
         llm_payload = {
@@ -336,26 +345,80 @@ def main():
              logging.error(f"   ERROR: Failed processing LLM response: {e}")
              continue
 
-        if not llm_content:
-            logging.error(f"   ERROR: Failed to generate content from LLM for '{prompt_name}'. Skipping update.")
-            logging.debug(f"   LLM Raw Response: {llm_data}") # Log raw response if content is empty
-            continue
-        logging.info("   LLM content generated.")
+        # --- Parse LLM Content for Main and Evidence ---
+        main_content_output = ""
+        supporting_evidence_snippets = []
+        evidence_marker_start = "==SUPPORTING_EVIDENCE_START=="
+        evidence_marker_end = "==SUPPORTING_EVIDENCE_END=="
 
-        # --- Save Generated Content Locally ---
-        # Get category for output path
-        category_tag = prompt_to_category.get(prompt_name, "uncategorized") # Default if prompt somehow not found in scan
+        if llm_content:
+            logging.info("   LLM content generated. Parsing for main content and evidence...")
+            start_evidence_idx = llm_content.find(evidence_marker_start)
+            
+            if start_evidence_idx != -1:
+                main_content_output = llm_content[:start_evidence_idx].strip()
+                evidence_block_start = start_evidence_idx + len(evidence_marker_start)
+                end_evidence_idx = llm_content.find(evidence_marker_end, evidence_block_start)
+                
+                if end_evidence_idx != -1:
+                    evidence_text = llm_content[evidence_block_start:end_evidence_idx].strip()
+                    # Simple split for now, assuming evidence snippets are separated by newlines or some delimiter.
+                    # This might need more sophisticated parsing based on LLM output.
+                    if evidence_text:
+                        supporting_evidence_snippets = [snippet.strip() for snippet in evidence_text.split("\\n") if snippet.strip()] 
+                    logging.info(f"   Extracted {len(supporting_evidence_snippets)} supporting evidence snippets.")
+                else:
+                    # Evidence start marker found, but no end marker. Treat everything after start as main content for now.
+                    main_content_output = llm_content.strip()
+                    logging.warning("   WARNING: Found 'SUPPORTING_EVIDENCE_START' but no 'SUPPORTING_EVIDENCE_END'. Treating all as main content.")
+            else:
+                # No evidence marker found, assume all is main content.
+                main_content_output = llm_content.strip()
+                logging.warning("   WARNING: 'SUPPORTING_EVIDENCE_START' marker not found in LLM output. Treating all as main content.")
+            
+            if not main_content_output:
+                 logging.error(f"   ERROR: Main content from LLM is empty for '{prompt_name}'. Skipping update.")
+                 logging.debug(f"   LLM Raw Response: {llm_data}")
+                 continue
+            logging.info("   LLM content parsed.")
+        else:
+            logging.error(f"   ERROR: Failed to generate any content from LLM for '{prompt_name}'. Skipping update.")
+            logging.debug(f"   LLM Raw Response: {llm_data}")
+            continue
+
+        # --- Save Generated Content Locally (Markdown and JSON) ---
+        category_tag = prompt_to_category.get(prompt_name, "uncategorized")
         prompt_output_dir = OUTPUT_DIR / category_tag / prompt_name
         prompt_output_dir.mkdir(parents=True, exist_ok=True)
-        output_filename = prompt_output_dir / f"{latest_date_str}.md"
-        logging.info(f"   Saving generated content to {output_filename}...")
+        
+        # Save Markdown (main content only)
+        md_output_filename = prompt_output_dir / f"{latest_date_str}.md"
+        logging.info(f"   Saving main generated content to {md_output_filename}...")
         try:
-            with open(output_filename, 'w', encoding='utf-8') as f:
-                f.write(llm_content)
-            logging.info("   Content saved locally.")
+            with open(md_output_filename, 'w', encoding='utf-8') as f:
+                f.write(main_content_output)
+            logging.info("   Main content saved locally to Markdown.")
         except Exception as e:
-             logging.error(f"   ERROR: Failed to save content locally to {output_filename}: {e}")
-             continue # Skip API update if we couldn't save locally
+             logging.error(f"   ERROR: Failed to save main content locally to {md_output_filename}: {e}")
+             # Decide if we should continue to JSON if MD fails. For now, let's continue.
+        
+        # Save JSON
+        json_output_filename = prompt_output_dir / f"{latest_date_str}.json"
+        json_data_to_save = {
+            "prompt_name": prompt_name,
+            "category": category_tag,
+            "date": latest_date_str,
+            "generated_text": main_content_output,
+            "source_references": supporting_evidence_snippets if supporting_evidence_snippets else [aggregated_content] # Fallback to full aggregated if no snippets
+        }
+        logging.info(f"   Saving structured data to {json_output_filename}...")
+        try:
+            with open(json_output_filename, 'w', encoding='utf-8') as f:
+                json.dump(json_data_to_save, f, indent=2)
+            logging.info("   Structured data saved locally to JSON.")
+        except Exception as e:
+            logging.error(f"   ERROR: Failed to save structured data locally to {json_output_filename}: {e}")
+            continue # Skip API update if critical local save fails
 
         # --- Get Current HackMD Note Content ---
         logging.info(f"   Fetching current content for note {note_id}...")
@@ -369,12 +432,12 @@ def main():
             # Proceeding will overwrite the note if PATCH succeeds
 
         # Log content being sent
-        logging.debug(f"   DEBUG: Sending LLM content length: {len(llm_content)}")
-        logging.debug(f"   DEBUG: Sending LLM content (start): {llm_content[:200]}...")
+        logging.debug(f"   DEBUG: Sending LLM content length: {len(main_content_output)}")
+        logging.debug(f"   DEBUG: Sending LLM content (start): {main_content_output[:200]}...")
 
         # --- Construct Appended Content ---
         # Ensure newline separation, add date header
-        new_content_block = f"{llm_content}"
+        new_content_block = f"{main_content_output}" # HackMD note will only get the main content
         updated_hackmd_content = current_hackmd_content + new_content_block
         logging.debug(f"   DEBUG: Total updated content length: {len(updated_hackmd_content)}")
 
