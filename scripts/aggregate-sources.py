@@ -16,7 +16,7 @@ from typing import Any, Dict, List, Optional, Union # For type hinting
 # --- Configuration ---
 # Using Path objects for easier manipulation
 WORKSPACE_ROOT = Path(__file__).resolve().parent.parent # Assumes script is in knowledge/scripts/
-OUTPUT_DIR_BASE = WORKSPACE_ROOT / "the-council"
+OUTPUT_DIR_BASE = WORKSPACE_ROOT / "the-council" / "aggregated"
 LOG_LEVEL = logging.INFO # Or logging.DEBUG for more verbose output
 
 # Source File Paths (relative to WORKSPACE_ROOT)
