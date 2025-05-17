@@ -25,6 +25,7 @@ BOOK_TITLE = "Eliza Daily"
 API_BASE_URL = "https://api.hackmd.io/v1"
 HACKMD_BASE_URL = "https://hackmd.io"
 OUTPUT_DIR = "hackmd" # Directory to save generated files - Use string
+CUSTOM_HEADER_LINKS_KEY = "CUSTOM_HEADER_LINKS" # New constant
 
 # Logging configuration
 logging.basicConfig(level=logging.INFO, format='[%(asctime)s] - %(levelname)s - %(message)s', datefmt='%Y-%m-%d %H:%M:%S')
@@ -105,13 +106,39 @@ def make_api_request(endpoint: str, method: str = "POST", data: dict = None, hea
 
 def generate_book_markdown(note_map: dict, prompt_to_category: dict) -> str:
     """Generates the markdown content for the index book, grouped by category."""
-    header = f"# {BOOK_TITLE}\n\n<!-- Auto-generated index. Last updated: {datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ')} -->\n\n"
+    header_parts = [
+        f"# {BOOK_TITLE}",
+        f"<!-- Auto-generated index. Last updated: {datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ')} -->"
+    ]
+
+    custom_links_md = []
+    if CUSTOM_HEADER_LINKS_KEY in note_map:
+        custom_links_list = note_map.get(CUSTOM_HEADER_LINKS_KEY, [])
+        if isinstance(custom_links_list, list): # Ensure it's a list
+            for link_item in custom_links_list:
+                if isinstance(link_item, dict) and "text" in link_item and "url" in link_item:
+                    custom_links_md.append(f"- [{link_item['text']}]({link_item['url']})")
+                else:
+                    logging.warning(f"Malformed custom link item: {link_item}. Skipping.")
+        else:
+            logging.warning(f"'{CUSTOM_HEADER_LINKS_KEY}' in state is not a list. Skipping custom links.")
+        if custom_links_md:
+            # Join custom links with single newlines, then add a double newline before this block
+            header_parts.append("\n" + "\n".join(custom_links_md))
+
+    # Join title, timestamp, and custom links block. Title/timestamp joined by single newline.
+    # Custom links block (if present) separated by a double newline from timestamp.
+    header = "\n".join(header_parts) 
+    # If custom_links_md was added, header_parts has 3 elements. 
+    # The join above correctly handles newlines between title and timestamp, 
+    # and the extra \n added before custom_links_md ensures the double newline after timestamp.
+
     content_sections = []
 
     # Group notes by category
     category_to_notes = {}
     for prompt_name, config_val in note_map.items():
-        if prompt_name == BOOK_MAP_KEY:
+        if prompt_name == BOOK_MAP_KEY or prompt_name == CUSTOM_HEADER_LINKS_KEY: # Exclude special keys
             continue
         
         actual_note_id = None
@@ -129,23 +156,32 @@ def generate_book_markdown(note_map: dict, prompt_to_category: dict) -> str:
             category_to_notes[category] = []
         category_to_notes[category].append((prompt_name, actual_note_id))
 
-    if not category_to_notes:
-        return header + "*No content notes found in state file yet.*"
+    if not category_to_notes and not custom_links_md:
+        # If no categories and no custom links, just return the basic header (Title + Timestamp)
+        return f"# {BOOK_TITLE}\n<!-- Auto-generated index. Last updated: {datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ')} -->"
+    elif not category_to_notes and custom_links_md:
+        # If custom links but no categories, return header with custom links
+        return header # Header already includes custom links correctly formatted
 
     # Sort categories and notes within categories
     sorted_categories = sorted(category_to_notes.keys())
 
     for category in sorted_categories:
-        category_header = f"## {' '.join(word.capitalize() for word in category.split('-'))}\n"
+        category_header_text = ' '.join(word.capitalize() for word in category.split('-'))
+        category_section_parts = [f"## {category_header_text}"] # Corrected: Use category_header_text
         links = []
         # Sort notes by prompt name within the category
         sorted_notes = sorted(category_to_notes[category], key=lambda item: item[0])
         for prompt_name, id_for_url in sorted_notes: # id_for_url is now the string ID
             display_title = ' '.join(word.capitalize() for word in prompt_name.split('-'))
             links.append(f"- [{display_title}]({HACKMD_BASE_URL}/{id_for_url})") # Use the extracted string ID
-        content_sections.append(category_header + "\n".join(links))
+        category_section_parts.append("\n".join(links))
+        content_sections.append("\n".join(category_section_parts)) # Join header and links with single newline
 
-    return header + "\n\n".join(content_sections)
+    # Join the main header (title, timestamp, custom links) with category sections.
+    # Each category section is separated by a double newline.
+    # A double newline is also ensured between custom links (if any) and the first category.
+    return header + "\n\n" + "\n\n".join(content_sections)
 
 # --- Main Logic ---
 
@@ -160,6 +196,13 @@ def main():
         "-v", "--verbose",
         action="store_true",
         help="Increase output verbosity (DEBUG level)."
+    )
+    parser.add_argument(
+        "-i", "--include",
+        action="append",
+        metavar="LOCAL_DIR_PATH",
+        dest="map_directories",
+        help="Local directory path to map to a new HackMD note for direct file sync. Adds to CUSTOM_HEADER_LINKS."
     )
     args = parser.parse_args()
 
@@ -324,6 +367,63 @@ def main():
             logging.info(f"-- Book index note exists (ID: {book_note_id}) and no new content notes were created. No book update needed.")
     else:
         logging.info("Book management skipped (run with -b <permalink> to create/update book).")
+
+    # --- Process Directories to Map (New Section) ---
+    if args.map_directories:
+        logging.info(f"Processing local directories to map to new HackMD notes: {args.map_directories}")
+        if CUSTOM_HEADER_LINKS_KEY not in updated_state:
+            updated_state[CUSTOM_HEADER_LINKS_KEY] = []
+        if not isinstance(updated_state[CUSTOM_HEADER_LINKS_KEY], list):
+            logging.warning(f"'{CUSTOM_HEADER_LINKS_KEY}' in state is not a list. Cannot add mapped directories. Please fix book.json.")
+        else:
+            for local_dir_path_str in args.map_directories:
+                local_dir = Path(local_dir_path_str)
+                if not local_dir.is_dir():
+                    logging.warning(f"   Skipping '{local_dir_path_str}': Not a valid directory.")
+                    continue
+
+                # Derive names - simple version, can be made more sophisticated
+                path_parts = [part.capitalize() for part in local_dir.parts]
+                derived_text = " - ".join(path_parts) # e.g., "Github - Summaries - Day"
+                derived_hackmd_title = f"Sync: {derived_text}"
+
+                # Check if this source_directory is already configured
+                already_configured = False
+                for existing_link in updated_state[CUSTOM_HEADER_LINKS_KEY]:
+                    if isinstance(existing_link, dict) and existing_link.get("source_directory") == local_dir_path_str:
+                        logging.info(f"   Skipping '{local_dir_path_str}': Already configured in CUSTOM_HEADER_LINKS for URL {existing_link.get('url')}.")
+                        already_configured = True
+                        break
+                if already_configured:
+                    continue
+
+                logging.info(f"   Attempting to create HackMD note for '{local_dir_path_str}' with title '{derived_hackmd_title}'...")
+                initial_content = f"# {derived_hackmd_title}\n\nThis note is automatically synced from the local directory: `{local_dir_path_str}`\nLast successful sync will be noted here by the update script."
+                create_payload = {
+                    "title": derived_hackmd_title,
+                    "content": initial_content,
+                    "readPermission": "guest",
+                    "writePermission": "signed_in", # Assuming same permissions as other notes
+                    "commentPermission": "everyone"
+                }
+                status_code, response_data = make_api_request(f"/teams/{TEAM_PATH}/notes", method="POST", data=create_payload)
+
+                if status_code == 201 and response_data and response_data.get("id"):
+                    new_note_id = response_data["id"]
+                    logging.info(f"   Successfully created HackMD note (ID: {new_note_id}) for '{local_dir_path_str}'.")
+                    
+                    new_link_config = {
+                        "text": derived_text,
+                        "url": f"{HACKMD_BASE_URL}/{new_note_id}",
+                        "source_directory": local_dir_path_str,
+                        "hackmd_note_title": derived_hackmd_title
+                    }
+                    updated_state[CUSTOM_HEADER_LINKS_KEY].append(new_link_config)
+                    new_content_notes_created = True # Mark state as changed to ensure it gets saved
+                    logging.info(f"   Added configuration for '{local_dir_path_str}' to CUSTOM_HEADER_LINKS.")
+                else:
+                    logging.error(f"   ERROR: Failed to create HackMD note for '{local_dir_path_str}' (Status: {status_code}).")
+                time.sleep(1) # API rate limiting
 
     # --- Save Final State ---
     if new_content_notes_created:

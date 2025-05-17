@@ -107,16 +107,43 @@ def make_api_request(endpoint: str, method: str = "GET", data: dict = None, head
 # Added back function and constants
 BOOK_TITLE = "Eliza Daily"
 HACKMD_BASE_URL = "https://hackmd.io"
+CUSTOM_HEADER_LINKS_KEY = "CUSTOM_HEADER_LINKS" # New constant
 
 def generate_book_markdown(note_map: dict, prompt_to_category: dict) -> str:
     """Generates the markdown content for the index book, grouped by category."""
-    header = f"# {BOOK_TITLE}\n\n<!-- Auto-generated index. Last updated: {datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ')} -->\n\n"
+    header_parts = [
+        f"# {BOOK_TITLE}",
+        f"<!-- Auto-generated index. Last updated: {datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ')} -->"
+    ]
+
+    custom_links_md = []
+    if CUSTOM_HEADER_LINKS_KEY in note_map:
+        custom_links_list = note_map.get(CUSTOM_HEADER_LINKS_KEY, [])
+        if isinstance(custom_links_list, list): # Ensure it's a list
+            for link_item in custom_links_list:
+                if isinstance(link_item, dict) and "text" in link_item and "url" in link_item:
+                    custom_links_md.append(f"- [{link_item['text']}]({link_item['url']})")
+                else:
+                    logging.warning(f"Malformed custom link item: {link_item}. Skipping.")
+        else:
+            logging.warning(f"'{CUSTOM_HEADER_LINKS_KEY}' in state is not a list. Skipping custom links.")
+        if custom_links_md:
+            # Join custom links with single newlines, then add a double newline before this block
+            header_parts.append("\n" + "\n".join(custom_links_md))
+
+    # Join title, timestamp, and custom links block. Title/timestamp joined by single newline.
+    # Custom links block (if present) separated by a double newline from timestamp.
+    header = "\n".join(header_parts) 
+    # If custom_links_md was added, header_parts has 3 elements. 
+    # The join above correctly handles newlines between title and timestamp, 
+    # and the extra \n added before custom_links_md ensures the double newline after timestamp.
+
     content_sections = []
 
     # Group notes by category
     category_to_notes = {}
     for prompt_name, config_val in note_map.items(): # config_val can be str or dict
-        if prompt_name == BOOK_MAP_KEY:
+        if prompt_name == BOOK_MAP_KEY or prompt_name == CUSTOM_HEADER_LINKS_KEY: # Exclude special keys
             continue
 
         actual_note_id = None
@@ -129,31 +156,35 @@ def generate_book_markdown(note_map: dict, prompt_to_category: dict) -> str:
             logging.debug(f"Skipping note {prompt_name} in book generation due to missing ID.")
             continue
             
-        # Use the map passed from main to find the category
         category = prompt_to_category.get(prompt_name, "uncategorized")
         if category not in category_to_notes:
             category_to_notes[category] = []
-        category_to_notes[category].append((prompt_name, actual_note_id)) # Store the actual string ID
+        category_to_notes[category].append((prompt_name, actual_note_id)) 
 
-    if not category_to_notes:
-        return header + "*No content notes found in state file yet.*"
+    if not category_to_notes and not custom_links_md:
+        # If no categories and no custom links, just return the basic header (Title + Timestamp)
+        return f"# {BOOK_TITLE}\n<!-- Auto-generated index. Last updated: {datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ')} -->"
+    elif not category_to_notes and custom_links_md:
+        # If custom links but no categories, return header with custom links
+        return header # Header already includes custom links correctly formatted
 
-    # Sort categories alphabetically
     sorted_categories = sorted(category_to_notes.keys())
 
     for category in sorted_categories:
-        # Create a capitalized H2 header for the category
-        category_header = f"## {' '.join(word.capitalize() for word in category.split('-'))}\n"
+        category_header_text = ' '.join(word.capitalize() for word in category.split('-'))
+        category_section_parts = [f"## {category_header_text}"]
         links = []
-        # Sort notes alphabetically by prompt name within the category
         sorted_notes = sorted(category_to_notes[category], key=lambda item: item[0])
-        for prompt_name, id_for_url in sorted_notes: # id_for_url is now the string ID
+        for prompt_name, id_for_url in sorted_notes: 
             display_title = ' '.join(word.capitalize() for word in prompt_name.split('-'))
-            links.append(f"- [{display_title}]({HACKMD_BASE_URL}/{id_for_url})") # Use the extracted string ID
-        content_sections.append(category_header + "\n".join(links))
+            links.append(f"- [{display_title}]({HACKMD_BASE_URL}/{id_for_url})")
+        category_section_parts.append("\n".join(links))
+        content_sections.append("\n".join(category_section_parts)) # Join header and links with single newline
 
-    # Join category sections with double newlines
-    return header + "\n\n".join(content_sections)
+    # Join the main header (title, timestamp, custom links) with category sections.
+    # Each category section is separated by a double newline.
+    # A double newline is also ensured between custom links (if any) and the first category.
+    return header + "\n\n" + "\n\n".join(content_sections)
 
 def aggregate_json_data(json_file: Path) -> str:
     """Reads a JSON file and aggregates all string values."""
@@ -182,6 +213,82 @@ def aggregate_json_data(json_file: Path) -> str:
     except Exception as e:
         logging.error(f"Error reading or processing JSON file '{json_file}': {e}")
         return ""
+
+# --- New Function for Direct File Uploads from CUSTOM_HEADER_LINKS ---
+def process_direct_file_uploads(state: dict, latest_date_str: str, team_path: str, output_dir: Path):
+    """Processes items in CUSTOM_HEADER_LINKS for direct file uploads."""
+    logging.info("--- Processing CUSTOM_HEADER_LINKS for direct file uploads ---")
+    custom_links_config = state.get(CUSTOM_HEADER_LINKS_KEY, [])
+    if not isinstance(custom_links_config, list):
+        logging.warning(f"'{CUSTOM_HEADER_LINKS_KEY}' in state is not a list. Skipping direct file uploads.")
+        return
+
+    for link_item in custom_links_config:
+        if not isinstance(link_item, dict):
+            logging.warning(f"Skipping malformed item in CUSTOM_HEADER_LINKS (not a dict): {link_item}")
+            continue
+
+        source_dir_str = link_item.get("source_directory")
+        link_url = link_item.get("url")
+        link_text = link_item.get("text", "Untitled Link") # Fallback for link text
+
+        if source_dir_str and link_url:
+            logging.info(f"-- Checking '{link_text}' for direct file upload from '{source_dir_str}'")
+            
+            # Extract note ID from URL
+            try:
+                note_id = link_url.split('/')[-1]
+                if not note_id: # Handle cases like trailing slash in URL
+                    raise ValueError("Extracted note ID is empty")
+            except (IndexError, ValueError) as e:
+                logging.error(f"   ERROR: Could not extract note ID from URL '{link_url}' for '{link_text}'. Skipping. Error: {e}")
+                continue
+
+            source_dir = Path(source_dir_str)
+            if not source_dir.is_dir():
+                logging.warning(f"   WARNING: source_directory '{source_dir}' for '{link_text}' is not a valid directory. Skipping.")
+                continue
+
+            markdown_files = list(source_dir.glob("*.md"))
+            if not markdown_files:
+                logging.info(f"   INFO: No markdown files (*.md) found in '{source_dir}' for '{link_text}'. Skipping update.")
+                continue
+
+            latest_md_file = max(markdown_files, key=lambda p: p.stat().st_mtime)
+            logging.info(f"   Found latest file to upload: {latest_md_file}")
+
+            try:
+                with open(latest_md_file, 'r', encoding='utf-8') as f:
+                    file_content = f.read()
+            except Exception as e:
+                logging.error(f"   ERROR: Failed to read content from '{latest_md_file}': {e}. Skipping update.")
+                continue
+            
+            hackmd_title = link_item.get("hackmd_note_title")
+            if not hackmd_title:
+                hackmd_title = ' '.join(word.capitalize() for word in latest_md_file.stem.split('-'))
+            if not hackmd_title: # Fallback if filename is empty or unusual
+                 hackmd_title = ' '.join(word.capitalize() for word in link_text.split('-')) # Use link_text as a further fallback
+            
+            logging.info(f"   Attempting to update note {note_id} with content from '{latest_md_file}' and title '{hackmd_title}'...")
+            update_payload = {"title": hackmd_title, "content": file_content}
+            patch_status, _ = make_api_request(f"/teams/{team_path}/notes/{note_id}", method="PATCH", data=update_payload)
+
+            if patch_status == 202:
+                logging.info(f"   Successfully updated title and content for note {note_id} from '{latest_md_file}'.")
+                logging.info("   Attempting to set permissions via API (Read: guest, Write: signed_in)...")
+                perm_payload = {"readPermission": "guest", "writePermission": "signed_in"}
+                perm_patch_status, _ = make_api_request(f"/teams/{team_path}/notes/{note_id}", method="PATCH", data=perm_payload)
+                if perm_patch_status == 202:
+                    logging.info(f"   Successfully set permissions for note {note_id}.")
+                else:
+                    logging.warning(f"   WARNING: API PATCH call failed for permissions setting (Status: {perm_patch_status}).")
+            else:
+                logging.error(f"   ERROR: API PATCH call failed for content update from file (Status: {patch_status}). Skipping permissions.")
+            time.sleep(2) # Short delay between these updates
+        elif source_dir_str and not link_url:
+            logging.warning(f"   Skipping '{link_text}': 'source_directory' provided but 'url' is missing.")
+    logging.info("--- Finished processing CUSTOM_HEADER_LINKS for direct file uploads ---")
 
 # --- Main Logic ---
 
@@ -234,29 +341,19 @@ def main():
     # --- Update Book Index First ---
     book_note_id = state.get(BOOK_MAP_KEY)
     if book_note_id:
-        logging.info(f"Attempting to update Book Index note (ID: {book_note_id}) with TEST content...")
-        # book_content = generate_book_markdown(state) # Skip generating complex content for now
-        test_content = "# Eliza Daily\n\nTest Update - $(date)"
-        update_payload = {"content": test_content}
+        logging.info(f"Attempting to update Book Index note (ID: {book_note_id}) with latest content...")
+        book_content = generate_book_markdown(state, prompt_to_category)
+        update_payload = {"content": book_content}
         patch_status_code, _ = make_api_request(f"/teams/{TEAM_PATH}/notes/{book_note_id}", method="PATCH", data=update_payload)
         if patch_status_code == 202:
-            logging.info(f"   Successfully updated Book Index note content WITH TEST STRING.")
-            # Now, immediately try with the real content (if the test worked)
-            logging.info(f"   Attempting to update Book Index note with REAL content...")
-            real_book_content = generate_book_markdown(state, prompt_to_category)
-            real_update_payload = {"content": real_book_content}
-            real_patch_status_code, _ = make_api_request(f"/teams/{TEAM_PATH}/notes/{book_note_id}", method="PATCH", data=real_update_payload)
-            if real_patch_status_code == 202:
-                logging.info(f"   Successfully updated Book Index note content with REAL content.")
-            else:
-                logging.warning(f"   WARNING: Failed to update Book Index note with REAL content (Status: {real_patch_status_code}). It might contain only the test string.")
+            logging.info(f"   Successfully updated Book Index note content.")
         else:
-            logging.warning(f"   WARNING: Failed to update Book Index note content EVEN WITH TEST STRING (Status: {patch_status_code}).")
-        time.sleep(1) # Add delay after book update attempts
+            logging.warning(f"   WARNING: Failed to update Book Index note content (Status: {patch_status_code}).")
+        time.sleep(1)
     else:
         logging.warning(f"Book index key '{BOOK_MAP_KEY}' not found in state. Skipping book update.")
 
-    # --- Find and Aggregate Data ---
+    # --- Find and Aggregate Data (Moved earlier to define latest_date_str) ---
     latest_data_file = None
     if args.date:
         latest_data_file = DATA_DIR / f"{args.date}.json"
@@ -281,180 +378,207 @@ def main():
         logging.warning(f"No text content extracted from {latest_data_file}. Some updates might be empty.")
     logging.info("Aggregated content prepared.")
 
-    # --- Create Output Directory ---
+    # --- Process Direct File Uploads from CUSTOM_HEADER_LINKS (Now latest_date_str is defined) ---
+    process_direct_file_uploads(state, latest_date_str, TEAM_PATH, OUTPUT_DIR)
+
+    # --- Create Output Directory (Ensure it exists before LLM processing saves files there) ---
     logging.info(f"Ensuring base output directory '{OUTPUT_DIR}' exists...")
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 
-    # --- Process Prompts and Update Notes ---
-    logging.info("Processing prompts and updating HackMD notes...")
+    # --- Process Prompts and Update Notes (LLM-based) ---
+    logging.info("Processing LLM prompts and updating HackMD notes...")
 
     for prompt_name, prompt_config_val in state.items():
-        if prompt_name == BOOK_MAP_KEY:
-            logging.debug(f"Skipping book index key: {prompt_name}")
+        # Explicitly skip special keys that are not individual notes for LLM processing or direct upload
+        if prompt_name == BOOK_MAP_KEY or prompt_name == CUSTOM_HEADER_LINKS_KEY:
+            logging.debug(f"Skipping special key: {prompt_name}")
             continue
 
         note_id = None
-        update_strategy = "append" # Default update strategy
+        update_strategy = "append" # Default for LLM, direct upload usually overwrites content & title
 
         if isinstance(prompt_config_val, str): # Legacy format (note_id is a string)
             note_id = prompt_config_val
-            # For legacy, we might assume append, or you could decide a global default for them
         elif isinstance(prompt_config_val, dict): # New format
             note_id = prompt_config_val.get("id")
             update_strategy = prompt_config_val.get("update_strategy", "append").lower()
         
         if not note_id: # Skip if note_id is somehow empty/null
-            logging.warning(f"Skipping prompt '{prompt_name}' due to missing note ID in state file config.")
+            logging.warning(f"Skipping item '{prompt_name}' due to missing note ID in state file config.")
             continue
 
-        logging.info(f"-- Processing: {prompt_name} (Note ID: {note_id}, Strategy: {update_strategy})")
-        # Get category for prompt path
-        category_tag = prompt_to_category.get(prompt_name, None) # Get category from map
-        if not category_tag:
-            logging.error(f"   ERROR: Category not found for prompt '{prompt_name}' in mapping. Skipping.")
-            continue
+        # Check if a prompt file exists for this item
+        category_tag = prompt_to_category.get(prompt_name)
 
-        # Construct the correct path using the category
-        prompt_file_path = PROMPTS_DIR / category_tag / f"{prompt_name}.txt"
+        if category_tag: # Prompt exists, use LLM generation path
+            logging.info(f"-- Processing LLM prompt: {prompt_name} (Note ID: {note_id}, Strategy: {update_strategy})")
+            prompt_file_path = PROMPTS_DIR / category_tag / f"{prompt_name}.txt"
 
-        if not prompt_file_path.is_file():
-            logging.error(f"   ERROR: Prompt file '{prompt_file_path}' not found. Skipping.")
-            continue
+            if not prompt_file_path.is_file(): # Should not happen if category_tag is found from prompt_to_category map
+                logging.error(f"   ERROR: Prompt file '{prompt_file_path}' expected for '{prompt_name}' but not found. Skipping.")
+                continue
 
-        # --- Generate LLM Content ---
-        try:
-            with open(prompt_file_path, 'r', encoding='utf-8') as f:
-                prompt_template = f.read()
-        except Exception as e:
-            logging.error(f"   ERROR: Failed to read prompt file '{prompt_file_path}': {e}")
-            continue
-
-        prompt_title_case = ' '.join(word.capitalize() for word in prompt_name.split('-'))
-        # Simplified prompt instructions, removing evidence request
-        prompt_instructions = (
-            f"Generate content suitable for a '{prompt_title_case}' document for the date {latest_date_str}, "
-            f"based on the provided aggregated data and the specific instructions in the template below.\n\n"
-            f"Output *only* the main content as requested by the template. Do not include any other preamble or explanation "
-            f"unless the template specifically asks for it within the main content part."
-        )
-        final_llm_prompt = f"{prompt_instructions}\n\n**Template Instructions:**\n{prompt_template}\n\n**Aggregated Data for {latest_date_str}:**\n```\n{aggregated_content}\n```"
-
-        logging.info(f"   Calling LLM ({LLM_MODEL})...")
-        llm_payload = {
-            "model": LLM_MODEL,
-            "messages": [{"role": "user", "content": final_llm_prompt}]
-        }
-        openrouter_headers = {
-            "Authorization": f"Bearer {os.getenv('OPENROUTER_API_KEY')}",
-            "Content-Type": "application/json",
-            "HTTP-Referer": "https://github.com/elizaOS/knowledge", # Replace with your actual site/app URL
-            "X-Title": f"Content Generator ({prompt_title_case})" # Optional
-        }
-        
-        main_content_output = "" # Initialize
-        llm_data = None # Initialize
-
-        try:
-            response = requests.post(
-                "https://openrouter.ai/api/v1/chat/completions", 
-                headers=openrouter_headers, 
-                json=llm_payload, 
-                timeout=180 # Longer timeout for LLM
-            )
-            response.raise_for_status() # Raise HTTPError for bad responses (4xx or 5xx)
-            llm_data = response.json()
-            main_content_output = llm_data.get("choices", [{}])[0].get("message", {}).get("content", "").strip()
-        except requests.exceptions.RequestException as e:
-            logging.error(f"   ERROR: LLM API request failed: {e}")
-            continue
-        except Exception as e:
-             logging.error(f"   ERROR: Failed processing LLM response: {e}")
-             continue
-            
-        if not main_content_output:
-             logging.error(f"   ERROR: Main content from LLM is empty for '{prompt_name}'. Skipping update.")
-             if llm_data: logging.debug(f"   LLM Raw Response: {llm_data}")
-             continue
-        logging.info("   LLM content generated and treated as main content.")
-
-        # --- Save Generated Content Locally (Markdown and JSON) ---
-        category_tag = prompt_to_category.get(prompt_name, "uncategorized")
-        prompt_output_dir = OUTPUT_DIR / category_tag / prompt_name
-        prompt_output_dir.mkdir(parents=True, exist_ok=True)
-        
-        # Save Markdown (main content only)
-        md_output_filename = prompt_output_dir / f"{latest_date_str}.md"
-        logging.info(f"   Saving main generated content to {md_output_filename}...")
-        try:
-            with open(md_output_filename, 'w', encoding='utf-8') as f:
-                f.write(main_content_output)
-            logging.info("   Main content saved locally to Markdown.")
-        except Exception as e:
-             logging.error(f"   ERROR: Failed to save main content locally to {md_output_filename}: {e}")
-             # Decide if we should continue to JSON if MD fails. For now, let's continue.
-        
-        # Save JSON only if -j flag is present
-        if args.json:
-            json_output_filename = prompt_output_dir / f"{latest_date_str}.json"
-            json_data_to_save = {
-                "prompt_name": prompt_name,
-                "category": category_tag,
-                "date": latest_date_str,
-                "generated_text": main_content_output,
-                "source_references": [aggregated_content] # Fallback to full aggregated content
-            }
-            logging.info(f"   Saving structured data to {json_output_filename} (JSON export enabled)...")
+            # --- Generate LLM Content (Existing Logic) ---
             try:
-                with open(json_output_filename, 'w', encoding='utf-8') as f:
-                    json.dump(json_data_to_save, f, indent=2)
-                logging.info("   Structured data saved locally to JSON.")
+                with open(prompt_file_path, 'r', encoding='utf-8') as f:
+                    prompt_template = f.read()
             except Exception as e:
-                logging.error(f"   ERROR: Failed to save structured data locally to {json_output_filename}: {e}")
-                # Do not necessarily 'continue' here, as MD might have saved. User might want HackMD update.
-        else:
-            logging.info("   JSON export disabled. Skipping JSON file saving.")
+                logging.error(f"   ERROR: Failed to read prompt file '{prompt_file_path}': {e}")
+                continue
 
-        # --- Construct New Title and Content for HackMD ---
-        logging.info(f"   Constructing new title and content for HackMD note {note_id}...")
+            prompt_title_case = ' '.join(word.capitalize() for word in prompt_name.split('-'))
+            prompt_instructions = (
+                f"Generate content suitable for a '{prompt_title_case}' document for the date {latest_date_str}, "
+                f"based on the provided aggregated data and the specific instructions in the template below.\n\n"
+                f"Output *only* the main content as requested by the template. Do not include any other preamble or explanation "
+                f"unless the template specifically asks for it within the main content part."
+            )
+            final_llm_prompt = f"{prompt_instructions}\n\n**Template Instructions:**\n{prompt_template}\n\n**Aggregated Data for {latest_date_str}:**\n```\n{aggregated_content}\n```"
 
-        # 1. Read prompt file content (already have `prompt_template`)
-        # 2. Construct new note title
-        new_hackmd_title = f"{prompt_title_case} - {latest_date_str}"
+            logging.info(f"   Calling LLM ({LLM_MODEL})...")
+            llm_payload = {
+                "model": LLM_MODEL,
+                "messages": [{"role": "user", "content": final_llm_prompt}]
+            }
+            openrouter_headers = {
+                "Authorization": f"Bearer {os.getenv('OPENROUTER_API_KEY')}",
+                "Content-Type": "application/json",
+                "HTTP-Referer": "https://github.com/elizaOS/knowledge",
+                "X-Title": f"Content Generator ({prompt_title_case})"
+            }
+            
+            main_content_output = ""
+            llm_data = None
 
-        # 3. Create <details> block
-        details_block = f"<details><summary>Prompt Details ({prompt_name}.txt)</summary>\n\n```text\n{prompt_template}\n```\n\n</details>"
+            try:
+                response = requests.post(
+                    "https://openrouter.ai/api/v1/chat/completions", 
+                    headers=openrouter_headers, 
+                    json=llm_payload, 
+                    timeout=180
+                )
+                response.raise_for_status()
+                llm_data = response.json()
+                main_content_output = llm_data.get("choices", [{}])[0].get("message", {}).get("content", "").strip()
+            except requests.exceptions.RequestException as e:
+                logging.error(f"   ERROR: LLM API request failed: {e}")
+                continue
+            except Exception as e:
+                 logging.error(f"   ERROR: Failed processing LLM response: {e}")
+                 continue
+                
+            if not main_content_output:
+                 logging.error(f"   ERROR: Main content from LLM is empty for '{prompt_name}'. Skipping update.")
+                 if llm_data: logging.debug(f"   LLM Raw Response: {llm_data}")
+                 continue
+            logging.info("   LLM content generated and treated as main content.")
 
-        # 4. Combine <details>, separator, and LLM output
-        # Ensure newline separation for append, add date header if desired (though LLM content might already have it)
-        # The main_content_output is from the LLM
-        updated_hackmd_content = f"{details_block}\n\n---\n\n{main_content_output}"
-        
-        logging.debug(f"   New HackMD Title: {new_hackmd_title}")
-        logging.debug(f"   New HackMD Content (start): {updated_hackmd_content[:250]}...")
-        logging.debug(f"   New HackMD Content length: {len(updated_hackmd_content)}")
-
-        # --- Update HackMD Note Content & Title ---
-        logging.info(f"   Attempting to update note {note_id} with new title and content via API PATCH...")
-        update_payload = {
-            "title": new_hackmd_title,
-            "content": updated_hackmd_content
-        }
-        content_patch_status, _ = make_api_request(f"/teams/{TEAM_PATH}/notes/{note_id}", method="PATCH", data=update_payload)
-
-        if content_patch_status == 202:
-            logging.info(f"   Successfully updated title and content for note {note_id}.")
-            # --- Set Permissions via API --- 
-            # Set permissions only after successful content update
-            logging.info("   Attempting to set permissions via API (Read: guest, Write: signed_in)...")
-            perm_payload = {"readPermission": "guest", "writePermission": "signed_in"}
-            perm_patch_status, _ = make_api_request(f"/teams/{TEAM_PATH}/notes/{note_id}", method="PATCH", data=perm_payload)
-            if perm_patch_status == 202:
-                logging.info(f"   Successfully set permissions for note {note_id}.")
+            # --- Save Generated Content Locally (Markdown and JSON) ---
+            # Category_tag is already known from prompt_to_category map
+            prompt_output_dir = OUTPUT_DIR / category_tag / prompt_name
+            prompt_output_dir.mkdir(parents=True, exist_ok=True)
+            
+            md_output_filename = prompt_output_dir / f"{latest_date_str}.md"
+            logging.info(f"   Saving main generated content to {md_output_filename}...")
+            try:
+                with open(md_output_filename, 'w', encoding='utf-8') as f:
+                    f.write(main_content_output)
+                logging.info("   Main content saved locally to Markdown.")
+            except Exception as e:
+                 logging.error(f"   ERROR: Failed to save main content locally to {md_output_filename}: {e}")
+            
+            if args.json:
+                json_output_filename = prompt_output_dir / f"{latest_date_str}.json"
+                json_data_to_save = {
+                    "prompt_name": prompt_name,
+                    "category": category_tag,
+                    "date": latest_date_str,
+                    "generated_text": main_content_output,
+                    "source_references": [aggregated_content]
+                }
+                logging.info(f"   Saving structured data to {json_output_filename} (JSON export enabled)...")
+                try:
+                    with open(json_output_filename, 'w', encoding='utf-8') as f:
+                        json.dump(json_data_to_save, f, indent=2)
+                    logging.info("   Structured data saved locally to JSON.")
+                except Exception as e:
+                    logging.error(f"   ERROR: Failed to save structured data locally to {json_output_filename}: {e}")
             else:
-                 logging.warning(f"   WARNING: API PATCH call failed for permissions setting (Status: {perm_patch_status}).")
+                logging.info("   JSON export disabled. Skipping JSON file saving.")
 
-        else:
-            logging.error(f"   ERROR: API PATCH call failed for content update (Status: {content_patch_status}). Skipping permissions and permalink update.")
+            new_hackmd_title = f"{prompt_title_case} - {latest_date_str}"
+            details_block = f"<details><summary>Prompt Details ({prompt_name}.txt)</summary>\n\n```text\n{prompt_template}\n```\n\n</details>"
+            updated_hackmd_content = f"{details_block}\n\n---\n\n{main_content_output}"
+            
+            update_payload = {"title": new_hackmd_title, "content": updated_hackmd_content}
+            content_patch_status, _ = make_api_request(f"/teams/{TEAM_PATH}/notes/{note_id}", method="PATCH", data=update_payload)
+
+            if content_patch_status == 202:
+                logging.info(f"   Successfully updated title and content for note {note_id}.")
+                logging.info("   Attempting to set permissions via API (Read: guest, Write: signed_in)...")
+                perm_payload = {"readPermission": "guest", "writePermission": "signed_in"}
+                perm_patch_status, _ = make_api_request(f"/teams/{TEAM_PATH}/notes/{note_id}", method="PATCH", data=perm_payload)
+                if perm_patch_status == 202:
+                    logging.info(f"   Successfully set permissions for note {note_id}.")
+                else:
+                     logging.warning(f"   WARNING: API PATCH call failed for permissions setting (Status: {perm_patch_status}).")
+            else:
+                logging.error(f"   ERROR: API PATCH call failed for content update (Status: {content_patch_status}). Skipping permissions.")
+
+        else: # No prompt file found, try direct file upload from source_directory
+            logging.info(f"-- No prompt for '{prompt_name}'. Checking for direct file source (Note ID: {note_id}).")
+            if not isinstance(prompt_config_val, dict):
+                logging.warning(f"   Skipping '{prompt_name}': its configuration in book.json is not a dictionary, cannot check for 'source_directory'.")
+                continue
+
+            source_dir_path_str = prompt_config_val.get("source_directory")
+            if source_dir_path_str:
+                source_dir = Path(source_dir_path_str)
+                if not source_dir.is_dir():
+                    logging.warning(f"   WARNING: source_directory '{source_dir}' for '{prompt_name}' is not a valid directory. Skipping.")
+                    continue
+
+                markdown_files = list(source_dir.glob("*.md"))
+                if not markdown_files:
+                    logging.info(f"   INFO: No markdown files (*.md) found in '{source_dir}' for '{prompt_name}'. Skipping update.")
+                    continue
+
+                latest_md_file = max(markdown_files, key=lambda p: p.stat().st_mtime)
+                logging.info(f"   Found latest file to upload: {latest_md_file}")
+
+                try:
+                    with open(latest_md_file, 'r', encoding='utf-8') as f:
+                        file_content = f.read()
+                except Exception as e:
+                    logging.error(f"   ERROR: Failed to read content from '{latest_md_file}': {e}. Skipping update.")
+                    continue
+                
+                # Determine title for HackMD note
+                # Priority: 1. title from book.json, 2. Capitalized filename stem, 3. Capitalized prompt_name
+                hackmd_title = prompt_config_val.get("title")
+                if not hackmd_title:
+                    hackmd_title = ' '.join(word.capitalize() for word in latest_md_file.stem.split('-'))
+                if not hackmd_title: # Fallback if filename is empty or unusual
+                    hackmd_title = ' '.join(word.capitalize() for word in prompt_name.split('-'))
+                
+                logging.info(f"   Attempting to update note {note_id} with content from '{latest_md_file}' and title '{hackmd_title}'...")
+                update_payload = {"title": hackmd_title, "content": file_content}
+                patch_status, _ = make_api_request(f"/teams/{TEAM_PATH}/notes/{note_id}", method="PATCH", data=update_payload)
+
+                if patch_status == 202:
+                    logging.info(f"   Successfully updated title and content for note {note_id} from '{latest_md_file}'.")
+                    # Set permissions, similar to LLM notes
+                    logging.info("   Attempting to set permissions via API (Read: guest, Write: signed_in)...")
+                    perm_payload = {"readPermission": "guest", "writePermission": "signed_in"}
+                    perm_patch_status, _ = make_api_request(f"/teams/{TEAM_PATH}/notes/{note_id}", method="PATCH", data=perm_payload)
+                    if perm_patch_status == 202:
+                        logging.info(f"   Successfully set permissions for note {note_id}.")
+                    else:
+                        logging.warning(f"   WARNING: API PATCH call failed for permissions setting (Status: {perm_patch_status}).")
+                else:
+                    logging.error(f"   ERROR: API PATCH call failed for content update from file (Status: {patch_status}). Skipping permissions.")
+            else:
+                logging.warning(f"   Skipping '{prompt_name}': No prompt file found and no 'source_directory' specified in its book.json configuration.")
 
         time.sleep(5) # Increased delay between notes
 
