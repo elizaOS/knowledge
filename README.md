@@ -10,6 +10,7 @@ This repository serves as the central hub for aggregating, processing, and synth
 - [Latest ElizaOS AI News Summary (JSON)](https://elizaos.github.io/knowledge/ai-news/elizaos/json/daily.json)
 - [Latest Extracted Facts (JSON - if available as daily.json)](https://elizaos.github.io/knowledge/the-council/facts/daily.json)
 - [Eliza Daily HackMD Book](https://hackmd.io/@xr/book)
+- [Eliza.how Docs llms-full.txt](https://eliza.how/llms-full.txt)
 
 This repository serves as the central hub for aggregating, processing, and synthesizing knowledge for the elizaOS project. It employs a series of automated workflows and scripts to gather data from various sources, generate insights using LLMs, and disseminate information through different channels.
 
