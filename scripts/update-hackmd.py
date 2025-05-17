@@ -44,6 +44,12 @@ def get_api_token() -> str:
             logging.warning("Using fallback HACKMD_API_TOKEN env var.")
     return token
 
+def get_clean_note_id(note_id_str: str | None) -> str | None:
+    """Removes query parameters like ?view from a HackMD note ID string."""
+    if not note_id_str:
+        return None
+    return note_id_str.split('?')[0]
+
 def load_state() -> dict:
     """Loads the state from the JSON file."""
     if STATE_FILE.exists():
@@ -109,7 +115,7 @@ BOOK_TITLE = "Eliza Daily"
 HACKMD_BASE_URL = "https://hackmd.io"
 CUSTOM_HEADER_LINKS_KEY = "CUSTOM_HEADER_LINKS" # New constant
 
-def generate_book_markdown(note_map: dict, prompt_to_category: dict) -> str:
+def generate_book_markdown(note_map: dict, prompt_to_category: dict, link_mode: str = "view") -> str:
     """Generates the markdown content for the index book, grouped by category."""
     header_parts = [
         f"# {BOOK_TITLE}",
@@ -122,51 +128,42 @@ def generate_book_markdown(note_map: dict, prompt_to_category: dict) -> str:
         if isinstance(custom_links_list, list): # Ensure it's a list
             for link_item in custom_links_list:
                 if isinstance(link_item, dict) and "text" in link_item and "url" in link_item:
-                    custom_links_md.append(f"- [{link_item['text']}]({link_item['url']})")
+                    custom_links_md.append(f"- [{link_item['text']}]({link_item['url']})") # Custom links are used as-is
                 else:
                     logging.warning(f"Malformed custom link item: {link_item}. Skipping.")
         else:
             logging.warning(f"'{CUSTOM_HEADER_LINKS_KEY}' in state is not a list. Skipping custom links.")
         if custom_links_md:
-            # Join custom links with single newlines, then add a double newline before this block
             header_parts.append("\n" + "\n".join(custom_links_md))
 
-    # Join title, timestamp, and custom links block. Title/timestamp joined by single newline.
-    # Custom links block (if present) separated by a double newline from timestamp.
     header = "\n".join(header_parts) 
-    # If custom_links_md was added, header_parts has 3 elements. 
-    # The join above correctly handles newlines between title and timestamp, 
-    # and the extra \n added before custom_links_md ensures the double newline after timestamp.
-
     content_sections = []
-
-    # Group notes by category
     category_to_notes = {}
-    for prompt_name, config_val in note_map.items(): # config_val can be str or dict
-        if prompt_name == BOOK_MAP_KEY or prompt_name == CUSTOM_HEADER_LINKS_KEY: # Exclude special keys
+
+    for prompt_name, config_val in note_map.items():
+        if prompt_name == BOOK_MAP_KEY or prompt_name == CUSTOM_HEADER_LINKS_KEY:
             continue
 
-        actual_note_id = None
-        if isinstance(config_val, str): # Legacy: value is note_id string
-            actual_note_id = config_val
-        elif isinstance(config_val, dict): # New: value is dict with "id"
-            actual_note_id = config_val.get("id")
+        raw_note_id = None
+        if isinstance(config_val, str):
+            raw_note_id = config_val
+        elif isinstance(config_val, dict):
+            raw_note_id = config_val.get("id")
 
-        if not actual_note_id: # If ID couldn't be extracted, skip
-            logging.debug(f"Skipping note {prompt_name} in book generation due to missing ID.")
+        clean_id_for_link = get_clean_note_id(raw_note_id)
+        if not clean_id_for_link:
+            logging.debug(f"Skipping note {prompt_name} in book generation due to missing or unparsable ID: {raw_note_id}.")
             continue
             
         category = prompt_to_category.get(prompt_name, "uncategorized")
         if category not in category_to_notes:
             category_to_notes[category] = []
-        category_to_notes[category].append((prompt_name, actual_note_id)) 
+        category_to_notes[category].append((prompt_name, clean_id_for_link)) 
 
     if not category_to_notes and not custom_links_md:
-        # If no categories and no custom links, just return the basic header (Title + Timestamp)
         return f"# {BOOK_TITLE}\n<!-- Auto-generated index. Last updated: {datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ')} -->"
     elif not category_to_notes and custom_links_md:
-        # If custom links but no categories, return header with custom links
-        return header # Header already includes custom links correctly formatted
+        return header
 
     sorted_categories = sorted(category_to_notes.keys())
 
@@ -175,15 +172,27 @@ def generate_book_markdown(note_map: dict, prompt_to_category: dict) -> str:
         category_section_parts = [f"## {category_header_text}"]
         links = []
         sorted_notes = sorted(category_to_notes[category], key=lambda item: item[0])
-        for prompt_name, id_for_url in sorted_notes: 
+        for prompt_name, clean_id_for_url in sorted_notes: 
             display_title = ' '.join(word.capitalize() for word in prompt_name.split('-'))
-            links.append(f"- [{display_title}]({HACKMD_BASE_URL}/{id_for_url})")
+            
+            base_url = f"{HACKMD_BASE_URL}/{clean_id_for_url}"
+            if link_mode == "view":
+                url_suffix = "?view"
+            elif link_mode == "edit":
+                url_suffix = "?edit"
+            elif link_mode == "both": # Example, could also be '?both' if HackMD supports it, or link to edit and mention view.
+                url_suffix = "?both" # Assuming this is a valid HackMD parameter or for internal consistency.
+                                      # Or,  f"- [{display_title} (View)]({base_url}?view) / [(Edit)]({base_url}?edit)" - more complex
+            elif link_mode == "raw":
+                url_suffix = ""
+            else: # Default to view if mode is unrecognized
+                url_suffix = "?view"
+                logging.warning(f"Unrecognized link_mode '{link_mode}', defaulting to '?view'.")
+            
+            links.append(f"- [{display_title}]({base_url}{url_suffix})")
         category_section_parts.append("\n".join(links))
-        content_sections.append("\n".join(category_section_parts)) # Join header and links with single newline
+        content_sections.append("\n".join(category_section_parts))
 
-    # Join the main header (title, timestamp, custom links) with category sections.
-    # Each category section is separated by a double newline.
-    # A double newline is also ensured between custom links (if any) and the first category.
     return header + "\n\n" + "\n\n".join(content_sections)
 
 def aggregate_json_data(json_file: Path) -> str:
@@ -207,14 +216,12 @@ def aggregate_json_data(json_file: Path) -> str:
                     extract_strings(value)
         
         extract_strings(data)
-        # Filter empty strings after extraction and join
         filtered_strings = [s for s in strings if s]
         return "\n---\n".join(filtered_strings)
     except Exception as e:
         logging.error(f"Error reading or processing JSON file '{json_file}': {e}")
         return ""
 
-# --- New Function for Direct File Uploads from CUSTOM_HEADER_LINKS ---
 def process_direct_file_uploads(state: dict, latest_date_str: str, team_path: str, output_dir: Path):
     """Processes items in CUSTOM_HEADER_LINKS for direct file uploads."""
     logging.info("--- Processing CUSTOM_HEADER_LINKS for direct file uploads ---")
@@ -230,18 +237,23 @@ def process_direct_file_uploads(state: dict, latest_date_str: str, team_path: st
 
         source_dir_str = link_item.get("source_directory")
         link_url = link_item.get("url")
-        link_text = link_item.get("text", "Untitled Link") # Fallback for link text
+        link_text = link_item.get("text", "Untitled Link") 
 
         if source_dir_str and link_url:
             logging.info(f"-- Checking '{link_text}' for direct file upload from '{source_dir_str}'")
             
-            # Extract note ID from URL
+            raw_note_id_from_url = None
             try:
-                note_id = link_url.split('/')[-1]
-                if not note_id: # Handle cases like trailing slash in URL
-                    raise ValueError("Extracted note ID is empty")
+                raw_note_id_from_url = link_url.split('/')[-1]
+                if not raw_note_id_from_url: 
+                    raise ValueError("Extracted note ID part from URL is empty")
             except (IndexError, ValueError) as e:
-                logging.error(f"   ERROR: Could not extract note ID from URL '{link_url}' for '{link_text}'. Skipping. Error: {e}")
+                logging.error(f"   ERROR: Could not extract note ID part from URL '{link_url}' for '{link_text}'. Skipping. Error: {e}")
+                continue
+            
+            api_note_id = get_clean_note_id(raw_note_id_from_url)
+            if not api_note_id:
+                logging.error(f"   ERROR: Could not obtain clean note ID from '{raw_note_id_from_url}' for '{link_text}'. Skipping.")
                 continue
 
             source_dir = Path(source_dir_str)
@@ -267,25 +279,25 @@ def process_direct_file_uploads(state: dict, latest_date_str: str, team_path: st
             hackmd_title = link_item.get("hackmd_note_title")
             if not hackmd_title:
                 hackmd_title = ' '.join(word.capitalize() for word in latest_md_file.stem.split('-'))
-            if not hackmd_title: # Fallback if filename is empty or unusual
-                 hackmd_title = ' '.join(word.capitalize() for word in link_text.split('-')) # Use link_text as a further fallback
+            if not hackmd_title:
+                 hackmd_title = ' '.join(word.capitalize() for word in link_text.split('-'))
             
-            logging.info(f"   Attempting to update note {note_id} with content from '{latest_md_file}' and title '{hackmd_title}'...")
+            logging.info(f"   Attempting to update note {api_note_id} with content from '{latest_md_file}' and title '{hackmd_title}'...")
             update_payload = {"title": hackmd_title, "content": file_content}
-            patch_status, _ = make_api_request(f"/teams/{team_path}/notes/{note_id}", method="PATCH", data=update_payload)
+            patch_status, _ = make_api_request(f"/teams/{team_path}/notes/{api_note_id}", method="PATCH", data=update_payload)
 
             if patch_status == 202:
-                logging.info(f"   Successfully updated title and content for note {note_id} from '{latest_md_file}'.")
-                logging.info("   Attempting to set permissions via API (Read: guest, Write: signed_in)...")
+                logging.info(f"   Successfully updated title and content for note {api_note_id} from '{latest_md_file}'.")
+                logging.info("   Attempting to set permissions via API (Read: guest, Write: owner)...") # Changed from signed_in to owner
                 perm_payload = {"readPermission": "guest", "writePermission": "owner"}
-                perm_patch_status, _ = make_api_request(f"/teams/{team_path}/notes/{note_id}", method="PATCH", data=perm_payload)
+                perm_patch_status, _ = make_api_request(f"/teams/{team_path}/notes/{api_note_id}", method="PATCH", data=perm_payload)
                 if perm_patch_status == 202:
-                    logging.info(f"   Successfully set permissions for note {note_id}.")
+                    logging.info(f"   Successfully set permissions for note {api_note_id}.")
                 else:
                     logging.warning(f"   WARNING: API PATCH call failed for permissions setting (Status: {perm_patch_status}).")
             else:
                 logging.error(f"   ERROR: API PATCH call failed for content update from file (Status: {patch_status}). Skipping permissions.")
-            time.sleep(2) # Short delay between these updates
+            time.sleep(2)
         elif source_dir_str and not link_url:
             logging.warning(f"   Skipping '{link_text}': 'source_directory' provided but 'url' is missing.")
     logging.info("--- Finished processing CUSTOM_HEADER_LINKS for direct file uploads ---")
@@ -313,15 +325,20 @@ def main():
         action="store_true",
         help="Update permissions (read: guest, write: owner) for all HackMD notes listed in book.json. Skips all other processing."
     )
+    parser.add_argument(
+        "--mode",
+        type=str,
+        choices=["view", "edit", "both", "raw"],
+        default="view",
+        help="Suffix mode for generated HackMD links in the book index (default: view)."
+    )
     args = parser.parse_args()
 
     if args.verbose:
         logging.getLogger().setLevel(logging.DEBUG)
 
-    # --- Check HackMD Token (Needed for all modes that interact with API) ---
     get_api_token() 
 
-    # --- Handle --update-all-note-permissions mode ---
     if args.perms:
         logging.info("--- Mode: Update All Note Permissions ---")
         state = load_state()
@@ -331,33 +348,41 @@ def main():
 
         notes_to_update_perms = []
         for key, value in state.items():
-            note_id_to_check = None
+            raw_note_id_val = None # This will hold the ID string that might have ?view etc.
             note_name_for_log = key
 
             if key == BOOK_MAP_KEY:
-                note_id_to_check = value
+                raw_note_id_val = value
                 note_name_for_log = "Book Index Page"
             elif key == CUSTOM_HEADER_LINKS_KEY:
                 if isinstance(value, list):
                     for link_item in value:
                         if isinstance(link_item, dict) and "url" in link_item:
                             try:
-                                extracted_id = link_item["url"].split('/')[-1]
-                                if extracted_id: # Make sure it's not an empty string
+                                # Extract the part that might be an ID from the URL
+                                potential_id_part = link_item["url"].split('/')[-1]
+                                clean_id = get_clean_note_id(potential_id_part)
+                                if clean_id: # Ensure it's a valid ID after cleaning
                                     notes_to_update_perms.append({
-                                        "id": extracted_id, 
-                                        "name": f"Custom Link: {link_item.get('text', extracted_id)}"
+                                        "id": clean_id, 
+                                        "name": f"Custom Link: {link_item.get('text', clean_id)}"
                                     })
+                                else:
+                                    logging.debug(f"Custom link URL '{link_item['url']}' did not yield a clean ID part. Skipping for perms.")
                             except Exception as e:
-                                logging.warning(f"Could not parse note ID from custom link URL '{link_item['url']}': {e}")
-                continue # Skip further processing of the CUSTOM_HEADER_LINKS_KEY itself
-            elif isinstance(value, str): # Legacy format (value is note_id string)
-                note_id_to_check = value
-            elif isinstance(value, dict): # New format (value is dict with "id")
-                note_id_to_check = value.get("id")
+                                logging.warning(f"Could not parse note ID from custom link URL '{link_item['url']}' for perms: {e}")
+                continue 
+            elif isinstance(value, str): 
+                raw_note_id_val = value
+            elif isinstance(value, dict): 
+                raw_note_id_val = value.get("id")
             
-            if note_id_to_check:
-                notes_to_update_perms.append({"id": note_id_to_check, "name": note_name_for_log})
+            clean_api_id = get_clean_note_id(raw_note_id_val)
+            if clean_api_id:
+                notes_to_update_perms.append({"id": clean_api_id, "name": note_name_for_log})
+            elif raw_note_id_val: # Log if original value was present but couldn't be cleaned
+                 logging.warning(f"Could not obtain a clean API ID for '{note_name_for_log}' (raw value: {raw_note_id_val}). Skipping for perms.")
+
 
         if not notes_to_update_perms:
             logging.info("No notes found to update permissions for.")
@@ -365,36 +390,30 @@ def main():
             logging.info(f"Found {len(notes_to_update_perms)} notes to update permissions for.")
             perm_payload = {"readPermission": "guest", "writePermission": "owner"}
             for note_info in notes_to_update_perms:
-                note_id = note_info["id"]
+                note_id_cleaned_for_api = note_info["id"] # Already cleaned
                 note_name = note_info["name"]
-                logging.info(f"Attempting to set permissions for note '{note_name}' (ID: {note_id})...")
-                perm_patch_status, _ = make_api_request(f"/teams/{TEAM_PATH}/notes/{note_id}", method="PATCH", data=perm_payload)
+                logging.info(f"Attempting to set permissions for note '{note_name}' (ID: {note_id_cleaned_for_api})...")
+                perm_patch_status, _ = make_api_request(f"/teams/{TEAM_PATH}/notes/{note_id_cleaned_for_api}", method="PATCH", data=perm_payload)
                 if perm_patch_status == 202:
-                    logging.info(f"   Successfully set permissions for note '{note_name}' (ID: {note_id}).")
+                    logging.info(f"   Successfully set permissions for note '{note_name}' (ID: {note_id_cleaned_for_api}).")
                 else:
-                    logging.warning(f"   WARNING: API PATCH call failed for permissions setting on note '{note_name}' (ID: {note_id}) (Status: {perm_patch_status}).")
-                time.sleep(1) # API rate limiting
+                    logging.warning(f"   WARNING: API PATCH call failed for permissions setting on note '{note_name}' (ID: {note_id_cleaned_for_api}) (Status: {perm_patch_status}).")
+                time.sleep(1) 
         
         logging.info("--- Finished updating all note permissions. ---")
         sys.exit(0)
-
-    # --- Full Processing Mode (if --update-all-note-permissions is not set) ---
     
-    # --- Check Prerequisites (for full mode) ---
-    if not os.getenv("OPENROUTER_API_KEY"): # Only check if not in permissions-only mode
+    if not os.getenv("OPENROUTER_API_KEY"): 
         logging.error("OPENROUTER_API_KEY environment variable not set.")
         sys.exit(1)
-    # get_api_token() # Already called
     if not DATA_DIR.is_dir(): logging.error(f"Data dir not found: {DATA_DIR}"); sys.exit(1)
     if not PROMPTS_DIR.is_dir(): logging.error(f"Prompts dir not found: {PROMPTS_DIR}"); sys.exit(1)
 
-    # --- Load State (already loaded if in permissions mode, but safe to call again or ensure it's loaded) ---
-    state = load_state() # Ensure state is loaded if not in perm-only mode path
+    state = load_state() 
     if not state:
         logging.error("State file is empty or failed to load for full processing.")
         sys.exit(1)
 
-    # --- Build Prompt-to-Category Mapping (Moved Before Book Update) ---
     logging.info(f"Scanning '{PROMPTS_DIR}' to map prompts to categories...")
     prompt_to_category = {}
     for prompt_file in PROMPTS_DIR.rglob("*.txt"):
@@ -405,30 +424,31 @@ def main():
         logging.debug(f"Mapped prompt '{prompt_name}' to category '{category_tag}'")
     logging.info(f"Found {len(prompt_to_category)} prompts in category structure.")
 
-    # --- Update Book Index First ---
-    book_note_id = state.get(BOOK_MAP_KEY)
-    if book_note_id:
-        logging.info(f"Attempting to update Book Index note (ID: {book_note_id}) with latest content...")
-        book_content = generate_book_markdown(state, prompt_to_category)
+    raw_book_note_id = state.get(BOOK_MAP_KEY)
+    book_note_id_cleaned_api = get_clean_note_id(raw_book_note_id)
+
+    if book_note_id_cleaned_api:
+        logging.info(f"Attempting to update Book Index note (Clean ID: {book_note_id_cleaned_api}, Raw: {raw_book_note_id}) with latest content...")
+        book_content = generate_book_markdown(state, prompt_to_category, args.mode) # Pass link_mode
         update_payload = {"content": book_content}
-        patch_status_code, _ = make_api_request(f"/teams/{TEAM_PATH}/notes/{book_note_id}", method="PATCH", data=update_payload)
+        patch_status_code, _ = make_api_request(f"/teams/{TEAM_PATH}/notes/{book_note_id_cleaned_api}", method="PATCH", data=update_payload)
         if patch_status_code == 202:
             logging.info(f"   Successfully updated Book Index note content.")
-            # Now, set permissions for the Book Index note
-            logging.info(f"   Attempting to set permissions for Book Index note {book_note_id} (Read: guest, Write: owner)...")
+            logging.info(f"   Attempting to set permissions for Book Index note {book_note_id_cleaned_api} (Read: guest, Write: owner)...")
             perm_payload = {"readPermission": "guest", "writePermission": "owner"}
-            perm_patch_status, _ = make_api_request(f"/teams/{TEAM_PATH}/notes/{book_note_id}", method="PATCH", data=perm_payload)
+            perm_patch_status, _ = make_api_request(f"/teams/{TEAM_PATH}/notes/{book_note_id_cleaned_api}", method="PATCH", data=perm_payload)
             if perm_patch_status == 202:
-                logging.info(f"   Successfully set permissions for Book Index note {book_note_id}.")
+                logging.info(f"   Successfully set permissions for Book Index note {book_note_id_cleaned_api}.")
             else:
                 logging.warning(f"   WARNING: API PATCH call failed for Book Index note permissions setting (Status: {perm_patch_status}).")
         else:
             logging.warning(f"   WARNING: Failed to update Book Index note content (Status: {patch_status_code}). Skipping permissions update.")
         time.sleep(1)
+    elif raw_book_note_id: # Log if raw_book_note_id was present but couldn't be cleaned
+        logging.warning(f"Book index key '{BOOK_MAP_KEY}' had value '{raw_book_note_id}' which could not be cleaned to a valid ID. Skipping book update.")
     else:
         logging.warning(f"Book index key '{BOOK_MAP_KEY}' not found in state. Skipping book update.")
 
-    # --- Find and Aggregate Data (Moved earlier to define latest_date_str) ---
     latest_data_file = None
     if args.date:
         latest_data_file = DATA_DIR / f"{args.date}.json"
@@ -453,47 +473,39 @@ def main():
         logging.warning(f"No text content extracted from {latest_data_file}. Some updates might be empty.")
     logging.info("Aggregated content prepared.")
 
-    # --- Process Direct File Uploads from CUSTOM_HEADER_LINKS (Now latest_date_str is defined) ---
     process_direct_file_uploads(state, latest_date_str, TEAM_PATH, OUTPUT_DIR)
 
-    # --- Create Output Directory (Ensure it exists before LLM processing saves files there) ---
-    logging.info(f"Ensuring base output directory '{OUTPUT_DIR}' exists...")
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
-
-    # --- Process Prompts and Update Notes (LLM-based) ---
     logging.info("Processing LLM prompts and updating HackMD notes...")
 
     for prompt_name, prompt_config_val in state.items():
-        # Explicitly skip special keys that are not individual notes for LLM processing or direct upload
         if prompt_name == BOOK_MAP_KEY or prompt_name == CUSTOM_HEADER_LINKS_KEY:
             logging.debug(f"Skipping special key: {prompt_name}")
             continue
 
-        note_id = None
-        update_strategy = "append" # Default for LLM, direct upload usually overwrites content & title
+        raw_note_id_from_config = None
+        update_strategy = "append" 
 
-        if isinstance(prompt_config_val, str): # Legacy format (note_id is a string)
-            note_id = prompt_config_val
-        elif isinstance(prompt_config_val, dict): # New format
-            note_id = prompt_config_val.get("id")
+        if isinstance(prompt_config_val, str): 
+            raw_note_id_from_config = prompt_config_val
+        elif isinstance(prompt_config_val, dict): 
+            raw_note_id_from_config = prompt_config_val.get("id")
             update_strategy = prompt_config_val.get("update_strategy", "append").lower()
         
-        if not note_id: # Skip if note_id is somehow empty/null
-            logging.warning(f"Skipping item '{prompt_name}' due to missing note ID in state file config.")
+        api_note_id = get_clean_note_id(raw_note_id_from_config)
+        if not api_note_id:
+            logging.warning(f"Skipping item '{prompt_name}' due to missing or unparsable note ID in state file (raw: {raw_note_id_from_config}).")
             continue
 
-        # Check if a prompt file exists for this item
         category_tag = prompt_to_category.get(prompt_name)
 
-        if category_tag: # Prompt exists, use LLM generation path
-            logging.info(f"-- Processing LLM prompt: {prompt_name} (Note ID: {note_id}, Strategy: {update_strategy})")
+        if category_tag: 
+            logging.info(f"-- Processing LLM prompt: {prompt_name} (API Note ID: {api_note_id}, Strategy: {update_strategy})")
             prompt_file_path = PROMPTS_DIR / category_tag / f"{prompt_name}.txt"
 
-            if not prompt_file_path.is_file(): # Should not happen if category_tag is found from prompt_to_category map
+            if not prompt_file_path.is_file(): 
                 logging.error(f"   ERROR: Prompt file '{prompt_file_path}' expected for '{prompt_name}' but not found. Skipping.")
                 continue
-
-            # --- Generate LLM Content (Existing Logic) ---
             try:
                 with open(prompt_file_path, 'r', encoding='utf-8') as f:
                     prompt_template = f.read()
@@ -524,7 +536,6 @@ def main():
             
             main_content_output = ""
             llm_data = None
-
             try:
                 response = requests.post(
                     "https://openrouter.ai/api/v1/chat/completions", 
@@ -548,8 +559,6 @@ def main():
                  continue
             logging.info("   LLM content generated and treated as main content.")
 
-            # --- Save Generated Content Locally (Markdown and JSON) ---
-            # Category_tag is already known from prompt_to_category map
             prompt_output_dir = OUTPUT_DIR / category_tag / prompt_name
             prompt_output_dir.mkdir(parents=True, exist_ok=True)
             
@@ -586,22 +595,22 @@ def main():
             updated_hackmd_content = f"{details_block}\n\n---\n\n{main_content_output}"
             
             update_payload = {"title": new_hackmd_title, "content": updated_hackmd_content}
-            content_patch_status, _ = make_api_request(f"/teams/{TEAM_PATH}/notes/{note_id}", method="PATCH", data=update_payload)
+            content_patch_status, _ = make_api_request(f"/teams/{TEAM_PATH}/notes/{api_note_id}", method="PATCH", data=update_payload)
 
             if content_patch_status == 202:
-                logging.info(f"   Successfully updated title and content for note {note_id}.")
-                logging.info("   Attempting to set permissions via API (Read: guest, Write: signed_in)...")
-                perm_payload = {"readPermission": "guest", "writePermission": "signed_in"}
-                perm_patch_status, _ = make_api_request(f"/teams/{TEAM_PATH}/notes/{note_id}", method="PATCH", data=perm_payload)
+                logging.info(f"   Successfully updated title and content for note {api_note_id}.")
+                logging.info("   Attempting to set permissions via API (Read: guest, Write: owner)...") # Changed from signed_in to owner
+                perm_payload = {"readPermission": "guest", "writePermission": "owner"}
+                perm_patch_status, _ = make_api_request(f"/teams/{TEAM_PATH}/notes/{api_note_id}", method="PATCH", data=perm_payload)
                 if perm_patch_status == 202:
-                    logging.info(f"   Successfully set permissions for note {note_id}.")
+                    logging.info(f"   Successfully set permissions for note {api_note_id}.")
                 else:
                      logging.warning(f"   WARNING: API PATCH call failed for permissions setting (Status: {perm_patch_status}).")
             else:
                 logging.error(f"   ERROR: API PATCH call failed for content update (Status: {content_patch_status}). Skipping permissions.")
 
-        else: # No prompt file found, try direct file upload from source_directory
-            logging.info(f"-- No prompt for '{prompt_name}'. Checking for direct file source (Note ID: {note_id}).")
+        else: # No prompt file found, this is where direct file upload from book.json top-level entries (non-CUSTOM_HEADER_LINKS) is handled.
+            logging.info(f"-- No prompt for '{prompt_name}'. Checking for direct file source (API Note ID: {api_note_id}).")
             if not isinstance(prompt_config_val, dict):
                 logging.warning(f"   Skipping '{prompt_name}': its configuration in book.json is not a dictionary, cannot check for 'source_directory'.")
                 continue
@@ -628,26 +637,23 @@ def main():
                     logging.error(f"   ERROR: Failed to read content from '{latest_md_file}': {e}. Skipping update.")
                     continue
                 
-                # Determine title for HackMD note
-                # Priority: 1. title from book.json, 2. Capitalized filename stem, 3. Capitalized prompt_name
                 hackmd_title = prompt_config_val.get("title")
                 if not hackmd_title:
                     hackmd_title = ' '.join(word.capitalize() for word in latest_md_file.stem.split('-'))
-                if not hackmd_title: # Fallback if filename is empty or unusual
+                if not hackmd_title: 
                     hackmd_title = ' '.join(word.capitalize() for word in prompt_name.split('-'))
                 
-                logging.info(f"   Attempting to update note {note_id} with content from '{latest_md_file}' and title '{hackmd_title}'...")
+                logging.info(f"   Attempting to update note {api_note_id} with content from '{latest_md_file}' and title '{hackmd_title}'...")
                 update_payload = {"title": hackmd_title, "content": file_content}
-                patch_status, _ = make_api_request(f"/teams/{TEAM_PATH}/notes/{note_id}", method="PATCH", data=update_payload)
+                patch_status, _ = make_api_request(f"/teams/{TEAM_PATH}/notes/{api_note_id}", method="PATCH", data=update_payload)
 
                 if patch_status == 202:
-                    logging.info(f"   Successfully updated title and content for note {note_id} from '{latest_md_file}'.")
-                    # Set permissions, similar to LLM notes
-                    logging.info("   Attempting to set permissions via API (Read: guest, Write: signed_in)...")
-                    perm_payload = {"readPermission": "guest", "writePermission": "signed_in"}
-                    perm_patch_status, _ = make_api_request(f"/teams/{TEAM_PATH}/notes/{note_id}", method="PATCH", data=perm_payload)
+                    logging.info(f"   Successfully updated title and content for note {api_note_id} from '{latest_md_file}'.")
+                    logging.info("   Attempting to set permissions via API (Read: guest, Write: owner)...") # Changed from signed_in to owner
+                    perm_payload = {"readPermission": "guest", "writePermission": "owner"}
+                    perm_patch_status, _ = make_api_request(f"/teams/{TEAM_PATH}/notes/{api_note_id}", method="PATCH", data=perm_payload)
                     if perm_patch_status == 202:
-                        logging.info(f"   Successfully set permissions for note {note_id}.")
+                        logging.info(f"   Successfully set permissions for note {api_note_id}.")
                     else:
                         logging.warning(f"   WARNING: API PATCH call failed for permissions setting (Status: {perm_patch_status}).")
                 else:
@@ -655,7 +661,7 @@ def main():
             else:
                 logging.warning(f"   Skipping '{prompt_name}': No prompt file found and no 'source_directory' specified in its book.json configuration.")
 
-        time.sleep(5) # Increased delay between notes
+        time.sleep(5) 
 
     logging.info("--- Script finished. ---")
 
