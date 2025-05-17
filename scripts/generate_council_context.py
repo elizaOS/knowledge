@@ -15,7 +15,7 @@ OPENROUTER_API_ENDPOINT = "https://openrouter.ai/api/v1/chat/completions"
 
 # Determine the script's directory to find related files
 SCRIPT_DIR = Path(__file__).parent.resolve()
-STRATEGIC_CONTEXT_FILE = SCRIPT_DIR / "prompts/strategy/north-star.txt"
+STRATEGIC_CONTEXT_FILE = SCRIPT_DIR / "special-prompts/north-star.txt"
 
 # Default output directory for council JSON if not specified
 DEFAULT_COUNCIL_OUTPUT_DIR = SCRIPT_DIR.parent / "the-council" / "council_briefing"

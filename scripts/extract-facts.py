@@ -22,7 +22,7 @@ OPENROUTER_API_KEY = os.environ.get("OPENROUTER_API_KEY")
 OPENROUTER_API_ENDPOINT = "https://openrouter.ai/api/v1/chat/completions"
 LLM_MODEL = "anthropic/claude-3.7-sonnet" # Or your preferred model, consider one with large context window
 FACT_EXTRACTION_PROMPT_DIR = Path(__file__).parent
-DEFAULT_FACT_EXTRACTION_PROMPT_FILE = FACT_EXTRACTION_PROMPT_DIR / "fact_extraction_prompt.txt"
+DEFAULT_FACT_EXTRACTION_PROMPT_FILE = FACT_EXTRACTION_PROMPT_DIR / "special-prompts" / "fact_extraction_prompt.txt"
 
 # Logging configuration
 logging.basicConfig(level=logging.INFO, format='[%(asctime)s] - %(levelname)s - %(message)s', datefmt='%Y-%m-%d %H:%M:%S')
