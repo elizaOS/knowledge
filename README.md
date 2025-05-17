@@ -26,15 +26,16 @@ The system follows a structured pipeline to transform raw data into actionable i
     *   It first executes `scripts/create-hackmd.py` which:
         *   Identifies prompt files in `scripts/prompts/` (organized by category in subdirectories).
         *   Ensures a corresponding HackMD note exists for each prompt, creating new ones if necessary.
-        *   Updates the `book.json` file, which maps prompt names to HackMD note IDs and serves as a state file.
-        *   Creates an initial HackMD book index note.
+        *   Updates the `book.json` file, which maps prompt names to HackMD note IDs and their `update_strategy` (defaulting to "overwrite" for new notes), serving as a state file.
+        *   Creates an initial HackMD book index note if specified.
     *   Then, it runs `scripts/update-hackmd.py` which:
         *   Uses `the-council/aggregated/daily.json` (latest aggregated data) as context.
-        *   For each prompt defined in `book.json`, it calls an LLM to generate content based on the prompt instructions and the aggregated daily data.
-        *   The generated content is structured, separating the main body from supporting evidence.
-        *   Updates the corresponding HackMD note via API with the main content.
-        *   Saves the main content locally to `hackmd/[category]/[prompt_name]/YYYY-MM-DD.md`.
-        *   Saves a structured JSON object (including `prompt_name`, `category`, `date`, `generated_text`, and `source_references`) locally to `hackmd/[category]/[prompt_name]/YYYY-MM-DD.json`.
+        *   For each prompt defined in `book.json`:
+            *   It calls an LLM to generate content based on the prompt instructions (from the local `.txt` file) and the aggregated daily data.
+            *   It updates the corresponding HackMD note's title (with the prompt name and current date) and its entire content.
+            *   The new content includes the prompt details (from the local prompt file, wrapped in `<details>` tags) followed by the LLM-generated text for the day, effectively overwriting previous content as per the "overwrite" strategy.
+        *   Saves the LLM-generated main content locally to `hackmd/[category]/[prompt_name]/YYYY-MM-DD.md`.
+        *   Optionally (if the `-j` flag is used), saves a structured JSON object (including `prompt_name`, `category`, `date`, `generated_text`, and `source_references`) locally to `hackmd/[category]/[prompt_name]/YYYY-MM-DD.json`.
         *   Updates the main HackMD book index note with links to all content notes, categorized.
     *   Finally, changes to `book.json`, `hackmd/**/*.md`, and `hackmd/**/*.json` are committed to the repository.
 
@@ -58,14 +59,14 @@ The system follows a structured pipeline to transform raw data into actionable i
 *   `github/`: Contains synced GitHub activity logs and summaries.
 *   `docs/`: Contains synced documentation from `elizaOS/eliza`.
 *   `daily-silk/`: Contains synced documentation from `madjin/daily-silk`.
-*   `book.json`: A state file mapping prompt names to HackMD note IDs, used by `create-hackmd.py` and `update-hackmd.py`.
+*   `book.json`: A state file mapping prompt names to HackMD note IDs and their update strategies (e.g., 'overwrite'), used by `create-hackmd.py` and `update-hackmd.py`.
 
 ## Primary Scripts Overview
 
 *   **`scripts/aggregate-sources.py`**: The main data aggregation engine, creating `the-council/aggregated/YYYY-MM-DD.json`.
 *   **`scripts/generate_council_context.py`**: Processes aggregated data from `the-council/aggregated/daily.json` to create strategic council briefings in `the-council/council_briefing/YYYY-MM-DD.json`.
-*   **`scripts/create-hackmd.py`**: Initializes HackMD notes for prompts and manages `book.json`.
-*   **`scripts/update-hackmd.py`**: Generates content for HackMD notes using prompts and data from `the-council/aggregated/daily.json`, updates HackMD via API, and saves local backups.
+*   **`scripts/create-hackmd.py`**: Initializes HackMD notes for prompts found in `scripts/prompts/`, creating new notes on HackMD if they don't exist. Manages `book.json` by storing HackMD note IDs and their update strategy (defaulting to 'overwrite' for new notes).
+*   **`scripts/update-hackmd.py`**: Generates content daily for HackMD notes using prompts from `scripts/prompts/` and data from `the-council/aggregated/daily.json`. It updates each HackMD note's title (with the current date) and overwrites its content with the prompt details and new LLM-generated text. It also updates the main HackMD book index and saves local backups of the generated content.
 *   **`scripts/extract_facts.py`**: Performs deep analysis on data from `the-council/aggregated/YYYY-MM-DD.json` to extract categorized facts and insights into `the-council/extracted_facts/YYYY-MM-DD.json`.
 
 This system is designed to be modular and extensible, allowing for the integration of new data sources and processing steps as the project evolves.
@@ -152,11 +153,11 @@ Daily summaries and discussions related to AI, specifically from the ElizaOS and
 ### Scripts & Prompts
 The `scripts/` directory contains Python scripts used for automating content generation and updates.
 - `scripts/prompts/`: Contains prompt templates categorized into subdirectories (`comms`, `dev`, `strategy`). These templates are used by `scripts/update-hackmd.py` along with daily context data to generate content for specific HackMD notes.
-- `scripts/create-hackmd.py`: Creates new HackMD notes for prompts found in `scripts/prompts/` that are not already listed in `book.json`.
-- `scripts/update-hackmd.py`: Reads the latest daily context data, generates content for each prompt using an LLM (via OpenRouter), and updates the corresponding HackMD notes (appending content) as defined in `book.json`. It also updates the main Book Index note on HackMD.
+- `scripts/create-hackmd.py`: Creates new HackMD notes for prompts found in `scripts/prompts/` that are not already listed in `book.json`. It populates `book.json` with the note ID and an "overwrite" update strategy.
+- `scripts/update-hackmd.py`: Reads the latest daily context data, generates content for each prompt (defined in `book.json`) using an LLM (via OpenRouter). It updates the corresponding HackMD note by overwriting its title (with the current date) and its entire content (placing the prompt details from the local file in `<details>` tags, followed by the LLM-generated text). It also updates the main Book Index note on HackMD and saves local backups.
 
 ### HackMD Backups
-The `hackmd/` directory stores local backups of the content generated by `scripts/update-hackmd.py`. The structure mirrors the `scripts/prompts/` categories, with each prompt having its own subdirectory containing dated markdown files (e.g., `hackmd/comms/discord-announcement/2025-05-05.md`).
+The `hackmd/` directory stores local backups of the content generated by `scripts/update-hackmd.py`. The structure mirrors the `scripts/prompts/` categories, with each prompt having its own subdirectory containing dated markdown files (e.g., `hackmd/comms/discord-announcement/2025-05-05.md`) and optionally JSON files.
 
 ### Packages
 Documentation from the [ElizaOS package ecosystem](https://eliza.how/packages), which includes a collection of adapters, clients, and plugins that extend the functionality of the ElizaOS platform. This directory contains detailed information about each package's features, configuration, and integration methods.

@@ -74,24 +74,75 @@ python scripts/extract-facts.py -i path/to/the-council/aggregated/YYYY-MM-DD.jso
 
 ## `create-hackmd.py`
 
-**Purpose**: Generates a HackMD note from a template and a given content.
+**Purpose**: Manages HackMD notes corresponding to prompt files in `scripts/prompts/`. Ensures a HackMD note exists for each prompt, creating it if necessary with initial content (including the prompt itself). It populates/updates `book.json` to map prompt names to their HackMD note IDs and their update strategy (defaulting to 'overwrite' for new notes). Can also create/update a main book index note on HackMD.
 
 **Details**:
-This Python script takes a template file and a content string as input, and generates a complete HackMD note from them. The template file is typically a plain text file with placeholders that are replaced with the provided content.
+This script iterates through all `*.txt` prompt files found recursively within the `scripts/prompts/` directory. For each prompt:
+- It determines a `category_tag` based on the prompt file's parent directory (e.g., `comms`, `dev`, `strategy`).
+- It checks `book.json` to see if a note already exists for the `prompt_name` (derived from the filename).
+- If a note does not exist (or if its ID is missing in `book.json`), the script creates a new note on HackMD via the API.
+    - The initial title of the new HackMD note includes the prompt name and the current date (e.g., "Developer Update - YYYY-MM-DD").
+    - The initial content includes this title, the `category_tag`, and the full content of the prompt file itself, wrapped in HTML `<details>` tags.
+    - The new note's ID and an `update_strategy` of "overwrite" are then saved to `book.json` for that `prompt_name`.
+- If the `-b <permalink>` argument is provided, the script will also manage a main "Book Index" HackMD note:
+    - If the Book Index note doesn't exist (ID not in `book.json` under `__BOOK_INDEX__`), it creates a new HackMD note with the title "Eliza Daily" (or as configured) and attempts to set its permalink to the one provided.
+    - It then generates the content for this Book Index (a list of links to all other notes in `book.json`, grouped by category) and updates the Book Index note on HackMD or saves it locally.
 
 **Usage**:
 ```bash
-./scripts/create-hackmd.py -t path/to/template.txt -c "This is the content to be inserted into the template."
+./scripts/create-hackmd.py [-b BOOK_PERMALINK] [-v]
 ```
+- `-b BOOK_PERMALINK`, `--book BOOK_PERMALINK`: Optional. If provided, creates/updates the Book Index note on HackMD, attempting to set its permalink to `BOOK_PERMALINK`.
+- `-v`, `--verbose`: Optional. Increases output verbosity for debugging.
 
-**Dependencies**: Python 3.
+**Dependencies**: Python 3, `requests` library.
+**Environment Variables**:
+- `HMD_API_ACCESS_TOKEN` (or `HACKMD_API_TOKEN` as fallback): Required for all HackMD API interactions.
+
+---
+
+## `update-hackmd.py`
+
+**Purpose**: Generates daily content for HackMD notes based on prompts and aggregated data, then updates these notes on HackMD, including their titles and full content.
+
+**Details**:
+This script is central to the daily content update process for HackMD notes.
+- It reads the `book.json` state file to get the list of `prompt_name`s and their corresponding HackMD `note_id`s and `update_strategy`.
+- It uses the latest aggregated data from `the-council/aggregated/daily.json` as context (or a specific date's file if the `-d` flag is used).
+- For each prompt listed in `book.json` (excluding `__BOOK_INDEX__`):
+    1.  It reads the associated prompt template file from `scripts/prompts/[category]/[prompt_name].txt`.
+    2.  It calls an LLM (via the OpenRouter API, model typically `anthropic/claude-3.7-sonnet`) with the prompt template and the aggregated daily data to generate the main content for the note.
+    3.  It constructs a new title for the HackMD note, combining the prompt's display name and the current processing date (e.g., "Developer Update - YYYY-MM-DD").
+    4.  It constructs the new full content for the HackMD note. This includes:
+        *   The full text of the prompt template (from the local file), wrapped in HTML `<details>` tags.
+        *   A markdown separator (`---`).
+        *   The LLM-generated main content for the day.
+    5.  It updates the corresponding HackMD note via the API. This is an overwrite operation for both the `title` and the entire `content` of the note, based on the "overwrite" strategy typically set in `book.json`.
+    6.  It sets the HackMD note permissions (e.g., read: guest, write: signed_in).
+    7.  It saves the LLM-generated main content locally to `hackmd/[category]/[prompt_name]/YYYY-MM-DD.md`.
+    8.  Optionally, if the `-j` or `--json` flag is used, it also saves a structured JSON file locally (`hackmd/[category]/[prompt_name]/YYYY-MM-DD.json`) containing the generated text and other metadata.
+- After processing all individual prompt notes, it regenerates the content for the main HackMD Book Index note (whose ID is stored under `__BOOK_INDEX__` in `book.json`) and updates it on HackMD.
+
+**Usage**:
+```bash
+./scripts/update-hackmd.py [-d YYYY-MM-DD] [-j] [-v]
+```
+- `-d YYYY-MM-DD`, `--date YYYY-MM-DD`: Optional. Specify the date for data aggregation. Defaults to the latest found `YYYY-MM-DD.json` file in `the-council/aggregated/`.
+- `-j`, `--json`: Optional. Export JSON files (containing generated text and metadata) locally in addition to Markdown files.
+- `-v`, `--verbose`: Optional. Increases output verbosity for debugging.
+
+**Dependencies**: Python 3, `requests` library.
+**Environment Variables**:
+- `OPENROUTER_API_KEY`: Required for LLM API calls.
+- `HMD_API_ACCESS_TOKEN` (or `HACKMD_API_TOKEN` as fallback): Required for all HackMD API interactions.
 
 ---
 
 ## `tweet-summarizer.sh` (Deprecated)
 
-> **Note:** This script is now deprecated and has been moved to `scripts/old/`.  
-> It is no longer maintained or used in the main automation workflows.
+> **Note:**  
+> This script is now deprecated and has been moved to `scripts/old/tweet-summarizer.sh`.  
+> It is no longer maintained as part of the active pipeline.
 
-The original `tweet-summarizer.sh` script generated tweets from GitHub activity logs in the elizaOS and auto.fun brand voices, using OpenRouter and prompt files.  
-If you need to reference or reuse this functionality, please see `scripts/old/tweet-summarizer.sh`.
+The functionality for tweet summarization from GitHub activity logs is no longer supported in the main scripts directory. If you need to reference or reuse the old script, you can find it in the `scripts/old/` directory.
+For up-to-date automation and content generation, please refer to the current Python-based workflows and scripts described above.
