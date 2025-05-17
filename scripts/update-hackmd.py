@@ -277,7 +277,7 @@ def process_direct_file_uploads(state: dict, latest_date_str: str, team_path: st
             if patch_status == 202:
                 logging.info(f"   Successfully updated title and content for note {note_id} from '{latest_md_file}'.")
                 logging.info("   Attempting to set permissions via API (Read: guest, Write: signed_in)...")
-                perm_payload = {"readPermission": "guest", "writePermission": "signed_in"}
+                perm_payload = {"readPermission": "guest", "writePermission": "owner"}
                 perm_patch_status, _ = make_api_request(f"/teams/{team_path}/notes/{note_id}", method="PATCH", data=perm_payload)
                 if perm_patch_status == 202:
                     logging.info(f"   Successfully set permissions for note {note_id}.")
@@ -308,23 +308,90 @@ def main():
         action="store_true",
         help="Export JSON files in addition to Markdown. Defaults to False."
     )
+    parser.add_argument(
+        "--perms",
+        action="store_true",
+        help="Update permissions (read: guest, write: owner) for all HackMD notes listed in book.json. Skips all other processing."
+    )
     args = parser.parse_args()
 
     if args.verbose:
         logging.getLogger().setLevel(logging.DEBUG)
 
-    # --- Check Prerequisites ---
-    if not os.getenv("OPENROUTER_API_KEY"):
+    # --- Check HackMD Token (Needed for all modes that interact with API) ---
+    get_api_token() 
+
+    # --- Handle --update-all-note-permissions mode ---
+    if args.perms:
+        logging.info("--- Mode: Update All Note Permissions ---")
+        state = load_state()
+        if not state:
+            logging.error("State file is empty or failed to load. Cannot update permissions.")
+            sys.exit(1)
+
+        notes_to_update_perms = []
+        for key, value in state.items():
+            note_id_to_check = None
+            note_name_for_log = key
+
+            if key == BOOK_MAP_KEY:
+                note_id_to_check = value
+                note_name_for_log = "Book Index Page"
+            elif key == CUSTOM_HEADER_LINKS_KEY:
+                if isinstance(value, list):
+                    for link_item in value:
+                        if isinstance(link_item, dict) and "url" in link_item:
+                            try:
+                                extracted_id = link_item["url"].split('/')[-1]
+                                if extracted_id: # Make sure it's not an empty string
+                                    notes_to_update_perms.append({
+                                        "id": extracted_id, 
+                                        "name": f"Custom Link: {link_item.get('text', extracted_id)}"
+                                    })
+                            except Exception as e:
+                                logging.warning(f"Could not parse note ID from custom link URL '{link_item['url']}': {e}")
+                continue # Skip further processing of the CUSTOM_HEADER_LINKS_KEY itself
+            elif isinstance(value, str): # Legacy format (value is note_id string)
+                note_id_to_check = value
+            elif isinstance(value, dict): # New format (value is dict with "id")
+                note_id_to_check = value.get("id")
+            
+            if note_id_to_check:
+                notes_to_update_perms.append({"id": note_id_to_check, "name": note_name_for_log})
+
+        if not notes_to_update_perms:
+            logging.info("No notes found to update permissions for.")
+        else:
+            logging.info(f"Found {len(notes_to_update_perms)} notes to update permissions for.")
+            perm_payload = {"readPermission": "guest", "writePermission": "owner"}
+            for note_info in notes_to_update_perms:
+                note_id = note_info["id"]
+                note_name = note_info["name"]
+                logging.info(f"Attempting to set permissions for note '{note_name}' (ID: {note_id})...")
+                perm_patch_status, _ = make_api_request(f"/teams/{TEAM_PATH}/notes/{note_id}", method="PATCH", data=perm_payload)
+                if perm_patch_status == 202:
+                    logging.info(f"   Successfully set permissions for note '{note_name}' (ID: {note_id}).")
+                else:
+                    logging.warning(f"   WARNING: API PATCH call failed for permissions setting on note '{note_name}' (ID: {note_id}) (Status: {perm_patch_status}).")
+                time.sleep(1) # API rate limiting
+        
+        logging.info("--- Finished updating all note permissions. ---")
+        sys.exit(0)
+
+    # --- Full Processing Mode (if --update-all-note-permissions is not set) ---
+    
+    # --- Check Prerequisites (for full mode) ---
+    if not os.getenv("OPENROUTER_API_KEY"): # Only check if not in permissions-only mode
         logging.error("OPENROUTER_API_KEY environment variable not set.")
         sys.exit(1)
-    get_api_token() # Check HackMD token early
+    # get_api_token() # Already called
     if not DATA_DIR.is_dir(): logging.error(f"Data dir not found: {DATA_DIR}"); sys.exit(1)
     if not PROMPTS_DIR.is_dir(): logging.error(f"Prompts dir not found: {PROMPTS_DIR}"); sys.exit(1)
 
-    # --- Load State ---
-    state = load_state()
+    # --- Load State (already loaded if in permissions mode, but safe to call again or ensure it's loaded) ---
+    state = load_state() # Ensure state is loaded if not in perm-only mode path
     if not state:
-        logging.error("State file is empty or failed to load.")
+        logging.error("State file is empty or failed to load for full processing.")
         sys.exit(1)
 
     # --- Build Prompt-to-Category Mapping (Moved Before Book Update) ---
@@ -347,8 +414,16 @@ def main():
         patch_status_code, _ = make_api_request(f"/teams/{TEAM_PATH}/notes/{book_note_id}", method="PATCH", data=update_payload)
         if patch_status_code == 202:
             logging.info(f"   Successfully updated Book Index note content.")
+            # Now, set permissions for the Book Index note
+            logging.info(f"   Attempting to set permissions for Book Index note {book_note_id} (Read: guest, Write: owner)...")
+            perm_payload = {"readPermission": "guest", "writePermission": "owner"}
+            perm_patch_status, _ = make_api_request(f"/teams/{TEAM_PATH}/notes/{book_note_id}", method="PATCH", data=perm_payload)
+            if perm_patch_status == 202:
+                logging.info(f"   Successfully set permissions for Book Index note {book_note_id}.")
+            else:
+                logging.warning(f"   WARNING: API PATCH call failed for Book Index note permissions setting (Status: {perm_patch_status}).")
         else:
-            logging.warning(f"   WARNING: Failed to update Book Index note content (Status: {patch_status_code}).")
+            logging.warning(f"   WARNING: Failed to update Book Index note content (Status: {patch_status_code}). Skipping permissions update.")
         time.sleep(1)
     else:
         logging.warning(f"Book index key '{BOOK_MAP_KEY}' not found in state. Skipping book update.")
