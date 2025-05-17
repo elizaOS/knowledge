@@ -6,7 +6,7 @@ This repository serves as the central hub for aggregating, processing, and synth
 
 **Explore**
 - Browse all content via GitHub Pages root: https://elizaos.github.io/knowledge/
-- Eliza Daily HackMD Book: https://hackmd.io/@xr/book
+- Eliza Daily HackMD Book: https://hackmd.io/@elizaos/book
 
 **Updated daily**
 - Latest aggregated data: https://elizaos.github.io/knowledge/the-council/aggregated/daily.json
