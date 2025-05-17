@@ -17,6 +17,9 @@ OPENROUTER_API_ENDPOINT = "https://openrouter.ai/api/v1/chat/completions"
 SCRIPT_DIR = Path(__file__).parent.resolve()
 STRATEGIC_CONTEXT_FILE = SCRIPT_DIR / "prompts/strategy/north-star.txt"
 
+# Default output directory for council JSON if not specified
+DEFAULT_COUNCIL_OUTPUT_DIR = SCRIPT_DIR.parent / "the-council" / "council_briefing"
+
 # Monthly Goal (more dynamic, can still use Env Var or default)
 MONTHLY_GOAL = os.environ.get(
     "COUNCIL_MONTHLY_GOAL",
@@ -159,13 +162,21 @@ def main():
     )
     parser.add_argument(
         "output_council_json_file",
+        nargs='?',
         type=Path,
-        help="Path to write the final council context JSON file"
+        default=None,
+        help="Optional: Path to write the final council context JSON file. Defaults to 'the-council/council_briefing/[input_filename].json'"
     )
     args = parser.parse_args()
 
     input_path = args.input_lean_json_file
     output_path = args.output_council_json_file
+
+    if output_path is None:
+        DEFAULT_COUNCIL_OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
+        output_path = DEFAULT_COUNCIL_OUTPUT_DIR / input_path.name
+        print(f"Output file not specified. Defaulting to: {output_path}")
+
     # --- Add Markdown output path ---
     output_markdown_dir = SCRIPT_DIR.parent / "hackmd" / "council"
     output_markdown_dir.mkdir(parents=True, exist_ok=True)

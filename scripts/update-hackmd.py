@@ -115,14 +115,25 @@ def generate_book_markdown(note_map: dict, prompt_to_category: dict) -> str:
 
     # Group notes by category
     category_to_notes = {}
-    for prompt_name, note_id in note_map.items():
-        if prompt_name == BOOK_MAP_KEY or not note_id:
+    for prompt_name, config_val in note_map.items(): # config_val can be str or dict
+        if prompt_name == BOOK_MAP_KEY:
             continue
+
+        actual_note_id = None
+        if isinstance(config_val, str): # Legacy: value is note_id string
+            actual_note_id = config_val
+        elif isinstance(config_val, dict): # New: value is dict with "id"
+            actual_note_id = config_val.get("id")
+
+        if not actual_note_id: # If ID couldn't be extracted, skip
+            logging.debug(f"Skipping note {prompt_name} in book generation due to missing ID.")
+            continue
+            
         # Use the map passed from main to find the category
         category = prompt_to_category.get(prompt_name, "uncategorized")
         if category not in category_to_notes:
             category_to_notes[category] = []
-        category_to_notes[category].append((prompt_name, note_id))
+        category_to_notes[category].append((prompt_name, actual_note_id)) # Store the actual string ID
 
     if not category_to_notes:
         return header + "*No content notes found in state file yet.*"
@@ -136,9 +147,9 @@ def generate_book_markdown(note_map: dict, prompt_to_category: dict) -> str:
         links = []
         # Sort notes alphabetically by prompt name within the category
         sorted_notes = sorted(category_to_notes[category], key=lambda item: item[0])
-        for prompt_name, note_id in sorted_notes:
+        for prompt_name, id_for_url in sorted_notes: # id_for_url is now the string ID
             display_title = ' '.join(word.capitalize() for word in prompt_name.split('-'))
-            links.append(f"- [{display_title}]({HACKMD_BASE_URL}/{note_id})")
+            links.append(f"- [{display_title}]({HACKMD_BASE_URL}/{id_for_url})") # Use the extracted string ID
         content_sections.append(category_header + "\n".join(links))
 
     # Join category sections with double newlines
@@ -277,16 +288,26 @@ def main():
     # --- Process Prompts and Update Notes ---
     logging.info("Processing prompts and updating HackMD notes...")
 
-    for prompt_name, note_id in state.items():
+    for prompt_name, prompt_config_val in state.items():
         if prompt_name == BOOK_MAP_KEY:
             logging.debug(f"Skipping book index key: {prompt_name}")
             continue
 
+        note_id = None
+        update_strategy = "append" # Default update strategy
+
+        if isinstance(prompt_config_val, str): # Legacy format (note_id is a string)
+            note_id = prompt_config_val
+            # For legacy, we might assume append, or you could decide a global default for them
+        elif isinstance(prompt_config_val, dict): # New format
+            note_id = prompt_config_val.get("id")
+            update_strategy = prompt_config_val.get("update_strategy", "append").lower()
+        
         if not note_id: # Skip if note_id is somehow empty/null
-            logging.warning(f"Skipping prompt '{prompt_name}' due to missing note ID in state file.")
+            logging.warning(f"Skipping prompt '{prompt_name}' due to missing note ID in state file config.")
             continue
 
-        logging.info(f"-- Processing: {prompt_name} (Note ID: {note_id})")
+        logging.info(f"-- Processing: {prompt_name} (Note ID: {note_id}, Strategy: {update_strategy})")
         # Get category for prompt path
         category_tag = prompt_to_category.get(prompt_name, None) # Get category from map
         if not category_tag:
@@ -312,11 +333,11 @@ def main():
         # Simplified prompt instructions, removing evidence request
         prompt_instructions = (
             f"Generate content suitable for a '{prompt_title_case}' document for the date {latest_date_str}, "
-            f"based on the provided aggregated data and the specific instructions in the template below.\\n\\n"
+            f"based on the provided aggregated data and the specific instructions in the template below.\n\n"
             f"Output *only* the main content as requested by the template. Do not include any other preamble or explanation "
             f"unless the template specifically asks for it within the main content part."
         )
-        final_llm_prompt = f"{prompt_instructions}\\n\\n**Template Instructions:**\\n{prompt_template}\\n\\n**Aggregated Data for {latest_date_str}:**\\n```\\n{aggregated_content}\\n```"
+        final_llm_prompt = f"{prompt_instructions}\n\n**Template Instructions:**\n{prompt_template}\n\n**Aggregated Data for {latest_date_str}:**\n```\n{aggregated_content}\n```"
 
         logging.info(f"   Calling LLM ({LLM_MODEL})...")
         llm_payload = {
@@ -393,34 +414,35 @@ def main():
         else:
             logging.info("   JSON export disabled. Skipping JSON file saving.")
 
-        # --- Get Current HackMD Note Content ---
-        logging.info(f"   Fetching current content for note {note_id}...")
-        get_status_code, get_response_data = make_api_request(f"/teams/{TEAM_PATH}/notes/{note_id}", method="GET")
-        current_hackmd_content = ""
-        if get_status_code == 200 and get_response_data:
-            current_hackmd_content = get_response_data.get("content", "")
-            logging.info(f"   Successfully fetched current content (length: {len(current_hackmd_content)}).")
-        else:
-            logging.warning(f"   WARNING: Failed to fetch current content for note {note_id} (Status: {get_status_code}). Will overwrite instead of appending.")
-            # Proceeding will overwrite the note if PATCH succeeds
+        # --- Construct New Title and Content for HackMD ---
+        logging.info(f"   Constructing new title and content for HackMD note {note_id}...")
 
-        # Log content being sent
-        logging.debug(f"   DEBUG: Sending LLM content length: {len(main_content_output)}")
-        logging.debug(f"   DEBUG: Sending LLM content (start): {main_content_output[:200]}...")
+        # 1. Read prompt file content (already have `prompt_template`)
+        # 2. Construct new note title
+        new_hackmd_title = f"{prompt_title_case} - {latest_date_str}"
 
-        # --- Construct Appended Content ---
-        # Ensure newline separation, add date header
-        new_content_block = f"{main_content_output}" # HackMD note will only get the main content
-        updated_hackmd_content = current_hackmd_content + new_content_block
-        logging.debug(f"   DEBUG: Total updated content length: {len(updated_hackmd_content)}")
+        # 3. Create <details> block
+        details_block = f"<details><summary>Prompt Details ({prompt_name}.txt)</summary>\n\n```text\n{prompt_template}\n```\n\n</details>"
 
-        # --- Update HackMD Note Content ---
-        logging.info(f"   Attempting to update note {note_id} with appended content via API PATCH...")
-        update_payload = {"content": updated_hackmd_content}
+        # 4. Combine <details>, separator, and LLM output
+        # Ensure newline separation for append, add date header if desired (though LLM content might already have it)
+        # The main_content_output is from the LLM
+        updated_hackmd_content = f"{details_block}\n\n---\n\n{main_content_output}"
+        
+        logging.debug(f"   New HackMD Title: {new_hackmd_title}")
+        logging.debug(f"   New HackMD Content (start): {updated_hackmd_content[:250]}...")
+        logging.debug(f"   New HackMD Content length: {len(updated_hackmd_content)}")
+
+        # --- Update HackMD Note Content & Title ---
+        logging.info(f"   Attempting to update note {note_id} with new title and content via API PATCH...")
+        update_payload = {
+            "title": new_hackmd_title,
+            "content": updated_hackmd_content
+        }
         content_patch_status, _ = make_api_request(f"/teams/{TEAM_PATH}/notes/{note_id}", method="PATCH", data=update_payload)
 
         if content_patch_status == 202:
-            logging.info(f"   Successfully updated content for note {note_id}.")
+            logging.info(f"   Successfully updated title and content for note {note_id}.")
             # --- Set Permissions via API --- 
             # Set permissions only after successful content update
             logging.info("   Attempting to set permissions via API (Read: guest, Write: signed_in)...")

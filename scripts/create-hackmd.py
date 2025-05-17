@@ -110,13 +110,24 @@ def generate_book_markdown(note_map: dict, prompt_to_category: dict) -> str:
 
     # Group notes by category
     category_to_notes = {}
-    for prompt_name, note_id in note_map.items():
-        if prompt_name == BOOK_MAP_KEY or not note_id:
+    for prompt_name, config_val in note_map.items():
+        if prompt_name == BOOK_MAP_KEY:
             continue
+        
+        actual_note_id = None
+        if isinstance(config_val, str): # Legacy: value is note_id string
+            actual_note_id = config_val
+        elif isinstance(config_val, dict): # New: value is dict with "id"
+            actual_note_id = config_val.get("id")
+
+        if not actual_note_id: # If ID couldn't be extracted, skip
+            logging.debug(f"Skipping note {prompt_name} in book generation due to missing ID.")
+            continue
+            
         category = prompt_to_category.get(prompt_name, "uncategorized")
         if category not in category_to_notes:
             category_to_notes[category] = []
-        category_to_notes[category].append((prompt_name, note_id))
+        category_to_notes[category].append((prompt_name, actual_note_id))
 
     if not category_to_notes:
         return header + "*No content notes found in state file yet.*"
@@ -129,9 +140,9 @@ def generate_book_markdown(note_map: dict, prompt_to_category: dict) -> str:
         links = []
         # Sort notes by prompt name within the category
         sorted_notes = sorted(category_to_notes[category], key=lambda item: item[0])
-        for prompt_name, note_id in sorted_notes:
+        for prompt_name, id_for_url in sorted_notes: # id_for_url is now the string ID
             display_title = ' '.join(word.capitalize() for word in prompt_name.split('-'))
-            links.append(f"- [{display_title}]({HACKMD_BASE_URL}/{note_id})")
+            links.append(f"- [{display_title}]({HACKMD_BASE_URL}/{id_for_url})") # Use the extracted string ID
         content_sections.append(category_header + "\n".join(links))
 
     return header + "\n\n".join(content_sections)
@@ -175,7 +186,15 @@ def main():
         category_tag = relative_path.parent.name if relative_path.parent != Path('.') else "uncategorized" # Use parent dir name or 'uncategorized' if in root
         prompt_to_category[prompt_name] = category_tag # <<< Store mapping
 
-        if prompt_name not in updated_state:
+        # Check if prompt_name exists and if its config is a dictionary with an 'id'
+        current_config = updated_state.get(prompt_name)
+        note_exists_with_id = False
+        if isinstance(current_config, dict) and current_config.get("id"):
+            note_exists_with_id = True
+        elif isinstance(current_config, str) and current_config: # Legacy string ID
+            note_exists_with_id = True # Treat legacy string ID as existing
+
+        if not note_exists_with_id:
             logging.info(f"-- No existing content note found for '{prompt_name}'. Creating...")
             new_content_notes_created = True
 
@@ -206,7 +225,7 @@ def main():
             if status_code == 201 and response_data and response_data.get("id"):
                 new_note_id = response_data["id"]
                 logging.info(f"   Note created for '{prompt_name}' with ID: {new_note_id}")
-                updated_state[prompt_name] = new_note_id
+                updated_state[prompt_name] = {"id": new_note_id, "update_strategy": "overwrite"} # Save new structure
                 logging.warning(f"   WARNING: Note created. Please set its permalink manually in HackMD UI to '{prompt_name}'.")
             else:
                 logging.error(f"   ERROR: Failed to create note for '{prompt_name}' via API (Status: {status_code}).")
@@ -216,7 +235,12 @@ def main():
     if args.book:
         book_permalink_target = args.book
         logging.info("Managing Book Index Note (Book Mode enabled)...")
-        book_note_id = updated_state.get(BOOK_MAP_KEY)
+        
+        # Get book_note_id, which should be a string ID
+        book_note_id = updated_state.get(BOOK_MAP_KEY) # This should always be a string ID
+        if isinstance(book_note_id, dict):
+            logging.warning(f"Book index key '{BOOK_MAP_KEY}' in state is a dict. Using 'id' field. This is unexpected.")
+            book_note_id = book_note_id.get("id") # Attempt to gracefully handle if it was made a dict
 
         if not book_note_id:
             logging.info("-- Book index note ID not found in state file. Creating...")
