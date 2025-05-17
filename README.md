@@ -9,6 +9,7 @@ This repository serves as the central hub for aggregating, processing, and synth
 - Eliza Daily HackMD Book: https://hackmd.io/@elizaos/book
 
 **Updated daily**
+(Data for these links is typically refreshed by 02:30 UTC each day.)
 - Latest aggregated data: https://elizaos.github.io/knowledge/the-council/aggregated/daily.json
 - Latest council briefing: https://elizaos.github.io/knowledge/the-council/council_briefing/daily.json
 - Latest ElizaOS AI news summary: https://elizaos.github.io/knowledge/ai-news/elizaos/json/daily.json
