@@ -57,11 +57,24 @@ jobs:
             -d "$DATE" \
             --verbose
         
+      - name: Create facts/daily.json permalink
+        if: steps.extract_files.outcome == 'success' && steps.get_date.outputs.DATE # Ensure extraction was attempted and date is set
+        run: |
+          DATE=${{ steps.get_date.outputs.DATE }}
+          JSON_OUTPUT_FILE="the-council/facts/${DATE}.json"
+          PERMALINK_FILE="the-council/facts/daily.json"
+          if [ -f "$JSON_OUTPUT_FILE" ]; then
+            cp "$JSON_OUTPUT_FILE" "$PERMALINK_FILE"
+            echo "Permalink $PERMALINK_FILE created."
+          else
+            echo "Source file $JSON_OUTPUT_FILE not found, permalink not created."
+          fi
+
       - name: Commit daily fact files (JSON and Markdown)
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: "feat: Add daily extracted facts for ${{ steps.get_date.outputs.DATE }}"
-          file_pattern: "the-council/facts/*.json hackmd/facts/*.md"
+          file_pattern: "the-council/facts/*.json hackmd/facts/*.md the-council/facts/daily.json"
           commit_user_name: "github-actions[bot]"
           commit_user_email: "github-actions[bot]@users.noreply.github.com"
           commit_author: "github-actions[bot] <github-actions[bot]@users.noreply.github.com>"
