@@ -74,25 +74,49 @@ python scripts/extract-facts.py -i path/to/the-council/aggregated/YYYY-MM-DD.jso
 
 ## `create-hackmd.py`
 
-**Purpose**: Manages HackMD notes corresponding to prompt files in `scripts/prompts/`. Ensures a HackMD note exists for each prompt, creating it if necessary with initial content (including the prompt itself). It populates/updates `book.json` to map prompt names to their HackMD note IDs and their update strategy (defaulting to 'overwrite' for new notes). Can also create/update a main book index note on HackMD.
+**Purpose**: Manages HackMD notes. It ensures notes exist for prompt files in `scripts/prompts/` and can also map local directories to new HackMD notes for direct file synchronization. It populates/updates `book.json` to map note configurations (prompt-based or direct file sync) to their HackMD note IDs. Can also create/update a main book index note on HackMD.
 
 **Details**:
-This script iterates through all `*.txt` prompt files found recursively within the `scripts/prompts/` directory. For each prompt:
-- It determines a `category_tag` based on the prompt file's parent directory (e.g., `comms`, `dev`, `strategy`).
-- It checks `book.json` to see if a note already exists for the `prompt_name` (derived from the filename).
-- If a note does not exist (or if its ID is missing in `book.json`), the script creates a new note on HackMD via the API.
-    - The initial title of the new HackMD note includes the prompt name and the current date (e.g., "Developer Update - YYYY-MM-DD").
-    - The initial content includes this title, the `category_tag`, and the full content of the prompt file itself, wrapped in HTML `<details>` tags.
-    - The new note's ID and an `update_strategy` of "overwrite" are then saved to `book.json` for that `prompt_name`.
-- If the `-b <permalink>` argument is provided, the script will also manage a main "Book Index" HackMD note:
-    - If the Book Index note doesn't exist (ID not in `book.json` under `__BOOK_INDEX__`), it creates a new HackMD note with the title "Eliza Daily" (or as configured) and attempts to set its permalink to the one provided.
-    - It then generates the content for this Book Index (a list of links to all other notes in `book.json`, grouped by category) and updates the Book Index note on HackMD or saves it locally.
+This script has two main functionalities for setting up HackMD notes:
+
+1.  **Prompt-Based Note Creation**:
+    - It iterates through all `*.txt` prompt files found recursively within the `scripts/prompts/` directory.
+    - For each prompt, it determines a `category_tag` based on the prompt file's parent directory (e.g., `comms`, `dev`, `strategy`).
+    - It checks `book.json` to see if a note already exists for the `prompt_name` (derived from the filename).
+    - If a note does not exist (or if its ID is missing in `book.json`), the script creates a new note on HackMD via the API.
+        - The initial title of the new HackMD note includes the prompt name and the current date (e.g., "Developer Update - YYYY-MM-DD").
+        - The initial content includes this title, the `category_tag`, and the full content of the prompt file itself, wrapped in HTML `<details>` tags.
+        - The new note's ID and an `update_strategy` of "overwrite" are then saved to `book.json` for that `prompt_name`.
+
+2.  **Direct Directory Mapping for File Sync (via `-i` or `--include` argument)**:
+    - If the `-i LOCAL_DIR_PATH` argument is used (can be specified multiple times), the script processes each provided local directory path.
+    - For each valid directory path not already configured in `book.json`'s `CUSTOM_HEADER_LINKS` (by checking `source_directory`):
+        - It derives a link text and HackMD note title from the directory path (e.g., path `github/summaries/day/` might become link text "Github - Summaries - Day" and note title "Sync: Github - Summaries - Day").
+        - It creates a new HackMD note with the derived title and placeholder content indicating it will be synced from the local directory.
+        - If successful, it adds a new configuration object to the `CUSTOM_HEADER_LINKS` array in `book.json`. This object includes:
+            - `text`: The derived link text (for the Book Index header).
+            - `url`: The URL of the newly created HackMD note.
+            - `source_directory`: The provided local directory path.
+            - `hackmd_note_title`: The title given to the HackMD note.
+        - This setup enables `update-hackmd.py` to later find this configuration and sync the latest `.md` file from the `source_directory` to this HackMD note.
+
+3.  **Book Index Management (via `-b` argument)**:
+    - If the `-b <permalink>` argument is provided, the script will also manage a main "Book Index" HackMD note:
+        - If the Book Index note doesn't exist (ID not in `book.json` under `__BOOK_INDEX__`), it creates a new HackMD note with the title "Eliza Daily" (or as configured) and attempts to set its permalink to the one provided.
+        - It then generates the content for this Book Index (a list of links based on `CUSTOM_HEADER_LINKS` and other notes in `book.json`, grouped by category) and updates the Book Index note on HackMD or saves it locally.
+
+**`book.json` Structure and Usage**:
+- `book.json` is a critical state file used by both `create-hackmd.py` and `update-hackmd.py`.
+- For **prompt-based notes**, it stores mappings like: `"prompt-name": {"id": "hackmd_note_id", "update_strategy": "overwrite"}`.
+- The `CUSTOM_HEADER_LINKS` key in `book.json` is an array of objects used to generate the header links in the Book Index page. Items here can now also include `source_directory` and `hackmd_note_title` fields to configure them for direct file sync by `update-hackmd.py` if no corresponding prompt file exists for that conceptual note.
+- `update-hackmd.py` relies on these configurations to determine which notes to update and how: either by generating content using an LLM based on a prompt file, or by syncing content directly from a local file specified by a `source_directory` in a `CUSTOM_HEADER_LINKS` entry.
 
 **Usage**:
 ```bash
-./scripts/create-hackmd.py [-b BOOK_PERMALINK] [-v]
+./scripts/create-hackmd.py [-b BOOK_PERMALINK] [-i LOCAL_DIR_PATH]... [-v]
 ```
 - `-b BOOK_PERMALINK`, `--book BOOK_PERMALINK`: Optional. If provided, creates/updates the Book Index note on HackMD, attempting to set its permalink to `BOOK_PERMALINK`.
+- `-i LOCAL_DIR_PATH`, `--include LOCAL_DIR_PATH`: Optional. Can be used multiple times. For each local directory path provided, creates a new HackMD note and adds a configuration to `CUSTOM_HEADER_LINKS` in `book.json` to enable direct file sync from this directory by `update-hackmd.py`.
 - `-v`, `--verbose`: Optional. Increases output verbosity for debugging.
 
 **Dependencies**: Python 3, `requests` library.
@@ -103,14 +127,20 @@ This script iterates through all `*.txt` prompt files found recursively within t
 
 ## `update-hackmd.py`
 
-**Purpose**: Generates daily content for HackMD notes based on prompts and aggregated data, then updates these notes on HackMD, including their titles and full content.
+**Purpose**: Generates daily content for HackMD notes or syncs them from local files, then updates these notes on HackMD, including their titles and full content.
 
 **Details**:
 This script is central to the daily content update process for HackMD notes.
-- It reads the `book.json` state file to get the list of `prompt_name`s and their corresponding HackMD `note_id`s and `update_strategy`.
-- It uses the latest aggregated data from `the-council/aggregated/daily.json` as context (or a specific date's file if the `-d` flag is used).
-- For each prompt listed in `book.json` (excluding `__BOOK_INDEX__`):
-    1.  It reads the associated prompt template file from `scripts/prompts/[category]/[prompt_name].txt`.
+- It reads the `book.json` state file to understand the notes to manage.
+- It uses the latest aggregated data from `the-council/aggregated/YYYY-MM-DD.json` as context for LLM-generated notes (or a specific date's file if the `-d` flag is used).
+- **Book Index Update**: First, it regenerates the content for the main HackMD Book Index note (ID from `__BOOK_INDEX__` in `book.json`, using link configurations from `CUSTOM_HEADER_LINKS` and other entries) and updates it on HackMD.
+- **Direct File Sync from `CUSTOM_HEADER_LINKS`**: It then processes entries in `CUSTOM_HEADER_LINKS` in `book.json`. If an entry specifies a `source_directory`:
+    - It extracts the HackMD note ID from the entry's `url`.
+    - It finds the most recently modified `.md` file in the specified local `source_directory`.
+    - It updates the HackMD note with the content of this local file and the title from `hackmd_note_title`.
+    - It sets note permissions.
+- **LLM-Based Content Generation**: For each remaining `prompt_name` in `book.json` that has a corresponding prompt file in `scripts/prompts/` (and is not a special key like `__BOOK_INDEX__` or `CUSTOM_HEADER_LINKS_KEY`):
+    1.  It reads the associated prompt template file (e.g., `scripts/prompts/[category]/[prompt_name].txt`).
     2.  It calls an LLM (via the OpenRouter API, model typically `anthropic/claude-3.7-sonnet`) with the prompt template and the aggregated daily data to generate the main content for the note.
     3.  It constructs a new title for the HackMD note, combining the prompt's display name and the current processing date (e.g., "Developer Update - YYYY-MM-DD").
     4.  It constructs the new full content for the HackMD note. This includes:
@@ -121,7 +151,6 @@ This script is central to the daily content update process for HackMD notes.
     6.  It sets the HackMD note permissions (e.g., read: guest, write: signed_in).
     7.  It saves the LLM-generated main content locally to `hackmd/[category]/[prompt_name]/YYYY-MM-DD.md`.
     8.  Optionally, if the `-j` or `--json` flag is used, it also saves a structured JSON file locally (`hackmd/[category]/[prompt_name]/YYYY-MM-DD.json`) containing the generated text and other metadata.
-- After processing all individual prompt notes, it regenerates the content for the main HackMD Book Index note (whose ID is stored under `__BOOK_INDEX__` in `book.json`) and updates it on HackMD.
 
 **Usage**:
 ```bash

@@ -38,36 +38,136 @@ def load_prompt_template(prompt_file: Path) -> str | None:
         logging.error(f"Could not read prompt file {prompt_file}: {e}")
         return None
 
+def convert_briefing_to_markdown(briefing_data: dict) -> str:
+    """Converts the structured JSON briefing data to a Markdown string."""
+    md_lines = []
+    date_str = briefing_data.get("briefing_date", "N/A")
+    md_lines.append(f"# Fact Briefing: {date_str}\n")
+
+    md_lines.append(f"## Overall Summary")
+    md_lines.append(f"{briefing_data.get('overall_summary', 'No overall summary provided.')}\n")
+
+    categories = briefing_data.get("categories", {})
+    if not categories:
+        md_lines.append("No detailed categories provided.")
+        return "\n".join(md_lines)
+
+    md_lines.append(f"## Categories")
+
+    # Twitter News Highlights
+    twitter_highlights = categories.get("twitter_news_highlights", [])
+    if twitter_highlights:
+        md_lines.append(f"\n### Twitter News Highlights")
+        for item in twitter_highlights:
+            sentiment_str = f" (Sentiment: {item.get('sentiment')})" if item.get('sentiment') else ""
+            md_lines.append(f"- {item.get('claim', 'N/A')}{sentiment_str}")
+
+    # GitHub Updates
+    github_updates = categories.get("github_updates", {})
+    if github_updates:
+        md_lines.append(f"\n### GitHub Updates")
+        new_issues_prs = github_updates.get("new_issues_prs", [])
+        if new_issues_prs:
+            md_lines.append(f"\n#### New Issues/PRs")
+            for item in new_issues_prs:
+                title = item.get('title', 'N/A')
+                item_type = item.get('item_type', '').capitalize()
+                number = item.get('number', '')
+                url = item.get('url', '#')
+                author = f" by {item.get('author', 'N/A')}" if item.get('author') else ""
+                status = f" - Status: {item.get('status', 'N/A')}"
+                significance = f" - Significance: {item.get('significance', 'N/A')}"
+                md_lines.append(f"- [{item_type} #{number}: {title}]({url}){author}{status}{significance}")
+        
+        overall_focus_list = github_updates.get("overall_focus", [])
+        if overall_focus_list:
+            md_lines.append(f"\n#### Overall Focus")
+            for item in overall_focus_list:
+                md_lines.append(f"- {item.get('claim', 'N/A')}")
+
+    # Discord Updates
+    discord_updates = categories.get("discord_updates", [])
+    if discord_updates:
+        md_lines.append(f"\n### Discord Updates")
+        for item in discord_updates:
+            channel = item.get('channel', 'N/A')
+            summary = item.get('summary', 'N/A')
+            participants = ", ".join(item.get('key_participants', []))
+            participants_str = f" (Key Participants: {participants})" if participants else ""
+            md_lines.append(f"- **{channel}:** {summary}{participants_str}")
+
+    # User Feedback
+    user_feedback = categories.get("user_feedback", [])
+    if user_feedback:
+        md_lines.append(f"\n### User Feedback")
+        for item in user_feedback:
+            platform_str = f" (Platform: {item.get('source_platform')})" if item.get('source_platform') else ""
+            sentiment_str = f" (Sentiment: {item.get('sentiment')})" if item.get('sentiment') else ""
+            md_lines.append(f"- {item.get('feedback_summary', 'N/A')}{platform_str}{sentiment_str}")
+
+    # Strategic Insights
+    strategic_insights = categories.get("strategic_insights", [])
+    if strategic_insights:
+        md_lines.append(f"\n### Strategic Insights")
+        for item in strategic_insights:
+            theme = item.get('theme', 'Insight')
+            md_lines.append(f"\n#### {theme}")
+            md_lines.append(item.get('insight', 'N/A'))
+            implications = item.get("implications_or_questions", [])
+            if implications:
+                md_lines.append(f"\n*Implications/Questions:*")
+                for imp_q in implications:
+                    md_lines.append(f"  - {imp_q}")
+    
+    # Market Analysis
+    market_analysis = categories.get("market_analysis", [])
+    if market_analysis:
+        md_lines.append(f"\n### Market Analysis")
+        for item in market_analysis:
+            relevance_str = f" (Relevance: {item.get('relevance')})" if item.get('relevance') else ""
+            md_lines.append(f"- {item.get('observation', 'N/A')}{relevance_str}")
+
+    return "\n".join(md_lines)
+
 def main():
     parser = argparse.ArgumentParser(
-        description="Extract structured facts from an aggregated JSON context file using an LLM."
+        description="Extracts structured facts from aggregated JSON using an LLM, or converts a fact JSON to Markdown."
     )
     parser.add_argument(
         "-i", "--input-file",
-        required=True,
         type=Path,
-        help="Path to the input JSON file (output of aggregate_sources.py). Expected to be a JSON object."
+        help="Input JSON file. For LLM mode: aggregated data. For Markdown mode (-m): fact JSON data."
     )
     parser.add_argument(
         "-o", "--output-file",
-        required=True,
         type=Path,
-        help="Full path for the output JSON file (e.g., the-council/fact_briefing_YYYY-MM-DD.json)."
+        help="Output file. For LLM mode: fact JSON. For Markdown mode (-m): Markdown file."
     )
     parser.add_argument(
         "-d", "--date",
-        help="Optional: Specify the date (YYYY-MM-DD) for context/logging. If not provided, attempts to infer from input filename."
+        help="Optional: Date (YYYY-MM-DD) for context/logging (primarily LLM mode)."
     )
     parser.add_argument(
         "-p", "--prompt-file",
         type=Path,
         default=DEFAULT_FACT_EXTRACTION_PROMPT_FILE,
-        help=f"Path to the fact extraction prompt file. Defaults to: {DEFAULT_FACT_EXTRACTION_PROMPT_FILE}"
+        help=f"Path to fact extraction prompt file (LLM mode). Default: {DEFAULT_FACT_EXTRACTION_PROMPT_FILE}"
     )
     parser.add_argument(
         "-v", "--verbose",
         action="store_true",
         help="Increase output verbosity (DEBUG level)."
+    )
+    parser.add_argument(
+        "-m", "--to-markdown",
+        action="store_true",
+        help="Convert input fact JSON (-i) to Markdown (-o). Skips LLM call."
+    )
+    parser.add_argument(
+        "-md", "--markdown-export-file",
+        type=Path,
+        help="Optional: Simultaneously export a Markdown version of the extracted facts to this file "
+             "during the primary LLM extraction process. Used in conjunction with -o (for JSON output)."
     )
     args = parser.parse_args()
 
@@ -79,9 +179,8 @@ def main():
         logging.error("OPENROUTER_API_KEY environment variable not set.")
         sys.exit(1)
 
-    if not args.input_file.is_file():
-        logging.error(f"Input file not found: {args.input_file}")
-        sys.exit(1)
+    if not args.input_file or not args.output_file:
+        parser.error("-i/--input-file and -o/--output-file are required for LLM-based fact extraction (if not using -m).")
 
     prompt_template = load_prompt_template(args.prompt_file)
     if not prompt_template:
@@ -114,6 +213,35 @@ def main():
     
     log_date_context = target_date_str if target_date_str else args.input_file.name
     logging.info(f"Processing for context: '{log_date_context}'")
+
+    # --- Markdown Generation Mode ---
+    if args.to_markdown:
+        if not args.input_file or not args.output_file:
+            parser.error("-i/--input-file (for fact JSON) and -o/--output-file (for Markdown) are required when using -m/--to-markdown.")
+        if not args.input_file.is_file():
+            logging.error(f"Error: Input fact JSON file not found: {args.input_file}")
+            sys.exit(1)
+        
+        logging.info(f"Converting fact JSON '{args.input_file}' to Markdown '{args.output_file}'...")
+        try:
+            with open(args.input_file, 'r', encoding='utf-8') as f:
+                fact_json_data = json.load(f)
+            markdown_content = convert_briefing_to_markdown(fact_json_data)
+            args.output_file.parent.mkdir(parents=True, exist_ok=True)
+            with open(args.output_file, 'w', encoding='utf-8') as f:
+                f.write(markdown_content)
+            logging.info(f"Successfully wrote Markdown to {args.output_file}.")
+            logging.info("--- Markdown generation finished. ---")
+            sys.exit(0) # Exit after generating Markdown
+        except Exception as e:
+            logging.error(f"Error during JSON to Markdown conversion: {e}")
+            sys.exit(1)
+
+    # --- LLM-Based Fact Extraction Mode (Original Logic) ---
+    # These checks are now effectively duplicated by the parser.error above if to_markdown is not set, 
+    # but kept for clarity or if logic changes.
+    if not args.input_file or not args.output_file:
+        parser.error("-i/--input-file and -o/--output-file are required for LLM-based fact extraction (if not using -m).")
 
     # --- Prepare LLM call ---
     final_llm_prompt = prompt_template.format(input_json_string=aggregated_data_json_string)
@@ -180,6 +308,21 @@ def main():
         with open(args.output_file, 'w', encoding='utf-8') as f:
             json.dump(llm_output_data, f, indent=2) # Write the whole parsed object
         logging.info(f"Successfully wrote categorized fact briefing to {args.output_file}.")
+
+        # --- Also export Markdown if requested ---
+        if args.markdown_export_file and llm_output_data:
+            logging.info(f"Also exporting Markdown to: {args.markdown_export_file}")
+            try:
+                markdown_content = convert_briefing_to_markdown(llm_output_data)
+                args.markdown_export_file.parent.mkdir(parents=True, exist_ok=True)
+                with open(args.markdown_export_file, 'w', encoding='utf-8') as md_f:
+                    md_f.write(markdown_content)
+                logging.info(f"Successfully wrote Markdown export to {args.markdown_export_file}.")
+            except Exception as e_md: # Use a different exception variable name
+                logging.error(f"Error writing Markdown export to {args.markdown_export_file}: {e_md}")
+                # Decide if this should be a critical error or just a warning.
+                # For now, it's just a logged error, primary JSON output was successful.
+
     except Exception as e:
         logging.error(f"Error writing categorized fact briefing JSON to {args.output_file}: {e}")
         sys.exit(1)
