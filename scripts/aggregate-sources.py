@@ -27,6 +27,9 @@ AI_NEWS_ELIZAOS_DISCORD_MD_DIR = WORKSPACE_ROOT / "ai-news/elizaos/discord/md"
 AI_NEWS_ELIZAOS_DEV_JSON_DIR = WORKSPACE_ROOT / "ai-news/elizaos/dev/json"
 AI_NEWS_ELIZAOS_DEV_MD_DIR = WORKSPACE_ROOT / "ai-news/elizaos/dev/md"
 
+AI_NEWS_HYPERFY_JSON_DIR = WORKSPACE_ROOT / "ai-news/hyperfy/json"
+AI_NEWS_HYPERFY_MD_DIR = WORKSPACE_ROOT / "ai-news/hyperfy/md"
+
 GITHUB_SUMMARIES_DAY_DIR = WORKSPACE_ROOT / "github/summaries/day"
 GITHUB_SUMMARIES_WEEK_DIR = WORKSPACE_ROOT / "github/summaries/week"
 GITHUB_SUMMARIES_MONTH_DIR = WORKSPACE_ROOT / "github/summaries/month"
@@ -157,7 +160,7 @@ def get_specific_date_file_content(
     date_str = target_date.strftime("%Y-%m-%d")
     filename = f"{file_prefix}{date_str}{file_suffix}"
     file_path = directory / filename
-    return create_file_entry(file_path, is_json, key_name)
+    return create_file_entry(file_path)
 
 def get_latest_file_content(directory: Path) -> Dict[str, Any]:
     """Gets content for the most recent file (lexicographically) in a directory."""
@@ -216,7 +219,7 @@ def get_recent_files_content(
         key_name_for_output = f"{directory.name.lower().replace(' ','_')}_{date_str}"
 
 
-        entry = create_file_entry(file_path, is_json, key_name_for_output) # use key_name_for_output here
+        entry = create_file_entry(file_path)
         entries.update(entry) # create_file_entry returns a dict, so update
     return entries
 

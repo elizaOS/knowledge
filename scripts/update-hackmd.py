@@ -21,7 +21,7 @@ import glob
 TEAM_PATH = "elizaos"
 PROMPTS_DIR = Path("scripts/prompts")
 STATE_FILE = Path("book.json")
-DATA_DIR = Path("the-council")
+DATA_DIR = Path("the-council/aggregated")
 OUTPUT_DIR = Path("hackmd")
 BOOK_MAP_KEY = "__BOOK_INDEX__"
 LLM_MODEL = "anthropic/claude-3.7-sonnet"
@@ -185,6 +185,11 @@ def main():
         action="store_true",
         help="Increase output verbosity (DEBUG level)."
     )
+    parser.add_argument(
+        "-j", "--json",
+        action="store_true",
+        help="Export JSON files in addition to Markdown. Defaults to False."
+    )
     args = parser.parse_args()
 
     if args.verbose:
@@ -304,15 +309,12 @@ def main():
             continue
 
         prompt_title_case = ' '.join(word.capitalize() for word in prompt_name.split('-'))
+        # Simplified prompt instructions, removing evidence request
         prompt_instructions = (
             f"Generate content suitable for a '{prompt_title_case}' document for the date {latest_date_str}, "
             f"based on the provided aggregated data and the specific instructions in the template below.\\n\\n"
-            f"IMPORTANT: Your response MUST be structured into two parts:\\n"
-            f"1. The main content, as requested by the template. This should be directly usable as the body of a document.\\n"
-            f"2. A section explicitly titled '==SUPPORTING_EVIDENCE_START==' followed by key snippets from the 'Aggregated Data for {latest_date_str}' "
-            f"that directly support your generated main content. Each snippet should be clearly quoted or demarcated. "
-            f"End this section with '==SUPPORTING_EVIDENCE_END=='.\\n\\n"
-            f"Output *only* these two parts. Do not include any other preamble or explanation unless the template specifically asks for it within the main content part."
+            f"Output *only* the main content as requested by the template. Do not include any other preamble or explanation "
+            f"unless the template specifically asks for it within the main content part."
         )
         final_llm_prompt = f"{prompt_instructions}\\n\\n**Template Instructions:**\\n{prompt_template}\\n\\n**Aggregated Data for {latest_date_str}:**\\n```\\n{aggregated_content}\\n```"
 
@@ -328,6 +330,9 @@ def main():
             "X-Title": f"Content Generator ({prompt_title_case})" # Optional
         }
         
+        main_content_output = "" # Initialize
+        llm_data = None # Initialize
+
         try:
             response = requests.post(
                 "https://openrouter.ai/api/v1/chat/completions", 
@@ -337,54 +342,19 @@ def main():
             )
             response.raise_for_status() # Raise HTTPError for bad responses (4xx or 5xx)
             llm_data = response.json()
-            llm_content = llm_data.get("choices", [{}])[0].get("message", {}).get("content", "")
+            main_content_output = llm_data.get("choices", [{}])[0].get("message", {}).get("content", "").strip()
         except requests.exceptions.RequestException as e:
             logging.error(f"   ERROR: LLM API request failed: {e}")
             continue
         except Exception as e:
              logging.error(f"   ERROR: Failed processing LLM response: {e}")
              continue
-
-        # --- Parse LLM Content for Main and Evidence ---
-        main_content_output = ""
-        supporting_evidence_snippets = []
-        evidence_marker_start = "==SUPPORTING_EVIDENCE_START=="
-        evidence_marker_end = "==SUPPORTING_EVIDENCE_END=="
-
-        if llm_content:
-            logging.info("   LLM content generated. Parsing for main content and evidence...")
-            start_evidence_idx = llm_content.find(evidence_marker_start)
             
-            if start_evidence_idx != -1:
-                main_content_output = llm_content[:start_evidence_idx].strip()
-                evidence_block_start = start_evidence_idx + len(evidence_marker_start)
-                end_evidence_idx = llm_content.find(evidence_marker_end, evidence_block_start)
-                
-                if end_evidence_idx != -1:
-                    evidence_text = llm_content[evidence_block_start:end_evidence_idx].strip()
-                    # Simple split for now, assuming evidence snippets are separated by newlines or some delimiter.
-                    # This might need more sophisticated parsing based on LLM output.
-                    if evidence_text:
-                        supporting_evidence_snippets = [snippet.strip() for snippet in evidence_text.split("\\n") if snippet.strip()] 
-                    logging.info(f"   Extracted {len(supporting_evidence_snippets)} supporting evidence snippets.")
-                else:
-                    # Evidence start marker found, but no end marker. Treat everything after start as main content for now.
-                    main_content_output = llm_content.strip()
-                    logging.warning("   WARNING: Found 'SUPPORTING_EVIDENCE_START' but no 'SUPPORTING_EVIDENCE_END'. Treating all as main content.")
-            else:
-                # No evidence marker found, assume all is main content.
-                main_content_output = llm_content.strip()
-                logging.warning("   WARNING: 'SUPPORTING_EVIDENCE_START' marker not found in LLM output. Treating all as main content.")
-            
-            if not main_content_output:
-                 logging.error(f"   ERROR: Main content from LLM is empty for '{prompt_name}'. Skipping update.")
-                 logging.debug(f"   LLM Raw Response: {llm_data}")
-                 continue
-            logging.info("   LLM content parsed.")
-        else:
-            logging.error(f"   ERROR: Failed to generate any content from LLM for '{prompt_name}'. Skipping update.")
-            logging.debug(f"   LLM Raw Response: {llm_data}")
-            continue
+        if not main_content_output:
+             logging.error(f"   ERROR: Main content from LLM is empty for '{prompt_name}'. Skipping update.")
+             if llm_data: logging.debug(f"   LLM Raw Response: {llm_data}")
+             continue
+        logging.info("   LLM content generated and treated as main content.")
 
         # --- Save Generated Content Locally (Markdown and JSON) ---
         category_tag = prompt_to_category.get(prompt_name, "uncategorized")
@@ -402,23 +372,26 @@ def main():
              logging.error(f"   ERROR: Failed to save main content locally to {md_output_filename}: {e}")
              # Decide if we should continue to JSON if MD fails. For now, let's continue.
         
-        # Save JSON
-        json_output_filename = prompt_output_dir / f"{latest_date_str}.json"
-        json_data_to_save = {
-            "prompt_name": prompt_name,
-            "category": category_tag,
-            "date": latest_date_str,
-            "generated_text": main_content_output,
-            "source_references": supporting_evidence_snippets if supporting_evidence_snippets else [aggregated_content] # Fallback to full aggregated if no snippets
-        }
-        logging.info(f"   Saving structured data to {json_output_filename}...")
-        try:
-            with open(json_output_filename, 'w', encoding='utf-8') as f:
-                json.dump(json_data_to_save, f, indent=2)
-            logging.info("   Structured data saved locally to JSON.")
-        except Exception as e:
-            logging.error(f"   ERROR: Failed to save structured data locally to {json_output_filename}: {e}")
-            continue # Skip API update if critical local save fails
+        # Save JSON only if -j flag is present
+        if args.json:
+            json_output_filename = prompt_output_dir / f"{latest_date_str}.json"
+            json_data_to_save = {
+                "prompt_name": prompt_name,
+                "category": category_tag,
+                "date": latest_date_str,
+                "generated_text": main_content_output,
+                "source_references": [aggregated_content] # Fallback to full aggregated content
+            }
+            logging.info(f"   Saving structured data to {json_output_filename} (JSON export enabled)...")
+            try:
+                with open(json_output_filename, 'w', encoding='utf-8') as f:
+                    json.dump(json_data_to_save, f, indent=2)
+                logging.info("   Structured data saved locally to JSON.")
+            except Exception as e:
+                logging.error(f"   ERROR: Failed to save structured data locally to {json_output_filename}: {e}")
+                # Do not necessarily 'continue' here, as MD might have saved. User might want HackMD update.
+        else:
+            logging.info("   JSON export disabled. Skipping JSON file saving.")
 
         # --- Get Current HackMD Note Content ---
         logging.info(f"   Fetching current content for note {note_id}...")
