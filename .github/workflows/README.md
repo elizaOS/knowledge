@@ -2,57 +2,70 @@
 
 This directory contains GitHub Actions workflows used to automate various tasks for the `knowledge` repository.
 
-## Available Workflows
+## Workflow Overview
 
-### 1. Sync Knowledge Sources (`sync.yml`)
+This directory contains GitHub Actions workflows to automate various aspects of knowledge aggregation, processing, and synchronization for the elizaOS project.
 
--   **Purpose**: Regularly synchronizes knowledge from various external sources into this repository.
--   **Triggers**:
-    -   Scheduled: Daily at 4 AM UTC.
-    -   Manual: Can be triggered via `workflow_dispatch`.
--   **Sources Synced**:
-    -   ElizaOS Documentation (from `elizaOS/eliza` repository, `v2-develop` branch).
-    -   Daily Silk Documentation (from `madjin/daily-silk` repository).
-    -   GitHub Activity Logs (from `elizaos/elizaos.github.io` repository, `_data` branch).
-    -   AI News (ElizaOS & Hyperfy) (from `M3-org/ai-news` repository, `gh-pages` branch).
--   **Output**: Updates directories like `docs/`, `github/`, `daily-silk/`, `ai-news/`, and generates a `sync-report.md`.
--   **Robustness**: Individual sync steps are configured with `continue-on-error: true` to prevent one failure from stopping the entire workflow.
+### 1. `sync.yml`
 
-### 2. Generate Daily Council Context (`generate_council_context.yml`)
+*   **Name**: `Sync External Data Sources`
+*   **Trigger**: Daily at 01:00 UTC and on `workflow_dispatch` (manual trigger).
+*   **Purpose**: Synchronizes data from various external repositories and sources into the current repository. This includes:
+    *   Documentation from `elizaOS/eliza` (v2-develop branch) into `docs/core` and `docs/rest`.
+    *   Documentation from `madjin/daily-silk` into `daily-silk/docs`.
+    *   GitHub activity logs from `elizaos/elizaos.github.io` into `github/activity_logs`.
+    *   AI news content (`elizaos/` and `hyperfy/` folders) from the `gh-pages` branch of `M3-org/ai-news` into the local `ai-news/` directory.
+*   **Key Actions**: Uses `actions/checkout` and `rsync` for file synchronization. Includes `continue-on-error: true` for individual sync steps to enhance robustness. Generates a `sync-report.md`.
 
--   **Purpose**: Generates a daily context file for "The Council," likely using AI to process aggregated data.
--   **Triggers**:
-    -   Scheduled: Daily at 6 AM UTC (intended to run after `Sync Knowledge Sources`).
-    -   Manual: Can be triggered via `workflow_dispatch`.
--   **Process**:
-    1.  Runs `scripts/aggregate-sources.sh` to generate a daily aggregated data file (`the-council/YYYY-MM-DD.json`).
-    2.  Runs `scripts/generate_council_context.py` using the aggregated data and an AI model (via OpenRouter) to produce `the-council/council_context_YYYY-MM-DD.json`.
-    3.  Creates a permalink `the-council/council_daily.json`.
--   **Dependencies**: Requires `OPENROUTER_API_KEY` secret.
+### 2. `aggregate-daily-sources.yml` (Formerly `generate_daily_context.yml`)
 
-### 3. Generate Daily Context Map (`generate_daily_context.yml`)
+*   **Name**: `Aggregate Daily Sources`
+*   **Trigger**: Daily at 01:30 UTC and on `workflow_dispatch`.
+*   **Purpose**: Generates a comprehensive daily aggregated JSON context file.
+*   **Key Actions**:
+    *   Sets up Python.
+    *   Ensures `scripts/aggregate-sources.py` is executable.
+    *   Runs `scripts/aggregate-sources.py` to collect data from various local paths (populated by `sync.yml` and other processes) and saves it to `the-council/aggregated/YYYY-MM-DD.json`.
+    *   Creates a permalink `the-council/aggregated/daily.json` pointing to the latest daily file.
+    *   Commits and pushes the generated JSON file and its permalink.
 
--   **Purpose**: Aggregates data from various sources within the repository into a daily context map. This map is likely used by other processes (e.g., `Generate Daily Council Context`).
--   **Triggers**:
-    -   Scheduled: Daily at 5 AM UTC.
-    -   Manual: Can be triggered via `workflow_dispatch`.
--   **Process**:
-    1.  Runs `scripts/aggregate-sources.sh`.
-    2.  Creates `the-council/YYYY-MM-DD.json`.
-    3.  Creates a permalink `the-council/daily.json`.
+### 3. `generate-council-briefing.yml` (Formerly `generate_council_context.yml`)
 
-### 4. Update HackMD Notes Weekly (`update_hackmd_notes.yml`)
+*   **Name**: `Generate Council Briefing`
+*   **Trigger**: Daily at 02:00 UTC and on `workflow_dispatch`.
+*   **Purpose**: Takes the aggregated daily context and generates a specialized briefing JSON output tailored for council review, using an LLM for synthesis.
+*   **Key Actions**:
+    *   Sets up Python.
+    *   Ensures `scripts/aggregate-sources.py` and `scripts/generate_council_context.py` are executable.
+    *   Runs `scripts/aggregate-sources.py` (as input for the council script, ensuring it has the latest aggregated data available if run independently or if there are intermediate changes).
+    *   Runs `scripts/generate_council_context.py`, which takes the output of `aggregate-sources.py` (e.g., `the-council/aggregated/YYYY-MM-DD.json`) and a strategic prompt, processes it with an LLM (via `OpenRouter API`), and saves the result to `the-council/council_briefing/YYYY-MM-DD.json`.
+    *   Creates a permalink `the-council/council_briefing/daily_council_context.json`.
+    *   Commits and pushes the generated council briefing and its permalink.
 
--   **Purpose**: Creates new HackMD notes (if needed) and updates existing ones weekly, then backs them up to the repository.
--   **Triggers**:
-    -   Scheduled: Every Friday at 6 PM UTC.
-    -   Manual: Can be triggered via `workflow_dispatch`.
--   **Process**:
-    1.  Installs Python, Node.js, and dependencies (`requests`, `@hackmd/hackmd-cli`).
-    2.  Runs `scripts/create-hackmd.py` to potentially create new notes on HackMD.
-    3.  Runs `scripts/update-hackmd.py` to update content on HackMD and potentially pull updates locally.
-    4.  Commits changes to `book.json` and files in `hackmd/**/*.md`.
--   **Dependencies**: Requires `HMD_API_ACCESS_TOKEN` and `OPENROUTER_API_KEY` secrets.
+### 4. `update_hackmd_notes.yml`
+
+*   **Name**: `Update HackMD Notes and Compile Show Context`
+*   **Trigger**: Daily at 02:30 UTC and on `workflow_dispatch`.
+*   **Purpose**: Updates HackMD notes by processing prompts, generates JSON backups. (The "Compile Show Context" part is pending review as the script changed).
+*   **Key Actions**:
+    *   Sets up Python.
+    *   Installs dependencies from `requirements.txt`.
+    *   Ensures `scripts/update-hackmd.py` is executable.
+    *   Runs `scripts/update-hackmd.py`: This script iterates through prompt files in `scripts/prompts/`, processes them with an LLM, and saves the output as both `.md` and structured `.json` files in the `hackmd/[category]/[prompt_name]/` directory structure. It also updates `book.json`.
+    *   (The step to run `scripts/compile_show_context.py` needs review as this script was renamed/deleted. The original intent was to compile JSON files from `hackmd/` processing into `ai-news-show-feed/YYYY-MM-DD.json`.)
+    *   Commits and pushes changes to `book.json`, `hackmd/**/*.md`, and `hackmd/**/*.json`. (The workflow also mentioned committing `backups/**/*.json` and `ai-news-show-feed/**/*.json` which implies these were outputs of the scripts run).
+    *   Includes `permissions: contents: write` to allow committing back to the repository.
+
+## Workflow Execution Order
+
+While some workflows can be run manually (`workflow_dispatch`), the scheduled daily runs are now staggered as follows:
+
+1.  **01:00 UTC**: `sync.yml` (Sync External Data Sources)
+2.  **01:30 UTC**: `aggregate-daily-sources.yml` (Aggregate Daily Sources)
+3.  **02:00 UTC**: `generate-council-briefing.yml` (Generate Council Briefing)
+4.  **02:30 UTC**: `update_hackmd_notes.yml` (Update HackMD Notes)
+
+This order ensures that data is first synced, then aggregated, then processed for council, and finally HackMD notes are updated based on the latest state.
 
 ## General Notes
 
