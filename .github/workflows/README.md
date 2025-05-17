@@ -15,7 +15,7 @@ This directory contains GitHub Actions workflows to automate various aspects of 
     *   Documentation from `madjin/daily-silk` into `daily-silk/docs`.
     *   GitHub activity logs from `elizaos/elizaos.github.io` into `github/activity_logs`.
     *   AI news content (`elizaos/` and `hyperfy/` folders) from the `gh-pages` branch of `M3-org/ai-news` into the local `ai-news/` directory.
-*   **Key Actions**: Uses `actions/checkout` and `rsync` for file synchronization. Includes `continue-on-error: true` for individual sync steps to enhance robustness. Generates a `sync-report.md`.
+*   **Key Actions**: Uses `actions/checkout` and `rsync` for file synchronization. Includes `continue-on-error: true` for individual sync steps to enhance robustness.
 
 ### 2. `aggregate-daily-sources.yml` (Formerly `generate_daily_context.yml`)
 

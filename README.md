@@ -2,6 +2,19 @@
 
 This repository serves as the central hub for aggregating, processing, and synthesizing knowledge for the elizaOS project. It employs a series of automated workflows and scripts to gather data from various sources, generate insights using LLMs, and disseminate information through different channels.
 
+**Quick Links to Explore Data:**
+
+- [Browse All Content via GitHub Pages Root](https://elizaos.github.io/knowledge/)
+- [Latest Aggregated Data (JSON)](https://elizaos.github.io/knowledge/the-council/aggregated/daily.json)
+- [Latest Council Briefing (JSON)](https://elizaos.github.io/knowledge/the-council/council_briefing/daily.json)
+- [Latest ElizaOS AI News Summary (JSON)](https://elizaos.github.io/knowledge/ai-news/elizaos/json/daily.json)
+- [Latest Extracted Facts (JSON - if available as daily.json)](https://elizaos.github.io/knowledge/the-council/facts/daily.json)
+- [Eliza Daily HackMD Book](https://hackmd.io/@xr/book)
+
+This repository serves as the central hub for aggregating, processing, and synthesizing knowledge for the elizaOS project. It employs a series of automated workflows and scripts to gather data from various sources, generate insights using LLMs, and disseminate information through different channels.
+
+---
+
 ## Core Data Pipeline & Automation
 
 The system follows a structured pipeline to transform raw data into actionable intelligence:
@@ -54,6 +67,7 @@ The system follows a structured pipeline to transform raw data into actionable i
     *   `the-council/aggregated/`: Contains daily raw aggregated data (`YYYY-MM-DD.json`) and a `daily.json` permalink. Output of `scripts/aggregate-sources.py`.
     *   `the-council/council_briefing/`: Contains daily strategic council briefings (`YYYY-MM-DD.json`) and a `daily.json` permalink. Output of `scripts/generate_council_context.py`.
     *   `the-council/extracted_facts/`: Contains daily extracted facts and insights (`YYYY-MM-DD.json`). Output of `scripts/extract_facts.py`.
+    *   `the-council/old/`: Contains older council-related files.
 *   `hackmd/`: Stores local backups of content generated for HackMD notes, organized by category and prompt name, in both Markdown and JSON formats.
 *   `ai-news/`: Contains synced data from the `M3-org/ai-news` repository.
 *   `github/`: Contains synced GitHub activity logs and summaries.
@@ -77,26 +91,62 @@ The repository is organized into several main directories, each containing infor
 
 ```
 .
-├── archive/            # Archived discussions (legacy, to be deprecated)
-├── docs/               # Documentation from elizaOS (from elizaOS/eliza repo)
-├──── news/             # Daily AI news summaries
-└──── partners/         # Information about elizaOS partners and integrations
-├──── static/packages/  # Documentation from elizaOS plugin ecosystem
-├── github/             # GitHub activity logs organized by day/week/month
+├── .github/            # GitHub Actions workflows and configurations
+│   └── workflows/
+├── ai-news/            # AI News summaries from M3-org/ai-news & other specific feeds
+│   ├── elizaos/        #   Summaries related to ElizaOS
+│   │   ├── dev/
+│   │   │   ├── json/
+│   │   │   └── md/
+│   │   ├── discord/
+│   │   │   ├── json/
+│   │   │   └── md/
+│   │   ├── json/       #   (General ElizaOS json, if any)
+│   │   └── md/         #   (General ElizaOS md, if any)
+│   ├── hyperfy/        #   Summaries related to Hyperfy
+│   │   ├── json/
+│   │   └── md/
+│   └── ...             #   (other specific ai-news feeds or top-level files)
+├── archive/            # Archived discussions and older data (legacy)
+│   ├── daily-elizaos/
+│   └── ...
 ├── daily-silk/         # Daily AI news from Discord channel using SILK
-├── ai-news/            # AI News summaries from M3-org/ai-news
-├──── elizaos/          # Summaries related to ElizaOS
-└──── hyperfy/          # Summaries related to Hyperfy
-├── scripts/            # Scripts for managing repository content
-├──── prompts/          # Prompt templates for generating HackMD notes
-├────── comms/          #   Communication-related prompts
-├────── dev/            #   Development-related prompts
-└────── strategy/       #   Strategy-related prompts
-├── hackmd/             # Local backups of generated HackMD content
-├──── comms/            #   Mirrors prompts/comms structure
-├──── dev/              #   Mirrors prompts/dev structure
-└──── strategy/         #   Mirrors prompts/strategy structure
-└── book.json           # State file mapping prompts to HackMD note IDs
+├── docs/               # Documentation, blogs, community notes, and versioned docs
+│   ├── blog/
+│   ├── community/
+│   ├── docs/           #   Core documentation (CLI, Core, REST)
+│   ├── news/           #   (Potentially older news, distinct from ai-news)
+│   ├── packages/
+│   ├── partners/
+│   ├── src/            #   (Source for Docusaurus if applicable)
+│   └── versioned_docs/
+├── github/             # GitHub activity logs and generated summaries/stats
+│   ├── stats/
+│   │   ├── day/
+│   │   ├── week/
+│   │   └── month/
+│   └── summaries/
+│       ├── day/
+│       ├── week/
+│       └── month/
+├── hackmd/             # Local backups of generated HackMD content & specific notes
+│   ├── comms/
+│   ├── council/
+│   ├── dev/
+│   ├── facts/          #   Markdown exports of extracted facts
+│   └── strategy/
+├── scripts/            # Scripts for managing repository content & LLM interactions
+│   ├── prompts/        #   Prompt templates for generating HackMD notes & other tasks
+│   │   ├── comms/
+│   │   ├── dev/
+│   │   └── strategy/
+│   └── special-prompts/
+├── the-council/        # Aggregated data, council briefings, and extracted facts
+│   ├── aggregated/     #   Daily raw aggregated data (YYYY-MM-DD.json)
+│   ├── council_briefing/ # Daily strategic council briefings (YYYY-MM-DD.json)
+│   └── facts/          #   Daily extracted facts (JSON) (YYYY-MM-DD.json)
+├── book.json           # State file for HackMD notes (IDs, prompts, strategies)
+├── README.md           # This file
 ```
 
 ## Data Sources
