@@ -22,7 +22,6 @@ The system follows a structured pipeline to transform raw data into actionable i
 1.  **External Data Ingestion (`.github/workflows/sync.yml`)**:
     *   This workflow runs daily to synchronize data from external repositories and sources. This includes documentation from `elizaOS/eliza` and `madjin/daily-silk`, GitHub activity logs from `elizaos/elizaos.github.io`, and AI news from `M3-org/ai-news`.
     *   Raw synced data is stored in directories like `docs/`, `daily-silk/`, `github/`, and `ai-news/`.
-    *   A `sync-report.md` is generated.
 
 2.  **Daily Context Aggregation (`.github/workflows/generate_daily_context.yml`)**:
     *   This workflow runs `scripts/aggregate-sources.py` daily.

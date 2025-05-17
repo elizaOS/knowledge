@@ -1,0 +1,82 @@
+name: Deploy Knowledge Repo to GitHub Pages
+
+on:
+  push:
+    branches:
+      - main # Or your primary development branch
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  deploy-to-gh-pages:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Checkout main branch content
+        uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - name: Prepare Staging Directory
+        run: |
+          mkdir -p ./gh-pages-staging
+          echo "GitHub Pages staging directory created: ./gh-pages-staging"
+
+      - name: Populate Staging Directory
+        run: |
+          echo "Populating staging directory with specified content..."
+          
+          # Define top-level content directories to include in GitHub Pages
+          # Add or remove from this list as needed.
+          content_dirs=(
+            "ai-news"
+            "archive"
+            "daily-silk"
+            "docs"
+            "github"
+            "hackmd"
+            "the-council"
+          )
+
+          for dir_name in "${content_dirs[@]}"; do
+            if [ -d "$dir_name" ]; then
+              echo "Copying $dir_name to staging..."
+              cp -R "$dir_name" "./gh-pages-staging/$dir_name"
+            else
+              echo "Directory $dir_name not found, skipping."
+            fi
+          done
+          
+          # Ensure .nojekyll file is present in the staging root to prevent Jekyll processing.
+          # Create one if it doesn't exist in the repository root.
+          if [ -f .nojekyll ]; then 
+            cp .nojekyll ./gh-pages-staging/
+            echo "Copied existing .nojekyll to staging root."
+          else
+            touch ./gh-pages-staging/.nojekyll 
+            echo "Created .nojekyll in staging root as it was not found in repository root."
+          fi
+          echo "Staging directory populated."
+
+      - name: Generate Root Directory Listing for Staging Area
+        uses: jayanta525/github-pages-directory-listing@v4.0.0
+        with:
+          FOLDER: ./gh-pages-staging # Generate index for the root of the staging area
+
+      - name: Setup Pages Artifact
+        uses: actions/configure-pages@v4
+
+      - name: Upload Pages Artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: './gh-pages-staging'
+          
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4 
