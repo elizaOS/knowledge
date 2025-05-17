@@ -4,13 +4,13 @@ This repository serves as the central hub for aggregating, processing, and synth
 
 **Quick Links to Explore Data:**
 
-- [Browse All Content via GitHub Pages Root](https://elizaos.github.io/knowledge/)
-- [Latest Aggregated Data (JSON)](https://elizaos.github.io/knowledge/the-council/aggregated/daily.json)
-- [Latest Council Briefing (JSON)](https://elizaos.github.io/knowledge/the-council/council_briefing/daily.json)
-- [Latest ElizaOS AI News Summary (JSON)](https://elizaos.github.io/knowledge/ai-news/elizaos/json/daily.json)
-- [Latest Extracted Facts (JSON - if available as daily.json)](https://elizaos.github.io/knowledge/the-council/facts/daily.json)
-- [Eliza Daily HackMD Book](https://hackmd.io/@xr/book)
-- [Eliza.how Docs llms-full.txt](https://eliza.how/llms-full.txt)
+- Browse all content via GitHub Pages root: https://elizaos.github.io/knowledge/
+- Latest aggregated data (JSON): https://elizaos.github.io/knowledge/the-council/aggregated/daily.json
+- Latest council briefing (JSON): https://elizaos.github.io/knowledge/the-council/council_briefing/daily.json
+- Latest ElizaOS AI news summary (JSON): https://elizaos.github.io/knowledge/ai-news/elizaos/json/daily.json
+- Latest extracted facts (JSON, if available as daily.json): https://elizaos.github.io/knowledge/the-council/facts/daily.json
+- Eliza Daily HackMD Book: https://hackmd.io/@xr/book
+- Eliza.how docs (llms-full.txt): https://eliza.how/llms-full.txt
 
 This repository serves as the central hub for aggregating, processing, and synthesizing knowledge for the elizaOS project. It employs a series of automated workflows and scripts to gather data from various sources, generate insights using LLMs, and disseminate information through different channels.
 
