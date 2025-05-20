@@ -16,6 +16,7 @@ from pathlib import Path
 import requests
 import time
 import glob
+import re
 
 # --- Configuration ---
 TEAM_PATH = "elizaos"
@@ -31,6 +32,45 @@ API_BASE_URL = "https://api.hackmd.io/v1"
 logging.basicConfig(level=logging.INFO, format='[%(asctime)s] - %(levelname)s - %(message)s', datefmt='%Y-%m-%d %H:%M:%S')
 
 # --- Helper Functions ---
+
+def get_latest_md_file(markdown_files: list[Path]) -> Path | None:
+    """
+    Determines the latest markdown file to upload.
+    Prioritizes YYYY-MM-DD.md files, then specific filenames (daily.md, etc.),
+    then falls back to most recently modified.
+    """
+    if not markdown_files:
+        return None
+
+    date_pattern = re.compile(r"^\\d{4}-\\d{2}-\\d{2}$")
+    dated_files = []
+    other_files = []
+
+    for f in markdown_files:
+        if date_pattern.match(f.stem):
+            dated_files.append(f)
+        else:
+            other_files.append(f)
+
+    if dated_files:
+        # If YYYY-MM-DD.md files exist, pick the latest among them by stem
+        logging.debug(f"   Found dated files: {dated_files}. Picking max by stem.")
+        return max(dated_files, key=lambda p: p.stem)
+    elif other_files:
+        # If no YYYY-MM-DD.md files, but other .md files exist
+        # Prioritize 'daily.md', then 'index.md', then 'README.md' if they exist
+        preferred_filenames = ["daily.md", "index.md", "README.md"]
+        for preferred_name in preferred_filenames:
+            for f_other in other_files:
+                if f_other.name == preferred_name:
+                    logging.info(f"   No YYYY-MM-DD files found. Using preferred file: {f_other}")
+                    return f_other
+        
+        # If no preferred files, fallback to most recently modified of the 'other' files
+        logging.info(f"   No YYYY-MM-DD or preferred files (daily.md, etc.) found. Using most recently modified of remaining files: {other_files}")
+        return max(other_files, key=lambda p: p.stat().st_mtime)
+    
+    return None # Should not be reached if markdown_files is not empty initially
 
 def get_api_token() -> str:
     """Retrieves the HackMD API token from environment variables."""
@@ -266,8 +306,11 @@ def process_direct_file_uploads(state: dict, latest_date_str: str, team_path: st
                 logging.info(f"   INFO: No markdown files (*.md) found in '{source_dir}' for '{link_text}'. Skipping update.")
                 continue
 
-            # Use date in filename stem for sorting, not modification time
-            latest_md_file = max(markdown_files, key=lambda p: p.stem)
+            latest_md_file = get_latest_md_file(markdown_files)
+            if not latest_md_file:
+                logging.warning(f"   WARNING: Could not determine latest file from non-empty list for '{link_text}' in '{source_dir}'. Skipping.")
+                continue
+            
             logging.info(f"   Found latest file to upload: {latest_md_file}")
 
             try:
@@ -628,8 +671,11 @@ def main():
                     logging.info(f"   INFO: No markdown files (*.md) found in '{source_dir}' for '{prompt_name}'. Skipping update.")
                     continue
 
-                # Use date in filename stem for sorting, not modification time
-                latest_md_file = max(markdown_files, key=lambda p: p.stem)
+                latest_md_file = get_latest_md_file(markdown_files)
+                if not latest_md_file:
+                    logging.warning(f"   WARNING: Could not determine latest file from non-empty list for '{prompt_name}' in '{source_dir}'. Skipping.")
+                    continue
+                
                 logging.info(f"   Found latest file to upload: {latest_md_file}")
 
                 try:
