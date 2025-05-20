@@ -1,72 +1,70 @@
-# Daily Report - 2025-05-18
+# Daily Report - 2025-05-19
 
 ## Twitter Activity
 
-### The Council - AI Governance System
-- @dankvr introduced "THE COUNCIL," a new AI governance system described as "Consensus Oracle Units Network"
-- The system features AI agents trained on organizational data (GitHub, Discord, X) representing different archetypes (users, builders, traders)
-- The project has open-source data pipelines already built, avatars created, and a 3D rendering pipeline via Playcanvas that can generate episodes in about 20 seconds
-- @dankvr is working on webhooks for community voting on discussion topics and plans to make it a weekly show, starting with elizaOS/ai16z and later Optimism
-- @shawmakesmagic added that all data created in the elizaOS ecosystem will feed into these agents, which will be embodied in both 2D and 3D formats
-- @shawmakesmagic emphasized this will "completely reinvent what a DAO is" with "AI at the center, humans at the edges"
-- Sources: https://twitter.com/dankvr/status/1923913122236023094, https://twitter.com/dankvr/status/1924225596927656146, https://twitter.com/shawmakesmagic/status/1923918220349571216, https://twitter.com/elizaOS/status/1923918220349571216, https://twitter.com/dankvr/status/1924215633304051728, https://twitter.com/shawmakesmagic/status/1924215633304051728, https://twitter.com/dankvr/status/1924222014090310112, https://twitter.com/shawmakesmagic/status/1924230033633399207, https://twitter.com/dankvr/status/1920321451514618255, https://twitter.com/shawmakesmagic/status/1924240192925544507
+### AI Development and Innovation
+- @baoskee tweeted about upcoming releases for 'ai16z' with 'acceleration incoming', which was retweeted by @shawmakesmagic and quoted by @elizaOS with an eye emoji
+- @dankvr expressed optimism with 'Things are lining up for AI summer' accompanied by a video
+- @SpartanVersus noted that 'AI meta isn't dead. just evolving past the low hanging fruit,' which was retweeted by @shawmakesmagic
+- @shawmakesmagic recommended 'The AI news show' as 'a nice roundup of everything happening in our world'
+- @grmchn4ai shared technical experiments with AI video generation using 'Wan2.1 Kijai version VICE 14B' to improve animation smoothness, which was retweeted by @shawmakesmagic
+- Sources: https://twitter.com/baoskee/status/1924292327184728528, https://twitter.com/dankvr/status/1924542190711107840, https://twitter.com/elizaOS/status/1924606219668300109, https://twitter.com/SpartanVersus/status/1924319795241197971, https://twitter.com/shawmakesmagic/status/1924334123772158292, https://twitter.com/grmchn4ai/status/1924068050279825915, https://twitter.com/grmchn4ai/status/1923544829017063602
 
-### Open Source AI Tools and Development
-- @dankvr shared his work on open-source AI tools for community management, highlighting Discord summarization AI prompts
-- @dankvr offered help setting up the tool and mentioned potential flat fee support
-- @shawmakesmagic asked about open-source agent frameworks under active development besides Eliza
-- @shawmakesmagic announced he's looking for a Python developer to create a Hyperfy agent starter kit with voice capabilities
-- The goal is to enable anyone to build Hyperfy agents in Python using Langchain or raw Python for an upcoming agent PVP challenge
-- @elizaOS tweeted that "Plugins go beyond integrations. They define how agents reason, recall, and act"
-- @shawmakesmagic mentioned that "elizaOS 1.0 is coming out of beta soon"
-- Sources: https://twitter.com/dankvr/status/1924121890622202212, https://twitter.com/dankvr/status/1917432629617369586, https://twitter.com/dankvr/status/1924122773976141885, https://twitter.com/gdb/status/1923541152508281329, https://twitter.com/shawmakesmagic/status/1923926764985758019, https://twitter.com/shawmakesmagic/status/1923944003612889354, https://twitter.com/shawmakesmagic/status/1923950279223083427, https://twitter.com/Web3WithMark/status/1923949795879813468, https://twitter.com/elizaOS/status/1924172132130627720, https://twitter.com/shawmakesmagic/status/1923942253325623417
+### Blockchain and Web3 Developments
+- @chainlink announced that token developers can now enable Solana support for cross-chain transfers using CCIP through the Cross-Chain Token standard, with launch partners including @elizaOS and @graphprotocol
+- @dankvr shared observations about the Solana DAO ecosystem from an EVM perspective, noting governance tools like Realms and delegation capabilities
+- @dankvr mentioned "having AI agents managing a treasury" and that "constraints breed creativity"
+- @IQ6900_ demonstrated at Solana Conference how blockchains can host websites, games, and large files without restrictive cost, which was retweeted by @shawmakesmagic
+- @0xNairolf expressed frustration about being forced to connect wallets before exploring apps, which was retweeted by @shawmakesmagic
+- Sources: https://twitter.com/chainlink/status/1924435187808575623, https://twitter.com/dankvr/status/1924276551014621419, https://twitter.com/dankvr/status/1924276932876673181, https://twitter.com/dankvr/status/1924280504645300515, https://twitter.com/IQ6900_/status/1924530433624031313, https://twitter.com/0xNairolf/status/1924422028767162704
 
-### elizaOS Development and Integration
-- @0rdlibrary shared a post about entering dev mode with @elizaOS CLI and @hyperfy_io
-- @elizaOS made several posts including "output held. no trigger needed," "nothing lost in transit," and a sun emoji in response to a Chainlink post
-- @elizaOS emphasized that "Plugins go beyond integrations. They define how agents reason, recall, and act"
-- @shawmakesmagic stated that "The metaverse will be created by AI, full of AI stuff and populated by AI agents"
-- @shawmakesmagic shared that he was doing some "Sunday Chill Dev"
-- @shawmakesmagic clarified that "v2 is dead. It's 1.0 now. elizaOS 1.0 is coming out of beta soon"
-- Sources: https://twitter.com/0rdlibrary/status/1924197004156060066, https://twitter.com/elizaOS/status/1924043031730442488, https://twitter.com/elizaOS/status/1924087071892726070, https://twitter.com/elizaOS/status/1924163550827700721, https://twitter.com/chainlink/status/1924163073805582801, https://twitter.com/elizaOS/status/1924172132130627720, https://twitter.com/shawmakesmagic/status/1923937891224338936, https://twitter.com/shawmakesmagic/status/1923942253325623417, https://twitter.com/shawmakesmagic/status/1924186244122075440
+### Virtual Worlds and AI Agents
+- @shawmakesmagic announced plans to create an AI agent world built on Hyperfy, an open source 3D world engine, inviting others to join the project
+- @shawmakesmagic mentioned plans for a future hackathon and competition, which was retweeted by @dankvr
+- @elizaOS shared brief updates with 'still here. still better. (￣ー￣)ゞ' and 'memory outlasts attention'
+- Sources: https://twitter.com/shawmakesmagic/status/1924609411320053834, https://twitter.com/elizaOS/status/1924381260073345069, https://twitter.com/elizaOS/status/1924456004999393428
 
-### AI and DAOs Innovation
-- @dankvr shared his experience from "6 years of DAOs" and explained he's building something different for ai16z holders
-- He described features including automated news, game shows for investments/partnerships, and an AI council mimicking a board room
-- @dankvr referenced @VitalikButerin's post about "humans as steering wheel and AI as the engine"
-- @shawmakesmagic expanded on the concept, stating that all organizational data feeds into AI-generated shows
-- @shawmakesmagic emphasized "Data is the new oil" and that they're "going to reinvent what a DAO is from the inside out with data, workflows and agents"
-- Sources: https://twitter.com/dankvr/status/1924215633304051728, https://twitter.com/dankvr/status/1920321451514618255, https://twitter.com/dankvr/status/1924222014090310112, https://twitter.com/shawmakesmagic/status/1924215633304051728, https://twitter.com/shawmakesmagic/status/1924230033633399207
+### Tech and Business Insights
+- @shawmakesmagic shared business philosophy, stating that revenue matters more than raising money or token value
+- @shawmakesmagic expressed skepticism about people pursuing programming solely for money
+- @Ekaeoq shared an image about 'vim vs. vscode discourse' showing someone switching to VSCode, which was retweeted by @shawmakesmagic
+- @maxhodak_ responded to a tweet about capitalism needing a logo with an image, which was retweeted by @shawmakesmagic
+- @mrexits shared a video about Steve Ballmer's enthusiasm for Microsoft, retweeted by @shawmakesmagic
+- Sources: https://twitter.com/shawmakesmagic/status/1924537015707771075, https://twitter.com/shawmakesmagic/status/1924544548229001344, https://twitter.com/Ekaeoq/status/1924539735680094706, https://twitter.com/maxhodak_/status/1924278743855448066, https://twitter.com/EricJorgenson/status/1924127517696266657, https://twitter.com/mrexits/status/1924141708822069401
 
-### Miscellaneous Tech Observations
-- @shawmakesmagic noted "You can hire a junior dev in a developing country for less than my cursor bill lol"
-- @shawmakesmagic commented on tip.md, calling it a "Cool idea" for developers to receive crypto tips via markdown buttons on GitHub READMEs
-- @BenjaminDEKR's tweet questioning whether John Carmack cares about sleep scores was retweeted by @shawmakesmagic
-- @dankvr retweeted a post by @zzznah celebrating the 10th anniversary of DeepDream
-- @shawmakesmagic commented on the Marathon plagiarism scandal, noting they could have avoided issues by using AI-generated textures
-- Sources: https://twitter.com/shawmakesmagic/status/1923900668802367650, https://twitter.com/shawmakesmagic/status/1923959099034677630, https://twitter.com/tipdotmd/status/1913624329692344723, https://twitter.com/BenjaminDEKR/status/1923928631811752193, https://twitter.com/personofswag/status/1923208772547178578, https://twitter.com/zzznah/status/1924001981447786898, https://twitter.com/KateVassGalerie/status/1920856648748298392, https://twitter.com/shawmakesmagic/status/1924237568113262775
-
-### Social Media Experiments
-- @shawmakesmagic shared that he's trying out a service called "superpeer.com" which he described as "a really cool product idea"
-- He initially joked about making "an agent that responds to the paid DMs $$$" but quickly clarified it was a joke
-- @shawmakesmagic made a cryptic post asking followers to "comment below with your UUIDs that you don't want me to use"
-- Sources: https://twitter.com/shawmakesmagic/status/1924162628928295232, https://twitter.com/0xY10_/status/1924160915064181124, https://twitter.com/shawmakesmagic/status/1924180691987959939, https://twitter.com/shawmakesmagic/status/1924182104990212222, https://twitter.com/shawmakesmagic/status/1924148734692376851
+### AI-Generated Content
+- @TonyLapidus shared an AI-generated video imagining '@lexfridman interviewed @MikeTyson', which was retweeted by @shawmakesmagic
+- @shawmakesmagic mentioned 'Sunday Chill Dev' in a separate tweet
+- Sources: https://twitter.com/TonyLapidus/status/1924164492826460606, https://twitter.com/shawmakesmagic/status/1924334426953076800
 
 ## Completed Items
-- Several pull requests were completed in the elizaOS/eliza repository, including addressing Issue 451 (PR #4575), updating documentation (PR #4586), and implementing a feature to return the ID of newly created agents in the API (PR #4634)
-- CI/CD improvements were made with the implementation of an automatic documentation deployer (PR #4631) and a subsequent fix to the docs deployment workflow (PR #4640)
-- New features were added including a CLI command for development (PR #4618), a missing plugin failure test (PR #4643), and functionality to allow world selection in the message API (PR #4637)
-- Sources: https://github.com/elizaOS/eliza/pull/4575, https://github.com/elizaOS/eliza/pull/4586, https://github.com/elizaOS/eliza/pull/4634, https://github.com/elizaOS/eliza/pull/4631, https://github.com/elizaOS/eliza/pull/4640, https://github.com/elizaOS/eliza/pull/4618, https://github.com/elizaOS/eliza/pull/4643, https://github.com/elizaOS/eliza/pull/4637
+
+- Several pull requests have been completed in the elizaOS/eliza repository:
+  - A work-in-progress Plugin-Jupiter Swap implementation (PR #4593)
+  - Code refactoring to clean up and optimize actions functions (PR #4633)
+  - A bugfix for chokidar watch usage (PR #4629)
+  - A fix for the agent start button to properly refetch agent status (PR #4642)
+  - A new feature to use registry (PR #4641)
+  - An update to elizaos as part of SpartanDev (PR #4648)
+  - Removal of PR title CI (PR #4644)
+- Sources: https://github.com/elizaOS/eliza/pull/4593, https://github.com/elizaOS/eliza/pull/4633, https://github.com/elizaOS/eliza/pull/4629, https://github.com/elizaOS/eliza/pull/4642, https://github.com/elizaOS/eliza/pull/4641, https://github.com/elizaOS/eliza/pull/4648, https://github.com/elizaOS/eliza/pull/4644
 
 ## GitHub Activity for elizaOS/eliza
-- Three pull requests have been submitted: PR #4635 by Samarthsinghal28 adds a Polygon Plugin, PR #4636 by HarshModi2005 merges an addpolygon resolution, and PR #4638 by wtfsayo introduces a deepsearch plugin (currently in draft status)
-- Sources: https://github.com/elizaOS/eliza/pull/4635, https://github.com/elizaOS/eliza/pull/4636, https://github.com/elizaOS/eliza/pull/4638
+
+- Four pull requests are currently open in the repository:
+  - PR #4648: "[SpartanDev] Update elizaos" submitted by odilitime
+  - PR #4646: "Eliza290/update docs readme and tests for all cli commands" submitted by yungalgo
+  - PR #4641: "feat: use registry" submitted by wtfsayo
+  - PR #4649: "chore(deps): bump the pip group across 1 directory with 3 updates" submitted by dependabot
+- Sources: https://github.com/elizaOS/eliza/pull/4648, https://github.com/elizaOS/eliza/pull/4646, https://github.com/elizaOS/eliza/pull/4641, https://github.com/elizaOS/eliza/pull/4649
 
 ## GitHub Summary
-- From May 18-19, 2025, the elizaos/eliza repository had 9 new pull requests with 8 of them merged
-- There were no new issues reported during this period
-- The repository had 13 active contributors working on it
+
+- From May 19-20, 2025, the elizaos/eliza repository had 5 new pull requests with 7 PRs merged
+- No new issues were reported during this period
+- The repository had 10 active contributors working on it
 - Sources: githubStatsSummary
 
 ## Misceleanous
+
 - The source provides information about the top contributors for the elizaOS/eliza GitHub repository
