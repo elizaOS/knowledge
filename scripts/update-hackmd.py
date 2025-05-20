@@ -266,7 +266,8 @@ def process_direct_file_uploads(state: dict, latest_date_str: str, team_path: st
                 logging.info(f"   INFO: No markdown files (*.md) found in '{source_dir}' for '{link_text}'. Skipping update.")
                 continue
 
-            latest_md_file = max(markdown_files, key=lambda p: p.stat().st_mtime)
+            # Use date in filename stem for sorting, not modification time
+            latest_md_file = max(markdown_files, key=lambda p: p.stem)
             logging.info(f"   Found latest file to upload: {latest_md_file}")
 
             try:
@@ -463,7 +464,7 @@ def main():
         if not json_files:
             logging.error(f"No YYYY-MM-DD.json files found in {DATA_DIR}.")
             sys.exit(1)
-        latest_data_file = max(json_files, key=lambda p: p.stat().st_mtime)
+        latest_data_file = max(json_files, key=lambda p: p.stem)
         latest_date_str = latest_data_file.stem
         logging.info(f"Using latest data file: {latest_data_file} (Date: {latest_date_str})")
 
@@ -627,7 +628,8 @@ def main():
                     logging.info(f"   INFO: No markdown files (*.md) found in '{source_dir}' for '{prompt_name}'. Skipping update.")
                     continue
 
-                latest_md_file = max(markdown_files, key=lambda p: p.stat().st_mtime)
+                # Use date in filename stem for sorting, not modification time
+                latest_md_file = max(markdown_files, key=lambda p: p.stem)
                 logging.info(f"   Found latest file to upload: {latest_md_file}")
 
                 try:
