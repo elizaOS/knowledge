@@ -229,8 +229,25 @@ for ((i=1; i<=page_count; i++)); do
   echo "  Converting section $i to image..."
   if command -v wkhtmltoimage &> /dev/null; then
     xvfb-run --auto-servernum --server-args="-screen 0 1024x768x24" wkhtmltoimage --quiet --quality 100 --width 800 --enable-local-file-access "$section_html" "$section_png_path"
-  elif command -v convert &> /dev/null; then # Fallback to ImageMagick (less ideal for HTML)
-    echo "    Using ImageMagick convert (may have formatting issues for complex HTML)"
+    if [ ! -f "$section_png_path" ] || [ ! -s "$section_png_path" ]; then # Check if file exists and is not empty
+      echo "Error: wkhtmltoimage failed to create a valid image for section $i ($section_png_path)"
+      # Attempting ImageMagick convert as a fallback
+      if command -v convert &> /dev/null; then
+        echo "    wkhtmltoimage failed. Attempting fallback using ImageMagick convert..."
+        convert -size 800x6000 xc:white -draw "text 0,0 '$(cat "$section_html" | tr -d '\n' | sed -e "s/'//g" -e 's/[\"\\"]//g')" -trim "$section_png_path"
+        if [ ! -f "$section_png_path" ] || [ ! -s "$section_png_path" ]; then
+          echo "Error: ImageMagick convert fallback also failed to create a valid image for section $i ($section_png_path)"
+          rm -rf "$TEMP_DIR"
+          exit 1
+        fi
+      else
+        echo "Error: ImageMagick convert not found for fallback."
+        rm -rf "$TEMP_DIR"
+        exit 1
+      fi
+    fi
+  elif command -v convert &> /dev/null; then # Fallback to ImageMagick (less ideal for HTML) if wkhtmltoimage not present at all
+    echo "    wkhtmltoimage not found. Using ImageMagick convert (may have formatting issues for complex HTML)"
     # This is a very basic conversion and might not render HTML well.
     # For better results with `convert`, one might need to use `html2ps` then `ps2png` or use a browser engine like puppeteer.
     # Forcing a large height to try and capture content, then trim.
