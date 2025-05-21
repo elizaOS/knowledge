@@ -40,7 +40,7 @@ jobs:
           HMD_API_ACCESS_TOKEN: ${{ secrets.HMD_API_ACCESS_TOKEN }}
 
         run: |
-          python scripts/create-hackmd.py --verbose
+          python scripts/create-hackmd.py
 
       - name: Update notes content and book index
         id: update_notes
@@ -49,7 +49,7 @@ jobs:
           OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
 
         run: |
-          python scripts/update-hackmd.py --verbose
+          python scripts/update-hackmd.py --json
 
       - name: Commit updated files
         uses: stefanzweifel/git-auto-commit-action@v5
