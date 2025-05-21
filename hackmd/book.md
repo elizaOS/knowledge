@@ -21,4 +21,3 @@
 
 ## Strategy
 - [Intel](https://hackmd.io/9Lxvc9fSQ7e6f_w1gQfuyA)
-- [Team Development](https://hackmd.io/DRm_5RAdQK68S3CKlz-gdw)
