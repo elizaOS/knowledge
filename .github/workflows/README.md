@@ -46,14 +46,17 @@ This directory contains GitHub Actions workflows to automate various aspects of 
 
 *   **Name**: `Update HackMD Notes`
 *   **Trigger**: Daily at 02:30 UTC and on `workflow_dispatch`.
-*   **Purpose**: Updates HackMD notes by processing prompts, generates JSON backups, and updates `book.json`.
+*   **Purpose**: Updates HackMD notes based on various configurations in `book.json`. This includes processing LLM prompts for some notes and syncing content from local source directories for others. It also generates local backups of LLM-generated content and updates `book.json` if new notes are created by helper scripts.
 *   **Key Actions**:
-    *   Sets up Python.
-    *   Installs dependencies from `requirements.txt`.
-    *   Ensures `scripts/update-hackmd.py` is executable.
-    *   Runs `scripts/update-hackmd.py`: This script iterates through prompt files in `scripts/prompts/`, processes them with an LLM, and saves the output as both `.md` and structured `.json` files in the `hackmd/[category]/[prompt_name]/` directory structure. It also updates `book.json`.
-    *   (The step to run `scripts/compile_show_context.py` needs review as this script was renamed/deleted. The original intent was to compile JSON files from `hackmd/` processing into `ai-news-show-feed/YYYY-MM-DD.json`.)
-    *   Commits and pushes changes to `book.json`, `hackmd/**/*.md`, and `hackmd/**/*.json`.
+    *   Sets up Python and Node.js.
+    *   Installs dependencies (e.g., `requests` for Python, `@hackmd/hackmd-cli` globally).
+    *   Ensures `scripts/update-hackmd.py` (and potentially `scripts/create-hackmd.py`) are executable.
+    *   Optionally runs `scripts/create-hackmd.py` to initialize new notes in `book.json` if needed (this step seems to primarily check existing mappings).
+    *   Runs `scripts/update-hackmd.py`:
+        *   **LLM Prompt Processing**: For notes configured with prompts (typically found in `scripts/prompts/`), it processes these with an LLM, updates the corresponding HackMD note via API, and saves the generated content locally as `.md` and structured `.json` files in the `hackmd/[category]/[prompt_name]/` directory structure.
+        *   **Direct Content Syncing**: For notes in `book.json` (including those under `CUSTOM_HEADER_LINKS`) that have a `source_directory` specified (e.g., `github/summaries/day/` or `ai-news/elizaos/md/`), the script reads the latest/relevant markdown file directly from that local `source_directory` and updates the content of the corresponding HackMD note via API using the title specified in `book.json` (e.g., `hackmd_note_title`). These source files are *not* copied into the `hackmd/` Git directory by this script.
+        *   **Book Index Update**: Updates the main HackMD book index note (`__BOOK_INDEX__` in `book.json`) with links to all managed notes.
+    *   Commits and pushes changes to `book.json` (if modified by `create-hackmd.py`) and any files created or changed within the `hackmd/**/*.md` and `hackmd/**/*.json` paths (primarily the local backups of LLM-generated content).
     *   Includes `permissions: contents: write` to allow committing back to the repository.
 
 ### 5. `extract_daily_facts.yml`
