@@ -228,7 +228,7 @@ for ((i=1; i<=page_count; i++)); do
   # Convert HTML to image
   echo "  Converting section $i to image..."
   if command -v wkhtmltoimage &> /dev/null; then
-    wkhtmltoimage --quiet --quality 100 --width 800 --enable-local-file-access "$section_html" "$section_png_path"
+    xvfb-run --auto-servernum --server-args="-screen 0 1024x768x24" wkhtmltoimage --quiet --quality 100 --width 800 --enable-local-file-access "$section_html" "$section_png_path"
   elif command -v convert &> /dev/null; then # Fallback to ImageMagick (less ideal for HTML)
     echo "    Using ImageMagick convert (may have formatting issues for complex HTML)"
     # This is a very basic conversion and might not render HTML well.
