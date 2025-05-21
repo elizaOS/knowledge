@@ -150,11 +150,13 @@ def main():
         logging.info("No posters were generated in this run.")
         # For GitHub Actions output
         if os.getenv('GITHUB_ACTIONS') == 'true':
-            print(f"::set-output name=posters_generated::false")
+            with open(os.environ['GITHUB_OUTPUT'], 'a') as f:
+                f.write("posters_generated=false\n")
     else:
         logging.info(f"Total posters generated/updated (including permalinks): {generated_posters_count}")
         if os.getenv('GITHUB_ACTIONS') == 'true':
-            print(f"::set-output name=posters_generated::true")
+            with open(os.environ['GITHUB_OUTPUT'], 'a') as f:
+                f.write("posters_generated=true\n")
 
 if __name__ == "__main__":
     main() 
