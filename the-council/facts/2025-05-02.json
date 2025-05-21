@@ -1,28 +1,45 @@
 {
   "briefing_date": "2025-05-02",
-  "overall_summary": "ElizaOS is preparing for a v2 release with multi-agent capabilities expected in the coming weeks, while Auto.fun platform is showing strong activity with new token launches, though users have reported verification and UI issues.",
+  "overall_summary": "Auto.fun platform launched SteamBot Wille by Tapestry AI with concerns about verification checkmarks enabling snipers, while elizaOS development shows significant GitHub activity with plugin system restructuring and Twitter timeline integration.",
   "categories": {
     "twitter_news_highlights": [
       {
-        "claim": "Shaw announced that ElizaOS v2 with multi-agent capabilities will be wrapped up in the next couple of weeks.",
-        "source_keys": [
-          "ai_news.elizaos.discord_md_last_3_days.content"
+        "claim": "ElizaOS version 2 (referred to as \"1.0.0beta\") is described as a \"finished product with useful working agents\" that's being tested internally.",
+        "source": [
+          "ai_news_elizaos_discord_md_2025-04-30.content"
         ],
         "sentiment": "positive"
       },
       {
-        "claim": "ElizaOS released a Next.js starter as the 'easiest fastest way to get going with Eliza in a full-stack project' with Postgres/Supabase support for permanent storage.",
-        "source_keys": [
-          "ai_news.elizaos.daily_elizaos_md.content"
+        "claim": "Auto.fun platform has processed over $100M in volume since launch, demonstrating significant traction despite experiencing technical issues including a memory leak causing slow loading times.",
+        "source": [
+          "ai_news_elizaos_discord_md_2025-04-30.content"
         ],
         "sentiment": "positive"
       },
       {
-        "claim": "Auto.fun launched SteamBot Willie by Tapestry AI, which scours public domain and CC0 works for creators, with tokenomics that reward holders.",
-        "source_keys": [
-          "ai_news.elizaos.daily_elizaos_md.content"
+        "claim": "SteamBot Wille built by Tapestry AI was launched on the auto.fun platform, creating a tool that \"scours public domain and CC0 works, giving creators a fresh goldmine of stories, characters, and art.\"",
+        "source": [
+          "ai_news_elizaos_daily_json_2025-05-01.content.categories[0].content[2].text",
+          "ai_news_elizaos_discord_md_2025-05-01.content"
         ],
         "sentiment": "positive"
+      },
+      {
+        "claim": "@shawmakesmagic shared an example of Eliza's chat-with-your-docs feature running on their new runtime and announced a Next.js starter as the \"easiest fastest way to get going with Eliza in a full-stack project.\"",
+        "source": [
+          "ai_news_elizaos_daily_json_2025-05-01.content.categories[0].content[0].text",
+          "ai_news_elizaos_daily_md_2025-05-01.content"
+        ],
+        "sentiment": "positive"
+      },
+      {
+        "claim": "@shawmakesmagic shared insights about AI agent protocols, admitting \"MCP is an agent to agent protocol\" invented by OpenAI 2 years ago, but expressing concerns this paradigm \"will lead to lots of credential theft.\"",
+        "source": [
+          "ai_news_elizaos_daily_json_2025-05-01.content.categories[0].content[3].text",
+          "ai_news_elizaos_daily_md_2025-05-01.content"
+        ],
+        "sentiment": "mixed"
       }
     ],
     "github_updates": {
@@ -34,16 +51,16 @@
           "url": "https://github.com/elizaOS/eliza/issues/4418",
           "status": "open",
           "author": "Kirstygoodary",
-          "significance": "Users are encountering errors with the OpenAI integration for text embedding functionality"
+          "significance": "Critical functionality issue with text embedding that affects core RAG capabilities"
         },
         {
           "item_type": "issue",
-          "title": "RAG processFile function attempts to embed entire files",
-          "number": 3745,
-          "url": "https://github.com/elizaOS/eliza/issues/3745",
+          "title": "Job: looking for a developer with Eliza framework experience",
+          "number": 4432,
+          "url": "https://github.com/elizaOS/eliza/issues/4432",
           "status": "open",
-          "author": "omikolaj",
-          "significance": "Large document processing is causing errors in the Retrieval Augmented Generation functionality"
+          "author": "TheDeveloperTom",
+          "significance": "Indicates growing demand for Eliza framework expertise in the job market"
         },
         {
           "item_type": "pull_request",
@@ -52,7 +69,16 @@
           "url": "https://github.com/elizaOS/eliza/pull/4429",
           "status": "merged",
           "author": "tcm390",
-          "significance": "Added new Twitter timeline functionality for bot interactions, which is now optional and can be enabled via configuration"
+          "significance": "Major feature addition enabling Twitter timeline functionality for bots"
+        },
+        {
+          "item_type": "pull_request",
+          "title": "feat: extend openai plugin to support custom embedding endpoint",
+          "number": 4421,
+          "url": "https://github.com/elizaOS/eliza/pull/4421",
+          "status": "merged",
+          "author": null,
+          "significance": "Enhanced flexibility for embedding models by allowing custom endpoints"
         },
         {
           "item_type": "pull_request",
@@ -60,17 +86,31 @@
           "number": 4420,
           "url": "https://github.com/elizaOS/eliza/pull/4420",
           "status": "merged",
-          "author": "wtfsayo",
-          "significance": "Added API key authentication with a dialog for unauthorized users, enhancing security"
+          "author": null,
+          "significance": "Improved security and user experience for API authentication"
         }
       ],
       "overall_focus": [
         {
-          "claim": "The development team is focusing on plugin architecture improvements, removing outdated plugins from the monorepo, adding database management features, and enhancing social media integration, particularly for Twitter.",
-          "source_keys": [
-            "ai_news.elizaos.daily_elizaos_json.content.categories[3].content[0].text",
-            "ai_news.elizaos.daily_elizaos_md.content",
-            "github.summaries.daily.content"
+          "claim": "Focus on plugin system restructuring, with several plugins being removed from the monorepo (storage-s3, browser, anthropic, ollama, groq, venice) to streamline the project and enable plugin sharing between v0.x and v1.x.",
+          "source": [
+            "ai_news_elizaos_daily_json_2025-05-01.content.categories[1].text",
+            "ai_news_elizaos_daily_md_2025-05-01.content",
+            "github_summaries_month_latest_2025-05-01.content"
+          ]
+        },
+        {
+          "claim": "Significant improvements to Twitter integration with a new timeline module for handling Twitter bot interactions and fixing template issues.",
+          "source": [
+            "ai_news_elizaos_daily_json_2025-05-01.content.categories[1].text",
+            "github_summaries_daily_2025-05-02.content"
+          ]
+        },
+        {
+          "claim": "Enhanced database management with implementation of unique PGLite folder generation when not provided, improving project isolation.",
+          "source": [
+            "ai_news_elizaos_daily_json_2025-05-01.content.categories[1].text",
+            "github_summaries_daily_2025-05-02.content"
           ]
         }
       ]
@@ -78,165 +118,192 @@
     "discord_updates": [
       {
         "channel": "#discussion",
-        "summary": "Users discussed cryptocurrency aspects, hardware wallets (Ledger and Keystone), and the Auto.fun launchpad functionality compared to competitors like Virtuals. Feedback indicated Auto.fun's launchpad lacks features found in competitors and needs a clearer roadmap.",
+        "summary": "Users discussed Auto.fun launchpad functionality compared to competitors like Virtuals, with feedback that it lacks features. Questions about DegenAI roadmap were raised, with unclear technical details. Hardware wallet (Ledger and Keystone) support and investment strategies were also topics of conversation.",
         "key_participants": [
           "mariocandia",
           "Kenk",
           "Osint",
-          "basje01"
+          "Ric Q",
+          "DorianD"
         ],
-        "source_keys": [
-          "ai_news.elizaos.daily_discord_json.content.categories[0].summary"
+        "source": [
+          "ai_news_elizaos_daily_discord_json_2025-05-01.content.categories[0].summary",
+          "ai_news_elizaos_discord_md_2025-05-01.content"
         ]
       },
       {
         "channel": "#\ud83d\udcbb-coders",
-        "summary": "Technical issues with Eliza OS were discussed, including problems with agent knowledge functionality, TEXT_EMBEDDING errors, large repo sizes, and the need for plugin enhancements. Users shared debugging information and sought assistance with various implementation challenges.",
+        "summary": "Technical discussions about agent knowledge functionality issues, TEXT_EMBEDDING delegate type errors, optimizing Eliza repo size (3.32GB), and improvements to bm25 in package/core. Users also sought advice on processing received interactions without interrupting original workflow.",
         "key_participants": [
           "techcomthanh",
           "Kgood",
           "Mohit",
           "mtbc",
           "morlok",
-          "DorianD",
           "Stan"
         ],
-        "source_keys": [
-          "ai_news.elizaos.daily_discord_json.content.categories[1].summary"
+        "source": [
+          "ai_news_elizaos_daily_discord_json_2025-05-01.content.categories[1].summary",
+          "ai_news_elizaos_discord_md_2025-05-01.content"
         ]
       },
       {
         "channel": "#fun",
-        "summary": "Discussions focused on token launches on Auto.fun, particularly SteamBot Willie by Tapestry AI. Users identified issues with the verification process where checkmarks added before public announcement create opportunities for snipers to purchase tokens before the general community.",
+        "summary": "Token launch of \"SteamBot Wille by Tapestry AI\" on auto.fun platform with discussion about verification process issues. Users identified that verification checkmarks added before public announcement create opportunities for snipers to detect and buy tokens early, suggesting checkmarks should only be added after tokens are publicly posted.",
         "key_participants": [
-          "Crispy",
+          "Tocheee",
           "frank_grimes_sr",
-          "Arceon",
-          "ben",
-          "Xyness",
           "Borko",
+          "Xyness",
+          "ben",
           "ryanthelad"
         ],
-        "source_keys": [
-          "ai_news.elizaos.daily_discord_json.content.categories[3].summary"
+        "source": [
+          "ai_news_elizaos_daily_discord_json_2025-05-01.content.categories[3].summary",
+          "ai_news_elizaos_discord_md_2025-05-01.content"
         ]
       },
       {
-        "channel": "#\ud83d\udcac\uff5cgeneral (Dev)",
-        "summary": "Discussions clarified that both V2 and 0.25.x versions support RAG capabilities, with 1.x offering better unification compared to 0.x's separate components. The team is developing a feature to allow posting to X (Twitter) communities, with potential same-day release.",
+        "channel": "#fun-support",
+        "summary": "Users reported token migration issues with the auto.fun platform. One user couldn't sell their test token supply, another requested migration of a specific token they purchased on-chain. Both submitted issues through a Tally form for the engineering team to address.",
         "key_participants": [
-          "Odilitime",
-          "sayonara",
-          "dong",
-          "z1",
-          "Jon",
-          "jin"
+          "y4",
+          "Vaunted",
+          "Shaw",
+          "Kenk",
+          "MDMnvest"
         ],
-        "source_keys": [
-          "ai_news.elizaos.daily_dev_json.content.categories[0].summary"
+        "source": [
+          "ai_news_elizaos_daily_discord_json_2025-05-01.content.categories[4].summary",
+          "ai_news_elizaos_discord_md_2025-05-01.content"
+        ]
+      },
+      {
+        "channel": "#\ud83d\udcac\uff5cgeneral (elizaOS Development)",
+        "summary": "Discussion clarified that both V2 and 0.25.x versions support RAG functionality, with 1.x offering better unification compared to 0.x. Jin shared a GitHub activity visualization and progress on a daily dashboard, and a new feature allowing posting to X communities is reportedly in development.",
+        "key_participants": [
+          "dong",
+          "Odilitime",
+          "Jin",
+          "Jon"
+        ],
+        "source": [
+          "ai_news_elizaos_daily_dev_json_2025-05-01.content.categories[0].summary",
+          "ai_news_elizaos_daily_dev_md_2025-05-01.content"
+        ]
+      },
+      {
+        "channel": "#\ud83e\udd16\uff5cagent-dev-school (elizaOS Development)",
+        "summary": "Troubleshooting session for dependency issues between Eliza v1.0.0-beta.41 and the video understanding plugin, highlighting need for platform-specific documentation as Windows users require different commands than Unix-style commands.",
+        "key_participants": [
+          "paddlep0p",
+          "Ruby"
+        ],
+        "source": [
+          "ai_news_elizaos_daily_dev_json_2025-05-01.content.categories[1].summary",
+          "ai_news_elizaos_daily_dev_md_2025-05-01.content"
         ]
       }
     ],
     "user_feedback": [
       {
-        "feedback_summary": "Users reported issues with the installation process, model compatibility, and API integration in ElizaOS.",
-        "source_platform": "discord",
-        "source_keys": [
-          "ai_news.elizaos.discord_md_last_3_days.content"
+        "feedback_summary": "Users report verification checkmarks added to tokens before public announcement create opportunities for snipers, suggesting checkmarks should only be added after public posting.",
+        "source": [
+          "ai_news_elizaos_discord_md_2025-05-01.content",
+          "ai_news_elizaos_daily_discord_json_2025-05-01.content.categories[3].summary"
         ],
         "sentiment": "negative"
       },
       {
-        "feedback_summary": "Users highlighted RAM limitations when running local models, noting that LLAMA 3 8B requires 20+ GB of VRAM.",
-        "source_platform": "discord",
-        "source_keys": [
-          "ai_news.elizaos.discord_md_last_3_days.content"
+        "feedback_summary": "Auto.fun launchpad reportedly lacks features compared to competitors like Virtuals, with users requesting clearer roadmap and documentation.",
+        "source": [
+          "ai_news_elizaos_discord_md_2025-05-01.content",
+          "ai_news_elizaos_daily_discord_json_2025-05-01.content.categories[0].summary"
         ],
         "sentiment": "negative"
       },
       {
-        "feedback_summary": "Auto.fun platform users are experiencing problems with DexScreener not updating for some token launches, causing loss of momentum.",
-        "source_platform": "discord",
-        "source_keys": [
-          "ai_news.elizaos.discord_md_last_3_days.content"
+        "feedback_summary": "Multiple users reported token migration issues with the auto.fun platform, submitting problems through a Tally form for the team to address.",
+        "source": [
+          "ai_news_elizaos_discord_md_2025-05-01.content",
+          "ai_news_elizaos_daily_discord_json_2025-05-01.content.categories[4].summary"
         ],
         "sentiment": "negative"
       },
       {
-        "feedback_summary": "A user provided positive feedback about using OpenRouter's web search feature to enhance content for elizaOS partners.",
-        "source_platform": "discord",
-        "source_keys": [
-          "ai_news.elizaos.discord_md_last_3_days.content"
+        "feedback_summary": "Users were confused about Discord server roles, particularly the \"partner\" role which requires holding 1M DegenAI tokens or 100k AI16Z.",
+        "source": [
+          "ai_news_elizaos_discord_md_2025-05-01.content"
         ],
-        "sentiment": "positive"
+        "sentiment": "neutral"
       },
       {
-        "feedback_summary": "Users are requesting UI improvements for Auto.fun, particularly for mobile compatibility and verification badge visibility.",
-        "source_platform": "discord",
-        "source_keys": [
-          "ai_news.elizaos.daily_discord_md.content"
+        "feedback_summary": "Developer reported issues with TEXT_EMBEDDING delegate type despite adding the OpenAPI key, highlighting an important functionality bug.",
+        "source": [
+          "ai_news_elizaos_discord_md_2025-05-01.content",
+          "ai_news_elizaos_daily_discord_json_2025-05-01.content.categories[1].summary"
         ],
         "sentiment": "negative"
       }
     ],
     "strategic_insights": [
       {
-        "theme": "Consolidating brand identity under a single name",
-        "insight": "There are discussions about consolidating ai16z (token) and ElizaOS (platform) under a single name for better brand recognition, which could improve market positioning and user understanding.",
-        "supporting_evidence_keys": [
-          "ai_news.elizaos.discord_md_last_3_days.content"
-        ],
+        "theme": "Plugin Architecture Restructuring",
+        "insight": "The project is undergoing a significant architecture shift by removing multiple plugins from the monorepo in preparation for enabling plugin sharing between v0.x and v1.x versions, streamlining the codebase to focus on core functionality.",
         "implications_or_questions": [
-          "How would a unified branding strategy affect the current token holders?",
-          "What name would best represent both the token and the platform?"
+          "How will this restructuring affect third-party plugin developers?",
+          "Will this improve the maintainability and performance of the core system?"
         ]
       },
       {
-        "theme": "Community expansion through token launch platforms",
-        "insight": "Auto.fun is becoming a significant platform for token launches with projects like FightFi, SQUID, and now SteamBot Willie, demonstrating a strategic focus on expanding the ecosystem through third-party integrations.",
-        "supporting_evidence_keys": [
-          "ai_news.elizaos.discord_md_last_3_days.content",
-          "ai_news.elizaos.daily_elizaos_md.content"
-        ],
+        "theme": "Auto.fun Platform Growth vs. Technical Challenges",
+        "insight": "While Auto.fun has achieved impressive volume ($100M since launch), users are reporting verification issues, token migration problems, and missing competitor-equivalent features, indicating potential growing pains that could limit further adoption.",
         "implications_or_questions": [
-          "How can the verification system be improved to prevent sniping issues?",
-          "What criteria should be used for selecting partner projects?"
+          "Should development resources be prioritized toward fixing verification issues or adding competitive features?",
+          "Will these early technical issues impact Auto.fun's reputation long-term?"
         ]
       },
       {
-        "theme": "Emphasis on modularity in platform architecture",
-        "insight": "The significant effort to remove multiple plugins from the monorepo (including browser, storage-s3, local-ai, and others) indicates a strategic shift toward a more modular ecosystem, which could improve maintenance and extensibility.",
-        "supporting_evidence_keys": [
-          "github.summaries.daily.content",
-          "github.extracted_data.monthly_stats_text"
-        ],
+        "theme": "Eliza V2 Release Readiness",
+        "insight": "ElizaOS v2 (officially 1.0.0beta) is described as a \"finished product with useful working agents\" being tested internally, with significant GitHub activity showing preparations for a potential imminent release.",
         "implications_or_questions": [
-          "Will this modularization improve third-party developer adoption?",
-          "How will this affect backward compatibility?"
+          "What metrics will determine when V2 is ready for public release?",
+          "How will existing users be migrated or incentivized to upgrade?"
+        ]
+      },
+      {
+        "theme": "Twitter Integration Enhancement",
+        "insight": "Significant development focus on Twitter timeline functionality and fixing template issues suggests a strategic pivot toward stronger social media integration capabilities for ElizaOS agents.",
+        "implications_or_questions": [
+          "How will enhanced Twitter capabilities differentiate ElizaOS from competing agent frameworks?",
+          "Could this focus lead to partnerships with other social platforms?"
         ]
       }
     ],
     "market_analysis": [
       {
-        "observation": "Community members discussed ELI5 token price targets between $10-50 million market cap by the end of Q2, with some suggesting a more ambitious $30M target within a week.",
-        "source_keys": [
-          "ai_news.elizaos.discord_md_last_3_days.content"
+        "observation": "Auto.fun launchpad is being compared unfavorably to competitors like Virtuals, suggesting market competition in the token launchpad space with feature gaps to address.",
+        "source": [
+          "ai_news_elizaos_discord_md_2025-05-01.content",
+          "ai_news_elizaos_daily_discord_json_2025-05-01.content.categories[0].summary"
         ],
-        "relevance": "These price targets indicate significant market expectations for token performance, which could influence development priorities and marketing strategies."
+        "relevance": "Indicates competitive pressure that could impact adoption and market share if not addressed promptly."
       },
       {
-        "observation": "Bithumb exchange has listed ai16z, according to community member Avanc, which is described as Korea's second largest exchange.",
-        "source_keys": [
-          "ai_news.elizaos.discord_md_last_3_days.content"
+        "observation": "There's growing demand for developers with Eliza framework experience, as evidenced by a job posting seeking such expertise, suggesting industry recognition of the technology.",
+        "source": [
+          "ai_news_elizaos_daily_json_2025-05-01.content.categories[3].text",
+          "github_summaries_daily_2025-05-02.content"
         ],
-        "relevance": "Listing on a major Korean exchange could significantly expand the project's exposure to Asian markets and potentially increase liquidity."
+        "relevance": "Indicates commercial viability and potential ecosystem growth as more companies seek to implement ElizaOS-based solutions."
       },
       {
-        "observation": "There are discussions about potential centralized exchange (CEX) listings for Degenai, though such information is typically under NDAs.",
-        "source_keys": [
-          "ai_news.elizaos.discord_md_last_3_days.content"
+        "observation": "SteamBot Wille by Tapestry AI demonstrates a viable use case for AI in helping creators access public domain and CC0 works, with tokenomics that reward holders.",
+        "source": [
+          "ai_news_elizaos_daily_json_2025-05-01.content.categories[0].content[2].text",
+          "ai_news_elizaos_discord_md_2025-05-01.content"
         ],
-        "relevance": "CEX listings typically lead to increased visibility and liquidity, potentially affecting token valuation and adoption rates."
+        "relevance": "Shows potential business models emerging in the creative AI space that leverage tokenomics for sustainability."
       }
     ]
   }
