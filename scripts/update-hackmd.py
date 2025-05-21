@@ -36,41 +36,58 @@ logging.basicConfig(level=logging.INFO, format='[%(asctime)s] - %(levelname)s - 
 def get_latest_md_file(markdown_files: list[Path]) -> Path | None:
     """
     Determines the latest markdown file to upload.
-    Prioritizes YYYY-MM-DD.md files, then specific filenames (daily.md, etc.),
-    then falls back to most recently modified.
+    Prioritizes YYYY-MM-DD.md files (sorted by date in stem),
+    then specific preferred filenames (daily.md, etc.),
+    then falls back to most recently modified among any other .md files.
     """
     if not markdown_files:
         return None
 
-    date_pattern = re.compile(r"^\\d{4}-\\d{2}-\\d{2}$")
+    date_pattern = re.compile(r"^(\d{4}-\d{2}-\d{2})$") # Ensure pattern captures for sorting if needed, though direct stem sort is fine
+    
     dated_files = []
-    other_files = []
+    preferred_files_present = {}
+    other_md_files = []
 
     for f in markdown_files:
-        if date_pattern.match(f.stem):
+        logging.debug(f"   Checking file stem for date pattern: '{f.stem}' (Full name: '{f.name}')")
+        match = date_pattern.match(f.stem)
+        if match:
             dated_files.append(f)
         else:
-            other_files.append(f)
+            if f.name in ["daily.md", "index.md", "README.md"]:
+                preferred_files_present[f.name] = f
+            else:
+                other_md_files.append(f)
 
     if dated_files:
-        # If YYYY-MM-DD.md files exist, pick the latest among them by stem
-        logging.debug(f"   Found dated files: {dated_files}. Picking max by stem.")
-        return max(dated_files, key=lambda p: p.stem)
-    elif other_files:
-        # If no YYYY-MM-DD.md files, but other .md files exist
-        # Prioritize 'daily.md', then 'index.md', then 'README.md' if they exist
-        preferred_filenames = ["daily.md", "index.md", "README.md"]
-        for preferred_name in preferred_filenames:
-            for f_other in other_files:
-                if f_other.name == preferred_name:
-                    logging.info(f"   No YYYY-MM-DD files found. Using preferred file: {f_other}")
-                    return f_other
-        
-        # If no preferred files, fallback to most recently modified of the 'other' files
-        logging.info(f"   No YYYY-MM-DD or preferred files (daily.md, etc.) found. Using most recently modified of remaining files: {other_files}")
-        return max(other_files, key=lambda p: p.stat().st_mtime)
+        # If YYYY-MM-DD.md files exist, pick the latest among them by stem (lexicographical sort works for YYYY-MM-DD)
+        dated_files.sort(key=lambda p: p.stem, reverse=True)
+        latest_dated = dated_files[0]
+        logging.info(f"   Found dated files. Using latest by stem: {latest_dated}")
+        return latest_dated
     
-    return None # Should not be reached if markdown_files is not empty initially
+    # If no YYYY-MM-DD files, check for preferred files in order
+    for preferred_name in ["daily.md", "index.md", "README.md"]:
+        if preferred_name in preferred_files_present:
+            found_preferred = preferred_files_present[preferred_name]
+            logging.info(f"   No YYYY-MM-DD files found. Using preferred file: {found_preferred}")
+            return found_preferred
+        
+    # If no dated or preferred files, use the most recently modified of any other .md files
+    if other_md_files:
+        logging.info(f"   No YYYY-MM-DD or preferred files found. Using most recently modified of remaining files: {other_md_files}")
+        return max(other_md_files, key=lambda p: p.stat().st_mtime)
+    
+    # If the list was not empty but contained no .md files fitting any criteria (e.g. only empty list passed, or non-.md files)
+    # This case should ideally be prevented by glob("*.md")
+    if markdown_files: # If there were files, but none matched criteria above
+        logging.warning(f"   No suitable .md files found by prioritization. Fallback to overall most recent if any .md file exists.")
+        # As a last resort, if markdown_files wasn't empty but logic above found nothing (e.g. only non-md files filtered somehow by caller)
+        # this ensures we pick *something* if the list given to us had at least one .md file. Glob should prevent this.
+        return max(markdown_files, key=lambda p: p.stat().st_mtime) if markdown_files else None
+
+    return None
 
 def get_api_token() -> str:
     """Retrieves the HackMD API token from environment variables."""
