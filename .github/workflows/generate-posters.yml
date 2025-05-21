@@ -135,9 +135,8 @@ jobs:
               PERMALINK_POSTER_PATH="${POSTER_OUTPUT_DIR}/${PERMALINK_POSTER_FILENAME}"
               
               echo "   Generating poster: $OUTPUT_POSTER_PATH"
-              OUTPUT_BASE_FOR_SCRIPT="${POSTER_OUTPUT_DIR}/$(basename "$OUTPUT_POSTER_PATH" .png)"
 
-              if ./scripts/posters.sh "$LATEST_MD_FILE" "$OUTPUT_BASE_FOR_SCRIPT"; then
+              if ./scripts/posters.sh "$LATEST_MD_FILE" "$OUTPUT_POSTER_PATH"; then
                 if [ -f "$OUTPUT_POSTER_PATH" ] && [ -s "$OUTPUT_POSTER_PATH" ]; then
                   echo "   Successfully generated poster: $OUTPUT_POSTER_PATH"
                   generated_posters_count=$((generated_posters_count + 1))
