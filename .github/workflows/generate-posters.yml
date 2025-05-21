@@ -1,0 +1,220 @@
+name: Generate Content Posters
+
+on:
+  schedule:
+    # Runs daily, adjust timing as needed, e.g., after content generation
+    - cron: '0 4 * * *' # Example: 4 AM UTC
+  workflow_dispatch: # Allows manual triggering
+
+jobs:
+  generate-posters:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write # To commit posters back to the repo
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Ensure all files are available for finding the latest
+
+      - name: Install poster generation dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y pandoc wkhtmltopdf imagemagick libopenjp2-7 gifsicle
+
+      - name: Set execute permission for poster script
+        run: chmod +x scripts/posters.sh
+
+      - name: Generate Posters from Latest Markdown Files
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # For poster.sh if it interacts with GitHub API (e.g., for private images) - may not be needed
+        run: |
+          import os
+          import re
+          from pathlib import Path
+          import shutil
+          import subprocess
+          import logging
+
+          # Setup logging
+          logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+
+          # --- Helper function to find the latest markdown file (adapted from update-hackmd.py) ---
+          def get_latest_md_file(markdown_files: list[Path]) -> Path | None:
+              if not markdown_files:
+                  return None
+              date_pattern = re.compile(r"^(\\d{4}-\\d{2}-\\d{2})$")
+              dated_files = []
+              preferred_files_present = {}
+              other_md_files = []
+
+              for f in markdown_files:
+                  logging.debug(f"   Checking file stem for date pattern: '{f.stem}' (Full name: '{f.name}')")
+                  match = date_pattern.match(f.stem)
+                  if match:
+                      dated_files.append(f)
+                  else:
+                      if f.name in ["daily.md", "index.md", "README.md"]:
+                          preferred_files_present[f.name] = f
+                      else:
+                          other_md_files.append(f)
+              
+              if dated_files:
+                  dated_files.sort(key=lambda p: p.stem, reverse=True)
+                  latest_dated = dated_files[0]
+                  logging.info(f"   Found dated files. Using latest by stem: {latest_dated}")
+                  return latest_dated
+              
+              for preferred_name in ["daily.md", "index.md", "README.md"]:
+                  if preferred_name in preferred_files_present:
+                      found_preferred = preferred_files_present[preferred_name]
+                      logging.info(f"   No YYYY-MM-DD files found. Using preferred file: {found_preferred}")
+                      return found_preferred
+              
+              if other_md_files:
+                  logging.info(f"   No YYYY-MM-DD or preferred files found. Using most recently modified of remaining files: {other_md_files}")
+                  return max(other_md_files, key=lambda p: p.stat().st_mtime)
+              
+              if markdown_files:
+                  logging.warning(f"   No suitable .md files found by prioritization. Fallback to overall most recent if any .md file exists.")
+                  return max(markdown_files, key=lambda p: p.stat().st_mtime) if markdown_files else None
+              return None
+
+          # --- Configuration for poster generation ---
+          POSTER_OUTPUT_DIR = Path("posters")
+          POSTER_OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
+
+          # Define source directories and their corresponding output poster base names
+          # Adjusted hackmd to be more specific if possible, or a general catch-all later
+          source_map = {
+              "ai-news/elizaos/md/": "ainews-elizaos",
+              "ai-news/elizaos/dev/md/": "ainews-elizaos-dev",
+              "ai-news/elizaos/discord/md/": "ainews-elizaos-discord",
+              "github/summaries/day/": "github-summaries-day",
+              "github/summaries/week/": "github-summaries-week",
+              "github/summaries/month/": "github-summaries-month",
+              "daily-silk/": "daily-silk",
+              "hackmd/council/": "hackmd-council-briefing",
+              "hackmd/facts/": "hackmd-facts-briefing",
+              "hackmd/comms/discord-announcement/": "hackmd-comms-discord-announcement",
+              "hackmd/comms/elizaos-tweets/": "hackmd-comms-elizaos-tweets",
+              "hackmd/comms/user-feedback/": "hackmd-comms-user-feedback",
+              "hackmd/comms/weekly-newsletter/": "hackmd-comms-weekly-newsletter",
+              "hackmd/dev/developer-update/": "hackmd-dev-developer-update",
+              "hackmd/dev/issue-triage/": "hackmd-dev-issue-triage",
+              "hackmd/strategy/intel/": "hackmd-strategy-intel",
+              "hackmd/strategy/team-development/": "hackmd-strategy-team-development",
+          }
+
+          generated_posters = []
+
+          for src_dir_str, out_base_name in source_map.items():
+              src_dir = Path(src_dir_str)
+              logging.info(f"Processing directory: {src_dir}")
+              if not src_dir.is_dir():
+                  logging.warning(f"Source directory {src_dir} not found. Skipping.")
+                  continue
+
+              markdown_files = list(src_dir.glob("*.md"))
+              if not markdown_files:
+                  logging.info(f"No markdown files found in {src_dir}. Skipping.")
+                  continue
+
+              latest_md_file = get_latest_md_file(markdown_files)
+
+              if latest_md_file:
+                  logging.info(f"Latest markdown file for {src_dir_str}: {latest_md_file}")
+                  
+                  # Determine output PNG name based on the original MD file's stem if it's dated, otherwise use out_base_name
+                  # Or always use out_base_name + date from file? Let's use out_base_name + original md stem.
+                  # This might lead to posters/github-summaries-day-2025-05-20.png
+                  # For permalink, we can use out_base_name.png
+                  
+                  dated_name_part = latest_md_file.stem # e.g., "2025-05-20" or "daily"
+                  
+                  # Ensure out_base_name doesn't accidentally include path separators if src_dir_str is complex
+                  clean_out_base_name = out_base_name.replace("/", "-")
+
+                  # Include the stem of the source MD file in the poster name for uniqueness if desired,
+                  # or just use a generic daily.
+                  # For the dated output, let's use the stem:
+                  # output_poster_name = f"{clean_out_base_name}-{dated_name_part}.png"
+                  # For simplicity and consistency with your request for posters/github-summaries-day.png:
+                  
+                  # The final unique poster will be named based on the source markdown file's stem.
+                  # e.g. posters/github-summaries-day-from-2025-05-20.png
+                  # And a permalink: posters/github-summaries-day.png
+                  
+                  # Let's refine the naming to be clear:
+                  # Output poster specific to the content date/name
+                  specific_poster_filename = f"{clean_out_base_name}-content-{latest_md_file.stem}.png"
+                  output_poster_path = POSTER_OUTPUT_DIR / specific_poster_filename
+
+                  # Permalink poster name (generic for the source type)
+                  permalink_poster_filename = f"{clean_out_base_name}.png"
+                  permalink_poster_path = POSTER_OUTPUT_DIR / permalink_poster_filename
+                  
+                  logging.info(f"Generating poster: {output_poster_path}")
+                  
+                  # Ensure the input path to posters.sh is correctly quoted if it contains spaces
+                  # The script posters.sh expects: posters.sh <markdown_file> <output_png_file_WITHOUT_EXTENSION>
+                  # So we pass the directory and the base name for the output.
+                  
+                  # posters.sh will append .png to the output base name.
+                  output_base_for_script = POSTER_OUTPUT_DIR / Path(output_poster_path).stem
+
+                  cmd = ["./scripts/posters.sh", str(latest_md_file), str(output_base_for_script)]
+                  
+                  try:
+                      subprocess.run(cmd, check=True, capture_output=True, text=True)
+                      logging.info(f"Successfully generated poster: {output_poster_path}")
+                      generated_posters.append(str(output_poster_path))
+                      
+                      # Create the permalink by copying
+                      if output_poster_path.exists():
+                          shutil.copy(output_poster_path, permalink_poster_path)
+                          logging.info(f"Created permalink: {permalink_poster_path}")
+                          generated_posters.append(str(permalink_poster_path))
+                      else:
+                          logging.error(f"Poster {output_poster_path} was not created, cannot make permalink.")
+                          
+                  except subprocess.CalledProcessError as e:
+                      logging.error(f"Error generating poster for {latest_md_file}:")
+                      logging.error(f"Command: {' '.join(cmd)}")
+                      logging.error(f"Stdout: {e.stdout}")
+                      logging.error(f"Stderr: {e.stderr}")
+              else:
+                  logging.info(f"No suitable markdown file found in {src_dir} after filtering. Skipping poster generation.")
+          
+          # Handling the hackmd/**/** case separately for more flexibility if needed,
+          # or integrate above if a clear mapping from subfolder to poster name can be made.
+          # For now, the source_map covers specific hackmd subfolders.
+          # A more generic hackmd/**/** might require different naming logic or grouping.
+
+          if not generated_posters:
+              logging.info("No posters were generated in this run.")
+              # Set an output for the next step to check if there's anything to commit
+              print(f"::set-output name=posters_generated::false")
+          else:
+              logging.info(f"Generated/updated posters: {generated_posters}")
+              print(f"::set-output name=posters_generated::true")
+
+      - name: Commit and Push Posters
+        # Only run if posters were generated
+        if: steps.generate-posters.outputs.posters_generated == 'true'
+        run: |
+          git config --global user.name 'GitHub Actions Bot'
+          git config --global user.email 'actions@github.com'
+          git pull # Ensure local branch is up-to-date before committing
+          
+          # Add all .png files in the posters directory
+          git add posters/**/*.png
+          
+          # Check for changes
+          if ! git diff --staged --quiet; then
+            git commit -m "Automated: Update content posters $(date +%Y-%m-%d)"
+            git push
+          else
+            echo "No changes to poster files to commit."
+          fi 
