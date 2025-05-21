@@ -13,41 +13,60 @@ logging.basicConfig(level=os.getenv('LOG_LEVEL', 'INFO').upper(), format='%(asct
 def get_latest_md_file(markdown_files: list[Path]) -> Path | None:
     if not markdown_files:
         return None
-    date_pattern = re.compile(r"^(\\d{4}-\\d{2}-\\d{2})$")
+    
+    # Regex for YYYY-MM-DD stems
+    date_pattern = re.compile(r"^\\d{4}-\\d{2}-\\d{2}$")
+    
     dated_files = []
-    preferred_files_present = {}
+    daily_file = None
+    index_file = None
+    readme_file = None
     other_md_files = []
 
     for f in markdown_files:
-        logging.debug(f"   Checking file stem for date pattern: '{f.stem}' (Full name: '{f.name}')")
-        match = date_pattern.match(f.stem)
-        if match:
+        stem = f.stem
+        name = f.name
+        logging.debug(f"   Checking file: '{name}' with stem: '{stem}'")
+
+        if date_pattern.match(stem):
+            logging.debug(f"     Matched date pattern: {f}")
             dated_files.append(f)
+        elif name == "daily.md":
+            daily_file = f
+        elif name == "index.md":
+            index_file = f
+        elif name == "README.md":
+            readme_file = f
         else:
-            if f.name in ["daily.md", "index.md", "README.md"]:
-                preferred_files_present[f.name] = f
-            else:
-                other_md_files.append(f)
-    
+            other_md_files.append(f)
+
     if dated_files:
         dated_files.sort(key=lambda p: p.stem, reverse=True)
-        latest_dated = dated_files[0]
-        logging.info(f"   Found dated files. Using latest by stem: {latest_dated}")
-        return latest_dated
+        latest_selected = dated_files[0]
+        logging.info(f"   Prioritizing dated files. Selected: {latest_selected}")
+        return latest_selected
     
-    for preferred_name in ["daily.md", "index.md", "README.md"]:
-        if preferred_name in preferred_files_present:
-            found_preferred = preferred_files_present[preferred_name]
-            logging.info(f"   No YYYY-MM-DD files found. Using preferred file: {found_preferred}")
-            return found_preferred
+    if daily_file:
+        logging.info(f"   No dated files. Using preferred: {daily_file}")
+        return daily_file
     
+    if index_file:
+        logging.info(f"   No dated or daily.md. Using preferred: {index_file}")
+        return index_file
+        
+    if readme_file:
+        logging.info(f"   No dated, daily.md, or index.md. Using preferred: {readme_file}")
+        return readme_file
+
     if other_md_files:
-        logging.info(f"   No YYYY-MM-DD or preferred files found. Using most recently modified of remaining files: {other_md_files}")
+        logging.info(f"   No dated or specific preferred files found. Using most recently modified from other .md files: {other_md_files}")
         return max(other_md_files, key=lambda p: p.stat().st_mtime)
-    
-    if markdown_files: # Should only be hit if markdown_files had items but none matched above criteria
-        logging.warning(f"   No suitable .md files found by prioritization. Fallback to overall most recent if any .md file exists.")
+        
+    if markdown_files: 
+        logging.warning(f"   No files matched specific criteria. Fallback to most recent in original list: {markdown_files}")
         return max(markdown_files, key=lambda p: p.stat().st_mtime)
+
+    logging.warning("   No markdown files found or list was empty.")
     return None
 
 def main():
@@ -79,7 +98,6 @@ def main():
     generated_posters_count = 0
 
     for src_dir_str, out_base_name in source_map.items():
-        # Resolve source directory relative to the main repo root (parent of SCRIPT_DIR)
         src_dir = SCRIPT_DIR.parent / src_dir_str
         logging.info(f"Processing directory: {src_dir}")
         if not src_dir.is_dir():
@@ -97,63 +115,52 @@ def main():
             logging.info(f"Latest markdown file for {src_dir_str}: {latest_md_file}")
             clean_out_base_name = out_base_name.replace("/", "-")
             
-            # Poster based on the content of the latest markdown file
             specific_poster_filename = f"{clean_out_base_name}-content-{latest_md_file.stem}.png"
             output_poster_path = POSTER_OUTPUT_DIR / specific_poster_filename
 
-            # Permalink poster (generic for the source type)
             permalink_poster_filename = f"{clean_out_base_name}.png"
             permalink_poster_path = POSTER_OUTPUT_DIR / permalink_poster_filename
             
             logging.info(f"Generating poster: {output_poster_path}")
             
-            # posters.sh expects the output path *without* the .png extension
             output_base_for_script = POSTER_OUTPUT_DIR / Path(output_poster_path).stem
+            actual_poster_script_path = SCRIPT_DIR / "posters.sh"
+            cmd = [str(actual_poster_script_path), str(latest_md_file), str(output_base_for_script)]
 
-            cmd = [str(SCRIPT_DIR / "posters.sh"), str(latest_md_file), str(output_base_for_script)]
-            
             try:
-                # In GitHub Actions, an absolute path to posters.sh might be more reliable
-                # For local testing, SCRIPT_DIR / "posters.sh" is fine.
-                # The workflow sets chmod +x scripts/posters.sh, so ./scripts/posters.sh should work.
-                # The python script is in scripts/ so relative path would be ./posters.sh
-                cmd = ["./posters.sh", str(latest_md_file), str(output_base_for_script)] 
-                # Assuming posters.sh is in the same directory as this script, or adjust path if not.
-                # If generate_all_posters.py is in scripts/, and posters.sh is also in scripts/ then: 
-                # cmd = [str(SCRIPT_DIR / "posters.sh"), str(latest_md_file), str(output_base_for_script)] is correct.
-                # If posters.sh is at root, then: 
-                # cmd = [str(SCRIPT_DIR.parent / "posters.sh"), str(latest_md_file), str(output_base_for_script)]
-                # Workflow calls scripts/posters.sh so that implies scripts/ is current dir for it.
-                # When python scripts/generate_all_posters.py is run from root, SCRIPT_DIR / "posters.sh" is correct.
-                actual_poster_script_path = SCRIPT_DIR / "posters.sh"
-                cmd = [str(actual_poster_script_path), str(latest_md_file), str(output_base_for_script)]
-
-                subprocess.run(cmd, check=True, capture_output=True, text=True)
-                logging.info(f"Successfully generated poster: {output_poster_path}")
-                generated_posters_count += 1
-                
-                if output_poster_path.exists():
-                    shutil.copy(output_poster_path, permalink_poster_path)
-                    logging.info(f"Created permalink: {permalink_poster_path}")
+                process = subprocess.run(cmd, check=False, capture_output=True, text=True) # Changed check to False
+                if process.returncode == 0:
+                    logging.info(f"Successfully generated poster: {output_poster_path}")
+                    generated_posters_count += 1
+                    if output_poster_path.exists():
+                        shutil.copy(output_poster_path, permalink_poster_path)
+                        logging.info(f"Created permalink: {permalink_poster_path}")
+                    else:
+                        # This case implies posters.sh exited 0 but didn't create the file, which is odd.
+                        logging.error(f"Poster {output_poster_path} was reported as generated by posters.sh (exit 0) but not found. Cannot make permalink.")
                 else:
-                    logging.error(f"Poster {output_poster_path} was not created, cannot make permalink.")
+                    # posters.sh exited with an error
+                    logging.error(f"Error generating poster for {latest_md_file} (posters.sh exited {process.returncode}):")
+                    logging.error(f"Command: {' '.join(cmd)}")
+                    if process.stdout:
+                        logging.error(f"Stdout: {process.stdout}")
+                    if process.stderr:
+                        logging.error(f"Stderr: {process.stderr}")
                         
-            except subprocess.CalledProcessError as e:
-                logging.error(f"Error generating poster for {latest_md_file}:")
-                logging.error(f"Command: {' '.join(e.cmd)}") # Use e.cmd for exact command
-                logging.error(f"Stdout: {e.stdout}")
-                logging.error(f"Stderr: {e.stderr}")
+            except Exception as e: # Catch other exceptions like file not found for posters.sh itself
+                logging.error(f"Exception while trying to run posters.sh for {latest_md_file}:")
+                logging.error(f"Command: {' '.join(cmd)}")
+                logging.error(str(e))
         else:
             logging.info(f"No suitable markdown file found in {src_dir} after filtering. Skipping poster generation.")
     
     if generated_posters_count == 0:
         logging.info("No posters were generated in this run.")
-        # For GitHub Actions output
         if os.getenv('GITHUB_ACTIONS') == 'true':
             with open(os.environ['GITHUB_OUTPUT'], 'a') as f:
                 f.write("posters_generated=false\n")
     else:
-        logging.info(f"Total posters generated/updated (including permalinks): {generated_posters_count}")
+        logging.info(f"Total posters successfully created (specific versions): {generated_posters_count}")
         if os.getenv('GITHUB_ACTIONS') == 'true':
             with open(os.environ['GITHUB_OUTPUT'], 'a') as f:
                 f.write("posters_generated=true\n")
