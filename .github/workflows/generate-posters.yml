@@ -16,19 +16,22 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0 # Ensure all files are available for finding the latest
+          fetch-depth: 0
 
       - name: Install poster generation dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y pandoc wkhtmltopdf imagemagick libopenjp2-7 gifsicle
+          sudo apt-get install -y pandoc wkhtmltopdf imagemagick libopenjp2-7 gifsicle xvfb
+
+      - name: Verify wkhtmltoimage installation
+        run: command -v wkhtmltoimage && wkhtmltoimage --version
 
       - name: Set execute permission for poster script
         run: chmod +x scripts/posters.sh
 
       - name: Generate Posters from Latest Markdown Files
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # For poster.sh if it interacts with GitHub API (e.g., for private images) - may not be needed
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           import os
           import re
