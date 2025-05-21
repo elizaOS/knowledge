@@ -126,24 +126,24 @@ jobs:
             if [ -n "$LATEST_MD_FILE" ]; then
               echo "   Selected markdown file for $SRC_DIR: $LATEST_MD_FILE"
               CLEAN_OUT_BASE_NAME=$(echo "$OUT_BASE_NAME" | sed 's|/|-|g')
-              MD_FILE_STEM=$(basename "$LATEST_MD_FILE" .md)
+              # MD_FILE_STEM=$(basename "$LATEST_MD_FILE" .md) # No longer needed for specific dated filename
 
-              SPECIFIC_POSTER_FILENAME="${CLEAN_OUT_BASE_NAME}-content-${MD_FILE_STEM}.png"
-              OUTPUT_POSTER_PATH="${POSTER_OUTPUT_DIR}/${SPECIFIC_POSTER_FILENAME}"
+              # SPECIFIC_POSTER_FILENAME="${CLEAN_OUT_BASE_NAME}-content-${MD_FILE_STEM}.png" # Removed
+              # OUTPUT_POSTER_PATH="${POSTER_OUTPUT_DIR}/${SPECIFIC_POSTER_FILENAME}" # Removed
               
               PERMALINK_POSTER_FILENAME="${CLEAN_OUT_BASE_NAME}.png"
               PERMALINK_POSTER_PATH="${POSTER_OUTPUT_DIR}/${PERMALINK_POSTER_FILENAME}"
               
-              echo "   Generating poster: $OUTPUT_POSTER_PATH"
+              echo "   Generating poster: $PERMALINK_POSTER_PATH" # Changed to permalink path
 
-              if ./scripts/posters.sh "$LATEST_MD_FILE" "$OUTPUT_POSTER_PATH"; then
-                if [ -f "$OUTPUT_POSTER_PATH" ] && [ -s "$OUTPUT_POSTER_PATH" ]; then
-                  echo "   Successfully generated poster: $OUTPUT_POSTER_PATH"
+              if ./scripts/posters.sh "$LATEST_MD_FILE" "$PERMALINK_POSTER_PATH"; then # Changed to pass PERMALINK_POSTER_PATH
+                if [ -f "$PERMALINK_POSTER_PATH" ] && [ -s "$PERMALINK_POSTER_PATH" ]; then # Changed to check PERMALINK_POSTER_PATH
+                  echo "   Successfully generated poster: $PERMALINK_POSTER_PATH" # Changed to permalink path
                   generated_posters_count=$((generated_posters_count + 1))
-                  cp "$OUTPUT_POSTER_PATH" "$PERMALINK_POSTER_PATH"
-                  echo "   Created permalink: $PERMALINK_POSTER_PATH"
+                  # cp "$OUTPUT_POSTER_PATH" "$PERMALINK_POSTER_PATH" # Removed copy command
+                  # echo "   Created permalink: $PERMALINK_POSTER_PATH" # Redundant as we are creating it directly
                 else
-                  echo "   ERROR: posters.sh exited 0 for $LATEST_MD_FILE, but $OUTPUT_POSTER_PATH was not found or is empty."
+                  echo "   ERROR: posters.sh exited 0 for $LATEST_MD_FILE, but $PERMALINK_POSTER_PATH was not found or is empty." # Changed to check PERMALINK_POSTER_PATH
                 fi
               else
                 echo "   ERROR: posters.sh failed for $LATEST_MD_FILE (exit code $?). Check scripts/posters.sh logs or errors."
