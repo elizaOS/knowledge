@@ -51,15 +51,63 @@ DEFAULT_POSTER_FILENAME = "hackmd-facts-briefing.png" # Default poster
 
 # Define a budget for how much text we want from each summarized section (approx)
 # This helps ensure multiple sections can fit.
-SECTION_SUMMARIZATION_TARGET_LENGTH = 400 # Target for LLM summary of a section
+SECTION_SUMMARIZATION_TARGET_LENGTH = 550 # Target for LLM summary (if LLM is called), was 450
 
-# New constants for dynamic summarization trigger logic
-MIN_CHARS_FOR_LLM_CONSIDERATION = 300       # Min raw chars in a section to even consider using LLM for it.
-LLM_WORTHWHILE_REDUCTION_THRESHOLD = 150    # Only use LLM if it can reduce by at least this many chars OR if current length is already very long.
-TARGET_DISPLAY_LENGTH_WITHOUT_LLM = 450     # Preferred max display length for a section if NOT summarized by LLM.
-                                            # (Actual per-embed desc limit `max_embed_len` is a hard final truncate)
+# Constants for dynamic summarization trigger logic
+MIN_CHARS_FOR_LLM_CONSIDERATION = 250       # Min raw chars in a section to even consider using LLM for it.
+# LLM_WORTHWHILE_REDUCTION_THRESHOLD = 150    # REMOVED
+# TARGET_DISPLAY_LENGTH_WITHOUT_LLM = 450     # REMOVED
 
-def summarize_text_openrouter(text_to_summarize: str, api_key: str, model: str, target_max_length: int) -> str:
+TOTAL_BUDGET_FOR_ALL_SECTIONS = 1600 # Target total characters for all section descriptions combined
+MAX_CHARS_PER_SECTION_ESTIMATE = 600 # A soft cap for any single section's dynamic target budget
+                                     # to prevent one very large section from hogging all budget initially.
+
+def should_use_bullets_for_section(section_key: str, raw_length: int, items_count: int) -> bool:
+    """
+    Determine if a section should use bullet points based on:
+    - Section type (some sections benefit more from bullets)
+    - Content length (longer content benefits from bullets)
+    - Number of items (multiple items benefit from bullets)
+    """
+    # Always use bullets for sections with multiple distinct items
+    if items_count > 3:
+        return True
+    
+    # Use bullets for longer content in specific sections
+    if section_key in ["discord", "twitter", "github"] and raw_length > 800:
+        return True
+    
+    # Use bullets for very long content regardless of section
+    if raw_length > 1200:
+        return True
+    
+    return False
+
+def safe_truncate(text: str, max_len: int) -> str:
+    """
+    Truncate text at logical breakpoints (sentences, bullets) rather than mid-sentence.
+    """
+    if len(text) <= max_len:
+        return text
+    
+    truncated = text[:max_len]
+    
+    # Try to cut at last logical breakpoint before max_len
+    # Order matters: prefer cutting at bullets/newlines, then sentences
+    for separator in ['\n• ', '\n- ', '. ', '.\n', '\n']:
+        idx = truncated.rfind(separator)
+        if idx > 0 and idx > max_len - 150:  # Don't cut too much content
+            return truncated[:idx + len(separator)].rstrip() + "..."
+    
+    # Fallback: cut at last word boundary
+    last_space = truncated.rfind(' ')
+    if last_space > max_len - 50:
+        return truncated[:last_space].rstrip() + "..."
+    
+    # Ultimate fallback: hard truncate
+    return truncated.rstrip() + "..."
+
+def summarize_text_openrouter(text_to_summarize: str, api_key: str, model: str, target_max_length: int, use_bullets: bool = False) -> str:
     if not api_key:
         print(f"{LogColors.WARNING}Warning: OPENROUTER_API_KEY not provided. Skipping summarization.{LogColors.ENDC}")
         return text_to_summarize
@@ -70,14 +118,26 @@ def summarize_text_openrouter(text_to_summarize: str, api_key: str, model: str, 
         # print(f"Text length ({len(text_to_summarize)}) is already within target ({target_max_length}). Skipping summarization by LLM.")
         return text_to_summarize
     
-    prompt_template = (
-        f"Please summarize the following text concisely to fit within approximately {target_max_length} characters. "
-        f"The summary is for a Discord embed. Maintain clarity and key information. Output only the summary.\n\n"
-        f"TEXT TO SUMMARIZE:\n\"\"\"\n{text_to_summarize}\n\"\"\"\n\nCONCISE SUMMARY:"
-    )
-    # Calculate max_tokens for the completion. Approx 3.5 chars per token.
+    if use_bullets:
+        prompt_template = (
+            f"Summarize the following text using bullet points for a Discord embed. "
+            f"Fit within {target_max_length} characters (aim for {int(target_max_length * 0.85)} to {target_max_length}). "
+            f"Start each main point with a bullet (•). Be clear and preserve key details. "
+            f"Use the available space effectively. Output only the summary.\n\n"
+            f"TEXT TO SUMMARIZE:\n\"\"\"\n{text_to_summarize}\n\"\"\"\n\nSUMMARY:"
+        )
+    else:
+        prompt_template = (
+            f"Please summarize the following text to approximately {target_max_length} characters. "
+            f"Aim for {int(target_max_length * 0.85)} to {target_max_length} characters. "
+            f"The summary is for a Discord embed. Maintain clarity and key information. "
+            f"Do not be overly concise - use the available space to preserve important details. "
+            f"Output only the summary.\n\n"
+            f"TEXT TO SUMMARIZE:\n\"\"\"\n{text_to_summarize}\n\"\"\"\n\nSUMMARY:"
+        )
+    # Calculate max_tokens for the completion. Approx 3.0 chars per token.
     # Ensure a minimum reasonable number of tokens if target_max_length is very small.
-    completion_max_tokens = max(50, int(target_max_length / 3.5)) 
+    completion_max_tokens = max(100, int(target_max_length / 3.0)) 
 
     headers = {
         "Authorization": f"Bearer {api_key}",
@@ -103,7 +163,7 @@ def summarize_text_openrouter(text_to_summarize: str, api_key: str, model: str, 
             print(f"{LogColors.SUCCESS}LLM Summary successful. Original length: {len(text_to_summarize)}, Summary length: {len(summary)}{LogColors.ENDC}")
             if len(summary) > target_max_length:
                 print(f"{LogColors.WARNING}Warning: LLM summary ({len(summary)}) exceeded target ({target_max_length}). Truncating in script.{LogColors.ENDC}")
-                return summary[:target_max_length -4] + "..."
+                return safe_truncate(summary, target_max_length)
             return summary
         else:
             print(f"{LogColors.WARNING}Warning: Summarization returned empty content. Using original text (truncated if needed).{LogColors.ENDC}")
@@ -131,7 +191,6 @@ async def send_discord_webhook(channel, json_file, summarize_flag, summary_model
         return
     
     main_poster_url = f"{POSTER_BASE_URL}{poster_filename_arg}"
-    # poster_link_text = poster_filename_arg.replace('.png', '').replace('-', ' ').title() # No longer needed for main embed desc
     hackmd_link_text = "View the full report in the HackMD Book"
     
     # Embed 1: Main Overview & Links
@@ -141,7 +200,7 @@ async def send_discord_webhook(channel, json_file, summarize_flag, summary_model
     if summarize_flag and openrouter_api_key:
         objective_summary_prompt = (
             f"Rewrite the following summary objectively, focusing on key metrics and factual observations from the ElizaOS project, suitable for a daily briefing. "
-            f"Avoid subjective phrases like 'significant activity' or 'bustling'. Aim for conciseness, around {SECTION_SUMMARIZATION_TARGET_LENGTH // 2} characters.\n\n"
+            f"Avoid subjective phrases. Aim for conciseness, around {SECTION_SUMMARIZATION_TARGET_LENGTH // 2} characters.\n\n"
             f"ORIGINAL SUMMARY:\n\"\"\"\n{overall_summary_text}\n\"\"\"\n\nOBJECTIVE REWRITE:"
         )
         rewritten_summary = summarize_text_openrouter(objective_summary_prompt, openrouter_api_key, summary_model, SECTION_SUMMARIZATION_TARGET_LENGTH // 2)
@@ -150,7 +209,6 @@ async def send_discord_webhook(channel, json_file, summarize_flag, summary_model
         main_embed_description = "Key observations: " + overall_summary_text
 
     # Add links to the main embed description
-    # main_embed_description += f"\n\n🖼️ [View the {poster_link_text} poster]({main_poster_url})" # Removed as poster is its own embed
     main_embed_description += f"\n\n📚 [{hackmd_link_text}]({HACKMD_BOOK_URL})"
 
     if len(main_embed_description) > max_embed_len:
@@ -170,14 +228,19 @@ async def send_discord_webhook(channel, json_file, summarize_flag, summary_model
     main_embed.set_author(name="Eliza Daily", url=HACKMD_BOOK_URL)
     main_embed.set_thumbnail(url="https://m3-org.github.io/avatars/eliza/thumb-bust_eliza.png")
 
-    embeds_to_send = [main_embed]
-    categories_data = briefing_data.get('categories', {})
+    embeds_to_send = [main_embed] # Initialize with the main embed
 
-    # Helper to create section embeds
-    def create_section_embed(section_key: str, title_prefix: str, items_data: list, item_text_extractor, item_prefix_extractor=None):
+    # --- Helper to create section embeds (must be defined before use) --- 
+    def create_section_embed(section_key: str, title_prefix: str, items_data: list, 
+                             item_text_extractor, item_prefix_extractor=None,
+                             current_section_dynamic_budget: int = MAX_CHARS_PER_SECTION_ESTIMATE, # New dynamic budget param
+                             summarize_flag: bool = False, openrouter_api_key: str | None = None, 
+                             summary_model: str = DEFAULT_SUMMARY_MODEL, max_embed_len: int = DEFAULT_MAX_EMBED_SUMMARY_LENGTH) -> tuple[Embed | None, int]:
+        
+        actual_chars_used = 0
         if not items_data:
             print(f"{LogColors.DIM}Section '{title_prefix}': No items provided.{LogColors.ENDC}")
-            return None
+            return None, actual_chars_used
 
         raw_item_texts = []
         for item in items_data:
@@ -186,97 +249,168 @@ async def send_discord_webhook(channel, json_file, summarize_flag, summary_model
             raw_item_texts.append(f"{prefix}: {text}" if prefix else text)
         
         if not raw_item_texts:
-            return None
+            print(f"{LogColors.DIM}Section '{title_prefix}': No raw item texts generated.{LogColors.ENDC}")
+            return None, actual_chars_used
 
         compiled_items_text = "\n".join(raw_item_texts)
         display_text = compiled_items_text
+        len_compiled = len(compiled_items_text)
         log_prefix = f"{LogColors.SECTION}Section '{title_prefix}':{LogColors.ENDC}"
 
-        print(f"{log_prefix} Initial compiled text length: {LogColors.DIM}{len(compiled_items_text)} chars.{LogColors.ENDC}")
+        print(f"{log_prefix} Initial compiled length: {LogColors.DIM}{len_compiled}{LogColors.ENDC} chars. Dynamic budget for this section: {LogColors.DIM}{current_section_dynamic_budget}{LogColors.ENDC} chars.")
 
         should_try_llm = False
-        if summarize_flag and openrouter_api_key and len(compiled_items_text) > MIN_CHARS_FOR_LLM_CONSIDERATION:
-            # Condition 1: Is the text very long anyway (well beyond our target display length for non-LLM content)?
-            if len(compiled_items_text) > TARGET_DISPLAY_LENGTH_WITHOUT_LLM + LLM_WORTHWHILE_REDUCTION_THRESHOLD: 
+        if summarize_flag and openrouter_api_key and len_compiled > MIN_CHARS_FOR_LLM_CONSIDERATION:
+            # Try LLM if compiled text is over its dynamically allocated budget for this section
+            if len_compiled > current_section_dynamic_budget:
                 should_try_llm = True
-                print(f"{log_prefix} Text is very long ({len(compiled_items_text)}), flagging for LLM summarization.")
-            # Condition 2: Would LLM (aiming for SECTION_SUMMARIZATION_TARGET_LENGTH) provide a significant reduction?
-            elif (len(compiled_items_text) - SECTION_SUMMARIZATION_TARGET_LENGTH) > LLM_WORTHWHILE_REDUCTION_THRESHOLD:
-                should_try_llm = True
-                print(f"{log_prefix} LLM could provide significant reduction from {len(compiled_items_text)} to ~{SECTION_SUMMARIZATION_TARGET_LENGTH}, flagging for LLM summarization.")
-
+                print(f"{log_prefix} Text length ({len_compiled}) > dynamic budget ({current_section_dynamic_budget}). Flagging for LLM.")
+        
         if should_try_llm:
-            print(f"{log_prefix} Attempting LLM summarization to ~{LogColors.DIM}{SECTION_SUMMARIZATION_TARGET_LENGTH}{LogColors.ENDC} chars.")
-            section_summary = summarize_text_openrouter(compiled_items_text, openrouter_api_key, summary_model, SECTION_SUMMARIZATION_TARGET_LENGTH)
-            if section_summary.strip() and len(section_summary) < len(display_text): # Use summary if it's shorter and not empty
+            # LLM target is now the section's dynamic budget, ensuring it's not excessively small.
+            # SECTION_SUMMARIZATION_TARGET_LENGTH is not directly used here for LLM target anymore.
+            llm_actual_target = max(MIN_CHARS_FOR_LLM_CONSIDERATION, current_section_dynamic_budget) 
+            # We also need to respect a practical upper limit for what we ask the LLM in one go, even if dynamic budget is huge.
+            # MAX_CHARS_PER_SECTION_ESTIMATE could serve this purpose, or a new constant.
+            # Let's use SECTION_SUMMARIZATION_TARGET_LENGTH as that practical upper bound for an LLM request for now.
+            # llm_actual_target = min(llm_actual_target, SECTION_SUMMARIZATION_TARGET_LENGTH) 
+            # Instead, use 90% of the dynamic budget to encourage fuller summaries
+            llm_actual_target = min(llm_actual_target, int(current_section_dynamic_budget * 0.9))
+            # But still cap at a reasonable maximum to prevent excessive API costs
+            if llm_actual_target > 800:
+                llm_actual_target = 800
+
+            # Determine if this section should use bullet points
+            use_bullets = should_use_bullets_for_section(section_key, len_compiled, len(items_data))
+            bullet_indicator = " (bullets)" if use_bullets else ""
+            
+            print(f"{log_prefix} Attempting LLM summarization to ~{LogColors.DIM}{llm_actual_target}{LogColors.ENDC} chars{bullet_indicator}.")
+            section_summary = summarize_text_openrouter(compiled_items_text, openrouter_api_key, summary_model, llm_actual_target, use_bullets)
+            if section_summary.strip() and len(section_summary) < len_compiled: 
                 display_text = section_summary
                 print(f"{log_prefix} {LogColors.SUCCESS}Used LLM summary. New length: {len(display_text)} chars.{LogColors.ENDC}")
-            elif not section_summary.strip():
-                print(f"{log_prefix} {LogColors.WARNING}LLM summary was empty. Will use original compiled text (potentially truncated).{LogColors.ENDC}")
-                # Fall through to non-LLM path truncation if needed
             else:
-                print(f"{log_prefix} {LogColors.DIM}LLM summary (len {len(section_summary)}) was not shorter than original (len {len(display_text)}) or was empty. Will use original (potentially truncated).{LogColors.ENDC}")
-                # Fall through to non-LLM path truncation if needed
-            
-            # After LLM attempt (used or not), check if current display_text (original or LLM summary) exceeds TARGET_DISPLAY_LENGTH_WITHOUT_LLM
-            # This applies if LLM summary was still too long, or if LLM wasn't used effectively.
-            if len(display_text) > TARGET_DISPLAY_LENGTH_WITHOUT_LLM:
-                print(f"{log_prefix} {LogColors.WARNING}Text (length {len(display_text)}) still exceeds preferred display length ({TARGET_DISPLAY_LENGTH_WITHOUT_LLM}) after LLM attempt. Truncating.{LogColors.ENDC}")
-                display_text = display_text[:TARGET_DISPLAY_LENGTH_WITHOUT_LLM - 4] + "..."
-
-        else: # Not trying LLM (or conditions not met)
-            print(f"{log_prefix} {LogColors.DIM}Not attempting LLM summarization (text length {len(compiled_items_text)}, min_consider {MIN_CHARS_FOR_LLM_CONSIDERATION}).{LogColors.ENDC}")
-            if len(display_text) > TARGET_DISPLAY_LENGTH_WITHOUT_LLM: 
-                print(f"{log_prefix} {LogColors.WARNING}Original text (length {len(display_text)}) exceeds preferred display length ({TARGET_DISPLAY_LENGTH_WITHOUT_LLM}). Truncating.{LogColors.ENDC}")
-                display_text = display_text[:TARGET_DISPLAY_LENGTH_WITHOUT_LLM - 4] + "..."
+                reason = "empty" if not section_summary.strip() else "not shorter/effective"
+                print(f"{log_prefix} {LogColors.WARNING}LLM summary was {reason}. Using original (potentially truncated).{LogColors.ENDC}")
+        else: 
+            print(f"{log_prefix} {LogColors.DIM}Not attempting LLM (compiled len: {len_compiled}, min_consider: {MIN_CHARS_FOR_LLM_CONSIDERATION}, or within dynamic budget).{LogColors.ENDC}")
+        
+        # Truncate display_text to its dynamically calculated budget if it's longer
+        if len(display_text) > current_section_dynamic_budget:
+            print(f"{log_prefix} {LogColors.WARNING}Current display text (length {len(display_text)}) exceeds dynamic budget ({current_section_dynamic_budget}). Truncating.{LogColors.ENDC}")
+            display_text = safe_truncate(display_text, current_section_dynamic_budget)
         
         # Final hard truncation to absolute per-embed description limit
         if len(display_text) > max_embed_len: 
             print(f"{log_prefix} {LogColors.WARNING}Display text (length {len(display_text)}) exceeds absolute embed limit ({max_embed_len}). Hard Truncating.{LogColors.ENDC}")
-            display_text = display_text[:max_embed_len - 4] + "..."
-            print(f"{log_prefix} {LogColors.DIM}Final display text length after hard truncation: {len(display_text)} chars.{LogColors.ENDC}")
-        elif not display_text.strip(): 
+            display_text = safe_truncate(display_text, max_embed_len)
+        
+        final_text_for_embed = display_text.strip()
+        actual_chars_used = len(final_text_for_embed)
+
+        if not final_text_for_embed: 
             print(f"{log_prefix} {LogColors.WARNING}Display text is empty after processing. Skipping embed.{LogColors.ENDC}")
-            return None
+            return None, 0 # Return 0 chars used
 
         section_embed = Embed(
             title=title_prefix,
-            description=display_text.strip(),
+            description=final_text_for_embed,
             color=SECTION_COLORS.get(section_key, SECTION_COLORS["default"])
         )
-        return section_embed
+        return section_embed, actual_chars_used
 
-    # Twitter Section
-    twitter_items = categories_data.get('twitter_news_highlights', [])
-    twitter_embed = create_section_embed("twitter", "🐦 Twitter Buzz", twitter_items, 
-                                         lambda item: item.get('claim', 'N/A'))
-    if twitter_embed: embeds_to_send.append(twitter_embed)
+    # --- Section Processing with Iterative Rollover Budget & Decoupled Order --- 
+    categories_data = briefing_data.get('categories', {})
+    # Define sections in their DESIRED OUTPUT ORDER
+    section_definitions_ordered = [
+        {"key": "twitter", "title": "🐦 Twitter Buzz", "items": categories_data.get('twitter_news_highlights', []), "text_extractor": lambda item: item.get('claim', 'N/A'), "prefix_extractor": None, "embed_placeholder": None, "original_order_index": 0},
+        {"key": "github", "title": "⚙️ GitHub Beat", "items": categories_data.get('github_updates', {}).get('overall_focus', []), "text_extractor": lambda item: item.get('claim', 'N/A'), "prefix_extractor": None, "embed_placeholder": None, "original_order_index": 1},
+        {"key": "discord", "title": "💬 Discord Updates", "items": categories_data.get('discord_updates', []), "text_extractor": lambda item: f"{item.get('summary', 'N/A')} (Participants: {', '.join(item.get('key_participants', [])) if item.get('key_participants') else 'N/A'})", "prefix_extractor": lambda item: item.get('channel', ''), "embed_placeholder": None, "original_order_index": 2},
+        {"key": "strategy", "title": "🚀 Strategic Insights", "items": categories_data.get('strategic_insights', []), "text_extractor": lambda item: item.get('insight', 'N/A'), "prefix_extractor": lambda item: item.get('theme', 'Insight'), "embed_placeholder": None, "original_order_index": 3},
+        {"key": "market", "title": "📈 (WIP) Market Analysis", "items": categories_data.get('market_analysis', []), "text_extractor": lambda item: item.get('observation', 'N/A'), "prefix_extractor": None, "embed_placeholder": None, "original_order_index": 4}
+    ]
 
-    # GitHub Section
-    github_items = categories_data.get('github_updates', {}).get('overall_focus', [])
-    github_embed = create_section_embed("github", "⚙️ GitHub Beat", github_items, 
-                                        lambda item: item.get('claim', 'N/A'))
-    if github_embed: embeds_to_send.append(github_embed)
+    # Calculate initial raw lengths and populate for processing, keeping original definition
+    sections_to_calculate_len = []
+    total_initial_raw_chars = 0
+    for i, sec_def in enumerate(section_definitions_ordered):
+        current_raw_len = 0
+        if sec_def["items"]:
+            raw_item_texts = []
+            for item in sec_def["items"]:
+                text = sec_def["text_extractor"](item)
+                prefix = sec_def["prefix_extractor"](item) if sec_def["prefix_extractor"] else None
+                raw_item_texts.append(f"{prefix}: {text}" if prefix else text)
+            compiled_text_for_len_calc = "\n".join(raw_item_texts)
+            current_raw_len = len(compiled_text_for_len_calc)
+        
+        sections_to_calculate_len.append({**sec_def, 'raw_length': current_raw_len, 'original_index_for_ordering': i}) # Use actual index for later re-sorting if needed
+        total_initial_raw_chars += current_raw_len
+    
+    # Sort sections by their raw_length for PROCESSING ORDER
+    # sections_for_processing_sorted = sorted(sections_to_calculate_len, key=lambda x: x['raw_length'])
+    # Keep a mutable list that we will sort for processing, but results will be stored based on original_order_index
+    processing_order_list = sorted(sections_to_calculate_len, key=lambda x: x['raw_length'])
+    
+    # This list will store results in the original definition order
+    results_in_original_order = [None] * len(section_definitions_ordered)
 
-    # Discord Section
-    discord_items = categories_data.get('discord_updates', [])
-    discord_embed = create_section_embed("discord", "💬 Discord Updates", discord_items, 
-                                         item_text_extractor=lambda item: f"{item.get('summary', 'N/A')} (Participants: {', '.join(item.get('key_participants', [])) if item.get('key_participants') else 'N/A'})",
-                                         item_prefix_extractor=lambda item: item.get('channel', ''))
-    if discord_embed: embeds_to_send.append(discord_embed)
+    print(f"{LogColors.DIM}Iterative Budget: Total initial raw chars for sections: {total_initial_raw_chars}. Overall budget: {TOTAL_BUDGET_FOR_ALL_SECTIONS}{LogColors.ENDC}")
+    print(f"{LogColors.DIM}Processing order (shortest to longest raw content): {[s['title'] for s in processing_order_list]}{LogColors.ENDC}")
 
-    # Strategy Section
-    strategy_items = categories_data.get('strategic_insights', [])
-    strategy_embed = create_section_embed("strategy", "🚀 Strategic Insights", strategy_items, 
-                                          item_text_extractor=lambda item: item.get('insight', 'N/A'),
-                                          item_prefix_extractor=lambda item: item.get('theme', 'Insight'))
-    if strategy_embed: embeds_to_send.append(strategy_embed)
+    remaining_budget_for_sections = TOTAL_BUDGET_FOR_ALL_SECTIONS
+    sum_of_remaining_raw_lengths = total_initial_raw_chars
 
-    # Market Analysis Section
-    market_items = categories_data.get('market_analysis', [])
-    market_embed = create_section_embed("market", "📈 (WIP) Market Analysis", market_items, 
-                                        lambda item: item.get('observation', 'N/A'))
-    if market_embed: embeds_to_send.append(market_embed)
+    # Process sections according to sorted order (shortest first)
+    for section_detail in processing_order_list:
+        original_idx = section_detail['original_order_index'] # Get the original index for storing result
+
+        if not section_detail["items"] or section_detail['raw_length'] == 0 or remaining_budget_for_sections <= MIN_CHARS_FOR_LLM_CONSIDERATION // 2: # Ensure some minimal budget left
+            print(f"{LogColors.DIM}Skipping section '{section_detail['title']}' (no items, zero raw length, or insufficient budget remaining).{LogColors.ENDC}")
+            if sum_of_remaining_raw_lengths > 0: # Avoid division by zero if only one section was left and skipped
+                sum_of_remaining_raw_lengths -= section_detail['raw_length']
+            results_in_original_order[original_idx] = None # Store None for this skipped section
+            continue
+
+        current_section_target_budget = 0
+        if sum_of_remaining_raw_lengths > 0:
+            proportion = section_detail['raw_length'] / sum_of_remaining_raw_lengths
+            ideal_proportional_budget = int(proportion * remaining_budget_for_sections)
+            current_section_target_budget = max(MIN_CHARS_FOR_LLM_CONSIDERATION // 2, ideal_proportional_budget)
+            current_section_target_budget = min(current_section_target_budget, MAX_CHARS_PER_SECTION_ESTIMATE) 
+        else: 
+             current_section_target_budget = min(remaining_budget_for_sections, MAX_CHARS_PER_SECTION_ESTIMATE)
+        
+        current_section_target_budget = max(0, current_section_target_budget)
+
+        section_embed, chars_actually_used = create_section_embed(
+            section_detail["key"],
+            section_detail["title"],
+            section_detail["items"], 
+            section_detail["text_extractor"],
+            section_detail["prefix_extractor"],
+            current_section_dynamic_budget=current_section_target_budget,
+            summarize_flag=summarize_flag, 
+            openrouter_api_key=openrouter_api_key, 
+            summary_model=summary_model, 
+            max_embed_len=max_embed_len
+        )
+        
+        results_in_original_order[original_idx] = section_embed # Store the created embed (or None)
+        
+        if section_embed: # Only adjust budget if an embed was actually created and used chars
+            remaining_budget_for_sections -= chars_actually_used
+            print(f"{LogColors.DIM}Budget update: Section '{section_detail['title']}' used {chars_actually_used}. Remaining budget for sections: {remaining_budget_for_sections}{LogColors.ENDC}")
+        
+        sum_of_remaining_raw_lengths -= section_detail['raw_length']
+        if remaining_budget_for_sections < -MAX_CHARS_PER_SECTION_ESTIMATE: 
+            print(f"{LogColors.FAIL}Critical: Section budget massively overdrawn. Stopping further section processing.{LogColors.ENDC}")
+            break 
+    
+    # Add processed embeds to embeds_to_send IN THEIR ORIGINAL ORDER
+    for embed_result in results_in_original_order:
+        if embed_result:
+            embeds_to_send.append(embed_result)
 
     # Embed for the Poster Image
     if main_poster_url:
@@ -411,20 +545,19 @@ if __name__ == "__main__":
             print(f"{LogColors.FAIL}Error reading {args.json_file} for local output: {e}{LogColors.ENDC}")
             sys.exit(1)
 
-        # For local output, we primarily use max_text_summary_length for the entire body.
-        # The summarization flag also applies here for section-level summaries if enabled.
-        final_text_output = format_body_from_briefing_data(
-            briefing_data_main, 
-            args.max_text_summary_length, # Use max_text_summary_length as the budget for the whole body
-            args.summarize, # User's intent to summarize sections
-            openrouter_api_key, 
-            args.summary_model
-        )
-            
-        # format_body_from_briefing_data should already try to respect its overall max length.
-        # A final truncation for plain text output if it somehow still exceeded.
-        if len(final_text_output) > args.max_text_summary_length:
-             print(f"{LogColors.WARNING}Warning: Final plain text output too long ({len(final_text_output)} chars). Truncating.{LogColors.ENDC}")
-             final_text_output = final_text_output[:args.max_text_summary_length - 4] + "..."
-            
-        print(final_text_output)
+        # Simple text output for local testing
+        print(f"📊 Eliza Daily – {briefing_data_main.get('briefing_date', 'Unknown Date')}")
+        print("=" * 50)
+        print(f"Overall Summary: {briefing_data_main.get('overall_summary', 'No summary available.')}")
+        
+        categories = briefing_data_main.get('categories', {})
+        for section_name, section_data in categories.items():
+            print(f"\n{section_name.replace('_', ' ').title()}:")
+            if isinstance(section_data, list):
+                for i, item in enumerate(section_data[:3]):  # Show first 3 items
+                    print(f"  {i+1}. {str(item)[:100]}...")
+            elif isinstance(section_data, dict):
+                for key, value in section_data.items():
+                    print(f"  {key}: {str(value)[:100]}...")
+        
+        print(f"\nThis script is primarily designed for Discord output. Use -d flag for full functionality.")
