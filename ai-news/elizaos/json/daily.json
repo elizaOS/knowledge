@@ -1,41 +1,41 @@
 {
   "type": "elizaosDailySummary",
-  "title": "Daily Report - 2025-05-22",
+  "title": "Daily Report - 2025-05-23",
   "categories": [
     {
       "title": "Summary for completed_items",
       "content": [
         {
-          "text": "Recent completed items in the elizaOS/eliza repository include several bugfixes, features, and other improvements. Multiple CLI-related fixes were implemented, including resolving issues with the update command to look for the latest version by tag (PR #4714), using beta versions when exact versions aren't found (PRs #4710, #4711), and fixing issues with the create command and setup directories (PR #4708). Docker voice functionality was fixed in PR #4715, and character environment loading was resolved with improvements to the default character (PR #4716).",
+          "text": "Recent development activity in the elizaOS/eliza repository includes several new features, bug fixes, and maintenance updates:\n\nNew Features:\n- Improved database API (PR #4556)\n- Added support for PDF RAG (Retrieval Augmented Generation) (PR #4611)\n- Added plugin-rag (PR #4614)\n- Added Knowledge Plugin (PR #4701)\n- Added file TRANSLATION (PR #4704)\n- Added supplemental unit tests for core utilities (PR #4739)\n- Enhanced plugin publishing with NPM authentication and validation (PR #4731)\n- Updated plugin prefix check/add function to validate \"plugin-alpanumeric\" naming convention (PR #4727)\n- Added libvips-dev to integration test CI (PR #4723)\n- Implemented .env example writing and cleaned up get-config functions (PR #4721)\n- Factored Knowledge out to Plugin and added Service Registry Types (PR #4719)\n\nBug Fixes:\n- Fixed GitHub credentials lookup using findNearestEnvFile() (PR #4700)\n- Fixed environment files for .73 release (PR #4751)\n- Made starter low priority (PR #4743)\n- Fixed postgres bypass and double initialization of server (PR #4741)\n- Removed unused PDF.js imports causing CLI DOMMatrix runtime error (PR #4740)\n- Fixed build error related to missing findNearestEnvFile import (PR #4732)\n- Fixed response handling (PR #4728)\n- Fixed linter issues and tests (PR #4725)\n- Reverted project starter character (PR #4724)\n\nOther Changes:\n- Bumped undici from 7.4.0 to 7.5.0 (PR #4598)\n- Deleted README_IDN.md (PR #4702)\n- Improved message handler template (PR #4748)\n- Unpegged CLI plugin/core dependencies and versioned .71 deploy CLI (PR #4747)\n- Updated Twitter setup blog (PR #4742)\n- Updated name handling in publisher.ts to no longer expect \"elizaos\" (PR #4729)\n- Updated OpenTelemetry version and API usage (PR #4726)\n- Simplified template path resolution in copy-template.ts (PR #4730)",
           "sources": [
-            "https://github.com/elizaOS/eliza/pull/4716",
-            "https://github.com/elizaOS/eliza/pull/4715",
-            "https://github.com/elizaOS/eliza/pull/4714",
-            "https://github.com/elizaOS/eliza/pull/4711",
-            "https://github.com/elizaOS/eliza/pull/4710",
-            "https://github.com/elizaOS/eliza/pull/4708"
-          ],
-          "images": [],
-          "videos": []
-        },
-        {
-          "text": "User interface improvements include fixing the filter for :user in client chat ignores (PR #4709), updating text from 'eliza' to 'elizaOS' (PR #4707), and improving tweet text formatting with double newlines between sentences (PR #4706). New features include adding .env to the plugin-starter's .gitignore file to prevent publishing failures due to key presence (PR #4703) and configuring Tauri for multi-platform CI/CD and mobile support (PR #4699).",
-          "sources": [
-            "https://github.com/elizaOS/eliza/pull/4709",
-            "https://github.com/elizaOS/eliza/pull/4707",
-            "https://github.com/elizaOS/eliza/pull/4706",
-            "https://github.com/elizaOS/eliza/pull/4703",
-            "https://github.com/elizaOS/eliza/pull/4699"
-          ],
-          "images": [],
-          "videos": []
-        },
-        {
-          "text": "Other improvements include making the runtime logger public (PR #4696), centralizing environment resolution (PR #4705), and implementing a deploy CLI action (PR #4712).",
-          "sources": [
-            "https://github.com/elizaOS/eliza/pull/4696",
-            "https://github.com/elizaOS/eliza/pull/4705",
-            "https://github.com/elizaOS/eliza/pull/4712"
+            "https://github.com/elizaOS/eliza/pull/4556",
+            "https://github.com/elizaOS/eliza/pull/4598",
+            "https://github.com/elizaOS/eliza/pull/4611",
+            "https://github.com/elizaOS/eliza/pull/4614",
+            "https://github.com/elizaOS/eliza/pull/4704",
+            "https://github.com/elizaOS/eliza/pull/4702",
+            "https://github.com/elizaOS/eliza/pull/4701",
+            "https://github.com/elizaOS/eliza/pull/4700",
+            "https://github.com/elizaOS/eliza/pull/4751",
+            "https://github.com/elizaOS/eliza/pull/4748",
+            "https://github.com/elizaOS/eliza/pull/4747",
+            "https://github.com/elizaOS/eliza/pull/4743",
+            "https://github.com/elizaOS/eliza/pull/4742",
+            "https://github.com/elizaOS/eliza/pull/4741",
+            "https://github.com/elizaOS/eliza/pull/4740",
+            "https://github.com/elizaOS/eliza/pull/4739",
+            "https://github.com/elizaOS/eliza/pull/4732",
+            "https://github.com/elizaOS/eliza/pull/4731",
+            "https://github.com/elizaOS/eliza/pull/4730",
+            "https://github.com/elizaOS/eliza/pull/4729",
+            "https://github.com/elizaOS/eliza/pull/4728",
+            "https://github.com/elizaOS/eliza/pull/4727",
+            "https://github.com/elizaOS/eliza/pull/4726",
+            "https://github.com/elizaOS/eliza/pull/4725",
+            "https://github.com/elizaOS/eliza/pull/4724",
+            "https://github.com/elizaOS/eliza/pull/4723",
+            "https://github.com/elizaOS/eliza/pull/4721",
+            "https://github.com/elizaOS/eliza/pull/4719"
           ],
           "images": [],
           "videos": []
@@ -48,18 +48,14 @@
       "repository_name": "elizaOS/eliza",
       "content": [
         {
-          "text": "Four pull requests are currently active in the elizaOS/eliza repository:\n\n1. PR #4701: A new Knowledge Plugin feature has been submitted by lalalune.\n\n2. PR #4717: Freytes is working on a work-in-progress feature to execute buys on strategies using the plugin-jupiter.\n\n3. PR #4705: wtfsayo has submitted a chore PR to further centralize environment resolution.\n\n4. PR #4699: lalalune has configured Tauri for multi-platform CI/CD and added mobile support.",
+          "text": "Two pull requests have been submitted to the elizaOS/eliza repository. PR #4614 by 0xbbjoker adds a new plugin-rag feature. PR #4745 by Samarthsinghal28 updates the existing polygon plugin.",
           "sources": [
-            "https://github.com/elizaOS/eliza/pull/4701",
-            "https://github.com/elizaOS/eliza/pull/4717",
-            "https://github.com/elizaOS/eliza/pull/4705",
-            "https://github.com/elizaOS/eliza/pull/4699"
+            "https://github.com/elizaOS/eliza/pull/4614",
+            "https://github.com/elizaOS/eliza/pull/4745"
           ],
           "images": [
-            "https://opengraph.githubassets.com/1/elizaOS/eliza/pull/4701",
-            "https://opengraph.githubassets.com/1/elizaOS/eliza/pull/4717",
-            "https://opengraph.githubassets.com/1/elizaOS/eliza/pull/4705",
-            "https://opengraph.githubassets.com/1/elizaOS/eliza/pull/4699"
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/pull/4614",
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/pull/4745"
           ],
           "videos": []
         }
@@ -70,7 +66,7 @@
       "title": "Summary for github_summary",
       "content": [
         {
-          "text": "From May 22-23, 2025, the elizaos/eliza repository had 19 new pull requests with 14 of them merged. There were no new issues reported during this period. The repository had 14 active contributors working on it.",
+          "text": "From May 23-24, 2025, the elizaos/eliza repository had 30 new pull requests with 28 of them merged, 2 new issues were created, and 17 contributors were active during this period.",
           "sources": [
             "githubStatsSummary"
           ],
@@ -84,7 +80,7 @@
       "title": "Summary for Misceleanous",
       "content": [
         {
-          "text": "The source provides information about the top contributors for the elizaOS/eliza GitHub repository. However, no specific details about the contributors or their contributions are provided in the source text.",
+          "text": "The source provides information about the top contributors for the elizaOS/eliza repository on GitHub. However, no specific contributor details were included in the provided text.",
           "sources": [],
           "images": [],
           "videos": []
@@ -93,5 +89,5 @@
       "topic": "Misceleanous"
     }
   ],
-  "date": 1747872000
+  "date": 1747958400
 }
