@@ -30,7 +30,7 @@ jobs:
 
       - name: Set execute permission for scripts
         run: |
-          chmod +x scripts/generate_daily_facts.py
+          chmod +x scripts/extract-facts.py
           chmod +x scripts/aggregate-sources.py
 
       - name: Aggregate Sources for Today
@@ -54,10 +54,14 @@ jobs:
           mkdir -p "$OUTPUT_MARKDOWN_DIR"
 
           if [ -f "$INPUT_FILE" ]; then
-            ./scripts/generate_daily_facts.py "$INPUT_FILE"
-            # The script internally saves to OUTPUT_JSON_DIR/YYYY-MM-DD.json and OUTPUT_MARKDOWN_DIR/YYYY-MM-DD.md
-            echo "fact_json_file=$OUTPUT_JSON_DIR/$(date +%Y-%m-%d).json" >> $GITHUB_OUTPUT
-            echo "fact_markdown_file=$OUTPUT_MARKDOWN_DIR/$(date +%Y-%m-%d).md" >> $GITHUB_OUTPUT
+            # Use extract-facts.py with explicit input/output parameters
+            OUTPUT_JSON_FILE="$OUTPUT_JSON_DIR/$(date +%Y-%m-%d).json"
+            OUTPUT_MARKDOWN_FILE="$OUTPUT_MARKDOWN_DIR/$(date +%Y-%m-%d).md"
+            
+            ./scripts/extract-facts.py -i "$INPUT_FILE" -o "$OUTPUT_JSON_FILE" -md "$OUTPUT_MARKDOWN_FILE"
+            
+            echo "fact_json_file=$OUTPUT_JSON_FILE" >> $GITHUB_OUTPUT
+            echo "fact_markdown_file=$OUTPUT_MARKDOWN_FILE" >> $GITHUB_OUTPUT
           else
             echo "Input file $INPUT_FILE not found, skipping fact briefing generation."
             exit 1
