@@ -24,43 +24,37 @@ This repository serves as the central hub for aggregating, processing, and synth
 
 The system follows a structured pipeline to transform raw data into actionable intelligence:
 
-1.  **External Data Ingestion (`.github/workflows/sync.yml`)**:
+1.  **External Data Ingestion (`.github/workflows/sync.yml`)**: (Runs at 01:00 UTC)
     *   This workflow runs daily to synchronize data from external repositories and sources. This includes documentation from `elizaOS/eliza` and `madjin/daily-silk`, GitHub activity logs from `elizaos/elizaos.github.io`, and AI news from `M3-org/ai-news`.
     *   Raw synced data is stored in directories like `docs/`, `daily-silk/`, `github/`, and `ai-news/`.
 
-2.  **Daily Context Aggregation (`.github/workflows/generate_daily_context.yml`)**:
+2.  **Daily Fact Extraction (`.github/workflows/extract_daily_facts.yml`)**: (Runs at 01:15 UTC)
+    *   This workflow runs `scripts/extract-facts.py` daily after data synchronization.
+    *   `scripts/extract-facts.py` takes the daily aggregated data (from the previous day, or requires `aggregate-daily-sources.yml` to have run if processing current day's live data, though its schedule suggests it processes already aggregated data from a prior step if available, or just focuses on what `aggregate-sources.py` can provide it if it were to be run by this workflow directly) and uses an LLM with a specialized prompt to distill significant information.
+    *   Outputs are structured JSON facts to `the-council/facts/YYYY-MM-DD.json` and a Markdown version to `hackmd/facts/YYYY-MM-DD.md`.
+    *   A permalink `the-council/facts/daily.json` is also created.
+
+3.  **Daily Context Aggregation (`.github/workflows/aggregate-daily-sources.yml`)**: (Runs at 01:30 UTC)
     *   This workflow runs `scripts/aggregate-sources.py` daily.
     *   `scripts/aggregate-sources.py` consolidates data from the synced external sources (e.g., `ai-news/`, `github/summaries/`) and internal structured data into a comprehensive daily JSON file: `the-council/aggregated/YYYY-MM-DD.json`.
     *   A permalink `the-council/aggregated/daily.json` is created, pointing to the latest daily aggregated file.
 
-3.  **Council Context Generation (`.github/workflows/generate_council_context.yml`)**:
+4.  **Council Briefing Generation (`.github/workflows/generate-council-briefing.yml`)**: (Runs at 02:00 UTC)
     *   Triggered daily after context aggregation, this workflow runs `scripts/generate_council_context.py`.
     *   This script takes `the-council/aggregated/daily.json` as input and uses an LLM (via OpenRouter) with strategic prompts (e.g., `scripts/prompts/strategy/north-star.txt`) to produce a high-level strategic briefing.
     *   The output is saved as `the-council/council_briefing/YYYY-MM-DD.json`, with a permalink `the-council/council_briefing/daily.json`.
 
-4.  **HackMD Note Generation & Backup (`.github/workflows/update_hackmd_notes.yml`)**:
-    *   This workflow runs weekly (and can be manually triggered) to manage topical insights on HackMD.
-    *   It first executes `scripts/create-hackmd.py` which:
-        *   Identifies prompt files in `scripts/prompts/` (organized by category in subdirectories).
-        *   Ensures a corresponding HackMD note exists for each prompt, creating new ones if necessary.
-        *   Updates the `book.json` file, which maps prompt names to HackMD note IDs and their `update_strategy` (defaulting to "overwrite" for new notes), serving as a state file.
-        *   Creates an initial HackMD book index note if specified.
-    *   Then, it runs `scripts/update-hackmd.py` which:
-        *   Uses `the-council/aggregated/daily.json` (latest aggregated data) as context.
-        *   For each prompt defined in `book.json`:
-            *   It calls an LLM to generate content based on the prompt instructions (from the local `.txt` file) and the aggregated daily data.
-            *   It updates the corresponding HackMD note's title (with the prompt name and current date) and its entire content.
-            *   The new content includes the prompt details (from the local prompt file, wrapped in `<details>` tags) followed by the LLM-generated text for the day, effectively overwriting previous content as per the "overwrite" strategy.
-        *   Saves the LLM-generated main content locally to `hackmd/[category]/[prompt_name]/YYYY-MM-DD.md`.
-        *   Optionally (if the `-j` flag is used), saves a structured JSON object (including `prompt_name`, `category`, `date`, `generated_text`, and `source_references`) locally to `hackmd/[category]/[prompt_name]/YYYY-MM-DD.json`.
-        *   Updates the main HackMD book index note with links to all content notes, categorized.
-    *   Finally, changes to `book.json`, `hackmd/**/*.md`, and `hackmd/**/*.json` are committed to the repository.
+5.  **HackMD Note Generation & Backup (`.github/workflows/update_hackmd_notes.yml`)**: (Runs at 02:30 UTC)
+    *   This workflow runs daily to manage topical insights on HackMD.
+    *   It first executes `scripts/create-hackmd.py` which ensures HackMD notes exist for prompts and updates `book.json`.
+    *   Then, it runs `scripts/update-hackmd.py` which uses `the-council/aggregated/daily.json` as context to generate content for each prompt, update HackMD notes, and save local backups.
+    *   Changes to `book.json`, `hackmd/**/*.md`, and `hackmd/**/*.json` are committed.
 
-5.  **Fact Extraction (Manual/Future Automation)**:
-    *   The `scripts/extract_facts.py` script can be run on the output of `scripts/aggregate-sources.py` (`the-council/aggregated/YYYY-MM-DD.json`).
-    *   It uses a specialized LLM prompt (`scripts/prompts/news_show/fact_extraction_prompt.txt`) to perform a deep analysis of the entire dataset in a single LLM call.
-    *   Its goal is to distill significant information into a structured JSON output, organized by thematic categories (Twitter, GitHub, Discord, user feedback, strategic insights, market analysis), including source traceability.
-    *   The output is typically saved to `the-council/extracted_facts/YYYY-MM-DD.json`.
+6.  **Daily Discord Briefing (`.github/workflows/daily_discord_briefing.yml`)**: (Runs at 02:35 UTC)
+    *   This workflow runs `scripts/webhook.py` daily after all data processing and HackMD updates are complete.
+    *   It takes the daily facts file (`the-council/facts/YYYY-MM-DD.json`) for the current date.
+    *   It sends a formatted briefing, including summaries and an optional poster, to a specified Discord channel.
+    *   Requires `OPENROUTER_API_KEY` and `DISCORD_BOT_TOKEN` secrets for LLM summarization and Discord posting.
 
 ## Key Directories
 
@@ -70,9 +64,10 @@ The system follows a structured pipeline to transform raw data into actionable i
 *   `the-council/`: Stores daily aggregated data and generated contexts.
     *   `the-council/aggregated/`: Contains daily raw aggregated data (`YYYY-MM-DD.json`) and a `daily.json` permalink. Output of `scripts/aggregate-sources.py`.
     *   `the-council/council_briefing/`: Contains daily strategic council briefings (`YYYY-MM-DD.json`) and a `daily.json` permalink. Output of `scripts/generate_council_context.py`.
-    *   `the-council/extracted_facts/`: Contains daily extracted facts and insights (`YYYY-MM-DD.json`). Output of `scripts/extract_facts.py`.
+    *   `the-council/facts/`: Contains daily extracted facts and insights in JSON format (`YYYY-MM-DD.json`) and a `daily.json` permalink. Output of `scripts/extract-facts.py`.
     *   `the-council/old/`: Contains older council-related files.
 *   `hackmd/`: Stores local backups of content generated for HackMD notes, organized by category and prompt name, in both Markdown and JSON formats.
+    *   `hackmd/facts/`: Contains Markdown exports of extracted facts (`YYYY-MM-DD.md`).
 *   `ai-news/`: Contains synced data from the `M3-org/ai-news` repository.
 *   `github/`: Contains synced GitHub activity logs and summaries.
 *   `docs/`: Contains synced documentation from `elizaOS/eliza`.
@@ -84,8 +79,9 @@ The system follows a structured pipeline to transform raw data into actionable i
 *   **`scripts/aggregate-sources.py`**: The main data aggregation engine, creating `the-council/aggregated/YYYY-MM-DD.json`.
 *   **`scripts/generate_council_context.py`**: Processes aggregated data from `the-council/aggregated/daily.json` to create strategic council briefings in `the-council/council_briefing/YYYY-MM-DD.json`.
 *   **`scripts/create-hackmd.py`**: Initializes HackMD notes for prompts found in `scripts/prompts/`, creating new notes on HackMD if they don't exist. Manages `book.json` by storing HackMD note IDs and their update strategy (defaulting to 'overwrite' for new notes).
-*   **`scripts/update-hackmd.py`**: Generates content daily for HackMD notes using prompts from `scripts/prompts/` and data from `the-council/aggregated/daily.json`. It updates each HackMD note's title (with the current date) and overwrites its content with the prompt details and new LLM-generated text. It also updates the main HackMD book index and saves local backups of the generated content.
-*   **`scripts/extract_facts.py`**: Performs deep analysis on data from `the-council/aggregated/YYYY-MM-DD.json` to extract categorized facts and insights into `the-council/extracted_facts/YYYY-MM-DD.json`.
+*   **`scripts/update-hackmd.py`**: Generates content daily for HackMD notes using prompts from `scripts/prompts/` and data from `the-council/aggregated/daily.json`. It updates each HackMD note's title (with the current date) and overwrites its content with the prompt details and new LLM-generated text. It also updates the main HackMD book index and saves local backups.
+*   **`scripts/extract_facts.py`**: Performs deep analysis on aggregated data. As part of the `extract_daily_facts.yml` workflow, it outputs structured facts to `the-council/facts/YYYY-MM-DD.json` and a corresponding Markdown version to `hackmd/facts/YYYY-MM-DD.md`.
+*   **`scripts/webhook.py`**: Called by `daily_discord_briefing.yml` to send the daily facts briefing from `the-council/facts/YYYY-MM-DD.json` to a specified Discord channel, with options for LLM summarization and a poster image.
 
 This system is designed to be modular and extensible, allowing for the integration of new data sources and processing steps as the project evolves.
 

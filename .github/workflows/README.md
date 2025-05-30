@@ -72,6 +72,19 @@ This directory contains GitHub Actions workflows to automate various aspects of 
     *   Creates `the-council/facts/daily.json` permalink.
     *   Commits `the-council/facts/*.json`, `hackmd/facts/*.md`, and `the-council/facts/daily.json`.
 
+### 6. `daily_discord_briefing.yml`
+
+*   **Name**: `Daily Discord Facts Briefing`
+*   **Trigger**: Daily at 02:35 UTC and on `workflow_dispatch`.
+*   **Purpose**: Sends the daily facts briefing (from `the-council/facts/YYYY-MM-DD.json`) to a specified Discord channel using the `scripts/webhook.py` script.
+*   **Key Actions**:
+    *   Sets up Python.
+    *   Installs `discord.py` and `requests`.
+    *   Determines the current date to locate the correct `YYYY-MM-DD.json` facts file.
+    *   Checks if the daily facts file exists before attempting to send.
+    *   Runs `scripts/webhook.py` with specified parameters for the Discord channel, summarization, and poster image.
+    *   Requires `OPENROUTER_API_KEY` and `DISCORD_BOT_TOKEN` secrets.
+
 ## Workflow Execution Order
 
 While some workflows can be run manually (`workflow_dispatch`), the scheduled daily runs are now staggered as follows:
@@ -81,8 +94,9 @@ While some workflows can be run manually (`workflow_dispatch`), the scheduled da
 3.  **01:30 UTC**: `aggregate-daily-sources.yml` (Aggregate Daily Sources)
 4.  **02:00 UTC**: `generate-council-briefing.yml` (Generate Council Briefing)
 5.  **02:30 UTC**: `update_hackmd_notes.yml` (Update HackMD Notes)
+6.  **02:35 UTC**: `daily_discord_briefing.yml` (Daily Discord Facts Briefing)
 
-This order ensures that data is first synced, then facts are extracted, then data is aggregated, then processed for council, and finally HackMD notes are updated based on the latest state.
+This order ensures that data is first synced, then facts are extracted, then data is aggregated, then processed for council, HackMD notes are updated, and finally the briefing is sent to Discord.
 
 ## General Notes
 
