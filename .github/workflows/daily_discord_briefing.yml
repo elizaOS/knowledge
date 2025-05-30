@@ -1,0 +1,44 @@
+name: Daily Discord Facts Briefing
+
+on:
+  schedule:
+    # Runs daily at 02:35 UTC (shortly after knowledge sync at 02:30 UTC)
+    - cron: '35 2 * * *'
+  workflow_dispatch: # Allows manual triggering
+
+jobs:
+  send_daily_briefing:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install discord.py requests
+
+      - name: Send Briefing to Discord
+        env:
+          OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
+          DISCORD_BOT_TOKEN: ${{ secrets.DISCORD_BOT_TOKEN }}
+        run: |
+          # Calculate current date in YYYY-MM-DD format
+          CURRENT_DATE=$(date +%Y-%m-%d)
+          FACTS_FILE="the-council/facts/$CURRENT_DATE.json"
+          
+          echo "Attempting to send briefing for $CURRENT_DATE using file: $FACTS_FILE"
+          
+          # Check if the daily facts file exists
+          if [ -f "$FACTS_FILE" ]; then
+            python scripts/webhook.py "$FACTS_FILE" -d -c "1377401701081944144" -s -p "ainews-elizaos.png"
+          else
+            echo "Facts file $FACTS_FILE not found. Skipping Discord briefing."
+            # Optionally, you could exit with an error or send a notification
+            # exit 1 
+          fi 

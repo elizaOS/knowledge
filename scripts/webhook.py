@@ -113,11 +113,18 @@ class EmbedFactory:
     def create_main(data: dict) -> Embed:
         # Use overall summary for key observations - simple and objective, no truncation
         overall_summary = data.get('overall_summary', '')
+        briefing_date = data.get('briefing_date', 'YYYY-MM-DD') # Get the briefing date
         
-        embed = Embed(title=f"📊 Eliza Daily – {data['briefing_date']}", 
-                     description=f"{overall_summary}\n\n📚 Full Report: {config.hackmd_url}",
+        # Construct the new GitHub link for the aggregated JSON
+        github_link_base = "https://github.com/elizaOS/knowledge/blob/main/the-council/aggregated/"
+        aggregated_json_filename = f"{briefing_date}.json"
+        full_github_link = f"{github_link_base}{aggregated_json_filename}"
+        link_text = f"Aggregated Sources - {briefing_date}"
+        
+        embed = Embed(title=f"📊 Eliza Daily – {briefing_date}", 
+                     description=f"{overall_summary}\n\n📚 [{link_text}]({full_github_link})", # Updated link and text
                      color=config.colors["default"], timestamp=datetime.utcnow())
-        embed.set_author(name="Eliza Daily", url=config.hackmd_url)
+        embed.set_author(name="Eliza Daily", url=config.hackmd_url) # Author link can remain or change if needed
         embed.set_thumbnail(url="https://m3-org.github.io/avatars/eliza/thumb-bust_eliza.png")
         return embed
     
@@ -201,10 +208,12 @@ class BriefingProcessor:
         # Removed separate PR/Issues sections to avoid redundancy
         # GitHub overall_focus already contains the important activity summary
         
-        embeds.append(EmbedFactory.create_poster(f"{config.poster_url}{poster_file}", data['briefing_date']))
+        # Only add poster if a filename is provided
+        if poster_file:
+            embeds.append(EmbedFactory.create_poster(f"{config.poster_url}{poster_file}", data['briefing_date']))
         return embeds, None
 
-async def send_to_discord(file_path: str, channels: str, api_key: str, poster: str):
+async def send_to_discord(file_path: str, channels: str, api_key: str, poster: Optional[str]):
     processor = BriefingProcessor(api_key)
     embeds, error = await processor.create_embeds(file_path, poster)
     
@@ -245,7 +254,7 @@ async def send_to_discord(file_path: str, channels: str, api_key: str, poster: s
         # Give a moment for cleanup
         await asyncio.sleep(0.1)
 
-async def export_json(file_path: str, output: str, api_key: str, poster: str):
+async def export_json(file_path: str, output: str, api_key: str, poster: Optional[str]):
     processor = BriefingProcessor(api_key)
     embeds, error = await processor.create_embeds(file_path, poster)
     
@@ -262,7 +271,13 @@ def main():
     parser.add_argument("-c", "--channels", help="Discord channel IDs (comma-separated)")
     parser.add_argument("-o", "--out", help="Export to JSON file")
     parser.add_argument("-s", "--summarize", action="store_true", help="Enable LLM summarization")
-    parser.add_argument("--poster", default="hackmd-facts-briefing.png", help="Poster filename")
+    parser.add_argument(
+        "-p", "--poster", 
+        nargs='?', 
+        const="hackmd-facts-briefing.png", 
+        default=None, 
+        help="Poster filename. If -p is used alone, defaults to hackmd-facts-briefing.png. If no -p, no poster."
+    )
     
     args = parser.parse_args()
     api_key = os.getenv("OPENROUTER_API_KEY") if args.summarize else None
