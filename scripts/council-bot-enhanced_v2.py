@@ -14,6 +14,7 @@ from discord.ext import commands
 from datetime import datetime
 import requests
 import asyncio # Keep asyncio for bot.run() and potential future async operations
+import csv # Ensure csv is imported
 from dataclasses import dataclass, field
 from typing import Dict, List, Optional, Tuple, Any
 
@@ -263,20 +264,25 @@ class CouncilBotV2(commands.Bot):
         view = EphemeralSurveyQuestionView(self, survey_key, briefing_data, question_data)
         return ([question_embed], view)
 
-    async def progress_ephemeral_survey(self, interaction: discord.Interaction, survey_key: Tuple[int, int]): # Removed message_to_edit
+    async def progress_ephemeral_survey(self, interaction: discord.Interaction, survey_key: Tuple[int, int]):
         if survey_key not in self.active_surveys:
             await interaction.edit_original_response(content="Survey session ended or encountered an issue. Please try starting again.", embeds=[], view=None)
             return
 
         survey_state = self.active_surveys[survey_key]
         briefing_data = survey_state['briefing_data']
+        # Store user object from interaction, as it's needed for saving if survey completes here
+        current_user = interaction.user 
+
         current_topic_idx = survey_state['current_topic_index']
         current_question_idx = survey_state['current_question_index'] + 1
 
         key_points = briefing_data.get('key_points', [])
         if current_topic_idx >= len(key_points):
             await interaction.edit_original_response(content="🎉 Survey Complete! Thank you for your participation. Your responses have been recorded.", embeds=[], view=None)
-            await self._send_user_vote_summary_dm(interaction.user, None) 
+            user_final_votes = global_vote_storage_v2.votes.get(str(current_user.id), {})
+            await self._save_user_responses_to_csv(current_user, user_final_votes, briefing_data)
+            await self._send_user_vote_summary_dm(current_user, None) 
             if survey_key in self.active_surveys: del self.active_surveys[survey_key]
             return
 
@@ -288,7 +294,9 @@ class CouncilBotV2(commands.Bot):
             survey_state['current_topic_index'] = current_topic_idx
             if current_topic_idx >= len(key_points):
                 await interaction.edit_original_response(content="🎉 Survey Complete! Thank you for your participation. Your responses have been recorded.", embeds=[], view=None)
-                await self._send_user_vote_summary_dm(interaction.user, None)
+                user_final_votes = global_vote_storage_v2.votes.get(str(current_user.id), {})
+                await self._save_user_responses_to_csv(current_user, user_final_votes, briefing_data)
+                await self._send_user_vote_summary_dm(current_user, None)
                 if survey_key in self.active_surveys: del self.active_surveys[survey_key]
                 return
             else:
@@ -628,6 +636,60 @@ class CouncilBotV2(commands.Bot):
         survey_state['current_question_id'] = question_id
         survey_state['valid_reactions_map'] = current_valid_reactions_map
 
+    async def _get_all_question_ids(self, briefing_data: dict) -> List[str]:
+        """Helper to extract all question_ids from the briefing data in order."""
+        all_q_ids = []
+        if briefing_data and 'key_points' in briefing_data:
+            for topic in briefing_data['key_points']:
+                for item in topic.get('deliberation_items', []):
+                    if 'question_id' in item:
+                        all_q_ids.append(item['question_id'])
+        return all_q_ids
+
+    async def _save_user_responses_to_csv(self, user: discord.User, user_votes: Dict[str, str], briefing_data: dict):
+        """Saves the user's responses to a CSV file."""
+        if not briefing_data:
+            print(f"{LogColors.WARNING}No briefing data available, cannot save responses for {user.name}{LogColors.ENDC}")
+            return
+
+        survey_date = briefing_data.get('date', 'N/A')
+        filepath = 'council_survey_responses.csv'
+        
+        all_question_ids = await self._get_all_question_ids(briefing_data)
+        if not all_question_ids:
+            print(f"{LogColors.WARNING}No question IDs found in briefing, cannot save responses for {user.name}{LogColors.ENDC}")
+            return
+
+        # Updated fieldnames to use discord_username and display_name
+        fieldnames = ['discord_username', 'display_name', 'survey_date'] + all_question_ids
+
+        response_row = {
+            'discord_username': user.name,       # Global Discord username
+            'display_name': user.display_name, # Server nickname or global display name
+            'survey_date': survey_date,
+        }
+
+        for q_id in all_question_ids:
+            answer_key = user_votes.get(q_id)
+            if answer_key and isinstance(answer_key, str) and '_' in answer_key:
+                try:
+                    response_row[q_id] = answer_key.split('_')[1] # Extract number from "answer_X"
+                except (IndexError, ValueError):
+                    response_row[q_id] = answer_key # Fallback to full key if parsing fails
+            else:
+                response_row[q_id] = '' # Or 'N/A' if no vote
+
+        file_exists = os.path.isfile(filepath)
+        try:
+            with open(filepath, 'a', newline='', encoding='utf-8') as csvfile:
+                writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+                if not file_exists:
+                    writer.writeheader()
+                writer.writerow(response_row)
+            print(f"{LogColors.SUCCESS}Saved responses for {user.name} to {filepath}{LogColors.ENDC}")
+        except Exception as e:
+            print(f"{LogColors.FAIL}Error saving responses for {user.name} to CSV: {e}{LogColors.ENDC}")
+
 class MoreContextButton(discord.ui.Button):
     def __init__(self, briefing_data: dict, current_question_data: dict):
         super().__init__(style=ButtonStyle.success, label="ℹ️ Context", custom_id="show_more_context")
@@ -768,7 +830,7 @@ class EphemeralSurveyQuestionView(discord.ui.View):
 
 class StartSurveyButton(discord.ui.Button):
     def __init__(self, briefing_data_to_pass: dict, bot_instance: "CouncilBotV2"):
-        super().__init__(style=ButtonStyle.success, label="🚀 Start Survey Ephemerally", custom_id="start_ephemeral_survey_v2")
+        super().__init__(style=ButtonStyle.success, label="🗳️ Start Survey", custom_id="start_ephemeral_survey_v2")
         self.briefing_data = briefing_data_to_pass
         self.bot = bot_instance
 
