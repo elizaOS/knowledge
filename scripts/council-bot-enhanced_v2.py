@@ -180,9 +180,8 @@ class CouncilBotV2(commands.Bot):
 
             embed = Embed(title="📝 Jedai Council Daily Survey Available!", 
                           description=(
-                              "A new council survey is ready for your input.\n\n"
-                              "Click the button below to start the survey in your DMs. "
-                              "Each question will be presented, and you can vote using reactions."
+                              "A new council survey is ready for your input.\n"
+                              "Click the button below to start the survey."
                           ),
                           color=config.colors[0])
             embed.set_author(name="JEDAI COUNCIL", url=config.hackmd_book_url)
@@ -204,31 +203,41 @@ class CouncilBotV2(commands.Bot):
             await channel.send(f"An unexpected error occurred while loading the V2 survey: {str(e)}")
 
     async def _prepare_question_content(self, topic_data: dict, question_data: dict, survey_key: Tuple[int, int], is_initial_question: bool = False) -> Tuple[List[Embed], 'EphemeralSurveyQuestionView']:
-        # survey_key is (interaction.channel_id, interaction.user.id)
-        # This key is used to fetch active_surveys state, which should exist by now.
         if survey_key not in self.active_surveys:
             print(f"{LogColors.WARNING}Survey key {survey_key} not found in _prepare_question_content.{LogColors.ENDC}")
             error_embed = Embed(title="Error", description="Could not retrieve survey session. Please try restarting the survey.", color=discord.Color.red())
             return ([error_embed], None)
 
-        briefing_data = self.active_surveys[survey_key]['briefing_data']
+        survey_state = self.active_surveys[survey_key] # Get survey_state
+        briefing_data = survey_state['briefing_data']
         briefing_date = briefing_data.get('date', 'N/A')
         topic_title = topic_data.get('topic', 'Current Topic')
         question_id = question_data.get('question_id', 'unknown_q')
         question_text_full = question_data.get('text', 'No question text available.')
         answers = question_data.get('multiple_choice_answers', {})
 
+        # Calculate total questions and current question number
+        total_questions = 0
+        for kp in briefing_data.get('key_points', []):
+            total_questions += len(kp.get('deliberation_items', []))
+        
+        current_question_number = 0
+        for i in range(survey_state['current_topic_index']):
+            current_question_number += len(briefing_data['key_points'][i].get('deliberation_items', []))
+        current_question_number += survey_state['current_question_index'] + 1
+
+
         orange_color = config.colors[1 % len(config.colors)]
 
-        description_parts = [f"**❓ Question {question_id}: {question_text_full}**", "\n**🗳️ Answer Options:**"]
+        description_parts = [f"**❓ Question: {question_text_full}**", "\n**🗳️ Answer Options:**\n"]
         sorted_answer_keys = sorted(answers.keys(), key=lambda x: int(x.split('_')[1]) if '_' in x and x.split('_')[1].isdigit() else float('inf'))
         
         for i, ans_key in enumerate(sorted_answer_keys):
-            if i < len(config.number_emojis):
+            if i < len(config.number_emojis): # Use number_emojis for iteration limit, but label buttons with numbers
                 ans_obj = answers[ans_key]
                 ans_text = ans_obj.get('text', 'N/A')
-                emoji_to_use = config.number_emojis[i]
-                description_parts.append(f"{emoji_to_use} {ans_text}")
+                # Use numeric label for embed, buttons will use simple numbers
+                description_parts.append(f"{config.number_emojis[i]} {ans_text}")
             else:
                 break
         description_parts.append("\nClick a button below to cast your vote.")
@@ -246,8 +255,11 @@ class CouncilBotV2(commands.Bot):
         if is_initial_question:
             question_embed.set_author(name="JEDAI COUNCIL DAILY SURVEY", url=config.hackmd_book_url)
             question_embed.set_thumbnail(url=config.avatar_url)
-        question_embed.set_footer(text=f"AI Generated Survey | {briefing_date} | QID: {question_id}")
         
+        # Update footer with progress
+        question_embed.set_footer(text=f"Question {current_question_number}/{total_questions} | Briefing Date: {briefing_date}")
+        
+        # Pass current_question_number for button labeling if needed, or handle in EphemeralSurveyQuestionView
         view = EphemeralSurveyQuestionView(self, survey_key, briefing_data, question_data)
         return ([question_embed], view)
 
@@ -352,9 +364,7 @@ class CouncilBotV2(commands.Bot):
                             break
                     
                     current_topic_lines.append(f"Q: {question_text_full}")
-                    current_topic_lines.append(f"A: {voted_emoji} {answer_text_full}")
-                    if implication_text and voted_answer_key != 'answer_4':
-                        current_topic_lines.append(f"> *Implication: {implication_text}*")
+                    current_topic_lines.append(f"A: {answer_text_full}")
             if has_votes_in_topic:
                 dm_parts.extend(current_topic_lines)
         
@@ -620,11 +630,12 @@ class CouncilBotV2(commands.Bot):
 
 class MoreContextButton(discord.ui.Button):
     def __init__(self, briefing_data: dict, current_question_data: dict):
-        super().__init__(style=ButtonStyle.secondary, label="ℹ️ More Context", custom_id="show_more_context")
+        super().__init__(style=ButtonStyle.success, label="ℹ️ Context", custom_id="show_more_context")
         self.briefing_data = briefing_data
         self.current_question_data = current_question_data
 
     async def callback(self, interaction: discord.Interaction):
+        # No defer needed if sending a new message directly
         ephemeral_embeds = []
 
         # 1. Monthly Goal & Daily Focus
@@ -634,7 +645,7 @@ class MoreContextButton(discord.ui.Button):
             goal_focus_desc_parts = []
             if monthly_goal: goal_focus_desc_parts.append(f"**Monthly Goal:** {monthly_goal}")
             if daily_focus: goal_focus_desc_parts.append(f"**Daily Focus:** {daily_focus}")
-            gf_embed = Embed(title="Current Directives", description="\n".join(goal_focus_desc_parts), color=config.colors[1]) # Orange
+            gf_embed = Embed(title="Current Directives", description="\n".join(goal_focus_desc_parts), color=config.colors[1])
             ephemeral_embeds.append(gf_embed)
         
         # 2. Question-Specific Context
@@ -642,22 +653,60 @@ class MoreContextButton(discord.ui.Button):
         question_text_for_title = self.current_question_data.get('text', 'Selected Question')
         if question_context_list:
             context_str = "\n".join([f"- {ctx}" for ctx in question_context_list])
-            q_ctx_embed = Embed(title=f"📜 Question-Specific Context for: {safe_truncate(question_text_for_title,70)}", description=safe_truncate(context_str, 1000), color=config.colors[1]) # Orange
+            q_ctx_embed = Embed(title=f"📜 Question-Specific Context for: {safe_truncate(question_text_for_title,70)}", description=safe_truncate(context_str, 1000), color=config.colors[1])
             ephemeral_embeds.append(q_ctx_embed)
-        else:
-            pass # Or just don't add this embed if no specific context
 
         if ephemeral_embeds:
-            # Add footer to the last embed in the list
             ephemeral_embeds[-1].set_footer(text="AI generated content")
+            # Send as a new ephemeral message, don't edit original
             await interaction.response.send_message(embeds=ephemeral_embeds, ephemeral=True)
         else:
             await interaction.response.send_message("No additional context details (Directives or Question-Specific) are available.", ephemeral=True)
 
+class ImplicationsButton(discord.ui.Button):
+    def __init__(self, current_question_data: dict):
+        super().__init__(style=ButtonStyle.secondary, label="🔍 Help", custom_id="show_implications")
+        self.current_question_data = current_question_data
+
+    async def callback(self, interaction: discord.Interaction):
+        # No defer needed if sending a new message directly
+        question_text = self.current_question_data.get('text', 'Selected Question')
+        answers = self.current_question_data.get('multiple_choice_answers', {})
+        
+        embed_description_lines = [f"**{question_text}**\n"]
+        
+        sorted_answer_keys = sorted(answers.keys(), key=lambda x: int(x.split('_')[1]) if '_' in x and x.split('_')[1].isdigit() else float('inf'))
+
+        for i, ans_key in enumerate(sorted_answer_keys):
+            ans_obj = answers.get(ans_key, {})
+            ans_text = ans_obj.get('text', 'N/A')
+            implication = ans_obj.get('implication')
+            emoji_label = config.number_emojis[i] if i < len(config.number_emojis) else str(i+1)
+
+            embed_description_lines.append(f"**{emoji_label} {ans_text}**")
+            if ans_key != 'answer_4' and implication: 
+                embed_description_lines.append(f"> _{safe_truncate(implication, 300)}_\n")
+            else:
+                embed_description_lines.append("\n")
+
+        if not embed_description_lines or len(embed_description_lines) <=1 : # Check if only the question text was added
+            await interaction.response.send_message("No implication details available for this question.", ephemeral=True)
+            return
+
+        implications_embed = Embed(
+            title="🔍 Answer Implications",
+            description="\n".join(embed_description_lines),
+            color=config.colors[2 % len(config.colors)] 
+        )
+        implications_embed.set_footer(text="Review the potential outcomes of each choice.")
+        
+        # Send as a new ephemeral message, don't edit original
+        await interaction.response.send_message(embeds=[implications_embed], ephemeral=True)
+
 class EphemeralAnswerButton(discord.ui.Button):
-    def __init__(self, bot_instance: "CouncilBotV2", survey_key: Tuple[int, int], question_id: str, answer_key: str, answer_text: str, emoji_label: str):
-        super().__init__(style=ButtonStyle.primary if answer_key != "answer_4" else ButtonStyle.secondary, 
-                         label=emoji_label,  # Changed to only show emoji
+    def __init__(self, bot_instance: "CouncilBotV2", survey_key: Tuple[int, int], question_id: str, answer_key: str, answer_text: str, button_label: str):
+        super().__init__(style=ButtonStyle.primary, 
+                         label=button_label, 
                          custom_id=f"ephemeral_vote_{question_id}_{answer_key}")
         self.bot = bot_instance
         self.survey_key = survey_key # (channel_id, user_id)
@@ -687,37 +736,35 @@ class EphemeralAnswerButton(discord.ui.Button):
 
 class EphemeralSurveyQuestionView(discord.ui.View):
     def __init__(self, bot_instance: "CouncilBotV2", survey_key: Tuple[int,int], briefing_data: dict, current_question_data: dict):
-        super().__init__(timeout=1800) # View timeout for this specific question
+        super().__init__(timeout=1800)
         self.bot = bot_instance
         self.survey_key = survey_key
         self.briefing_data = briefing_data
         self.current_question_data = current_question_data
-        # description_lines = [] # This is not used for adding buttons
 
         answers = current_question_data.get('multiple_choice_answers', {})
         question_id = current_question_data.get('question_id', 'unknown_q')
         sorted_answer_keys = sorted(answers.keys(), key=lambda x: int(x.split('_')[1]) if '_' in x and x.split('_')[1].isdigit() else float('inf'))
 
         for i, ans_key in enumerate(sorted_answer_keys):
-            if i < len(config.number_emojis): # Limit to number of emojis we have for buttons
+            if i < 10: 
                 ans_obj = answers[ans_key]
                 ans_text = ans_obj.get('text', 'N/A')
-                emoji_to_use = config.number_emojis[i]
+                button_numeric_label = str(i + 1)
                 
-                # Create and add the answer button
                 button = EphemeralAnswerButton(
                     bot_instance=self.bot,
                     survey_key=self.survey_key,
                     question_id=question_id,
                     answer_key=ans_key,
-                    answer_text=ans_text,
-                    emoji_label=emoji_to_use
+                    answer_text=ans_text, 
+                    button_label=button_numeric_label 
                 )
                 self.add_item(button)
             else: break
 
-        # Add "More Context" button to this view
         self.add_item(MoreContextButton(briefing_data, current_question_data))
+        self.add_item(ImplicationsButton(current_question_data)) # Add the new button
 
 class StartSurveyButton(discord.ui.Button):
     def __init__(self, briefing_data_to_pass: dict, bot_instance: "CouncilBotV2"):
