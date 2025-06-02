@@ -63,7 +63,7 @@ This directory contains GitHub Actions workflows to automate various aspects of 
 
 *   **Name**: `Extract Daily Facts and Convert to Markdown`
 *   **Trigger**: Daily at 01:15 UTC (after aggregation, before council briefing) and on `workflow_dispatch`.
-*   **Purpose**: Runs fact extraction on aggregated data, outputting both JSON and Markdown. Creates permalinks.
+*   **Purpose**: Runs fact extraction on aggregated data, outputting both JSON and Markdown. This includes processing user feedback in a way that prepares it for sentiment analysis. Creates permalinks.
 *   **Key Actions**:
     *   Sets up Python.
     *   Installs dependencies.
@@ -76,30 +76,7 @@ This directory contains GitHub Actions workflows to automate various aspects of 
 
 *   **Name**: `Daily Discord Facts Briefing`
 *   **Trigger**: Daily at 02:35 UTC and on `workflow_dispatch`.
-*   **Purpose**: Sends the daily facts briefing (from `the-council/facts/YYYY-MM-DD.json`) to a specified Discord channel using the `scripts/webhook.py` script.
+*   **Purpose**: Sends the daily facts briefing (from `the-council/facts/YYYY-MM-DD.json`) to a specified Discord channel using the `scripts/webhook.py` script. The briefing includes a visual representation of user sentiment.
 *   **Key Actions**:
     *   Sets up Python.
-    *   Installs `discord.py` and `requests`.
-    *   Determines the current date to locate the correct `YYYY-MM-DD.json` facts file.
-    *   Checks if the daily facts file exists before attempting to send.
-    *   Runs `scripts/webhook.py` with specified parameters for the Discord channel, summarization, and poster image.
-    *   Requires `OPENROUTER_API_KEY` and `DISCORD_BOT_TOKEN` secrets.
-
-## Workflow Execution Order
-
-While some workflows can be run manually (`workflow_dispatch`), the scheduled daily runs are now staggered as follows:
-
-1.  **01:00 UTC**: `sync.yml` (Sync External Data Sources)
-2.  **01:15 UTC**: `extract_daily_facts.yml` (Extract Daily Facts)
-3.  **01:30 UTC**: `aggregate-daily-sources.yml` (Aggregate Daily Sources)
-4.  **02:00 UTC**: `generate-council-briefing.yml` (Generate Council Briefing)
-5.  **02:30 UTC**: `update_hackmd_notes.yml` (Update HackMD Notes)
-6.  **02:35 UTC**: `daily_discord_briefing.yml` (Daily Discord Facts Briefing)
-
-This order ensures that data is first synced, then facts are extracted, then data is aggregated, then processed for council, HackMD notes are updated, and finally the briefing is sent to Discord.
-
-## General Notes
-
--   All workflows require `contents: write` permissions to commit changes back to the repository.
--   Some workflows use a `GH_PAT` (Personal Access Token) or `GITHUB_TOKEN` for authenticated operations.
--   Scripts used by these workflows are generally located in the `scripts/` directory at the root of the repository. 
+    *   Installs `discord.py` and `

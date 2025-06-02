@@ -63,7 +63,7 @@ This Python script takes the aggregated daily JSON (typically produced by `aggre
 **Purpose**: Generates a categorized intelligence briefing by extracting key facts and insights from the aggregated daily JSON data.
 
 **Details**:
-This script takes the comprehensive JSON output from `scripts/aggregate_sources.py` (e.g., `the-council/aggregated/YYYY-MM-DD.json`) and uses a specialized LLM prompt (`scripts/prompts/news_show/fact_extraction_prompt.txt`) to perform a deep analysis of the entire dataset in a single LLM call. It aims to distill the most significant information into a structured JSON output, organized by thematic categories such as Twitter news, GitHub updates (new issues/PRs, overall focus), Discord updates, user feedback, strategic insights, and market analysis. The output includes an overall summary and, for each extracted piece of information, `source_keys` tracing back to the original data in the input JSON. This script is designed to produce actionable intelligence for briefings or to power other content generation processes.
+This script takes the comprehensive JSON output from `scripts/aggregate_sources.py` (e.g., `the-council/aggregated/YYYY-MM-DD.json`) and uses a specialized LLM prompt (`scripts/prompts/news_show/fact_extraction_prompt.txt`) to perform a deep analysis of the entire dataset in a single LLM call. It aims to distill the most significant information into a structured JSON output, organized by thematic categories such as Twitter news, GitHub updates (new issues/PRs, overall focus), Discord updates, user feedback, strategic insights, and market analysis. The output includes an overall summary and, for each extracted piece of information, `source_keys` tracing back to the original data in the input JSON. Crucially, user feedback is structured to be easily consumable for sentiment analysis and visualization by downstream scripts like `webhook.py`. This script is designed to produce actionable intelligence for briefings or to power other content generation processes.
 
 **Typical Usage**:
 ```bash
@@ -88,7 +88,7 @@ This Python script is the streamlined replacement for `extract-webhook.py`, redu
 - **Rich Discord Formatting**:
   - Main embed with overall summary and thumbnail
   - Separate themed embeds for GitHub, Discord, and User Feedback sections
-  - Single consolidated diff block for user feedback with sentiment-based coloring (`+` positive, `-` negative, neutral unmarked)
+  - Single consolidated diff block for user feedback with sentiment-based coloring (`+` positive, `-` negative, neutral unmarked), providing a clear visual representation of community sentiment.
   - Clickable links for GitHub PRs/issues with author attribution
 - **Visual Enhancements**: Includes AI-generated poster images and proper embed styling with section-specific colors
 - **Robust Error Handling**: Proper Discord connection cleanup and graceful fallbacks when LLM summarization fails
@@ -97,7 +97,7 @@ This Python script is the streamlined replacement for `extract-webhook.py`, redu
 - **Main Embed**: Overall summary with key observations extracted from strategic insights
 - **GitHub Section**: PRs and issues with `[Title](url) by @author - significance` format
 - **Discord Section**: Channel summaries with participant information, intelligently consolidated
-- **User Feedback Section**: Sentiment-colored feedback in a single diff block for efficient token usage
+- **User Feedback Section**: Sentiment-colored feedback in a single diff block for efficient token usage, offering an at-a-glance view of community sentiment.
 - **Visual Poster**: AI-generated daily summary image
 
 **Content Processing**:
