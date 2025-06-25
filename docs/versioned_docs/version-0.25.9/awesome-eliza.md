@@ -70,7 +70,6 @@ A curated list of awesome things related to the [eliza framework](https://github
 
 ## 🛠️ Tools
 
-- [twitter-scraper-finetune](https://github.com/elizaOS/twitter-scraper-finetune) - Scrape twitter accounts for fine tuning
 - [elizagen](https://elizagen.howieduhzit.best/) - Easy eliza characterfile generator, add your own API keys
 - [Fleek.xyz](https://fleek.xyz/eliza/) - Deploy Eliza agents in one click on a hosted platform
 
@@ -102,7 +101,7 @@ A curated list of awesome things related to the [eliza framework](https://github
 
 - [MongoDB](https://github.com/elizaos-plugins/adapter-mongodb) - Database adapter for MongoDB enabling document storage with query capabilities
 - [Postgres](https://github.com/elizaos-plugins/adapter-postgres) - Database adapter for PostgreSQL with full relational database capabilities
-- [Pglite](https://github.com/elizaos-plugins/adapter-pglite) - Lightweight PostgreSQL adapter for embedded database applications
+- [Sqlite](https://github.com/elizaos-plugins/adapter-sqlite) - Lightweight PostgreSQL adapter for embedded database applications
 - [Qdrant](https://github.com/elizaos-plugins/adapter-qdrant) - Vector database adapter for Qdrant with similarity search capabilities
 - [SQLite](https://github.com/elizaos-plugins/adapter-sqlite) - File-based SQL database adapter for lightweight local storage
 - [Supabase](https://github.com/elizaos-plugins/adapter-supabase) - Database adapter for Supabase with PostgreSQL and realtime capabilities

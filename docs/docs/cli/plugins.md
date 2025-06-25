@@ -6,9 +6,15 @@ keywords: [plugins, extensions, packages, npm, registry, installation, configura
 image: /img/cli.jpg
 ---
 
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
 # Plugin Command
 
 Manage ElizaOS plugins.
+
+<Tabs>
+<TabItem value="overview" label="Overview & Options" default>
 
 ## Usage
 
@@ -18,20 +24,22 @@ elizaos plugins [options] [command]
 
 ## Subcommands
 
-| Subcommand          | Aliases   | Description                                             | Arguments                                                                 | Options                                                                                   |
-| ------------------- | --------- | ------------------------------------------------------- | ------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------- |
-| `list`              | `l`       | List available plugins to install into the project      |                                                                           | `--all` (detailed version info), `--v0` (v0.x compatible only)                            |
-| `add`               | `install` | Add a plugin to the project                             | `<plugin>` (plugins name e.g., "abc", "plugin-abc", "elizaos/plugin-abc") | `-n, --no-env-prompt`, `-b, --branch <branchName>` (default: main), `-T, --tag <tagname>` |
-| `update`            | `refresh` | Fetch the latest plugin registry and update local cache |                                                                           |                                                                                           |
-| `installed-plugins` |           | List plugins found in the project dependencies          |                                                                           |                                                                                           |
-| `remove`            | `delete`  | Remove a plugins from the project                       | `<plugin>` (plugins name e.g., "abc", "plugin-abc", "elizaos/plugin-abc") |                                                                                           |
+| Subcommand          | Aliases               | Description                                                                        | Arguments                                                                 | Options                                                                           |
+| ------------------- | --------------------- | ---------------------------------------------------------------------------------- | ------------------------------------------------------------------------- | --------------------------------------------------------------------------------- |
+| `list`              | `l`, `ls`             | List available plugins to install into the project (shows v1.x plugins by default) |                                                                           | `--all` (detailed version info), `--v0` (v0.x compatible only)                    |
+| `add`               | `install`             | Add a plugin to the project                                                        | `<plugin>` (plugins name e.g., "abc", "plugin-abc", "elizaos/plugin-abc") | `-s, --skip-env-prompt`, `--skip-verification`, `-b, --branch`, `-T, --tag`       |
+| `installed-plugins` |                       | List plugins found in the project dependencies                                     |                                                                           |                                                                                   |
+| `remove`            | `delete`, `del`, `rm` | Remove a plugins from the project                                                  | `<plugin>` (plugins name e.g., "abc", "plugin-abc", "elizaos/plugin-abc") |                                                                                   |
+| `upgrade`           |                       | Upgrade a plugin from version 0.x to 1.x using AI-powered migration                | `<path>` (GitHub repository URL or local folder path)                     | `--api-key`, `--skip-tests`, `--skip-validation`                                  |
+| `generate`          |                       | Generate a new plugin using AI-powered code generation                             |                                                                           | `--api-key`, `--skip-tests`, `--skip-validation`, `--skip-prompts`, `--spec-file` |
 
-## Examples
+</TabItem>
+<TabItem value="examples" label="Examples">
 
 ### Listing Available Plugins
 
 ```bash
-# List all available plugins
+# List available v1.x plugins (default behavior)
 elizaos plugins list
 
 # Using alias
@@ -54,7 +62,10 @@ elizaos plugins add openai
 elizaos plugins add @elizaos/plugin-anthropic
 
 # Add plugin and skip environment variable prompts
-elizaos plugins add google-ai --no-env-prompt
+elizaos plugins add google-ai --skip-env-prompt
+
+# Skip plugin verification after installation
+elizaos plugins add discord --skip-verification
 
 # Add plugin from specific branch (for monorepo development)
 elizaos plugins add custom-plugin --branch feature/new-api
@@ -78,22 +89,6 @@ elizaos plugins add github:owner/my-plugin#feature-branch
 elizaos plugins install openai
 ```
 
-### Updating Plugin Registry
-
-```bash
-# Fetch latest plugin registry and update local cache
-elizaos plugins update
-
-# Using alias
-elizaos plugins refresh
-```
-
-**When to run this:**
-
-- You see "Plugin cache is empty or not found" messages
-- Want to get the latest available plugins
-- Plugin installation fails due to outdated registry cache
-
 ### Listing Installed Plugins
 
 ```bash
@@ -110,9 +105,55 @@ elizaos plugins remove openai
 # Remove plugin by full package name
 elizaos plugins remove @elizaos/plugin-anthropic
 
-# Using alias
+# Using aliases
 elizaos plugins delete openai
+elizaos plugins del twitter
+elizaos plugins rm discord
 ```
+
+### Upgrading Plugins (AI-Powered)
+
+```bash
+# Upgrade a plugin from v0.x to v1.x using AI migration
+elizaos plugins upgrade https://github.com/user/plugin-v0
+
+# Upgrade from local folder
+elizaos plugins upgrade ./path/to/old-plugin
+
+# Provide API key directly
+elizaos plugins upgrade ./my-plugin --api-key sk-ant-...
+
+# Skip test validation
+elizaos plugins upgrade ./my-plugin --skip-tests
+
+# Skip production readiness validation
+elizaos plugins upgrade ./my-plugin --skip-validation
+
+# Run upgrade with all skips (faster but less safe)
+elizaos plugins upgrade ./my-plugin --skip-tests --skip-validation
+```
+
+### Generating New Plugins (AI-Powered)
+
+```bash
+# Generate a new plugin interactively
+elizaos plugins generate
+
+# Generate with API key directly
+elizaos plugins generate --api-key sk-ant-...
+
+# Generate from specification file (non-interactive)
+elizaos plugins generate --spec-file ./plugin-spec.json --skip-prompts
+
+# Skip test validation during generation
+elizaos plugins generate --skip-tests
+
+# Skip production readiness validation
+elizaos plugins generate --skip-validation
+```
+
+</TabItem>
+<TabItem value="guides" label="Guides & Concepts">
 
 ## Plugin Installation Formats
 
@@ -185,26 +226,78 @@ elizaos test
 
 ### 4. Publish Your Plugin
 
+For detailed instructions on authentication, plugin requirements, and the full publishing process, see the [**`publish` command documentation**](./publish.md).
+
 ```bash
-# Test publishing process
+# Test the publishing process before committing
 elizaos publish --test
 
-# Publish to registry
+# Publish to the registry
 elizaos publish
 ```
+
+## AI-Powered Plugin Development
+
+ElizaOS includes AI-powered features to help with plugin development:
+
+### Plugin Generation
+
+The `generate` command uses AI to create a new plugin based on your specifications:
+
+1. **Interactive Mode**: Guides you through plugin requirements
+2. **Code Generation**: Creates complete plugin structure with actions, providers, and tests
+3. **Validation**: Ensures generated code follows ElizaOS best practices
+
+### Plugin Migration
+
+The `upgrade` command helps migrate v0.x plugins to v1.x format:
+
+1. **Automated Analysis**: Analyzes existing plugin structure
+2. **Code Transformation**: Updates APIs, imports, and patterns
+3. **Test Migration**: Converts tests to new format
+4. **Validation**: Ensures migrated plugin works correctly
+
+### Requirements
+
+Both AI features require an Anthropic API key:
+
+- Set via environment: `export ANTHROPIC_API_KEY=sk-ant-...`
+- Or pass directly: `--api-key sk-ant-...`
+
+</TabItem>
+<TabItem value="troubleshooting" label="Troubleshooting">
 
 ## Troubleshooting
 
 ### Plugin Installation Failures
 
 ```bash
-# If plugin cache is empty or corrupted
-elizaos plugins update
-
 # Clear cache and retry
 rm -rf ~/.eliza/cache
-elizaos plugins update
 elizaos plugins add plugin-name
+```
+
+### Bun Installation Issues
+
+```bash
+# If you see "bun: command not found" errors
+# Install Bun using the appropriate command for your system:
+
+# Linux/macOS:
+curl -fsSL https://bun.sh/install | bash
+
+# Windows:
+powershell -c "irm bun.sh/install.ps1 | iex"
+
+# macOS with Homebrew:
+brew install bun
+
+# After installation, restart your terminal or:
+source ~/.bashrc  # Linux
+source ~/.zshrc   # macOS with zsh
+
+# Verify installation:
+bun --version
 ```
 
 ### Network Issues
@@ -269,8 +362,33 @@ elizaos plugins add plugin-name --branch main
 elizaos plugins add plugin-name --tag v1.0.0
 ```
 
+### AI Feature Issues
+
+```bash
+# Missing API key error
+export ANTHROPIC_API_KEY=sk-ant-your-key-here
+
+# Or pass directly to command
+elizaos plugins generate --api-key sk-ant-your-key-here
+
+# Invalid specification file
+# Ensure spec file is valid JSON
+cat plugin-spec.json | jq .
+
+# Generation/Upgrade timeout
+# Skip validation for faster iteration
+elizaos plugins generate --skip-tests --skip-validation
+
+# Out of memory during AI operations
+# Increase Node.js memory limit
+NODE_OPTIONS="--max-old-space-size=8192" elizaos plugins upgrade ./my-plugin
+```
+
 ## Related Commands
 
 - [`create`](./create.md): Create a new project or plugin
 - [`env`](./env.md): Manage environment variables needed by plugins
 - [`publish`](./publish.md): Publish your plugin to the registry
+
+</TabItem>
+</Tabs>

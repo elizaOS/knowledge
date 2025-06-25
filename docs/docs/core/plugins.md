@@ -40,7 +40,7 @@ The ElizaOS plugin system maintains the same basic concept as previous versions,
 
 The new CLI tool introduces a streamlined workflow for plugin development without ever needing to touch the ElizaOS monorepo directly:
 
-1. **Create**: `npm create eliza` - Initialize a new plugin project with proper structure
+1. **Create**: `bun create eliza` - Initialize a new plugin project with proper structure
 2. **Develop**: Edit the plugin code in the generated project structure
 3. **Test**: `elizaos test` - Test the plugin functionality
 4. **Run**: `elizaos start` - Run the plugin with a default agent
@@ -51,11 +51,11 @@ The new CLI tool introduces a streamlined workflow for plugin development withou
 You can create a new ElizaOS plugin using the CLI:
 
 ```bash
-# Using npm
-npm create eliza
+# Using bun (recommended)
+bun create eliza
 
-# Or using npx
-npx create-eliza
+# Or using bunx
+bunx create-eliza
 ```
 
 When prompted, select "Plugin" as the type to create. The CLI will guide you through the setup process, creating a plugin with the proper structure and dependencies.
@@ -72,7 +72,7 @@ There are several ways to add plugins to your ElizaOS project:
     {
       "dependencies": {
         "@elizaos/plugin-solana": "github:elizaos-plugins/plugin-solana",
-        "@elizaos/plugin-twitter": "github:elizaos-plugins/plugin-twitter"
+        "@elizaos/plugin-farcaster": "github:elizaos-plugins/plugin-farcaster"
       }
     }
     ```
@@ -82,7 +82,7 @@ There are several ways to add plugins to your ElizaOS project:
     // In src/index.ts
     export const character: Character = {
       name: 'MyAgent',
-      plugins: ['@elizaos/plugin-twitter', '@elizaos/plugin-example'],
+      plugins: ['@elizaos/plugin-farcaster', '@elizaos/plugin-example'],
       // ...
     };
     ```
@@ -90,10 +90,10 @@ There are several ways to add plugins to your ElizaOS project:
   <TabItem value="cli" label="Via CLI Commands">
     ```bash
     # Add a plugin
-    elizaos plugins add @elizaos/plugin-twitter
+    elizaos plugins add @elizaos/plugin-farcaster
 
     # Remove a plugin
-    elizaos plugins remove @elizaos/plugin-twitter
+    elizaos plugins remove @elizaos/plugin-farcaster
 
     # List available plugins
     elizaos plugins list
@@ -260,7 +260,7 @@ Each plugin can provide one or more of the following components:
 
 | Component          | Purpose                                                                         |
 | ------------------ | ------------------------------------------------------------------------------- |
-| **Services**       | Platform integrations (Discord, Twitter, etc.) or specialized capabilities      |
+| **Services**       | Platform integrations (Discord, Telegram, etc.) or specialized capabilities     |
 | **Actions**        | Executable functions triggered by the agent (reply, generate content, etc.)     |
 | **Providers**      | Context providers that supply info to the agent during decision making          |
 | **Evaluators**     | Analyze conversations to extract insights and improve future interactions       |
@@ -275,6 +275,17 @@ Each plugin can provide one or more of the following components:
 All plugins implement the core Plugin interface:
 
 ```typescript
+import {
+  IAgentRuntime,
+  Service,
+  Action,
+  Provider,
+  Evaluator,
+  Adapter,
+  Route,
+  TestSuite,
+} from '@elizaos/core';
+
 interface Plugin {
   name: string;
   description: string;
@@ -630,7 +641,7 @@ elizaos start --plugins=./path/to/plugin
 
 ### What's the difference between Actions and Services?
 
-Actions handle specific agent responses or behaviors, while Services provide platform integrations (like Discord or Twitter) or ongoing background functionality that multiple actions might use.
+Actions handle specific agent responses or behaviors, while Services provide platform integrations (like Discord or Telegram) or ongoing background functionality that multiple actions might use.
 
 ### How do I handle rate limits with external APIs?
 

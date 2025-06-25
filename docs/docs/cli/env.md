@@ -6,9 +6,15 @@ keywords: [environment, configuration, API keys, secrets, settings, .env]
 image: /img/cli.jpg
 ---
 
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
 # Environment Command
 
 Manage environment variables and secrets.
+
+<Tabs>
+<TabItem value="overview" label="Overview & Options" default>
 
 ## Usage
 
@@ -29,10 +35,13 @@ elizaos env [command] [options]
 
 ### List Command Options
 
-| Option     | Description                           |
-| ---------- | ------------------------------------- |
-| `--system` | List only system information          |
-| `--local`  | List only local environment variables |
+| Option            | Description                                             |
+| ----------------- | ------------------------------------------------------- |
+| `--system`        | List only system information                            |
+| `--local`         | List only local environment variables                   |
+| `--show-values`   | Display the actual values of secrets (use with caution) |
+| `--filter <text>` | Filter variables by a text pattern                      |
+| `--output <file>` | Export the environment variables to a file              |
 
 ### General Options
 
@@ -40,7 +49,8 @@ elizaos env [command] [options]
 | ----------- | ----------------------------- |
 | `-y, --yes` | Automatically confirm prompts |
 
-## Examples
+</TabItem>
+<TabItem value="examples" label="Examples">
 
 ### Viewing Environment Variables
 
@@ -53,9 +63,48 @@ elizaos env list --system
 
 # Show only local environment variables
 elizaos env list --local
+
+# Filter for variables containing 'API'
+elizaos env list --filter API
+
+# Show the actual values of variables (not masked)
+elizaos env list --show-values
+
+# Export all environment variables to a file
+elizaos env list --output env.json
 ```
 
-Example output:
+### Managing Local Environment Variables
+
+```bash
+# Edit local environment variables interactively
+elizaos env edit-local
+
+# Display variables and exit (--yes flag skips interactive editing)
+elizaos env edit-local --yes
+```
+
+### Interactive Management
+
+```bash
+# Start interactive environment manager
+elizaos env interactive
+```
+
+### Resetting Environment and Data
+
+```bash
+# Interactive reset with item selection
+elizaos env reset
+
+# Automatic reset with default selections
+elizaos env reset --yes
+```
+
+</TabItem>
+<TabItem value="guides" label="Guides & Concepts">
+
+### Example `list` output:
 
 ```
 System Information:
@@ -72,32 +121,18 @@ Path: /current/directory/.env
   LOG_LEVEL: debug
 ```
 
-### Managing Local Environment Variables
+### `edit-local` Details
 
-```bash
-# Edit local environment variables interactively
-elizaos env edit-local
-
-# Edit with automatic confirmation of prompts
-elizaos env edit-local --yes
-```
-
-The edit-local command allows you to:
+The `edit-local` command allows you to:
 
 - View existing local variables
 - Add new variables
 - Edit existing variables
 - Delete variables
 
-### Interactive Management
+**Note**: The `--yes` flag displays current variables and exits without interactive editing, since variable modification requires user input.
 
-```bash
-# Start interactive environment manager
-elizaos env interactive
-
-# Interactive mode with automatic confirmations
-elizaos env interactive --yes
-```
+### `interactive` Details
 
 Interactive mode provides a menu with options to:
 
@@ -105,15 +140,9 @@ Interactive mode provides a menu with options to:
 - Edit local environment variables
 - Reset environment variables
 
-### Resetting Environment and Data
+**Note**: The `--yes` flag is ignored in interactive mode since it requires user input by design.
 
-```bash
-# Interactive reset with item selection
-elizaos env reset
-
-# Automatic reset with default selections
-elizaos env reset --yes
-```
+### `reset` Details
 
 The reset command allows you to selectively reset:
 
@@ -144,7 +173,7 @@ If no local `.env` file exists:
 | `TELEGRAM_BOT_TOKEN` | Token for Telegram bot integration           |
 | `DISCORD_BOT_TOKEN`  | Token for Discord bot integration            |
 | `POSTGRES_URL`       | PostgreSQL database connection string        |
-| `PGLITE_DATA_DIR`    | Directory for PGLite database files          |
+| `SQLITE_DATA_DIR`    | Directory for PGLite database files          |
 | `MODEL_PROVIDER`     | Default model provider to use                |
 | `LOG_LEVEL`          | Logging verbosity (debug, info, warn, error) |
 | `PORT`               | HTTP API port number                         |
@@ -162,6 +191,9 @@ The reset command intelligently detects your database configuration:
 - **Value masking** - Sensitive values (API keys, tokens) are automatically masked in output
 - **Local-only storage** - Environment variables are stored locally in your project
 - **No global secrets** - Prevents accidental exposure across projects
+
+</TabItem>
+<TabItem value="troubleshooting" label="Troubleshooting">
 
 ## Troubleshooting
 
@@ -217,3 +249,6 @@ elizaos env list --local
 - [`dev`](./dev.md): Run in development mode with the configured environment
 - [`test`](./test.md): Run tests with environment configuration
 - [`create`](./create.md): Create a new project with initial environment setup
+
+</TabItem>
+</Tabs>

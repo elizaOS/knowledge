@@ -1143,7 +1143,7 @@ Complete changelog:
 * chore: add embedding tests by @shlokkhemani in https://github.com/elizaOS/eliza/pull/1944
 * feat: new plugin Arthera Chain by @elpiarthera in https://github.com/elizaOS/eliza/pull/1818
 * fix: fixed error in C3PO and improved error handling feedback by @JoeyKhd in https://github.com/elizaOS/eliza/pull/1951
-* feat: add pglite db adapter by @KONFeature in https://github.com/elizaOS/eliza/pull/1810
+* feat: add sqlite db adapter by @KONFeature in https://github.com/elizaOS/eliza/pull/1810
 * feat: Add fraxtal chain to evm by @kesar in https://github.com/elizaOS/eliza/pull/1954
 * feat: add coin price plugin (CoinMarketCap, CoinGecko & CoinCap) by @proteanx in https://github.com/elizaOS/eliza/pull/1808
 * fix: abstract readme by @cygaar in https://github.com/elizaOS/eliza/pull/1963
@@ -2395,9 +2395,9 @@ Complete changelog:
 * default set to new standard  post time 90-180 type: post time by @o-on-x in https://github.com/ai16z/eliza/pull/369
 * feat: readme by @ponderingdemocritus in https://github.com/ai16z/eliza/pull/370
 * twitter-profile-remake by @alextitonis in https://github.com/ai16z/eliza/pull/263
-* fix: bug in getRecentMessageInteractions not awating for promisses before formating by @bmgalego in https://github.com/ai16z/eliza/pull/366
+* fix: bug in getRecentMessageInteractions not awating for promises before formatting by @bmgalego in https://github.com/ai16z/eliza/pull/366
 * feat: starknet token transfer by @enitrat in https://github.com/ai16z/eliza/pull/373
-* feat: Adding unit tests for start - Covering goals, defaultCharacters, relationships, evaulators, posts, database, messages by @ai16z-demirix in https://github.com/ai16z/eliza/pull/367
+* feat: Adding unit tests for start - Covering goals, defaultCharacters, relationships, evaluators, posts, database, messages by @ai16z-demirix in https://github.com/ai16z/eliza/pull/367
 * feat: Enhance Heurist Image Generation Settings and Image Handling by @tsubasakong in https://github.com/ai16z/eliza/pull/375
 * feat: install clients from plugin by @ponderingdemocritus in https://github.com/ai16z/eliza/pull/371
 * fix: openrouter 70b don't support 128000, changed to 405b in model.ts by @denizekiz in https://github.com/ai16z/eliza/pull/356

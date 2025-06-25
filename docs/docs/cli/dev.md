@@ -6,9 +6,15 @@ keywords: [development, hot reload, debugging, watch mode, local development]
 image: /img/cli.jpg
 ---
 
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
 # Dev Command
 
 Start the project or plugin in development mode with auto-rebuild, detailed logging, and file change detection.
+
+<Tabs>
+<TabItem value="overview" label="Overview & Options" default>
 
 ## Usage
 
@@ -18,14 +24,15 @@ elizaos dev [options]
 
 ## Options
 
-| Option                          | Description                                                          |
-| ------------------------------- | -------------------------------------------------------------------- |
-| `-c, --configure`               | Reconfigure services and AI models (skips using saved configuration) |
-| `-char, --character [paths...]` | Character file(s) to use - accepts paths or URLs                     |
-| `-b, --build`                   | Build the project before starting                                    |
-| `-p, --port <port>`             | Port to listen on                                                    |
+| Option                   | Description                                                          |
+| ------------------------ | -------------------------------------------------------------------- |
+| `-c, --configure`        | Reconfigure services and AI models (skips using saved configuration) |
+| `--character [paths...]` | Character file(s) to use - accepts paths or URLs                     |
+| `-b, --build`            | Build the project before starting                                    |
+| `-p, --port <port>`      | Port to listen on                                                    |
 
-## Examples
+</TabItem>
+<TabItem value="examples" label="Examples">
 
 ### Basic Development Mode
 
@@ -75,6 +82,9 @@ elizaos dev --character https://example.com/characters/assistant.json
 # Full development setup
 elizaos dev --port 4000 --character "assistant.json,chatbot.json" --build --configure
 ```
+
+</TabItem>
+<TabItem value="guides" label="Guides & Concepts">
 
 ## Development Features
 
@@ -204,6 +214,9 @@ Multiple character files can be specified using:
 - Comma separation: `"file1.json,file2.json"`
 - Mixed format: `"file1.json, file2.json"`
 
+</TabItem>
+<TabItem value="troubleshooting" label="Troubleshooting">
+
 ## Troubleshooting
 
 ### Build Failures
@@ -218,6 +231,29 @@ bun i && bun run build
 
 # Try dev mode with explicit build
 elizaos dev --build
+```
+
+### Bun Installation Issues
+
+```bash
+# If you see "bun: command not found" errors
+# Install Bun using the appropriate command for your system:
+
+# Linux/macOS:
+curl -fsSL https://bun.sh/install | bash
+
+# Windows:
+powershell -c "irm bun.sh/install.ps1 | iex"
+
+# macOS with Homebrew:
+brew install bun
+
+# After installation, restart your terminal or:
+source ~/.bashrc  # Linux
+source ~/.zshrc   # macOS with zsh
+
+# Verify installation:
+bun --version
 ```
 
 ### File Watching Issues
@@ -270,3 +306,6 @@ elizaos env list
 - [`test`](./test.md): Run tests for your project
 - [`env`](./env.md): Configure environment variables for development
 - [`create`](./create.md): Create new projects with development structure
+
+</TabItem>
+</Tabs>
