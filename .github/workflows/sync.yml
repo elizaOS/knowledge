@@ -38,7 +38,7 @@ jobs:
         continue-on-error: true # Added for robustness
         run: |
           # Clone the repo temporarily
-          git clone -b v2-develop --depth 1 https://github.com/elizaOS/eliza.git temp-elizaos # Changed branch
+          git clone -b develop --depth 1 https://github.com/elizaOS/eliza.git temp-elizaos # Changed branch
           
           # Use tar to find and copy markdown files while preserving directory structure
           find temp-elizaos/packages/docs -name "*.md" -o -name "*.mdx" | tar -cf - -T - | tar -xf - --strip-components=3 -C docs/
