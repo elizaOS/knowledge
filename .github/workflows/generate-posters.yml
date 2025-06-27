@@ -24,13 +24,15 @@ jobs:
       - name: Install poster generation dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y pandoc wkhtmltopdf imagemagick libopenjp2-7 gifsicle xvfb
+          sudo apt-get install -y pandoc wkhtmltopdf imagemagick libopenjp2-7 gifsicle xvfb fonts-inter
+          # Install additional fallback tools for robustness
+          sudo apt-get install -y chromium-browser
 
       - name: Verify wkhtmltoimage installation
         run: command -v wkhtmltoimage && wkhtmltoimage --version
 
       - name: Set execute permission for poster script
-        run: chmod +x scripts/posters.sh
+        run: chmod +x scripts/posters-enhanced.sh
 
       - name: Generate Posters from Latest Markdown Files
         id: generate-posters-step 
@@ -136,17 +138,17 @@ jobs:
               
               echo "   Generating poster: $PERMALINK_POSTER_PATH" # Changed to permalink path
 
-              if ./scripts/posters.sh "$LATEST_MD_FILE" "$PERMALINK_POSTER_PATH"; then # Changed to pass PERMALINK_POSTER_PATH
+              if ./scripts/posters-enhanced.sh "$LATEST_MD_FILE" "$PERMALINK_POSTER_PATH"; then # Use enhanced script
                 if [ -f "$PERMALINK_POSTER_PATH" ] && [ -s "$PERMALINK_POSTER_PATH" ]; then # Changed to check PERMALINK_POSTER_PATH
                   echo "   Successfully generated poster: $PERMALINK_POSTER_PATH" # Changed to permalink path
                   generated_posters_count=$((generated_posters_count + 1))
                   # cp "$OUTPUT_POSTER_PATH" "$PERMALINK_POSTER_PATH" # Removed copy command
                   # echo "   Created permalink: $PERMALINK_POSTER_PATH" # Redundant as we are creating it directly
                 else
-                  echo "   ERROR: posters.sh exited 0 for $LATEST_MD_FILE, but $PERMALINK_POSTER_PATH was not found or is empty." # Changed to check PERMALINK_POSTER_PATH
+                  echo "   ERROR: posters-enhanced.sh exited 0 for $LATEST_MD_FILE, but $PERMALINK_POSTER_PATH was not found or is empty."
                 fi
               else
-                echo "   ERROR: posters.sh failed for $LATEST_MD_FILE (exit code $?). Check scripts/posters.sh logs or errors."
+                echo "   ERROR: posters-enhanced.sh failed for $LATEST_MD_FILE (exit code $?). Check scripts/posters-enhanced.sh logs or errors."
               fi
             else
               echo "   No suitable markdown file found in $SRC_DIR after filtering. Skipping poster generation."
