@@ -414,8 +414,8 @@ convert_html_to_image() {
   if command -v wkhtmltoimage &> /dev/null; then
     log_info "Attempting conversion with wkhtmltoimage..."
     if xvfb-run --auto-servernum --server-args="-screen 0 1024x768x24" \
-       wkhtmltoimage --quiet --quality 100 --width 800 --enable-local-file-access \
-       --disable-smart-shrinking --encoding utf-8 \
+       wkhtmltoimage --quiet --quality 100 --width 800 \
+       --encoding utf-8 \
        "$html_file" "$png_path" 2>/dev/null; then
       if [ -f "$png_path" ] && [ -s "$png_path" ]; then
         log_success "wkhtmltoimage conversion successful"
@@ -429,7 +429,8 @@ convert_html_to_image() {
     log_warn "wkhtmltoimage failed, trying Chromium headless..."
     if chromium-browser --headless --disable-gpu --virtual-time-budget=2000 \
        --window-size=800,1000 --screenshot="$png_path" \
-       "file://$html_file" 2>/dev/null; then
+       --allow-file-access-from-files --disable-web-security \
+       "file://$(realpath "$html_file")" 2>/dev/null; then
       if [ -f "$png_path" ] && [ -s "$png_path" ]; then
         log_success "Chromium conversion successful"
         success=true
