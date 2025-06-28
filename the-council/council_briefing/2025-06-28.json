@@ -1,0 +1,271 @@
+{
+  "date": "2025-06-28",
+  "meeting_context": "# North Star & Strategic Context\n\nThis file combines the overall project mission (North Star) and summaries of key strategic documents for use in AI prompts, particularly for the AI Agent Council context generation.\n\n---\n\n**North Star:**\nTo build a truly autonomous, sustainable DAO that develops open-source software accelerating the path toward AGI, blending AI researchers, open-source hackers, and crypto degens to create AI agents streaming, shitposting, and trading 24/7 on auto.fun to attract users and bootstrap an autonomous organization.\n\n---\n\n**ElizaOS Mission Summary (`docs/blog/mission.mdx`):**\nThe elizaOS mission is to build an extensible, modular, open-source AI agent framework for Web2/Web3, seeing agents as steps toward AGI. Core values are Autonomy, Modularity, and Decentralization. Key products include the framework itself, DegenSpartanAI (trading agent), Autonomous Investor/Trust Marketplace (social trading intelligence), and the Agent Marketplace/auto.fun (launchpad).\n\n---\n\n**ElizaOS Reintroduction Summary (`docs/blog/reintroduction.mdx`):**\nelizaOS is an open-source \"operating system for AI agents\" aimed at decentralizing AI development away from corporate control. It's built on three pillars: 1) The Eliza Framework (TypeScript toolkit for persistent, interoperable agents), 2) AI-Enhanced Governance (building autonomous DAOs), and 3) Eliza Labs (R&D for future capabilities like v2, Trust Marketplace, auto.fun, DegenSpartanAI, Eliza Studios). The native Solana token coordinates the ecosystem and captures value. The vision is an intelligent internet built on open protocols and collaboration.\n\n---\n\n**Auto.fun Introduction Summary (`docs/blog/autofun-intro.mdx`):**\nAuto.fun is an AI-native, creator-first token launchpad designed for sustainable AI/crypto projects. It aims to balance fair community access with project funding needs through mechanisms like bonding curves and liquidity NFTs. Key features include a no-code agent builder, AI-generated marketing tools, and integration with the elizaOS ecosystem. It serves as a core product driving value back to the native token ($ai16z) through buybacks and liquidity pairing.\n\n---\n\n**Taming Information Summary (`docs/blog/taming_info.mdx`):**\nAddresses the challenge of information scattered across platforms (Discord, GitHub, X). Proposes using AI agents as \"bridges\" to collect, wrangle (summarize/tag), and distribute information in various formats (JSON, MD, RSS, dashboards, 3D shows). Showcases an AI News system and AI Assistants for tech support as examples. Emphasizes treating documentation as a first-class citizen to empower AI assistants and streamline community operations. ",
+  "monthly_goal": "Current focus: Stabilize and attract new users to auto.fun by showcasing 24/7 agent activity (streaming, trading, shitposting), ship production ready elizaOS v2.",
+  "daily_focus": "Major architectural transformation with v2 preparations including the mega PR 'Next' from lalalune featuring extensive changes (+1.3M/-69K lines) alongside significant progress on the Agent-to-Agent (A2A) network that will drive token utility.",
+  "key_points": [
+    {
+      "topic": "ElizaOS v2 Launch Readiness",
+      "summary": "Development on ElizaOS v2 has accelerated significantly, with critical components like the A2A network, architectural improvements, and plugin system refinements nearing completion, though community concerns about token performance remain.",
+      "deliberation_items": [
+        {
+          "question_id": "q1",
+          "text": "How should we prioritize the remaining components of ElizaOS v2 for launch?",
+          "context": [
+            "lalalune: This PR adds everything needed to enable Eilza, a new generally capable and intelligent agent who can self-improve. This is a mega PR that changes several things necessary to enable much more expansive capability, including action chaining. Bootstrap has been refactored to message handling. Trust, Research, Secrets, Autonomy, Autocoder, Rolodex and Todo are all in development and will be pushed shortly to enable all of this.",
+            "cjft: The A2A network will create token fees and bring income to the Eliza ecosystem through broadcast, bid, receive actions between agents and humans. Similar to ACP but not bound to any framework."
+          ],
+          "multiple_choice_answers": {
+            "answer_1": {
+              "text": "Prioritize the A2A network and token utility features to address community concerns about token value.",
+              "implication": "This addresses immediate community concerns but may delay other technical capabilities needed for a complete v2 experience."
+            },
+            "answer_2": {
+              "text": "Focus on Eliza's intelligent agent capabilities and action chaining as the primary differentiator.",
+              "implication": "This emphasizes technical innovation but might not directly address sustainability concerns related to token economics."
+            },
+            "answer_3": {
+              "text": "Balance development across all components while establishing a clear token utility narrative through documentation and demos.",
+              "implication": "This provides a comprehensive approach but risks diluting focus and extending the timeline for all components."
+            },
+            "answer_4": {
+              "text": "Other / More discussion needed / None of the above.",
+              "implication": null
+            }
+          }
+        },
+        {
+          "question_id": "q2",
+          "text": "What communication strategy should we adopt for the upcoming v2 announcements to address the community's concerns about token performance?",
+          "context": [
+            "Community expressed concerns about AI16Z token's price decline (90%+ drawdown)",
+            "Team indicated they're working on V2 announcements",
+            "Marketing efforts hampered by suspended X/Twitter account",
+            "Community members requested standalone documentation explaining A2A network token utility"
+          ],
+          "multiple_choice_answers": {
+            "answer_1": {
+              "text": "Provide detailed technical documentation on A2A network utility mechanisms with step-by-step explanations of token value accrual.",
+              "implication": "This builds credibility with technical users but might not address broader market sentiment or reach less technical community members."
+            },
+            "answer_2": {
+              "text": "Create visual demos and simplified explainers showing A2A network in action, with clear focus on how transactions generate fees for token holders.",
+              "implication": "This makes token utility tangible and accessible to a wider audience but may lack the technical depth some community members seek."
+            },
+            "answer_3": {
+              "text": "Deliver a comprehensive update including both technical documentation and visual demos, plus a concrete roadmap with dates for fee implementation.",
+              "implication": "This provides maximum transparency but commits the team to specific deadlines that might be challenging to meet."
+            },
+            "answer_4": {
+              "text": "Other / More discussion needed / None of the above.",
+              "implication": null
+            }
+          }
+        },
+        {
+          "question_id": "q3",
+          "text": "How should we handle the rollout of agent-scoped plugins vs. project-scoped plugins in v2?",
+          "context": [
+            "The team is shipping approximately 500k lines of code weekly with baby AGI assistance",
+            "PR #5270: Changed plugins from project-scoped to agent-scoped architecture",
+            "PR #5297: fix: rollback-pr-5270 - this is a rollback for pr 5270"
+          ],
+          "multiple_choice_answers": {
+            "answer_1": {
+              "text": "Commit to agent-scoped plugins as the primary architecture for v2 and invest in resolving the issues that led to rollback.",
+              "implication": "This creates a cleaner, more flexible architecture but requires addressing compatibility issues before launch."
+            },
+            "answer_2": {
+              "text": "Maintain project-scoped plugins for v2 launch and plan agent-scoped plugins as a post-launch improvement.",
+              "implication": "This ensures stability for launch but delays architectural improvements that could enhance the platform's flexibility."
+            },
+            "answer_3": {
+              "text": "Implement a hybrid approach where both models are supported, giving developers the option to choose based on their use case.",
+              "implication": "This provides maximum flexibility but increases maintenance complexity and could confuse users with too many options."
+            },
+            "answer_4": {
+              "text": "Other / More discussion needed / None of the above.",
+              "implication": null
+            }
+          }
+        }
+      ]
+    },
+    {
+      "topic": "Auto.fun User Acquisition Strategy",
+      "summary": "With the planned addition of new features like ETH support, Mobile apps, and the auto incubator, Auto.fun is poised for growth, but needs a clear strategy to attract and retain users through 24/7 agent activity showcasing.",
+      "deliberation_items": [
+        {
+          "question_id": "q1",
+          "text": "Which demonstration of agent capabilities should we prioritize to showcase 24/7 agent activity on auto.fun?",
+          "context": [
+            "Current focus: Stabilize and attract new users to auto.fun by showcasing 24/7 agent activity (streaming, trading, shitposting), ship production ready elizaOS v2.",
+            "33coded: Add ETH support to Autofun/Launchpad",
+            "33coded: Develop mobile apps (iOS/Android) for Autofun launchpad",
+            "wire: Launch auto incubator"
+          ],
+          "multiple_choice_answers": {
+            "answer_1": {
+              "text": "Focus on trading agents with real-time market analysis and automated trading strategies across both SOL and ETH.",
+              "implication": "This directly demonstrates value creation but requires significant risk management and reliable market integrations."
+            },
+            "answer_2": {
+              "text": "Prioritize content creation agents that generate engaging social media content, memes, and market commentary.",
+              "implication": "This creates highly visible activity that can drive organic growth but may not demonstrate advanced capabilities or direct value creation."
+            },
+            "answer_3": {
+              "text": "Build showcase agents that combine trading, content creation, and community engagement in unified personalities.",
+              "implication": "This provides a comprehensive demonstration but increases complexity and resource requirements for maintenance."
+            },
+            "answer_4": {
+              "text": "Other / More discussion needed / None of the above.",
+              "implication": null
+            }
+          }
+        },
+        {
+          "question_id": "q2",
+          "text": "How should we approach mobile app development for auto.fun to maximize user acquisition and retention?",
+          "context": [
+            "33coded: Develop mobile apps (iOS/Android) for Autofun launchpad",
+            "Upcoming Products Roadmap: Launchpad, Login with Eliza (CLI and web), Hosted inference for token holders' agents, Eliza A2A (Agent-to-Agent) network, Desktop/mobile apps, Robots"
+          ],
+          "multiple_choice_answers": {
+            "answer_1": {
+              "text": "Develop a feature-complete mobile experience with agent creation, management, and monitoring capabilities.",
+              "implication": "This provides a comprehensive mobile experience but extends development time and complexity significantly."
+            },
+            "answer_2": {
+              "text": "Create a streamlined mobile app focused on monitoring agent activity and receiving alerts/notifications from agents.",
+              "implication": "This gets to market faster and targets the primary mobile use case but limits the platform's mobile functionality."
+            },
+            "answer_3": {
+              "text": "Build a progressive web app (PWA) with core functionality while developing native apps with enhanced features in parallel.",
+              "implication": "This provides immediate cross-platform access while working toward optimized native experiences for power users."
+            },
+            "answer_4": {
+              "text": "Other / More discussion needed / None of the above.",
+              "implication": null
+            }
+          }
+        },
+        {
+          "question_id": "q3",
+          "text": "What incentive mechanisms should we implement to encourage developers to build and deploy agents on auto.fun?",
+          "context": [
+            "MDMnvest shared ELI5 token contract information with Scarekraw and announced creating a separate burn token with 90% of creator fees used for buyback and burn",
+            "cjft mentioned they're working on hosted inference for token holders' agents"
+          ],
+          "multiple_choice_answers": {
+            "answer_1": {
+              "text": "Implement a revenue-sharing model where agent developers receive a percentage of fees generated by their agents' activities.",
+              "implication": "This directly aligns developer incentives with platform growth but requires robust tracking and distribution mechanisms."
+            },
+            "answer_2": {
+              "text": "Create a developer grant program funded by platform fees to support promising agent projects with technical and financial resources.",
+              "implication": "This enables strategic investment in high-potential projects but requires significant governance and selection processes."
+            },
+            "answer_3": {
+              "text": "Offer tiered hosting benefits for token holders, with increasing inference capacity and capabilities based on token holdings.",
+              "implication": "This drives token utility and creates a clear value proposition for holding tokens but may create barriers for new developers."
+            },
+            "answer_4": {
+              "text": "Other / More discussion needed / None of the above.",
+              "implication": null
+            }
+          }
+        }
+      ]
+    },
+    {
+      "topic": "Developer Experience & Community Growth",
+      "summary": "Recent improvements to the ElizaOS framework include enhanced plugin management, improved knowledge functionality, and better developer tools, but technical challenges and documentation issues continue to impact developer onboarding and community growth.",
+      "deliberation_items": [
+        {
+          "question_id": "q1",
+          "text": "How should we improve the developer onboarding experience to accelerate community growth?",
+          "context": [
+            "3on_.: Where can I get a guide on how to build ai agents for slow learners?",
+            "open24hrs: Check #useful-links channel and dev school videos.",
+            "Community members requested standalone documentation explaining A2A network token utility",
+            "alerios and cjft collaborated on troubleshooting and fixing hello world action not responding, resulting in PR #5296"
+          ],
+          "multiple_choice_answers": {
+            "answer_1": {
+              "text": "Create an end-to-end guided tutorial series covering agent creation, plugin development, and deployment scenarios.",
+              "implication": "This provides comprehensive education but requires significant resource investment and ongoing maintenance as the platform evolves."
+            },
+            "answer_2": {
+              "text": "Develop more template projects and starter kits with clear, commented code explaining key concepts and integration patterns.",
+              "implication": "This enables learning-by-doing and faster time-to-value but may not address deeper conceptual understanding needed for complex agents."
+            },
+            "answer_3": {
+              "text": "Implement an interactive playground environment where developers can experiment with agent capabilities without setup overhead.",
+              "implication": "This lowers the barrier to entry significantly but may not prepare developers for real-world implementation challenges."
+            },
+            "answer_4": {
+              "text": "Other / More discussion needed / None of the above.",
+              "implication": null
+            }
+          }
+        },
+        {
+          "question_id": "q2",
+          "text": "What approach should we take to stabilize knowledge management (RAG) functionality in the framework?",
+          "context": [
+            "Knowledge tab visibility regression was fixed",
+            "harperaa reported in issue #5004: \"Knowledge management (RAG) not working (implemented) in 1.0.6\"",
+            "Issue review revealed: \"The default `messageHandler` prompt contains an entry for the AI to choose relevant evaluators to be run after handling the processed message. At the moment the bootstrap plugin doesn't provide any evaluator providers.\""
+          ],
+          "multiple_choice_answers": {
+            "answer_1": {
+              "text": "Prioritize a comprehensive rewrite of the knowledge/RAG system as a core framework capability with standardized interfaces.",
+              "implication": "This creates a robust foundation but requires significant development time and may delay other features."
+            },
+            "answer_2": {
+              "text": "Focus on documenting current limitations and providing clear workarounds while incrementally improving existing functionality.",
+              "implication": "This acknowledges issues transparently while providing immediate value, though it may frustrate users seeking a complete solution."
+            },
+            "answer_3": {
+              "text": "Develop a standalone knowledge plugin with complete functionality that can be integrated independently of bootstrap evaluators.",
+              "implication": "This creates a clean separation of concerns and faster path to functionality but may complicate the overall architecture."
+            },
+            "answer_4": {
+              "text": "Other / More discussion needed / None of the above.",
+              "implication": null
+            }
+          }
+        },
+        {
+          "question_id": "q3",
+          "text": "How should we prioritize platform compatibility improvements for ElizaOS?",
+          "context": [
+            "cjft helped Luke \ud83c\udde6\ud83c\uddfa identify that ElizaOS was working on Ubuntu but not on macOS 15.5",
+            "PR #5110: fix: Windows compatibility for CLI tests",
+            "PR #5156: fix project loading on windows machines",
+            "bolt1king asked: \"How do I use Ollama configuration instead of it automatically using local AI?\"",
+            "0xbbjoker answered: \"Remove local-ia from plugins list, leave only ollama plugin\""
+          ],
+          "multiple_choice_answers": {
+            "answer_1": {
+              "text": "Focus on macOS/Homebrew compatibility as primary development environment, with Windows support as secondary priority.",
+              "implication": "This aligns with common developer environments but may alienate Windows-first developers and enterprise users."
+            },
+            "answer_2": {
+              "text": "Implement automated cross-platform testing in CI/CD for all major OSes (Linux, macOS, Windows) with equal priority.",
+              "implication": "This ensures consistent experience across platforms but increases development and testing overhead considerably."
+            },
+            "answer_3": {
+              "text": "Standardize on containerized developer environments to eliminate platform-specific issues entirely.",
+              "implication": "This creates a highly consistent development experience but requires developers to adopt Docker workflows that may be unfamiliar."
+            },
+            "answer_4": {
+              "text": "Other / More discussion needed / None of the above.",
+              "implication": null
+            }
+          }
+        }
+      ]
+    }
+  ]
+}
