@@ -133,7 +133,9 @@ jobs:
               # SPECIFIC_POSTER_FILENAME="${CLEAN_OUT_BASE_NAME}-content-${MD_FILE_STEM}.png" # Removed
               # OUTPUT_POSTER_PATH="${POSTER_OUTPUT_DIR}/${SPECIFIC_POSTER_FILENAME}" # Removed
               
-              PERMALINK_POSTER_FILENAME="${CLEAN_OUT_BASE_NAME}.png"
+              # Generate timestamped poster filename to avoid Discord caching
+              CURRENT_DATE=$(date +%Y-%m-%d)
+              PERMALINK_POSTER_FILENAME="${CURRENT_DATE}_${CLEAN_OUT_BASE_NAME}.png"
               PERMALINK_POSTER_PATH="${POSTER_OUTPUT_DIR}/${PERMALINK_POSTER_FILENAME}"
               
               echo "   Generating poster: $PERMALINK_POSTER_PATH" # Changed to permalink path
