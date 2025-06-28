@@ -24,6 +24,17 @@ This repository serves as the central hub for aggregating, processing, and synth
 
 The system follows a structured pipeline to transform raw data into actionable intelligence:
 
+### Daily Automation Schedule (UTC)
+- **01:00** - External Data Ingestion (`.github/workflows/sync.yml`)
+- **01:15** - Daily Fact Extraction (`.github/workflows/extract_daily_facts.yml`)
+- **01:30** - Context Aggregation (`.github/workflows/aggregate-daily-sources.yml`)
+- **02:00** - Council Briefing Generation (`.github/workflows/generate-council-briefing.yml`)
+- **02:30** - HackMD Note Updates (`.github/workflows/update_hackmd_notes.yml`)
+- **04:00** - Poster Generation (`.github/workflows/generate-posters.yml`)
+- **04:30** - Discord Briefing (`.github/workflows/daily_discord_briefing.yml`)
+
+### Pipeline Details
+
 1.  **External Data Ingestion (`.github/workflows/sync.yml`)**: (Runs at 01:00 UTC)
     *   This workflow runs daily to synchronize data from external repositories and sources. This includes documentation from `elizaOS/eliza` and `madjin/daily-silk`, GitHub activity logs from `elizaos/elizaos.github.io`, and AI news from `M3-org/ai-news`.
     *   Raw synced data is stored in directories like `docs/`, `daily-silk/`, `github/`, and `ai-news/`.
@@ -50,7 +61,13 @@ The system follows a structured pipeline to transform raw data into actionable i
     *   Then, it runs `scripts/update-hackmd.py` which uses `the-council/aggregated/daily.json` as context to generate content for each prompt, update HackMD notes, and save local backups.
     *   Changes to `book.json`, `hackmd/**/*.md`, and `hackmd/**/*.json` are committed.
 
-6.  **Daily Discord Briefing (`.github/workflows/daily_discord_briefing.yml`)**: (Runs at 02:35 UTC)
+6.  **Poster Generation (`.github/workflows/generate-posters.yml`)**: (Runs at 04:00 UTC)
+    *   This workflow generates visual poster content from the latest markdown files across various categories.
+    *   It uses `scripts/posters.sh` to convert markdown content to structured HTML and then to PNG images using wkhtmltoimage.
+    *   Posters are created for AI news, GitHub summaries, daily content, and HackMD notes, maintaining consistent aspect ratios and information balance.
+    *   Generated posters are committed back to the `posters/` directory for use in Discord briefings and other channels.
+
+7.  **Daily Discord Briefing (`.github/workflows/daily_discord_briefing.yml`)**: (Runs at 04:30 UTC)
     *   This workflow runs `scripts/webhook.py` daily after all data processing and HackMD updates are complete.
     *   It takes the daily facts file (`the-council/facts/YYYY-MM-DD.json`) for the current date.
     *   It sends a formatted briefing, including summaries and an optional poster, to a specified Discord channel.
