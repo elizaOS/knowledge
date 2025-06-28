@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """Optimized Discord Facts Briefing Bot - Under 200 lines with smart features"""
-import json, sys, os, argparse, discord, requests, asyncio
+import json, sys, os, argparse, discord, requests, asyncio, glob
 from discord import Embed
-from datetime import datetime
+from datetime import datetime, timedelta
 from dataclasses import dataclass
 from typing import Dict, List, Optional, Tuple
 
@@ -51,7 +51,7 @@ class TextProcessor:
         summary = feedback_text[:80] + "..." if len(feedback_text) > 80 else feedback_text
         
         # Return just the marker and text - no individual code block wrapper
-        marker = "+" if sentiment == "positive" else "-" if sentiment == "negative" else "*"
+        marker = "+" if sentiment == "positive" else "~" if sentiment == "negative" else "*"
         return f"{marker} {summary}"
     
     @staticmethod
@@ -210,7 +210,9 @@ class BriefingProcessor:
         
         # Only add poster if a filename is provided
         if poster_file:
-            embeds.append(EmbedFactory.create_poster(f"{config.poster_url}{poster_file}", data['briefing_date']))
+            # Use timestamped poster filename to avoid Discord caching
+            dated_poster = f"{data['briefing_date']}_{poster_file}"
+            embeds.append(EmbedFactory.create_poster(f"{config.poster_url}{dated_poster}", data['briefing_date']))
         return embeds, None
 
 async def send_to_discord(file_path: str, channels: str, api_key: str, poster: Optional[str]):
@@ -264,6 +266,35 @@ async def export_json(file_path: str, output: str, api_key: str, poster: Optiona
     with open(output, 'w') as f: json.dump(payload, f, indent=2)
     Logger.success(f"Exported to {output}")
 
+def cleanup_old_posters(days_to_keep: int = 7) -> None:
+    """Remove poster files older than specified days to keep repo size manageable"""
+    poster_dir = "posters"
+    if not os.path.exists(poster_dir):
+        Logger.warn(f"Poster directory {poster_dir} not found")
+        return
+    
+    cutoff_date = datetime.now() - timedelta(days=days_to_keep)
+    cutoff_str = cutoff_date.strftime("%Y-%m-%d")
+    
+    # Find all dated poster files (YYYY-MM-DD_*.png)
+    pattern = os.path.join(poster_dir, "????-??-??_*.png")
+    dated_files = glob.glob(pattern)
+    
+    removed_count = 0
+    for file_path in dated_files:
+        filename = os.path.basename(file_path)
+        file_date_str = filename[:10]  # Extract date (YYYY-MM-DD)
+        
+        try:
+            if file_date_str < cutoff_str:
+                os.remove(file_path)
+                Logger.info(f"Removed old poster: {filename}")
+                removed_count += 1
+        except (ValueError, OSError) as e:
+            Logger.error(f"Error removing {filename}: {e}")
+    
+    Logger.success(f"Cleanup complete. Removed {removed_count} old posters (kept {cutoff_str}+)")
+
 def main():
     parser = argparse.ArgumentParser(description="Discord Facts Briefing Bot - Priority Sections Only")
     parser.add_argument("json_file", help="Facts briefing JSON file")
@@ -278,9 +309,16 @@ def main():
         default=None, 
         help="Poster filename. If -p is used alone, defaults to hackmd-facts-briefing.png. If no -p, no poster."
     )
+    parser.add_argument("--cleanup", action="store_true", help="Clean up old poster files (keeps last 7 days)")
     
     args = parser.parse_args()
     api_key = os.getenv("OPENROUTER_API_KEY") if args.summarize else None
+    
+    # Handle cleanup first if requested
+    if args.cleanup:
+        cleanup_old_posters()
+        if not (args.discord or args.out):
+            return  # Exit if only cleanup was requested
     
     if args.discord:
         if not args.channels: Logger.error("--channels required with --discord"); sys.exit(1)
