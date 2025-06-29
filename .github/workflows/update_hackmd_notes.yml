@@ -51,11 +51,20 @@ jobs:
         run: |
           python scripts/update-hackmd.py --json
 
+      - name: Generate council episodes summary for Discord
+        id: episodes_summary
+        env:
+          OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
+        continue-on-error: true
+        run: |
+          # Generate discord-optimized episode summary (optional step)
+          python scripts/summarize_council_episodes.py -o hackmd/council-episodes/discord-summary.md
+
       - name: Commit updated files
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: "chore: Update HackMD notes and backups"
-          file_pattern: "book.json hackmd/**/**/*.md hackmd/**/**/*.json"
+          file_pattern: "book.json hackmd/**/**/*.md hackmd/**/**/*.json hackmd/council-episodes/*.md"
           commit_user_name: "github-actions[bot]"
           commit_user_email: "github-actions[bot]@users.noreply.github.com"
           commit_author: "github-actions[bot] <github-actions[bot]@users.noreply.github.com>" 

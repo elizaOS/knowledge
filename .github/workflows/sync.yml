@@ -32,6 +32,8 @@ jobs:
           mkdir -p github
           mkdir -p daily-silk
           mkdir -p ai-news
+          mkdir -p clanktank/episodes
+          mkdir -p the-council/episodes
       
       # Step 2: ElizaOS Docs
       - name: Sync ElizaOS Documentation
@@ -87,13 +89,39 @@ jobs:
           # Clean up
           rm -rf temp-ai-news
 
-      # Step 7: Commit and push changes
+      # Step 6: Sync Clanktank Episodes
+      - name: Sync Clanktank Episodes
+        continue-on-error: true # Added for robustness
+        run: |
+          # Clone the repo temporarily
+          git clone --depth 1 https://github.com/m3-org/clanktank.git temp-clanktank
+          
+          # Copy JSON files from episodes directory
+          rsync -av --include="*.json" --exclude="*" temp-clanktank/episodes/ clanktank/episodes/
+          
+          # Clean up
+          rm -rf temp-clanktank
+
+      # Step 7: Sync The-Council Episodes
+      - name: Sync The-Council Episodes
+        continue-on-error: true # Added for robustness
+        run: |
+          # Clone the repo temporarily
+          git clone --depth 1 https://github.com/m3-org/the-council.git temp-the-council
+          
+          # Copy JSON files from episodes directory
+          rsync -av --include="*.json" --exclude="*" temp-the-council/episodes/ the-council/episodes/
+          
+          # Clean up
+          rm -rf temp-the-council
+
+      # Step 8: Commit and push changes
       - name: Commit and push if changes
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
           
-          git add docs/ github/ daily-silk/ ai-news/
+          git add docs/ github/ daily-silk/ ai-news/ clanktank/ the-council/
           
           # Check if there are any changes
           if git diff --staged --quiet; then

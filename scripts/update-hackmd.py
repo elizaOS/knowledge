@@ -23,6 +23,7 @@ TEAM_PATH = "elizaos"
 PROMPTS_DIR = Path("scripts/prompts")
 STATE_FILE = Path("book.json")
 DATA_DIR = Path("the-council/aggregated")
+EPISODES_DIR = Path("the-council/episodes")
 OUTPUT_DIR = Path("hackmd")
 BOOK_MAP_KEY = "__BOOK_INDEX__"
 LLM_MODEL = "anthropic/claude-3.7-sonnet"
@@ -277,6 +278,78 @@ def aggregate_json_data(json_file: Path) -> str:
         return "\n---\n".join(filtered_strings)
     except Exception as e:
         logging.error(f"Error reading or processing JSON file '{json_file}': {e}")
+        return ""
+
+def aggregate_episodes_data() -> str:
+    """Reads all episode JSON files and aggregates their content."""
+    if not EPISODES_DIR.is_dir():
+        logging.warning(f"Episodes directory not found: {EPISODES_DIR}")
+        return ""
+    
+    episode_files = list(EPISODES_DIR.glob("*.json"))
+    if not episode_files:
+        logging.info(f"No episode JSON files found in {EPISODES_DIR}")
+        return ""
+    
+    episode_contents = []
+    
+    for episode_file in episode_files:
+        try:
+            with open(episode_file, 'r', encoding='utf-8') as f:
+                episode_data = json.load(f)
+            
+            # Extract episode content similar to the summarize script
+            content_parts = []
+            
+            # Extract title
+            title = episode_data.get("title", "")
+            if title:
+                content_parts.append(f"Title: {title}")
+            
+            # Extract description/summary
+            description = episode_data.get("description", "") or episode_data.get("summary", "")
+            if description:
+                content_parts.append(f"Description: {description}")
+            
+            # Extract transcript or content
+            transcript = episode_data.get("transcript", "") or episode_data.get("content", "")
+            if transcript:
+                content_parts.append(f"Content: {transcript}")
+            
+            # Extract other text fields recursively
+            def extract_text_recursive(obj):
+                texts = []
+                if isinstance(obj, dict):
+                    for key, value in obj.items():
+                        if key not in ["title", "description", "summary", "transcript", "content"]:
+                            texts.extend(extract_text_recursive(value))
+                elif isinstance(obj, list):
+                    for item in obj:
+                        texts.extend(extract_text_recursive(item))
+                elif isinstance(obj, str) and obj.strip() and obj.lower() != 'null':
+                    texts.append(obj.strip())
+                return texts
+            
+            other_texts = extract_text_recursive(episode_data)
+            if other_texts:
+                content_parts.extend(other_texts)
+            
+            if content_parts:
+                episode_content = f"--- Episode: {episode_file.stem} ---\n" + "\n\n".join(content_parts)
+                episode_contents.append(episode_content)
+        
+        except json.JSONDecodeError as e:
+            logging.warning(f"Could not parse JSON from '{episode_file}': {e}")
+            continue
+        except Exception as e:
+            logging.warning(f"Error processing episode file '{episode_file}': {e}")
+            continue
+    
+    if episode_contents:
+        logging.info(f"Aggregated content from {len(episode_contents)} episodes")
+        return "\n\n".join(episode_contents)
+    else:
+        logging.warning("No episode content could be extracted")
         return ""
 
 def process_direct_file_uploads(state: dict, latest_date_str: str, team_path: str, output_dir: Path):
@@ -575,13 +648,24 @@ def main():
                 continue
 
             prompt_title_case = ' '.join(word.capitalize() for word in prompt_name.split('-'))
+            
+            # Use episode data for council-episodes prompt, otherwise use aggregated data
+            if prompt_name == "council-episodes":
+                episodes_content = aggregate_episodes_data()
+                data_content = episodes_content if episodes_content else "No episode data available"
+                data_label = "Episode Data"
+                logging.info(f"   Using episode data for council-episodes prompt")
+            else:
+                data_content = aggregated_content
+                data_label = "Aggregated Data"
+            
             prompt_instructions = (
                 f"Generate content suitable for a '{prompt_title_case}' document for the date {latest_date_str}, "
-                f"based on the provided aggregated data and the specific instructions in the template below.\n\n"
+                f"based on the provided data and the specific instructions in the template below.\n\n"
                 f"Output *only* the main content as requested by the template. Do not include any other preamble or explanation "
                 f"unless the template specifically asks for it within the main content part."
             )
-            final_llm_prompt = f"{prompt_instructions}\n\n**Template Instructions:**\n{prompt_template}\n\n**Aggregated Data for {latest_date_str}:**\n```\n{aggregated_content}\n```"
+            final_llm_prompt = f"{prompt_instructions}\n\n**Template Instructions:**\n{prompt_template}\n\n**{data_label} for {latest_date_str}:**\n```\n{data_content}\n```"
 
             logging.info(f"   Calling LLM ({LLM_MODEL})...")
             llm_payload = {
