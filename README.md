@@ -36,8 +36,8 @@ The system follows a structured pipeline to transform raw data into actionable i
 ### Pipeline Details
 
 1.  **External Data Ingestion (`.github/workflows/sync.yml`)**: (Runs at 01:00 UTC)
-    *   This workflow runs daily to synchronize data from external repositories and sources. This includes documentation from `elizaOS/eliza` and `madjin/daily-silk`, GitHub activity logs from `elizaos/elizaos.github.io`, and AI news from `M3-org/ai-news`.
-    *   Raw synced data is stored in directories like `docs/`, `daily-silk/`, `github/`, and `ai-news/`.
+    *   This workflow runs daily to synchronize data from external repositories and sources. This includes documentation from `elizaOS/eliza` and `madjin/daily-silk`, GitHub activity logs from `elizaos/elizaos.github.io`, AI news from `M3-org/ai-news`, and episode data from `m3-org/clanktank` and `m3-org/the-council`.
+    *   Raw synced data is stored in directories like `docs/`, `daily-silk/`, `github/`, `ai-news/`, `clanktank/episodes/`, and `the-council/episodes/`.
 
 2.  **Daily Fact Extraction (`.github/workflows/extract_daily_facts.yml`)**: (Runs at 01:15 UTC)
     *   This workflow runs `scripts/extract-facts.py` daily after data synchronization.
@@ -82,6 +82,7 @@ The system follows a structured pipeline to transform raw data into actionable i
     *   `the-council/aggregated/`: Contains daily raw aggregated data (`YYYY-MM-DD.json`) and a `daily.json` permalink. Output of `scripts/aggregate-sources.py`.
     *   `the-council/council_briefing/`: Contains daily strategic council briefings (`YYYY-MM-DD.json`) and a `daily.json` permalink. Output of `scripts/generate_council_context.py`.
     *   `the-council/facts/`: Contains daily extracted facts and insights in JSON format (`YYYY-MM-DD.json`) and a `daily.json` permalink. Output of `scripts/extract-facts.py`.
+    *   `the-council/episodes/`: Contains episode data synced from `m3-org/the-council` repository.
     *   `the-council/old/`: Contains older council-related files.
 *   `hackmd/`: Stores local backups of content generated for HackMD notes, organized by category and prompt name, in both Markdown and JSON formats.
     *   `hackmd/facts/`: Contains Markdown exports of extracted facts (`YYYY-MM-DD.md`).
@@ -89,6 +90,7 @@ The system follows a structured pipeline to transform raw data into actionable i
 *   `github/`: Contains synced GitHub activity logs and summaries.
 *   `docs/`: Contains synced documentation from `elizaOS/eliza`.
 *   `daily-silk/`: Contains synced documentation from `madjin/daily-silk`.
+*   `clanktank/episodes/`: Contains episode data synced from `m3-org/clanktank` repository.
 *   `book.json`: A state file mapping prompt names to HackMD note IDs and their update strategies (e.g., 'overwrite'), used by `create-hackmd.py` and `update-hackmd.py`.
 
 ## Primary Scripts Overview
@@ -127,6 +129,8 @@ The repository is organized into several main directories, each containing infor
 ├── archive/            # Archived discussions and older data (legacy)
 │   ├── daily-elizaos/
 │   └── ...
+├── clanktank/          # Episode data from m3-org/clanktank
+│   └── episodes/       #   JSON episode files
 ├── daily-silk/         # Daily AI news from Discord channel using SILK
 ├── docs/               # Documentation, blogs, community notes, and versioned docs
 │   ├── blog/
@@ -161,6 +165,7 @@ The repository is organized into several main directories, each containing infor
 ├── the-council/        # Aggregated data, council briefings, and extracted facts
 │   ├── aggregated/     #   Daily raw aggregated data (YYYY-MM-DD.json)
 │   ├── council_briefing/ # Daily strategic council briefings (YYYY-MM-DD.json)
+│   ├── episodes/       #   Episode data from m3-org/the-council (JSON files)
 │   └── facts/          #   Daily extracted facts (JSON) (YYYY-MM-DD.json)
 ├── book.json           # State file for HackMD notes (IDs, prompts, strategies)
 ├── README.md           # This file
@@ -216,6 +221,15 @@ Daily AI news collected from a Discord channel using [SILK](https://github.com/m
 Daily summaries and discussions related to AI, specifically from the ElizaOS and Hyperfy communities, sourced from the [M3-org/ai-news](https://github.com/M3-org/ai-news) repository (`gh-pages` branch). This includes:
 - `ai-news/elizaos/`: Summaries and logs from ElizaOS related channels.
 - `ai-news/hyperfy/`: Summaries and logs from Hyperfy related channels.
+
+### Episode Data
+Structured episode content from M3-org repositories containing rich narrative and analytical content:
+
+#### Clanktank Episodes
+Episodes from the [m3-org/clanktank](https://github.com/m3-org/clanktank) repository. Contains JSON files with episode data covering various topics in AI, crypto, and technology. Each episode includes structured content with topics, discussions, and insights from the clanktank community.
+
+#### The-Council Episodes  
+Episodes from the [m3-org/the-council](https://github.com/m3-org/the-council) repository. Contains JSON files with strategic discussions and analysis from the council. This data is synced daily as part of the automated pipeline, providing ongoing strategic insights and community discussions.
 
 ### Scripts & Prompts
 The `scripts/` directory contains Python scripts used for automating content generation and updates.
