@@ -28,16 +28,21 @@ jobs:
           OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
           DISCORD_BOT_TOKEN: ${{ secrets.DISCORD_BOT_TOKEN }}
         run: |
-          # Calculate current date in YYYY-MM-DD format
+          # Calculate current date and yesterday in YYYY-MM-DD format
           CURRENT_DATE=$(date +%Y-%m-%d)
+          YESTERDAY_DATE=$(date -d 'yesterday' +%Y-%m-%d)
           FACTS_FILE="the-council/facts/$CURRENT_DATE.json"
           
           echo "Attempting to send briefing for $CURRENT_DATE using file: $FACTS_FILE"
           
           # Check if the daily facts file exists
           if [ -f "$FACTS_FILE" ]; then
-            # Clean up old posters first, then send briefing with timestamped poster
-            python scripts/webhook.py "$FACTS_FILE" -d -c "1377401701081944144" -s -p "hackmd-strategy-intel.png" --cleanup
+            # Use yesterday's poster to avoid GitHub Pages deployment lag and Discord caching
+            POSTER_FILENAME="${YESTERDAY_DATE}_hackmd-strategy-intel.png"
+            echo "Using yesterday's poster: $POSTER_FILENAME"
+            
+            # Clean up old posters first, then send briefing with yesterday's timestamped poster
+            python scripts/webhook.py "$FACTS_FILE" -d -c "1377401701081944144" -s -p "$POSTER_FILENAME" --cleanup
           else
             echo "Facts file $FACTS_FILE not found. Skipping Discord briefing."
             # Optionally, you could exit with an error or send a notification
