@@ -210,17 +210,7 @@ class BriefingProcessor:
         
         # Only add poster if a filename is provided
         if poster_file:
-            # Check if poster filename already includes date prefix (YYYY-MM-DD_)
-            if poster_file.startswith(('2024-', '2025-', '2026-', '2027-')) and '_' in poster_file[:11]:
-                # Filename already timestamped (e.g., "2025-07-23_hackmd-strategy-intel.png")
-                dated_poster = poster_file
-                poster_date = poster_file[:10]  # Extract date from filename
-            else:
-                # Add today's date prefix to avoid Discord caching
-                dated_poster = f"{data['briefing_date']}_{poster_file}"
-                poster_date = data['briefing_date']
-            
-            embeds.append(EmbedFactory.create_poster(f"{config.poster_url}{dated_poster}", poster_date))
+            embeds.append(EmbedFactory.create_poster(f"{config.poster_url}{poster_file}", data['briefing_date']))
         return embeds, None
 
 async def send_to_discord(file_path: str, channels: str, api_key: str, poster: Optional[str]):
