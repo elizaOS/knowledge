@@ -210,9 +210,7 @@ class BriefingProcessor:
         
         # Only add poster if a filename is provided
         if poster_file:
-            # Use timestamped poster filename to avoid Discord caching
-            dated_poster = f"{data['briefing_date']}_{poster_file}"
-            embeds.append(EmbedFactory.create_poster(f"{config.poster_url}{dated_poster}", data['briefing_date']))
+            embeds.append(EmbedFactory.create_poster(f"{config.poster_url}{poster_file}", data['briefing_date']))
         return embeds, None
 
 async def send_to_discord(file_path: str, channels: str, api_key: str, poster: Optional[str]):

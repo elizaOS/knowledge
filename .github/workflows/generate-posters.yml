@@ -2,8 +2,7 @@ name: Generate Content Posters
 
 on:
   schedule:
-    # Runs daily, adjust timing as needed, e.g., after content generation
-    - cron: '0 4 * * *' # Example: 4 AM UTC
+    - cron: '0 4 * * *' # 4 AM UTC daily
   workflow_dispatch: # Allows manual triggering
 
 jobs:
@@ -11,9 +10,6 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write # To commit posters back to the repo
-
-    outputs:
-      posters_generated: ${{ steps.generate-posters-step.outputs.posters_generated }} # Define job output
 
     steps:
       - name: Checkout repository
@@ -24,155 +20,32 @@ jobs:
       - name: Install poster generation dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y pandoc wkhtmltopdf imagemagick libopenjp2-7 gifsicle xvfb fonts-inter
-          # Install additional fallback tools for robustness
-          sudo apt-get install -y chromium-browser
+          sudo apt-get install -y pandoc wkhtmltopdf imagemagick libopenjp2-7 gifsicle xvfb fonts-inter chromium-browser
 
       - name: Verify wkhtmltoimage installation
         run: command -v wkhtmltoimage && wkhtmltoimage --version
 
-      - name: Set execute permission for poster script
-        run: chmod +x scripts/posters-enhanced.sh
-
-      - name: Generate Posters from Latest Markdown Files
-        id: generate-posters-step 
+      - name: Set execute permissions
         run: |
-          echo "Starting poster generation process..."
-          POSTER_OUTPUT_DIR="posters"
-          mkdir -p "$POSTER_OUTPUT_DIR"
-          
-          declare -a src_dirs=(
-            "ai-news/elizaos/md/"
-            "ai-news/elizaos/dev/md/"
-            "ai-news/elizaos/discord/md/"
-            "github/summaries/day/"
-            "github/summaries/week/"
-            "github/summaries/month/"
-            "daily-silk/"
-            "hackmd/council/"
-            "hackmd/facts/"
-            "hackmd/comms/discord-announcement/"
-            "hackmd/comms/elizaos-tweets/"
-            "hackmd/comms/user-feedback/"
-            "hackmd/comms/weekly-newsletter/"
-            "hackmd/dev/developer-update/"
-            "hackmd/dev/issue-triage/"
-            "hackmd/strategy/intel/"
-            "hackmd/strategy/team-development/"
-          )
+          chmod +x scripts/posters-enhanced.sh
+          chmod +x scripts/run_poster_generation.sh
 
-          declare -a out_bases=(
-            "ainews-elizaos"
-            "ainews-elizaos-dev"
-            "ainews-elizaos-discord"
-            "github-summaries-day"
-            "github-summaries-week"
-            "github-summaries-month"
-            "daily-silk"
-            "hackmd-council-briefing"
-            "hackmd-facts-briefing"
-            "hackmd-comms-discord-announcement"
-            "hackmd-comms-elizaos-tweets"
-            "hackmd-comms-user-feedback"
-            "hackmd-comms-weekly-newsletter"
-            "hackmd-dev-developer-update"
-            "hackmd-dev-issue-triage"
-            "hackmd-strategy-intel"
-            "hackmd-strategy-team-development"
-          )
-
-          generated_posters_count=0
-
-          for i in "${!src_dirs[@]}"; do
-            SRC_DIR="${src_dirs[$i]}"
-            OUT_BASE_NAME="${out_bases[$i]}"
-            LATEST_MD_FILE=""
-            LATEST_DATED_FILE="" # Initialize
-
-            echo "Processing directory: $SRC_DIR"
-            if [ ! -d "$SRC_DIR" ]; then
-              echo "Source directory $SRC_DIR not found. Skipping."
-              continue
-            fi
-
-            # Attempt to find the latest YYYY-MM-DD.md file using find and sort
-            # This gets basenames, sorts them, picks the top one, then re-prepends dir
-            # Ensure SRC_DIR ends with a / for clean concatenation if needed, or handle path joining carefully.
-            # Assuming SRC_DIR always ends with /
-            _latest_basename=$(find "$SRC_DIR" -maxdepth 1 -type f -name "????-??-??.md" -print0 | xargs -0 -r basename -a | sort -r | head -n 1)
-            if [ -n "$_latest_basename" ]; then
-              LATEST_DATED_FILE="${SRC_DIR}${_latest_basename}"
-            fi
-
-            if [ -n "$LATEST_DATED_FILE" ] && [ -f "$LATEST_DATED_FILE" ]; then
-              LATEST_MD_FILE="$LATEST_DATED_FILE"
-              echo "   Found latest dated file: $LATEST_MD_FILE"
-            elif [ -f "${SRC_DIR}daily.md" ]; then
-              LATEST_MD_FILE="${SRC_DIR}daily.md"
-              echo "   No dated files found. Using preferred: daily.md"
-            elif [ -f "${SRC_DIR}index.md" ]; then
-              LATEST_MD_FILE="${SRC_DIR}index.md"
-              echo "   No dated or daily.md. Using preferred: index.md"
-            elif [ -f "${SRC_DIR}README.md" ]; then
-              LATEST_MD_FILE="${SRC_DIR}README.md"
-              echo "   No dated, daily.md or index.md. Using preferred: README.md"
-            else
-              LATEST_MD_FILE=$(find "$SRC_DIR" -maxdepth 1 -type f -name '*.md' -printf '%T@ %p\n' 2>/dev/null | sort -nr | head -n1 | cut -d' ' -f2-)
-              if [ -n "$LATEST_MD_FILE" ] && [ -f "$LATEST_MD_FILE" ]; then
-                echo "   No dated or specific preferred files. Using most recently modified: $LATEST_MD_FILE"
-              else
-                LATEST_MD_FILE="" # Ensure it's empty if nothing found
-              fi
-            fi
-            
-            if [ -n "$LATEST_MD_FILE" ]; then
-              echo "   Selected markdown file for $SRC_DIR: $LATEST_MD_FILE"
-              CLEAN_OUT_BASE_NAME=$(echo "$OUT_BASE_NAME" | sed 's|/|-|g')
-              # MD_FILE_STEM=$(basename "$LATEST_MD_FILE" .md) # No longer needed for specific dated filename
-
-              # SPECIFIC_POSTER_FILENAME="${CLEAN_OUT_BASE_NAME}-content-${MD_FILE_STEM}.png" # Removed
-              # OUTPUT_POSTER_PATH="${POSTER_OUTPUT_DIR}/${SPECIFIC_POSTER_FILENAME}" # Removed
-              
-              # Generate timestamped poster filename to avoid Discord caching
-              CURRENT_DATE=$(date +%Y-%m-%d)
-              PERMALINK_POSTER_FILENAME="${CURRENT_DATE}_${CLEAN_OUT_BASE_NAME}.png"
-              PERMALINK_POSTER_PATH="${POSTER_OUTPUT_DIR}/${PERMALINK_POSTER_FILENAME}"
-              
-              echo "   Generating poster: $PERMALINK_POSTER_PATH" # Changed to permalink path
-
-              if ./scripts/posters-enhanced.sh "$LATEST_MD_FILE" "$PERMALINK_POSTER_PATH"; then # Use enhanced script
-                if [ -f "$PERMALINK_POSTER_PATH" ] && [ -s "$PERMALINK_POSTER_PATH" ]; then # Changed to check PERMALINK_POSTER_PATH
-                  echo "   Successfully generated poster: $PERMALINK_POSTER_PATH" # Changed to permalink path
-                  generated_posters_count=$((generated_posters_count + 1))
-                  # cp "$OUTPUT_POSTER_PATH" "$PERMALINK_POSTER_PATH" # Removed copy command
-                  # echo "   Created permalink: $PERMALINK_POSTER_PATH" # Redundant as we are creating it directly
-                else
-                  echo "   ERROR: posters-enhanced.sh exited 0 for $LATEST_MD_FILE, but $PERMALINK_POSTER_PATH was not found or is empty."
-                fi
-              else
-                echo "   ERROR: posters-enhanced.sh failed for $LATEST_MD_FILE (exit code $?). Check scripts/posters-enhanced.sh logs or errors."
-              fi
-            else
-              echo "   No suitable markdown file found in $SRC_DIR after filtering. Skipping poster generation."
-            fi
-            echo "----"
-          done
-
-          if [ "$generated_posters_count" -eq 0 ]; then
-            echo "No posters were successfully generated in this run."
-            echo "posters_generated=false" >> "$GITHUB_OUTPUT"
-          else
-            echo "Total posters successfully created (specific versions): $generated_posters_count"
+      - name: Generate Posters
+        id: generate-posters
+        run: |
+          mkdir -p posters
+          if scripts/run_poster_generation.sh; then
             echo "posters_generated=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "posters_generated=false" >> "$GITHUB_OUTPUT"
           fi
 
       - name: Commit and Push Posters
-        if: steps.generate-posters-step.outputs.posters_generated == 'true'
+        if: steps.generate-posters.outputs.posters_generated == 'true'
         run: |
           git config --global user.name 'GitHub Actions Bot'
           git config --global user.email 'actions@github.com'
-          git pull # Ensure local branch is up-to-date before committing
-          
+          git pull
           git add posters/*.png 
           
           if ! git diff --staged --quiet; then
@@ -180,4 +53,4 @@ jobs:
             git push
           else
             echo "No changes to poster files to commit."
-          fi 
+          fi
