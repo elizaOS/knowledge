@@ -2,6 +2,25 @@
 
 This repository serves as the central hub for aggregating, processing, and synthesizing knowledge for the elizaOS project. It employs a series of automated workflows and scripts to gather data from various sources, generate insights using LLMs, and disseminate information through different channels.
 
+## 📚 Comprehensive Documentation
+
+**All major directories now contain detailed README documentation!** Each README provides:
+- **Technical specifications** and data formats
+- **Integration patterns** and data flow diagrams  
+- **Usage examples** with practical bash commands
+- **Quality metrics** and performance characteristics
+- **Troubleshooting guides** and best practices
+
+**Directory Documentation:**
+- **[Core Processing](the-council/README.md)**: Data aggregation, fact extraction, strategic analysis
+- **[AI Intelligence](ai-news/README.md)**: Multi-source news aggregation (1,640+ files)
+- **[GitHub Analytics](github/README.md)**: Development activity tracking (900+ files)
+- **[Community Data](daily-silk/README.md)**: Discord AI news collection (25,000+ lines)
+- **[Generated Content](hackmd/README.md)**: LLM-powered content creation and backup
+- **[Visual Assets](posters/README.md)**: Automated poster generation (448+ images)
+- **[Episode Database](clanktank/README.md)**: Business pitch show scripts (31 episodes)
+- **[Historical Archive](archive/README.md)**: 7+ months of preserved data (1,813+ files)
+
 **Quick Links to Explore Data:**
 
 **Explore**
@@ -16,7 +35,22 @@ This repository serves as the central hub for aggregating, processing, and synth
 - Latest extracted facts: https://elizaos.github.io/knowledge/the-council/facts/daily.json
 - Eliza.how docs (llms-full.txt): https://eliza.how/llms-full.txt
 
-This repository serves as the central hub for aggregating, processing, and synthesizing knowledge for the elizaOS project. It employs a series of automated workflows and scripts to gather data from various sources, generate insights using LLMs, and disseminate information through different channels.
+## 🚀 Getting Started
+
+**For Developers & Researchers:**
+1. **Start with [the-council/README.md](the-council/README.md)** - Understand the core data processing pipeline
+2. **Explore [ai-news/README.md](ai-news/README.md)** - Learn about multi-source intelligence gathering  
+3. **Review [scripts/README.md](scripts/)** - See automation tools and deployment guides
+4. **Check [CLAUDE.md](CLAUDE.md)** - Development guidelines and system architecture
+
+**For Data Analysis:**
+- **[github/README.md](github/README.md)** - 900+ files of development activity analytics
+- **[daily-silk/README.md](daily-silk/README.md)** - 25,000+ lines of community AI news
+- **[archive/README.md](archive/README.md)** - 7+ months of historical data (1,813+ files)
+
+**For Content Creation:**
+- **[hackmd/README.md](hackmd/README.md)** - LLM-generated content creation and management
+- **[posters/README.md](posters/README.md)** - Automated visual content generation (448+ images)
 
 ---
 
@@ -61,37 +95,50 @@ The system follows a structured pipeline to transform raw data into actionable i
     *   Then, it runs `scripts/update-hackmd.py` which uses `the-council/aggregated/daily.json` as context to generate content for each prompt, update HackMD notes, and save local backups.
     *   Changes to `book.json`, `hackmd/**/*.md`, and `hackmd/**/*.json` are committed.
 
-6.  **Poster Generation (`.github/workflows/generate-posters.yml`)**: (Runs at 04:00 UTC)
-    *   This workflow generates visual poster content from the latest markdown files across various categories.
-    *   It uses `scripts/posters.sh` to convert markdown content to structured HTML and then to PNG images using wkhtmltoimage.
-    *   Posters are created for AI news, GitHub summaries, daily content, and HackMD notes, maintaining consistent aspect ratios and information balance.
-    *   Generated posters are committed back to the `posters/` directory for use in Discord briefings and other channels.
+6.  **Enhanced Poster Generation (`.github/workflows/generate-posters.yml`)**: (Runs at 04:00 UTC)
+    *   This workflow generates visual poster content using the enhanced `scripts/posters-enhanced.sh` script.
+    *   Features multiple rendering engines (wkhtmltoimage, Chromium, ImageMagick) with robust fallback handling.
+    *   Creates date-stamped posters (YYYY-MM-DD_category.png) to avoid Discord caching issues.
+    *   Generates 16+ poster categories daily with ElizaOS branding and responsive layouts.
+    *   All posters are hosted on GitHub Pages for reliable distribution.
 
 7.  **Daily Discord Briefing (`.github/workflows/daily_discord_briefing.yml`)**: (Runs at 04:30 UTC)
-    *   This workflow runs `scripts/webhook.py` daily after all data processing and HackMD updates are complete.
-    *   It takes the daily facts file (`the-council/facts/YYYY-MM-DD.json`) for the current date.
-    *   It sends a formatted briefing, including summaries and an optional poster, to a specified Discord channel.
+    *   This workflow runs `scripts/webhook.py` daily after all data processing and poster generation are complete.
+    *   Uses yesterday's date-stamped poster to avoid GitHub Pages deployment lag and Discord caching issues.
+    *   Includes automatic poster cleanup and sends formatted briefings with LLM-generated summaries.
+    *   Integrates rich Discord embeds with poster images hosted on GitHub Pages.
     *   Requires `OPENROUTER_API_KEY` and `DISCORD_BOT_TOKEN` secrets for LLM summarization and Discord posting.
 
 ## Key Directories
 
-*   `.github/workflows/`: Contains GitHub Actions workflow configurations for automation.
-*   `scripts/`: Houses all automation scripts (Python and shell).
-    *   `scripts/prompts/`: Contains prompt templates for LLM interactions, organized by category.
-*   `the-council/`: Stores daily aggregated data and generated contexts.
-    *   `the-council/aggregated/`: Contains daily raw aggregated data (`YYYY-MM-DD.json`) and a `daily.json` permalink. Output of `scripts/aggregate-sources.py`.
-    *   `the-council/council_briefing/`: Contains daily strategic council briefings (`YYYY-MM-DD.json`) and a `daily.json` permalink. Output of `scripts/generate_council_context.py`.
-    *   `the-council/facts/`: Contains daily extracted facts and insights in JSON format (`YYYY-MM-DD.json`) and a `daily.json` permalink. Output of `scripts/extract-facts.py`.
-    *   `the-council/episodes/`: Contains episode data synced from `m3-org/the-council` repository.
-    *   `the-council/old/`: Contains older council-related files.
-*   `hackmd/`: Stores local backups of content generated for HackMD notes, organized by category and prompt name, in both Markdown and JSON formats.
-    *   `hackmd/facts/`: Contains Markdown exports of extracted facts (`YYYY-MM-DD.md`).
-*   `ai-news/`: Contains synced data from the `M3-org/ai-news` repository.
-*   `github/`: Contains synced GitHub activity logs and summaries.
-*   `docs/`: Contains synced documentation from `elizaOS/eliza`.
-*   `daily-silk/`: Contains synced documentation from `madjin/daily-silk`.
-*   `clanktank/episodes/`: Contains episode data synced from `m3-org/clanktank` repository.
-*   `book.json`: A state file mapping prompt names to HackMD note IDs and their update strategies (e.g., 'overwrite'), used by `create-hackmd.py` and `update-hackmd.py`.
+Each major directory contains comprehensive documentation. Click the links below to explore detailed information about each component:
+
+### Core Processing Hub
+*   **[`the-council/`](the-council/README.md)**: Central data processing hub containing daily aggregated data, strategic council briefings, and extracted facts
+    *   `aggregated/`: Daily raw aggregated data (`YYYY-MM-DD.json`) from all sources
+    *   `council_briefing/`: Strategic council briefings with high-level analysis  
+    *   `facts/`: Daily extracted facts and insights with source tracing
+    *   `episodes/`: Episode data from strategic discussions
+
+### Data Sources & Intelligence
+*   **[`ai-news/`](ai-news/README.md)**: Multi-source AI intelligence (1,640+ files) from elizaOS and Hyperfy ecosystems
+*   **[`github/`](github/README.md)**: GitHub activity analytics (900+ files) with daily/weekly/monthly summaries and statistics  
+*   **[`daily-silk/`](daily-silk/README.md)**: Daily AI news from Discord community (167+ files, 25,000+ lines)
+*   **[`docs/`](docs/)**: Technical documentation synced from `elizaOS/eliza` repository
+
+### Generated Content & Distribution
+*   **[`hackmd/`](hackmd/README.md)**: LLM-generated content backups organized by category with HackMD synchronization
+*   **[`posters/`](posters/README.md)**: Visual content generation (448+ date-stamped poster images) for Discord and social sharing
+
+### Specialized Content
+*   **[`clanktank/`](clanktank/README.md)**: Episode database for Clank Tank business pitch show (31 complete episode scripts)
+*   **[`archive/`](archive/README.md)**: Historical data repository (1,813+ files) preserving 7+ months of elizaOS ecosystem evolution
+
+### Automation & Configuration  
+*   **[`.github/workflows/`](.github/workflows/)**: GitHub Actions workflow configurations for daily automation pipeline
+*   **[`scripts/`](scripts/)**: All automation scripts (Python primary, shell secondary) with comprehensive tooling
+    *   `prompts/`: LLM interaction templates organized by category (comms, dev, strategy)
+*   **`book.json`**: HackMD state management file mapping prompts to note IDs and update strategies
 
 ## Primary Scripts Overview
 
@@ -106,69 +153,58 @@ This system is designed to be modular and extensible, allowing for the integrati
 
 ## Repository Structure
 
-The repository is organized into several main directories, each containing information from different sources:
+The repository is organized into several main directories with comprehensive documentation. Each directory README provides detailed technical specifications and usage examples:
 
 ```
-.
-├── .github/            # GitHub Actions workflows and configurations
-│   └── workflows/
-├── ai-news/            # AI News summaries from M3-org/ai-news & other specific feeds
-│   ├── elizaos/        #   Summaries related to ElizaOS
-│   │   ├── dev/
-│   │   │   ├── json/
-│   │   │   └── md/
-│   │   ├── discord/
-│   │   │   ├── json/
-│   │   │   └── md/
-│   │   ├── json/       #   (General ElizaOS json, if any)
-│   │   └── md/         #   (General ElizaOS md, if any)
-│   ├── hyperfy/        #   Summaries related to Hyperfy
-│   │   ├── json/
-│   │   └── md/
-│   └── ...             #   (other specific ai-news feeds or top-level files)
-├── archive/            # Archived discussions and older data (legacy)
-│   ├── daily-elizaos/
-│   └── ...
-├── clanktank/          # Episode data from m3-org/clanktank
-│   └── episodes/       #   JSON episode files
-├── daily-silk/         # Daily AI news from Discord channel using SILK
-├── docs/               # Documentation, blogs, community notes, and versioned docs
-│   ├── blog/
-│   ├── community/
-│   ├── docs/           #   Core documentation (CLI, Core, REST)
-│   ├── news/           #   (Potentially older news, distinct from ai-news)
-│   ├── packages/
-│   ├── partners/
-│   ├── src/            #   (Source for Docusaurus if applicable)
-│   └── versioned_docs/
-├── github/             # GitHub activity logs and generated summaries/stats
-│   ├── stats/
-│   │   ├── day/
-│   │   ├── week/
-│   │   └── month/
-│   └── summaries/
-│       ├── day/
-│       ├── week/
-│       └── month/
-├── hackmd/             # Local backups of generated HackMD content & specific notes
-│   ├── comms/
-│   ├── council/
-│   ├── dev/
-│   ├── facts/          #   Markdown exports of extracted facts
-│   └── strategy/
-├── scripts/            # Scripts for managing repository content & LLM interactions
-│   ├── prompts/        #   Prompt templates for generating HackMD notes & other tasks
-│   │   ├── comms/
-│   │   ├── dev/
-│   │   └── strategy/
-│   └── special-prompts/
-├── the-council/        # Aggregated data, council briefings, and extracted facts
-│   ├── aggregated/     #   Daily raw aggregated data (YYYY-MM-DD.json)
-│   ├── council_briefing/ # Daily strategic council briefings (YYYY-MM-DD.json)
-│   ├── episodes/       #   Episode data from m3-org/the-council (JSON files)
-│   └── facts/          #   Daily extracted facts (JSON) (YYYY-MM-DD.json)
-├── book.json           # State file for HackMD notes (IDs, prompts, strategies)
-├── README.md           # This file
+elizaOS Knowledge Aggregation System
+├── 📁 Core Processing Hub
+│   └── the-council/            # 🔗 Central data processing (see README.md)
+│       ├── aggregated/         #   Daily raw data aggregation (YYYY-MM-DD.json)
+│       ├── council_briefing/   #   Strategic analysis & briefings  
+│       ├── facts/              #   LLM-extracted insights & intelligence
+│       └── episodes/           #   Strategic discussion archives
+│
+├── 📁 Data Sources & Intelligence  
+│   ├── ai-news/                # 🔗 Multi-source AI intelligence (see README.md)
+│   │   ├── elizaos/            #   ElizaOS ecosystem news (270+ files)
+│   │   │   ├── dev/            #   Developer-focused content
+│   │   │   ├── discord/        #   Community discussions  
+│   │   │   └── json/ + md/     #   Daily summaries & reports
+│   │   └── hyperfy/            #   VR/Web3 platform developments
+│   ├── github/                 # 🔗 GitHub activity analytics (see README.md)
+│   │   ├── stats/              #   Quantitative metrics (day/week/month)
+│   │   └── summaries/          #   Human-readable reports (900+ files)
+│   ├── daily-silk/             # 🔗 Discord AI news aggregation (see README.md)
+│   └── docs/                   #   Technical docs from elizaOS/eliza
+│
+├── 📁 Generated Content & Distribution
+│   ├── hackmd/                 # 🔗 LLM-generated content backups (see README.md)
+│   │   ├── comms/              #   Communication & outreach content
+│   │   ├── dev/                #   Development & technical content  
+│   │   ├── strategy/           #   Strategic analysis & planning
+│   │   └── facts/              #   Daily extracted facts (markdown)
+│   └── posters/                # 🔗 Visual content generation (see README.md)
+│       └── YYYY-MM-DD_*.png    #   Date-stamped poster images (448+ files)
+│
+├── 📁 Specialized Content
+│   ├── clanktank/              # 🔗 Business pitch show episodes (see README.md)
+│   │   └── episodes/           #   31 complete episode scripts (JSON)
+│   └── archive/                # 🔗 Historical data preservation (see README.md)
+│       ├── daily-elizaos/      #   Legacy daily reports (Oct 2024-Apr 2025)
+│       └── elizaos/            #   Community collaboration archives
+│
+├── 📁 Automation & Configuration
+│   ├── .github/workflows/      #   Daily automation pipeline (8 workflows)
+│   ├── scripts/                #   Python automation scripts & tooling
+│   │   └── prompts/            #   LLM interaction templates (comms/dev/strategy)
+│   └── book.json               #   HackMD state management configuration
+│
+└── 📄 Documentation
+    ├── README.md               #   This comprehensive system overview
+    └── CLAUDE.md               #   Development guidelines & architecture notes
+    
+📊 System Scale: 5,000+ files • 50+ MB data • Daily automation • 7+ months history
+🔗 All major directories contain detailed README.md documentation
 ```
 
 ## Data Sources
