@@ -1,0 +1,39 @@
+{
+  "server": "Hyperfy",
+  "title": "Hyperfy Discord - 2025-08-05",
+  "date": 1754352000,
+  "stats": {
+    "totalMessages": 89,
+    "totalUsers": 14
+  },
+  "categories": [
+    {
+      "channelId": "994775534733115412",
+      "channelName": "💻│developers",
+      "summary": "# Discord Chat Analysis for 💻│developers\n\n## 1. Summary\nThe discussion primarily focused on technical aspects of Hyperfy app development. Key topics included:\n\n- Script execution behavior in Hyperfy, with clarification that code runs on both server and client sides simultaneously, requiring conditional checks (`world.isClient` and `world.isServer`) to control execution context.\n- A music player app that pulls playlists from Audius was discussed, with plans for future features like trending categories and synchronized listening zones.\n- Material linking in Hyperfy was explored, particularly how duplicated objects share materials by default, requiring the `linked = false` property to enable individual material modifications.\n- Server-client communication was explained, including how to detect when players enter or leave a world using event listeners.\n- A confetti popper implementation was troubleshooted, resolving an issue where state changes (hover/cooldown) affected all instances instead of individual objects.\n- The importance of the world folder structure for backup/restore functionality was mentioned, along with automatic mesh optimization through linking.\n\n## 2. FAQ\nQ: How can the app still be updating if no one is in the world? (asked by Lastraum - theforgecore.xyz) A: Code runs on both the server and the clients, the server is always running so you can have things like plants growing over time (answered by Ashxn)\nQ: Is it exemplified in the docs anywhere that code runs on server even without an isServer block? (asked by Lastraum - theforgecore.xyz) A: Scripts execute on both server and clients, with server executing first on boot and clients running after receiving initial snapshot (answered by Ashxn)\nQ: Is there a way for the server to know when a client has left and stop doing something? (asked by Lastraum - theforgecore.xyz) A: Yes, using world.on('leave', e => {}) event listener on the server (answered by Ashxn)\nQ: Why do all my confetti poppers share the same state when I add multiple to the world? (asked by Gert-Jan Akerboom) A: Duplicated apps share the same materials by default, you need to set mesh.linked = false (answered by .hyp shaman and Valiant)\n\n## 3. Help Interactions\nHelper: .hyp shaman | Helpee: Gert-Jan Akerboom | Context: Confetti popper objects sharing state across duplicates | Resolution: Suggested setting mesh.linked = false to make materials independent\nHelper: Valiant | Helpee: Gert-Jan Akerboom | Context: Provided exact code for unlinking popper mesh | Resolution: Issue fixed, confirmed by Gert-Jan\nHelper: Ashxn | Helpee: Lastraum - theforgecore.xyz | Context: Explaining server/client code execution | Resolution: Provided code examples and explanation of world.isClient/world.isServer checks\nHelper: Ashxn | Helpee: Lastraum - theforgecore.xyz | Context: Detecting when players leave a world | Resolution: Provided code example using world.on('leave') event listener\n\n## 4. Action Items\nTechnical: Optimize music player app to handle server/client execution properly | Description: Add isClient/isServer checks to prevent unnecessary server updates | Mentioned By: Lastraum - theforgecore.xyz\nTechnical: Implement cursor change for hoverable objects | Description: Change cursor appearance when hovering over interactive elements | Mentioned By: Gert-Jan Akerboom\nFeature: Add trending and other categories to music player | Description: Expand music player functionality beyond playlists | Mentioned By: Lastraum - theforgecore.xyz\nFeature: Implement synchronized music listening | Description: Allow music to be in sync between players with pub/sub events for listening zones | Mentioned By: Lastraum - theforgecore.xyz\nFeature: Auto-unlink meshes when material properties are modified | Description: Automatically set linked=false when developers change material colors/properties | Mentioned By: Ashxn",
+      "messageCount": 64,
+      "userCount": 7
+    },
+    {
+      "channelId": "958209074045026327",
+      "channelName": "⚡│general",
+      "summary": "# Analysis of ⚡│general Discord Chat\n\n## 1. Summary\nThis chat segment contains minimal technical discussion. The primary conversation revolves around Hyperfy's role in relation to holographic technology, with Natefrog (not a team member) explaining that Hyperfy builds infrastructure layers (servers, networking, physics, social systems, creator tools) that would be enhanced rather than threatened by hologram technology. Other topics briefly mentioned include AI developments (reference to a DeepMind blog post about Genie-3), NFTs making a comeback, and a request for Hyperfy to comment on a social media post. No significant technical decisions or problem-solving occurred in this segment.\n\n## 2. FAQ\nQ: What is the role of hyperfy in a world where holograms are a reality? (asked by 3on_.) A: Hyperfy is building the infrastructure layer - the servers, networking, physics, social systems, and creator tools. Holograms are just another display technology. (answered by Natefrog)\nQ: What machines is Genie-3 running on? (asked by vox) A: Very very big ones that Google owns (answered by hiroP)\n\n## 3. Help Interactions\nHelper: Natefrog | Helpee: 3on_. | Context: New user asking about Hyperfy's relevance in a world with hologram technology | Resolution: Explained that Hyperfy builds infrastructure that would be enhanced by holographic displays rather than threatened by them\n\n## 4. Action Items\nTechnical: None identified in this chat segment\nDocumentation: None identified in this chat segment\nFeature: None identified in this chat segment",
+      "messageCount": 17,
+      "userCount": 7
+    },
+    {
+      "channelId": "1326789867312775290",
+      "channelName": "🪙│hyper",
+      "summary": "The chat segment is extremely brief with minimal technical content. It contains only shared tweets (without visible content details), a comment about \"raids,\" and brief statements from Xukonth expressing opinions about the metaverse as a \"dead narrative\" while positioning Hyperfy as a \"versatile project\" with future potential. No technical discussions, decisions, problem-solving, solutions, or implementations are present in this limited exchange.",
+      "messageCount": 6,
+      "userCount": 3
+    },
+    {
+      "channelId": "1031058655581323324",
+      "channelName": "🧊│3d-design",
+      "summary": "The chat segment is extremely brief, containing only two messages from the same user (Valiant). The discussion focuses on 3D model optimization techniques, specifically for reducing memory usage. Valiant suggests a two-step optimization process: first using gltf.report to reduce VRAM usage, followed by gltf-compressor to optimize textures. They also mention that \"hypercompresser\" combines these two tools into a single solution.",
+      "messageCount": 2,
+      "userCount": 1
+    }
+  ]
+}
