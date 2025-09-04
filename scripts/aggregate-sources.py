@@ -22,8 +22,8 @@ AI_NEWS_ELIZAOS_JSON_DIR = WORKSPACE_ROOT / "ai-news/elizaos/json"
 AI_NEWS_ELIZAOS_MD_DIR = WORKSPACE_ROOT / "ai-news/elizaos/md"
 AI_NEWS_ELIZAOS_DISCORD_JSON_DIR = WORKSPACE_ROOT / "ai-news/elizaos/discord/json"
 AI_NEWS_ELIZAOS_DISCORD_MD_DIR = WORKSPACE_ROOT / "ai-news/elizaos/discord/md"
-AI_NEWS_ELIZAOS_DEV_JSON_DIR = WORKSPACE_ROOT / "ai-news/elizaos/dev/json"
-AI_NEWS_ELIZAOS_DEV_MD_DIR = WORKSPACE_ROOT / "ai-news/elizaos/dev/md"
+# AI_NEWS_ELIZAOS_DEV_JSON_DIR = WORKSPACE_ROOT / "ai-news/elizaos/dev/json"  # DEPRECATED: Directory no longer exists
+# AI_NEWS_ELIZAOS_DEV_MD_DIR = WORKSPACE_ROOT / "ai-news/elizaos/dev/md"      # DEPRECATED: Directory no longer exists
 
 AI_NEWS_HYPERFY_JSON_DIR = WORKSPACE_ROOT / "ai-news/hyperfy/json"
 AI_NEWS_HYPERFY_MD_DIR = WORKSPACE_ROOT / "ai-news/hyperfy/md"
@@ -36,16 +36,16 @@ GITHUB_USER_SUMMARIES_FILE = WORKSPACE_ROOT / "github/user_summaries.ndjson"
 
 AI_NEWS_SOURCES_CONFIG = {
     "elizaos_discord_md": {"dir": AI_NEWS_ELIZAOS_DISCORD_MD_DIR, "suffix": ".md", "days": 3, "is_json": False, "prefix": ""},
-    "elizaos_dev_md": {"dir": AI_NEWS_ELIZAOS_DEV_MD_DIR, "suffix": ".md", "days": 3, "is_json": False, "prefix": ""},
+    # "elizaos_dev_md": {"dir": AI_NEWS_ELIZAOS_DEV_MD_DIR, "suffix": ".md", "days": 3, "is_json": False, "prefix": ""},  # DEPRECATED: Directory no longer exists
     "elizaos_daily_json": {"dir": AI_NEWS_ELIZAOS_JSON_DIR, "suffix": ".json", "is_json": True, "prefix": ""},
     "elizaos_daily_md": {"dir": AI_NEWS_ELIZAOS_MD_DIR, "suffix": ".md", "is_json": False, "prefix": ""},
     "elizaos_daily_discord_json": {"dir": AI_NEWS_ELIZAOS_DISCORD_JSON_DIR, "suffix": ".json", "is_json": True, "prefix": ""},
     "elizaos_daily_discord_md": {"dir": AI_NEWS_ELIZAOS_DISCORD_MD_DIR, "suffix": ".md", "is_json": False, "prefix": ""},
-    "elizaos_daily_dev_json": {"dir": AI_NEWS_ELIZAOS_DEV_JSON_DIR, "suffix": ".json", "is_json": True, "prefix": ""},
-    "elizaos_daily_dev_md": {"dir": AI_NEWS_ELIZAOS_DEV_MD_DIR, "suffix": ".md", "is_json": False, "prefix": ""},
-    # Add Hyperfy or other AI news sources here if they follow similar patterns
-    "hyperfy_daily_json": {"dir": AI_NEWS_HYPERFY_JSON_DIR, "suffix": ".json", "is_json": True, "prefix": ""},
-    "hyperfy_daily_md": {"dir": AI_NEWS_HYPERFY_MD_DIR, "suffix": ".md", "is_json": False, "prefix": ""},
+    # "elizaos_daily_dev_json": {"dir": AI_NEWS_ELIZAOS_DEV_JSON_DIR, "suffix": ".json", "is_json": True, "prefix": ""},    # DEPRECATED: Directory no longer exists
+    # "elizaos_daily_dev_md": {"dir": AI_NEWS_ELIZAOS_DEV_MD_DIR, "suffix": ".md", "is_json": False, "prefix": ""},        # DEPRECATED: Directory no longer exists
+    # Hyperfy sources temporarily disabled - data only available through 2025-07-03
+    # "hyperfy_daily_json": {"dir": AI_NEWS_HYPERFY_JSON_DIR, "suffix": ".json", "is_json": True, "prefix": ""},
+    # "hyperfy_daily_md": {"dir": AI_NEWS_HYPERFY_MD_DIR, "suffix": ".md", "is_json": False, "prefix": ""},
 }
 
 # --- Logging Setup ---
