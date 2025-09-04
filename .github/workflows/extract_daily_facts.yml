@@ -88,6 +88,7 @@ jobs:
             echo "Changes detected in fact briefing files."
             git add "$DAILY_FACT_JSON" "$DAILY_FACT_MARKDOWN" "$PERMALINK_FACT_JSON"
             git commit -m "Automated: Update daily fact briefing for $(date +%Y-%m-%d)"
+            git pull --rebase origin main
             git push
           else
             echo "No changes to commit for fact briefing."
