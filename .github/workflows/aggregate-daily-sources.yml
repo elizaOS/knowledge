@@ -44,6 +44,7 @@ jobs:
           if [[ `git status --porcelain the-council/aggregated/$(date +%Y-%m-%d).json the-council/aggregated/daily.json` ]]; then
             git add the-council/aggregated/$(date +%Y-%m-%d).json the-council/aggregated/daily.json
             git commit -m "Automated: Generate context map for $(date +%Y-%m-%d) to aggregated/"
+            git pull --rebase origin main
             git push
           else
             echo "No changes to commit."
