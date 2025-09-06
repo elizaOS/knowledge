@@ -15,6 +15,8 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          token: \${{ secrets.GH_PAT }} # Use PAT for authentication
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -84,8 +86,7 @@ jobs:
             # Add markdown file to the commit
             git add "$DAILY_COUNCIL_FILE" "$PERMALINK_COUNCIL_FILE" "$DAILY_MARKDOWN_FILE"
             git commit -m "Automated: Generate council context for $(date +%Y-%m-%d) to council_briefing/"
-            git pull --rebase origin main
-            git push
+            git push "https://\${{ secrets.GH_PAT }}@github.com/\${{ github.repository }}.git"
           else
             echo "No changes to commit for council context."
           fi 
