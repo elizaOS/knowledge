@@ -15,8 +15,6 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-        with:
-          token: \${{ secrets.GITHUB_TOKEN }} # Use default token for checkout
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -35,18 +33,11 @@ jobs:
       - name: Create daily.json permalink
         run: cp the-council/aggregated/$(date +%Y-%m-%d).json the-council/aggregated/daily.json
 
-      - name: Configure Git
-        run: |
-          git config --global user.name 'GitHub Actions Bot'
-          git config --global user.email 'actions@github.com'
-
-      - name: Commit and push if changes
-        run: |
-          # Check if the specific daily file or permalink file was created/modified
-          if [[ `git status --porcelain the-council/aggregated/$(date +%Y-%m-%d).json the-council/aggregated/daily.json` ]]; then
-            git add the-council/aggregated/$(date +%Y-%m-%d).json the-council/aggregated/daily.json
-            git commit -m "Automated: Generate context map for $(date +%Y-%m-%d) to aggregated/"
-            git push
-          else
-            echo "No changes to commit."
-          fi 
+      - name: Commit updated files
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "Automated: Generate context map for $(date +%Y-%m-%d) to aggregated/"
+          file_pattern: "the-council/aggregated/*.json"
+          commit_user_name: "github-actions[bot]"
+          commit_user_email: "github-actions[bot]@users.noreply.github.com"
+          commit_author: "github-actions[bot] <github-actions[bot]@users.noreply.github.com>" 
