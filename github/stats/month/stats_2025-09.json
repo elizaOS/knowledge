@@ -5,7 +5,7 @@
     "intervalType": "month"
   },
   "repository": "elizaos/eliza",
-  "overview": "From 2025-09-01 to 2025-10-01, elizaos/eliza had 27 new PRs (28 merged), 6 new issues, and 19 active contributors.",
+  "overview": "From 2025-09-01 to 2025-10-01, elizaos/eliza had 56 new PRs (52 merged), 61 new issues, and 25 active contributors.",
   "topIssues": [
     {
       "id": "I_kwDOMT5cIs7I-3_W",
@@ -18,6 +18,18 @@
       "closedAt": null,
       "state": "OPEN",
       "commentCount": 11
+    },
+    {
+      "id": "I_kwDOMT5cIs7Hx_mQ",
+      "title": "i Successfully Publish a Plugin in  23AUG but it's not visible in PR",
+      "author": "1BDO",
+      "number": 5813,
+      "repository": "elizaos/eliza",
+      "body": "plugin-delta-0.1.0",
+      "createdAt": "2025-08-25T13:01:43Z",
+      "closedAt": "2025-09-09T11:43:31Z",
+      "state": "CLOSED",
+      "commentCount": 6
     },
     {
       "id": "I_kwDOMT5cIs7HaHnG",
@@ -44,28 +56,16 @@
       "commentCount": 2
     },
     {
-      "id": "I_kwDOMT5cIs7F0hup",
-      "title": "Move to core pure",
-      "author": "borisudovicic",
-      "number": 5766,
-      "repository": "elizaos/eliza",
-      "body": "Make sure it works, get up to speed for low level devs, browser support, streaming in core, etc.",
-      "createdAt": "2025-08-13T15:20:17Z",
-      "closedAt": "2025-09-03T22:40:09Z",
-      "state": "CLOSED",
-      "commentCount": 0
-    },
-    {
-      "id": "I_kwDOMT5cIs7H3Obz",
-      "title": "Implement Dynamic Prompting (Multi-Turn Conversations) in ElizaOS Scenarios",
+      "id": "I_kwDOMT5cIs7EFUYp",
+      "title": "FIX CLI CI TESTS",
       "author": "linear",
-      "number": 5819,
+      "number": 5714,
       "repository": "elizaos/eliza",
-      "body": "# Dynamic Prompting Implementation for ElizaOS Scenarios\n\n## Overview\n\nImplement **Dynamic Prompting** (multi-turn conversations) in ElizaOS scenarios to enable sophisticated testing of agent behavior through extended conversations where an LLM simulates realistic user responses.\n\n## Problem Statement\n\nCurrent ElizaOS scenarios are limited to single-turn interactions, making it impossible to test:\n\n* Multi-step problem solving\n* Context retention across conversation turns\n* Clarification and follow-up question handling\n* Natural conversation flow assessment\n* Error recovery and correction flows\n\n## Solution\n\nExtend the existing scenario framework to support multi-turn conversations where:\n\n1. **Agent** receives initial user input\n2. **Agent** responds with thoughts, actions, and replies\n3. **LLM Simulator** generates realistic user follow-up based on agent response\n4. **Agent** continues the conversation based on simulated user input\n5. Process repeats for specified number of turns or until conditions are met\n\n## Key Requirements\n\n### 1\\. Backward Compatibility\n\n* **100% backward compatible** - all existing scenarios must work unchanged\n* Gradual adoption path for teams to enhance existing scenarios\n* No breaking changes to existing APIs or CLI commands\n\n### 2\\. Core Components\n\n#### Schema Extensions\n\n* Extend `RunStepSchema` with optional `conversation` field\n* Add new evaluation types: `conversation_length`, `conversation_flow`, `user_satisfaction`, `context_retention`\n* Support conversation configuration with user simulator settings\n\n#### User Simulator\n\n* LLM-based response generation with persona-driven prompts\n* Configurable personality, objectives, constraints, and knowledge level\n* Realistic conversation progression based on agent responses\n\n#### Conversation Manager\n\n* Multi-turn execution orchestration\n* Termination condition checking (satisfaction, solution provided, escalation needed)\n* Turn-level and final evaluation support\n* Conversation transcript generation\n\n#### New Evaluators\n\n* **Conversation Length**: Validate optimal conversation duration\n* **Conversation Flow**: Detect required conversation patterns\n* **User Satisfaction**: Measure user satisfaction through sentiment analysis\n* **Context Retention**: Verify agent memory across conversation turns\n\n### 3\\. Configuration Examples\n\n#### Basic Multi-Turn Conversation\n\n```yaml\nrun:\n  - input: \"I need help with something\"\n    conversation:\n      max_turns: 4\n      user_simulator:\n        persona: \"polite customer with a billing question\"\n        objective: \"find out why charged twice this month\"\n        temperature: 0.6\n      final_evaluations:\n        - type: \"llm_judge\"\n          prompt: \"Did the agent successfully help resolve the billing issue?\"\n          expected: \"yes\"\n```\n\n#### Advanced Persona-Driven Conversation\n\n```yaml\nrun:\n  - input: \"This is ridiculous! Your product doesn't work!\"\n    conversation:\n      max_turns: 6\n      user_simulator:\n        persona: \"angry customer who had bad experience\"\n        objective: \"vent frustration but eventually want help\"\n        style: \"initially hostile, gradually becomes cooperative if handled well\"\n        constraints:\n          - \"Start with complaints and criticism\"\n          - \"Don't accept first solution immediately\"\n          - \"Become more cooperative if agent shows empathy\"\n      termination_conditions:\n        - type: \"user_expresses_satisfaction\"\n        - type: \"agent_escalates_to_human\"\n```\n\n## Implementation Plan\n\n### Phase 1: Core Infrastructure (Weeks 1-2)\n\n- [ ] Schema extensions and type definitions\n- [ ] User Simulator implementation\n- [ ] Basic conversation flow testing\n\n### Phase 2: Conversation Management (Weeks 3-4)\n\n- [ ] ConversationManager class implementation\n- [ ] Provider integration (LocalEnvironmentProvider, E2BEnvironmentProvider)\n- [ ] Termination condition logic\n\n### Phase 3: Evaluation System (Weeks 5-6)\n\n- [ ] New conversation evaluators implementation\n- [ ] EvaluationEngine integration\n- [ ] End-to-end testing\n\n### Phase 4: Polish and Documentation (Week 7)\n\n- [ ] Example scenarios creation\n- [ ] Documentation updates\n- [ ] Performance optimizations\n\n## Technical Specifications\n\n### File Structure\n\n```\npackages/cli/src/commands/scenario/src/\n├── schema.ts (extend)\n├── conversation-types.ts (new)\n├── UserSimulator.ts (new)\n├── ConversationManager.ts (new)\n├── ConversationEvaluators.ts (new)\n├── LocalEnvironmentProvider.ts (modify)\n├── E2BEnvironmentProvider.ts (modify)\n└── __tests__/\n    ├── UserSimulator.test.ts (new)\n    ├── ConversationManager.test.ts (new)\n    ├── ConversationEvaluators.test.ts (new)\n    └── integration/ (new tests)\n```\n\n### Key Interfaces\n\n```typescript\ninterface ConversationConfig {\n  max_turns: number;\n  user_simulator: UserSimulatorConfig;\n  termination_conditions: TerminationCondition[];\n  turn_evaluations: EvaluationSchema[];\n  final_evaluations: EvaluationSchema[];\n}\n\ninterface UserSimulatorConfig {\n  persona: string;\n  objective: string;\n  style?: string;\n  constraints: string[];\n  knowledge_level: 'beginner' | 'intermediate' | 'expert';\n}\n```\n\n## Success Criteria\n\n### Functional Requirements\n\n- [ ] Single-turn scenarios continue to work unchanged\n- [ ] Multi-turn conversations execute successfully\n- [ ] User simulator generates realistic, persona-consistent responses\n- [ ] Termination conditions work correctly\n- [ ] All new evaluation types function properly\n- [ ] Matrix testing supports conversation parameters\n\n### Performance Requirements\n\n- [ ] Conversation scenarios complete within reasonable time limits\n- [ ] Memory usage remains within acceptable bounds\n- [ ] LLM API usage is optimized and rate-limited appropriately\n\n### Quality Requirements\n\n- [ ] Comprehensive test coverage (unit, integration, e2e)\n- [ ] Clear error handling and debugging capabilities\n- [ ] Well-documented examples and migration guide\n\n## Risk Mitigation\n\n### Technical Risks\n\n* **LLM API failures**: Implement retry logic and graceful degradation\n* **Infinite loops**: Hard max_turns limit and timeout mechanisms\n* **Memory leaks**: Turn-based cleanup and conversation archiving\n\n### Integration Risks\n\n* **Breaking existing scenarios**: Comprehensive backward compatibility testing\n* **Performance impact**: Resource monitoring and optimization\n\n## Dependencies\n\n* Existing `askAgentViaApi` infrastructure\n* Current evaluation engine and trajectory reconstruction\n* LLM provider integration for user simulation\n* Database schema (no changes required)\n\n## Acceptance Criteria\n\n1. **Backward Compatibility**: All existing scenarios pass without modification\n2. **New Functionality**: Multi-turn conversation scenarios execute successfully\n3. **Evaluation Quality**: New evaluators provide meaningful insights\n4. **Performance**: No significant impact on existing scenario execution time\n5. **Documentation**: Clear examples and migration path provided",
-      "createdAt": "2025-08-25T20:36:17Z",
-      "closedAt": "2025-09-03T22:39:53Z",
+      "body": "",
+      "createdAt": "2025-08-04T14:39:12Z",
+      "closedAt": "2025-09-08T15:31:51Z",
       "state": "CLOSED",
-      "commentCount": 0
+      "commentCount": 1
     }
   ],
   "topPRs": [
@@ -82,61 +82,72 @@
       "deletions": 274
     },
     {
-      "id": "PR_kwDOMT5cIs6meEtU",
-      "title": "refactor: centralize business logic in server package",
-      "author": "standujar",
-      "number": 5864,
-      "body": "# Relates to\r\n\r\n  #5860 Refactor Eliza CLI\r\n                                                                                                                                                                                                                                                                                                                                                                                                                                                           \r\n   # Risks                                                                                                                                                                                                                                                                               \r\n                                                                                                                                                                                                                                                                                         \r\n   **Low to Medium**                                                                                                                                                                                                                                                                     \r\n   - **Low**: All existing functionality maintained with backward compatibility                                                                                                                                                                                                          \r\n   - **Medium**: Large architectural change affecting core components, thoroughly tested                                                                                                                                                                                                 \r\n                                                                                                                                                                                                                                                                                         \r\n   # Background                                                                                                                                                                                                                                                                          \r\n                                                                                                                                                                                                                                                                                         \r\n   ## What does this PR do?                                                                                                                                                                                                                                                              \r\n                                                                                                                                                                                                                                                                                         \r\n   This PR refactors the ElizaOS architecture by moving all business logic from the CLI package to the server package. The CLI becomes a thin orchestration layer that delegates to the server package, eliminating code duplication and creating a cleaner separation of concerns.      \r\n                                                                                                                                                                                                                                                                                         \r\n   **Key changes:**                                                                                                                                                                                                                                                                      \r\n   - Moved 870+ lines of business logic from CLI to server package                                                                                                                                                                                                                       \r\n   - Created new `ElizaOS` orchestration class and managers (Agent, Plugin, Config) in server package                                                                                                                                                                                    \r\n   - Simplified CLI to ~170 lines of pure delegation code                                                                                                                                                                                                                                \r\n   - Removed 1,612 lines of redundant code while adding 1,211 lines of well-organized managers                                                                                                                                                                                           \r\n   - Maintained 100% backward compatibility for all existing use cases                                                                                                                                                                                                                   \r\n                                                                                                                                                                                                                                                                                         \r\n   **Files deleted from CLI:**                                                                                                                                                                                                                                                           \r\n   - `commands/start/actions/agent-start.ts` (134 lines)                                                                                                                                                                                                                                 \r\n   - `commands/start/actions/server-start.ts` (118 lines)                                                                                                                                                                                                                                \r\n   - `commands/start/utils/config-utils.ts` (73 lines)                                                                                                                                                                                                                                   \r\n   - `commands/start/utils/dependency-resolver.ts` (56 lines)                                                                                                                                                                                                                            \r\n   - `commands/start/utils/loader.ts` (120 lines)                                                                                                                                                                                                                                        \r\n   - `commands/start/utils/plugin-utils.ts` (99 lines)                                                                                                                                                                                                                                   \r\n                                                                                                                                                                                                                                                                                         \r\n   **New files in server:**                                                                                                                                                                                                                                                              \r\n   - `orchestration/ElizaOS.ts` - Main orchestration (166 lines)                                                                                                                                                                                                                         \r\n   - `managers/AgentManager.ts` - Agent lifecycle (171 lines)                                                                                                                                                                                                                            \r\n   - `managers/PluginLoader.ts` - Plugin management (140 lines)                                                                                                                                                                                                                          \r\n   - `managers/ConfigManager.ts` - Config handling (123 lines)                                                                                                                                                                                                                           \r\n   - `characters/default.ts` - Default Eliza character (271 lines)                                                                                                                                                                                                                       \r\n                                                                                                                                                                                                                                                                                         \r\n   ## What kind of change is this?                                                                                                                                                                                                                                                       \r\n                                                                                                                                                                                                                                                                                         \r\n   **Improvements** (misc. changes to existing features) - Major architectural refactoring without breaking changes                                                                                                                                                                      \r\n                                                                                                                                                                                                                                                                                         \r\n   # Documentation changes needed?                                                                                                                                                                                                                                                       \r\n                                                                                                                                                                                                                                                                                         \r\n   My changes do not require a change to the project documentation.                                                                                                                                                                                                                      \r\n   - The public API remains the same                                                                                                                                                                                                                                                     \r\n   - All commands work identically                                                                                                                                                                                                                                                       \r\n   - Internal architecture changes only                                                                                                                                                                                                                                                  \r\n                                                                                                                                                                                                                                                                                         \r\n   # Testing                                                                                                                                                                                                                                                                             \r\n                                                                                                                                                                                                                                                                                         \r\n   ## Where should a reviewer start?                                                                                                                                                                                                                                                     \r\n                                                                                                                                                                                                                                                                                         \r\n   1. Review the new architecture in `packages/server/src/`:                                                                                                                                                                                                                             \r\n      - `orchestration/ElizaOS.ts` - Main orchestration class                                                                                                                                                                                                                            \r\n      - `managers/AgentManager.ts` - Agent lifecycle management                                                                                                                                                                                                                          \r\n      - `managers/PluginLoader.ts` - Plugin loading and dependency resolution                                                                                                                                                                                                            \r\n      - `managers/ConfigManager.ts` - Configuration management                                                                                                                                                                                                                           \r\n                                                                                                                                                                                                                                                                                         \r\n   2. Check the simplified CLI in `packages/cli/src/commands/start/index.ts`                                                                                                                                                                                                             \r\n                                                                                                                                                                                                                                                                                         \r\n   ## Detailed testing steps                                                                                                                                                                                                                                                             \r\n                                                                                                                                                                                                                                                                                         \r\n   ```bash                                                                                                                                                                                                                                                                               \r\n   # Test 1: CLI with character files (standalone mode)                                                                                                                                                                                                                                  \r\n   cd eliza                                                                                                                                                                                                                                                                              \r\n   bun run build                                                                                                                                                                                                                                                                         \r\n   bunx elizaos start --character characters/cartman.json                                                                                                                                                                                                                                \r\n   # Verify: Agent starts successfully                                                                                                                                                                                                                                                   \r\n                                                                                                                                                                                                                                                                                         \r\n   # Test 2: CLI within a project                                                                                                                                                                                                                                                        \r\n   bunx elizaos create test-project --yes                                                                                                                                                                                                                                                \r\n   cd test-project                                                                                                                                                                                                                                                                       \r\n   bunx elizaos start                                                                                                                                                                                                                                                                    \r\n   # Verify: Project agents load and start                                                                                                                                                                                                                                               \r\n                                                                                                                                                                                                                                                                                         \r\n   # Test 3: Test command still works                                                                                                                                                                                                                                                    \r\n   bunx elizaos test                                                                                                                                                                                                                                                                     \r\n   # Verify: Tests run successfully                                                                                                                                                                                                                                                      \r\n                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     \r\n   # Test 5: Build and test                                                                                                                                                                                                                                                              \r\n   bun run build                                                                                                                                                                                                                                                                         \r\n   bun test                                                                                                                                                                                                                                                                              \r\n   # Verify: All tests passing test still passing                                                                                                                                                                                                                                                        \r\n   ```                                                                                                                                                                                                                                                                                   \r\n                                                                                                                                                                                                                                                                                         \r\n   **Results:**                                                                                                                                                                                                                                                                          \r\n   - ✅ Created and tested a new project outside monorepo                                                                                                                                                                                                                                 \r\n   - ✅ Verified CLI works with --character flag                                                                                                                                                                                                                                          \r\n   - ✅ Confirmed projects created with `elizaos create` work correctly                                                                                                                                                                                                                   \r\n   - ✅ All test and scenario commands functioning                                                                                                                                                                                                                                        \r\n   - ✅ Added comprehensive unit tests for new managers\"\n\n<!-- This is an auto-generated comment: release notes by coderabbit.ai -->\n\n## Summary by CodeRabbit\n\n- New Features\n  - Introduced unified server orchestration via ElizaOS, enabling simpler startup and agent management.\n  - Added a server-provided default character with environment-aware plugin loading.\n  - Ensured Ollama is always available as a fallback plugin.\n  - Added dotenv support for loading .env at startup.\n- Refactor\n  - CLI start flow now delegates to the server for bootstrap, agent lifecycle, and character loading.\n  - Plugin parsing updated to functional APIs; centralized plugin loading and dependency resolution.\n- Chores\n  - Updated CLI dependencies, including adding the OpenAI plugin.\n- Tests\n  - Significant test suite updates aligning with the new orchestration and loaders.\n\n<!-- end of auto-generated comment: release notes by coderabbit.ai -->",
+      "id": "PR_kwDOMT5cIs6nYgfa",
+      "title": "fix: sanitize dkg assets",
+      "author": "Lexpeartha",
+      "number": 5902,
+      "body": "",
       "repository": "elizaos/eliza",
-      "createdAt": "2025-09-02T14:28:47Z",
+      "createdAt": "2025-09-08T13:11:21Z",
       "mergedAt": null,
-      "additions": 2238,
-      "deletions": 1825
+      "additions": 5899,
+      "deletions": 890
     },
     {
-      "id": "PR_kwDOMT5cIs6mf7xp",
-      "title": "feat: Show action called and result in chat UI",
-      "author": "tcm390",
-      "number": 5865,
-      "body": "related: https://github.com/elizaOS/eliza/issues/5831\r\n\r\nresult:\r\n\r\n\r\nhttps://github.com/user-attachments/assets/632831d2-819d-4ba6-96e1-57206c08b6fc\r\n\r\n\r\n\r\n# Real-time Action Execution UI with Enhanced Tool Visualization\r\n\r\n## 🎯 Overview\r\n\r\nThis PR introduces a comprehensive **Real-time Action Execution UI System** that provides transparency and visibility into agent action execution. Users can now see actions as they happen, with detailed input/output data, status tracking, and error handling - all updated in real-time.\r\n\r\n## ✨ Features\r\n\r\n### 🔧 Interactive Tool Component\r\n- **Collapsible Tool Cards**: Each action is displayed as an expandable card showing execution details\r\n- **Real-time Status Updates**: Visual indicators for Processing → Ready → Completed → Error states\r\n- **Input/Output Display**: Formatted view of action parameters and results\r\n- **Error Handling**: Clear error messages and stack traces when actions fail\r\n\r\n### 📡 Live Action Tracking\r\n- **WebSocket Integration**: Real-time updates as actions progress through their lifecycle\r\n- **Event-Driven Architecture**: Comprehensive event system for action start/completion\r\n- **Status Broadcasting**: All connected clients receive live action status updates\r\n\r\n### 💾 Enhanced Data Persistence\r\n- **Action Message Storage**: Dedicated storage for action execution data\r\n- **Message Updates**: Ability to update existing messages with new action results\r\n- **Lifecycle Tracking**: Complete audit trail of action execution from start to finish\r\n\r\n## 🏗️ Technical Implementation\r\n\r\n### Frontend Changes\r\n\r\n#### New Components\r\n- **`actionTool.tsx`**: Core tool visualization component with:\r\n  - Collapsible interface with state-based styling\r\n  - Input/output data formatting and display\r\n  - Error handling and status indicators\r\n  - Accessibility features and keyboard navigation\r\n\r\n#### Enhanced Chat Interface\r\n- **Action Message Detection**: Automatically identifies action messages and renders them with tool UI\r\n- **Data Transformation**: Converts action messages to tool format with proper state mapping\r\n- **Seamless Integration**: Tool cards integrate naturally into the chat flow\r\n\r\n### Backend Changes\r\n\r\n#### Runtime Enhancements\r\n- **Action Lifecycle Events**: Enhanced `ACTION_STARTED` and `ACTION_COMPLETED` events with detailed payloads\r\n- **Callback System**: Added storage callback mechanism to capture action responses\r\n- **Event Emission**: Comprehensive event emission at action start and completion\r\n\r\n#### Database Layer\r\n- **New Methods**: \r\n  - `getMessageById()`: Retrieve specific messages by ID\r\n  - `updateMessage()`: Update existing messages with new data\r\n- **Message ID Handling**: Support for pre-defined message IDs in action tracking\r\n\r\n#### API Endpoints\r\n- **`POST /api/messaging/action`**: Create new action messages\r\n- **`PATCH /api/messaging/action/:id`**: Update existing action messages\r\n- **Enhanced Validation**: Comprehensive input validation and error handling\r\n\r\n#### Message Bus Service\r\n- **`notifyActionStart()`**: Broadcasts action initiation to clients\r\n- **`notifyActionUpdate()`**: Broadcasts action completion/updates to clients\r\n- **Real-time Sync**: Ensures all clients stay synchronized with action states\r\n\r\n## 🔄 User Flow\r\n\r\n```mermaid\r\nsequenceDiagram\r\n    participant U as User\r\n    participant C as Client UI\r\n    participant S as Server\r\n    participant R as Runtime\r\n    participant A as Agent Action\r\n    \r\n    U->>C: Sends message\r\n    C->>S: HTTP request\r\n    S->>R: Process message\r\n    R->>A: Execute action\r\n    R->>S: ACTION_STARTED event\r\n    S->>C: WebSocket: action started\r\n    C->>C: Show \"Processing\" tool card\r\n    A->>R: Action completes\r\n    R->>S: ACTION_COMPLETED event\r\n    S->>C: WebSocket: action completed\r\n    C->>C: Update tool card to \"Completed\"\r\n    C->>U: Show final results\r\n```\r\n\r\n## 📋 Code Changes Summary\r\n\r\n### Files Modified\r\n- `packages/client/src/components/chat.tsx` - Enhanced chat interface with action detection\r\n- `packages/client/src/hooks/use-socket-chat.ts` - Added rawMessage handling\r\n- `packages/client/src/lib/api-type-mappers.ts` - Enhanced message mapping with action data\r\n- `packages/core/src/runtime.ts` - Enhanced action lifecycle with event emission\r\n- `packages/core/src/types/events.ts` - Updated action event payload structure\r\n- `packages/plugin-bootstrap/src/index.ts` - Enhanced event handlers for action tracking\r\n- `packages/plugin-sql/src/base.ts` - Added message CRUD operations\r\n- `packages/server/src/index.ts` - Added message update method\r\n- `packages/server/src/api/messaging/core.ts` - New action endpoints\r\n- `packages/server/src/services/message.ts` - Enhanced message bus with action notifications\r\n\r\n### Files Added\r\n- `packages/client/src/components/actionTool.tsx` - New tool visualization component\r\n\r\n## 🧪 Testing\r\n\r\n### Manual Testing Scenarios\r\n1. **Action Execution**: Send a message that triggers an action and verify:\r\n   - Tool card appears with \"Processing\" state\r\n   - Updates to \"Completed\" when action finishes\r\n   - Shows correct input/output data\r\n   \r\n2. **Error Handling**: Trigger an action that fails and verify:\r\n   - Tool card shows \"Error\" state\r\n   - Error message is displayed clearly\r\n   - No UI crashes or broken states\r\n\r\n3. **Multiple Actions**: Test scenarios with multiple actions and verify:\r\n   - Each action gets its own tool card\r\n   - States update independently\r\n   - No race conditions or state conflicts\r\n\r\n### Integration Testing\r\n- WebSocket connection stability during action execution\r\n- Database consistency for action message storage\r\n- Event system reliability under load\r\n\r\n## 🔍 Screenshots\r\n\r\n### Action Processing State\r\n```\r\n┌─────────────────────────────────────┐\r\n│ 🔄 SEND_MESSAGE        Processing   │\r\n│ ▼ Show Details                      │\r\n└─────────────────────────────────────┘\r\n```\r\n\r\n### Action Completed State\r\n```\r\n┌─────────────────────────────────────┐\r\n│ ✅ SEND_MESSAGE        Completed    │\r\n│ ▼ Input:                           │\r\n│   action: \"SEND_MESSAGE\"           │\r\n│   text: \"Hello world\"              │\r\n│                                    │\r\n│ ▼ Output:                          │\r\n│   result: \"Message sent successfully\" │\r\n│   messageId: \"msg_123\"             │\r\n└─────────────────────────────────────┘\r\n```\r\n\r\n## 🚨 Breaking Changes\r\n\r\n**None** - This is a purely additive feature that enhances existing functionality without breaking current behavior.\r\n\r\n## 🎯 Benefits\r\n\r\n### For Users\r\n- **Transparency**: Clear visibility into what the agent is doing\r\n- **Feedback**: Immediate indication of action progress and completion\r\n- **Debugging**: Easy access to action inputs, outputs, and errors\r\n\r\n### For Developers\r\n- **Debugging**: Comprehensive action execution logging and visualization\r\n- **Monitoring**: Real-time insight into agent behavior and performance\r\n- **Development**: Enhanced development experience with detailed action tracking\r\n\r\n### For the Platform\r\n- **User Experience**: Significantly improved UX with real-time feedback\r\n- **Reliability**: Better error handling and user communication\r\n- **Extensibility**: Foundation for future action-related features\r\n\r\n## 🔮 Future Enhancements\r\n\r\nThis foundation enables future features like:\r\n- Action execution analytics and metrics\r\n- Custom action UI components for specific tools\r\n- Action replay and debugging tools\r\n- Performance monitoring and optimization insights\r\n\r\n## ✅ Checklist\r\n\r\n- [x] Frontend tool visualization component implemented\r\n- [x] Backend action lifecycle tracking added\r\n- [x] Database layer enhanced with message CRUD operations\r\n- [x] API endpoints for action management created\r\n- [x] WebSocket integration for real-time updates\r\n- [x] Event system enhanced for action tracking\r\n- [x] Error handling implemented throughout the stack\r\n- [x] Manual testing completed\r\n- [x] Code follows ElizaOS architectural patterns\r\n- [x] No breaking changes introduced\r\n\r\n## 🚀 Ready for Review\r\n\r\nThis PR is ready for review and testing. The implementation follows ElizaOS architectural principles, maintains backward compatibility, and provides a solid foundation for enhanced agent interaction visibility.",
+      "id": "PR_kwDOMT5cIs6kzWrr",
+      "title": "feat: Add AI Gateway plugin - Universal access to 100+ AI models",
+      "author": "Dexploarer",
+      "number": 5806,
+      "body": "## Summary\nAdds a universal AI Gateway plugin that provides access to 100+ AI models through Vercel AI Gateway and other OpenAI-compatible gateways.\n\n## Features\n- 🚀 **100+ AI Models** - OpenAI, Anthropic, Google, Meta, Mistral, and more through unified gateways\n- 🔄 **Universal Gateway Support** - Works with Vercel AI Gateway, OpenRouter, and any OpenAI-compatible endpoint\n- 💾 **Response Caching** - Built-in LRU cache for cost optimization\n- 📊 **Built-in Telemetry** - Track usage and performance metrics\n- ⚡ **High Performance** - Automatic retry logic and connection pooling\n- 🎯 **Multiple Actions** - Text generation, image generation, embeddings, and model listing\n\n## Highlights\n\n### Vercel AI Gateway Integration\n- Optimized for Vercel's AI Gateway with proper URL format (`https://ai-gateway.vercel.sh/v1`)\n- Supports Vercel's colon-based model naming convention (e.g., `openai:gpt-4o`)\n- Compatible with Vercel's app attribution headers for analytics\n\n### Flexible Provider Support\n- Works with any OpenAI-compatible API endpoint\n- Automatic model format detection (colon vs slash separators)\n- Seamless switching between providers with minimal configuration\n\n### Enterprise Features\n- Response caching with configurable TTL\n- Automatic retry logic with exponential backoff\n- OIDC authentication support for enterprise deployments\n- Comprehensive error handling and fallback mechanisms\n\n## Installation\n\nThe plugin is already published to npm for immediate use:\n```bash\nnpm install @promptordie/plugin-aigateway\n```\n\nAfter merge, it will be available as:\n```bash\nnpm install @elizaos/plugin-aigateway\n```\n\n## Configuration\n\n```env\n# Required\nAIGATEWAY_API_KEY=your_api_key_here\n\n# Optional (defaults shown)\nAIGATEWAY_BASE_URL=https://ai-gateway.vercel.sh/v1\nAIGATEWAY_DEFAULT_MODEL=openai:gpt-4o-mini\nAIGATEWAY_LARGE_MODEL=openai:gpt-4o\nAIGATEWAY_EMBEDDING_MODEL=openai:text-embedding-3-small\nAIGATEWAY_CACHE_TTL=300\nAIGATEWAY_MAX_RETRIES=3\n```\n\n## Usage\n\n```typescript\nimport aiGatewayPlugin from '@elizaos/plugin-aigateway';\n\nconst character = {\n    name: 'MyAgent',\n    plugins: [aiGatewayPlugin],\n    settings: {\n        AIGATEWAY_API_KEY: 'your-api-key'\n    }\n};\n```\n\n## Test Plan\n- [x] Built successfully with `bun run build`\n- [x] All TypeScript types validated\n- [x] Published to npm registry for testing\n- [x] Tested with Vercel AI Gateway\n- [x] Tested model provider registration\n- [ ] Community testing welcomed\n\n## Documentation\nFull documentation and examples included in packages/plugin-aigateway/README.md\n\n## Related Links\n- NPM Package: https://www.npmjs.com/package/@promptordie/plugin-aigateway\n- Vercel AI Gateway Docs: https://vercel.com/docs/ai-gateway",
       "repository": "elizaos/eliza",
-      "createdAt": "2025-09-02T17:02:38Z",
-      "mergedAt": "2025-09-02T21:07:19Z",
-      "additions": 796,
-      "deletions": 68
+      "createdAt": "2025-08-22T02:36:55Z",
+      "mergedAt": null,
+      "additions": 4985,
+      "deletions": 423
     },
     {
-      "id": "PR_kwDOMT5cIs6m-zhX",
-      "title": "feat: dev cli fix, logging cleanup, file watching optz.",
-      "author": "ChristopherTrimboli",
-      "number": 5881,
-      "body": "This pull request introduces several improvements to development workflow and logging, with a major focus on enhancing the developer experience for monorepo and project setups that include a client UI. The most significant change is the addition of robust support for automatically starting and managing a Vite client development server alongside the backend server, including graceful shutdown and improved status reporting. Other changes include more targeted file watching for rebuilds, cleaner and less noisy logging, and expanded watcher configuration for better reliability.\r\n\r\n**Client Dev Server Integration:**\r\n\r\n* Added logic to detect the presence of a client package and automatically start a Vite development server for the client UI in monorepo or project setups. This includes handling process management, output streaming, and graceful shutdown of the client dev server. (`packages/cli/src/commands/dev/actions/dev-server.ts`) [[1]](diffhunk://#diff-889e97856af209d02514c0f8b48694ef9b085cc4527ac25326e15c309a0788edR8-R207) [[2]](diffhunk://#diff-889e97856af209d02514c0f8b48694ef9b085cc4527ac25326e15c309a0788edR292-R309) [[3]](diffhunk://#diff-889e97856af209d02514c0f8b48694ef9b085cc4527ac25326e15c309a0788edR334-R398)\r\n\r\n**Developer Experience & Logging:**\r\n\r\n<img width=\"649\" height=\"335\" alt=\"Screenshot From 2025-09-04 22-29-17\" src=\"https://github.com/user-attachments/assets/11be91cf-ba2c-4433-8f74-1a7b18894344\" />\r\n\r\n* Improved console output throughout the build and dev processes to be more concise and readable, removing references to parallel execution and reducing noise in asset copying and build steps. (`build-utils.ts`, `packages/cli/build.ts`, `packages/core/build.ts`) [[1]](diffhunk://#diff-a69aed1cd2ab488fd0350da3228e93094a9cbe3f8cf4b12fdf1ee9bbf2df3c7cL161-R161) [[2]](diffhunk://#diff-a69aed1cd2ab488fd0350da3228e93094a9cbe3f8cf4b12fdf1ee9bbf2df3c7cL202) [[3]](diffhunk://#diff-a69aed1cd2ab488fd0350da3228e93094a9cbe3f8cf4b12fdf1ee9bbf2df3c7cL221-R222) [[4]](diffhunk://#diff-a69aed1cd2ab488fd0350da3228e93094a9cbe3f8cf4b12fdf1ee9bbf2df3c7cL477-L485) [[5]](diffhunk://#diff-a69aed1cd2ab488fd0350da3228e93094a9cbe3f8cf4b12fdf1ee9bbf2df3c7cL496-R510) [[6]](diffhunk://#diff-38a7bfc3de9135d0af986757713f0fc589a906dd9be2f715932e303ae8bc7e4cL13-R13) [[7]](diffhunk://#diff-38a7bfc3de9135d0af986757713f0fc589a906dd9be2f715932e303ae8bc7e4cL41-R41) [[8]](diffhunk://#diff-38a7bfc3de9135d0af986757713f0fc589a906dd9be2f715932e303ae8bc7e4cL68-R68) [[9]](diffhunk://#diff-38a7bfc3de9135d0af986757713f0fc589a906dd9be2f715932e303ae8bc7e4cL116-R116) [[10]](diffhunk://#diff-d7ef5dd9fcf3ebdeeeb230b1ba9d7e64b93732b0a056c5b4de8c19f62ee33be2L96-R96)\r\n\r\n**File Watching Reliability:**\r\n\r\n* Expanded ignored file patterns in the default watcher configuration to avoid unnecessary rebuilds and improve performance. Added support for `awaitWriteFinish` to prevent rebuilds on partial file writes. (`packages/cli/src/commands/dev/types.ts`, `packages/cli/src/commands/dev/utils/file-watcher.ts`) [[1]](diffhunk://#diff-6023f4b19b52307d6dd173b0a6aee33857b9746a8bf84c862a13f44918134fbfR39-R42) [[2]](diffhunk://#diff-933184909707c3cb021eb27c82b442bebd11fe1b2c5559dba54e4f08b3dc6516L10-R37)\r\n\r\n* Changed file watcher to only monitor relevant TypeScript/JavaScript files in `src` (or root) and improved logging for watched files, making rebuild triggers more accurate and less noisy. (`packages/cli/src/commands/dev/utils/file-watcher.ts`)\r\n\r\n**Developer Feedback & Graceful Shutdown:**\r\n\r\n* Enhanced dev mode startup to display clear status for both backend and client servers, including URLs for API and UI. Added graceful shutdown handling for both servers on process termination signals. (`packages/cli/src/commands/dev/actions/dev-server.ts`)",
+      "id": "PR_kwDOMT5cIs6nQ6oI",
+      "title": "Main",
+      "author": "DevGruGold",
+      "number": 5892,
+      "body": "<!-- Use this template by filling in information and copying and pasting relevant items out of the HTML comments. -->\r\n\r\n# Relates to\r\n\r\n<!-- LINK TO ISSUE OR TICKET -->\r\n\r\n<!-- This risks section must be filled out before the final review and merge. -->\r\n\r\n# Risks\r\n\r\n<!--\r\nLow, medium, large. List what kind of risks and what could be affected.\r\n-->\r\n\r\n# Background\r\n\r\n## What does this PR do?\r\n\r\n## What kind of change is this?\r\n\r\n<!--\r\nBug fixes (non-breaking change which fixes an issue)\r\nImprovements (misc. changes to existing features)\r\nFeatures (non-breaking change which adds functionality)\r\nUpdates (new versions of included code)\r\n-->\r\n\r\n<!-- This \"Why\" section is most relevant if there are no linked issues explaining why. If there is a related issue, it might make sense to skip this why section. -->\r\n<!--\r\n## Why are we doing this? Any context or related work?\r\n-->\r\n\r\n# Documentation changes needed?\r\n\r\n<!--\r\nMy changes do not require a change to the project documentation.\r\nMy changes require a change to the project documentation.\r\nIf documentation change is needed: I have updated the documentation accordingly.\r\n-->\r\n\r\n<!-- Please show how you tested the PR. This will really help if the PR needs to be retested and probably help the PR get merged quicker. -->\r\n\r\n# Testing\r\n\r\n## Where should a reviewer start?\r\n\r\n## Detailed testing steps\r\n\r\n<!--\r\nNone: Automated tests are acceptable.\r\n-->\r\n\r\n<!--\r\n- As [anon/admin], go to [link]\r\n  - [do action]\r\n  - verify [result]\r\n-->\r\n\r\n<!-- If there is a UI change, please include before and after screenshots or videos. This will speed up PRs being merged. It is extra nice to annotate screenshots with arrows or boxes pointing out the differences. -->\r\n<!--\r\n## Screenshots\r\n### Before\r\n### After\r\n-->\r\n\r\n<!-- If there is anything about the deployment, please make a note. -->\r\n<!--\r\n# Deploy Notes\r\n-->\r\n\r\n<!--  Copy and paste command line output. -->\r\n<!--\r\n## Database changes\r\n-->\r\n\r\n<!--  Please specify deploy instructions if there is something more than the automated steps. -->\r\n<!--\r\n## Deployment instructions\r\n-->\r\n\r\n<!-- If you are on Discord, please join https://discord.gg/ai16z and state your Discord username here for the contributor role and join us in #development-feed -->\r\n<!--\r\n## Discord username\r\n\r\n-->\r\n",
       "repository": "elizaos/eliza",
-      "createdAt": "2025-09-05T05:03:13Z",
-      "mergedAt": "2025-09-05T17:26:16Z",
-      "additions": 543,
-      "deletions": 150
+      "createdAt": "2025-09-07T18:01:30Z",
+      "mergedAt": null,
+      "additions": 3476,
+      "deletions": 662
     },
     {
-      "id": "PR_kwDOMT5cIs6m24Ba",
-      "title": "feat: Add standalone CLI chat interface with improved UX",
-      "author": "wtfsayo",
-      "number": 5879,
-      "body": "## Changes\n- Add new standalone CLI chat interface (`standalone-cli-chat.ts`)\n- Enhanced interactive chat experience with improved UX\n- Version alignment to 1.5.8-alpha.1 across all packages\n- Updated TypeScript configuration\n\n## Features Added\n- Interactive command-line chat interface using ElizaOS agents\n- Similar to AI SDK's streamText but using ElizaOS runtime and plugins\n- Support for LOG_LEVEL and OPENAI_API_KEY configuration\n- Clean exit commands (quit/exit)\n- Proper text wrapping and formatting\n\n## Files Changed\n- 19 files modified (primarily version updates and new chat interface)\n- 431 insertions, 39 deletions\n\n## Testing\n- Standalone chat interface tested with OpenAI integration\n- All existing functionality preserved",
+      "id": "PR_kwDOMT5cIs6nQ6MF",
+      "title": "dev changes",
+      "author": "DevGruGold",
+      "number": 5891,
+      "body": "<!-- Use this template by filling in information and copying and pasting relevant items out of the HTML comments. -->\r\n\r\n# Relates to\r\n\r\n<!-- LINK TO ISSUE OR TICKET -->\r\n\r\n<!-- This risks section must be filled out before the final review and merge. -->\r\n\r\n# Risks\r\n\r\n<!--\r\nLow, medium, large. List what kind of risks and what could be affected.\r\n-->\r\n\r\n# Background\r\n\r\n## What does this PR do?\r\n\r\n## What kind of change is this?\r\n\r\n<!--\r\nBug fixes (non-breaking change which fixes an issue)\r\nImprovements (misc. changes to existing features)\r\nFeatures (non-breaking change which adds functionality)\r\nUpdates (new versions of included code)\r\n-->\r\n\r\n<!-- This \"Why\" section is most relevant if there are no linked issues explaining why. If there is a related issue, it might make sense to skip this why section. -->\r\n<!--\r\n## Why are we doing this? Any context or related work?\r\n-->\r\n\r\n# Documentation changes needed?\r\n\r\n<!--\r\nMy changes do not require a change to the project documentation.\r\nMy changes require a change to the project documentation.\r\nIf documentation change is needed: I have updated the documentation accordingly.\r\n-->\r\n\r\n<!-- Please show how you tested the PR. This will really help if the PR needs to be retested and probably help the PR get merged quicker. -->\r\n\r\n# Testing\r\n\r\n## Where should a reviewer start?\r\n\r\n## Detailed testing steps\r\n\r\n<!--\r\nNone: Automated tests are acceptable.\r\n-->\r\n\r\n<!--\r\n- As [anon/admin], go to [link]\r\n  - [do action]\r\n  - verify [result]\r\n-->\r\n\r\n<!-- If there is a UI change, please include before and after screenshots or videos. This will speed up PRs being merged. It is extra nice to annotate screenshots with arrows or boxes pointing out the differences. -->\r\n<!--\r\n## Screenshots\r\n### Before\r\n### After\r\n-->\r\n\r\n<!-- If there is anything about the deployment, please make a note. -->\r\n<!--\r\n# Deploy Notes\r\n-->\r\n\r\n<!--  Copy and paste command line output. -->\r\n<!--\r\n## Database changes\r\n-->\r\n\r\n<!--  Please specify deploy instructions if there is something more than the automated steps. -->\r\n<!--\r\n## Deployment instructions\r\n-->\r\n\r\n<!-- If you are on Discord, please join https://discord.gg/ai16z and state your Discord username here for the contributor role and join us in #development-feed -->\r\n<!--\r\n## Discord username\r\n\r\n-->\r\n",
       "repository": "elizaos/eliza",
-      "createdAt": "2025-09-04T13:11:27Z",
-      "mergedAt": "2025-09-04T13:18:12Z",
-      "additions": 392,
-      "deletions": 0
+      "createdAt": "2025-09-07T17:58:30Z",
+      "mergedAt": null,
+      "additions": 3053,
+      "deletions": 572
     }
   ],
   "codeChanges": {
-    "additions": 16513,
-    "deletions": 2258,
-    "files": 148,
-    "commitCount": 215
+    "additions": 18949,
+    "deletions": 4444,
+    "files": 180,
+    "commitCount": 337
   },
   "completedItems": [
+    {
+      "title": "fix: namespace plugin routes",
+      "prNumber": 5693,
+      "type": "bugfix",
+      "body": "# Risks\r\n\r\nLow, some routes maybe need to be updated\r\n\r\n# Background\r\n\r\n## What does this PR do?\r\n\r\n- makes helmut more permissive (only in dev mode) so devs can use tailwind or CDNs for js frameworks\r\n- DRY clean up in server (refactored u",
+      "files": [
+        "packages/core/src/runtime.ts",
+        "packages/server/src/api/index.ts",
+        "packages/server/src/index.ts"
+      ]
+    },
     {
       "title": "feat: scenarios dynamic prompting + spec",
       "prNumber": 5824,
@@ -554,38 +565,299 @@
         "packages/cli/src/commands/scenario/src/TrajectoryReconstructor.ts",
         "packages/cli/src/commands/scenario/src/UserSimulator.ts"
       ]
+    },
+    {
+      "title": "feat: add NPM safe overrides for error-ex hack",
+      "prNumber": 5904,
+      "type": "feature",
+      "body": "In response to: https://jdstaerk.substack.com/p/we-just-found-malicious-code-in-the\r\n\r\nerror-ex NPM hack this pins package.json versions to safe versions.\r\n\r\nWe were not effected previously but this to be safe.\r\n\r\nThis pull request updates ",
+      "files": [
+        "bun.lock",
+        "package.json"
+      ]
+    },
+    {
+      "title": "fix: agents panels loading",
+      "prNumber": 5901,
+      "type": "bugfix",
+      "body": "\n\n<!-- This is an auto-generated comment: release notes by coderabbit.ai -->\n\n## Summary by CodeRabbit\n\n- New Features\n  - Public agent plugin panels are now exposed under agent-scoped paths: /api/agents/{agentId}/plugins...\n  - Panel disco",
+      "files": [
+        "packages/server/src/api/agents/panels.ts",
+        "packages/server/src/api/index.ts"
+      ]
+    },
+    {
+      "title": "fix: Logger API to Capture All Logs Including Namespaced Agent Logs",
+      "prNumber": 5900,
+      "type": "bugfix",
+      "body": "related: https://github.com/elizaOS/eliza/issues/5886\r\n\r\nresult: \r\n\r\n<img width=\"614\" height=\"837\" alt=\"Screenshot 2025-09-08 at 6 47 19 PM\" src=\"https://github.com/user-attachments/assets/3ca700fa-f1a9-46ea-b1f6-baaaa2928b89\" />\r\n\r\n## Summ",
+      "files": [
+        "packages/core/src/logger.browser.ts",
+        "packages/core/src/logger.ts",
+        "packages/server/src/api/runtime/logging.ts"
+      ]
+    },
+    {
+      "title": "chore(docs): remove duplicate AGENT.md in favor of AGENTS.md",
+      "prNumber": 5899,
+      "type": "other",
+      "body": "This PR removes the duplicate AGENT.md at the repo root in favor of the canonical AGENTS.md.\\n\\nWhy:\\n- The repository standardizes on AGENTS.md for agent instructions across the tree.\\n- AGENT.md duplicated and diverged from AGENTS.md, ris",
+      "files": [
+        "AGENT.md"
+      ]
+    },
+    {
+      "title": "docs: add AGENTS.md contributor guide",
+      "prNumber": 5898,
+      "type": "docs",
+      "body": "This pull request adds comprehensive repository guidelines to the documentation, outlining project structure, development workflows, coding standards, testing practices, and security protocols. These guidelines are intended to help contribu",
+      "files": [
+        "AGENTS.md"
+      ]
+    },
+    {
+      "title": "chore: remove deprecated configuration files",
+      "prNumber": 5897,
+      "type": "other",
+      "body": "## Summary\n\nThis PR removes three deprecated configuration files that are no longer needed in the ElizaOS repository:\n\n### Files Removed:\n\n1. **** - GitHub Actions workflow for testing alpha CLI releases\n   - This workflow was used to test ",
+      "files": [
+        ".github/workflows/alpha-cli-tests.yml",
+        "fly.toml",
+        "knip.config.ts"
+      ]
+    },
+    {
+      "title": "feat: modernize README with better structure and quick start",
+      "prNumber": 5896,
+      "type": "feature",
+      "body": "## 🎯 Problem\n\nThe current README, while comprehensive, presents several usability challenges:\n- Dense, overwhelming initial experience for new users\n- Verbose sections that bury key information\n- No clear 5-minute quick start path\n- Missin",
+      "files": [
+        "README.md"
+      ]
+    },
+    {
+      "title": "fix: change SECRET_SALT log level from error to warning",
+      "prNumber": 5895,
+      "type": "bugfix",
+      "body": "## Problem\n\nThe SECRET_SALT environment variable validation was logging an **error** when the default value was being used. This created confusion as error-level logs typically indicate critical failures that prevent the system from functio",
+      "files": [
+        "packages/core/src/settings.ts"
+      ]
+    },
+    {
+      "title": "fix(server): resolve TypeScript logger parameter errors",
+      "prNumber": 5894,
+      "type": "bugfix",
+      "body": "",
+      "files": [
+        "packages/server/src/api/index.ts"
+      ]
+    },
+    {
+      "title": "fix: separate browser sentry in logger",
+      "prNumber": 5893,
+      "type": "bugfix",
+      "body": "Testing @eliza/core/browser in next.js\n\nGetting errors logger sentry is still loading node.js:\n\n```\nModule not found: Can't resolve 'async_hooks'\n  18 | exports.AsyncHooksContextManager = void 0;\n  19 | const api_1 = require(\"@opentelemetry",
+      "files": [
+        "bun.lock",
+        "packages/core/src/index.browser.ts",
+        "packages/core/src/logger.browser.ts"
+      ]
+    },
+    {
+      "title": "fix(client): Remove redundant navigate() call in force new chat flow",
+      "prNumber": 5945,
+      "type": "bugfix",
+      "body": "## Problem\r\nWhen creating a new chat via \"New Chat\" button, the `navigate(location.pathname, { replace: true })` call was wiping out the channelId from the URL after `addChannelIdToUrl` had just set it, causing URL inconsistency.\r\n\r\n## Solu",
+      "files": [
+        "packages/client/src/components/chat.tsx"
+      ]
+    },
+    {
+      "title": "Correct action name and improve prompt for multi-step",
+      "prNumber": 5942,
+      "type": "other",
+      "body": "",
+      "files": [
+        "packages/core/src/prompts.ts",
+        "packages/plugin-bootstrap/src/index.ts"
+      ]
+    },
+    {
+      "title": "feat(client): Add URL synchronization for DM channel switching and direct navigation",
+      "prNumber": 5941,
+      "type": "feature",
+      "body": "result:\r\n\r\n\r\nhttps://github.com/user-attachments/assets/7f1a502b-51f6-431f-be05-dc0dccf923e8\r\n\r\n\r\n## Summary\r\nImplements URL synchronization for DM channels, allowing users to bookmark and share direct links to specific conversations while ",
+      "files": [
+        "packages/client/src/components/chat.tsx",
+        "packages/core/src/prompts.ts",
+        "packages/plugin-bootstrap/src/index.ts"
+      ]
+    },
+    {
+      "title": "feat: Add Sentry Vercel AI integration",
+      "prNumber": 5963,
+      "type": "feature",
+      "body": "This PR introduces Sentry's Vercel AI integration to improve monitoring and error tracking for deployments on Vercel. It also includes minor code formatting changes.",
+      "files": [
+        "packages/server/src/index.ts"
+      ]
+    },
+    {
+      "title": "feat: Improves client debugging and React version handling",
+      "prNumber": 5962,
+      "type": "feature",
+      "body": "Enhances debugging capabilities by enabling sourcemaps and preserving function names for better stack traces.\n\nEnsures a single React instance to prevent version conflicts and related errors.\n",
+      "files": [
+        "packages/client/vite.config.cypress.ts",
+        "packages/client/vite.config.ts"
+      ]
+    },
+    {
+      "title": "feat: Removes Sentry browser SDK from core package",
+      "prNumber": 5961,
+      "type": "feature",
+      "body": "Removes the Sentry browser SDK from the core package and includes Sentry node SDK in the server package.\n\nThis change avoids bundling browser-incompatible Sentry code in the core package, reducing its size and preventing potential runtime e",
+      "files": [
+        "bun.lock",
+        "packages/core/build.ts",
+        "packages/core/package.json",
+        "packages/core/src/index.browser.ts",
+        "packages/core/src/index.node.ts",
+        "packages/core/src/index.ts",
+        "packages/core/src/logger.browser.ts",
+        "packages/core/src/logger.ts",
+        "packages/core/src/runtime.browser.ts",
+        "packages/core/src/sentry/instrument.browser.ts",
+        "packages/core/src/sentry/instrument.node.ts",
+        "packages/core/src/sentry/instrument.ts",
+        "packages/server/README.md",
+        "packages/server/package.json",
+        "packages/server/src/index.ts"
+      ]
+    },
+    {
+      "title": "fix: resolve Buffer to Blob type compatibility error in api-client",
+      "prNumber": 5960,
+      "type": "bugfix",
+      "body": "",
+      "files": [
+        "packages/api-client/src/services/audio.ts"
+      ]
+    },
+    {
+      "title": "fix: resolve TypeScript build errors in plugin-bootstrap",
+      "prNumber": 5959,
+      "type": "bugfix",
+      "body": "# Fix TypeScript Build Errors in Plugin Bootstrap\r\n\r\n## Problem\r\nThe `@elizaos/plugin-bootstrap` package was failing to build due to several TypeScript compilation errors:\r\n\r\n1. `Property 'adapter' does not exist on type 'IAgentRuntime'` - ",
+      "files": [
+        "packages/core/src/types/events.ts",
+        "packages/plugin-bootstrap/src/index.ts",
+        "packages/plugin-bootstrap/src/services/embedding.ts"
+      ]
+    },
+    {
+      "title": "fix: only send action notifications for client_chat messages",
+      "prNumber": 5957,
+      "type": "bugfix",
+      "body": "issue:\r\n\r\n<img width=\"906\" height=\"196\" alt=\"Screenshot 2025-09-11 at 12 20 15 AM\" src=\"https://github.com/user-attachments/assets/ef5f488e-5271-4778-b644-e654c19ab9bd\" />\r\n",
+      "files": [
+        "packages/core/src/runtime.ts",
+        "packages/plugin-bootstrap/src/index.ts"
+      ]
+    },
+    {
+      "title": "feat(runs): backend runs tracking (server/core/bootstrap/api-client)",
+      "prNumber": 5953,
+      "type": "feature",
+      "body": "## Runs Tracking Backend Implementation (Server, Core, Bootstrap, API Client)\n\nThis PR implements the backend portions of the Runs Tracking and Interface plan described in `docs/runs-tracking-interface.md`. It adds structured logging and se",
+      "files": [
+        ".gitignore",
+        "packages/api-client/src/index.ts",
+        "packages/api-client/src/services/runs.ts",
+        "packages/api-client/src/types/runs.ts",
+        "packages/core/src/runtime.ts",
+        "packages/plugin-bootstrap/src/index.ts",
+        "packages/plugin-bootstrap/src/services/embedding.ts",
+        "packages/server/src/__tests__/agents-runs.test.ts",
+        "packages/server/src/api/agents/index.ts",
+        "packages/server/src/api/agents/runs.ts"
+      ]
+    },
+    {
+      "title": "Bump vite from 6.1.6 to 6.3.6 in /packages/client in the npm_and_yarn group across 1 directory",
+      "prNumber": 5946,
+      "type": "other",
+      "body": "Bumps the npm_and_yarn group with 1 update in the /packages/client directory: [vite](https://github.com/vitejs/vite/tree/HEAD/packages/vite).\n\nUpdates `vite` from 6.1.6 to 6.3.6\n<details>\n<summary>Release notes</summary>\n<p><em>Sourced from",
+      "files": [
+        "packages/client/package.json"
+      ]
+    },
+    {
+      "title": "fix(core): make SECRET_SALT reads cache-aware and fix plugin-bootstrap test flakiness",
+      "prNumber": 5968,
+      "type": "bugfix",
+      "body": "## Summary\n\nThis PR fixes core test failures by making SECRET_SALT reads cache-aware to properly reflect environment changes during tests. It also addresses plugin-bootstrap test flakiness.\n\n## Changes Made\n\n### Core Changes\n- **packages/co",
+      "files": [
+        "packages/core/src/settings.ts",
+        "packages/plugin-bootstrap/src/__tests__/actions.test.ts",
+        "packages/plugin-bootstrap/src/__tests__/embedding-queue-management.test.ts",
+        "packages/plugin-bootstrap/src/__tests__/test-utils.ts"
+      ]
+    },
+    {
+      "title": "feat: Creates elizaos alias package",
+      "prNumber": 5972,
+      "type": "feature",
+      "body": "### PR: Add `elizaos` npm alias for `@elizaos/cli`\n\n- Adds new alias package `packages/elizaos` that delegates to `@elizaos/cli`.\n- Keeps the simple npm name `elizaos`; improves discoverability while remaining identical to the CLI.\n\n### Wha",
+      "files": [
+        "bun.lock",
+        "packages/elizaos/README.md",
+        "packages/elizaos/bin/elizaos.js",
+        "packages/elizaos/package.json"
+      ]
     }
   ],
   "topContributors": [
     {
       "username": "wtfsayo",
       "avatarUrl": "https://avatars.githubusercontent.com/u/82053242?u=98209a1f10456f42d4d2fa71db4d5bf4a672cbc3&v=4",
-      "totalScore": 369.00866206117786,
-      "prScore": 351.9906620611779,
+      "totalScore": 635.3665651362364,
+      "prScore": 617.7105651362365,
       "issueScore": 0,
       "reviewScore": 15.5,
-      "commentScore": 1.5179999999999998,
-      "summary": null
+      "commentScore": 2.1559999999999997,
+      "summary": "wtfsayo: Focused on enhancing the command-line experience and bolstering project stability this month. They delivered a significant new feature by adding a standalone CLI chat interface with an improved user experience (elizaos/eliza#5879). They also established a new testing workflow for the alpha CLI in a large refactor (elizaos/eliza#5873) and fixed a key semantic versioning bug in the plugin registry (elizaos-plugins/registry#214). This work reflects a primary focus on bug fixes, testing improvements, and configuration management."
     },
     {
       "username": "ChristopherTrimboli",
       "avatarUrl": "https://avatars.githubusercontent.com/u/27584221?u=0d816ce1dcdea8f925aba18bb710153d4a87a719&v=4",
-      "totalScore": 192.27903238070562,
-      "prScore": 191.67903238070562,
+      "totalScore": 421.23249576776516,
+      "prScore": 400.13249576776514,
       "issueScore": 0,
-      "reviewScore": 0,
+      "reviewScore": 20.5,
       "commentScore": 0.6000000000000001,
-      "summary": null
+      "summary": "ChristopherTrimboli: Focused on improving the development and release infrastructure for the `elizaos/eliza` repository this month. He established a new alpha NPM release workflow (#5863) and subsequently unified the release process for all NPM packages (#5877). Christopher also delivered significant developer experience enhancements in a large PR (#5881, +1104/-327 lines) that improved the dev CLI, cleaned up logging, and optimized file watching. His work primarily involved changes to code and configuration files, reflecting his focus on tooling and build systems."
+    },
+    {
+      "username": "tcm390",
+      "avatarUrl": "https://avatars.githubusercontent.com/u/60634884?u=c6c41679b8322eaa0c81f72e0b4ed95e80f0ac16&v=4",
+      "totalScore": 341.2220649510466,
+      "prScore": 336.0220649510466,
+      "issueScore": 0,
+      "reviewScore": 5,
+      "commentScore": 0.2,
+      "summary": "tcm390: Focused on enhancing user experience and stability within the `elizaos/eliza` repository, merging three pull requests. Their most impactful contribution was implementing a new feature to display action results in the chat UI (elizaos/eliza#5865), a significant effort adding nearly 1200 lines of code. They also enabled image generation for Discord (elizaos/eliza#5861) and fixed an unhandled promise bug (elizaos/eliza#5870), demonstrating a clear focus on feature work and bug fixes."
     },
     {
       "username": "standujar",
       "avatarUrl": "https://avatars.githubusercontent.com/u/16385918?u=718bdcd1585be8447bdfffb8c11ce249baa7532d&v=4",
-      "totalScore": 178.80501854708933,
-      "prScore": 153.79101854708935,
+      "totalScore": 231.54439771622202,
+      "prScore": 200.99039771622202,
       "issueScore": 0,
-      "reviewScore": 23.5,
-      "commentScore": 1.5139999999999998,
-      "summary": null
+      "reviewScore": 28.5,
+      "commentScore": 2.054,
+      "summary": "standujar: Focused on improving the stability and developer experience of the `elizaos/eliza` repository, merging three targeted bug fixes. Their most impactful work included resolving a CLI port detection issue (#5876) and adding `SERVER_HOST` support to the dev command (#5883). In addition to actively reviewing 5 PRs and commenting on 11 issues, they have a significant refactoring effort in progress to centralize business logic (#5864). This month's contributions were primarily centered on bug fixes and refactoring, with a healthy balance of code and test file modifications."
     },
     {
       "username": "yungalgo",
@@ -595,17 +867,37 @@
       "issueScore": 0,
       "reviewScore": 27,
       "commentScore": 0.2,
-      "summary": null
+      "summary": "yungalgo: Focused on core project infrastructure and packaging, merging a significant fix in `elizaos/eliza#5882` to scope npm package fields for registry entries (+8532/-499 lines). They also improved the developer experience by adding Docker files to the project starter in `elizaos/eliza#5858` and submitted 11 new plugins to the `elizaos-plugins/registry`. This work shows a primary focus on configuration files and core project code, complemented by providing feedback on 6 pull requests."
     },
     {
-      "username": "tcm390",
-      "avatarUrl": "https://avatars.githubusercontent.com/u/60634884?u=c6c41679b8322eaa0c81f72e0b4ed95e80f0ac16&v=4",
-      "totalScore": 100.71224594499039,
-      "prScore": 100.51224594499038,
+      "username": "borisudovicic",
+      "avatarUrl": "https://avatars.githubusercontent.com/u/31806472?u=27713fbe603baae91ef519990facbacd6c23e93d&v=4",
+      "totalScore": 92,
+      "prScore": 0,
+      "issueScore": 92,
+      "reviewScore": 0,
+      "commentScore": 0,
+      "summary": "borisudovicic: Focused on identifying and documenting work within the elizaos/eliza repository by creating four issues. Their contributions included proposals for a CLI refactor (elizaos/eliza#5860) and a new observability GUI (elizaos/eliza#5868). They also reported a broken logger (elizaos/eliza#5886) and managed an issue related to moving to core pure (elizaos/eliza#5766)."
+    },
+    {
+      "username": "DevGruGold",
+      "avatarUrl": "https://avatars.githubusercontent.com/u/181147699?u=4258e430ad766ca1d11778ab9e7d91ecfa0e110c&v=4",
+      "totalScore": 81.28954779315221,
+      "prScore": 80.8515477931522,
       "issueScore": 0,
       "reviewScore": 0,
-      "commentScore": 0.2,
-      "summary": null
+      "commentScore": 0.43799999999999994,
+      "summary": "DevGruGold: Focused on bugfix work in the elizaos/eliza repository, opening two pull requests (#5891, #5892). They contributed to development discussions with 3 comments on pull requests. Their single commit this period modified documentation and test files."
+    },
+    {
+      "username": "0xbbjoker",
+      "avatarUrl": "https://avatars.githubusercontent.com/u/54844437?u=90fe1762420de6ad493a1c1582f1f70c0d87d8e2&v=4",
+      "totalScore": 75.77820680277036,
+      "prScore": 49.80020680277036,
+      "issueScore": 0,
+      "reviewScore": 25,
+      "commentScore": 0.978,
+      "summary": "0xbbjoker focused on expanding the plugin ecosystem by opening pull requests to add a new Sourcegraph plugin to the registry (elizaos-plugins/registry#216, #215). They also supported the team through collaboration, providing 4 approvals and 2 comments on other pull requests. Their work this month centered on configuration changes within the plugin registry."
     },
     {
       "username": "wookosh",
@@ -625,16 +917,26 @@
       "issueScore": 0,
       "reviewScore": 0,
       "commentScore": 0.33999999999999997,
+      "summary": "jonathanprozzi: Focused on enhancing observability by opening a pull request to add Sentry Node telemetry support in the elizaos/eliza repository (#5867). They also participated in pull request discussions with 2 comments."
+    },
+    {
+      "username": "Lexpeartha",
+      "avatarUrl": "https://avatars.githubusercontent.com/u/43365376?u=612e09b9512edda4717a1cb7d61f163a0289be1a&v=4",
+      "totalScore": 33.5437738965761,
+      "prScore": 33.5437738965761,
+      "issueScore": 0,
+      "reviewScore": 0,
+      "commentScore": 0,
       "summary": null
     },
     {
-      "username": "0xbbjoker",
-      "avatarUrl": "https://avatars.githubusercontent.com/u/54844437?u=90fe1762420de6ad493a1c1582f1f70c0d87d8e2&v=4",
-      "totalScore": 33.971147180559946,
-      "prScore": 13.631147180559946,
-      "issueScore": 0,
-      "reviewScore": 20,
-      "commentScore": 0.33999999999999997,
+      "username": "linear",
+      "avatarUrl": "https://avatars.githubusercontent.com/in/20150?v=4",
+      "totalScore": 24.2,
+      "prScore": 0,
+      "issueScore": 24,
+      "reviewScore": 0,
+      "commentScore": 0.2,
       "summary": null
     },
     {
@@ -645,7 +947,7 @@
       "issueScore": 0,
       "reviewScore": 0,
       "commentScore": 0,
-      "summary": null
+      "summary": "MozirDmitriy: This month, MozirDmitriy's contributions were focused on documentation maintenance. They merged one pull request in the elizaos/eliza repository (#5866) to fix a broken path. This work involved a minor change to documentation files."
     },
     {
       "username": "monilpat",
@@ -655,7 +957,7 @@
       "issueScore": 0,
       "reviewScore": 18,
       "commentScore": 1.3139999999999998,
-      "summary": null
+      "summary": "monilpat: Undertook a significant local refactoring effort, evidenced by 23 commits modifying 241 files with substantial changes (+8627/-9623 lines). While this work has not yet been opened as a pull request, they actively participated in code reviews by providing 12 comments across 4 different PRs. This activity indicates a primary focus on large-scale refactoring and other related work."
     },
     {
       "username": "claude",
@@ -665,6 +967,16 @@
       "issueScore": 0,
       "reviewScore": 9,
       "commentScore": 0.8759999999999999,
+      "summary": "claude: Focused on providing feedback across pull requests this month. They were highly engaged in code review discussions, leaving 109 comments and conducting 2 formal reviews."
+    },
+    {
+      "username": "odilitime",
+      "avatarUrl": "https://avatars.githubusercontent.com/u/16395496?u=c9bac48e632aae594a0d85aaf9e9c9c69b674d8b&v=4",
+      "totalScore": 9.640735902799728,
+      "prScore": 9.640735902799728,
+      "issueScore": 0,
+      "reviewScore": 0,
+      "commentScore": 0,
       "summary": null
     },
     {
@@ -675,17 +987,7 @@
       "issueScore": 0,
       "reviewScore": 0,
       "commentScore": 0.54,
-      "summary": null
-    },
-    {
-      "username": "borisudovicic",
-      "avatarUrl": "https://avatars.githubusercontent.com/u/31806472?u=27713fbe603baae91ef519990facbacd6c23e93d&v=4",
-      "totalScore": 6,
-      "prScore": 0,
-      "issueScore": 6,
-      "reviewScore": 0,
-      "commentScore": 0,
-      "summary": null
+      "summary": "1BDO: This month, 1BDO's main contribution was opening a pull request to add the `plugin-delta` to the registry (elizaos-plugins/registry#218). They also participated in discussions by commenting on four issues. Their work this period involved minor changes to configuration files."
     },
     {
       "username": "DarrenZal",
@@ -695,17 +997,17 @@
       "issueScore": 4,
       "reviewScore": 0,
       "commentScore": 0,
-      "summary": null
+      "summary": "DarrenZal: This month, DarrenZal's contribution was focused on product ideation within the `elizaos/eliza` project. They proposed a new feature by opening an issue to add native web fetching capabilities for agents (elizaos/eliza#5889)."
     },
     {
       "username": "thedotmack",
-      "avatarUrl": "https://avatars.githubusercontent.com/u/683968?u=fdb9ab5845aa92dbd5a9de4abea58d43b46cc0cd&v=4",
+      "avatarUrl": "https://avatars.githubusercontent.com/u/683968?u=7163be2e8345b6a03cf8bd9bcc55025e73e4601b&v=4",
       "totalScore": 2,
       "prScore": 0,
       "issueScore": 2,
       "reviewScore": 0,
       "commentScore": 0,
-      "summary": null
+      "summary": "thedotmack: This month, their contribution focused on improving product usability by identifying a significant documentation gap in the elizaos/eliza repository. They opened an issue (elizaos/eliza#5857) to report that the Web UI dashboard was completely undocumented for users."
     },
     {
       "username": "objp2",
@@ -715,12 +1017,22 @@
       "issueScore": 2,
       "reviewScore": 0,
       "commentScore": 0,
+      "summary": "objp2: Focused on planning a new feature this month, opening an issue to propose a Matrix Platform Integration for the elizaos/eliza repository (#5862)."
+    },
+    {
+      "username": "TensorNull",
+      "avatarUrl": "https://avatars.githubusercontent.com/u/129579691?u=fef786d866afd3d3a36397da036641c65906f3f2&v=4",
+      "totalScore": 2,
+      "prScore": 0,
+      "issueScore": 2,
+      "reviewScore": 0,
+      "commentScore": 0,
       "summary": null
     }
   ],
-  "newPRs": 27,
-  "mergedPRs": 28,
-  "newIssues": 6,
-  "closedIssues": 5,
-  "activeContributors": 19
+  "newPRs": 56,
+  "mergedPRs": 52,
+  "newIssues": 61,
+  "closedIssues": 22,
+  "activeContributors": 25
 }

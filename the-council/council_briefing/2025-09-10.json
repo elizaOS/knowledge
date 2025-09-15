@@ -1,0 +1,182 @@
+{
+  "date": "2025-09-10",
+  "meeting_context": "# North Star & Strategic Context\n\nThis file combines the overall project mission (North Star) and summaries of key strategic documents for use in AI prompts, particularly for the AI Agent Council context generation.\n\n---\n\n**North Star:**\nTo build a truly autonomous, sustainable DAO that develops open-source software accelerating the path toward AGI, blending AI researchers, open-source hackers, and crypto degens to create AI agents streaming, shitposting, and trading 24/7 on auto.fun to attract users and bootstrap an autonomous organization.\n\n---\n\n**ElizaOS Mission Summary (`docs/blog/mission.mdx`):**\nThe elizaOS mission is to build an extensible, modular, open-source AI agent framework for Web2/Web3, seeing agents as steps toward AGI. Core values are Autonomy, Modularity, and Decentralization. Key products include the framework itself, DegenSpartanAI (trading agent), Autonomous Investor/Trust Marketplace (social trading intelligence), and the Agent Marketplace/auto.fun (launchpad).\n\n---\n\n**ElizaOS Reintroduction Summary (`docs/blog/reintroduction.mdx`):**\nelizaOS is an open-source \"operating system for AI agents\" aimed at decentralizing AI development away from corporate control. It's built on three pillars: 1) The Eliza Framework (TypeScript toolkit for persistent, interoperable agents), 2) AI-Enhanced Governance (building autonomous DAOs), and 3) Eliza Labs (R&D for future capabilities like v2, Trust Marketplace, auto.fun, DegenSpartanAI, Eliza Studios). The native Solana token coordinates the ecosystem and captures value. The vision is an intelligent internet built on open protocols and collaboration.\n\n---\n\n**Auto.fun Introduction Summary (`docs/blog/autofun-intro.mdx`):**\nAuto.fun is an AI-native, creator-first token launchpad designed for sustainable AI/crypto projects. It aims to balance fair community access with project funding needs through mechanisms like bonding curves and liquidity NFTs. Key features include a no-code agent builder, AI-generated marketing tools, and integration with the elizaOS ecosystem. It serves as a core product driving value back to the native token ($ai16z) through buybacks and liquidity pairing.\n\n---\n\n**Taming Information Summary (`docs/blog/taming_info.mdx`):**\nAddresses the challenge of information scattered across platforms (Discord, GitHub, X). Proposes using AI agents as \"bridges\" to collect, wrangle (summarize/tag), and distribute information in various formats (JSON, MD, RSS, dashboards, 3D shows). Showcases an AI News system and AI Assistants for tech support as examples. Emphasizes treating documentation as a first-class citizen to empower AI assistants and streamline community operations. ",
+  "monthly_goal": "Current focus: Stabilize and attract new users to auto.fun by showcasing 24/7 agent activity (streaming, trading, shitposting), ship production ready elizaOS v2.",
+  "daily_focus": "Technical development has accelerated with significant progress on browser compatibility for AgentRuntime, USDC tipping on Solana, and feature-rich core work, while auto.fun platform shows concerning inactivity and user complaints.",
+  "key_points": [
+    {
+      "topic": "Browser Compatibility Strategy",
+      "summary": "The development team is making significant progress on browser compatibility for AgentRuntime, requiring extensive refactoring estimated at 10,000 lines of code to enable key web-based functionality.",
+      "deliberation_items": [
+        {
+          "question_id": "q1",
+          "text": "Given the scope of browser compatibility work, should we prioritize this over other v2 features?",
+          "context": [
+            "cjft: Major refactoring required (est. 10k lines) to make AgentRuntime work in browsers, including creating BrowserDatabaseAdapter using IndexedDB/localStorage, handling file system operations, environment variables, services architecture, and crypto operations.",
+            "shaw: I think browser is good. It shouldn't be hard from where we are."
+          ],
+          "multiple_choice_answers": {
+            "answer_1": {
+              "text": "Yes, browser compatibility is a critical path item for v2 and should be our top engineering priority.",
+              "implication": "This approach could accelerate our path to a more accessible platform but may delay other feature work and reduce short-term functionality."
+            },
+            "answer_2": {
+              "text": "Partially - allocate dedicated resources to browser work while maintaining parallel development on other v2 priorities.",
+              "implication": "This balanced approach maintains momentum on multiple fronts but could extend the timeline for both browser compatibility and other features."
+            },
+            "answer_3": {
+              "text": "No, browser compatibility should be deprioritized in favor of features that showcase agent capabilities on auto.fun first.",
+              "implication": "This would accelerate auto.fun feature development but potentially create technical debt and limit cross-platform user growth."
+            },
+            "answer_4": {
+              "text": "Other / More discussion needed / None of the above.",
+              "implication": null
+            }
+          }
+        },
+        {
+          "question_id": "q2",
+          "text": "How should we approach the technical architecture for browser-based agents versus server-side agents?",
+          "context": [
+            "cjft: Significant refactoring (estimated 10k lines) required to make AgentRuntime work in browsers, including creating BrowserDatabaseAdapter using IndexedDB/localStorage, handling file system operations, environment variables, services architecture, and crypto operations."
+          ],
+          "multiple_choice_answers": {
+            "answer_1": {
+              "text": "Create a unified architecture that works across environments with environment-specific adapters.",
+              "implication": "This approach creates a consistent developer experience but increases complexity in the core system and may limit optimization for specific environments."
+            },
+            "answer_2": {
+              "text": "Develop separate optimized runtimes for browser and server with a common API interface.",
+              "implication": "This would allow optimal performance in each environment but require maintaining parallel codebases and potentially create feature divergence."
+            },
+            "answer_3": {
+              "text": "Focus on server-side execution with browser-based UI, using a client-server architecture rather than in-browser execution.",
+              "implication": "This simplifies development but limits offline capabilities and increases server infrastructure requirements."
+            },
+            "answer_4": {
+              "text": "Other / More discussion needed / None of the above.",
+              "implication": null
+            }
+          }
+        }
+      ]
+    },
+    {
+      "topic": "Auto.fun Platform Status",
+      "summary": "Despite being a core strategic focus, auto.fun is showing signs of inactivity with users reporting multiple technical issues and raising concerns about its accessibility and future.",
+      "deliberation_items": [
+        {
+          "question_id": "q1",
+          "text": "What should be our immediate response to the auto.fun platform issues?",
+          "context": [
+            "Emanuel: Will Ai16z be listed anywhere? Volume has increased significantly.",
+            "davidd: ELI5 moon when auto.fun relaunch or cameback with new face",
+            "DeadCash: As theres no action on \"fun\". Curious if there's been any announcement why its inactive? And eli5?",
+            "Maxtax: Issues with buying/selling tokens on Auto.fun"
+          ],
+          "multiple_choice_answers": {
+            "answer_1": {
+              "text": "Prioritize emergency technical fixes and deploy a status update to users within 48 hours.",
+              "implication": "This addresses immediate concerns but may pull resources from longer-term development work."
+            },
+            "answer_2": {
+              "text": "Pause auto.fun for a full relaunch with improved infrastructure and announce a clear timeline to the community.",
+              "implication": "This provides a clean break for technical improvements but risks further damaging user trust during the downtime."
+            },
+            "answer_3": {
+              "text": "Maintain current operations while developing a parallel v2 platform, with gradual migration once stable.",
+              "implication": "This minimizes disruption but may lead to prolonged user dissatisfaction with the current platform issues."
+            },
+            "answer_4": {
+              "text": "Other / More discussion needed / None of the above.",
+              "implication": null
+            }
+          }
+        },
+        {
+          "question_id": "q2",
+          "text": "How should we approach communication about auto.fun's status and roadmap?",
+          "context": [
+            "DeadCash: As theres no action on \"fun\". Curious if there's been any announcement why its inactive? And eli5?",
+            "Borko: We're cooking. Our Github repo is evident of that. Also we have some roadmap announcements coming in the next week."
+          ],
+          "multiple_choice_answers": {
+            "answer_1": {
+              "text": "Release a comprehensive status update and detailed roadmap with specific timelines and milestones.",
+              "implication": "This provides maximum transparency but creates accountability pressure and potential disappointment if deadlines slip."
+            },
+            "answer_2": {
+              "text": "Share a high-level roadmap with flexible timeframes while increasing regular progress updates.",
+              "implication": "This balances transparency with flexibility but may not fully satisfy users seeking concrete timelines."
+            },
+            "answer_3": {
+              "text": "Focus communication on showcasing new agent capabilities and features without committing to specific platform timelines.",
+              "implication": "This emphasizes progress and innovation but fails to directly address platform stability concerns."
+            },
+            "answer_4": {
+              "text": "Other / More discussion needed / None of the above.",
+              "implication": null
+            }
+          }
+        }
+      ]
+    },
+    {
+      "topic": "Agent-to-Agent Economy Development",
+      "summary": "Discussions about autonomous economies and agent-to-agent (A2A) transactions are emerging, with examples from advertising technology demonstrating how billions of micro-transactions can operate without human intervention.",
+      "deliberation_items": [
+        {
+          "question_id": "q1",
+          "text": "What role should autonomous agent-to-agent (A2A) transactions play in our platform strategy?",
+          "context": [
+            "Dr. Neuro and satsbased discussed how autonomous systems already exist in advertising technology (specifically DV360 media buys) where systems run billions of real-time micro-transactions without human input.",
+            "satsbased emphasizing that true agents can \"think for themselves\" and that trust is critical for A2A interactions."
+          ],
+          "multiple_choice_answers": {
+            "answer_1": {
+              "text": "Make A2A transactions a cornerstone feature, positioning elizaOS as the primary platform for autonomous agent economies.",
+              "implication": "This would differentiate our platform but requires significant technical investment and potential regulatory considerations."
+            },
+            "answer_2": {
+              "text": "Develop A2A capabilities as an optional module while focusing core platform on human-agent interactions first.",
+              "implication": "This balanced approach lets us enter the A2A space gradually while maintaining focus on proven human-agent interactions."
+            },
+            "answer_3": {
+              "text": "Deprioritize A2A development in favor of perfecting individual agent capabilities and user experience.",
+              "implication": "This focuses resources on core functionality but risks falling behind in the emerging autonomous agent economy space."
+            },
+            "answer_4": {
+              "text": "Other / More discussion needed / None of the above.",
+              "implication": null
+            }
+          }
+        },
+        {
+          "question_id": "q2",
+          "text": "How should we approach the trust model for agent-to-agent interactions?",
+          "context": [
+            "satsbased emphasizing that true agents can \"think for themselves\" and that trust is critical for A2A interactions."
+          ],
+          "multiple_choice_answers": {
+            "answer_1": {
+              "text": "Implement a reputation-based trust system where agents build verifiable transaction histories.",
+              "implication": "This creates an emergent trust ecosystem but requires time to establish meaningful reputation scores and could be manipulated."
+            },
+            "answer_2": {
+              "text": "Develop a formalized verification framework with cryptographic guarantees for agent behavior and capabilities.",
+              "implication": "This provides strong security guarantees but increases technical complexity and may limit agent flexibility and autonomy."
+            },
+            "answer_3": {
+              "text": "Create a hybrid model with human oversight for critical transactions while allowing autonomous interaction for routine operations.",
+              "implication": "This balances autonomy with safety but creates potential bottlenecks in the agent economy where human verification is required."
+            },
+            "answer_4": {
+              "text": "Other / More discussion needed / None of the above.",
+              "implication": null
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

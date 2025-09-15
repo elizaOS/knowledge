@@ -1,0 +1,182 @@
+{
+  "date": "2025-09-09",
+  "meeting_context": "# North Star & Strategic Context\n\nThis file combines the overall project mission (North Star) and summaries of key strategic documents for use in AI prompts, particularly for the AI Agent Council context generation.\n\n---\n\n**North Star:**\nTo build a truly autonomous, sustainable DAO that develops open-source software accelerating the path toward AGI, blending AI researchers, open-source hackers, and crypto degens to create AI agents streaming, shitposting, and trading 24/7 on auto.fun to attract users and bootstrap an autonomous organization.\n\n---\n\n**ElizaOS Mission Summary (`docs/blog/mission.mdx`):**\nThe elizaOS mission is to build an extensible, modular, open-source AI agent framework for Web2/Web3, seeing agents as steps toward AGI. Core values are Autonomy, Modularity, and Decentralization. Key products include the framework itself, DegenSpartanAI (trading agent), Autonomous Investor/Trust Marketplace (social trading intelligence), and the Agent Marketplace/auto.fun (launchpad).\n\n---\n\n**ElizaOS Reintroduction Summary (`docs/blog/reintroduction.mdx`):**\nelizaOS is an open-source \"operating system for AI agents\" aimed at decentralizing AI development away from corporate control. It's built on three pillars: 1) The Eliza Framework (TypeScript toolkit for persistent, interoperable agents), 2) AI-Enhanced Governance (building autonomous DAOs), and 3) Eliza Labs (R&D for future capabilities like v2, Trust Marketplace, auto.fun, DegenSpartanAI, Eliza Studios). The native Solana token coordinates the ecosystem and captures value. The vision is an intelligent internet built on open protocols and collaboration.\n\n---\n\n**Auto.fun Introduction Summary (`docs/blog/autofun-intro.mdx`):**\nAuto.fun is an AI-native, creator-first token launchpad designed for sustainable AI/crypto projects. It aims to balance fair community access with project funding needs through mechanisms like bonding curves and liquidity NFTs. Key features include a no-code agent builder, AI-generated marketing tools, and integration with the elizaOS ecosystem. It serves as a core product driving value back to the native token ($ai16z) through buybacks and liquidity pairing.\n\n---\n\n**Taming Information Summary (`docs/blog/taming_info.mdx`):**\nAddresses the challenge of information scattered across platforms (Discord, GitHub, X). Proposes using AI agents as \"bridges\" to collect, wrangle (summarize/tag), and distribute information in various formats (JSON, MD, RSS, dashboards, 3D shows). Showcases an AI News system and AI Assistants for tech support as examples. Emphasizes treating documentation as a first-class citizen to empower AI assistants and streamline community operations. ",
+  "monthly_goal": "Current focus: Stabilize and attract new users to auto.fun by showcasing 24/7 agent activity (streaming, trading, shitposting), ship production ready elizaOS v2.",
+  "daily_focus": "The elizaOS team is securing the codebase against supply chain attacks while making significant progress on multiple fronts: Eliza Cloud video generation, core architecture refactoring, and community outreach initiatives.",
+  "key_points": [
+    {
+      "topic": "Security and Code Stability",
+      "summary": "The team responded swiftly to a potentially critical npm supply chain attack by implementing security measures while also improving the codebase with multiple bug fixes and enhancements.",
+      "deliberation_items": [
+        {
+          "question_id": "q1",
+          "text": "How should we balance rapid response to security threats with maintaining our development velocity for elizaOS v2?",
+          "context": [
+            "cjft created PR #5904 to add a version override in package.json as a security measure.",
+            "jin shared multiple links about a major JavaScript ecosystem supply chain attack to inform the team."
+          ],
+          "multiple_choice_answers": {
+            "answer_1": {
+              "text": "Implement a dedicated security team that handles threats while the core team maintains focus on v2 development.",
+              "implication": "Creating specialized roles increases security expertise but may fragment the team and increase overhead costs."
+            },
+            "answer_2": {
+              "text": "Establish automated security scanning and practices integrated into our CI/CD pipeline that alerts the team to critical issues only.",
+              "implication": "Automation reduces manual security work but requires upfront investment and ongoing maintenance."
+            },
+            "answer_3": {
+              "text": "Adopt periodic security sprints where the entire team pauses feature development to address vulnerabilities and strengthen our security posture.",
+              "implication": "Security sprints ensure systematic security improvements but cause predictable pauses in feature development."
+            },
+            "answer_4": {
+              "text": "Other / More discussion needed / None of the above.",
+              "implication": null
+            }
+          }
+        },
+        {
+          "question_id": "q2",
+          "text": "Should we prioritize improving our error logging and debugging capabilities for better issue resolution across the platform?",
+          "context": [
+            "PR #5900 by @tcm390 titled 'fix: Logger API to Capture All Logs Including Namespaced Agent Logs' is merged.",
+            "PR #5895 titled 'fix: change SECRET_SALT log level from error to warning' is merged."
+          ],
+          "multiple_choice_answers": {
+            "answer_1": {
+              "text": "Yes, prioritize comprehensive logging infrastructure as it's fundamental to platform stability and user experience.",
+              "implication": "Investing in logging will accelerate issue resolution but may delay feature development in the short term."
+            },
+            "answer_2": {
+              "text": "Maintain current logging capabilities while focusing on specific high-impact areas like agent interactions and API integrations.",
+              "implication": "This targeted approach addresses critical areas without diverting significant resources from feature development."
+            },
+            "answer_3": {
+              "text": "Defer major logging enhancements until after v2 ships, focusing only on critical bug fixes related to logging in the interim.",
+              "implication": "Maintaining development velocity for v2 comes at the cost of potentially slower issue resolution in the near term."
+            },
+            "answer_4": {
+              "text": "Other / More discussion needed / None of the above.",
+              "implication": null
+            }
+          }
+        }
+      ]
+    },
+    {
+      "topic": "Auto.fun Usability and Accessibility",
+      "summary": "Multiple users reported technical difficulties with auto.fun platform functionality, highlighting a critical gap between our monthly goal of attracting new users and the current user experience.",
+      "deliberation_items": [
+        {
+          "question_id": "q3",
+          "text": "How should we address the reported issues with auto.fun to improve user experience while maintaining our development roadmap?",
+          "context": [
+            "Multiple users reported issues with the Auto.fun platform, including: Inability to see tokens for buying or selling after connecting wallets, Error messages when clicking links, General access problems.",
+            "Jeff claimed to have a solution but didn't share it publicly."
+          ],
+          "multiple_choice_answers": {
+            "answer_1": {
+              "text": "Immediately divert resources to resolve auto.fun issues, as the platform is central to our monthly goal of attracting users.",
+              "implication": "Prioritizing auto.fun fixes supports user growth goals but may delay other initiatives including elizaOS v2 development."
+            },
+            "answer_2": {
+              "text": "Establish a dedicated auto.fun maintenance team while keeping the core team focused on elizaOS v2 development.",
+              "implication": "This balanced approach addresses both goals but requires additional coordination and possibly resources."
+            },
+            "answer_3": {
+              "text": "Focus on documenting current limitations while maintaining development focus on v2, which will ultimately resolve many of these issues.",
+              "implication": "This preserves development velocity at the cost of potentially poor user experience in the short term."
+            },
+            "answer_4": {
+              "text": "Other / More discussion needed / None of the above.",
+              "implication": null
+            }
+          }
+        },
+        {
+          "question_id": "q4",
+          "text": "Given the pending lawsuit with X platform limiting our social media presence, what alternative approaches should we prioritize for community engagement and new user acquisition?",
+          "context": [
+            "Q: Is there any way to get back on X? A: Lawsuit with X is ongoing (answered by Borko)",
+            "Multiple references to an ongoing lawsuit with X platform, limiting ElizaOS's presence there."
+          ],
+          "multiple_choice_answers": {
+            "answer_1": {
+              "text": "Expand our presence on alternative platforms like Reddit, Discord, and emerging decentralized social networks.",
+              "implication": "Diversifying our social presence reduces platform risk but fragments attention and resources."
+            },
+            "answer_2": {
+              "text": "Invest in direct community building through hackathons and workshops as mentioned by Carlos Rene | DEGA.",
+              "implication": "Direct engagement builds deeper community connections but scales more slowly than social media."
+            },
+            "answer_3": {
+              "text": "Develop our own social platform powered by elizaOS agents that showcases our technology while building community.",
+              "implication": "This demonstrates our technology but requires significant resources that could be used for core product development."
+            },
+            "answer_4": {
+              "text": "Other / More discussion needed / None of the above.",
+              "implication": null
+            }
+          }
+        }
+      ]
+    },
+    {
+      "topic": "Architecture and Feature Development",
+      "summary": "The team is making significant progress on architectural improvements, with multiple PRs focused on refactoring core components and adding new features like scenarios dynamic prompting, which align with our goal of shipping a production-ready elizaOS v2.",
+      "deliberation_items": [
+        {
+          "question_id": "q5",
+          "text": "Should we prioritize the refactoring of Eliza CLI to streamline complexity and centralize business logic, or focus on shipping v2 with the current architecture?",
+          "context": [
+            "A major architectural discussion began around a comprehensive refactor of the Eliza CLI (#5860), proposing to centralize business logic into a new `@eliza/server` package.",
+            "PR #5864 by @standujar titled 'refactor: centralize business logic in server package' is not yet merged."
+          ],
+          "multiple_choice_answers": {
+            "answer_1": {
+              "text": "Prioritize the refactoring as it will improve developer experience and create a more maintainable foundation for v2 and beyond.",
+              "implication": "Architectural improvements may delay v2 launch but create a stronger foundation for future development."
+            },
+            "answer_2": {
+              "text": "Continue CLI refactoring in parallel with v2 feature development, but don't make it a blocker for the v2 release.",
+              "implication": "This balanced approach maintains progress on both fronts but may strain development resources."
+            },
+            "answer_3": {
+              "text": "Defer major architectural changes until after v2 ships, focusing entirely on delivering v2 features and fixing critical bugs.",
+              "implication": "Shipping v2 faster may accumulate technical debt that will need to be addressed in future releases."
+            },
+            "answer_4": {
+              "text": "Other / More discussion needed / None of the above.",
+              "implication": null
+            }
+          }
+        },
+        {
+          "question_id": "q6",
+          "text": "How should we balance developing new platform integrations (like Reddit) versus improving core functionality for v2?",
+          "context": [
+            "Q: Does ElizaOS have a good Reddit integration? A: No, but users are welcome to develop one. (answered by sayonara)",
+            "PR #5824 by @monilpat titled 'feat: scenarios dynamic prompting + spec' is merged."
+          ],
+          "multiple_choice_answers": {
+            "answer_1": {
+              "text": "Prioritize core functionality improvements like dynamic prompting over new platform integrations until v2 is stable.",
+              "implication": "Core stability benefits all users but may limit our reach on specific platforms in the near term."
+            },
+            "answer_2": {
+              "text": "Develop a plugin marketplace incentive program to encourage community contributions for platform integrations while the core team focuses on v2.",
+              "implication": "Community-driven development expands our ecosystem without diverting core team resources."
+            },
+            "answer_3": {
+              "text": "Dedicate a small team to high-value platform integrations that directly support our monthly goal of showcasing 24/7 agent activity.",
+              "implication": "Strategic platform presence may drive user growth but diverts some resources from core v2 development."
+            },
+            "answer_4": {
+              "text": "Other / More discussion needed / None of the above.",
+              "implication": null
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

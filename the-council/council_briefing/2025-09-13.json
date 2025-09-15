@@ -1,0 +1,183 @@
+{
+  "date": "2025-09-13",
+  "meeting_context": "# North Star & Strategic Context\n\nThis file combines the overall project mission (North Star) and summaries of key strategic documents for use in AI prompts, particularly for the AI Agent Council context generation.\n\n---\n\n**North Star:**\nTo build a truly autonomous, sustainable DAO that develops open-source software accelerating the path toward AGI, blending AI researchers, open-source hackers, and crypto degens to create AI agents streaming, shitposting, and trading 24/7 on auto.fun to attract users and bootstrap an autonomous organization.\n\n---\n\n**ElizaOS Mission Summary (`docs/blog/mission.mdx`):**\nThe elizaOS mission is to build an extensible, modular, open-source AI agent framework for Web2/Web3, seeing agents as steps toward AGI. Core values are Autonomy, Modularity, and Decentralization. Key products include the framework itself, DegenSpartanAI (trading agent), Autonomous Investor/Trust Marketplace (social trading intelligence), and the Agent Marketplace/auto.fun (launchpad).\n\n---\n\n**ElizaOS Reintroduction Summary (`docs/blog/reintroduction.mdx`):**\nelizaOS is an open-source \"operating system for AI agents\" aimed at decentralizing AI development away from corporate control. It's built on three pillars: 1) The Eliza Framework (TypeScript toolkit for persistent, interoperable agents), 2) AI-Enhanced Governance (building autonomous DAOs), and 3) Eliza Labs (R&D for future capabilities like v2, Trust Marketplace, auto.fun, DegenSpartanAI, Eliza Studios). The native Solana token coordinates the ecosystem and captures value. The vision is an intelligent internet built on open protocols and collaboration.\n\n---\n\n**Auto.fun Introduction Summary (`docs/blog/autofun-intro.mdx`):**\nAuto.fun is an AI-native, creator-first token launchpad designed for sustainable AI/crypto projects. It aims to balance fair community access with project funding needs through mechanisms like bonding curves and liquidity NFTs. Key features include a no-code agent builder, AI-generated marketing tools, and integration with the elizaOS ecosystem. It serves as a core product driving value back to the native token ($ai16z) through buybacks and liquidity pairing.\n\n---\n\n**Taming Information Summary (`docs/blog/taming_info.mdx`):**\nAddresses the challenge of information scattered across platforms (Discord, GitHub, X). Proposes using AI agents as \"bridges\" to collect, wrangle (summarize/tag), and distribute information in various formats (JSON, MD, RSS, dashboards, 3D shows). Showcases an AI News system and AI Assistants for tech support as examples. Emphasizes treating documentation as a first-class citizen to empower AI assistants and streamline community operations. ",
+  "monthly_goal": "Current focus: Stabilize and attract new users to auto.fun by showcasing 24/7 agent activity (streaming, trading, shitposting), ship production ready elizaOS v2.",
+  "daily_focus": "Development teams made crucial progress toward elizaOS v2 with two key contributions: browser integration with PGlite WASM support for the client DB and creation of an 'elizaos' NPM alias package to streamline installation and usage.",
+  "key_points": [
+    {
+      "topic": "Package Management & Infrastructure",
+      "summary": "The team identified and worked on resolving issues with the 'elizaos' NPM package, discussing whether it should be part of 'core' or 'cli' components, with consensus to implement it as a CLI alias, while also addressing security concerns through token regeneration.",
+      "deliberation_items": [
+        {
+          "question_id": "q1",
+          "text": "What should our approach be for the 'elizaos' NPM package management going forward?",
+          "context": [
+            "Shaw identified an issue with the 'elizaos' NPM package that needed fixing. CJFT agreed to address it, and they discussed whether it should be part of 'core' or 'cli' components, concluding it should be a CLI alias.",
+            "CJFT: 'Need to regenerate NPM tokens' and 'We need to add second NPM token in CI because elizaos is not in the org.'"
+          ],
+          "multiple_choice_answers": {
+            "answer_1": {
+              "text": "Transfer the 'elizaos' package to the organization and maintain centralized control.",
+              "implication": "Centralized package management would streamline release processes but may create bottlenecks for rapid iteration."
+            },
+            "answer_2": {
+              "text": "Keep current structure but improve security with token regeneration and formalize it as a CLI alias.",
+              "implication": "Maintains current flexibility while addressing immediate security concerns and clarifying the package's purpose."
+            },
+            "answer_3": {
+              "text": "Completely refactor package management and consolidate all functionality into a single unified package.",
+              "implication": "Would simplify the user experience but require significant engineering resources and potentially break backward compatibility."
+            },
+            "answer_4": {
+              "text": "Other / More discussion needed / None of the above.",
+              "implication": null
+            }
+          }
+        },
+        {
+          "question_id": "q2",
+          "text": "How should we prioritize GitHub organization access management to optimize development flow?",
+          "context": [
+            "Odilitime: 'Can I add people to the org GitHub?'",
+            "CJFT: 'No, only owners can do that'",
+            "Action Item: Add Stan to the GitHub organization (mentioned by Odilitime)"
+          ],
+          "multiple_choice_answers": {
+            "answer_1": {
+              "text": "Maintain strict access control with only senior team members as organization owners.",
+              "implication": "Ensures security but may create bottlenecks in onboarding and contribution workflows."
+            },
+            "answer_2": {
+              "text": "Implement a tiered access model with more granular permissions and documented promotion paths.",
+              "implication": "Balances security with scalability and provides clear progression for contributors."
+            },
+            "answer_3": {
+              "text": "Expand organization ownership to all core developers to eliminate bottlenecks.",
+              "implication": "Accelerates development but increases security risks and potential for uncoordinated actions."
+            },
+            "answer_4": {
+              "text": "Other / More discussion needed / None of the above.",
+              "implication": null
+            }
+          }
+        }
+      ]
+    },
+    {
+      "topic": "Technical Development Focus",
+      "summary": "Progress is being made on browser integration with PGlite WASM and a major PR for 'Adds browser build with PGlite WASM support' is open, while benchmark work was demonstrated and embedding options for knowledge plugins were clarified as working with local Ollama without additional configuration.",
+      "deliberation_items": [
+        {
+          "question_id": "q3",
+          "text": "How should we balance embedding strategies for knowledge plugins to maximize user accessibility and privacy?",
+          "context": [
+            "Discussion about using local Ollama embeddings with the knowledge plugin as an alternative to OpenAI/Google API",
+            "0xbbjoker assisted n3kobuff by confirming that local Ollama embeddings work with the knowledge plugin without additional configuration"
+          ],
+          "multiple_choice_answers": {
+            "answer_1": {
+              "text": "Prioritize cloud-based embedding services for reliability and performance, keeping local options as fallback.",
+              "implication": "Ensures consistent performance but increases dependency on third-party services and potential costs."
+            },
+            "answer_2": {
+              "text": "Make local embeddings the default with clear documentation while maintaining cloud options for scalability.",
+              "implication": "Prioritizes privacy and reduces operational costs but may introduce performance variability for users."
+            },
+            "answer_3": {
+              "text": "Develop a hybrid approach that automatically selects the optimal embedding strategy based on user context and resource availability.",
+              "implication": "Provides best user experience but requires more complex implementation and maintenance."
+            },
+            "answer_4": {
+              "text": "Other / More discussion needed / None of the above.",
+              "implication": null
+            }
+          }
+        },
+        {
+          "question_id": "q4",
+          "text": "How should we prioritize browser-based capabilities for elizaOS v2 to maximize user adoption?",
+          "context": [
+            "PR #5970 by @ChristopherTrimboli titled 'feat: Adds browser build with PGlite WASM support' is open.",
+            "CJFT reported progress on browser integration, noting they were close to loading with a browser DB"
+          ],
+          "multiple_choice_answers": {
+            "answer_1": {
+              "text": "Focus primarily on browser-first experience to maximize accessibility and reduce setup friction.",
+              "implication": "Could dramatically increase user adoption but might limit advanced capabilities that require server-side processing."
+            },
+            "answer_2": {
+              "text": "Balance browser and server capabilities, with clear migration paths between the two environments.",
+              "implication": "Provides flexibility for different user needs but increases testing complexity and maintenance overhead."
+            },
+            "answer_3": {
+              "text": "Keep browser support as a secondary option, focusing core development on server capabilities first.",
+              "implication": "Ensures robust core functionality but may slow adoption among casual users who prefer zero-installation options."
+            },
+            "answer_4": {
+              "text": "Other / More discussion needed / None of the above.",
+              "implication": null
+            }
+          }
+        }
+      ]
+    },
+    {
+      "topic": "Community Engagement & Growth",
+      "summary": "Community outreach shows increasing activity with announcement of the EthTokyo hackathon opportunity, introduction of new members transitioning from other roles, and requests for partners to share data for enhancing Eliza's knowledge system capabilities.",
+      "deliberation_items": [
+        {
+          "question_id": "q5",
+          "text": "How should we integrate blockchain hackathons like EthTokyo into our community growth and technical development strategy?",
+          "context": [
+            "EthTokyo hackathon was announced as a potential opportunity for blockchain developers",
+            "Consider participating in EthTokyo hackathon challenges for blockchain development opportunities (mentioned by Kenk)"
+          ],
+          "multiple_choice_answers": {
+            "answer_1": {
+              "text": "Position elizaOS as an essential tool for hackathon participants by providing specialized templates and integration guides.",
+              "implication": "Could drive significant adoption among blockchain developers but requires dedicated resources for hackathon-specific support."
+            },
+            "answer_2": {
+              "text": "Sponsor targeted challenges that specifically showcase auto.fun and tokenomics capabilities of elizaOS.",
+              "implication": "Creates focused visibility for our Web3 features but limits broader exposure to other capabilities of the platform."
+            },
+            "answer_3": {
+              "text": "Organize community participation in hackathons as participants rather than sponsors, demonstrating elizaOS capabilities through winning projects.",
+              "implication": "Authentic demonstration of value but less control over messaging and potentially lower visibility."
+            },
+            "answer_4": {
+              "text": "Other / More discussion needed / None of the above.",
+              "implication": null
+            }
+          }
+        },
+        {
+          "question_id": "q6",
+          "text": "How should we approach data collection for enhancing Eliza's knowledge system to best serve our user community?",
+          "context": [
+            "A request was made for partners to share interesting data or questions for Eliza to answer as part of research for a new knowledge system",
+            "Research and development of a new knowledge system for Eliza, collecting interesting data and questions to enhance capabilities (mentioned by avirtualfuture)"
+          ],
+          "multiple_choice_answers": {
+            "answer_1": {
+              "text": "Implement a structured data collection program with clear guidelines and incentives for community contributions.",
+              "implication": "Creates systematic knowledge growth but may require significant resource investment in curation and quality control."
+            },
+            "answer_2": {
+              "text": "Focus on integration with existing knowledge bases and APIs while encouraging ad-hoc community contributions.",
+              "implication": "Leverages existing resources efficiently but may result in knowledge gaps in niche areas important to our community."
+            },
+            "answer_3": {
+              "text": "Develop domain-specific knowledge modules through targeted partnerships with experts in key vertical markets.",
+              "implication": "Creates deep expertise in selected domains but may slow broader knowledge development across the platform."
+            },
+            "answer_4": {
+              "text": "Other / More discussion needed / None of the above.",
+              "implication": null
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

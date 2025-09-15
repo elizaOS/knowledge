@@ -1,0 +1,234 @@
+{
+  "date": "2025-09-11",
+  "meeting_context": "# North Star & Strategic Context\n\nThis file combines the overall project mission (North Star) and summaries of key strategic documents for use in AI prompts, particularly for the AI Agent Council context generation.\n\n---\n\n**North Star:**\nTo build a truly autonomous, sustainable DAO that develops open-source software accelerating the path toward AGI, blending AI researchers, open-source hackers, and crypto degens to create AI agents streaming, shitposting, and trading 24/7 on auto.fun to attract users and bootstrap an autonomous organization.\n\n---\n\n**ElizaOS Mission Summary (`docs/blog/mission.mdx`):**\nThe elizaOS mission is to build an extensible, modular, open-source AI agent framework for Web2/Web3, seeing agents as steps toward AGI. Core values are Autonomy, Modularity, and Decentralization. Key products include the framework itself, DegenSpartanAI (trading agent), Autonomous Investor/Trust Marketplace (social trading intelligence), and the Agent Marketplace/auto.fun (launchpad).\n\n---\n\n**ElizaOS Reintroduction Summary (`docs/blog/reintroduction.mdx`):**\nelizaOS is an open-source \"operating system for AI agents\" aimed at decentralizing AI development away from corporate control. It's built on three pillars: 1) The Eliza Framework (TypeScript toolkit for persistent, interoperable agents), 2) AI-Enhanced Governance (building autonomous DAOs), and 3) Eliza Labs (R&D for future capabilities like v2, Trust Marketplace, auto.fun, DegenSpartanAI, Eliza Studios). The native Solana token coordinates the ecosystem and captures value. The vision is an intelligent internet built on open protocols and collaboration.\n\n---\n\n**Auto.fun Introduction Summary (`docs/blog/autofun-intro.mdx`):**\nAuto.fun is an AI-native, creator-first token launchpad designed for sustainable AI/crypto projects. It aims to balance fair community access with project funding needs through mechanisms like bonding curves and liquidity NFTs. Key features include a no-code agent builder, AI-generated marketing tools, and integration with the elizaOS ecosystem. It serves as a core product driving value back to the native token ($ai16z) through buybacks and liquidity pairing.\n\n---\n\n**Taming Information Summary (`docs/blog/taming_info.mdx`):**\nAddresses the challenge of information scattered across platforms (Discord, GitHub, X). Proposes using AI agents as \"bridges\" to collect, wrangle (summarize/tag), and distribute information in various formats (JSON, MD, RSS, dashboards, 3D shows). Showcases an AI News system and AI Assistants for tech support as examples. Emphasizes treating documentation as a first-class citizen to empower AI assistants and streamline community operations. ",
+  "monthly_goal": "Current focus: Stabilize and attract new users to auto.fun by showcasing 24/7 agent activity (streaming, trading, shitposting), ship production ready elizaOS v2.",
+  "daily_focus": "The team has successfully deployed elizaOS v1.5.8, accelerating with significant backend development on runs tracking, enhanced UI features, and architectural improvements while laying groundwork for community-driven protocol standards.",
+  "key_points": [
+    {
+      "topic": "Framework Stability & Technical Debt",
+      "summary": "Recent system stabilization efforts include resolving the MessageBusService issue, restructuring Sentry integration, and implementing a major runs tracking backend system, enhancing both stability and observability.",
+      "deliberation_items": [
+        {
+          "question_id": "q1",
+          "text": "How should we prioritize continued stabilization work versus feature development for v2?",
+          "context": [
+            "PR #5953 by @wtfsayo titled 'feat(runs): backend runs tracking (server/core/bootstrap/api-client)' is completed, implementing backend functionality for tracking runs.",
+            "PR #5961 by @ChristopherTrimboli titled 'feat: Removes Sentry browser SDK from core package' is completed, removing the Sentry browser SDK dependency from the core package."
+          ],
+          "multiple_choice_answers": {
+            "answer_1": {
+              "text": "Aggressively shift resources to v2 development, accepting some lingering stability issues in v1.x.",
+              "implication": "This accelerates v2 timeline but risks reputation damage if users encounter persistent issues."
+            },
+            "answer_2": {
+              "text": "Implement a 70/30 split, dedicating majority resources to v2 while maintaining a focused stability team for critical v1.x issues.",
+              "implication": "Balanced approach maintains forward momentum while addressing the most impactful stability concerns."
+            },
+            "answer_3": {
+              "text": "Delay v2 development until v1.x reaches target stability metrics across all subsystems.",
+              "implication": "Ensures solid foundation but delays key innovations needed for auto.fun user attraction goals."
+            },
+            "answer_4": {
+              "text": "Other / More discussion needed / None of the above.",
+              "implication": null
+            }
+          }
+        },
+        {
+          "question_id": "q2",
+          "text": "Should we invest in establishing formal performance SLAs and benchmarks given recent observability enhancements?",
+          "context": [
+            "PR #5963 titled 'feat: Add Sentry Vercel AI integration' is completed, adding integration between Sentry and Vercel AI.",
+            "PR #5962 by @ChristopherTrimboli titled 'feat: Improves client debugging and React version handling' is completed, enhancing client-side debugging capabilities and React version management."
+          ],
+          "multiple_choice_answers": {
+            "answer_1": {
+              "text": "Establish comprehensive SLAs and benchmarks as a formal part of the v2 specification.",
+              "implication": "Creates clear engineering targets but adds significant planning overhead before implementation."
+            },
+            "answer_2": {
+              "text": "Implement lightweight monitoring dashboards with key metrics, refining SLAs iteratively based on user feedback.",
+              "implication": "Balances immediate visibility with flexibility to adapt based on actual usage patterns."
+            },
+            "answer_3": {
+              "text": "Maintain current ad-hoc monitoring approach, addressing issues reactively as they surface.",
+              "implication": "Minimizes immediate work but increases risk of undetected degradation and emergency fixes."
+            },
+            "answer_4": {
+              "text": "Other / More discussion needed / None of the above.",
+              "implication": null
+            }
+          }
+        },
+        {
+          "question_id": "q3",
+          "text": "What approach should we take to database and persistence technologies given recent architectural discussions?",
+          "context": [
+            "Codebase Restructuring Plans: The core team is planning to implement pglite WASM browser DB and ElizaOS/react hooks",
+            "PR #5953 implements the backend portions of the Runs Tracking and Interface plan described in `docs/runs-tracking-interface.md`. It adds structured logging and server-side API routes for tracking agent execution."
+          ],
+          "multiple_choice_answers": {
+            "answer_1": {
+              "text": "Standardize on PostgreSQL for server deployments and pglite WASM for browser, ensuring maximum compatibility.",
+              "implication": "Simplifies developer experience but may constrain innovation for specialized use cases."
+            },
+            "answer_2": {
+              "text": "Adopt a multi-database abstraction layer that supports pluggable persistence technologies for different deployment scenarios.",
+              "implication": "Increases flexibility but adds complexity to the codebase and testing requirements."
+            },
+            "answer_3": {
+              "text": "Focus on ephemeral state management with event sourcing, minimizing database dependencies entirely.",
+              "implication": "Creates resilient architecture but requires significant rethinking of existing persistence patterns."
+            },
+            "answer_4": {
+              "text": "Other / More discussion needed / None of the above.",
+              "implication": null
+            }
+          }
+        }
+      ]
+    },
+    {
+      "topic": "Governance & Community Standards",
+      "summary": "The team is considering implementing an Eliza Improvement Proposals (EIP) system similar to Ethereum's EIPs/ERCs to standardize development efforts and formalize community participation in the protocol's evolution.",
+      "deliberation_items": [
+        {
+          "question_id": "q1",
+          "text": "Should we formally adopt an Ethereum-inspired EIP system or develop a governance approach more tailored to our AI agent ecosystem?",
+          "context": [
+            "DorianD suggesting that the Eliza Foundation should implement a structured proposal system similar to Ethereum's EIPs (Ethereum Improvement Proposals) and ERCs (Ethereum Request for Comments).",
+            "DorianD explains that such a system would help standardize development efforts and involve the community in a more organized way."
+          ],
+          "multiple_choice_answers": {
+            "answer_1": {
+              "text": "Directly adopt the EIP format and process, benefiting from its familiarity in the Web3 ecosystem.",
+              "implication": "Accelerates implementation through proven templates but may not address AI-specific governance needs."
+            },
+            "answer_2": {
+              "text": "Develop a hybrid approach, adopting EIP's structured format while adding AI agent-specific governance elements.",
+              "implication": "Balances familiarity with innovation but requires careful design to avoid unnecessary complexity."
+            },
+            "answer_3": {
+              "text": "Create an entirely new governance framework optimized for AI agent development and autonomous systems.",
+              "implication": "Potentially better suited to our domain but requires significant investment and lacks the benefit of established patterns."
+            },
+            "answer_4": {
+              "text": "Other / More discussion needed / None of the above.",
+              "implication": null
+            }
+          }
+        },
+        {
+          "question_id": "q2",
+          "text": "How should we integrate proposal systems with our autonomous governance vision for the DAO?",
+          "context": [
+            "DorianD suggesting Eliza Foundation should implement a structured proposal system similar to Ethereum's EIPs and ERCs",
+            "AI Hackathon Announcement: Carlos Rene from DEGA invited developers to participate in an $8000 prize hackathon focused on AI for DAO Treasury Management, mentioning workshops with ElizaOS for agents and automations."
+          ],
+          "multiple_choice_answers": {
+            "answer_1": {
+              "text": "Build proposal workflows that progressively transfer decision-making authority from humans to autonomous agent councils.",
+              "implication": "Aligns with long-term autonomous DAO vision but introduces novel governance challenges."
+            },
+            "answer_2": {
+              "text": "Maintain human-centric proposal processing with agents serving advisory and analytical roles.",
+              "implication": "More conservative approach that improves decision quality while maintaining human control."
+            },
+            "answer_3": {
+              "text": "Implement a dual-track system with separate processes for technical standards (human-led) versus protocol parameters (agent-managed).",
+              "implication": "Compartmentalizes risk while still advancing autonomous governance in defined domains."
+            },
+            "answer_4": {
+              "text": "Other / More discussion needed / None of the above.",
+              "implication": null
+            }
+          }
+        }
+      ]
+    },
+    {
+      "topic": "User Experience & Agent Capabilities",
+      "summary": "Recent development advances include new image generation fixes, improved UI action feedback, and enhanced knowledge systems that could significantly improve user engagement with elizaOS agents on auto.fun.",
+      "deliberation_items": [
+        {
+          "question_id": "q1",
+          "text": "How should we balance enhancing the agent experience versus developing auto.fun platform capabilities?",
+          "context": [
+            "PR #5957 titled 'fix: only send action notifications for client_chat messages' is completed, addressing notification behavior for client chat messages.",
+            "Enhanced Knowledge Systems: Work is underway on improving Eliza's question answering capabilities, with requests for input on data sources and question types."
+          ],
+          "multiple_choice_answers": {
+            "answer_1": {
+              "text": "Prioritize agent capabilities (knowledge systems, trading, multimedia) to make existing agents more compelling.",
+              "implication": "Creates more impressive agents but may delay platform features needed for ecosystem growth."
+            },
+            "answer_2": {
+              "text": "Focus on platform infrastructure (token mechanics, launchpad) to accelerate onboarding of new project teams.",
+              "implication": "Expands ecosystem faster but risks user disappointment if agent capabilities seem limited."
+            },
+            "answer_3": {
+              "text": "Develop specialized showcase agents optimized for auto.fun that demonstrate both platform and agent capabilities.",
+              "implication": "Creates focused impact for user attraction but diverts resources from general-purpose improvements."
+            },
+            "answer_4": {
+              "text": "Other / More discussion needed / None of the above.",
+              "implication": null
+            }
+          }
+        },
+        {
+          "question_id": "q2",
+          "text": "How should we evolve our confidential computing approach to support both trading agents and DAO treasury management?",
+          "context": [
+            "Confidential Computing Progress: Agent Joshua demonstrated using dstack SDK to generate accounts without storing private keys, now running a dev server in a Confidential Virtual Machine (CVM) to test in a production TEE environment.",
+            "AI Hackathon Announcement: Carlos Rene from DEGA invited developers to participate in an $8000 prize hackathon focused on AI for DAO Treasury Management, mentioning workshops with ElizaOS for agents and automations."
+          ],
+          "multiple_choice_answers": {
+            "answer_1": {
+              "text": "Develop a unified TEE framework optimized primarily for trading agents with DegenSpartanAI as the reference implementation.",
+              "implication": "Creates strong alignment with monthly goal of showcasing trading but may not fully address DAO treasury needs."
+            },
+            "answer_2": {
+              "text": "Create distinct but complementary TEE implementations for individual trading vs. organizational treasury management.",
+              "implication": "Addresses both use cases but increases development and maintenance overhead."
+            },
+            "answer_3": {
+              "text": "Partner with established Web3 infrastructure projects to leverage their TEE implementations rather than building our own.",
+              "implication": "Accelerates deployment timeframe but creates external dependencies and potential integration challenges."
+            },
+            "answer_4": {
+              "text": "Other / More discussion needed / None of the above.",
+              "implication": null
+            }
+          }
+        },
+        {
+          "question_id": "q3",
+          "text": "How should we improve browser compatibility to maximize auto.fun user accessibility?",
+          "context": [
+            "Issue #5958 titled 'Fully wrap up browser support' by @borisudovicic is OPEN and awaiting resolution.",
+            "PR #5893 titled 'fix: separate browser sentry in logger' is completed, addressing issues with 'Module not found: Can't resolve 'async_hooks'"
+          ],
+          "multiple_choice_answers": {
+            "answer_1": {
+              "text": "Implement progressive enhancement, ensuring core functionality works in all browsers with advanced features for modern ones.",
+              "implication": "Maximizes accessibility but increases testing complexity and potentially limits innovation."
+            },
+            "answer_2": {
+              "text": "Target modern browsers exclusively, optimizing for Chrome/Edge, Firefox, and Safari's latest versions.",
+              "implication": "Simplifies development and enables cutting-edge features but excludes users on older browsers."
+            },
+            "answer_3": {
+              "text": "Develop a lightweight native app wrapper alongside the browser experience for optimal performance.",
+              "implication": "Provides best performance but adds significant development overhead and app store dependencies."
+            },
+            "answer_4": {
+              "text": "Other / More discussion needed / None of the above.",
+              "implication": null
+            }
+          }
+        }
+      ]
+    }
+  ]
+}
