@@ -1,0 +1,204 @@
+{
+  "date": "2025-09-14",
+  "meeting_context": "# North Star & Strategic Context\n\nThis file combines the overall project mission (North Star) and summaries of key strategic documents for use in AI prompts, particularly for the AI Agent Council context generation.\n\n---\n\n**North Star:**\nTo build a truly autonomous, sustainable DAO that develops open-source software accelerating the path toward AGI, blending AI researchers, open-source hackers, and crypto degens to create AI agents streaming, shitposting, and trading 24/7 on auto.fun to attract users and bootstrap an autonomous organization.\n\n---\n\n**ElizaOS Mission Summary (`docs/blog/mission.mdx`):**\nThe elizaOS mission is to build an extensible, modular, open-source AI agent framework for Web2/Web3, seeing agents as steps toward AGI. Core values are Autonomy, Modularity, and Decentralization. Key products include the framework itself, DegenSpartanAI (trading agent), Autonomous Investor/Trust Marketplace (social trading intelligence), and the Agent Marketplace/auto.fun (launchpad).\n\n---\n\n**ElizaOS Reintroduction Summary (`docs/blog/reintroduction.mdx`):**\nelizaOS is an open-source \"operating system for AI agents\" aimed at decentralizing AI development away from corporate control. It's built on three pillars: 1) The Eliza Framework (TypeScript toolkit for persistent, interoperable agents), 2) AI-Enhanced Governance (building autonomous DAOs), and 3) Eliza Labs (R&D for future capabilities like v2, Trust Marketplace, auto.fun, DegenSpartanAI, Eliza Studios). The native Solana token coordinates the ecosystem and captures value. The vision is an intelligent internet built on open protocols and collaboration.\n\n---\n\n**Auto.fun Introduction Summary (`docs/blog/autofun-intro.mdx`):**\nAuto.fun is an AI-native, creator-first token launchpad designed for sustainable AI/crypto projects. It aims to balance fair community access with project funding needs through mechanisms like bonding curves and liquidity NFTs. Key features include a no-code agent builder, AI-generated marketing tools, and integration with the elizaOS ecosystem. It serves as a core product driving value back to the native token ($ai16z) through buybacks and liquidity pairing.\n\n---\n\n**Taming Information Summary (`docs/blog/taming_info.mdx`):**\nAddresses the challenge of information scattered across platforms (Discord, GitHub, X). Proposes using AI agents as \"bridges\" to collect, wrangle (summarize/tag), and distribute information in various formats (JSON, MD, RSS, dashboards, 3D shows). Showcases an AI News system and AI Assistants for tech support as examples. Emphasizes treating documentation as a first-class citizen to empower AI assistants and streamline community operations. ",
+  "monthly_goal": "Current focus: Stabilize and attract new users to auto.fun by showcasing 24/7 agent activity (streaming, trading, shitposting), ship production ready elizaOS v2.",
+  "daily_focus": "Architectural evolution toward browser-based elizaOS v2 implementation is gaining momentum with critical components being defined, while simultaneous marketing initiatives like the Farcaster character project align with auto.fun user attraction goals.",
+  "key_points": [
+    {
+      "topic": "Browser-First elizaOS v2 Architecture",
+      "summary": "CJFT's proposal to run AgentRuntime and DB directly in the browser rather than using websockets represents a significant architectural shift for elizaOS 2.0, requiring evaluation of technical feasibility, security implications, and alignment with our vision for decentralization.",
+      "deliberation_items": [
+        {
+          "question_id": "q1",
+          "text": "How should we balance the technical complexity of browser-based implementation against the strategic benefits of a more decentralized architecture?",
+          "context": [
+            "CJFT advocated for running AgentRuntime and DB directly in browser rather than using websockets, positioning this as a key component for ElizaOS 2.0."
+          ],
+          "multiple_choice_answers": {
+            "answer_1": {
+              "text": "Prioritize browser-first implementation immediately to accelerate v2 launch, accepting temporary technical debt and feature limitations.",
+              "implication": "Faster time-to-market with v2 but may require significant refactoring later."
+            },
+            "answer_2": {
+              "text": "Adopt a hybrid approach where core functionality runs in-browser while complex operations remain server-side, creating a migration path.",
+              "implication": "Balances user experience with technical feasibility but increases system complexity."
+            },
+            "answer_3": {
+              "text": "Develop a comprehensive specification and benchmarking process before committing to the browser-first architecture.",
+              "implication": "Delays v2 launch but ensures technical viability and strategic alignment."
+            },
+            "answer_4": {
+              "text": "Other / More discussion needed / None of the above.",
+              "implication": null
+            }
+          }
+        },
+        {
+          "question_id": "q2",
+          "text": "Which text-to-speech implementation strategy best serves our goal of continuous 24/7 agent activity on auto.fun?",
+          "context": [
+            "Developers compared ElevenLabs (high quality but requiring API proxying) versus browser-based models like VITS-web and HeadTTS (faster but potentially lower quality)."
+          ],
+          "multiple_choice_answers": {
+            "answer_1": {
+              "text": "Implement high-quality ElevenLabs with API proxying for streaming, prioritizing professional audio quality for user retention.",
+              "implication": "Better user experience but increases operational complexity and potential points of failure."
+            },
+            "answer_2": {
+              "text": "Deploy browser-based models like VITS-web and HeadTTS to maximize decentralization and minimize latency.",
+              "implication": "Reinforces our decentralization vision but may sacrifice some audio quality in the near term."
+            },
+            "answer_3": {
+              "text": "Build a flexible TTS abstraction layer that can switch between services based on context, bandwidth, and quality requirements.",
+              "implication": "Most adaptable but requires more development resources upfront."
+            },
+            "answer_4": {
+              "text": "Other / More discussion needed / None of the above.",
+              "implication": null
+            }
+          }
+        },
+        {
+          "question_id": "q3",
+          "text": "How should we address the security vulnerability of hardcoded credentials discovered in the codebase?",
+          "context": [
+            "Security Concern: Hardcoded Supabase credentials were discovered in the codebase, with CJFT committing to remove them in an upcoming PR."
+          ],
+          "multiple_choice_answers": {
+            "answer_1": {
+              "text": "Immediate security audit of all codebase with a dedicated sprint for remediation of all credential issues before proceeding with feature work.",
+              "implication": "Prioritizes security but may delay v2 development and auto.fun integration work."
+            },
+            "answer_2": {
+              "text": "Implement proper credential management with JWT authentication system while continuing parallel work on v2 features.",
+              "implication": "Balances security needs with development velocity but may leave some vulnerabilities temporarily unaddressed."
+            },
+            "answer_3": {
+              "text": "Rotate compromised credentials and move to a secrets management service, while developing security guidelines for future contributions.",
+              "implication": "Addresses immediate risks and prevents recurrence but doesn't comprehensively address existing code issues."
+            },
+            "answer_4": {
+              "text": "Other / More discussion needed / None of the above.",
+              "implication": null
+            }
+          }
+        }
+      ]
+    },
+    {
+      "topic": "Marketing Strategy & User Acquisition",
+      "summary": "Shaw's proposal to create a Farcaster character as a marketing initiative offers a timely opportunity to showcase elizaOS capabilities, attract new users to auto.fun, and potentially restore our social media presence, but raises questions about priorities and execution approach.",
+      "deliberation_items": [
+        {
+          "question_id": "q4",
+          "text": "How should we prioritize the Farcaster character project relative to other technical and marketing initiatives?",
+          "context": [
+            "Shaw proposed creating a Farcaster character called \"frok\" as a marketing initiative, with a 3-week timeline. Stan and sayonara agreed to collaborate on this project."
+          ],
+          "multiple_choice_answers": {
+            "answer_1": {
+              "text": "Fully prioritize the Farcaster character as our primary marketing initiative with dedicated resources and timeline guarantees.",
+              "implication": "Creates a focused marketing win but may divert resources from core v2 development."
+            },
+            "answer_2": {
+              "text": "Develop the Farcaster character as a showcase for v2 features, aligning the development timelines to maximize technical and marketing impact.",
+              "implication": "Leverages marketing for technical validation but increases the complexity of the v2 rollout."
+            },
+            "answer_3": {
+              "text": "Create a small, focused team for the Farcaster character while maintaining primary resources on v2 development and auto.fun integration.",
+              "implication": "Balances marketing initiatives with core development but may result in a less impactful Farcaster presence."
+            },
+            "answer_4": {
+              "text": "Other / More discussion needed / None of the above.",
+              "implication": null
+            }
+          }
+        },
+        {
+          "question_id": "q5",
+          "text": "Should we restore or replace our previous social media presence ('X') as suggested by community members?",
+          "context": [
+            "Several users asked about the project's status and were directed to information channels.",
+            "Consider restoring X or creating a new one (Mentioned by: ValleyBeyond)"
+          ],
+          "multiple_choice_answers": {
+            "answer_1": {
+              "text": "Restore our previous social media presence on X immediately to reclaim our audience and maintain continuity.",
+              "implication": "Quickest path to restored social presence but may not align with evolving strategy."
+            },
+            "answer_2": {
+              "text": "Develop a comprehensive cross-platform strategy that includes Farcaster, X, and other relevant platforms based on target audiences.",
+              "implication": "Most comprehensive but requires significant resource investment and content strategy."
+            },
+            "answer_3": {
+              "text": "Focus exclusively on Farcaster as our new social hub, leveraging its crypto-native audience and potentially utilizing agent-driven content.",
+              "implication": "Creates focus and aligns with crypto audience but limits broader reach."
+            },
+            "answer_4": {
+              "text": "Other / More discussion needed / None of the above.",
+              "implication": null
+            }
+          }
+        }
+      ]
+    },
+    {
+      "topic": "Developer Experience & Ecosystem Growth",
+      "summary": "Multiple community inquiries about project status, documentation, and integration options highlight the need for better developer onboarding and ecosystem support to achieve our goal of attracting new users and builders to the platform.",
+      "deliberation_items": [
+        {
+          "question_id": "q6",
+          "text": "How can we better support potential developers like Michael (\"Pro N8N guy\") who want to understand and integrate with elizaOS?",
+          "context": [
+            "Helper: satsbased | Helpee: Michael (a \"Pro N8N guy\") | Context: User wanting to connect with Eliza OS developers | Resolution: Directed to appropriate channel for information",
+            "Provide information about how Eliza OS works (Mentioned by: Michael)"
+          ],
+          "multiple_choice_answers": {
+            "answer_1": {
+              "text": "Create comprehensive integration-focused documentation with specific guides for popular platforms like N8N, including sample code and video tutorials.",
+              "implication": "Directly addresses developer needs but requires significant documentation effort."
+            },
+            "answer_2": {
+              "text": "Establish a formal developer relations program with dedicated community support staff and regular office hours for integration assistance.",
+              "implication": "Creates sustainable developer support but requires ongoing resource commitment."
+            },
+            "answer_3": {
+              "text": "Build a self-service integration portal with automated demos, API documentation, and a specialized AI assistant for developer onboarding.",
+              "implication": "Scales efficiently but may lack the personal touch needed for complex integrations."
+            },
+            "answer_4": {
+              "text": "Other / More discussion needed / None of the above.",
+              "implication": null
+            }
+          }
+        },
+        {
+          "question_id": "q7",
+          "text": "How should we prioritize RSS integration capabilities mentioned in relation to x402 and AI agents?",
+          "context": [
+            "RSS Integration: Brief mention of RSS in relation to x402 and AI agents through a shared article link.",
+            "Explore integration of RSS with x402 and AI Agents (Mentioned by: avirtualfuture)"
+          ],
+          "multiple_choice_answers": {
+            "answer_1": {
+              "text": "Immediately develop a dedicated RSS plugin with comprehensive content ingestion capabilities as a priority feature.",
+              "implication": "Addresses specific integration need but may divert resources from core v2 work."
+            },
+            "answer_2": {
+              "text": "Include RSS capabilities as part of a broader content ingestion strategy for v2, addressing multiple data sources simultaneously.",
+              "implication": "More comprehensive solution but takes longer to deliver specific RSS functionality."
+            },
+            "answer_3": {
+              "text": "Encourage community development of an RSS plugin by providing documentation, templates, and mentorship support.",
+              "implication": "Leverages community resources but may result in less predictable development timelines."
+            },
+            "answer_4": {
+              "text": "Other / More discussion needed / None of the above.",
+              "implication": null
+            }
+          }
+        }
+      ]
+    }
+  ]
+}
