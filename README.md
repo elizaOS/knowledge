@@ -35,6 +35,10 @@ This repository serves as the central hub for aggregating, processing, and synth
 - Latest extracted facts: https://elizaos.github.io/knowledge/the-council/facts/daily.json
 - Eliza.how docs (llms-full.txt): https://eliza.how/llms-full.txt
 
+**RSS Feeds**
+- Daily Intelligence Feed: https://elizaos.github.io/knowledge/rss/feed.xml
+- Council Briefings Feed: https://elizaos.github.io/knowledge/rss/council.xml
+
 ## 🚀 Getting Started
 
 **For Developers & Researchers:**
@@ -107,12 +111,19 @@ The system follows a structured pipeline to transform raw data into actionable i
 
 ### Daily Automation Schedule (UTC)
 - **01:00** - External Data Ingestion (`.github/workflows/sync.yml`)
-- **01:15** - Daily Fact Extraction (`.github/workflows/extract_daily_facts.yml`)
-- **01:30** - Context Aggregation (`.github/workflows/aggregate-daily-sources.yml`)
-- **02:00** - Council Briefing Generation (`.github/workflows/generate-council-briefing.yml`)
+- **01:15** - Context Aggregation (`.github/workflows/aggregate-daily-sources.yml`)
+- **01:35** - Daily Fact Extraction + RSS Generation (`.github/workflows/extract_daily_facts.yml`)
+- **01:50** - Council Briefing Generation + RSS Update (`.github/workflows/generate-council-briefing.yml`)
 - **02:30** - HackMD Note Updates (`.github/workflows/update_hackmd_notes.yml`)
 - **04:00** - Poster Generation (`.github/workflows/generate-posters.yml`)
 - **04:30** - Discord Briefing (`.github/workflows/daily_discord_briefing.yml`)
+
+### Periodic Retrospectives (`.github/workflows/retro.yml`)
+- **Monthly** (1st of each month @ 03:00 UTC) - Council retrospective episode analyzing the previous month
+- **Quarterly** (1st of Jan/Apr/Jul/Oct @ 04:00 UTC) - Strategic summary across 3 months
+- **Annual** (Manual trigger) - Comprehensive year-in-review summary
+
+Retrospectives output to `the-council/retros/` and `the-council/summaries/`.
 
 ### Pipeline Details
 
@@ -163,9 +174,11 @@ Each major directory contains comprehensive documentation. Click the links below
 ### Core Processing Hub
 *   **[`the-council/`](the-council/README.md)**: Central data processing hub containing daily aggregated data, strategic council briefings, and extracted facts
     *   `aggregated/`: Daily raw aggregated data (`YYYY-MM-DD.json`) from all sources
-    *   `council_briefing/`: Strategic council briefings with high-level analysis  
+    *   `council_briefing/`: Strategic council briefings with high-level analysis
     *   `facts/`: Daily extracted facts and insights with source tracing
-    *   `episodes/`: Episode data from strategic discussions
+    *   `episodes/`: Episode data from strategic discussions (including monthly retros)
+    *   `retros/`: Monthly retrospective analyses
+    *   `summaries/`: Quarterly and annual strategic summaries
 
 ### Data Sources & Intelligence
 *   **[`ai-news/`](ai-news/README.md)**: Multi-source AI intelligence (1,640+ files) from elizaOS and Hyperfy ecosystems
@@ -369,23 +382,36 @@ This workflow runs weekly on Fridays at 18:00 UTC and can be triggered manually.
 
 ---
 
-## Strategic Context Summaries (For AI Council & Background)
+## Strategic Context (December 2025)
 
-These summaries encapsulate the core mission, vision, and key initiatives, derived from project blog posts.
+### North Star
 
-### Auto.fun Introduction Summary (`docs/blog/autofun-intro.mdx`)
+To build the most reliable, developer-friendly open-source AI agent framework and cloud platform—enabling builders worldwide to deploy autonomous agents that work seamlessly across chains and platforms. We create infrastructure where agents and humans collaborate, forming the foundation for a decentralized AI economy that accelerates the path toward beneficial AGI.
 
-Auto.fun is an AI-native, creator-first token launchpad designed for sustainable AI/crypto projects. It aims to balance fair community access with project funding needs through mechanisms like bonding curves and liquidity NFTs. Key features include a no-code agent builder, AI-generated marketing tools, and integration with the elizaOS ecosystem. It serves as a core product driving value back to the native token ($ai16z) through buybacks and liquidity pairing.
+### Core Principles
 
-### ElizaOS Mission Summary (`docs/blog/mission.mdx`)
+1. **Execution Excellence** - Reliability and seamless UX over feature quantity
+2. **Developer First** - Great DX attracts builders; builders create ecosystem value
+3. **Open & Composable** - Multi-agent systems that interoperate across platforms
+4. **Trust Through Shipping** - Build community confidence through consistent delivery
 
-The elizaOS mission is to build an extensible, modular, open-source AI agent framework for Web2/Web3, seeing agents as steps toward AGI. Core values are Autonomy, Modularity, and Decentralization. Key products include the framework itself, DegenSpartanAI (trading agent), Autonomous Investor/Trust Marketplace (social trading intelligence), and the Agent Marketplace/auto.fun (launchpad).
+### Current Product Focus
 
-### ElizaOS Reintroduction Summary (`docs/blog/reintroduction.mdx`)
+- **ElizaOS Framework** (v1.6.x) - Core TypeScript toolkit for building persistent, interoperable agents
+- **ElizaOS Cloud** - Managed deployment platform with integrated storage and cross-chain capabilities
+- **Flagship Agents** - Reference implementations demonstrating platform capabilities
+- **Cross-Chain Infrastructure** - Native support for multi-chain agent operations
 
-elizaOS is an open-source "operating system for AI agents" aimed at decentralizing AI development away from corporate control. It's built on three pillars: 1) The Eliza Framework (TypeScript toolkit for persistent, interoperable agents), 2) AI-Enhanced Governance (building autonomous DAOs), and 3) Eliza Labs (R&D for future capabilities like v2, Trust Marketplace, auto.fun, DegenSpartanAI, Eliza Studios). The native Solana token coordinates the ecosystem and captures value. The vision is an intelligent internet built on open protocols and collaboration.
+### Mission Summary
 
-### Taming Information Summary (`docs/blog/taming_info.mdx`)
+ElizaOS is an open-source "operating system for AI agents" aimed at decentralizing AI development. Built on three pillars:
+1. **The Eliza Framework** - TypeScript toolkit for persistent agents
+2. **AI-Enhanced Governance** - Building toward autonomous DAOs
+3. **Eliza Labs** - R&D driving cloud, cross-chain, and multi-agent capabilities
 
-Addresses the challenge of information scattered across platforms (Discord, GitHub, X). Proposes using AI agents as "bridges" to collect, wrangle (summarize/tag), and distribute information in various formats (JSON, MD, RSS, dashboards, 3D shows). Showcases an AI News system and AI Assistants for tech support as examples. Emphasizes treating documentation as a first-class citizen to empower AI assistants and streamline community operations.
+The native token coordinates the ecosystem. The vision is an intelligent internet built on open protocols and collaboration.
+
+### Taming Information
+
+This repository addresses the challenge of information scattered across platforms (Discord, GitHub, X). It uses AI agents as "bridges" to collect, wrangle (summarize/tag), and distribute information in various formats (JSON, MD, RSS, dashboards, council episodes). Documentation is treated as a first-class citizen to empower AI assistants and streamline community operations.
 
