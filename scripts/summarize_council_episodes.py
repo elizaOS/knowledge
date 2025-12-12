@@ -14,7 +14,7 @@ from datetime import datetime
 import logging
 
 # --- Configuration ---
-MODEL = "anthropic/claude-3.7-sonnet"
+MODEL = "anthropic/claude-sonnet-4"
 API_KEY = os.environ.get("OPENROUTER_API_KEY", "")
 OPENROUTER_API_ENDPOINT = "https://openrouter.ai/api/v1/chat/completions"
 

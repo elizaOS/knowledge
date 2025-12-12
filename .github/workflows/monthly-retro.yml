@@ -1,0 +1,78 @@
+name: Monthly Council Retrospective
+
+on:
+  schedule:
+    # Run on the 1st of each month at 03:00 UTC (after all daily workflows complete)
+    - cron: '0 3 1 * *'
+  workflow_dispatch:
+    inputs:
+      year:
+        description: 'Year to analyze (YYYY)'
+        required: false
+        type: string
+      month:
+        description: 'Month to analyze (1-12)'
+        required: false
+        type: string
+
+concurrency:
+  group: knowledge-repo-writes
+  cancel-in-progress: false
+
+jobs:
+  generate-retro:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Pull latest changes
+        run: git pull --rebase origin main || true
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install requests
+
+      - name: Generate Monthly Retrospective
+        env:
+          OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
+        run: |
+          chmod +x scripts/generate-monthly-retro.py
+
+          # Use inputs if provided, otherwise script defaults to previous month
+          ARGS=""
+          if [ -n "${{ inputs.year }}" ]; then
+            ARGS="$ARGS -y ${{ inputs.year }}"
+          fi
+          if [ -n "${{ inputs.month }}" ]; then
+            ARGS="$ARGS -m ${{ inputs.month }}"
+          fi
+
+          python scripts/generate-monthly-retro.py $ARGS
+
+      - name: Commit retrospective
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "Automated: Generate monthly council retrospective for $(date -d 'last month' +%Y-%m)"
+          file_pattern: "the-council/retros/*.json the-council/episodes/episode-retro-*.json"
+          commit_user_name: "github-actions[bot]"
+          commit_user_email: "github-actions[bot]@users.noreply.github.com"
+          commit_author: "github-actions[bot] <github-actions[bot]@users.noreply.github.com>"
+
+      - name: Alert on failure
+        if: failure()
+        run: |
+          curl -X POST "${{ secrets.ALERT_WEBHOOK_URL }}" \
+            -H "Content-Type: application/json" \
+            -d '{
+              "content": "<@213767993153290250> Monthly Council Retrospective failed: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+            }'

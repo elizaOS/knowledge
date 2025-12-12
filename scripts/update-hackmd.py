@@ -26,7 +26,7 @@ DATA_DIR = Path("the-council/aggregated")
 EPISODES_DIR = Path("the-council/episodes")
 OUTPUT_DIR = Path("hackmd")
 BOOK_MAP_KEY = "__BOOK_INDEX__"
-LLM_MODEL = "anthropic/claude-3.7-sonnet"
+LLM_MODEL = "anthropic/claude-sonnet-4"
 API_BASE_URL = "https://api.hackmd.io/v1"
 
 # Logging configuration

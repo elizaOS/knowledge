@@ -9,7 +9,7 @@ from pathlib import Path
 from datetime import datetime
 
 # --- Configuration ---
-MODEL = "anthropic/claude-3.7-sonnet"
+MODEL = "anthropic/claude-sonnet-4"
 API_KEY = os.environ.get("OPENROUTER_API_KEY", "")
 OPENROUTER_API_ENDPOINT = "https://openrouter.ai/api/v1/chat/completions"
 
