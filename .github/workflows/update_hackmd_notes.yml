@@ -6,6 +6,10 @@ on:
     - cron: '30 2 * * *'
   workflow_dispatch:
 
+concurrency:
+  group: knowledge-repo-writes
+  cancel-in-progress: false
+
 jobs:
   update_notes:
     runs-on: ubuntu-latest
@@ -59,6 +63,11 @@ jobs:
         run: |
           # Generate discord-optimized episode summary (optional step)
           python scripts/summarize_council_episodes.py -o hackmd/council-episodes/discord-summary.md
+
+      - name: Pull latest changes before commit
+        run: |
+          git fetch origin main
+          git rebase origin/main || git rebase --abort
 
       - name: Commit updated files
         uses: stefanzweifel/git-auto-commit-action@v5

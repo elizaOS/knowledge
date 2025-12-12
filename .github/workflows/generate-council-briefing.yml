@@ -2,9 +2,13 @@ name: Generate Council Briefing
 
 on:
   schedule:
-    # Runs daily at 2:00 UTC (after sync and tweet generation)
-    - cron: '0 2 * * *'
+    # Runs daily at 1:50 UTC (after aggregate and extract facts)
+    - cron: '50 1 * * *'
   workflow_dispatch: # Allows manual triggering
+
+concurrency:
+  group: knowledge-repo-writes
+  cancel-in-progress: false
 
 jobs:
   generate-council-context:
@@ -63,6 +67,11 @@ jobs:
       - name: Create council_context_daily.json permalink
         if: steps.council_gen.outputs.council_json_file
         run: cp "${{ steps.council_gen.outputs.council_json_file }}" the-council/council_briefing/daily.json
+
+      - name: Pull latest changes before commit
+        run: |
+          git fetch origin main
+          git rebase origin/main || git rebase --abort
 
       - name: Commit updated files
         uses: stefanzweifel/git-auto-commit-action@v5

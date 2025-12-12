@@ -5,6 +5,10 @@ on:
     - cron: '0 4 * * *' # 4 AM UTC daily
   workflow_dispatch: # Allows manual triggering
 
+concurrency:
+  group: knowledge-repo-writes
+  cancel-in-progress: false
+
 jobs:
   generate-posters:
     runs-on: ubuntu-latest

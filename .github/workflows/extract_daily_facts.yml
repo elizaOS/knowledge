@@ -2,9 +2,13 @@ name: Extract Daily Facts
 
 on:
   schedule:
-    # Runs daily at 1:30 AM UTC (after knowledge sync)
-    - cron: '30 1 * * *'
+    # Runs daily at 1:35 AM UTC (after knowledge sync and aggregation)
+    - cron: '35 1 * * *'
   workflow_dispatch: # Allows manual triggering
+
+concurrency:
+  group: knowledge-repo-writes
+  cancel-in-progress: false
 
 jobs:
   extract-facts:
@@ -73,6 +77,11 @@ jobs:
           if [ -f "$DAILY_FACT_JSON" ]; then
             cp "$DAILY_FACT_JSON" "$PERMALINK_FACT_JSON"
           fi
+
+      - name: Pull latest changes before commit
+        run: |
+          git fetch origin main
+          git rebase origin/main || git rebase --abort
 
       - name: Commit updated files
         uses: stefanzweifel/git-auto-commit-action@v5
