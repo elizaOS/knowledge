@@ -1,0 +1,159 @@
+name: Council Retrospectives
+
+on:
+  schedule:
+    # Monthly retro: Run on the 1st of each month at 03:00 UTC
+    - cron: '0 3 1 * *'
+    # Quarterly retro: Run on 1st of Jan, Apr, Jul, Oct at 04:00 UTC
+    - cron: '0 4 1 1,4,7,10 *'
+  workflow_dispatch:
+    inputs:
+      type:
+        description: 'Retrospective type'
+        required: true
+        type: choice
+        options:
+          - monthly
+          - quarterly
+          - annual
+        default: 'monthly'
+      year:
+        description: 'Year (YYYY)'
+        required: false
+        type: string
+      month:
+        description: 'Month (1-12) - for monthly retro'
+        required: false
+        type: string
+      quarter:
+        description: 'Quarter (1-4) - for quarterly retro'
+        required: false
+        type: string
+
+concurrency:
+  group: knowledge-repo-writes
+  cancel-in-progress: false
+
+jobs:
+  generate-retro:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Pull latest changes
+        run: git pull --rebase origin main || true
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install requests
+
+      - name: Determine retro type and parameters
+        id: params
+        run: |
+          # For scheduled runs, determine type from cron
+          if [ "${{ github.event_name }}" == "schedule" ]; then
+            DAY=$(date -u +%d)
+            MONTH=$(date -u +%m)
+            HOUR=$(date -u +%H)
+
+            # If running at 04:00 on quarterly months, it's a quarterly retro
+            if [ "$HOUR" == "04" ] && [[ "$MONTH" =~ ^(01|04|07|10)$ ]]; then
+              echo "type=quarterly" >> $GITHUB_OUTPUT
+              # Calculate previous quarter
+              PREV_MONTH=$((10#$MONTH - 1))
+              if [ $PREV_MONTH -eq 0 ]; then
+                PREV_MONTH=12
+                echo "year=$(date -u -d 'last year' +%Y)" >> $GITHUB_OUTPUT
+              else
+                echo "year=$(date -u +%Y)" >> $GITHUB_OUTPUT
+              fi
+              # Map month to quarter
+              case $PREV_MONTH in
+                1|2|3) echo "quarter=1" >> $GITHUB_OUTPUT ;;
+                4|5|6) echo "quarter=2" >> $GITHUB_OUTPUT ;;
+                7|8|9) echo "quarter=3" >> $GITHUB_OUTPUT ;;
+                10|11|12) echo "quarter=4" >> $GITHUB_OUTPUT ;;
+              esac
+            else
+              # Monthly retro (default for 03:00 runs)
+              echo "type=monthly" >> $GITHUB_OUTPUT
+              # Get previous month
+              PREV_DATE=$(date -u -d 'last month' +%Y-%m)
+              echo "year=$(echo $PREV_DATE | cut -d'-' -f1)" >> $GITHUB_OUTPUT
+              echo "month=$(echo $PREV_DATE | cut -d'-' -f2 | sed 's/^0//')" >> $GITHUB_OUTPUT
+            fi
+          else
+            # Manual dispatch - use inputs
+            echo "type=${{ inputs.type }}" >> $GITHUB_OUTPUT
+
+            if [ -n "${{ inputs.year }}" ]; then
+              echo "year=${{ inputs.year }}" >> $GITHUB_OUTPUT
+            else
+              echo "year=$(date -u +%Y)" >> $GITHUB_OUTPUT
+            fi
+
+            if [ -n "${{ inputs.month }}" ]; then
+              echo "month=${{ inputs.month }}" >> $GITHUB_OUTPUT
+            fi
+
+            if [ -n "${{ inputs.quarter }}" ]; then
+              echo "quarter=${{ inputs.quarter }}" >> $GITHUB_OUTPUT
+            fi
+          fi
+
+      - name: Generate Monthly Retrospective
+        if: steps.params.outputs.type == 'monthly'
+        env:
+          OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
+        run: |
+          ARGS="-y ${{ steps.params.outputs.year }}"
+          if [ -n "${{ steps.params.outputs.month }}" ]; then
+            ARGS="$ARGS -m ${{ steps.params.outputs.month }}"
+          fi
+          python scripts/generate-monthly-retro.py $ARGS
+
+      - name: Generate Quarterly Summary
+        if: steps.params.outputs.type == 'quarterly'
+        env:
+          OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
+        run: |
+          ARGS="-y ${{ steps.params.outputs.year }}"
+          if [ -n "${{ steps.params.outputs.quarter }}" ]; then
+            ARGS="$ARGS -q ${{ steps.params.outputs.quarter }}"
+          fi
+          python scripts/generate-quarterly-summary.py $ARGS
+
+      - name: Generate Annual Summary
+        if: steps.params.outputs.type == 'annual'
+        env:
+          OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
+        run: |
+          python scripts/generate-quarterly-summary.py -y ${{ steps.params.outputs.year }}
+
+      - name: Commit retrospective
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "Automated: Generate ${{ steps.params.outputs.type }} retrospective"
+          file_pattern: "the-council/retros/*.json the-council/episodes/episode-retro-*.json the-council/summaries/*.json"
+          commit_user_name: "github-actions[bot]"
+          commit_user_email: "github-actions[bot]@users.noreply.github.com"
+          commit_author: "github-actions[bot] <github-actions[bot]@users.noreply.github.com>"
+
+      - name: Alert on failure
+        if: failure()
+        run: |
+          curl -X POST "${{ secrets.ALERT_WEBHOOK_URL }}" \
+            -H "Content-Type: application/json" \
+            -d '{
+              "content": "<@213767993153290250> Council Retrospective (${{ steps.params.outputs.type }}) failed: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+            }'
