@@ -54,6 +54,53 @@ This repository serves as the central hub for aggregating, processing, and synth
 
 ---
 
+## 🔌 MCP Server Integration
+
+This repository includes a [Model Context Protocol (MCP)](https://modelcontextprotocol.io/) server that exposes the knowledge base to AI assistants like Claude. See **[mcp-server/README.md](mcp-server/README.md)** for full documentation.
+
+### Quick Start
+
+```bash
+cd mcp-server && npm install && npm run build
+```
+
+### Claude Desktop Configuration
+
+Add to your Claude Desktop MCP settings:
+
+```json
+{
+  "mcpServers": {
+    "elizaos-knowledge": {
+      "command": "node",
+      "args": ["/path/to/knowledge/mcp-server/dist/index.js"],
+      "env": {
+        "KNOWLEDGE_BASE_PATH": "/path/to/knowledge"
+      }
+    }
+  }
+}
+```
+
+### Available Tools
+
+| Tool | Description |
+|------|-------------|
+| `get_daily_briefing` | Get aggregated intelligence from all sources |
+| `get_facts` | Get LLM-extracted facts and insights |
+| `get_council_briefing` | Get strategic analysis for leadership |
+| `list_available_dates` | Discover available historical data |
+| `search_knowledge` | Full-text search across all briefings |
+
+### Example Queries
+
+Once connected, you can ask Claude:
+- "What happened in the ElizaOS community today?"
+- "Search for discussions about MCP integration"
+- "Get the council briefing from yesterday"
+
+---
+
 ## Core Data Pipeline & Automation
 
 The system follows a structured pipeline to transform raw data into actionable intelligence:
