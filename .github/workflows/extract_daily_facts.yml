@@ -20,7 +20,10 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0 # Fetch all history to get all files
+          fetch-depth: 0
+
+      - name: Pull latest changes
+        run: git pull --rebase origin main || true
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -77,11 +80,6 @@ jobs:
           if [ -f "$DAILY_FACT_JSON" ]; then
             cp "$DAILY_FACT_JSON" "$PERMALINK_FACT_JSON"
           fi
-
-      - name: Pull latest changes before commit
-        run: |
-          git fetch origin main
-          git rebase origin/main || git rebase --abort
 
       - name: Commit updated files
         uses: stefanzweifel/git-auto-commit-action@v5

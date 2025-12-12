@@ -20,6 +20,9 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Pull latest changes
+        run: git pull --rebase origin main || true
+
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
@@ -36,11 +39,6 @@ jobs:
 
       - name: Create daily.json permalink
         run: cp the-council/aggregated/$(date +%Y-%m-%d).json the-council/aggregated/daily.json
-
-      - name: Pull latest changes before commit
-        run: |
-          git fetch origin main
-          git rebase origin/main || git rebase --abort
 
       - name: Commit updated files
         uses: stefanzweifel/git-auto-commit-action@v5
