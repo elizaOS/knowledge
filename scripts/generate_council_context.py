@@ -23,7 +23,7 @@ DEFAULT_COUNCIL_OUTPUT_DIR = SCRIPT_DIR.parent / "the-council" / "council_briefi
 # Monthly Goal (more dynamic, can still use Env Var or default)
 MONTHLY_GOAL = os.environ.get(
     "COUNCIL_MONTHLY_GOAL",
-    "Current focus: Stabilize and attract new users to auto.fun by showcasing 24/7 agent activity (streaming, trading, shitposting), ship production ready elizaOS v2."
+    "December 2025: Execution excellence—complete token migration with high success rate, launch ElizaOS Cloud, stabilize flagship agents, and build developer trust through reliability and clear documentation."
 )
 # --- End Configuration ---
 
