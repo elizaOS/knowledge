@@ -91,3 +91,12 @@ jobs:
           commit_user_name: "github-actions[bot]"
           commit_user_email: "github-actions[bot]@users.noreply.github.com"
           commit_author: "github-actions[bot] <github-actions[bot]@users.noreply.github.com>"
+
+      - name: Alert on failure
+        if: failure()
+        run: |
+          curl -X POST "${{ secrets.ALERT_WEBHOOK_URL }}" \
+            -H "Content-Type: application/json" \
+            -d '{
+              "content": "⚠️ **Extract Daily Facts** failed: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+            }'
