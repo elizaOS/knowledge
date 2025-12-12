@@ -1,0 +1,60 @@
+# Docker Compose for ElizaOS Knowledge MCP Server
+#
+# Usage:
+#   docker compose up -d
+#   docker compose logs -f
+#
+# For use with Claude Desktop, you'll need to configure the MCP client
+# to connect to this server via stdio (see README.md)
+
+version: '3.8'
+
+services:
+  mcp-server:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: elizaos-knowledge-mcp
+    restart: unless-stopped
+    volumes:
+      # Mount the knowledge base (parent directory)
+      - ../the-council:/knowledge/the-council:ro
+      - ../hackmd:/knowledge/hackmd:ro
+      - ../ai-news:/knowledge/ai-news:ro
+      - ../github:/knowledge/github:ro
+    environment:
+      - NODE_ENV=production
+      - KNOWLEDGE_BASE_PATH=/knowledge
+    # MCP servers communicate via stdio
+    stdin_open: true
+    tty: true
+    # Resource limits
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 256M
+        reservations:
+          cpus: '0.1'
+          memory: 64M
+    # Security options
+    security_opt:
+      - no-new-privileges:true
+    read_only: true
+    tmpfs:
+      - /tmp
+
+  # Optional: HTTP wrapper for cloud deployments
+  # Uncomment this if you need HTTP access to the MCP server
+  # mcp-http:
+  #   build:
+  #     context: .
+  #     dockerfile: Dockerfile.http
+  #   container_name: elizaos-knowledge-mcp-http
+  #   restart: unless-stopped
+  #   ports:
+  #     - "3000:3000"
+  #   depends_on:
+  #     - mcp-server
+  #   environment:
+  #     - MCP_SERVER_COMMAND=node dist/index.js
