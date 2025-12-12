@@ -29,11 +29,11 @@ jobs:
           python-version: '3.x' # Use a recent Python version
 
       - name: Set execute permission for script
-        run: chmod +x scripts/aggregate-sources.py
+        run: chmod +x scripts/etl/aggregate-sources.py
 
       - name: Generate Daily Context Map
         id: generate_map
-        run: ./scripts/aggregate-sources.py # Changed from .sh to .py
+        run: python scripts/etl/aggregate-sources.py
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # GITHUB_TOKEN is usually not needed by the script itself
 

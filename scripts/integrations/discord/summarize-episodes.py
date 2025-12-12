@@ -20,8 +20,11 @@ OPENROUTER_API_ENDPOINT = "https://openrouter.ai/api/v1/chat/completions"
 
 # Directories
 SCRIPT_DIR = Path(__file__).parent.resolve()
-EPISODES_DIR = SCRIPT_DIR.parent / "the-council" / "episodes"
-OUTPUT_DIR = SCRIPT_DIR.parent / "hackmd" / "council-episodes"
+INTEGRATIONS_DIR = SCRIPT_DIR.parent  # integrations/
+SCRIPTS_ROOT = INTEGRATIONS_DIR.parent  # scripts/
+WORKSPACE_ROOT = SCRIPTS_ROOT.parent  # repository root
+EPISODES_DIR = WORKSPACE_ROOT / "the-council" / "episodes"
+OUTPUT_DIR = WORKSPACE_ROOT / "hackmd" / "council-episodes"
 
 # Logging configuration
 logging.basicConfig(level=logging.INFO, format='[%(asctime)s] - %(levelname)s - %(message)s', datefmt='%Y-%m-%d %H:%M:%S')

@@ -35,36 +35,25 @@ jobs:
           pip install requests
           # Add other dependencies if needed
 
-      - name: Set execute permission for scripts
-        run: |
-          chmod +x scripts/generate_council_context.py
-          chmod +x scripts/aggregate-sources.py
-
       - name: Generate Daily Context Map (Input for Council)
         id: aggregate_step
         run: |
-          # Run the script for today's date (defaults to current)
-          # Output will be the-council/YYYY-MM-DD.json
-          ./scripts/aggregate-sources.py
+          python scripts/etl/aggregate-sources.py
           echo "aggregated_json_file=the-council/aggregated/$(date +%Y-%m-%d).json" >> $GITHUB_OUTPUT
 
       - name: Run council context generation script
         id: council_gen
         env:
-          # Pass API key securely
           OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
-          # Pass other context env vars if needed (using secrets or vars)
-          # COUNCIL_MONTHLY_GOAL: ${{ vars.COUNCIL_MONTHLY_GOAL_VAR || 'Default Goal' }}
         run: |
           INPUT_FILE="${{ steps.aggregate_step.outputs.aggregated_json_file }}"
           OUTPUT_FILE="the-council/council_briefing/$(date +%Y-%m-%d).json"
           if [ -f "$INPUT_FILE" ]; then
-            ./scripts/generate_council_context.py "$INPUT_FILE" "$OUTPUT_FILE"
-            # Set output filename for next step
+            python scripts/etl/generate-council-context.py "$INPUT_FILE" "$OUTPUT_FILE"
             echo "council_json_file=$OUTPUT_FILE" >> $GITHUB_OUTPUT
           else
             echo "Input file $INPUT_FILE not found, skipping council context generation."
-            exit 1 # Or handle appropriately
+            exit 1
           fi
 
       - name: Create council_context_daily.json permalink
@@ -73,7 +62,7 @@ jobs:
 
       - name: Generate RSS feeds
         run: |
-          python scripts/generate-rss.py
+          python scripts/etl/generate-rss.py
 
       - name: Commit updated files
         uses: stefanzweifel/git-auto-commit-action@v5

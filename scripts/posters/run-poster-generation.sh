@@ -95,7 +95,7 @@ for i in ${!src_dirs[@]}; do
     
     echo "   Generating poster: $PERMALINK_POSTER_PATH"
 
-    if ./scripts/posters-enhanced.sh "$LATEST_MD_FILE" "$PERMALINK_POSTER_PATH"; then
+    if ./scripts/posters/posters-enhanced.sh "$LATEST_MD_FILE" "$PERMALINK_POSTER_PATH"; then
       if [ -f "$PERMALINK_POSTER_PATH" ] && [ -s "$PERMALINK_POSTER_PATH" ]; then
         echo "   Successfully generated poster: $PERMALINK_POSTER_PATH"
         generated_posters_count=$((generated_posters_count + 1))
@@ -103,7 +103,7 @@ for i in ${!src_dirs[@]}; do
         echo "   ERROR: posters-enhanced.sh exited 0 for $LATEST_MD_FILE, but $PERMALINK_POSTER_PATH was not found or is empty."
       fi
     else
-      echo "   ERROR: posters-enhanced.sh failed for $LATEST_MD_FILE (exit code $?). Check scripts/posters-enhanced.sh logs or errors."
+      echo "   ERROR: posters-enhanced.sh failed for $LATEST_MD_FILE (exit code $?). Check scripts/posters/posters-enhanced.sh logs or errors."
     fi
   else
     echo "   No suitable markdown file found in $SRC_DIR after filtering. Skipping poster generation."

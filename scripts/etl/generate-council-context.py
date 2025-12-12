@@ -15,10 +15,12 @@ OPENROUTER_API_ENDPOINT = "https://openrouter.ai/api/v1/chat/completions"
 
 # Determine the script's directory to find related files
 SCRIPT_DIR = Path(__file__).parent.resolve()
-STRATEGIC_CONTEXT_FILE = SCRIPT_DIR / "special-prompts/north-star.txt"
+SCRIPTS_ROOT = SCRIPT_DIR.parent  # scripts/
+WORKSPACE_ROOT = SCRIPTS_ROOT.parent  # repository root
+STRATEGIC_CONTEXT_FILE = SCRIPTS_ROOT / "prompts" / "config" / "north-star.txt"
 
 # Default output directory for council JSON if not specified
-DEFAULT_COUNCIL_OUTPUT_DIR = SCRIPT_DIR.parent / "the-council" / "council_briefing"
+DEFAULT_COUNCIL_OUTPUT_DIR = WORKSPACE_ROOT / "the-council" / "council_briefing"
 
 # Monthly Goal (more dynamic, can still use Env Var or default)
 MONTHLY_GOAL = os.environ.get(
@@ -209,7 +211,7 @@ def main():
         print(f"Output file not specified. Defaulting to: {output_path}")
 
     # --- Add Markdown output path ---
-    output_markdown_dir = SCRIPT_DIR.parent / "hackmd" / "council"
+    output_markdown_dir = WORKSPACE_ROOT / "hackmd" / "council"
     output_markdown_dir.mkdir(parents=True, exist_ok=True)
     markdown_filename = input_path.stem + ".md"
     output_markdown_path = output_markdown_dir / markdown_filename

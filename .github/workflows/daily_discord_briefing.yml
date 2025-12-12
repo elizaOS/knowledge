@@ -42,7 +42,7 @@ jobs:
             echo "Using yesterday's poster: $POSTER_FILENAME"
             
             # Clean up old posters first, then send briefing with yesterday's timestamped poster
-            python scripts/webhook.py "$FACTS_FILE" -d -c "1377401701081944144" -s -p "$POSTER_FILENAME" --cleanup
+            python scripts/integrations/discord/webhook.py "$FACTS_FILE" -d -c "1377401701081944144" -s -p "$POSTER_FILENAME" --cleanup
           else
             echo "Facts file $FACTS_FILE not found. Skipping Discord briefing."
             # Optionally, you could exit with an error or send a notification

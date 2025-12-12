@@ -21,8 +21,8 @@ NEWS_SHOW_OUTPUT_DIR = Path("the-council") # Default parent for output if -o is 
 OPENROUTER_API_KEY = os.environ.get("OPENROUTER_API_KEY")
 OPENROUTER_API_ENDPOINT = "https://openrouter.ai/api/v1/chat/completions"
 LLM_MODEL = "anthropic/claude-sonnet-4" # Or your preferred model, consider one with large context window
-FACT_EXTRACTION_PROMPT_DIR = Path(__file__).parent
-DEFAULT_FACT_EXTRACTION_PROMPT_FILE = FACT_EXTRACTION_PROMPT_DIR / "special-prompts" / "fact_extraction_prompt.txt"
+SCRIPTS_DIR = Path(__file__).parent.parent
+DEFAULT_FACT_EXTRACTION_PROMPT_FILE = SCRIPTS_DIR / "prompts" / "extraction" / "facts.txt"
 
 # Logging configuration
 logging.basicConfig(level=logging.INFO, format='[%(asctime)s] - %(levelname)s - %(message)s', datefmt='%Y-%m-%d %H:%M:%S')

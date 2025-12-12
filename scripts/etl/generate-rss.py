@@ -12,7 +12,9 @@ from xml.etree.ElementTree import Element, SubElement, tostring
 from xml.dom import minidom
 
 # Configuration
-WORKSPACE_ROOT = Path(__file__).resolve().parent.parent
+SCRIPT_DIR = Path(__file__).resolve().parent  # scripts/etl/
+SCRIPTS_ROOT = SCRIPT_DIR.parent  # scripts/
+WORKSPACE_ROOT = SCRIPTS_ROOT.parent  # repository root
 FACTS_DIR = WORKSPACE_ROOT / "the-council" / "facts"
 COUNCIL_DIR = WORKSPACE_ROOT / "the-council" / "council_briefing"
 OUTPUT_DIR = WORKSPACE_ROOT / "rss"

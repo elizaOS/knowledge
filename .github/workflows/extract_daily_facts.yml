@@ -35,38 +35,30 @@ jobs:
           python -m pip install --upgrade pip
           pip install requests
 
-      - name: Set execute permission for scripts
-        run: |
-          chmod +x scripts/extract-facts.py
-          chmod +x scripts/aggregate-sources.py
-
       - name: Aggregate Sources for Today
         id: aggregate_step
         run: |
-          ./scripts/aggregate-sources.py # Defaults to today
+          python scripts/etl/aggregate-sources.py
           echo "aggregated_json_file=the-council/aggregated/$(date +%Y-%m-%d).json" >> $GITHUB_OUTPUT
 
       - name: Generate Fact Briefing from Aggregated Data
         id: fact_gen_step
         env:
           OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
-          # COUNCIL_MONTHLY_GOAL: ${{ vars.COUNCIL_MONTHLY_GOAL_VAR || 'Default Goal' }} # Example if needed
         run: |
           INPUT_FILE="${{ steps.aggregate_step.outputs.aggregated_json_file }}"
           OUTPUT_JSON_DIR="the-council/facts"
           OUTPUT_MARKDOWN_DIR="hackmd/facts"
-          
-          # Ensure output directories exist
+
           mkdir -p "$OUTPUT_JSON_DIR"
           mkdir -p "$OUTPUT_MARKDOWN_DIR"
 
           if [ -f "$INPUT_FILE" ]; then
-            # Use extract-facts.py with explicit input/output parameters
             OUTPUT_JSON_FILE="$OUTPUT_JSON_DIR/$(date +%Y-%m-%d).json"
             OUTPUT_MARKDOWN_FILE="$OUTPUT_MARKDOWN_DIR/$(date +%Y-%m-%d).md"
-            
-            ./scripts/extract-facts.py -i "$INPUT_FILE" -o "$OUTPUT_JSON_FILE" -md "$OUTPUT_MARKDOWN_FILE"
-            
+
+            python scripts/etl/extract-facts.py -i "$INPUT_FILE" -o "$OUTPUT_JSON_FILE" -md "$OUTPUT_MARKDOWN_FILE"
+
             echo "fact_json_file=$OUTPUT_JSON_FILE" >> $GITHUB_OUTPUT
             echo "fact_markdown_file=$OUTPUT_MARKDOWN_FILE" >> $GITHUB_OUTPUT
           else
@@ -83,7 +75,7 @@ jobs:
 
       - name: Generate RSS feed
         run: |
-          python scripts/generate-rss.py
+          python scripts/etl/generate-rss.py
 
       - name: Commit updated files
         uses: stefanzweifel/git-auto-commit-action@v5
