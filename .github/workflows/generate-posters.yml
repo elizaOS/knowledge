@@ -44,6 +44,20 @@ jobs:
             echo "posters_generated=false" >> "$GITHUB_OUTPUT"
           fi
 
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+
+      - name: Install Python dependencies
+        run: pip install requests
+
+      - name: Generate AI Daily Image
+        env:
+          OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
+        run: python scripts/posters/generate-ai-image.py
+        continue-on-error: true  # Don't fail workflow if image gen fails
+
       - name: Commit and Push Posters
         if: steps.generate-posters.outputs.posters_generated == 'true'
         run: |
