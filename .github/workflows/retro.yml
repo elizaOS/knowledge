@@ -120,7 +120,7 @@ jobs:
           if [ -n "${{ steps.params.outputs.month }}" ]; then
             ARGS="$ARGS -m ${{ steps.params.outputs.month }}"
           fi
-          python scripts/generate-monthly-retro.py $ARGS
+          python scripts/etl/generate-monthly-retro.py $ARGS
 
       - name: Generate Quarterly Summary
         if: steps.params.outputs.type == 'quarterly'
@@ -131,14 +131,14 @@ jobs:
           if [ -n "${{ steps.params.outputs.quarter }}" ]; then
             ARGS="$ARGS -q ${{ steps.params.outputs.quarter }}"
           fi
-          python scripts/generate-quarterly-summary.py $ARGS
+          python scripts/etl/generate-quarterly-summary.py $ARGS
 
       - name: Generate Annual Summary
         if: steps.params.outputs.type == 'annual'
         env:
           OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
         run: |
-          python scripts/generate-quarterly-summary.py -y ${{ steps.params.outputs.year }}
+          python scripts/etl/generate-quarterly-summary.py -y ${{ steps.params.outputs.year }}
 
       - name: Commit retrospective
         uses: stefanzweifel/git-auto-commit-action@v5

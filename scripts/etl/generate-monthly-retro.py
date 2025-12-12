@@ -23,7 +23,8 @@ API_KEY = os.environ.get("OPENROUTER_API_KEY", "")
 OPENROUTER_API_ENDPOINT = "https://openrouter.ai/api/v1/chat/completions"
 
 SCRIPT_DIR = Path(__file__).parent.resolve()
-WORKSPACE_ROOT = SCRIPT_DIR.parent
+SCRIPTS_ROOT = SCRIPT_DIR.parent  # scripts/
+WORKSPACE_ROOT = SCRIPTS_ROOT.parent  # repository root
 
 # Input directories
 FACTS_DIR = WORKSPACE_ROOT / "the-council" / "facts"
@@ -35,7 +36,7 @@ OUTPUT_DIR = WORKSPACE_ROOT / "the-council" / "retros"
 EPISODES_DIR = WORKSPACE_ROOT / "the-council" / "episodes"
 
 # Strategic context
-NORTH_STAR_FILE = SCRIPT_DIR / "special-prompts" / "north-star.txt"
+NORTH_STAR_FILE = SCRIPTS_ROOT / "prompts" / "config" / "north-star.txt"
 
 logging.basicConfig(level=logging.INFO, format='[%(asctime)s] - %(levelname)s - %(message)s')
 

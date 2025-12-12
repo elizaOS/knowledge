@@ -20,7 +20,8 @@ API_KEY = os.environ.get("OPENROUTER_API_KEY", "")
 OPENROUTER_API_ENDPOINT = "https://openrouter.ai/api/v1/chat/completions"
 
 SCRIPT_DIR = Path(__file__).parent.resolve()
-WORKSPACE_ROOT = SCRIPT_DIR.parent
+SCRIPTS_ROOT = SCRIPT_DIR.parent  # scripts/
+WORKSPACE_ROOT = SCRIPTS_ROOT.parent  # repository root
 RETROS_DIR = WORKSPACE_ROOT / "the-council" / "retros"
 OUTPUT_DIR = WORKSPACE_ROOT / "the-council" / "summaries"
 

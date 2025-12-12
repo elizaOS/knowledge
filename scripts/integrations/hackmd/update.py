@@ -20,7 +20,7 @@ import re
 
 # --- Configuration ---
 TEAM_PATH = "elizaos"
-PROMPTS_DIR = Path("scripts/prompts")
+PROMPTS_DIR = Path("scripts/prompts/hackmd")
 STATE_FILE = Path("book.json")
 DATA_DIR = Path("the-council/aggregated")
 EPISODES_DIR = Path("the-council/episodes")

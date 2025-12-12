@@ -44,7 +44,7 @@ jobs:
           HMD_API_ACCESS_TOKEN: ${{ secrets.HMD_API_ACCESS_TOKEN }}
 
         run: |
-          python scripts/create-hackmd.py
+          python scripts/integrations/hackmd/create.py
 
       - name: Update notes content and book index
         id: update_notes
@@ -53,7 +53,7 @@ jobs:
           OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
 
         run: |
-          python scripts/update-hackmd.py --json
+          python scripts/integrations/hackmd/update.py --json
 
       - name: Generate council episodes summary for Discord
         id: episodes_summary
@@ -62,7 +62,7 @@ jobs:
         continue-on-error: true
         run: |
           # Generate discord-optimized episode summary (optional step)
-          python scripts/summarize_council_episodes.py -o hackmd/council-episodes/discord-summary.md
+          python scripts/integrations/discord/summarize-episodes.py -o hackmd/council-episodes/discord-summary.md
 
       - name: Pull latest changes before commit
         run: |

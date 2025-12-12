@@ -31,14 +31,14 @@ jobs:
 
       - name: Set execute permissions
         run: |
-          chmod +x scripts/posters-enhanced.sh
-          chmod +x scripts/run_poster_generation.sh
+          chmod +x scripts/posters/posters-enhanced.sh
+          chmod +x scripts/posters/run-poster-generation.sh
 
       - name: Generate Posters
         id: generate-posters
         run: |
           mkdir -p posters
-          if scripts/run_poster_generation.sh; then
+          if scripts/posters/run-poster-generation.sh; then
             echo "posters_generated=true" >> "$GITHUB_OUTPUT"
           else
             echo "posters_generated=false" >> "$GITHUB_OUTPUT"

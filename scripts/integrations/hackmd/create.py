@@ -18,7 +18,7 @@ import time
 
 # --- Configuration ---
 TEAM_PATH = "elizaos"
-PROMPTS_DIR = Path("scripts/prompts")
+PROMPTS_DIR = Path("scripts/prompts/hackmd")
 STATE_FILE = Path("book.json")
 BOOK_MAP_KEY = "__BOOK_INDEX__"
 BOOK_TITLE = "Eliza Daily"

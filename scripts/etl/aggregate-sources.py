@@ -14,7 +14,9 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional, Union # For type hinting
 
 # --- Configuration ---
-WORKSPACE_ROOT = Path(__file__).resolve().parent.parent
+SCRIPT_DIR = Path(__file__).resolve().parent  # scripts/etl/
+SCRIPTS_ROOT = SCRIPT_DIR.parent  # scripts/
+WORKSPACE_ROOT = SCRIPTS_ROOT.parent  # repository root
 OUTPUT_DIR_BASE = WORKSPACE_ROOT / "the-council" / "aggregated"
 LOG_LEVEL = logging.INFO
 
