@@ -265,11 +265,24 @@ def main():
     }
 
     llm_output_data = None
+    llm_metadata = {
+        "model": LLM_MODEL,
+        "extracted_at": datetime.utcnow().isoformat() + "Z",
+    }
+    extraction_start_time = datetime.utcnow()
     try:
         response = requests.post(OPENROUTER_API_ENDPOINT, headers=headers, json=llm_payload, timeout=300)
         response.raise_for_status()
         llm_response_data = response.json()
-        
+
+        # Capture token usage for cost tracking
+        usage = llm_response_data.get("usage", {})
+        if usage:
+            llm_metadata["prompt_tokens"] = usage.get("prompt_tokens")
+            llm_metadata["completion_tokens"] = usage.get("completion_tokens")
+            llm_metadata["total_tokens"] = usage.get("total_tokens")
+            logging.info(f"LLM Usage - Prompt: {usage.get('prompt_tokens')}, Completion: {usage.get('completion_tokens')}, Total: {usage.get('total_tokens')}")
+
         content_str = llm_response_data.get("choices", [{}])[0].get("message", {}).get("content", "")
         
         if not content_str.strip():
@@ -302,14 +315,48 @@ def main():
     except Exception as e_gen:
         logging.error(f"Error processing LLM response: {e_gen}")
 
+    # Calculate processing duration
+    llm_metadata["processing_seconds"] = round((datetime.utcnow() - extraction_start_time).total_seconds(), 2)
+
     if not llm_output_data:
         logging.warning("No valid categorized briefing was extracted. The output JSON file might be incomplete or empty.")
         llm_output_data = {
             "briefing_date": target_date_str or "unknown",
             "overall_summary": "Error: Failed to generate briefing due to LLM or parsing issues.",
             "categories": {}
-            # Reverted: Removed _source_key_legend from error case
         }
+        llm_metadata["status"] = "error"
+    else:
+        llm_metadata["status"] = "success"
+        # Count facts extracted per category
+        categories = llm_output_data.get("categories", {})
+        llm_metadata["facts_by_category"] = {
+            k: len(v) if isinstance(v, list) else (len(v.get("new_issues_prs", [])) if isinstance(v, dict) else 0)
+            for k, v in categories.items()
+        }
+        llm_metadata["total_facts"] = sum(llm_metadata["facts_by_category"].values())
+
+        # Aggregate sentiment distribution from user_feedback
+        sentiment_counts = {"positive": 0, "negative": 0, "neutral": 0, "unknown": 0}
+        user_feedback = categories.get("user_feedback", [])
+        for item in user_feedback:
+            sentiment = item.get("sentiment", "unknown").lower()
+            if sentiment in sentiment_counts:
+                sentiment_counts[sentiment] += 1
+            else:
+                sentiment_counts["unknown"] += 1
+        llm_metadata["sentiment_distribution"] = sentiment_counts
+
+        # Calculate overall sentiment score (-1 to 1 scale)
+        total_sentiment_items = sum(sentiment_counts.values()) - sentiment_counts["unknown"]
+        if total_sentiment_items > 0:
+            sentiment_score = (sentiment_counts["positive"] - sentiment_counts["negative"]) / total_sentiment_items
+            llm_metadata["sentiment_score"] = round(sentiment_score, 2)
+        else:
+            llm_metadata["sentiment_score"] = 0
+
+    # Add metadata to output
+    llm_output_data["_metadata"] = llm_metadata
 
     args.output_file.parent.mkdir(parents=True, exist_ok=True)
     logging.info(f"Writing categorized fact briefing for '{log_date_context}' to: {args.output_file}")

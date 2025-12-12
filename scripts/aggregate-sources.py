@@ -234,11 +234,46 @@ def main():
     if user_summaries_content is not None:
         final_context[f"github_extracted_data_user_summaries_text_last_7_days_for_{target_date_str}"] = user_summaries_content
 
+    # Add metadata for observability and visualizations
+    sources_with_content = [k for k, v in final_context.items()
+                           if k != "date_generated_for" and isinstance(v, dict) and v.get("content")]
+    sources_with_errors = [k for k, v in final_context.items()
+                          if k != "date_generated_for" and isinstance(v, dict) and v.get("error")]
+
+    # Calculate total characters for token estimation (~4 chars per token)
+    total_chars = 0
+    for k, v in final_context.items():
+        if k == "date_generated_for":
+            continue
+        if isinstance(v, dict) and v.get("content"):
+            content = v["content"]
+            if isinstance(content, str):
+                total_chars += len(content)
+            else:
+                total_chars += len(json.dumps(content))
+        elif isinstance(v, str):
+            total_chars += len(v)
+
+    final_context["_metadata"] = {
+        "generated_at": datetime.utcnow().isoformat() + "Z",
+        "target_date": target_date_str,
+        "sources_successful": len(sources_with_content),
+        "sources_failed": len(sources_with_errors),
+        "source_keys": sources_with_content,
+        "failed_keys": sources_with_errors,
+        "total_characters": total_chars,
+        "estimated_tokens": total_chars // 4,  # rough estimate for LLM context planning
+    }
+
     OUTPUT_DIR_BASE.mkdir(parents=True, exist_ok=True)
     output_file = OUTPUT_DIR_BASE / f"{target_date_str}.json"
     try:
+        output_json = json.dumps(final_context, indent=2, ensure_ascii=False)
+        final_context["_metadata"]["file_size_bytes"] = len(output_json.encode('utf-8'))
+        # Re-serialize with file size included
+        output_json = json.dumps(final_context, indent=2, ensure_ascii=False)
         with open(output_file, 'w', encoding='utf-8') as f:
-            json.dump(final_context, f, indent=2, ensure_ascii=False)
+            f.write(output_json)
         logging.info(f"Aggregated context saved to: {output_file}")
     except IOError as e:
         logging.error(f"Error writing output file {output_file}: {e}"); sys.exit(1)

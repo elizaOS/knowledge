@@ -299,10 +299,26 @@ def main():
     error_output_json = None
     error_output_md = None
 
+    # Metadata for observability
+    council_metadata = {
+        "model": MODEL,
+        "generated_at": datetime.utcnow().isoformat() + "Z",
+    }
+    generation_start_time = datetime.utcnow()
+
     try:
-        response = requests.post(OPENROUTER_API_ENDPOINT, headers=headers, json=payload, timeout=180) 
-        response.raise_for_status() 
+        response = requests.post(OPENROUTER_API_ENDPOINT, headers=headers, json=payload, timeout=180)
+        response.raise_for_status()
         response_data = response.json()
+
+        # Capture token usage
+        usage = response_data.get("usage", {})
+        if usage:
+            council_metadata["prompt_tokens"] = usage.get("prompt_tokens")
+            council_metadata["completion_tokens"] = usage.get("completion_tokens")
+            council_metadata["total_tokens"] = usage.get("total_tokens")
+            print(f"LLM Usage - Prompt: {usage.get('prompt_tokens')}, Completion: {usage.get('completion_tokens')}, Total: {usage.get('total_tokens')}")
+
         council_context_str = response_data.get("choices", [{}])[0].get("message", {}).get("content")
 
         if not council_context_str:
@@ -357,19 +373,39 @@ def main():
         council_context_md = format_json_to_markdown(council_context_json)
         print("V2 Council context generated successfully by LLM and 'Other' (answer_4) option added.")
 
+        # Add success metadata with deliberation stats
+        council_metadata["status"] = "success"
+        council_metadata["processing_seconds"] = round((datetime.utcnow() - generation_start_time).total_seconds(), 2)
+        council_metadata["key_points_count"] = len(council_context_json.get("key_points", []))
+        total_questions = sum(
+            len(point.get("deliberation_items", []))
+            for point in council_context_json.get("key_points", [])
+        )
+        council_metadata["total_deliberation_questions"] = total_questions
+        council_context_json["_metadata"] = council_metadata
+
     except requests.exceptions.RequestException as e:
         print(f"Error calling OpenRouter API for V2: {e}", file=sys.stderr)
-        error_output_json = {"date": date_str, "monthly_goal": MONTHLY_GOAL, "daily_focus_theme": f"Error V2: API Request Failed ({e})", "key_strategic_points": []}
+        council_metadata["status"] = "error"
+        council_metadata["error"] = f"API Request Failed: {e}"
+        council_metadata["processing_seconds"] = round((datetime.utcnow() - generation_start_time).total_seconds(), 2)
+        error_output_json = {"date": date_str, "monthly_goal": MONTHLY_GOAL, "daily_focus_theme": f"Error V2: API Request Failed ({e})", "key_strategic_points": [], "_metadata": council_metadata}
         error_output_md = f"# Council Briefing (V2): {date_str}\n\nError: API Request Failed ({e})"
     except (json.JSONDecodeError, ValueError, KeyError, IndexError) as e:
         print(f"Error processing LLM response for V2: {e}", file=sys.stderr)
         if 'response' in locals() and response is not None:
              print(f"LLM Response Data (V2): {response.text[:500]}...", file=sys.stderr)
-        error_output_json = {"date": date_str, "monthly_goal": MONTHLY_GOAL, "daily_focus_theme": f"Error V2: Invalid LLM Response ({e})", "key_strategic_points": []}
+        council_metadata["status"] = "error"
+        council_metadata["error"] = f"Invalid LLM Response: {e}"
+        council_metadata["processing_seconds"] = round((datetime.utcnow() - generation_start_time).total_seconds(), 2)
+        error_output_json = {"date": date_str, "monthly_goal": MONTHLY_GOAL, "daily_focus_theme": f"Error V2: Invalid LLM Response ({e})", "key_strategic_points": [], "_metadata": council_metadata}
         error_output_md = f"# Council Briefing (V2): {date_str}\n\nError: Invalid LLM Response ({e})"
     except Exception as e:
          print(f"An unexpected error occurred during V2 generation: {e}", file=sys.stderr)
-         error_output_json = {"date": date_str, "monthly_goal": MONTHLY_GOAL, "daily_focus_theme": f"Error V2: Unexpected error ({e})", "key_strategic_points": []}
+         council_metadata["status"] = "error"
+         council_metadata["error"] = f"Unexpected error: {e}"
+         council_metadata["processing_seconds"] = round((datetime.utcnow() - generation_start_time).total_seconds(), 2)
+         error_output_json = {"date": date_str, "monthly_goal": MONTHLY_GOAL, "daily_focus_theme": f"Error V2: Unexpected error ({e})", "key_strategic_points": [], "_metadata": council_metadata}
          error_output_md = f"# Council Briefing (V2): {date_str}\n\nError: Unexpected error ({e})"
     finally:
         final_json_to_save = council_context_json if council_context_json else error_output_json
