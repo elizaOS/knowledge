@@ -94,12 +94,6 @@ def format_facts_description(facts: dict) -> str:
             lines.append(f"<li><em>{channel}:</em> {disc_summary}...</li>")
         lines.append("</ul>")
 
-    metadata = facts.get("_metadata", {})
-    if metadata.get("sentiment_score") is not None:
-        score = metadata["sentiment_score"]
-        sentiment = "positive" if score > 0.3 else "negative" if score < -0.3 else "neutral"
-        lines.append(f"<p><em>Community sentiment: {sentiment} ({score})</em></p>")
-
     return "\n".join(lines) if lines else "<p>No details available.</p>"
 
 

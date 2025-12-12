@@ -336,25 +336,6 @@ def main():
         }
         llm_metadata["total_facts"] = sum(llm_metadata["facts_by_category"].values())
 
-        # Aggregate sentiment distribution from user_feedback
-        sentiment_counts = {"positive": 0, "negative": 0, "neutral": 0, "unknown": 0}
-        user_feedback = categories.get("user_feedback", [])
-        for item in user_feedback:
-            sentiment = item.get("sentiment", "unknown").lower()
-            if sentiment in sentiment_counts:
-                sentiment_counts[sentiment] += 1
-            else:
-                sentiment_counts["unknown"] += 1
-        llm_metadata["sentiment_distribution"] = sentiment_counts
-
-        # Calculate overall sentiment score (-1 to 1 scale)
-        total_sentiment_items = sum(sentiment_counts.values()) - sentiment_counts["unknown"]
-        if total_sentiment_items > 0:
-            sentiment_score = (sentiment_counts["positive"] - sentiment_counts["negative"]) / total_sentiment_items
-            llm_metadata["sentiment_score"] = round(sentiment_score, 2)
-        else:
-            llm_metadata["sentiment_score"] = 0
-
     # Add metadata to output
     llm_output_data["_metadata"] = llm_metadata
 
