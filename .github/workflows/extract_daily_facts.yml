@@ -81,11 +81,15 @@ jobs:
             cp "$DAILY_FACT_JSON" "$PERMALINK_FACT_JSON"
           fi
 
+      - name: Generate RSS feed
+        run: |
+          python scripts/generate-rss.py
+
       - name: Commit updated files
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: "Automated: Update daily fact briefing for $(date +%Y-%m-%d)"
-          file_pattern: "the-council/facts/*.json hackmd/facts/*.md"
+          file_pattern: "the-council/facts/*.json hackmd/facts/*.md rss/*.xml"
           commit_user_name: "github-actions[bot]"
           commit_user_email: "github-actions[bot]@users.noreply.github.com"
           commit_author: "github-actions[bot] <github-actions[bot]@users.noreply.github.com>"

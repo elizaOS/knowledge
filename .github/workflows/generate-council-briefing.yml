@@ -71,11 +71,15 @@ jobs:
         if: steps.council_gen.outputs.council_json_file
         run: cp "${{ steps.council_gen.outputs.council_json_file }}" the-council/council_briefing/daily.json
 
+      - name: Generate RSS feeds
+        run: |
+          python scripts/generate-rss.py
+
       - name: Commit updated files
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: "Automated: Generate council context for $(date +%Y-%m-%d) to council_briefing/"
-          file_pattern: "the-council/council_briefing/*.json hackmd/council/*.md"
+          file_pattern: "the-council/council_briefing/*.json hackmd/council/*.md rss/*.xml"
           commit_user_name: "github-actions[bot]"
           commit_user_email: "github-actions[bot]@users.noreply.github.com"
           commit_author: "github-actions[bot] <github-actions[bot]@users.noreply.github.com>"
