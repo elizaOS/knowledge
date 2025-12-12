@@ -15,7 +15,10 @@ import * as fs from "fs/promises";
 import * as path from "path";
 import { glob } from "glob";
 
-// Configuration - can be overridden via environment variables
+// ============================================================================
+// CONFIGURATION
+// ============================================================================
+
 const CONFIG = {
   KNOWLEDGE_BASE_PATH: process.env.KNOWLEDGE_BASE_PATH || path.resolve(process.cwd(), ".."),
   FACTS_DIR: "the-council/facts",
@@ -23,7 +26,12 @@ const CONFIG = {
   COUNCIL_DIR: "the-council/council_briefing",
 };
 
-// Helper functions
+const CHARACTER_LIMIT = 50000; // Maximum response size
+
+// ============================================================================
+// HELPER FUNCTIONS
+// ============================================================================
+
 function getBasePath(): string {
   return CONFIG.KNOWLEDGE_BASE_PATH;
 }
@@ -69,7 +77,17 @@ function formatDate(date?: string): string {
   return new Date().toISOString().split("T")[0];
 }
 
-// Type definitions for knowledge data
+function truncateResponse(text: string, limit: number = CHARACTER_LIMIT): string {
+  if (text.length <= limit) {
+    return text;
+  }
+  return text.slice(0, limit) + "\n\n[Response truncated. Use date filters or pagination to reduce results.]";
+}
+
+// ============================================================================
+// TYPE DEFINITIONS
+// ============================================================================
+
 interface FactsBriefing {
   briefing_date: string;
   overall_summary: string;
@@ -124,408 +142,6 @@ interface CouncilBriefing {
     }>;
   }>;
 }
-
-// Create MCP Server
-const server = new McpServer({
-  name: "elizaos-knowledge",
-  version: "1.0.0",
-});
-
-// ============================================================================
-// TOOLS - Functions the AI can execute
-// ============================================================================
-
-// Tool: Get Daily Briefing (latest aggregated intelligence)
-server.tool(
-  "get-daily-briefing",
-  "Get the latest daily intelligence briefing with aggregated data from all sources",
-  {
-    date: z.string().optional().describe("Date in YYYY-MM-DD format (defaults to today)"),
-  },
-  async ({ date }) => {
-    const targetDate = formatDate(date);
-    const filePath = resolvePath(CONFIG.AGGREGATED_DIR, `${targetDate}.json`);
-
-    if (!(await fileExists(filePath))) {
-      // Try daily.json as fallback
-      const dailyPath = resolvePath(CONFIG.AGGREGATED_DIR, "daily.json");
-      if (await fileExists(dailyPath)) {
-        const data = await readJsonFile(dailyPath);
-        return {
-          content: [{
-            type: "text" as const,
-            text: JSON.stringify(data, null, 2)
-          }],
-        };
-      }
-      return {
-        content: [{
-          type: "text" as const,
-          text: `No aggregated data found for ${targetDate}`
-        }],
-        isError: true,
-      };
-    }
-
-    const data = await readJsonFile(filePath);
-    return {
-      content: [{
-        type: "text" as const,
-        text: JSON.stringify(data, null, 2)
-      }],
-    };
-  }
-);
-
-// Tool: Get Facts
-server.tool(
-  "get-facts",
-  "Get extracted facts and insights for a specific date",
-  {
-    date: z.string().optional().describe("Date in YYYY-MM-DD format (defaults to latest)"),
-  },
-  async ({ date }) => {
-    const targetDate = formatDate(date);
-    const filePath = resolvePath(CONFIG.FACTS_DIR, `${targetDate}.json`);
-
-    if (!(await fileExists(filePath))) {
-      const dailyPath = resolvePath(CONFIG.FACTS_DIR, "daily.json");
-      if (await fileExists(dailyPath)) {
-        const data = await readJsonFile<FactsBriefing>(dailyPath);
-        if (data) {
-          return {
-            content: [{
-              type: "text" as const,
-              text: formatFactsBriefing(data)
-            }],
-          };
-        }
-      }
-      return {
-        content: [{
-          type: "text" as const,
-          text: `No facts found for ${targetDate}`
-        }],
-        isError: true,
-      };
-    }
-
-    const data = await readJsonFile<FactsBriefing>(filePath);
-    if (!data) {
-      return {
-        content: [{
-          type: "text" as const,
-          text: `Error reading facts for ${targetDate}`
-        }],
-        isError: true,
-      };
-    }
-
-    return {
-      content: [{
-        type: "text" as const,
-        text: formatFactsBriefing(data)
-      }],
-    };
-  }
-);
-
-// Tool: Get Council Briefing
-server.tool(
-  "get-council-briefing",
-  "Get strategic council briefing with key points and deliberation items",
-  {
-    date: z.string().optional().describe("Date in YYYY-MM-DD format (defaults to latest)"),
-  },
-  async ({ date }) => {
-    const targetDate = formatDate(date);
-    const filePath = resolvePath(CONFIG.COUNCIL_DIR, `${targetDate}.json`);
-
-    if (!(await fileExists(filePath))) {
-      const dailyPath = resolvePath(CONFIG.COUNCIL_DIR, "daily.json");
-      if (await fileExists(dailyPath)) {
-        const data = await readJsonFile<CouncilBriefing>(dailyPath);
-        if (data) {
-          return {
-            content: [{
-              type: "text" as const,
-              text: formatCouncilBriefing(data)
-            }],
-          };
-        }
-      }
-      return {
-        content: [{
-          type: "text" as const,
-          text: `No council briefing found for ${targetDate}`
-        }],
-        isError: true,
-      };
-    }
-
-    const data = await readJsonFile<CouncilBriefing>(filePath);
-    if (!data) {
-      return {
-        content: [{
-          type: "text" as const,
-          text: `Error reading council briefing for ${targetDate}`
-        }],
-        isError: true,
-      };
-    }
-
-    return {
-      content: [{
-        type: "text" as const,
-        text: formatCouncilBriefing(data)
-      }],
-    };
-  }
-);
-
-// Tool: List Available Dates
-server.tool(
-  "list-available-dates",
-  "List all dates that have knowledge data available",
-  {
-    type: z.enum(["facts", "council", "aggregated"]).optional()
-      .describe("Type of data to list dates for (defaults to all)"),
-    limit: z.number().optional().describe("Maximum number of dates to return (default 30)"),
-  },
-  async ({ type, limit = 30 }) => {
-    const results: Record<string, string[]> = {};
-
-    const dirs = type
-      ? { [type]: type === "facts" ? CONFIG.FACTS_DIR : type === "council" ? CONFIG.COUNCIL_DIR : CONFIG.AGGREGATED_DIR }
-      : { facts: CONFIG.FACTS_DIR, council: CONFIG.COUNCIL_DIR, aggregated: CONFIG.AGGREGATED_DIR };
-
-    for (const [name, dir] of Object.entries(dirs)) {
-      const dates = await getAvailableDates(dir);
-      results[name] = dates.slice(0, limit);
-    }
-
-    return {
-      content: [{
-        type: "text" as const,
-        text: JSON.stringify(results, null, 2)
-      }],
-    };
-  }
-);
-
-// Tool: Search Knowledge
-server.tool(
-  "search-knowledge",
-  "Search across all knowledge sources for specific topics or keywords",
-  {
-    query: z.string().describe("Search query (keywords or topic)"),
-    date_range: z.object({
-      start: z.string().optional(),
-      end: z.string().optional(),
-    }).optional().describe("Optional date range to search within"),
-    limit: z.number().optional().describe("Maximum results to return (default 10)"),
-  },
-  async ({ query, date_range, limit = 10 }) => {
-    const results: Array<{ date: string; type: string; matches: string[] }> = [];
-    const queryLower = query.toLowerCase();
-
-    // Get dates to search
-    const factsDates = await getAvailableDates(CONFIG.FACTS_DIR);
-
-    // Filter by date range if provided
-    let datesToSearch = factsDates;
-    if (date_range?.start) {
-      datesToSearch = datesToSearch.filter(d => d >= date_range.start!);
-    }
-    if (date_range?.end) {
-      datesToSearch = datesToSearch.filter(d => d <= date_range.end!);
-    }
-
-    // Search through facts
-    for (const date of datesToSearch.slice(0, 50)) { // Limit search scope
-      const filePath = resolvePath(CONFIG.FACTS_DIR, `${date}.json`);
-      const data = await readJsonFile<FactsBriefing>(filePath);
-
-      if (data) {
-        const matches: string[] = [];
-        const content = JSON.stringify(data).toLowerCase();
-
-        if (content.includes(queryLower)) {
-          // Find specific matches
-          if (data.overall_summary?.toLowerCase().includes(queryLower)) {
-            matches.push(`Summary: ${data.overall_summary}`);
-          }
-
-          data.categories.discord_updates?.forEach(update => {
-            if (update.summary?.toLowerCase().includes(queryLower)) {
-              matches.push(`Discord [${update.channel}]: ${update.summary}`);
-            }
-          });
-
-          data.categories.github_updates?.new_issues_prs?.forEach(item => {
-            if (item.title?.toLowerCase().includes(queryLower) ||
-                item.significance?.toLowerCase().includes(queryLower)) {
-              matches.push(`GitHub: ${item.title} - ${item.significance || ''}`);
-            }
-          });
-
-          data.categories.strategic_insights?.forEach(insight => {
-            if (insight.insight?.toLowerCase().includes(queryLower) ||
-                insight.theme?.toLowerCase().includes(queryLower)) {
-              matches.push(`Insight [${insight.theme}]: ${insight.insight}`);
-            }
-          });
-
-          if (matches.length > 0) {
-            results.push({ date, type: "facts", matches });
-          }
-        }
-      }
-
-      if (results.length >= limit) break;
-    }
-
-    if (results.length === 0) {
-      return {
-        content: [{
-          type: "text" as const,
-          text: `No results found for query: "${query}"`
-        }],
-      };
-    }
-
-    return {
-      content: [{
-        type: "text" as const,
-        text: JSON.stringify(results, null, 2)
-      }],
-    };
-  }
-);
-
-// ============================================================================
-// RESOURCES - Read-only data endpoints
-// ============================================================================
-
-// Resource: Facts by date
-server.resource(
-  "knowledge://facts/{date}",
-  "Facts briefing for a specific date",
-  async (uri) => {
-    const match = uri.href.match(/knowledge:\/\/facts\/(\d{4}-\d{2}-\d{2})/);
-    if (!match) {
-      return {
-        contents: [{
-          uri: uri.href,
-          mimeType: "text/plain",
-          text: "Invalid date format. Use YYYY-MM-DD"
-        }],
-      };
-    }
-
-    const date = match[1];
-    const filePath = resolvePath(CONFIG.FACTS_DIR, `${date}.json`);
-
-    if (!(await fileExists(filePath))) {
-      return {
-        contents: [{
-          uri: uri.href,
-          mimeType: "text/plain",
-          text: `No facts found for ${date}`
-        }],
-      };
-    }
-
-    const content = await fs.readFile(filePath, "utf-8");
-    return {
-      contents: [{
-        uri: uri.href,
-        mimeType: "application/json",
-        text: content
-      }],
-    };
-  }
-);
-
-// Resource: Council briefing by date
-server.resource(
-  "knowledge://council/{date}",
-  "Council briefing for a specific date",
-  async (uri) => {
-    const match = uri.href.match(/knowledge:\/\/council\/(\d{4}-\d{2}-\d{2})/);
-    if (!match) {
-      return {
-        contents: [{
-          uri: uri.href,
-          mimeType: "text/plain",
-          text: "Invalid date format. Use YYYY-MM-DD"
-        }],
-      };
-    }
-
-    const date = match[1];
-    const filePath = resolvePath(CONFIG.COUNCIL_DIR, `${date}.json`);
-
-    if (!(await fileExists(filePath))) {
-      return {
-        contents: [{
-          uri: uri.href,
-          mimeType: "text/plain",
-          text: `No council briefing found for ${date}`
-        }],
-      };
-    }
-
-    const content = await fs.readFile(filePath, "utf-8");
-    return {
-      contents: [{
-        uri: uri.href,
-        mimeType: "application/json",
-        text: content
-      }],
-    };
-  }
-);
-
-// Resource: Aggregated data by date
-server.resource(
-  "knowledge://aggregated/{date}",
-  "Raw aggregated data for a specific date",
-  async (uri) => {
-    const match = uri.href.match(/knowledge:\/\/aggregated\/(\d{4}-\d{2}-\d{2})/);
-    if (!match) {
-      return {
-        contents: [{
-          uri: uri.href,
-          mimeType: "text/plain",
-          text: "Invalid date format. Use YYYY-MM-DD"
-        }],
-      };
-    }
-
-    const date = match[1];
-    const filePath = resolvePath(CONFIG.AGGREGATED_DIR, `${date}.json`);
-
-    if (!(await fileExists(filePath))) {
-      return {
-        contents: [{
-          uri: uri.href,
-          mimeType: "text/plain",
-          text: `No aggregated data found for ${date}`
-        }],
-      };
-    }
-
-    const content = await fs.readFile(filePath, "utf-8");
-    return {
-      contents: [{
-        uri: uri.href,
-        mimeType: "application/json",
-        text: content
-      }],
-    };
-  }
-);
 
 // ============================================================================
 // FORMATTING HELPERS
@@ -642,6 +258,394 @@ function formatCouncilBriefing(data: CouncilBriefing): string {
 }
 
 // ============================================================================
+// CREATE MCP SERVER
+// ============================================================================
+
+const server = new McpServer({
+  name: "elizaos-knowledge",
+  version: "1.0.0",
+});
+
+// ============================================================================
+// TOOLS
+// ============================================================================
+
+// Tool: Get Daily Briefing
+server.tool(
+  "get_daily_briefing",
+  "Get aggregated intelligence briefing from all ElizaOS knowledge sources for a specific date. Returns Discord discussions, GitHub activity, AI news, and community updates.",
+  {
+    date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional()
+      .describe("Date in YYYY-MM-DD format (defaults to today)"),
+    format: z.enum(["markdown", "json"]).default("markdown")
+      .describe("Output format: 'markdown' for human-readable or 'json' for raw data"),
+  },
+  async ({ date, format }) => {
+    const targetDate = formatDate(date);
+    const filePath = resolvePath(CONFIG.AGGREGATED_DIR, `${targetDate}.json`);
+
+    let data: unknown = null;
+    let actualDate = targetDate;
+
+    if (await fileExists(filePath)) {
+      data = await readJsonFile(filePath);
+    } else {
+      const dailyPath = resolvePath(CONFIG.AGGREGATED_DIR, "daily.json");
+      if (await fileExists(dailyPath)) {
+        data = await readJsonFile(dailyPath);
+        actualDate = "latest";
+      }
+    }
+
+    if (!data) {
+      return {
+        content: [{
+          type: "text" as const,
+          text: `No aggregated data found for ${targetDate}. Use list_available_dates to see available dates.`
+        }],
+        isError: true,
+      };
+    }
+
+    const textContent = format === "json"
+      ? JSON.stringify(data, null, 2)
+      : `# Daily Briefing: ${actualDate}\n\n${JSON.stringify(data, null, 2)}`;
+
+    return {
+      content: [{ type: "text" as const, text: truncateResponse(textContent) }],
+    };
+  }
+);
+
+// Tool: Get Facts
+server.tool(
+  "get_facts",
+  "Get extracted facts and insights from the ElizaOS knowledge system. Returns LLM-processed intelligence including GitHub updates, Discord summaries, strategic insights, and user feedback.",
+  {
+    date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional()
+      .describe("Date in YYYY-MM-DD format (defaults to latest available)"),
+    format: z.enum(["markdown", "json"]).default("markdown")
+      .describe("Output format: 'markdown' for formatted briefing or 'json' for structured data"),
+  },
+  async ({ date, format }) => {
+    const targetDate = formatDate(date);
+    const filePath = resolvePath(CONFIG.FACTS_DIR, `${targetDate}.json`);
+
+    let data: FactsBriefing | null = null;
+
+    if (await fileExists(filePath)) {
+      data = await readJsonFile<FactsBriefing>(filePath);
+    } else {
+      const dailyPath = resolvePath(CONFIG.FACTS_DIR, "daily.json");
+      if (await fileExists(dailyPath)) {
+        data = await readJsonFile<FactsBriefing>(dailyPath);
+      }
+    }
+
+    if (!data) {
+      return {
+        content: [{
+          type: "text" as const,
+          text: `No facts found for ${targetDate}. Use list_available_dates to see available dates.`
+        }],
+        isError: true,
+      };
+    }
+
+    const textContent = format === "json"
+      ? JSON.stringify(data, null, 2)
+      : formatFactsBriefing(data);
+
+    return {
+      content: [{ type: "text" as const, text: truncateResponse(textContent) }],
+    };
+  }
+);
+
+// Tool: Get Council Briefing
+server.tool(
+  "get_council_briefing",
+  "Get strategic council briefing with key discussion points and deliberation items. Returns high-level strategic analysis designed for leadership decision-making.",
+  {
+    date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional()
+      .describe("Date in YYYY-MM-DD format (defaults to latest available)"),
+    format: z.enum(["markdown", "json"]).default("markdown")
+      .describe("Output format: 'markdown' for formatted briefing or 'json' for structured data"),
+  },
+  async ({ date, format }) => {
+    const targetDate = formatDate(date);
+    const filePath = resolvePath(CONFIG.COUNCIL_DIR, `${targetDate}.json`);
+
+    let data: CouncilBriefing | null = null;
+
+    if (await fileExists(filePath)) {
+      data = await readJsonFile<CouncilBriefing>(filePath);
+    } else {
+      const dailyPath = resolvePath(CONFIG.COUNCIL_DIR, "daily.json");
+      if (await fileExists(dailyPath)) {
+        data = await readJsonFile<CouncilBriefing>(dailyPath);
+      }
+    }
+
+    if (!data) {
+      return {
+        content: [{
+          type: "text" as const,
+          text: `No council briefing found for ${targetDate}. Use list_available_dates to see available dates.`
+        }],
+        isError: true,
+      };
+    }
+
+    const textContent = format === "json"
+      ? JSON.stringify(data, null, 2)
+      : formatCouncilBriefing(data);
+
+    return {
+      content: [{ type: "text" as const, text: truncateResponse(textContent) }],
+    };
+  }
+);
+
+// Tool: List Available Dates
+server.tool(
+  "list_available_dates",
+  "List all dates that have knowledge data available in the system. Use this to discover what historical data is available before querying specific dates.",
+  {
+    type: z.enum(["facts", "council", "aggregated"]).optional()
+      .describe("Filter by data type (defaults to all types)"),
+    limit: z.number().int().min(1).max(100).default(30)
+      .describe("Maximum number of dates to return (1-100, default: 30)"),
+  },
+  async ({ type, limit }) => {
+    const results: Record<string, string[]> = {};
+
+    const dirs = type
+      ? { [type]: type === "facts" ? CONFIG.FACTS_DIR : type === "council" ? CONFIG.COUNCIL_DIR : CONFIG.AGGREGATED_DIR }
+      : { facts: CONFIG.FACTS_DIR, council: CONFIG.COUNCIL_DIR, aggregated: CONFIG.AGGREGATED_DIR };
+
+    for (const [name, dir] of Object.entries(dirs)) {
+      const dates = await getAvailableDates(dir);
+      results[name] = dates.slice(0, limit);
+    }
+
+    return {
+      content: [{ type: "text" as const, text: JSON.stringify(results, null, 2) }],
+    };
+  }
+);
+
+// Tool: Search Knowledge
+server.tool(
+  "search_knowledge",
+  "Search across all knowledge sources for specific topics, keywords, or discussions. Performs full-text search across facts briefings.",
+  {
+    query: z.string().min(2).max(200)
+      .describe("Search query - keywords or topic to search for (2-200 characters)"),
+    date_start: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional()
+      .describe("Start date for search range (YYYY-MM-DD format)"),
+    date_end: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional()
+      .describe("End date for search range (YYYY-MM-DD format)"),
+    limit: z.number().int().min(1).max(50).default(10)
+      .describe("Maximum results to return (1-50, default: 10)"),
+  },
+  async ({ query, date_start, date_end, limit }) => {
+    const results: Array<{ date: string; type: string; matches: string[] }> = [];
+    const queryLower = query.toLowerCase();
+
+    const factsDates = await getAvailableDates(CONFIG.FACTS_DIR);
+
+    let datesToSearch = factsDates;
+    if (date_start) {
+      datesToSearch = datesToSearch.filter(d => d >= date_start);
+    }
+    if (date_end) {
+      datesToSearch = datesToSearch.filter(d => d <= date_end);
+    }
+
+    for (const date of datesToSearch.slice(0, 50)) {
+      const filePath = resolvePath(CONFIG.FACTS_DIR, `${date}.json`);
+      const data = await readJsonFile<FactsBriefing>(filePath);
+
+      if (data) {
+        const matches: string[] = [];
+        const content = JSON.stringify(data).toLowerCase();
+
+        if (content.includes(queryLower)) {
+          if (data.overall_summary?.toLowerCase().includes(queryLower)) {
+            matches.push(`Summary: ${data.overall_summary.slice(0, 200)}...`);
+          }
+
+          data.categories.discord_updates?.forEach(update => {
+            if (update.summary?.toLowerCase().includes(queryLower)) {
+              matches.push(`Discord [${update.channel}]: ${update.summary.slice(0, 150)}...`);
+            }
+          });
+
+          data.categories.github_updates?.new_issues_prs?.forEach(item => {
+            if (item.title?.toLowerCase().includes(queryLower) ||
+                item.significance?.toLowerCase().includes(queryLower)) {
+              matches.push(`GitHub: ${item.title} - ${item.significance?.slice(0, 100) || ''}`);
+            }
+          });
+
+          data.categories.strategic_insights?.forEach(insight => {
+            if (insight.insight?.toLowerCase().includes(queryLower) ||
+                insight.theme?.toLowerCase().includes(queryLower)) {
+              matches.push(`Insight [${insight.theme}]: ${insight.insight.slice(0, 150)}...`);
+            }
+          });
+
+          if (matches.length > 0) {
+            results.push({ date, type: "facts", matches: matches.slice(0, 5) });
+          }
+        }
+      }
+
+      if (results.length >= limit) break;
+    }
+
+    if (results.length === 0) {
+      return {
+        content: [{
+          type: "text" as const,
+          text: `No results found for query: "${query}". Try different keywords or broader date range.`
+        }],
+      };
+    }
+
+    const textContent = results.map(r =>
+      `## ${r.date}\n${r.matches.map(m => `- ${m}`).join("\n")}`
+    ).join("\n\n");
+
+    return {
+      content: [{ type: "text" as const, text: textContent }],
+    };
+  }
+);
+
+// ============================================================================
+// RESOURCES
+// ============================================================================
+
+server.resource(
+  "facts/{date}",
+  "knowledge://facts/{date}",
+  async (uri) => {
+    const match = uri.href.match(/knowledge:\/\/facts\/(\d{4}-\d{2}-\d{2})/);
+    if (!match) {
+      return {
+        contents: [{
+          uri: uri.href,
+          mimeType: "text/plain",
+          text: "Invalid date format. Use knowledge://facts/YYYY-MM-DD"
+        }],
+      };
+    }
+
+    const date = match[1];
+    const filePath = resolvePath(CONFIG.FACTS_DIR, `${date}.json`);
+
+    if (!(await fileExists(filePath))) {
+      return {
+        contents: [{
+          uri: uri.href,
+          mimeType: "text/plain",
+          text: `No facts found for ${date}`
+        }],
+      };
+    }
+
+    const content = await fs.readFile(filePath, "utf-8");
+    return {
+      contents: [{
+        uri: uri.href,
+        mimeType: "application/json",
+        text: content
+      }],
+    };
+  }
+);
+
+server.resource(
+  "council/{date}",
+  "knowledge://council/{date}",
+  async (uri) => {
+    const match = uri.href.match(/knowledge:\/\/council\/(\d{4}-\d{2}-\d{2})/);
+    if (!match) {
+      return {
+        contents: [{
+          uri: uri.href,
+          mimeType: "text/plain",
+          text: "Invalid date format. Use knowledge://council/YYYY-MM-DD"
+        }],
+      };
+    }
+
+    const date = match[1];
+    const filePath = resolvePath(CONFIG.COUNCIL_DIR, `${date}.json`);
+
+    if (!(await fileExists(filePath))) {
+      return {
+        contents: [{
+          uri: uri.href,
+          mimeType: "text/plain",
+          text: `No council briefing found for ${date}`
+        }],
+      };
+    }
+
+    const content = await fs.readFile(filePath, "utf-8");
+    return {
+      contents: [{
+        uri: uri.href,
+        mimeType: "application/json",
+        text: content
+      }],
+    };
+  }
+);
+
+server.resource(
+  "aggregated/{date}",
+  "knowledge://aggregated/{date}",
+  async (uri) => {
+    const match = uri.href.match(/knowledge:\/\/aggregated\/(\d{4}-\d{2}-\d{2})/);
+    if (!match) {
+      return {
+        contents: [{
+          uri: uri.href,
+          mimeType: "text/plain",
+          text: "Invalid date format. Use knowledge://aggregated/YYYY-MM-DD"
+        }],
+      };
+    }
+
+    const date = match[1];
+    const filePath = resolvePath(CONFIG.AGGREGATED_DIR, `${date}.json`);
+
+    if (!(await fileExists(filePath))) {
+      return {
+        contents: [{
+          uri: uri.href,
+          mimeType: "text/plain",
+          text: `No aggregated data found for ${date}`
+        }],
+      };
+    }
+
+    const content = await fs.readFile(filePath, "utf-8");
+    return {
+      contents: [{
+        uri: uri.href,
+        mimeType: "application/json",
+        text: content
+      }],
+    };
+  }
+);
+
+// ============================================================================
 // SERVER STARTUP
 // ============================================================================
 
@@ -649,7 +653,6 @@ async function main() {
   console.error("Starting ElizaOS Knowledge MCP Server...");
   console.error(`Knowledge base path: ${getBasePath()}`);
 
-  // Verify knowledge base exists
   const factsDir = resolvePath(CONFIG.FACTS_DIR);
   if (!(await fileExists(factsDir))) {
     console.error(`Warning: Facts directory not found at ${factsDir}`);

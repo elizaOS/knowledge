@@ -106,11 +106,11 @@ Add to your Claude Desktop MCP settings (`~/Library/Application Support/Claude/c
 
 | Tool | Description | Parameters |
 |------|-------------|------------|
-| `get-daily-briefing` | Get aggregated intelligence | `date?` (YYYY-MM-DD) |
-| `get-facts` | Get extracted facts | `date?` (YYYY-MM-DD) |
-| `get-council-briefing` | Get strategic briefing | `date?` (YYYY-MM-DD) |
-| `list-available-dates` | List dates with data | `type?`, `limit?` |
-| `search-knowledge` | Search across sources | `query`, `date_range?`, `limit?` |
+| `get_daily_briefing` | Get aggregated intelligence | `date?` (YYYY-MM-DD), `format?` (markdown/json) |
+| `get_facts` | Get extracted facts | `date?` (YYYY-MM-DD), `format?` (markdown/json) |
+| `get_council_briefing` | Get strategic briefing | `date?` (YYYY-MM-DD), `format?` (markdown/json) |
+| `list_available_dates` | List dates with data | `type?` (facts/council/aggregated), `limit?` (1-100) |
+| `search_knowledge` | Search across sources | `query`, `date_start?`, `date_end?`, `limit?` (1-50) |
 
 ## Available Resources
 
