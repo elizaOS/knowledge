@@ -31,16 +31,15 @@ jobs:
       - name: Populate Staging Directory
         run: |
           echo "Populating staging directory with specified content..."
-          
+
           # Define top-level content directories to include in GitHub Pages
-          # Add or remove from this list as needed.
+          # Note: posters handled separately to only include last 7 days
           content_dirs=(
             "ai-news"
             "archive"
             "daily-silk"
             "docs"
             "github"
-            "posters"
             "hackmd"
             "the-council"
           )
@@ -53,14 +52,29 @@ jobs:
               echo "Directory $dir_name not found, skipping."
             fi
           done
-          
+
+          # Copy only last 7 days of posters to keep artifact size under 1GB
+          mkdir -p ./gh-pages-staging/posters
+          CUTOFF_DATE=$(date -d '7 days ago' +%Y-%m-%d)
+          POSTER_COUNT=0
+          for file in posters/????-??-??_*.png; do
+            if [ -f "$file" ]; then
+              FILE_DATE=$(basename "$file" | cut -c1-10)
+              if [[ "$FILE_DATE" >= "$CUTOFF_DATE" ]]; then
+                cp "$file" ./gh-pages-staging/posters/
+                ((POSTER_COUNT++))
+              fi
+            fi
+          done
+          echo "Copied $POSTER_COUNT recent posters (since $CUTOFF_DATE)"
+
           # Ensure .nojekyll file is present in the staging root to prevent Jekyll processing.
           # Create one if it doesn't exist in the repository root.
-          if [ -f .nojekyll ]; then 
+          if [ -f .nojekyll ]; then
             cp .nojekyll ./gh-pages-staging/
             echo "Copied existing .nojekyll to staging root."
           else
-            touch ./gh-pages-staging/.nojekyll 
+            touch ./gh-pages-staging/.nojekyll
             echo "Created .nojekyll in staging root as it was not found in repository root."
           fi
           echo "Staging directory populated."
