@@ -20,7 +20,7 @@ import requests
 NEWS_SHOW_OUTPUT_DIR = Path("the-council") # Default parent for output if -o is just a filename, but -o allows full path
 OPENROUTER_API_KEY = os.environ.get("OPENROUTER_API_KEY")
 OPENROUTER_API_ENDPOINT = "https://openrouter.ai/api/v1/chat/completions"
-LLM_MODEL = "anthropic/claude-sonnet-4" # Or your preferred model, consider one with large context window
+LLM_MODEL = "openai/gpt-5.2" # Or your preferred model, consider one with large context window
 SCRIPTS_DIR = Path(__file__).parent.parent
 DEFAULT_FACT_EXTRACTION_PROMPT_FILE = SCRIPTS_DIR / "prompts" / "extraction" / "facts.txt"
 
