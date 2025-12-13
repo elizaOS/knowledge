@@ -60,9 +60,9 @@ jobs:
           for file in posters/????-??-??_*.png; do
             if [ -f "$file" ]; then
               FILE_DATE=$(basename "$file" | cut -c1-10)
-              if [[ "$FILE_DATE" >= "$CUTOFF_DATE" ]]; then
+              if [ "$FILE_DATE" \> "$CUTOFF_DATE" ] || [ "$FILE_DATE" = "$CUTOFF_DATE" ]; then
                 cp "$file" ./gh-pages-staging/posters/
-                ((POSTER_COUNT++))
+                POSTER_COUNT=$((POSTER_COUNT + 1))
               fi
             fi
           done
