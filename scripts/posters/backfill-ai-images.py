@@ -1,20 +1,44 @@
 #!/usr/bin/env python3
 """
-Generate daily AI image from facts using OpenRouter.
-Uses GPT-5.2 to create an image prompt from the day's news summary,
-then calls Nano Banana Pro (Gemini 3 Pro) to generate the actual image.
+Backfill AI-generated images for historical dates using Nano Banana Pro.
 
 Supports reference images for character consistency (up to 14 images, 5 people).
+
+Usage examples:
+  # Generate for last 7 days
+  python scripts/posters/backfill-ai-images.py --days 7
+
+  # Generate with council characters for consistency
+  python scripts/posters/backfill-ai-images.py --days 7 --use-council
+
+  # Generate with specific characters
+  python scripts/posters/backfill-ai-images.py --days 7 --characters eliza marc
+
+  # Generate for specific dates
+  python scripts/posters/backfill-ai-images.py --dates 2025-12-01 2025-12-05 2025-12-10
+
+  # Generate for date range
+  python scripts/posters/backfill-ai-images.py --from 2025-12-01 --to 2025-12-10
+
+  # Use custom prompt instead of facts-based generation
+  python scripts/posters/backfill-ai-images.py --dates 2025-12-01 --custom-prompt "A solarpunk city at dawn"
+
+  # Skip existing images
+  python scripts/posters/backfill-ai-images.py --days 30 --skip-existing
+
+  # Dry run to see what would be generated
+  python scripts/posters/backfill-ai-images.py --days 7 --dry-run
 """
 
 import os
+import sys
 import json
 import base64
 import requests
 import logging
 import argparse
 from pathlib import Path
-from datetime import datetime
+from datetime import datetime, timedelta
 from typing import Optional
 
 # Config
@@ -43,17 +67,14 @@ logging.basicConfig(
 )
 
 
-def load_facts(date: str = None) -> dict:
-    """Load facts JSON for given date or daily.json."""
-    if date:
-        facts_file = FACTS_DIR / f"{date}.json"
-    else:
-        facts_file = FACTS_DIR / "daily.json"
+def load_facts(date_str: str) -> Optional[dict]:
+    """Load facts JSON for a specific date."""
+    facts_file = FACTS_DIR / f"{date_str}.json"
 
     if not facts_file.exists():
-        raise FileNotFoundError(f"Facts file not found: {facts_file}")
+        logging.warning(f"No facts file for {date_str}")
+        return None
 
-    logging.info(f"Loading facts from: {facts_file}")
     with open(facts_file) as f:
         return json.load(f)
 
@@ -64,8 +85,6 @@ def generate_image_prompt(facts: dict, use_characters: bool = False, character_n
 
     if not summary:
         raise ValueError("No overall_summary found in facts")
-
-    logging.info(f"Generating image prompt from summary: {summary[:100]}...")
 
     if use_characters and character_names:
         # Prompt for council character scenes
@@ -138,14 +157,8 @@ Given today's tech/AI news summary, create an illustrated scene that captures th
         json={
             "model": LLM_MODEL,
             "messages": [
-                {
-                    "role": "system",
-                    "content": system_prompt
-                },
-                {
-                    "role": "user",
-                    "content": f"Today's tech/AI news summary:\n\n{summary}"
-                }
+                {"role": "system", "content": system_prompt},
+                {"role": "user", "content": f"Today's tech/AI news summary:\n\n{summary}"}
             ]
         },
         timeout=60
@@ -153,15 +166,12 @@ Given today's tech/AI news summary, create an illustrated scene that captures th
     response.raise_for_status()
 
     result = response.json()
-    prompt = result["choices"][0]["message"]["content"].strip()
-    logging.info(f"Generated image prompt: {prompt}")
-    return prompt
+    return result["choices"][0]["message"]["content"].strip()
 
 
 def load_reference_image(path: Path) -> Optional[str]:
     """Load an image file and return as base64 data URL."""
     if not path.exists():
-        logging.warning(f"Reference image not found: {path}")
         return None
 
     suffix = path.suffix.lower()
@@ -188,83 +198,54 @@ def create_reference_montage(image_paths: list[Path]) -> Optional[str]:
     if not image_paths:
         return None
 
-    # Filter to existing files
     existing = [p for p in image_paths if p.exists()]
     if not existing:
         return None
 
     try:
-        # Create temp file for montage
         with tempfile.NamedTemporaryFile(suffix=".png", delete=False) as tmp:
             tmp_path = tmp.name
 
-        # Build montage command
-        # Tile horizontally, resize each to consistent height, add labels
         cmd = [
             "montage",
             *[str(p) for p in existing],
-            "-tile", f"{len(existing)}x1",  # horizontal row
-            "-geometry", "256x256+10+10",   # resize each, add padding
+            "-tile", f"{len(existing)}x1",
+            "-geometry", "256x256+10+10",
             "-background", "white",
             tmp_path
         ]
 
-        logging.info(f"Creating reference montage with {len(existing)} images...")
         result = subprocess.run(cmd, capture_output=True, text=True, timeout=30)
-
         if result.returncode != 0:
-            logging.warning(f"Montage failed: {result.stderr}")
             return None
 
-        # Read and encode the montage
         with open(tmp_path, "rb") as f:
             data = base64.b64encode(f.read()).decode("utf-8")
 
-        # Clean up
         Path(tmp_path).unlink(missing_ok=True)
-
         return f"data:image/png;base64,{data}"
 
-    except subprocess.TimeoutExpired:
-        logging.warning("Montage creation timed out")
-        return None
-    except FileNotFoundError:
-        logging.warning("ImageMagick montage not found - falling back to individual images")
-        return None
-    except Exception as e:
-        logging.warning(f"Montage creation failed: {e}")
+    except Exception:
         return None
 
 
 def generate_image(prompt: str, reference_images: Optional[list[Path]] = None) -> bytes:
-    """Call Nano Banana Pro to generate image, return PNG bytes.
-
-    Args:
-        prompt: Text prompt for image generation
-        reference_images: Optional list of image paths for character consistency
-    """
-    logging.info("Calling Nano Banana Pro image generation API...")
-
-    # Build message content
+    """Call Nano Banana Pro to generate image, return PNG bytes."""
     content = []
     char_names = []
 
-    # Add reference images for character consistency
     if reference_images:
         char_names = [p.stem for p in reference_images if p.exists()]
 
-        # Try to create a montage first (cleaner single image)
+        # Try montage first
         montage_url = create_reference_montage(reference_images)
-
         if montage_url:
             content.append({
                 "type": "image_url",
                 "image_url": {"url": montage_url}
             })
-            logging.info(f"Using montage of {len(char_names)} character(s): {char_names}")
         else:
             # Fallback to individual images
-            loaded_count = 0
             for img_path in reference_images[:14]:
                 data_url = load_reference_image(img_path)
                 if data_url:
@@ -272,8 +253,6 @@ def generate_image(prompt: str, reference_images: Optional[list[Path]] = None) -
                         "type": "image_url",
                         "image_url": {"url": data_url}
                     })
-                    loaded_count += 1
-            logging.info(f"Loaded {loaded_count} individual reference image(s)")
 
         # Prepend instruction about reference images
         ref_instruction = f"""The attached reference image shows the characters: {', '.join(char_names)}.
@@ -282,7 +261,6 @@ Use these EXACT character designs in the illustration. Maintain their appearance
 """
         prompt = ref_instruction + prompt
 
-    # Add text prompt
     content.append({"type": "text", "text": prompt})
 
     response = requests.post(
@@ -304,9 +282,6 @@ Use these EXACT character designs in the illustration. Maintain their appearance
 
     result = response.json()
 
-    # Extract base64 image from response
-    # Format: response.choices[0].message.images[0].image_url.url
-    # URL format: "data:image/png;base64,..."
     try:
         images = result["choices"][0]["message"]["images"]
         if not images:
@@ -316,14 +291,58 @@ Use these EXACT character designs in the illustration. Maintain their appearance
         if not image_url.startswith("data:"):
             raise ValueError(f"Unexpected image URL format: {image_url[:50]}")
 
-        # Extract base64 data after the comma
         base64_data = image_url.split(",", 1)[1]
         return base64.b64decode(base64_data)
 
     except (KeyError, IndexError) as e:
-        logging.error(f"Failed to extract image from response: {e}")
-        logging.error(f"Response structure: {json.dumps(result, indent=2)[:500]}")
+        logging.error(f"Failed to extract image: {e}")
+        logging.error(f"Response: {json.dumps(result, indent=2)[:500]}")
         raise ValueError(f"Failed to extract image from API response: {e}")
+
+
+def get_dates_from_args(args) -> list[str]:
+    """Parse command line args to get list of dates to process."""
+    dates = []
+
+    if args.dates:
+        # Specific dates provided
+        for d in args.dates:
+            try:
+                datetime.strptime(d, "%Y-%m-%d")
+                dates.append(d)
+            except ValueError:
+                logging.error(f"Invalid date format: {d} (use YYYY-MM-DD)")
+                sys.exit(1)
+
+    elif args.days:
+        # Last N days
+        today = datetime.now()
+        for i in range(args.days):
+            date = today - timedelta(days=i)
+            dates.append(date.strftime("%Y-%m-%d"))
+
+    elif args.from_date and args.to_date:
+        # Date range
+        try:
+            start = datetime.strptime(args.from_date, "%Y-%m-%d")
+            end = datetime.strptime(args.to_date, "%Y-%m-%d")
+        except ValueError as e:
+            logging.error(f"Invalid date format: {e}")
+            sys.exit(1)
+
+        if start > end:
+            start, end = end, start
+
+        current = start
+        while current <= end:
+            dates.append(current.strftime("%Y-%m-%d"))
+            current += timedelta(days=1)
+
+    else:
+        # Default: today only
+        dates.append(datetime.now().strftime("%Y-%m-%d"))
+
+    return dates
 
 
 def get_reference_images(args) -> list[Path]:
@@ -331,54 +350,109 @@ def get_reference_images(args) -> list[Path]:
     images = []
 
     if args.references:
-        # Custom reference images provided
         for ref in args.references:
             path = Path(ref)
             if path.exists():
                 images.append(path)
-            else:
-                logging.warning(f"Reference image not found: {ref}")
 
     elif args.characters:
-        # Use specific council characters
         for char in args.characters:
             char_lower = char.lower()
             if char_lower in DEFAULT_REFERENCES:
                 images.append(DEFAULT_REFERENCES[char_lower])
-            else:
-                logging.warning(f"Unknown character: {char}. Available: {list(DEFAULT_REFERENCES.keys())}")
 
     elif args.use_council:
-        # Use all council characters
         images = [p for p in DEFAULT_REFERENCES.values() if p.exists()]
 
     return images
 
 
+def process_date(date_str: str, custom_prompt: Optional[str], skip_existing: bool,
+                 dry_run: bool, reference_images: Optional[list[Path]] = None) -> bool:
+    """Process a single date. Returns True if successful."""
+    output_path = OUTPUT_DIR / f"{date_str}_ai-daily.png"
+
+    if skip_existing and output_path.exists():
+        logging.info(f"[{date_str}] Skipping - image already exists")
+        return True
+
+    if dry_run:
+        ref_info = f" (with {len(reference_images)} reference images)" if reference_images else ""
+        if custom_prompt:
+            logging.info(f"[{date_str}] Would generate with custom prompt{ref_info}: {custom_prompt[:50]}...")
+        else:
+            facts = load_facts(date_str)
+            if facts:
+                logging.info(f"[{date_str}] Would generate from facts{ref_info} (summary: {facts.get('overall_summary', 'N/A')[:50]}...)")
+            else:
+                logging.info(f"[{date_str}] Would skip - no facts available")
+        return True
+
+    try:
+        use_characters = bool(reference_images)
+        character_names = [p.stem for p in reference_images] if reference_images else []
+
+        if custom_prompt:
+            prompt = custom_prompt
+            logging.info(f"[{date_str}] Using custom prompt")
+        else:
+            facts = load_facts(date_str)
+            if not facts:
+                logging.warning(f"[{date_str}] Skipping - no facts file")
+                return False
+
+            logging.info(f"[{date_str}] Generating prompt from facts...")
+            prompt = generate_image_prompt(facts, use_characters=use_characters, character_names=character_names)
+
+        logging.info(f"[{date_str}] Prompt: {prompt[:100]}...")
+        if reference_images:
+            logging.info(f"[{date_str}] Using {len(reference_images)} reference image(s) for consistency")
+        logging.info(f"[{date_str}] Generating image...")
+
+        image_bytes = generate_image(prompt, reference_images=reference_images)
+
+        OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
+        output_path.write_bytes(image_bytes)
+
+        logging.info(f"[{date_str}] Saved: {output_path}")
+        return True
+
+    except Exception as e:
+        logging.error(f"[{date_str}] Failed: {e}")
+        return False
+
+
 def main():
     parser = argparse.ArgumentParser(
-        description="Generate AI image from daily facts using Nano Banana Pro",
+        description="Backfill AI-generated images for historical dates using Nano Banana Pro",
         formatter_class=argparse.RawDescriptionHelpFormatter,
-        epilog="""
-Examples:
-  # Basic generation from today's facts
-  python generate-ai-image.py
-
-  # Generate with all council characters for consistency
-  python generate-ai-image.py --use-council
-
-  # Generate with specific characters
-  python generate-ai-image.py --characters eliza marc
-
-  # Generate with custom reference images
-  python generate-ai-image.py --references path/to/img1.png path/to/img2.png
-
-  # Generate for a specific date
-  python generate-ai-image.py -d 2025-12-10 --use-council
-"""
+        epilog=__doc__
     )
-    parser.add_argument("-d", "--date", help="Date in YYYY-MM-DD format (default: use daily.json)")
-    parser.add_argument("-o", "--output", help="Output path (default: posters/YYYY-MM-DD_ai-daily.png)")
+
+    # Date selection (mutually exclusive groups)
+    date_group = parser.add_mutually_exclusive_group()
+    date_group.add_argument(
+        "-d", "--days",
+        type=int,
+        help="Generate for last N days (including today)"
+    )
+    date_group.add_argument(
+        "--dates",
+        nargs="+",
+        help="Specific dates to generate (YYYY-MM-DD format)"
+    )
+
+    # Date range (used together)
+    parser.add_argument(
+        "--from",
+        dest="from_date",
+        help="Start date for range (YYYY-MM-DD)"
+    )
+    parser.add_argument(
+        "--to",
+        dest="to_date",
+        help="End date for range (YYYY-MM-DD)"
+    )
 
     # Reference image options (mutually exclusive)
     ref_group = parser.add_mutually_exclusive_group()
@@ -399,53 +473,75 @@ Examples:
         help="Custom reference image paths (up to 14 images)"
     )
 
-    parser.add_argument("-v", "--verbose", action="store_true", help="Enable verbose logging")
+    # Options
+    parser.add_argument(
+        "-p", "--custom-prompt",
+        help="Use custom prompt instead of generating from facts"
+    )
+    parser.add_argument(
+        "-s", "--skip-existing",
+        action="store_true",
+        help="Skip dates that already have generated images"
+    )
+    parser.add_argument(
+        "--dry-run",
+        action="store_true",
+        help="Show what would be generated without making API calls"
+    )
+    parser.add_argument(
+        "-v", "--verbose",
+        action="store_true",
+        help="Enable verbose logging"
+    )
+
     args = parser.parse_args()
 
     if args.verbose:
         logging.getLogger().setLevel(logging.DEBUG)
 
-    if not OPENROUTER_API_KEY:
+    if not OPENROUTER_API_KEY and not args.dry_run:
         logging.error("OPENROUTER_API_KEY environment variable not set")
-        return 1
+        sys.exit(1)
 
-    OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
+    # Get dates to process
+    dates = get_dates_from_args(args)
 
-    try:
-        facts = load_facts(args.date)
-        date_str = facts.get("briefing_date", datetime.now().strftime("%Y-%m-%d"))
+    if not dates:
+        logging.error("No dates to process")
+        sys.exit(1)
 
-        # Get reference images for character consistency
-        reference_images = get_reference_images(args)
-        use_characters = bool(reference_images)
-        character_names = [p.stem for p in reference_images] if reference_images else []
+    # Get reference images for character consistency
+    reference_images = get_reference_images(args)
+    if reference_images:
+        logging.info(f"Using {len(reference_images)} reference image(s): {[p.name for p in reference_images]}")
 
-        if reference_images:
-            logging.info(f"Using {len(reference_images)} reference image(s): {[p.name for p in reference_images]}")
+    logging.info(f"Processing {len(dates)} date(s): {dates[0]} to {dates[-1]}" if len(dates) > 1 else f"Processing date: {dates[0]}")
 
-        prompt = generate_image_prompt(facts, use_characters=use_characters, character_names=character_names)
-        image_bytes = generate_image(prompt, reference_images=reference_images)
+    if args.dry_run:
+        logging.info("DRY RUN - no images will be generated")
 
-        if args.output:
-            output_path = Path(args.output)
+    # Process each date
+    success = 0
+    failed = 0
+
+    for date_str in dates:
+        result = process_date(
+            date_str,
+            custom_prompt=args.custom_prompt,
+            skip_existing=args.skip_existing,
+            dry_run=args.dry_run,
+            reference_images=reference_images
+        )
+        if result:
+            success += 1
         else:
-            output_path = OUTPUT_DIR / f"{date_str}_ai-daily.png"
+            failed += 1
 
-        output_path.write_bytes(image_bytes)
-        logging.info(f"Saved AI-generated image: {output_path}")
+    # Summary
+    logging.info(f"\nComplete: {success} succeeded, {failed} failed")
 
-        return 0
-
-    except FileNotFoundError as e:
-        logging.error(f"File not found: {e}")
-        return 1
-    except requests.RequestException as e:
-        logging.error(f"API request failed: {e}")
-        return 1
-    except Exception as e:
-        logging.error(f"Unexpected error: {e}")
-        return 1
+    return 0 if failed == 0 else 1
 
 
 if __name__ == "__main__":
-    exit(main())
+    sys.exit(main())
