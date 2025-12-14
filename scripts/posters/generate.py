@@ -30,8 +30,8 @@ Usage:
   python scripts/posters/generate.py eliza -i ref.jpg -t "use this color palette for the background"
 
 Workflow:
-  1. Open preview.html in browser (auto-refreshes)
-  2. Run generate.py to create/update reference sheet
+  1. Run generate.py to create reference sheet
+  2. View output with your image viewer
   3. Iterate until happy
 """
 
@@ -284,84 +284,6 @@ def generate(collage_bytes: bytes, prompt: str, has_style_refs: bool = False) ->
         raise ValueError(f"Failed to extract image from API response: {e}")
 
 
-def create_preview_html(char_dir: Path, character: str):
-    """Create or update the preview.html file."""
-    preview_path = char_dir / "preview.html"
-
-    html = f"""<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="utf-8">
-    <meta http-equiv="refresh" content="2">
-    <title>{character} - Reference Sheet</title>
-    <style>
-        body {{
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-            background: #1a1a2e;
-            color: #eee;
-        }}
-        h1 {{
-            color: #fff;
-            border-bottom: 2px solid #ff6b35;
-            padding-bottom: 10px;
-        }}
-        .sheet {{
-            background: #16213e;
-            border-radius: 8px;
-            padding: 20px;
-            margin: 20px 0;
-        }}
-        img {{
-            max-width: 100%;
-            border-radius: 4px;
-        }}
-        .meta {{
-            color: #888;
-            font-size: 14px;
-        }}
-        .commands {{
-            background: #0f3460;
-            padding: 15px;
-            border-radius: 4px;
-            font-family: monospace;
-            margin-top: 20px;
-        }}
-        .commands code {{
-            display: block;
-            margin: 5px 0;
-            color: #e94560;
-        }}
-    </style>
-</head>
-<body>
-    <h1>{character.title()} - Reference Sheet</h1>
-
-    <div class="sheet">
-        <img src="reference-sheet.png" alt="Reference Sheet" onerror="this.style.display='none'">
-    </div>
-
-    <p class="meta">Auto-refreshes every 2 seconds. Last check: <span id="time"></span></p>
-
-    <div class="commands">
-        <strong>Commands:</strong>
-        <code>python scripts/posters/generate.py {character}</code>
-        <code>python scripts/posters/generate.py {character} "adjustment here"</code>
-        <code>python scripts/posters/generate.py {character} cyberpunk</code>
-    </div>
-
-    <script>
-        document.getElementById('time').textContent = new Date().toLocaleTimeString();
-    </script>
-</body>
-</html>"""
-
-    preview_path.write_text(html)
-    return preview_path
-
-
 def get_output_path(char_dir: Path, theme: str = None, custom_output: str = None) -> Path:
     """Determine output path for the reference sheet."""
     if custom_output:
@@ -484,12 +406,6 @@ def main():
         manifest = load_manifest(args.character)
         char_dir = CHARACTERS_DIR / args.character
 
-        # Create preview.html if it doesn't exist
-        preview_path = char_dir / "preview.html"
-        if not preview_path.exists():
-            create_preview_html(char_dir, args.character)
-            logging.info(f"Created preview: {preview_path}")
-
         # Select references
         refs = select_refs(manifest)
         if not refs:
@@ -548,9 +464,6 @@ def main():
         # Save
         output_path.write_bytes(image_bytes)
         logging.info(f"Saved: {output_path}")
-
-        # Update preview.html
-        create_preview_html(char_dir, args.character)
 
         return 0
 

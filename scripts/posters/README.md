@@ -11,8 +11,7 @@ python scripts/posters/analyze.py eliza
 # 2. Generate reference sheet (creates reference-sheet.png)
 python scripts/posters/generate.py eliza
 
-# 3. Iterate with live preview
-open posters/characters/eliza/preview.html
+# 3. Iterate
 python scripts/posters/generate.py eliza "shorter hair"
 python scripts/posters/generate.py eliza cyberpunk
 ```
@@ -129,20 +128,6 @@ python scripts/posters/generate.py --list
 | athletic | Sports clothing, activewear |
 | vintage | Retro style, classic fashion |
 
-#### Live Preview
-
-Each character folder gets a `preview.html` that auto-refreshes:
-
-```bash
-# Terminal 1: Open in browser
-open posters/characters/eliza/preview.html
-
-# Terminal 2: Iterate
-python scripts/posters/generate.py eliza
-python scripts/posters/generate.py eliza "adjust the eyes"
-# Browser updates automatically every 2 seconds
-```
-
 ---
 
 ## Character Assets
@@ -160,11 +145,10 @@ Located in `posters/characters/{name}/`:
 Each character folder contains:
 ```
 posters/characters/eliza/
-├── *.png              # Source reference images
-├── manifest.json      # Analysis metadata
+├── *.png                  # Source reference images
+├── manifest.json          # Analysis metadata
 ├── reference-sheet.png    # Generated canonical sheet
-├── reference-sheet-*.png  # Themed variations
-└── preview.html       # Auto-refreshing browser preview
+└── reference-sheet-*.png  # Themed variations
 ```
 
 ---
