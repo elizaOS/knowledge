@@ -6,36 +6,36 @@ Supports reference images for character consistency and multiple art styles.
 
 Usage examples:
   # Generate for last 7 days (default editorial style)
-  python scripts/posters/backfill-ai-images.py --days 7
+  python scripts/posters/utils/backfill-ai-images.py --days 7
 
   # Generate with a specific art style
-  python scripts/posters/backfill-ai-images.py --days 7 --style anime
-  python scripts/posters/backfill-ai-images.py --days 7 --style vintage
+  python scripts/posters/utils/backfill-ai-images.py --days 7 --style anime
+  python scripts/posters/utils/backfill-ai-images.py --days 7 --style vintage
 
   # Generate with council characters for consistency
-  python scripts/posters/backfill-ai-images.py --days 7 --use-council
-  python scripts/posters/backfill-ai-images.py --days 7 --style council
+  python scripts/posters/utils/backfill-ai-images.py --days 7 --use-council
+  python scripts/posters/utils/backfill-ai-images.py --days 7 --style council
 
   # Generate with specific characters
-  python scripts/posters/backfill-ai-images.py --days 7 --characters eliza marc
+  python scripts/posters/utils/backfill-ai-images.py --days 7 --characters eliza marc
 
   # Generate for specific dates
-  python scripts/posters/backfill-ai-images.py --dates 2025-12-01 2025-12-05 2025-12-10
+  python scripts/posters/utils/backfill-ai-images.py --dates 2025-12-01 2025-12-05 2025-12-10
 
   # Generate for date range
-  python scripts/posters/backfill-ai-images.py --from 2025-12-01 --to 2025-12-10
+  python scripts/posters/utils/backfill-ai-images.py --from 2025-12-01 --to 2025-12-10
 
   # Use custom prompt instead of facts-based generation
-  python scripts/posters/backfill-ai-images.py --dates 2025-12-01 --custom-prompt "A solarpunk city at dawn"
+  python scripts/posters/utils/backfill-ai-images.py --dates 2025-12-01 --custom-prompt "A solarpunk city at dawn"
 
   # Skip existing images
-  python scripts/posters/backfill-ai-images.py --days 30 --skip-existing
+  python scripts/posters/utils/backfill-ai-images.py --days 30 --skip-existing
 
   # Dry run to see what would be generated
-  python scripts/posters/backfill-ai-images.py --days 7 --dry-run
+  python scripts/posters/utils/backfill-ai-images.py --days 7 --dry-run
 
   # List available styles
-  python scripts/posters/backfill-ai-images.py --list-styles
+  python scripts/posters/utils/backfill-ai-images.py --list-styles
 """
 
 import os
@@ -46,12 +46,13 @@ from pathlib import Path
 from datetime import datetime, timedelta
 from typing import Optional
 
-# Import from main generate-ai-image script
+# Import from main generate-ai-image script (in parent directory)
 SCRIPT_DIR = Path(__file__).parent.resolve()
-sys.path.insert(0, str(SCRIPT_DIR))
+POSTERS_DIR = SCRIPT_DIR.parent  # utils/ -> posters/
+sys.path.insert(0, str(POSTERS_DIR))
 
 from importlib.util import spec_from_file_location, module_from_spec
-spec = spec_from_file_location("generate_ai_image", SCRIPT_DIR / "generate-ai-image.py")
+spec = spec_from_file_location("generate_ai_image", POSTERS_DIR / "generate-ai-image.py")
 generate_ai_image = module_from_spec(spec)
 spec.loader.exec_module(generate_ai_image)
 

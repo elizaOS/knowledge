@@ -28,14 +28,14 @@ SCRIPT_DIR = Path(__file__).parent.resolve()
 WORKSPACE_ROOT = SCRIPT_DIR.parent.parent
 FACTS_DIR = WORKSPACE_ROOT / "the-council" / "facts"
 OUTPUT_DIR = WORKSPACE_ROOT / "posters"
-STYLE_PRESETS_FILE = SCRIPT_DIR / "style-presets.json"
+STYLE_PRESETS_FILE = SCRIPT_DIR / "config" / "style-presets.json"
 
 # Default character reference images (council members)
 DEFAULT_REFERENCES = {
-    "eliza": SCRIPT_DIR / "eliza.png",
-    "marc": SCRIPT_DIR / "marc.png",
-    "peepo": SCRIPT_DIR / "peepo.png",
-    "spartan": SCRIPT_DIR / "spartan.png",
+    "eliza": SCRIPT_DIR / "assets" / "eliza.png",
+    "marc": SCRIPT_DIR / "assets" / "marc.png",
+    "peepo": SCRIPT_DIR / "assets" / "peepo.png",
+    "spartan": SCRIPT_DIR / "assets" / "spartan.png",
 }
 
 logging.basicConfig(
