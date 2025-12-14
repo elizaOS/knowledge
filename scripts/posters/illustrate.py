@@ -244,14 +244,14 @@ Output ONLY the scene description, no explanation."""
 
 # --------------- Interactive Mode ---------------
 
-# Category to style mapping
+# Category to style mapping (first style is default)
 CATEGORY_STYLES = {
-    "github_updates": "blueprint",
-    "discord_updates": "editorial",
+    "github_updates": "dataviz",
+    "discord_updates": "comic_panel",
     "user_feedback": "editorial",
-    "strategic_insights": "council",
-    "market_analysis": "risograph",
-    "twitter_news_highlights": "collage",
+    "strategic_insights": "cinematic_anime",
+    "market_analysis": "dataviz",
+    "twitter_news_highlights": "comic_panel",
 }
 
 # Category to suggested characters
@@ -378,6 +378,54 @@ Output ONLY the scene description, no explanation."""
     return result["choices"][0]["message"]["content"].strip()
 
 
+def get_style_alternatives(category: str) -> list[str]:
+    """Get alternative styles for a category from presets."""
+    presets = load_style_presets()
+    cat_config = presets.get("categories", {}).get(category, {})
+    return cat_config.get("suggested_styles", ["editorial", "risograph", "noir_ink"])
+
+
+def display_styles_menu():
+    """Display numbered list of all available styles."""
+    styles = get_available_styles()
+    print("\nAvailable styles:")
+    for i, style in enumerate(styles, 1):
+        desc = get_style_description(style)[:50]
+        print(f"  {i:2}. {style}: {desc}...")
+    return styles
+
+
+def prompt_for_style(idea: dict, all_styles: list[str]) -> tuple[str, bool]:
+    """Prompt user for style choice. Returns (style, generate_variations)."""
+    default_style = idea["style"]
+
+    try:
+        prompt_text = f"  Style? [{default_style}] / # to pick / v for variations: "
+        response = input(prompt_text).strip().lower()
+    except (EOFError, KeyboardInterrupt):
+        print()
+        return default_style, False
+
+    if response == "":
+        return default_style, False
+    elif response == "v":
+        return default_style, True  # Generate variations
+    elif response == "?":
+        display_styles_menu()
+        return prompt_for_style(idea, all_styles)  # Ask again
+    else:
+        try:
+            style_idx = int(response) - 1
+            if 0 <= style_idx < len(all_styles):
+                return all_styles[style_idx], False
+        except ValueError:
+            # Maybe they typed a style name directly
+            if response in all_styles:
+                return response, False
+        print(f"  Invalid choice, using {default_style}")
+        return default_style, False
+
+
 def interactive_mode(facts_path: Path, dry_run: bool = False) -> int:
     """Run interactive mode - present ideas and generate selected ones."""
     print(f"\nAnalyzing {facts_path.name}...")
@@ -386,6 +434,9 @@ def interactive_mode(facts_path: Path, dry_run: bool = False) -> int:
     if not ideas:
         print("No illustration ideas found in this facts file.")
         return 1
+
+    # Get all available styles for reference
+    all_styles = get_available_styles()
 
     # Display ideas
     print(f"\nFound {len(ideas)} illustration ideas:\n")
@@ -400,6 +451,7 @@ def interactive_mode(facts_path: Path, dry_run: bool = False) -> int:
 
     print("-" * 60)
     print("Enter numbers to generate (e.g., '1 3 5'), 'all', or 'q' to quit")
+    print("Tip: Type '?' during style selection to see all styles")
 
     try:
         response = input("\nGenerate which? ").strip().lower()
@@ -425,43 +477,75 @@ def interactive_mode(facts_path: Path, dry_run: bool = False) -> int:
         print("No valid selections")
         return 1
 
-    print(f"\nGenerating {len(selected)} illustration(s)...\n")
+    # Prompt for style per idea
+    print(f"\nStyle selection for {len(selected)} idea(s):")
+    style_choices = []  # List of (idea_idx, style, generate_variations)
+
+    for idx in selected:
+        idea = ideas[idx]
+        print(f"\n[{idx + 1}] {idea['title']}")
+        style, variations = prompt_for_style(idea, all_styles)
+        style_choices.append((idx, style, variations))
+
+    # Calculate total generations
+    total = sum(3 if v else 1 for _, _, v in style_choices)
+    print(f"\nGenerating {total} illustration(s)...\n")
 
     # Generate each selected idea
     date_str = facts_path.stem  # e.g., "2025-12-01"
     generated = []
+    gen_num = 0
 
-    for idx in selected:
+    for idx, style, variations in style_choices:
         idea = ideas[idx]
-        print(f"[{idx + 1}/{len(selected)}] {idea['title']}...")
 
-        try:
-            # Load reference sheets
-            collage_bytes, manifests = make_reference_collage(idea["characters"])
+        # Determine which styles to generate
+        if variations:
+            # Get alternatives from category config
+            alt_styles = get_style_alternatives(idea["category"])
+            styles_to_gen = [style]
+            for alt in alt_styles:
+                if alt != style and len(styles_to_gen) < 3:
+                    styles_to_gen.append(alt)
+            # Fill to 3 if needed
+            while len(styles_to_gen) < 3:
+                for s in all_styles:
+                    if s not in styles_to_gen:
+                        styles_to_gen.append(s)
+                        break
+        else:
+            styles_to_gen = [style]
 
-            # Generate scene
-            scene = generate_scene_from_content(idea["content"], idea["characters"])
-            print(f"   Scene: {scene[:60]}...")
+        for gen_style in styles_to_gen:
+            gen_num += 1
+            print(f"[{gen_num}/{total}] {idea['title']} ({gen_style})...")
 
-            if dry_run:
-                print(f"   [dry-run] Would generate with style '{idea['style']}'")
+            try:
+                # Load reference sheets
+                collage_bytes, manifests = make_reference_collage(idea["characters"])
+
+                # Generate scene
+                scene = generate_scene_from_content(idea["content"], idea["characters"])
+                print(f"   Scene: {scene[:60]}...")
+
+                if dry_run:
+                    print(f"   [dry-run] Would generate with style '{gen_style}'")
+                    continue
+
+                # Build and generate
+                prompt = build_illustration_prompt(manifests, scene, style=gen_style)
+                image_bytes = generate_illustration(collage_bytes, prompt)
+
+                # Save with style in filename
+                cat_str = idea["category"].replace("_", "-")
+                output_path = OUTPUT_DIR / f"{date_str}-{cat_str}-{gen_style}.png"
+                output_path.write_bytes(image_bytes)
+                print(f"   Saved: {output_path}")
+                generated.append(output_path)
+
+            except Exception as e:
+                print(f"   Error: {e}")
                 continue
-
-            # Build and generate
-            prompt = build_illustration_prompt(manifests, scene, style=idea["style"])
-            image_bytes = generate_illustration(collage_bytes, prompt)
-
-            # Save
-            char_str = "-".join(idea["characters"])
-            cat_str = idea["category"].replace("_", "-")
-            output_path = OUTPUT_DIR / f"{date_str}-{cat_str}-{char_str}.png"
-            output_path.write_bytes(image_bytes)
-            print(f"   Saved: {output_path}")
-            generated.append(output_path)
-
-        except Exception as e:
-            print(f"   Error: {e}")
-            continue
 
     print(f"\nGenerated {len(generated)} illustration(s)")
     return 0
