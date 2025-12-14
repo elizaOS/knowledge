@@ -286,23 +286,49 @@ def format_succinct_summary(manifest: dict) -> str:
     return "\n".join(lines)
 
 
+def get_editor() -> list[str]:
+    """Get the system editor command."""
+    import shutil
+
+    # Check explicit environment variables first
+    if os.environ.get("VISUAL"):
+        return [os.environ["VISUAL"]]
+    if os.environ.get("EDITOR"):
+        return [os.environ["EDITOR"]]
+
+    # Try system defaults
+    if shutil.which("sensible-editor"):  # Debian/Ubuntu
+        return ["sensible-editor"]
+    if shutil.which("xdg-open"):  # Linux - opens in default app
+        return ["xdg-open"]
+    if shutil.which("open"):  # macOS
+        return ["open", "-W"]  # -W waits for app to close
+
+    # Fallback to common editors
+    for editor in ["code", "gedit", "kate", "nano", "vim", "vi"]:
+        if shutil.which(editor):
+            return [editor]
+
+    return ["nano"]
+
+
 def edit_manifest(manifest: dict, character_dir: Path) -> dict:
     """Open manifest in editor for user modification."""
     import subprocess
     import tempfile
 
-    # Get editor from environment
-    editor = os.environ.get("EDITOR") or os.environ.get("VISUAL") or "nano"
+    # Get editor
+    editor_cmd = get_editor()
 
     # Write manifest to temp file
     with tempfile.NamedTemporaryFile(mode="w", suffix=".json", delete=False) as tmp:
         json.dump(manifest, tmp, indent=2)
         tmp_path = tmp.name
 
-    print(f"Opening in {editor}... (save and exit to continue)")
+    print(f"Opening in {editor_cmd[0]}... (save and close to continue)")
 
     try:
-        subprocess.run([editor, tmp_path], check=True)
+        subprocess.run(editor_cmd + [tmp_path], check=True)
 
         # Reload edited manifest
         with open(tmp_path) as f:
