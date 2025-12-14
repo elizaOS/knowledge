@@ -24,6 +24,11 @@ Usage:
   python scripts/posters/generate.py eliza -i dress.png
   python scripts/posters/generate.py eliza formal -i suit-reference.png
 
+  # Add extra instructions with -t
+  python scripts/posters/generate.py eliza -t "more dynamic poses"
+  python scripts/posters/generate.py eliza -i watercolor.jpg -t "apply style only to clothing"
+  python scripts/posters/generate.py eliza -i ref.jpg -t "use this color palette for the background"
+
 Workflow:
   1. Open preview.html in browser (auto-refreshes)
   2. Run generate.py to create/update reference sheet
@@ -170,7 +175,7 @@ def make_collage(refs: list[Path]) -> bytes:
     return buffer.getvalue()
 
 
-def build_prompt(manifest: dict, adjustment: str = None, theme: str = None) -> str:
+def build_prompt(manifest: dict, adjustment: str = None, theme: str = None, extra_text: str = None) -> str:
     """Build the reference sheet generation prompt."""
     features = manifest.get("features", {})
 
@@ -204,12 +209,30 @@ REQUIREMENTS:
 - No text, labels, or watermarks
 - Game art / animation reference style"""
 
+    # Append extra text instructions if provided
+    if extra_text:
+        prompt += f"\n\nADDITIONAL INSTRUCTIONS: {extra_text}"
+
     return prompt
 
 
-def generate(collage_bytes: bytes, prompt: str) -> bytes:
+def generate(collage_bytes: bytes, prompt: str, has_style_refs: bool = False) -> bytes:
     """Call image generation API."""
     collage_b64 = base64.b64encode(collage_bytes).decode("utf-8")
+
+    # Adjust preamble based on whether extra style refs were provided
+    if has_style_refs:
+        preamble = (
+            "Reference images show: (1) the character design to maintain, and "
+            "(2) style/aesthetic references to apply. "
+            "Keep the CHARACTER consistent but adopt the STYLE, colors, and artistic aesthetic "
+            "from the style reference images. Follow any additional instructions in the prompt.\n\n"
+        )
+    else:
+        preamble = (
+            "Reference images showing the character design. "
+            "Maintain EXACT character appearance, colors, and art style.\n\n"
+        )
 
     content = [
         {
@@ -218,11 +241,7 @@ def generate(collage_bytes: bytes, prompt: str) -> bytes:
         },
         {
             "type": "text",
-            "text": (
-                "Reference images showing the character design. "
-                "Maintain EXACT character appearance, colors, and art style.\n\n"
-                f"{prompt}"
-            )
+            "text": preamble + prompt
         }
     ]
 
@@ -409,6 +428,11 @@ def main():
         help="Extra reference image(s) for inspiration (can use multiple times)"
     )
     parser.add_argument(
+        "-t", "--text",
+        dest="extra_text",
+        help="Additional instructions to append to prompt (e.g., 'apply style only to shirt', 'more dramatic pose')"
+    )
+    parser.add_argument(
         "--list",
         action="store_true",
         help="List available characters and themes"
@@ -485,7 +509,7 @@ def main():
             refs = refs + extra_ref_paths
 
         # Build prompt
-        prompt = build_prompt(manifest, adjustment=adjustment, theme=theme)
+        prompt = build_prompt(manifest, adjustment=adjustment, theme=theme, extra_text=args.extra_text)
 
         # Determine output path
         output_path = get_output_path(char_dir, theme=theme, custom_output=args.output)
@@ -502,6 +526,8 @@ def main():
             print(f"Character refs: {[r.name for r in refs if r not in extra_ref_paths]}")
             if extra_ref_paths:
                 print(f"Extra refs: {[r.name for r in extra_ref_paths]}")
+            if args.extra_text:
+                print(f"Extra text: {args.extra_text}")
             print(f"Output: {output_path}")
             print()
             print("PROMPT:")
@@ -516,7 +542,8 @@ def main():
 
         # Generate
         logging.info("Generating reference sheet...")
-        image_bytes = generate(collage_bytes, prompt)
+        has_style_refs = bool(extra_ref_paths)
+        image_bytes = generate(collage_bytes, prompt, has_style_refs=has_style_refs)
 
         # Save
         output_path.write_bytes(image_bytes)
