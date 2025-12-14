@@ -17,6 +17,9 @@ Usage:
   # From facts file (generates prompt from summary)
   python scripts/posters/illustrate.py eliza -f the-council/facts/2025-12-14.json
 
+  # Interactive mode - analyze facts and pick from multiple ideas
+  python scripts/posters/illustrate.py -f the-council/facts/2025-12-14.json -i
+
   # Custom output
   python scripts/posters/illustrate.py eliza "happy moment" -o celebration.png
 
@@ -239,6 +242,231 @@ Output ONLY the scene description, no explanation."""
     return result["choices"][0]["message"]["content"].strip()
 
 
+# --------------- Interactive Mode ---------------
+
+# Category to style mapping
+CATEGORY_STYLES = {
+    "github_updates": "blueprint",
+    "discord_updates": "editorial",
+    "user_feedback": "editorial",
+    "strategic_insights": "council",
+    "market_analysis": "risograph",
+    "twitter_news_highlights": "collage",
+}
+
+# Category to suggested characters
+CATEGORY_CHARACTERS = {
+    "github_updates": ["shaw", "eliza"],
+    "discord_updates": ["eliza", "peepo"],
+    "user_feedback": ["peepo", "eliza"],
+    "strategic_insights": ["eliza", "marc", "spartan"],
+    "market_analysis": ["marc", "spartan"],
+    "twitter_news_highlights": ["eliza", "peepo"],
+}
+
+
+def get_available_characters() -> list[str]:
+    """Get list of characters with reference sheets."""
+    chars = []
+    for char_dir in CHARACTERS_DIR.iterdir():
+        if char_dir.is_dir() and not char_dir.name.startswith("."):
+            if (char_dir / "reference-sheet.png").exists():
+                chars.append(char_dir.name)
+    return sorted(chars)
+
+
+def extract_category_content(facts: dict, category: str) -> str:
+    """Extract readable content from a category."""
+    categories = facts.get("categories", {})
+    if category not in categories:
+        return ""
+
+    data = categories[category]
+
+    if isinstance(data, list):
+        # discord_updates, user_feedback, etc.
+        texts = []
+        for item in data[:3]:  # Limit to first 3
+            if isinstance(item, dict):
+                text = item.get("summary") or item.get("observation") or item.get("insight")
+                if text:
+                    texts.append(text[:200])
+        return " ".join(texts)
+
+    elif isinstance(data, dict):
+        # github_updates has nested structure
+        if "overall_focus" in data:
+            focus = data.get("overall_focus", [])
+            texts = [item.get("claim", "")[:200] for item in focus[:2] if isinstance(item, dict)]
+            return " ".join(texts)
+
+    return ""
+
+
+def generate_illustration_ideas(facts_path: Path) -> list[dict]:
+    """Analyze facts file and generate multiple illustration ideas."""
+    with open(facts_path) as f:
+        facts = json.load(f)
+
+    date_str = facts.get("briefing_date", "unknown")
+    available_chars = get_available_characters()
+
+    ideas = []
+
+    # Always add overall summary as first option
+    if facts.get("overall_summary"):
+        ideas.append({
+            "category": "overall",
+            "title": "Daily Overview",
+            "content": facts["overall_summary"][:300],
+            "characters": ["eliza"],
+            "style": "editorial",
+        })
+
+    # Add ideas for each category with content
+    categories = facts.get("categories", {})
+    for cat_name, cat_data in categories.items():
+        content = extract_category_content(facts, cat_name)
+        if not content or len(content) < 50:
+            continue
+
+        # Get suggested characters (filter to available)
+        suggested = CATEGORY_CHARACTERS.get(cat_name, ["eliza"])
+        chars = [c for c in suggested if c in available_chars][:3]
+        if not chars:
+            chars = [available_chars[0]] if available_chars else ["eliza"]
+
+        ideas.append({
+            "category": cat_name,
+            "title": cat_name.replace("_", " ").title(),
+            "content": content[:300],
+            "characters": chars,
+            "style": CATEGORY_STYLES.get(cat_name, "editorial"),
+        })
+
+    return ideas
+
+
+def generate_scene_from_content(content: str, characters: list[str]) -> str:
+    """Use LLM to convert content into a scene description."""
+    response = requests.post(
+        OPENROUTER_ENDPOINT,
+        headers={
+            "Authorization": f"Bearer {OPENROUTER_API_KEY}",
+            "Content-Type": "application/json"
+        },
+        json={
+            "model": LLM_MODEL,
+            "messages": [
+                {
+                    "role": "system",
+                    "content": f"""Convert this news content into a brief scene description for an illustration.
+The scene should feature: {', '.join(characters)}
+Keep it under 50 words. Focus on a single compelling visual moment.
+Output ONLY the scene description, no explanation."""
+                },
+                {
+                    "role": "user",
+                    "content": content
+                }
+            ]
+        },
+        timeout=60
+    )
+    response.raise_for_status()
+    result = response.json()
+    return result["choices"][0]["message"]["content"].strip()
+
+
+def interactive_mode(facts_path: Path, dry_run: bool = False) -> int:
+    """Run interactive mode - present ideas and generate selected ones."""
+    print(f"\nAnalyzing {facts_path.name}...")
+    ideas = generate_illustration_ideas(facts_path)
+
+    if not ideas:
+        print("No illustration ideas found in this facts file.")
+        return 1
+
+    # Display ideas
+    print(f"\nFound {len(ideas)} illustration ideas:\n")
+    print("-" * 60)
+
+    for i, idea in enumerate(ideas, 1):
+        chars = ", ".join(idea["characters"])
+        print(f"{i}. [{idea['style']}] {idea['title']}")
+        print(f"   Characters: {chars}")
+        print(f"   {idea['content'][:100]}...")
+        print()
+
+    print("-" * 60)
+    print("Enter numbers to generate (e.g., '1 3 5'), 'all', or 'q' to quit")
+
+    try:
+        response = input("\nGenerate which? ").strip().lower()
+    except (EOFError, KeyboardInterrupt):
+        print()
+        return 0
+
+    if response in ("q", "quit", "exit"):
+        return 0
+
+    # Parse selection
+    if response == "all":
+        selected = list(range(len(ideas)))
+    else:
+        try:
+            selected = [int(x) - 1 for x in response.split()]
+            selected = [i for i in selected if 0 <= i < len(ideas)]
+        except ValueError:
+            print("Invalid selection")
+            return 1
+
+    if not selected:
+        print("No valid selections")
+        return 1
+
+    print(f"\nGenerating {len(selected)} illustration(s)...\n")
+
+    # Generate each selected idea
+    date_str = facts_path.stem  # e.g., "2025-12-01"
+    generated = []
+
+    for idx in selected:
+        idea = ideas[idx]
+        print(f"[{idx + 1}/{len(selected)}] {idea['title']}...")
+
+        try:
+            # Load reference sheets
+            collage_bytes, manifests = make_reference_collage(idea["characters"])
+
+            # Generate scene
+            scene = generate_scene_from_content(idea["content"], idea["characters"])
+            print(f"   Scene: {scene[:60]}...")
+
+            if dry_run:
+                print(f"   [dry-run] Would generate with style '{idea['style']}'")
+                continue
+
+            # Build and generate
+            prompt = build_illustration_prompt(manifests, scene, style=idea["style"])
+            image_bytes = generate_illustration(collage_bytes, prompt)
+
+            # Save
+            char_str = "-".join(idea["characters"])
+            cat_str = idea["category"].replace("_", "-")
+            output_path = OUTPUT_DIR / f"{date_str}-{cat_str}-{char_str}.png"
+            output_path.write_bytes(image_bytes)
+            print(f"   Saved: {output_path}")
+            generated.append(output_path)
+
+        except Exception as e:
+            print(f"   Error: {e}")
+            continue
+
+    print(f"\nGenerated {len(generated)} illustration(s)")
+    return 0
+
+
 # --------------- Image Generation ---------------
 
 
@@ -350,6 +578,11 @@ def main():
         help="Generate scene from facts JSON file"
     )
     parser.add_argument(
+        "-i", "--interactive",
+        action="store_true",
+        help="Interactive mode: analyze facts and pick from multiple ideas"
+    )
+    parser.add_argument(
         "-o", "--output",
         help="Output path (default: posters/illustration-{timestamp}.png)"
     )
@@ -387,6 +620,19 @@ def main():
     if args.list_characters:
         list_characters()
         return 0
+
+    # Interactive mode
+    if args.interactive:
+        if not args.facts:
+            parser.error("Interactive mode requires -f/--facts")
+        facts_path = Path(args.facts)
+        if not facts_path.exists():
+            logging.error(f"Facts file not found: {facts_path}")
+            return 1
+        if not OPENROUTER_API_KEY and not args.dry_run:
+            logging.error("OPENROUTER_API_KEY not set")
+            return 1
+        return interactive_mode(facts_path, dry_run=args.dry_run)
 
     # Validate args
     if not args.args:
