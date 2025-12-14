@@ -40,6 +40,7 @@ python scripts/posters/generate.py eliza cyberpunk
 scripts/posters/
 ├── analyze.py            # Analyze images → manifest.json
 ├── generate.py           # Create reference sheets
+├── illustrate.py         # Story illustrations from ref sheets
 ├── generate-ai-image.py  # Daily news posters from facts
 │
 ├── config/               # Configuration files
@@ -225,14 +226,38 @@ export OPENROUTER_API_KEY="your-key-here"
 
 ---
 
-## Coming Soon: Story Illustrations
+## illustrate.py - Story Illustrations
 
-Use reference sheets to generate illustrations for news articles:
+Generate illustrations using character reference sheets.
 
 ```bash
-# Future workflow
-python scripts/posters/illustrate.py \
-  -c eliza \
-  -t "Eliza celebrates the V2 launch" \
-  -s editorial
+# Basic - character + scene
+python scripts/posters/illustrate.py eliza "celebrating a product launch"
+
+# With art style
+python scripts/posters/illustrate.py eliza "presenting at conference" -s editorial
+
+# Multiple characters
+python scripts/posters/illustrate.py eliza marc "discussing code on whiteboard"
+
+# From facts file (auto-generates scene from summary)
+python scripts/posters/illustrate.py eliza -f the-council/facts/2025-12-14.json
+
+# Custom output
+python scripts/posters/illustrate.py eliza "happy moment" -o celebration.png
+
+# List options
+python scripts/posters/illustrate.py --list-styles
+python scripts/posters/illustrate.py --list-characters
 ```
+
+#### Options
+
+| Flag | Description |
+|------|-------------|
+| `-s, --style` | Art style (default: editorial) |
+| `-f, --facts` | Generate scene from facts JSON file |
+| `-o, --output` | Custom output path |
+| `--list-styles` | List available art styles |
+| `--list-characters` | List characters with reference sheets |
+| `--dry-run` | Show prompt without generating |
