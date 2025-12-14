@@ -20,6 +20,10 @@ Usage:
   # Custom output path
   python scripts/posters/generate.py eliza -o my-version.png
 
+  # Add extra reference images (e.g., outfit inspiration)
+  python scripts/posters/generate.py eliza -i dress.png
+  python scripts/posters/generate.py eliza formal -i suit-reference.png
+
 Workflow:
   1. Open preview.html in browser (auto-refreshes)
   2. Run generate.py to create/update reference sheet
@@ -399,6 +403,12 @@ def main():
         help="Custom output path"
     )
     parser.add_argument(
+        "-i", "--input",
+        action="append",
+        dest="extra_refs",
+        help="Extra reference image(s) for inspiration (can use multiple times)"
+    )
+    parser.add_argument(
         "--list",
         action="store_true",
         help="List available characters and themes"
@@ -462,6 +472,18 @@ def main():
             logging.error("No suitable reference images found")
             return 1
 
+        # Add extra reference images if provided
+        extra_ref_paths = []
+        if args.extra_refs:
+            for ref_path in args.extra_refs:
+                p = Path(ref_path)
+                if p.exists():
+                    extra_ref_paths.append(p)
+                    logging.info(f"Added extra reference: {p.name}")
+                else:
+                    logging.warning(f"Extra reference not found: {ref_path}")
+            refs = refs + extra_ref_paths
+
         # Build prompt
         prompt = build_prompt(manifest, adjustment=adjustment, theme=theme)
 
@@ -477,7 +499,9 @@ def main():
             print(f"Character: {args.character}")
             print(f"Theme: {theme or 'default'}")
             print(f"Adjustment: {adjustment or 'none'}")
-            print(f"References: {[r.name for r in refs]}")
+            print(f"Character refs: {[r.name for r in refs if r not in extra_ref_paths]}")
+            if extra_ref_paths:
+                print(f"Extra refs: {[r.name for r in extra_ref_paths]}")
             print(f"Output: {output_path}")
             print()
             print("PROMPT:")
