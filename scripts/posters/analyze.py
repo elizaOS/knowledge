@@ -286,29 +286,67 @@ def format_succinct_summary(manifest: dict) -> str:
     return "\n".join(lines)
 
 
-def confirm_manifest(manifest: dict) -> bool:
-    """Display summary and ask for confirmation. Returns True if confirmed."""
+def edit_manifest(manifest: dict, character_dir: Path) -> dict:
+    """Open manifest in editor for user modification."""
+    import subprocess
+    import tempfile
+
+    # Get editor from environment
+    editor = os.environ.get("EDITOR") or os.environ.get("VISUAL") or "nano"
+
+    # Write manifest to temp file
+    with tempfile.NamedTemporaryFile(mode="w", suffix=".json", delete=False) as tmp:
+        json.dump(manifest, tmp, indent=2)
+        tmp_path = tmp.name
+
+    print(f"Opening in {editor}... (save and exit to continue)")
+
+    try:
+        subprocess.run([editor, tmp_path], check=True)
+
+        # Reload edited manifest
+        with open(tmp_path) as f:
+            edited = json.load(f)
+
+        print("Manifest updated.")
+        return edited
+
+    except subprocess.CalledProcessError:
+        print("Editor exited with error, keeping original manifest.")
+        return manifest
+    except json.JSONDecodeError as e:
+        print(f"Invalid JSON after edit: {e}")
+        print("Keeping original manifest.")
+        return manifest
+    finally:
+        Path(tmp_path).unlink(missing_ok=True)
+
+
+def confirm_manifest(manifest: dict, character_dir: Path) -> tuple[bool, dict]:
+    """Display summary and ask for confirmation. Returns (confirmed, manifest)."""
     print()
     print(format_succinct_summary(manifest))
     print()
 
     while True:
         try:
-            response = input("Correct? [Y/n/edit]: ").strip().lower()
+            response = input("Correct? [Y/n/e]dit: ").strip().lower()
         except (EOFError, KeyboardInterrupt):
             print()
-            return False
+            return False, manifest
 
         if response in ("", "y", "yes"):
-            return True
+            return True, manifest
         elif response in ("n", "no"):
-            return False
+            return False, manifest
         elif response in ("e", "edit"):
-            print("Edit not implemented yet. Please modify manifest.json manually after saving,")
-            print("or re-run with --force after making corrections.")
+            manifest = edit_manifest(manifest, character_dir)
+            print()
+            print(format_succinct_summary(manifest))
+            print()
             continue
         else:
-            print("Please enter Y, n, or edit")
+            print("Please enter Y, n, or e")
 
 
 def process_character(character_dir: Path, skip_existing: bool = False, force: bool = False) -> dict:
@@ -455,7 +493,8 @@ def main():
                 save_manifest(folder, manifest)
                 results.append((folder.name, "success", len(manifest["images"])))
             else:
-                if confirm_manifest(manifest):
+                confirmed, manifest = confirm_manifest(manifest, folder)
+                if confirmed:
                     save_manifest(folder, manifest)
                     results.append((folder.name, "success", len(manifest["images"])))
                 else:
