@@ -2,14 +2,19 @@
 """
 Backfill AI-generated images for historical dates using Nano Banana Pro.
 
-Supports reference images for character consistency (up to 14 images, 5 people).
+Supports reference images for character consistency and multiple art styles.
 
 Usage examples:
-  # Generate for last 7 days
+  # Generate for last 7 days (default editorial style)
   python scripts/posters/backfill-ai-images.py --days 7
+
+  # Generate with a specific art style
+  python scripts/posters/backfill-ai-images.py --days 7 --style anime
+  python scripts/posters/backfill-ai-images.py --days 7 --style vintage
 
   # Generate with council characters for consistency
   python scripts/posters/backfill-ai-images.py --days 7 --use-council
+  python scripts/posters/backfill-ai-images.py --days 7 --style council
 
   # Generate with specific characters
   python scripts/posters/backfill-ai-images.py --days 7 --characters eliza marc
@@ -28,276 +33,46 @@ Usage examples:
 
   # Dry run to see what would be generated
   python scripts/posters/backfill-ai-images.py --days 7 --dry-run
+
+  # List available styles
+  python scripts/posters/backfill-ai-images.py --list-styles
 """
 
 import os
 import sys
-import json
-import base64
-import requests
 import logging
 import argparse
 from pathlib import Path
 from datetime import datetime, timedelta
 from typing import Optional
 
-# Config
-OPENROUTER_API_KEY = os.environ.get("OPENROUTER_API_KEY")
-OPENROUTER_ENDPOINT = "https://openrouter.ai/api/v1/chat/completions"
-LLM_MODEL = "openai/gpt-5.2"
-IMAGE_MODEL = "google/gemini-3-pro-image-preview"
-
+# Import from main generate-ai-image script
 SCRIPT_DIR = Path(__file__).parent.resolve()
-WORKSPACE_ROOT = SCRIPT_DIR.parent.parent
-FACTS_DIR = WORKSPACE_ROOT / "the-council" / "facts"
-OUTPUT_DIR = WORKSPACE_ROOT / "posters"
+sys.path.insert(0, str(SCRIPT_DIR))
 
-# Default character reference images (council members)
-DEFAULT_REFERENCES = {
-    "eliza": SCRIPT_DIR / "eliza.png",
-    "marc": SCRIPT_DIR / "marc.png",
-    "peepo": SCRIPT_DIR / "peepo.png",
-    "spartan": SCRIPT_DIR / "spartan.png",
-}
+from importlib.util import spec_from_file_location, module_from_spec
+spec = spec_from_file_location("generate_ai_image", SCRIPT_DIR / "generate-ai-image.py")
+generate_ai_image = module_from_spec(spec)
+spec.loader.exec_module(generate_ai_image)
+
+# Re-export needed functions and constants
+OPENROUTER_API_KEY = generate_ai_image.OPENROUTER_API_KEY
+FACTS_DIR = generate_ai_image.FACTS_DIR
+OUTPUT_DIR = generate_ai_image.OUTPUT_DIR
+DEFAULT_REFERENCES = generate_ai_image.DEFAULT_REFERENCES
+
+load_facts = generate_ai_image.load_facts
+generate_image_prompt = generate_ai_image.generate_image_prompt
+generate_image = generate_ai_image.generate_image
+get_available_styles = generate_ai_image.get_available_styles
+style_requires_references = generate_ai_image.style_requires_references
+load_style_presets = generate_ai_image.load_style_presets
 
 logging.basicConfig(
     level=logging.INFO,
     format='[%(asctime)s] %(levelname)s - %(message)s',
     datefmt='%Y-%m-%d %H:%M:%S'
 )
-
-
-def load_facts(date_str: str) -> Optional[dict]:
-    """Load facts JSON for a specific date."""
-    facts_file = FACTS_DIR / f"{date_str}.json"
-
-    if not facts_file.exists():
-        logging.warning(f"No facts file for {date_str}")
-        return None
-
-    with open(facts_file) as f:
-        return json.load(f)
-
-
-def generate_image_prompt(facts: dict, use_characters: bool = False, character_names: list[str] = None) -> str:
-    """Use LLM to create a detailed image prompt from facts summary."""
-    summary = facts.get("overall_summary", "")
-
-    if not summary:
-        raise ValueError("No overall_summary found in facts")
-
-    if use_characters and character_names:
-        # Prompt for council character scenes
-        system_prompt = f"""You are an expert AI art director creating illustrated poster art featuring the ElizaOS Council characters.
-
-**Characters available** (reference images will be provided):
-{', '.join(character_names)}
-
-**Art Style Requirements:**
-- Illustrated, hand-drawn aesthetic (NOT photorealistic)
-- Think: editorial illustration, vintage poster art, risograph prints, flat design with texture
-- Studio Ghibli-inspired, Moebius comics, or modern editorial illustration
-- Clean lines, bold shapes, stylized characters
-- Textured backgrounds (paper grain, halftone dots, watercolor washes)
-
-**Your task:**
-Given today's news summary, create a scene showing the council characters reacting to or discussing the day's themes.
-
-**Prompt structure:**
-1. **Scene**: What are the characters doing? (debating, celebrating, worried, strategizing)
-2. **Setting**: Simple illustrated background (council chamber, abstract shapes, symbolic elements)
-3. **Style**: "illustrated poster art style, hand-drawn aesthetic, [specific influence]"
-4. **Colors**: Bold, limited palette (2-4 colors max)
-5. **Mood**: Match the tone of the news (optimistic, tense, triumphant, cautious)
-
-**Rules:**
-- Feature the characters prominently - they ARE the subject
-- NO photorealism, NO 3D renders, NO cinematic photography
-- NO text, words, or typography in the image
-- Keep it simple and iconic, like a movie poster or editorial spread
-- Describe each character's pose/expression briefly
-
-**Output ONLY the image prompt, nothing else.**"""
-    else:
-        # Prompt for standalone illustrated art (no characters)
-        system_prompt = """You are an expert AI art director creating illustrated poster art.
-
-**Art Style Requirements:**
-- Illustrated, hand-drawn aesthetic (NOT photorealistic)
-- Think: editorial illustration, vintage poster art, risograph prints, infographic art
-- Moebius comics, Charley Harper, or modern flat design with texture
-- Clean lines, bold shapes, symbolic imagery
-- Textured backgrounds (paper grain, halftone dots, geometric patterns)
-
-**Your task:**
-Given today's tech/AI news summary, create an illustrated scene that captures the day's themes symbolically.
-
-**Prompt structure:**
-1. **Subject**: Symbolic visual (robots, abstract tech shapes, nature-meets-tech, metaphorical scenes)
-2. **Composition**: Simple, iconic, poster-worthy
-3. **Style**: "illustrated poster art, hand-drawn, [specific influence like risograph, vintage travel poster, editorial illustration]"
-4. **Colors**: Bold, limited palette (2-4 colors)
-5. **Mood**: Match the news tone
-
-**Rules:**
-- NO photorealism, NO 3D renders, NO cinematic photography
-- NO text, words, logos, or typography
-- NO literal screens, code, or UI elements
-- Think symbolic and artistic, not literal
-- Simple and iconic, not cluttered
-
-**Output ONLY the image prompt, nothing else.**"""
-
-    response = requests.post(
-        OPENROUTER_ENDPOINT,
-        headers={
-            "Authorization": f"Bearer {OPENROUTER_API_KEY}",
-            "Content-Type": "application/json"
-        },
-        json={
-            "model": LLM_MODEL,
-            "messages": [
-                {"role": "system", "content": system_prompt},
-                {"role": "user", "content": f"Today's tech/AI news summary:\n\n{summary}"}
-            ]
-        },
-        timeout=60
-    )
-    response.raise_for_status()
-
-    result = response.json()
-    return result["choices"][0]["message"]["content"].strip()
-
-
-def load_reference_image(path: Path) -> Optional[str]:
-    """Load an image file and return as base64 data URL."""
-    if not path.exists():
-        return None
-
-    suffix = path.suffix.lower()
-    mime_types = {
-        ".png": "image/png",
-        ".jpg": "image/jpeg",
-        ".jpeg": "image/jpeg",
-        ".gif": "image/gif",
-        ".webp": "image/webp",
-    }
-    mime_type = mime_types.get(suffix, "image/png")
-
-    with open(path, "rb") as f:
-        data = base64.b64encode(f.read()).decode("utf-8")
-
-    return f"data:{mime_type};base64,{data}"
-
-
-def create_reference_montage(image_paths: list[Path]) -> Optional[str]:
-    """Create a montage of reference images using ImageMagick, return as base64 data URL."""
-    import subprocess
-    import tempfile
-
-    if not image_paths:
-        return None
-
-    existing = [p for p in image_paths if p.exists()]
-    if not existing:
-        return None
-
-    try:
-        with tempfile.NamedTemporaryFile(suffix=".png", delete=False) as tmp:
-            tmp_path = tmp.name
-
-        cmd = [
-            "montage",
-            *[str(p) for p in existing],
-            "-tile", f"{len(existing)}x1",
-            "-geometry", "256x256+10+10",
-            "-background", "white",
-            tmp_path
-        ]
-
-        result = subprocess.run(cmd, capture_output=True, text=True, timeout=30)
-        if result.returncode != 0:
-            return None
-
-        with open(tmp_path, "rb") as f:
-            data = base64.b64encode(f.read()).decode("utf-8")
-
-        Path(tmp_path).unlink(missing_ok=True)
-        return f"data:image/png;base64,{data}"
-
-    except Exception:
-        return None
-
-
-def generate_image(prompt: str, reference_images: Optional[list[Path]] = None) -> bytes:
-    """Call Nano Banana Pro to generate image, return PNG bytes."""
-    content = []
-    char_names = []
-
-    if reference_images:
-        char_names = [p.stem for p in reference_images if p.exists()]
-
-        # Try montage first
-        montage_url = create_reference_montage(reference_images)
-        if montage_url:
-            content.append({
-                "type": "image_url",
-                "image_url": {"url": montage_url}
-            })
-        else:
-            # Fallback to individual images
-            for img_path in reference_images[:14]:
-                data_url = load_reference_image(img_path)
-                if data_url:
-                    content.append({
-                        "type": "image_url",
-                        "image_url": {"url": data_url}
-                    })
-
-        # Prepend instruction about reference images
-        ref_instruction = f"""The attached reference image shows the characters: {', '.join(char_names)}.
-Use these EXACT character designs in the illustration. Maintain their appearance, colors, and style.
-
-"""
-        prompt = ref_instruction + prompt
-
-    content.append({"type": "text", "text": prompt})
-
-    response = requests.post(
-        OPENROUTER_ENDPOINT,
-        headers={
-            "Authorization": f"Bearer {OPENROUTER_API_KEY}",
-            "Content-Type": "application/json",
-            "HTTP-Referer": "https://github.com/elizaOS/knowledge",
-            "X-Title": "ElizaOS Daily AI Image"
-        },
-        json={
-            "model": IMAGE_MODEL,
-            "modalities": ["image", "text"],
-            "messages": [{"role": "user", "content": content}]
-        },
-        timeout=180
-    )
-    response.raise_for_status()
-
-    result = response.json()
-
-    try:
-        images = result["choices"][0]["message"]["images"]
-        if not images:
-            raise ValueError("No images in response")
-
-        image_url = images[0]["image_url"]["url"]
-        if not image_url.startswith("data:"):
-            raise ValueError(f"Unexpected image URL format: {image_url[:50]}")
-
-        base64_data = image_url.split(",", 1)[1]
-        return base64.b64decode(base64_data)
-
-    except (KeyError, IndexError) as e:
-        logging.error(f"Failed to extract image: {e}")
-        logging.error(f"Response: {json.dumps(result, indent=2)[:500]}")
-        raise ValueError(f"Failed to extract image from API response: {e}")
 
 
 def get_dates_from_args(args) -> list[str]:
@@ -367,42 +142,50 @@ def get_reference_images(args) -> list[Path]:
     return images
 
 
-def process_date(date_str: str, custom_prompt: Optional[str], skip_existing: bool,
-                 dry_run: bool, reference_images: Optional[list[Path]] = None) -> bool:
+def process_date(date_str: str, style: str, custom_prompt: Optional[str],
+                 skip_existing: bool, dry_run: bool,
+                 reference_images: Optional[list[Path]] = None) -> bool:
     """Process a single date. Returns True if successful."""
-    output_path = OUTPUT_DIR / f"{date_str}_ai-daily.png"
+    # Determine output filename based on style
+    if style != "editorial":
+        output_path = OUTPUT_DIR / f"{date_str}_ai-{style}.png"
+    else:
+        output_path = OUTPUT_DIR / f"{date_str}_ai-daily.png"
 
     if skip_existing and output_path.exists():
-        logging.info(f"[{date_str}] Skipping - image already exists")
+        logging.info(f"[{date_str}] Skipping - image already exists: {output_path.name}")
         return True
 
     if dry_run:
         ref_info = f" (with {len(reference_images)} reference images)" if reference_images else ""
         if custom_prompt:
-            logging.info(f"[{date_str}] Would generate with custom prompt{ref_info}: {custom_prompt[:50]}...")
+            logging.info(f"[{date_str}] Would generate with style '{style}'{ref_info}: {custom_prompt[:50]}...")
         else:
-            facts = load_facts(date_str)
-            if facts:
-                logging.info(f"[{date_str}] Would generate from facts{ref_info} (summary: {facts.get('overall_summary', 'N/A')[:50]}...)")
-            else:
-                logging.info(f"[{date_str}] Would skip - no facts available")
+            try:
+                facts = load_facts(date_str)
+                if facts:
+                    logging.info(f"[{date_str}] Would generate with style '{style}'{ref_info} (summary: {facts.get('overall_summary', 'N/A')[:50]}...)")
+                else:
+                    logging.info(f"[{date_str}] Would skip - no facts available")
+            except FileNotFoundError:
+                logging.info(f"[{date_str}] Would skip - no facts file")
         return True
 
     try:
-        use_characters = bool(reference_images)
         character_names = [p.stem for p in reference_images] if reference_images else []
 
         if custom_prompt:
             prompt = custom_prompt
-            logging.info(f"[{date_str}] Using custom prompt")
+            logging.info(f"[{date_str}] Using custom prompt with style '{style}'")
         else:
-            facts = load_facts(date_str)
-            if not facts:
+            try:
+                facts = load_facts(date_str)
+            except FileNotFoundError:
                 logging.warning(f"[{date_str}] Skipping - no facts file")
                 return False
 
-            logging.info(f"[{date_str}] Generating prompt from facts...")
-            prompt = generate_image_prompt(facts, use_characters=use_characters, character_names=character_names)
+            logging.info(f"[{date_str}] Generating prompt with style '{style}'...")
+            prompt = generate_image_prompt(facts, style=style, character_names=character_names)
 
         logging.info(f"[{date_str}] Prompt: {prompt[:100]}...")
         if reference_images:
@@ -423,6 +206,10 @@ def process_date(date_str: str, custom_prompt: Optional[str], skip_existing: boo
 
 
 def main():
+    # Get available styles for help text
+    available_styles = get_available_styles()
+    styles_list = ", ".join(available_styles) if available_styles else "editorial, anime, infographic, council, risograph, vintage"
+
     parser = argparse.ArgumentParser(
         description="Backfill AI-generated images for historical dates using Nano Banana Pro",
         formatter_class=argparse.RawDescriptionHelpFormatter,
@@ -454,6 +241,18 @@ def main():
         help="End date for range (YYYY-MM-DD)"
     )
 
+    # Style options
+    parser.add_argument(
+        "-s", "--style",
+        default="editorial",
+        help=f"Art style to use (default: editorial). Available: {styles_list}"
+    )
+    parser.add_argument(
+        "--list-styles",
+        action="store_true",
+        help="List all available styles and exit"
+    )
+
     # Reference image options (mutually exclusive)
     ref_group = parser.add_mutually_exclusive_group()
     ref_group.add_argument(
@@ -479,7 +278,7 @@ def main():
         help="Use custom prompt instead of generating from facts"
     )
     parser.add_argument(
-        "-s", "--skip-existing",
+        "--skip-existing",
         action="store_true",
         help="Skip dates that already have generated images"
     )
@@ -495,6 +294,17 @@ def main():
     )
 
     args = parser.parse_args()
+
+    # Handle --list-styles
+    if args.list_styles:
+        presets = load_style_presets()
+        styles = presets.get("styles", {})
+        print("Available styles:")
+        for name, config in styles.items():
+            desc = config.get("description", "No description")
+            requires_ref = " (requires --use-council)" if config.get("requires_references") else ""
+            print(f"  {name}: {desc}{requires_ref}")
+        return 0
 
     if args.verbose:
         logging.getLogger().setLevel(logging.DEBUG)
@@ -512,10 +322,18 @@ def main():
 
     # Get reference images for character consistency
     reference_images = get_reference_images(args)
+
+    # Auto-enable council references if council style is selected
+    style = args.style
+    if style_requires_references(style) and not reference_images:
+        logging.info(f"Style '{style}' requires references, auto-enabling council characters")
+        reference_images = [p for p in DEFAULT_REFERENCES.values() if p.exists()]
+
     if reference_images:
         logging.info(f"Using {len(reference_images)} reference image(s): {[p.name for p in reference_images]}")
 
     logging.info(f"Processing {len(dates)} date(s): {dates[0]} to {dates[-1]}" if len(dates) > 1 else f"Processing date: {dates[0]}")
+    logging.info(f"Using style: {style}")
 
     if args.dry_run:
         logging.info("DRY RUN - no images will be generated")
@@ -527,6 +345,7 @@ def main():
     for date_str in dates:
         result = process_date(
             date_str,
+            style=style,
             custom_prompt=args.custom_prompt,
             skip_existing=args.skip_existing,
             dry_run=args.dry_run,
