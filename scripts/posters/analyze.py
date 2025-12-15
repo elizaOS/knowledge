@@ -39,7 +39,7 @@ MODEL = "openai/gpt-5.2"
 
 SCRIPT_DIR = Path(__file__).parent.resolve()
 WORKSPACE_ROOT = SCRIPT_DIR.parent.parent
-CHARACTERS_DIR = WORKSPACE_ROOT / "posters" / "characters"
+CHARACTERS_DIR = SCRIPT_DIR / "characters"
 
 logging.basicConfig(
     level=logging.INFO,

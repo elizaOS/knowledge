@@ -132,7 +132,7 @@ python scripts/posters/generate.py --list
 
 ## Character Assets
 
-Located in `posters/characters/{name}/`:
+Located in `scripts/posters/characters/{name}/`:
 
 | Character | Status | Description |
 |-----------|--------|-------------|
@@ -144,7 +144,7 @@ Located in `posters/characters/{name}/`:
 
 Each character folder contains:
 ```
-posters/characters/eliza/
+scripts/posters/characters/eliza/
 ├── *.png                  # Source reference images
 ├── manifest.json          # Analysis metadata
 ├── reference-sheet.png    # Generated canonical sheet
@@ -204,7 +204,7 @@ export OPENROUTER_API_KEY="your-key-here"
 
 | Type | Location |
 |------|----------|
-| Reference sheets | `posters/characters/{name}/reference-sheet*.png` |
+| Reference sheets | `scripts/posters/characters/{name}/reference-sheet*.png` |
 | News posters | `posters/` |
 | Style samplers | `posters/sampler-{date}/` |
 

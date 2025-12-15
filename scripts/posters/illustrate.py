@@ -49,7 +49,7 @@ IMAGE_MODEL = "google/gemini-3-pro-image-preview"
 
 SCRIPT_DIR = Path(__file__).parent.resolve()
 WORKSPACE_ROOT = SCRIPT_DIR.parent.parent
-CHARACTERS_DIR = WORKSPACE_ROOT / "posters" / "characters"
+CHARACTERS_DIR = SCRIPT_DIR / "characters"
 OUTPUT_DIR = WORKSPACE_ROOT / "posters"
 STYLE_PRESETS_FILE = SCRIPT_DIR / "config" / "style-presets.json"
 

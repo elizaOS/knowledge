@@ -56,7 +56,7 @@ IMAGE_MODEL = "google/gemini-3-pro-image-preview"
 
 SCRIPT_DIR = Path(__file__).parent.resolve()
 WORKSPACE_ROOT = SCRIPT_DIR.parent.parent
-CHARACTERS_DIR = WORKSPACE_ROOT / "posters" / "characters"
+CHARACTERS_DIR = SCRIPT_DIR / "characters"
 
 logging.basicConfig(
     level=logging.INFO,
@@ -332,7 +332,7 @@ def main():
     parser.add_argument(
         "character",
         nargs="?",
-        help="Character name (folder in posters/characters/)"
+        help="Character name (folder in scripts/posters/characters/)"
     )
     parser.add_argument(
         "modifier",
