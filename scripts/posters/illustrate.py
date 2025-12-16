@@ -88,6 +88,22 @@ def get_style_description(style_name: str) -> str:
     return config.get("description", style_name)
 
 
+def is_data_visualization_style(style_name: str) -> bool:
+    """Check if style is a data visualization style (no characters needed)."""
+    presets = load_style_presets()
+    styles = presets.get("styles", {})
+    if style_name not in styles:
+        return False
+    return styles[style_name].get("is_data_visualization", False)
+
+
+def get_style_config(style_name: str) -> dict:
+    """Get full style configuration."""
+    presets = load_style_presets()
+    styles = presets.get("styles", {})
+    return styles.get(style_name, {})
+
+
 # --------------- Reference Sheet Loading ---------------
 
 
@@ -196,6 +212,32 @@ REQUIREMENTS:
 - Professional quality illustration
 - No text or watermarks
 - Scene should feel natural and engaging"""
+
+    return prompt
+
+
+def build_dataviz_prompt(viz_description: str, style: str, content: str) -> str:
+    """Build prompt for data visualization (no characters)."""
+    style_config = get_style_config(style)
+    style_desc = style_config.get("description", "data visualization")
+    style_suffix = style_config.get("style_suffix", "")
+
+    prompt = f"""Create a professional data visualization for a tech news publication.
+
+VISUALIZATION TYPE: {viz_description}
+
+CONTENT CONTEXT:
+{content[:500]}
+
+STYLE: {style_desc}
+
+REQUIREMENTS:
+- Professional infographic/dashboard quality
+- Clean, polished vector aesthetic
+- Include section headers and labels where appropriate
+- Strategic use of color to highlight key insights
+- Editorial publication quality
+- Modern, sophisticated design{style_suffix}"""
 
     return prompt
 
@@ -347,8 +389,26 @@ def generate_illustration_ideas(facts_path: Path) -> list[dict]:
     return ideas
 
 
-def generate_scene_from_content(content: str, characters: list[str]) -> str:
-    """Use LLM to convert content into a scene description."""
+def generate_scene_from_content(content: str, characters: list[str], style: str = None) -> str:
+    """Use LLM to convert content into a scene/visualization description."""
+
+    # Check if this is a data visualization style
+    if style and is_data_visualization_style(style):
+        style_config = get_style_config(style)
+        system_prompt = style_config.get(
+            "scene_generation_prompt",
+            """You are creating a data visualization. Extract KEY METRICS and DATA RELATIONSHIPS.
+Output a visualization description (Sankey, dashboard, infographic, etc.).
+Do NOT describe characters. Focus on DATA REPRESENTATION.
+Keep under 100 words."""
+        )
+    else:
+        # Character-based scene
+        system_prompt = f"""Convert this news content into a brief scene description for an illustration.
+The scene should feature: {', '.join(characters)}
+Keep it under 50 words. Focus on a single compelling visual moment.
+Output ONLY the scene description, no explanation."""
+
     response = requests.post(
         OPENROUTER_ENDPOINT,
         headers={
@@ -358,17 +418,8 @@ def generate_scene_from_content(content: str, characters: list[str]) -> str:
         json={
             "model": LLM_MODEL,
             "messages": [
-                {
-                    "role": "system",
-                    "content": f"""Convert this news content into a brief scene description for an illustration.
-The scene should feature: {', '.join(characters)}
-Keep it under 50 words. Focus on a single compelling visual moment.
-Output ONLY the scene description, no explanation."""
-                },
-                {
-                    "role": "user",
-                    "content": content
-                }
+                {"role": "system", "content": system_prompt},
+                {"role": "user", "content": content}
             ]
         },
         timeout=60
@@ -521,20 +572,37 @@ def interactive_mode(facts_path: Path, dry_run: bool = False) -> int:
             print(f"[{gen_num}/{total}] {idea['title']} ({gen_style})...")
 
             try:
-                # Load reference sheets
-                collage_bytes, manifests = make_reference_collage(idea["characters"])
+                # Check if this is a data visualization style
+                if is_data_visualization_style(gen_style):
+                    # Data viz path - no character references
+                    viz_desc = generate_scene_from_content(
+                        idea["content"], idea["characters"], style=gen_style
+                    )
+                    print(f"   Viz: {viz_desc[:60]}...")
 
-                # Generate scene
-                scene = generate_scene_from_content(idea["content"], idea["characters"])
-                print(f"   Scene: {scene[:60]}...")
+                    if dry_run:
+                        print(f"   [dry-run] Would generate dataviz with style '{gen_style}'")
+                        continue
 
-                if dry_run:
-                    print(f"   [dry-run] Would generate with style '{gen_style}'")
-                    continue
+                    # Build dataviz prompt and generate
+                    prompt = build_dataviz_prompt(viz_desc, gen_style, idea["content"])
+                    image_bytes = generate_dataviz(prompt)
+                else:
+                    # Character-based illustration path
+                    collage_bytes, manifests = make_reference_collage(idea["characters"])
 
-                # Build and generate
-                prompt = build_illustration_prompt(manifests, scene, style=gen_style)
-                image_bytes = generate_illustration(collage_bytes, prompt)
+                    scene = generate_scene_from_content(
+                        idea["content"], idea["characters"], style=gen_style
+                    )
+                    print(f"   Scene: {scene[:60]}...")
+
+                    if dry_run:
+                        print(f"   [dry-run] Would generate with style '{gen_style}'")
+                        continue
+
+                    # Build and generate with character references
+                    prompt = build_illustration_prompt(manifests, scene, style=gen_style)
+                    image_bytes = generate_illustration(collage_bytes, prompt)
 
                 # Save with style in filename
                 cat_str = idea["category"].replace("_", "-")
@@ -589,6 +657,47 @@ def generate_illustration(collage_bytes: bytes, prompt: str) -> bytes:
             "model": IMAGE_MODEL,
             "modalities": ["image", "text"],
             "messages": [{"role": "user", "content": content}]
+        },
+        timeout=180
+    )
+    resp.raise_for_status()
+
+    result = resp.json()
+
+    try:
+        images = result["choices"][0]["message"]["images"]
+        if not images:
+            raise ValueError("No images in response")
+
+        image_url = images[0]["image_url"]["url"]
+        if not image_url.startswith("data:"):
+            raise ValueError(f"Unexpected image URL format: {image_url[:50]}")
+
+        base64_data = image_url.split(",", 1)[1]
+        return base64.b64decode(base64_data)
+
+    except (KeyError, IndexError) as e:
+        logging.error(f"Failed to extract image: {e}")
+        logging.error(f"Response: {json.dumps(result, indent=2)[:500]}")
+        raise ValueError(f"Failed to extract image from API response: {e}")
+
+
+def generate_dataviz(prompt: str) -> bytes:
+    """Generate data visualization without character references."""
+    logging.info(f"Calling {IMAGE_MODEL} for data visualization...")
+
+    resp = requests.post(
+        OPENROUTER_ENDPOINT,
+        headers={
+            "Authorization": f"Bearer {OPENROUTER_API_KEY}",
+            "Content-Type": "application/json",
+            "HTTP-Referer": "https://github.com/elizaOS/knowledge",
+            "X-Title": "ElizaOS DataViz"
+        },
+        json={
+            "model": IMAGE_MODEL,
+            "modalities": ["image", "text"],
+            "messages": [{"role": "user", "content": prompt}]
         },
         timeout=180
     )

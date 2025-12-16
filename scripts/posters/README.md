@@ -40,6 +40,7 @@ scripts/posters/
 ├── analyze.py            # Analyze images → manifest.json
 ├── generate.py           # Create reference sheets
 ├── illustrate.py         # Story illustrations from ref sheets
+├── vision.py             # General-purpose image analysis
 ├── generate-ai-image.py  # Daily news posters from facts
 │
 ├── config/               # Configuration files
@@ -69,6 +70,39 @@ python scripts/posters/analyze.py marc --verbose
 ```
 
 Creates metadata for each image: pose, angle, expression, costume details.
+
+### vision.py - General Image Analysis
+
+Simple, standalone image analysis following Unix philosophy. Outputs to stdout.
+
+```bash
+# Basic description
+python scripts/posters/vision.py image.png
+
+# Custom prompt
+python scripts/posters/vision.py image.png -p "What data is shown in this chart?"
+
+# JSON output
+python scripts/posters/vision.py image.png -p "List the main colors" --json
+
+# From stdin (for piping)
+cat image.png | python scripts/posters/vision.py - -p "describe"
+
+# Batch analysis
+for f in posters/*.png; do
+  echo "=== $f ==="
+  python scripts/posters/vision.py "$f" -p "One sentence summary"
+done
+
+# Evaluate dataviz quality
+python scripts/posters/vision.py output.png -p "Rate clarity 1-10. What works?"
+```
+
+| Flag | Description |
+|------|-------------|
+| `-p, --prompt` | Analysis prompt (default: describe image) |
+| `--json` | Request JSON output from model |
+| `-m, --model` | Model override |
 
 ### generate.py - Reference Sheet Generator
 

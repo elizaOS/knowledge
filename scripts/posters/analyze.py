@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Analyze character images using GPT-5.2 and generate manifest.json files.
+Analyze character images and generate manifest.json files.
 
 Like a sculptor examining their reference material - describes what EXISTS
 in each image (pose, angle, costume, distinguishing features) to build
@@ -35,7 +35,7 @@ import textwrap
 # Config
 OPENROUTER_API_KEY = os.environ.get("OPENROUTER_API_KEY")
 OPENROUTER_ENDPOINT = "https://openrouter.ai/api/v1/chat/completions"
-MODEL = "openai/gpt-5.2"
+MODEL = "google/gemini-2.5-flash-image-preview"
 
 SCRIPT_DIR = Path(__file__).parent.resolve()
 WORKSPACE_ROOT = SCRIPT_DIR.parent.parent
@@ -47,7 +47,7 @@ logging.basicConfig(
     datefmt='%Y-%m-%d %H:%M:%S'
 )
 
-# Analysis prompt for GPT-5.2
+# Analysis prompt
 ANALYSIS_PROMPT = """Analyze this character image for a digital asset catalog. Describe what you SEE, not what you imagine.
 
 Return a JSON object with these exact fields:
@@ -102,7 +102,7 @@ def load_image_as_base64(path: Path) -> str:
 
 
 def analyze_image(image_path: Path) -> dict:
-    """Use GPT-5.2 to analyze a single image."""
+    """Analyze a single image using vision model."""
     logging.debug(f"Analyzing: {image_path.name}")
 
     image_url = load_image_as_base64(image_path)
