@@ -89,6 +89,12 @@ jobs:
           # Clean up
           rm -rf temp-ai-news
 
+          # Update daily.json and daily.md from latest dated files
+          LATEST_JSON=$(ls -t ai-news/elizaos/json/????-??-??.json 2>/dev/null | head -1)
+          LATEST_MD=$(ls -t ai-news/elizaos/md/????-??-??.md 2>/dev/null | head -1)
+          [ -f "$LATEST_JSON" ] && cp "$LATEST_JSON" ai-news/elizaos/json/daily.json
+          [ -f "$LATEST_MD" ] && cp "$LATEST_MD" ai-news/elizaos/md/daily.md
+
       # Step 6: Sync Clanktank Episodes
       - name: Sync Clanktank Episodes
         continue-on-error: true # Added for robustness
