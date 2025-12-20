@@ -275,7 +275,9 @@ def build_complete_tags(llm_tags: Optional[dict], categories: dict, data: dict) 
     # Add LLM-generated tags
     if llm_tags:
         tags["themes"] = llm_tags.get("themes", [])
-        tags["story_type"] = llm_tags.get("story_type", [])
+        # Normalize story_type to always be an array (LLM sometimes returns string)
+        story_type = llm_tags.get("story_type", [])
+        tags["story_type"] = [story_type] if isinstance(story_type, str) else story_type
 
         # Handle sentiment - support both old (list) and new (dict) formats
         llm_sentiment = llm_tags.get("sentiment", {})
