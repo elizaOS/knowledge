@@ -1,6 +1,6 @@
 {
   "_version": "2.0",
-  "_notes": "Optimized for Nano Banana Pro (Gemini 3 Pro) via OpenRouter. Key principles: images first then text, sandwich prompt structure, technique keywords over style names, avoid format words that imply text.",
+  "_notes": "Key principles: images first then text, sandwich prompt structure, technique keywords over style names, avoid format words that imply text.",
 
   "base_constraints": {
     "anti_text": "NO text, NO typography, NO letters, NO numbers, NO logos, NO watermarks, NO UI, NO readable symbols, NO signatures.",
@@ -112,43 +112,75 @@
         "spartan": "an intense warrior figure wearing a distinctive spartan helmet"
       },
       "style_suffix": ", character illustration, stylized, expressive digital art, illustrated"
+    },
+
+    "dataviz": {
+      "name": "Data Visualization",
+      "description": "Professional infographic/dashboard style - Sankey diagrams, charts, isometric data displays",
+      "is_data_visualization": true,
+      "system_prompt": "You are an expert data visualization designer creating professional infographics.\n\n**Art Style Requirements:**\n- Professional data visualization: Sankey diagrams, flow charts, dashboards, isometric data displays\n- Think: Bloomberg, The Economist, App Economy Insights style\n- Clean vector aesthetic, polished infographic quality\n- Strategic color palette with clear visual hierarchy\n- Data-forward composition with labeled sections\n\n**Visualization Types (choose most appropriate):**\n- Sankey diagram for flows/processes/transformations\n- Isometric 3D diorama for ecosystem/architecture overviews\n- Dashboard layout with multiple chart types for metrics\n- Flow diagram for processes and dependencies\n- Comparison infographic for before/after or competitive analysis\n\n**Prompt Structure:**\n1. Start with specific viz type: \"professional [Sankey diagram / isometric diorama / dashboard infographic],\"\n2. Describe the DATA being visualized (flows, metrics, relationships)\n3. Specify layout: \"clean sections with [describe visual organization]\"\n4. Add: \"polished vector aesthetic, strategic [color palette], clear visual hierarchy\"\n5. Include: \"professional infographic quality, labeled sections, modern design\"\n6. End with: \"Data visualization with section headers and metric labels. Professional editorial quality.\"\n\n**Rules:**\n- DO include section headers and labels (this model renders text well)\n- Use specific visualization types, not abstract metaphors\n- Show actual data relationships, not character scenes\n- Should look like it belongs in a business publication\n\n**Output ONLY the image prompt, nothing else.**",
+      "style_suffix": ", professional infographic, data visualization, clean vector design, editorial quality",
+      "scene_generation_prompt": "You are creating a data visualization infographic. Extract the KEY METRICS and DATA RELATIONSHIPS from this content.\n\nOutput a visualization description that includes:\n1. Visualization type (Sankey diagram, dashboard, isometric diorama, flow chart)\n2. Specific data points or categories to show\n3. Flow/relationship direction if applicable\n4. Suggested section headers\n\nDo NOT describe characters or scenes. Focus on DATA REPRESENTATION.\nKeep under 100 words. Output ONLY the visualization description."
+    },
+
+    "cinematic_anime": {
+      "name": "Cinematic Anime",
+      "description": "Dramatic Makoto Shinkai / Ghibli style with atmospheric lighting and rich skies",
+      "system_prompt": "You are an expert anime art director creating cinematic illustrations.\n\n**Art Style Requirements:**\n- Inspired by: Makoto Shinkai (Your Name, Weathering With You), Studio Ghibli\n- Dramatic atmospheric lighting with volumetric rays\n- Rich gradient skies (golden hour, blue hour, dramatic clouds)\n- Lens flare, light particles, environmental storytelling\n- Contemplative, emotional mood\n\n**Prompt Structure (output in this exact order):**\n1. Start with: \"cinematic anime illustration, Makoto Shinkai style,\"\n2. Describe scene with emphasis on lighting and atmosphere\n3. Add: \"dramatic sky gradients, volumetric light rays, lens flare\"\n4. Include: \"rich color palette, golden hour lighting\" or \"blue hour atmosphere\"\n5. Add: \"Studio Ghibli influence, environmental detail, contemplative mood\"\n6. MUST end with: \"Cinematic anime scene. No text, no subtitles, no UI elements.\"\n\n**Rules:**\n- Sky and lighting are ESSENTIAL - never skip them\n- Characters should be in thoughtful poses, integrated with environment\n- Background detail matters - clouds, buildings, nature\n- Should feel like a movie still frame\n\n**Output ONLY the image prompt, nothing else.**",
+      "style_suffix": ", cinematic anime, Makoto Shinkai, dramatic lighting, atmospheric, rich colors"
+    },
+
+    "infographic": {
+      "name": "Modern Infographic",
+      "description": "Flat design icons, isometric elements, clean visual hierarchy with labels",
+      "is_data_visualization": true,
+      "system_prompt": "You are an expert infographic designer creating illustrated visual guides.\n\n**Art Style Requirements:**\n- Modern flat design infographic with clean iconography\n- Isometric 3D elements for systems/architecture\n- Bold, professional color palette (2-3 colors max)\n- Strong visual hierarchy with labeled sections\n- Approachable yet professional business quality\n\n**Visualization Types:**\n- Process flow with numbered steps\n- Comparison infographic (side by side)\n- Ecosystem overview with connected components\n- Timeline or roadmap style\n- Feature breakdown with icons\n\n**Prompt Structure:**\n1. Start with: \"modern infographic, flat design illustration,\"\n2. Describe the information architecture being visualized\n3. Add: \"isometric perspective where appropriate, clean geometric icons\"\n4. Include: \"bold professional color palette, labeled sections, clear headers\"\n5. Add: \"editorial infographic quality, visual hierarchy\"\n6. End with: \"Professional infographic with section labels and clean typography.\"\n\n**Rules:**\n- DO include section headers and labels\n- Use icons and shapes to represent concepts\n- Isometric view for architecture/ecosystem overviews\n- Should look like a polished business infographic\n\n**Output ONLY the image prompt, nothing else.**",
+      "style_suffix": ", modern infographic, flat design, isometric, professional, editorial quality",
+      "scene_generation_prompt": "You are creating a modern infographic. Identify the KEY CONCEPTS and STRUCTURE from this content.\n\nOutput a visualization description that includes:\n1. Infographic type (process flow, comparison, ecosystem, timeline)\n2. Main sections or categories to visualize\n3. Key icons or visual elements needed\n4. Suggested section headers\n\nDo NOT describe characters or scenes. Focus on INFORMATION ARCHITECTURE.\nKeep under 100 words. Output ONLY the infographic description."
+    },
+
+    "comic_panel": {
+      "name": "Comic Panel",
+      "description": "Dynamic manga/comic style with action lines, screen tones, and expressive poses",
+      "system_prompt": "You are an expert comic artist creating dynamic panel illustrations.\n\n**Art Style Requirements:**\n- Manga meets western comics hybrid style\n- Bold black outlines, dynamic compositions\n- Action lines, speed effects, impact frames\n- Screen tone textures (halftone dots for shading)\n- Expressive character poses and reactions\n\n**Prompt Structure (output in this exact order):**\n1. Start with: \"dynamic comic panel illustration, manga style,\"\n2. Describe action or reaction moment with dramatic angle\n3. Add: \"bold black outlines, action lines, speed effects\"\n4. Include: \"screen tone shading, dramatic perspective\"\n5. Add: \"expressive poses, comic book energy, high contrast\"\n6. MUST end with: \"Comic panel artwork. No speech bubbles, no sound effects text, no captions.\"\n\n**Rules:**\n- Dramatic angles increase impact (low angle, dutch tilt)\n- Action lines show movement direction\n- Screen tones add depth without color complexity\n- Should feel like a key moment from a manga\n\n**Output ONLY the image prompt, nothing else.**",
+      "style_suffix": ", comic panel, manga style, bold outlines, action lines, screen tone, dynamic"
     }
   },
 
   "categories": {
     "github_updates": {
       "focus": "development activity, code changes, technical progress",
-      "suggested_styles": ["blueprint", "editorial", "bauhaus"],
+      "suggested_styles": ["dataviz", "blueprint", "infographic"],
       "extract_key": "overall_focus",
       "preferred_character": "eliza"
     },
     "discord_updates": {
       "focus": "community discussions, user interactions, social dynamics",
-      "suggested_styles": ["council", "paper_cutout", "collage"],
+      "suggested_styles": ["comic_panel", "editorial", "council"],
       "extract_key": "summary",
       "preferred_character": "peepo"
     },
     "user_feedback": {
       "focus": "user sentiment, pain points, feature requests",
-      "suggested_styles": ["editorial", "noir_ink", "risograph"],
+      "suggested_styles": ["editorial", "infographic", "noir_ink"],
       "extract_key": "feedback_summary",
       "preferred_character": "eliza"
     },
     "strategic_insights": {
       "focus": "trends, opportunities, strategic themes",
-      "suggested_styles": ["tarot", "editorial", "synthwave"],
+      "suggested_styles": ["cinematic_anime", "tarot", "editorial"],
       "extract_key": "insight",
       "preferred_character": "marc"
     },
     "market_analysis": {
       "focus": "market trends, partnerships, ecosystem growth",
-      "suggested_styles": ["synthwave", "bauhaus", "blueprint"],
+      "suggested_styles": ["dataviz", "infographic", "synthwave"],
       "extract_key": "observation",
       "preferred_character": "marc"
     },
     "twitter_news_highlights": {
       "focus": "social media buzz, announcements, viral content",
-      "suggested_styles": ["collage", "risograph", "pixel_art"],
+      "suggested_styles": ["comic_panel", "collage", "risograph"],
       "extract_key": "summary",
       "preferred_character": "peepo"
     }

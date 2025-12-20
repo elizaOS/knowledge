@@ -7,10 +7,10 @@ Creates a folder with:
 - A README.md with facts, prompts, and embedded images
 
 Usage:
-  python scripts/posters/generate-sampler.py
-  python scripts/posters/generate-sampler.py -d 2025-12-12
-  python scripts/posters/generate-sampler.py --styles editorial risograph noir_ink
-  python scripts/posters/generate-sampler.py --include-characters
+  python scripts/posters/utils/generate-sampler.py
+  python scripts/posters/utils/generate-sampler.py -d 2025-12-12
+  python scripts/posters/utils/generate-sampler.py --styles editorial risograph noir_ink
+  python scripts/posters/utils/generate-sampler.py --include-characters
 """
 
 import os
@@ -22,12 +22,13 @@ from pathlib import Path
 from datetime import datetime
 from typing import Optional
 
-# Import from main generate-ai-image script
+# Import from main generate-ai-image script (in parent directory)
 SCRIPT_DIR = Path(__file__).parent.resolve()
-sys.path.insert(0, str(SCRIPT_DIR))
+POSTERS_DIR = SCRIPT_DIR.parent  # utils/ -> posters/
+sys.path.insert(0, str(POSTERS_DIR))
 
 from importlib.util import spec_from_file_location, module_from_spec
-spec = spec_from_file_location("generate_ai_image", SCRIPT_DIR / "generate-ai-image.py")
+spec = spec_from_file_location("generate_ai_image", POSTERS_DIR / "generate-ai-image.py")
 generate_ai_image = module_from_spec(spec)
 spec.loader.exec_module(generate_ai_image)
 
