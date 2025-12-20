@@ -62,9 +62,9 @@ TAG_GENERATION_PROMPT = """Analyze this fact briefing and generate semantic tags
 - `ux-improvement`, `bug-fix`, `maintenance`
 - `market-activity`, `trading`, `liquidity`
 
-**sentiment** (HOW it feels - pick 1-2):
-- `positive`, `negative`, `neutral`, `mixed`
-- `controversial`, `technical`, `urgent`
+**sentiment** (structured object):
+- `overall`: exactly one of `positive`, `negative`, `neutral`, `mixed`
+- `context`: 1-3 domain tags from: `economic`, `technical`, `governance`, `social`
 
 **story_type** (editorial classification - pick exactly 1):
 - `crisis` - urgent issues, security incidents, breaking problems
@@ -78,7 +78,10 @@ TAG_GENERATION_PROMPT = """Analyze this fact briefing and generate semantic tags
 ```json
 {{
   "themes": ["tag1", "tag2"],
-  "sentiment": ["tag"],
+  "sentiment": {{
+    "overall": "positive|negative|neutral|mixed",
+    "context": ["economic", "technical"]
+  }},
   "story_type": ["tag"]
 }}
 ```
@@ -201,26 +204,34 @@ def load_baseline() -> Optional[dict]:
 
 
 def gate_crisis(tags: dict, data: dict, baseline: Optional[dict]) -> dict:
-    """Downgrade crisis unless significantly above baseline."""
+    """Downgrade crisis unless significantly above baseline.
+
+    Crisis requires: (keywords AND urgency) to pass through.
+    Without baseline: fall back to keyword+urgency check only.
+    With baseline: also check if crisis is overused historically.
+    """
+    tags = dict(tags)  # Avoid mutating original
     story_type = tags.get("story_type", [])
 
     if "crisis" not in story_type:
         return tags
 
-    # Check for crisis keywords
+    # Check for crisis keywords in summary
     summary = data.get("overall_summary", "").lower()
     crisis_keywords = ["security", "vulnerability", "outage", "exploit",
                        "hack", "down", "broken", "emergency", "critical"]
     has_crisis_keyword = any(kw in summary for kw in crisis_keywords)
 
-    # Check if urgency is elevated
+    # Check if urgency is elevated (from derive_priority_tags)
     has_urgent_priority = "time-sensitive" in tags.get("priority", [])
 
     # If no baseline, only allow crisis with keywords + urgency
     if baseline is None:
-        if not (has_crisis_keyword and has_urgent_priority):
-            tags["story_type"] = ["maintenance"]
-            tags["_crisis_gated"] = "no_baseline"
+        if has_crisis_keyword and has_urgent_priority:
+            logging.info(f"Crisis accepted (no baseline): keywords={has_crisis_keyword} urgent={has_urgent_priority}")
+            return tags
+        tags["story_type"] = ["maintenance"]
+        tags["_crisis_gated"] = "no_baseline"
         return tags
 
     # Get baseline thresholds
@@ -228,11 +239,12 @@ def gate_crisis(tags: dict, data: dict, baseline: Optional[dict]) -> dict:
 
     # Allow crisis only if: keywords + urgency
     if has_crisis_keyword and has_urgent_priority:
+        logging.info(f"Crisis accepted: keywords={has_crisis_keyword} urgent={has_urgent_priority} baseline_rate={crisis_rate:.2f}")
         return tags  # Genuine crisis
 
     # Otherwise downgrade based on baseline
+    # If >20% of historical days were crises, treat crisis as overused
     if crisis_rate > 0.2:
-        # Crisis is too common historically, be stricter
         tags["story_type"] = ["maintenance"]
         tags["_crisis_gated"] = f"crisis_rate_high_{crisis_rate}"
     elif not has_crisis_keyword:
