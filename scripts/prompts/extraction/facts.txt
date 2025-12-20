@@ -134,6 +134,31 @@ The `tags` object captures semantic metadata about the briefing content. Use the
 - `debate` - community discussions, governance decisions, differing opinions
 - `analysis` - market insights, strategic observations, trends
 
+**Editorial Guidelines for story_type:**
+
+Use these rules to avoid over-classification:
+
+**crisis** - ONLY use when:
+- There is a NEW, urgent technical problem (outage, security vulnerability, exploit)
+- The issue is breaking functionality for many users RIGHT NOW
+- Keywords present: security, vulnerability, outage, exploit, hack, down, broken, emergency
+
+**DO NOT mark as crisis:**
+- Routine complaints about token prices or migration timelines
+- Ongoing issues that have been discussed for days/weeks
+- General user frustration or "vibes are bad" sentiment
+- Feature requests framed as complaints
+
+**progress vs maintenance:**
+- `progress` = NEW features shipped, milestones reached, significant wins
+- `maintenance` = routine updates, bug fixes, dependency bumps, housekeeping
+- When in doubt between progress/maintenance, prefer `maintenance`
+
+**negative sentiment ≠ crisis:**
+- Negative sentiment about prices/tokenomics → `debate` or `analysis`, not crisis
+- Community disagreement → `debate`
+- Routine gripes about DX or bugs → `maintenance`
+
 **Important Considerations:**
 *   **Structure Adherence:** Strictly follow the JSON structure, including all specified field names and types. If a category or sub-category has no data, represent it as an empty list `[]` or an empty object `{{}}` as appropriate within the defined structure (e.g., `"twitter_news_highlights": []`). Do not omit the category keys themselves unless explicitly allowed for *new* categories not listed.
 *   **Conciseness & Significance:** Focus on genuinely important information. Summarize where appropriate.
