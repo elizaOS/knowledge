@@ -20,6 +20,14 @@ Produce a single JSON object as your response, adhering strictly to this structu
 {{
   "briefing_date": "YYYY-MM-DD",
   "overall_summary": "A 1-2 sentence high-level summary of the day's key intelligence.",
+  "tags": {{
+    "themes": ["kebab-case-theme-tags"],
+    "sentiment": {{
+      "overall": "positive|negative|neutral|mixed",
+      "context": ["domain-tags"]
+    }},
+    "story_type": ["story-classification-tag"]
+  }},
   "categories": {{
     "twitter_news_highlights": [
       {{
@@ -89,9 +97,47 @@ Produce a single JSON object as your response, adhering strictly to this structu
 }}
 ```
 
+**Tag Generation Guidelines:**
+
+The `tags` object captures semantic metadata about the briefing content. Use these controlled vocabularies:
+
+**themes** (WHAT is happening - pick 2-5 most relevant):
+- `token-migration`, `governance`, `tokenomics`
+- `release`, `deployment`, `infrastructure`
+- `developer-experience`, `documentation`, `onboarding`
+- `security`, `vulnerability`, `audit`
+- `community-growth`, `partnerships`, `ecosystem`
+- `ai-agents`, `plugins`, `integrations`
+- `performance`, `optimization`, `scaling`
+- `ux-improvement`, `bug-fix`, `maintenance`
+- `market-activity`, `trading`, `liquidity`
+
+**sentiment** (structured object with overall mood and domain context):
+
+`overall` (pick exactly 1):
+- `positive` - generally good news, wins, progress
+- `negative` - problems, complaints, setbacks
+- `neutral` - informational, routine, no strong valence
+- `mixed` - significant positive AND negative elements
+
+`context` (WHAT DOMAIN the sentiment relates to - pick 1-3):
+- `economic` - tokenomics, prices, migration, trading, liquidity
+- `technical` - bugs, performance, DX, infrastructure, code quality
+- `governance` - decisions, moderation, direction, leadership
+- `social` - community vibes, drama, memes, interpersonal
+
+**story_type** (editorial classification - pick 1):
+- `crisis` - urgent issues, security incidents, breaking problems
+- `progress` - features shipped, milestones reached, wins
+- `maintenance` - routine updates, bug fixes, housekeeping
+- `announcement` - official communications, launches, events
+- `debate` - community discussions, governance decisions, differing opinions
+- `analysis` - market insights, strategic observations, trends
+
 **Important Considerations:**
 *   **Structure Adherence:** Strictly follow the JSON structure, including all specified field names and types. If a category or sub-category has no data, represent it as an empty list `[]` or an empty object `{{}}` as appropriate within the defined structure (e.g., `"twitter_news_highlights": []`). Do not omit the category keys themselves unless explicitly allowed for *new* categories not listed.
 *   **Conciseness & Significance:** Focus on genuinely important information. Summarize where appropriate.
 *   **Source Attribution (`source`):** Provide accurate dot-notation paths from the input JSON for all claims.
 *   **No Redundancy:** Consolidate similar information.
+*   **Tag Consistency:** Use only tags from the controlled vocabularies above. Prefer reusable tags over one-off descriptions.
 *   **Output ONLY the JSON object.** No other text, explanations, or apologies. 

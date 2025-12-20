@@ -15,6 +15,7 @@ import argparse
 from pathlib import Path
 from datetime import datetime, timedelta
 from calendar import monthrange
+from collections import defaultdict
 import logging
 
 # --- Configuration ---
@@ -92,6 +93,56 @@ def load_github_monthly_summary(year: int, month: int) -> str | None:
     if path.exists():
         return path.read_text()
     return None
+
+
+def compute_sentiment_baseline(facts: list[dict]) -> dict:
+    """Compute sentiment statistics for baseline.
+
+    Used by daily extraction to gate crisis and normalize sentiment.
+    """
+    total_days = len(facts)
+    if total_days == 0:
+        return {
+            "period_days": 0,
+            "sentiment_distribution": {},
+            "avg_negative_rate": 0.0,
+            "crisis_rate": 0.0,
+            "context_frequency": {},
+        }
+
+    sentiment_counts = {"negative": 0, "positive": 0, "neutral": 0, "mixed": 0}
+    context_counts = defaultdict(int)
+    crisis_days = 0
+
+    for fact in facts:
+        tags = fact.get("tags", {})
+        sentiment = tags.get("sentiment", {})
+
+        # Handle both old (list) and new (dict) formats
+        if isinstance(sentiment, list):
+            for s in sentiment:
+                if s in sentiment_counts:
+                    sentiment_counts[s] += 1
+        elif isinstance(sentiment, dict):
+            overall = sentiment.get("overall", "neutral")
+            if overall in sentiment_counts:
+                sentiment_counts[overall] += 1
+            for ctx in sentiment.get("context", []):
+                context_counts[ctx] += 1
+
+        story_type = tags.get("story_type", [])
+        if "crisis" in story_type:
+            crisis_days += 1
+
+    return {
+        "period_days": total_days,
+        "sentiment_distribution": {
+            k: round(v / total_days, 3) for k, v in sentiment_counts.items()
+        },
+        "avg_negative_rate": round(sentiment_counts["negative"] / total_days, 3),
+        "crisis_rate": round(crisis_days / total_days, 3),
+        "context_frequency": dict(context_counts),
+    }
 
 
 def extract_themes(facts: list[dict], briefings: list[dict]) -> dict:
@@ -323,6 +374,10 @@ def main():
     themes = extract_themes(facts, briefings)
     logging.info(f"Extracted themes: {len(themes['strategic_themes'])} strategic, {len(themes['github_prs'])} PRs")
 
+    # Compute sentiment baseline for daily extraction
+    baseline = compute_sentiment_baseline(facts)
+    logging.info(f"Baseline: {baseline['avg_negative_rate']:.1%} negative, {baseline['crisis_rate']:.1%} crisis rate")
+
     # Generate prompt and call LLM
     prompt = generate_retro_prompt(target_year, target_month, themes, github_summary, north_star)
 
@@ -342,6 +397,9 @@ def main():
         "month": f"{target_year}-{target_month:02d}",
     }
 
+    # Add sentiment baseline (used by daily extraction for crisis gating)
+    episode["sentiment_baseline"] = baseline
+
     # Save output
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 
@@ -349,7 +407,15 @@ def main():
     output_file.write_text(json.dumps(episode, indent=2))
     logging.info(f"Retrospective saved to {output_file}")
 
+    # Update latest.json symlink (used by daily extraction for baseline)
+    latest_link = OUTPUT_DIR / "latest.json"
+    if latest_link.exists() or latest_link.is_symlink():
+        latest_link.unlink()
+    latest_link.symlink_to(output_file.name)
+    logging.info(f"Updated latest.json symlink -> {output_file.name}")
+
     # Also save as an episode
+    EPISODES_DIR.mkdir(parents=True, exist_ok=True)
     episode_file = EPISODES_DIR / f"episode-retro-{target_year}-{target_month:02d}.json"
     episode_file.write_text(json.dumps(episode, indent=2))
     logging.info(f"Episode saved to {episode_file}")
