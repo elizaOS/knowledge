@@ -302,21 +302,24 @@ def build_complete_tags(llm_tags: Optional[dict], categories: dict, data: dict) 
     return tags
 
 
-def backfill_tags_for_file(file_path: Path, dry_run: bool = False) -> bool:
+def backfill_tags_for_file(file_path: Path, dry_run: bool = False, force: bool = False) -> bool:
     """Add tags to an existing facts JSON file."""
     try:
         with open(file_path, 'r', encoding='utf-8') as f:
             data = json.load(f)
 
         # Check if tags already exist
-        if "tags" in data:
-            logging.info(f"  [skip] {file_path.name} - already has tags")
+        if "tags" in data and not force:
+            logging.info(f"  [skip] {file_path.name} - already has tags (use --force to overwrite)")
             return True
 
         # Check if _metadata.tags exists (old location)
-        if data.get("_metadata", {}).get("tags"):
-            logging.info(f"  [skip] {file_path.name} - already has _metadata.tags")
+        if data.get("_metadata", {}).get("tags") and not force:
+            logging.info(f"  [skip] {file_path.name} - already has _metadata.tags (use --force to overwrite)")
             return True
+
+        if "tags" in data and force:
+            logging.info(f"  [force] {file_path.name} - overwriting existing tags")
 
         logging.info(f"  [process] {file_path.name}")
 
@@ -497,6 +500,11 @@ def main():
         action="store_true",
         help="Show what would be done without making changes (for backfill mode)."
     )
+    parser.add_argument(
+        "-f", "--force",
+        action="store_true",
+        help="Force overwrite existing tags (for backfill mode)."
+    )
     args = parser.parse_args()
 
     if args.verbose:
@@ -535,7 +543,7 @@ def main():
         skipped = 0
 
         for file_path in files_to_process:
-            result = backfill_tags_for_file(file_path, dry_run=args.dry_run)
+            result = backfill_tags_for_file(file_path, dry_run=args.dry_run, force=args.force)
             if result:
                 success += 1
             else:
