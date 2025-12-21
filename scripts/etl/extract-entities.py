@@ -18,7 +18,7 @@ import requests
 
 OPENROUTER_API_KEY = os.environ.get("OPENROUTER_API_KEY", "")
 OPENROUTER_API_ENDPOINT = "https://openrouter.ai/api/v1/chat/completions"
-MODEL = "openai/gpt-4.1-mini"
+MODEL = "google/gemini-2.5-flash-lite"
 
 logging.basicConfig(level=logging.INFO, format='[%(asctime)s] %(message)s')
 
@@ -82,7 +82,8 @@ def extract_entities(content: str) -> dict:
             json={
                 "model": MODEL,
                 "messages": [{"role": "user", "content": PROMPT.format(content=content)}],
-                "response_format": {"type": "json_object"}
+                "response_format": {"type": "json_object"},
+                "plugins": [{"id": "response-healing"}]
             },
             timeout=60
         )
@@ -128,13 +129,25 @@ def main():
 
     logging.info(f"Processing {len(files)} file(s)...")
 
+    out_dir = args.output.parent if args.output else None
+    if out_dir:
+        out_dir.mkdir(parents=True, exist_ok=True)
+
     all_entities = []
     for f in files:
         logging.info(f"  {f.name}")
         content = load_content(f)
         entities = extract_entities(content)
+
         if entities:
             all_entities.append(entities)
+            # Save individual file immediately
+            if out_dir:
+                (out_dir / f.name).write_text(json.dumps({
+                    "source": f.name,
+                    "entities": entities,
+                    "_metadata": {"extracted_at": datetime.utcnow().isoformat() + "Z"}
+                }, indent=2))
 
     merged = merge_entities(all_entities)
 
@@ -147,9 +160,8 @@ def main():
     }
 
     if args.output:
-        args.output.parent.mkdir(parents=True, exist_ok=True)
         args.output.write_text(json.dumps(output, indent=2))
-        logging.info(f"Saved to {args.output}")
+        logging.info(f"Saved {len(all_entities)} files + {args.output.name} to {out_dir}/")
     else:
         print(json.dumps(output, indent=2))
 
