@@ -187,80 +187,6 @@ def generate_tags_via_llm(briefing_data: dict) -> Optional[dict]:
         return None
 
 
-RETRO_LATEST = WORKSPACE_ROOT / "the-council" / "retros" / "latest.json"
-
-
-def load_baseline() -> Optional[dict]:
-    """Load sentiment baseline from latest monthly retro."""
-    if not RETRO_LATEST.exists():
-        logging.debug("No retro latest.json found, skipping crisis gating")
-        return None
-    try:
-        retro = json.loads(RETRO_LATEST.read_text())
-        return retro.get("sentiment_baseline", {})
-    except Exception as e:
-        logging.warning(f"Failed to load baseline from retro: {e}")
-        return None
-
-
-def gate_crisis(tags: dict, data: dict, baseline: Optional[dict]) -> dict:
-    """Downgrade crisis unless significantly above baseline.
-
-    Crisis requires: (keywords AND urgency) to pass through.
-    Without baseline: fall back to keyword+urgency check only.
-    With baseline: also check if crisis is overused historically.
-    """
-    tags = dict(tags)  # Avoid mutating original
-    story_type = tags.get("story_type", [])
-
-    if "crisis" not in story_type:
-        return tags
-
-    # Check for crisis keywords in summary
-    summary = data.get("overall_summary", "").lower()
-    crisis_keywords = ["security", "vulnerability", "outage", "exploit",
-                       "hack", "down", "broken", "emergency", "critical"]
-    has_crisis_keyword = any(kw in summary for kw in crisis_keywords)
-
-    # Check if urgency is elevated (from derive_priority_tags)
-    has_urgent_priority = "time-sensitive" in tags.get("priority", [])
-
-    # If no baseline, only allow crisis with keywords + urgency
-    if baseline is None:
-        if has_crisis_keyword and has_urgent_priority:
-            logging.info(f"Crisis accepted (no baseline): keywords={has_crisis_keyword} urgent={has_urgent_priority}")
-            return tags
-        tags["story_type"] = ["maintenance"]
-        tags["_crisis_gated"] = "no_baseline"
-        return tags
-
-    # Get baseline thresholds
-    crisis_rate = baseline.get("crisis_rate", 0.1)
-
-    # Allow crisis only if: keywords + urgency
-    if has_crisis_keyword and has_urgent_priority:
-        logging.info(f"Crisis accepted: keywords={has_crisis_keyword} urgent={has_urgent_priority} baseline_rate={crisis_rate:.2f}")
-        return tags  # Genuine crisis
-
-    # Otherwise downgrade based on baseline
-    # If >20% of historical days were crises, treat crisis as overused
-    if crisis_rate > 0.2:
-        tags["story_type"] = ["maintenance"]
-        tags["_crisis_gated"] = f"crisis_rate_high_{crisis_rate}"
-    elif not has_crisis_keyword:
-        # No crisis keywords - downgrade to debate or maintenance
-        sentiment = tags.get("sentiment", {})
-        overall = sentiment.get("overall", "neutral") if isinstance(sentiment, dict) else "neutral"
-        tags["story_type"] = ["debate"] if overall == "negative" else ["maintenance"]
-        tags["_crisis_gated"] = "no_keywords"
-    else:
-        # Has keywords but not urgent - could be debate
-        tags["story_type"] = ["debate"]
-        tags["_crisis_gated"] = "not_urgent"
-
-    return tags
-
-
 def build_complete_tags(llm_tags: Optional[dict], categories: dict, data: dict) -> dict:
     """Combine LLM tags with rule-based derived tags."""
     tags = {
@@ -737,13 +663,6 @@ def main():
         # Handle tags: merge LLM-generated tags with rule-based tags
         llm_tags = llm_output_data.get("tags", {})
         complete_tags = build_complete_tags(llm_tags, categories, llm_output_data)
-
-        # Apply crisis gating based on baseline
-        baseline = load_baseline()
-        complete_tags = gate_crisis(complete_tags, llm_output_data, baseline)
-        if complete_tags.get("_crisis_gated"):
-            logging.info(f"Crisis gated: {complete_tags['_crisis_gated']}")
-
         llm_output_data["tags"] = complete_tags
         sentiment = complete_tags.get('sentiment', {})
         sentiment_str = f"{sentiment.get('overall', '?')} ({', '.join(sentiment.get('context', []))})" if isinstance(sentiment, dict) else str(sentiment)
