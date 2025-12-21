@@ -17,7 +17,8 @@ This repository serves as the central hub for aggregating, processing, and synth
 - **[GitHub Analytics](github/README.md)**: Development activity tracking (900+ files)
 - **[Community Data](daily-silk/README.md)**: Discord AI news collection (25,000+ lines)
 - **[Generated Content](hackmd/README.md)**: LLM-powered content creation and backup
-- **[Visual Assets](posters/README.md)**: Automated poster generation (448+ images)
+- **[Visual Assets](posters/README.md)**: Automated poster generation (rolling 7-day archive)
+- **[Character System](scripts/posters/README.md)**: AI-powered character illustration pipeline
 - **[Episode Database](clanktank/README.md)**: Business pitch show scripts (31 episodes)
 - **[Historical Archive](archive/README.md)**: 7+ months of preserved data (1,813+ files)
 
@@ -33,6 +34,7 @@ This repository serves as the central hub for aggregating, processing, and synth
 - Latest council briefing: https://elizaos.github.io/knowledge/the-council/council_briefing/daily.json
 - Latest ElizaOS AI news summary: https://elizaos.github.io/knowledge/ai-news/elizaos/json/daily.json
 - Latest extracted facts: https://elizaos.github.io/knowledge/the-council/facts/daily.json
+- Contributor profiles: https://elizaos.github.io/knowledge/github/contributors/
 - Eliza.how docs (llms-full.txt): https://eliza.how/llms-full.txt
 
 **RSS Feeds**
@@ -188,7 +190,7 @@ Each major directory contains comprehensive documentation. Click the links below
 
 ### Generated Content & Distribution
 *   **[`hackmd/`](hackmd/README.md)**: LLM-generated content backups organized by category with HackMD synchronization
-*   **[`posters/`](posters/README.md)**: Visual content generation (448+ date-stamped poster images) for Discord and social sharing
+*   **[`posters/`](posters/README.md)**: Visual content generation for Discord and social sharing (rolling 7-day archive)
 
 ### Specialized Content
 *   **[`clanktank/`](clanktank/README.md)**: Episode database for Clank Tank business pitch show (31 complete episode scripts)
@@ -202,12 +204,46 @@ Each major directory contains comprehensive documentation. Click the links below
 
 ## Primary Scripts Overview
 
-*   **`scripts/aggregate-sources.py`**: The main data aggregation engine, creating `the-council/aggregated/YYYY-MM-DD.json`.
-*   **`scripts/generate_council_context.py`**: Processes aggregated data from `the-council/aggregated/daily.json` to create strategic council briefings in `the-council/council_briefing/YYYY-MM-DD.json`.
-*   **`scripts/create-hackmd.py`**: Initializes HackMD notes for prompts found in `scripts/prompts/`, creating new notes on HackMD if they don't exist. Manages `book.json` by storing HackMD note IDs and their update strategy (defaulting to 'overwrite' for new notes).
-*   **`scripts/update-hackmd.py`**: Generates content daily for HackMD notes using prompts from `scripts/prompts/` and data from `the-council/aggregated/daily.json`. It updates each HackMD note's title (with the current date) and overwrites its content with the prompt details and new LLM-generated text. It also updates the main HackMD book index and saves local backups.
-*   **`scripts/extract_facts.py`**: Performs deep analysis on aggregated data. As part of the `extract_daily_facts.yml` workflow, it outputs structured facts to `the-council/facts/YYYY-MM-DD.json` and a corresponding Markdown version to `hackmd/facts/YYYY-MM-DD.md`.
-*   **`scripts/webhook.py`**: Called by `daily_discord_briefing.yml` to send the daily facts briefing from `the-council/facts/YYYY-MM-DD.json` to a specified Discord channel, with options for LLM summarization and a poster image.
+### ETL Pipeline (`scripts/etl/`)
+*   **`aggregate-sources.py`**: The main data aggregation engine, creating `the-council/aggregated/YYYY-MM-DD.json`.
+*   **`extract-facts.py`**: Performs deep analysis on aggregated data, outputs structured facts to `the-council/facts/YYYY-MM-DD.json` and markdown to `hackmd/facts/YYYY-MM-DD.md`.
+*   **`generate-council-context.py`**: Processes aggregated data to create strategic council briefings in `the-council/council_briefing/YYYY-MM-DD.json`.
+*   **`generate-monthly-retro.py`**: Generates monthly "State of ElizaOS" council episodes.
+*   **`generate-quarterly-summary.py`**: Generates quarterly/annual strategic summaries.
+*   **`generate-rss.py`**: Generates RSS feeds for facts and council briefings.
+
+### Integrations (`scripts/integrations/`)
+*   **`discord/webhook.py`**: Sends daily facts briefing to Discord with LLM summarization and poster images. Also handles poster cleanup (keeps last 7 days).
+*   **`discord/bot.py`**: Council briefing Discord bot.
+*   **`hackmd/create.py`**: Initializes HackMD notes for prompts, manages `book.json`.
+*   **`hackmd/update.py`**: Generates daily content for HackMD notes using prompts and aggregated data.
+
+### Character Illustration System (`scripts/posters/`)
+
+A complete system for generating character-driven visual content:
+
+```
+┌─────────────┐     ┌─────────────┐     ┌─────────────┐
+│  ANALYZE    │ ──▶ │  GENERATE   │ ──▶ │ ILLUSTRATE  │
+│  analyze.py │     │ generate.py │     │illustrate.py│
+│             │     │             │     │             │
+│ Images →    │     │ Manifest →  │     │ Ref sheet + │
+│ manifest    │     │ ref sheet   │     │ story →     │
+│             │     │             │     │ illustration│
+└─────────────┘     └─────────────┘     └─────────────┘
+```
+
+| Script | Purpose | Example |
+|--------|---------|---------|
+| `analyze.py` | Analyze character images → `manifest.json` | `python scripts/posters/analyze.py eliza` |
+| `generate.py` | Create reference sheets from manifest | `python scripts/posters/generate.py eliza cyberpunk` |
+| `illustrate.py` | Generate story illustrations with characters | `python scripts/posters/illustrate.py eliza "presenting at conference"` |
+| `vision.py` | General-purpose image analysis (Unix-style) | `python scripts/posters/vision.py image.png -p "describe"` |
+| `generate-ai-image.py` | Daily AI news poster generation | Automated via workflow |
+
+**Available Characters**: eliza, marc, peepo, spartan, shaw
+
+See **[scripts/posters/README.md](scripts/posters/README.md)** for detailed usage.
 
 This system is designed to be modular and extensible, allowing for the integration of new data sources and processing steps as the project evolves.
 
@@ -233,7 +269,9 @@ elizaOS Knowledge Aggregation System
 │   │   └── hyperfy/            #   VR/Web3 platform developments
 │   ├── github/                 # 🔗 GitHub activity analytics (see README.md)
 │   │   ├── stats/              #   Quantitative metrics (day/week/month)
-│   │   └── summaries/          #   Human-readable reports (900+ files)
+│   │   ├── summaries/          #   Human-readable reports (900+ files)
+│   │   ├── api/                #   API endpoint data
+│   │   └── contributors/       #   Contributor profiles & statistics
 │   ├── daily-silk/             # 🔗 Discord AI news aggregation (see README.md)
 │   └── docs/                   #   Technical docs from elizaOS/eliza
 │
@@ -244,7 +282,7 @@ elizaOS Knowledge Aggregation System
 │   │   ├── strategy/           #   Strategic analysis & planning
 │   │   └── facts/              #   Daily extracted facts (markdown)
 │   └── posters/                # 🔗 Visual content generation (see README.md)
-│       └── YYYY-MM-DD_*.png    #   Date-stamped poster images (448+ files)
+│       └── YYYY-MM-DD_*.png    #   Date-stamped poster images (last 7 days kept)
 │
 ├── 📁 Specialized Content
 │   ├── clanktank/              # 🔗 Business pitch show episodes (see README.md)
@@ -256,6 +294,11 @@ elizaOS Knowledge Aggregation System
 ├── 📁 Automation & Configuration
 │   ├── .github/workflows/      #   Daily automation pipeline (8 workflows)
 │   ├── scripts/                #   Python automation scripts & tooling
+│   │   ├── etl/                #   Data pipeline (aggregate, extract, generate)
+│   │   ├── integrations/       #   External services (Discord, HackMD)
+│   │   ├── posters/            #   Character illustration system
+│   │   │   ├── characters/     #   Character assets & manifests
+│   │   │   └── config/         #   Style presets & configuration
 │   │   └── prompts/            #   LLM interaction templates (comms/dev/strategy)
 │   └── book.json               #   HackMD state management configuration
 │
@@ -277,6 +320,12 @@ Technical documentation from the [ElizaOS/eliza](https://github.com/elizaOS/eliz
 
 ### GitHub
 Activity logs from [ElizaOS/elizaos.github.io](https://github.com/elizaos/elizaos.github.io) (`_data` branch), organized by day, week, and month. This provides a chronological view of development activities and changes.
+
+**Synced directories:**
+- `github/stats/` - Quantitative metrics (day/week/month JSON files)
+- `github/summaries/` - Human-readable activity reports
+- `github/api/` - API endpoint data
+- `github/contributors/` - Contributor profiles and statistics
 
 Tip: here's a command to turn the JSON stats files into a single text file:
 
