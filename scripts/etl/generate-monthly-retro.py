@@ -96,23 +96,18 @@ def load_github_monthly_summary(year: int, month: int) -> str | None:
 
 
 def compute_sentiment_baseline(facts: list[dict]) -> dict:
-    """Compute sentiment statistics for baseline.
-
-    Used by daily extraction to gate crisis and normalize sentiment.
-    """
+    """Compute sentiment statistics from the month's facts."""
     total_days = len(facts)
     if total_days == 0:
         return {
             "period_days": 0,
             "sentiment_distribution": {},
             "avg_negative_rate": 0.0,
-            "crisis_rate": 0.0,
             "context_frequency": {},
         }
 
     sentiment_counts = {"negative": 0, "positive": 0, "neutral": 0, "mixed": 0}
     context_counts = defaultdict(int)
-    crisis_days = 0
 
     for fact in facts:
         tags = fact.get("tags", {})
@@ -130,17 +125,12 @@ def compute_sentiment_baseline(facts: list[dict]) -> dict:
             for ctx in sentiment.get("context", []):
                 context_counts[ctx] += 1
 
-        story_type = tags.get("story_type", [])
-        if "crisis" in story_type:
-            crisis_days += 1
-
     return {
         "period_days": total_days,
         "sentiment_distribution": {
             k: round(v / total_days, 3) for k, v in sentiment_counts.items()
         },
         "avg_negative_rate": round(sentiment_counts["negative"] / total_days, 3),
-        "crisis_rate": round(crisis_days / total_days, 3),
         "context_frequency": dict(context_counts),
     }
 
@@ -376,7 +366,7 @@ def main():
 
     # Compute sentiment baseline for daily extraction
     baseline = compute_sentiment_baseline(facts)
-    logging.info(f"Baseline: {baseline['avg_negative_rate']:.1%} negative, {baseline['crisis_rate']:.1%} crisis rate")
+    logging.info(f"Baseline: {baseline['avg_negative_rate']:.1%} negative rate")
 
     # Generate prompt and call LLM
     prompt = generate_retro_prompt(target_year, target_month, themes, github_summary, north_star)
@@ -397,7 +387,7 @@ def main():
         "month": f"{target_year}-{target_month:02d}",
     }
 
-    # Add sentiment baseline (used by daily extraction for crisis gating)
+    # Add sentiment baseline for reference
     episode["sentiment_baseline"] = baseline
 
     # Save output
