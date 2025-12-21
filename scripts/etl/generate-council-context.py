@@ -271,7 +271,7 @@ def main():
         empty_output_md = f"# Council Briefing (V2): {date_str}\n\nNo operational data processed."
         try:
             with open(output_path, 'w') as f:
-                json.dump(empty_output_json, f, indent=2)
+                json.dump(empty_output_json, f, indent=2, ensure_ascii=True)
             with open(output_markdown_path, 'w') as f:
                 f.write(empty_output_md)
             print(f"Saved empty V2 council context JSON to: {output_path}")
@@ -421,7 +421,7 @@ def main():
             if final_json_to_save:
                  try:
                     with open(output_path, 'w') as f_json:
-                        json.dump(final_json_to_save, f_json, indent=2)
+                        json.dump(final_json_to_save, f_json, indent=2, ensure_ascii=True)
                     print(f"Saved V2 council context JSON (despite MD error) to: {output_path}")
                  except Exception as e_json_write:
                     print(f"Error writing final V2 JSON output file during MD error: {e_json_write}", file=sys.stderr)
@@ -429,7 +429,7 @@ def main():
 
         try:
             with open(output_path, 'w') as f:
-                json.dump(final_json_to_save, f, indent=2)
+                json.dump(final_json_to_save, f, indent=2, ensure_ascii=True)
             print(f"Saved V2 council context JSON to: {output_path}")
 
             with open(output_markdown_path, 'w') as f:

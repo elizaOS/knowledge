@@ -6,19 +6,19 @@ Unix philosophy: does one thing well - analyze an image with a prompt.
 
 Usage:
   # Basic description
-  python scripts/posters/vision.py image.png
+  python vision.py image.png
 
   # Custom prompt
-  python scripts/posters/vision.py image.png -p "What data is shown?"
+  python vision.py image.png -p "What data is shown?"
 
   # JSON output
-  python scripts/posters/vision.py image.png -p "List colors" --json
+  python vision.py image.png -p "List colors" --json
 
   # From stdin
-  cat image.png | python scripts/posters/vision.py - -p "describe"
+  cat image.png | python vision.py - -p "describe"
 
   # Batch analysis
-  for f in *.png; do echo "=== $f ==="; python scripts/posters/vision.py "$f" -p "one sentence"; done
+  for f in *.png; do echo "=== $f ==="; python vision.py "$f" -p "one sentence"; done
 """
 
 import os

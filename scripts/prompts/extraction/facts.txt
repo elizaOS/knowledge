@@ -10,8 +10,20 @@ The input will be a JSON object containing aggregated data from various sources 
 1.  Carefully analyze the entire `input_json_string` provided above.
 2.  Generate a `briefing_date` (use the date most relevant to the input data, typically found within the input or its filename, in YYYY-MM-DD format).
 3.  Write a 1-2 sentence `overall_summary` of the day's most critical intelligence or themes.
-4.  Extract and organize key information into the predefined `categories` detailed below. If no relevant information is found for a category or sub-category, you MAY omit it or represent it as an empty list/object as appropriate for the structure.
-5.  For each piece of extracted information, determine the path(s) within the original `input_json_string` that best support it. These paths should be represented as a list of strings in a `source` field (e.g., `["github.summaries.daily.content"]`).
+4.  Extract 5-10 `key_facts` - objective statements directly supported by the input. Each fact must:
+    - Be traceable to sourced items elsewhere in the briefing
+    - Avoid sentiment words (not: "unfortunately", "excitingly", "problematically")
+    - Avoid interpretation (not: "this suggests", "this indicates", "likely because")
+    - Be verifiable against the source data
+    - Good example: "PR #6216 was opened by lalalune on December 14"
+    - Bad example: "An important PR was opened that will significantly improve the platform"
+    Do not introduce facts that don't appear in sourced sections.
+5.  Extract `open_questions` - questions explicitly asked in the input that received no answer. Include only:
+    - Direct questions from Discord/GitHub discussions with no response
+    - Questions in issue comments without resolution
+    Do NOT include rhetorical questions or questions you're inferring.
+6.  Extract and organize key information into the predefined `categories` detailed below. If no relevant information is found for a category or sub-category, you MAY omit it or represent it as an empty list/object as appropriate for the structure.
+7.  For each piece of extracted information, determine the path(s) within the original `input_json_string` that best support it. These paths should be represented as a list of strings in a `source` field (e.g., `["github.summaries.daily.content"]`).
 
 **Output JSON Structure:**
 Produce a single JSON object as your response, adhering strictly to this structure:
@@ -20,6 +32,24 @@ Produce a single JSON object as your response, adhering strictly to this structu
 {{
   "briefing_date": "YYYY-MM-DD",
   "overall_summary": "A 1-2 sentence high-level summary of the day's key intelligence.",
+  "key_facts": [
+    "Objective fact 1 without sentiment or interpretation",
+    "Objective fact 2 without sentiment or interpretation"
+    // ... 5-10 facts total
+  ],
+  "open_questions": [
+    "Explicitly asked question with no answer?",
+    "Another unanswered question from discussions?"
+    // ... only include if there are unanswered questions
+  ],
+  "tags": {{
+    "themes": ["kebab-case-theme-tags"],
+    "sentiment": {{
+      "overall": "positive|negative|neutral|mixed",
+      "context": ["domain-tags"]
+    }},
+    "story_type": ["story-classification-tag"]
+  }},
   "categories": {{
     "twitter_news_highlights": [
       {{
@@ -89,9 +119,74 @@ Produce a single JSON object as your response, adhering strictly to this structu
 }}
 ```
 
+**Tag Generation Guidelines:**
+
+The `tags` object captures semantic metadata about the briefing content. Use these controlled vocabularies:
+
+**themes** (WHAT is happening - pick 2-5 most relevant):
+- `token-migration`, `governance`, `tokenomics`
+- `release`, `deployment`, `infrastructure`
+- `developer-experience`, `documentation`, `onboarding`
+- `security`, `vulnerability`, `audit`
+- `community-growth`, `partnerships`, `ecosystem`
+- `ai-agents`, `plugins`, `integrations`
+- `performance`, `optimization`, `scaling`
+- `ux-improvement`, `bug-fix`, `maintenance`
+- `market-activity`, `trading`, `liquidity`
+
+**sentiment** (structured object with overall mood and domain context):
+
+`overall` (pick exactly 1):
+- `positive` - generally good news, wins, progress
+- `negative` - problems, complaints, setbacks
+- `neutral` - informational, routine, no strong valence
+- `mixed` - significant positive AND negative elements
+
+`context` (WHAT DOMAIN the sentiment relates to - pick 1-3):
+- `economic` - tokenomics, prices, migration, trading, liquidity
+- `technical` - bugs, performance, DX, infrastructure, code quality
+- `governance` - decisions, moderation, direction, leadership
+- `social` - community vibes, drama, memes, interpersonal
+
+**story_type** (editorial classification - pick 1):
+- `crisis` - urgent issues, security incidents, breaking problems
+- `progress` - features shipped, milestones reached, wins
+- `maintenance` - routine updates, bug fixes, housekeeping
+- `announcement` - official communications, launches, events
+- `debate` - community discussions, governance decisions, differing opinions
+- `analysis` - market insights, strategic observations, trends
+
+**Editorial Guidelines for story_type:**
+
+Use these rules to avoid over-classification:
+
+**crisis** - ONLY use when:
+- There is a NEW, urgent technical problem (outage, security vulnerability, exploit)
+- The issue is breaking functionality for many users RIGHT NOW
+- Keywords present: security, vulnerability, outage, exploit, hack, down, broken, emergency
+
+**DO NOT mark as crisis:**
+- Routine complaints about token prices or migration timelines
+- Ongoing issues that have been discussed for days/weeks
+- General user frustration or "vibes are bad" sentiment
+- Feature requests framed as complaints
+
+**progress vs maintenance:**
+- `progress` = NEW features shipped, milestones reached, significant wins
+- `maintenance` = routine updates, bug fixes, dependency bumps, housekeeping
+- When in doubt between progress/maintenance, prefer `maintenance`
+
+**negative sentiment ≠ crisis:**
+- Negative sentiment about prices/tokenomics → `debate` or `analysis`, not crisis
+- Community disagreement → `debate`
+- Routine gripes about DX or bugs → `maintenance`
+
+**Chronic vs acute:** If the language suggests this is an ongoing/chronic issue rather than a new incident, prefer `debate` or `maintenance` over `crisis`.
+
 **Important Considerations:**
 *   **Structure Adherence:** Strictly follow the JSON structure, including all specified field names and types. If a category or sub-category has no data, represent it as an empty list `[]` or an empty object `{{}}` as appropriate within the defined structure (e.g., `"twitter_news_highlights": []`). Do not omit the category keys themselves unless explicitly allowed for *new* categories not listed.
 *   **Conciseness & Significance:** Focus on genuinely important information. Summarize where appropriate.
 *   **Source Attribution (`source`):** Provide accurate dot-notation paths from the input JSON for all claims.
 *   **No Redundancy:** Consolidate similar information.
+*   **Tag Consistency:** Use only tags from the controlled vocabularies above. Prefer reusable tags over one-off descriptions.
 *   **Output ONLY the JSON object.** No other text, explanations, or apologies. 
