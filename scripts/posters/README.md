@@ -40,7 +40,6 @@ scripts/posters/
 ├── analyze.py            # Analyze images → manifest.json
 ├── generate.py           # Create reference sheets
 ├── illustrate.py         # Story illustrations from ref sheets
-├── vision.py             # General-purpose image analysis
 ├── generate-ai-image.py  # Daily news posters from facts
 │
 ├── config/               # Configuration files
@@ -52,6 +51,7 @@ scripts/posters/
 ├── utils/                # Utility scripts
 │   ├── generate-sampler.py
 │   └── backfill-ai-images.py
+│   └── vision.py         # General-purpose image analysis
 │
 └── _deprecated/          # Old/experimental scripts
 ```
@@ -77,25 +77,25 @@ Simple, standalone image analysis following Unix philosophy. Outputs to stdout.
 
 ```bash
 # Basic description
-python scripts/posters/vision.py image.png
+python scripts/posters/utils/vision.py image.png
 
 # Custom prompt
-python scripts/posters/vision.py image.png -p "What data is shown in this chart?"
+python scripts/posters/utils/vision.py image.png -p "What data is shown in this chart?"
 
 # JSON output
-python scripts/posters/vision.py image.png -p "List the main colors" --json
+python scripts/posters/utils/vision.py image.png -p "List the main colors" --json
 
 # From stdin (for piping)
-cat image.png | python scripts/posters/vision.py - -p "describe"
+cat image.png | python scripts/posters/utils/vision.py - -p "describe"
 
 # Batch analysis
 for f in posters/*.png; do
   echo "=== $f ==="
-  python scripts/posters/vision.py "$f" -p "One sentence summary"
+  python scripts/posters/utils/vision.py "$f" -p "One sentence summary"
 done
 
 # Evaluate dataviz quality
-python scripts/posters/vision.py output.png -p "Rate clarity 1-10. What works?"
+python scripts/posters/utils/vision.py output.png -p "Rate clarity 1-10. What works?"
 ```
 
 | Flag | Description |
