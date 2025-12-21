@@ -157,7 +157,7 @@ def generate_tags_via_llm(briefing_data: dict) -> Optional[dict]:
     }
 
     payload = {
-        "model": "openai/gpt-4.1-mini",  # Fast/cheap model for tag generation
+        "model": "google/gemini-2.5-flash-lite",  # Fast/cheap model for tag generation
         "messages": [{"role": "user", "content": prompt}],
         "response_format": {"type": "json_object"}
     }
@@ -363,6 +363,22 @@ def convert_briefing_to_markdown(briefing_data: dict) -> str:
 
     md_lines.append(f"## Overall Summary")
     md_lines.append(f"{briefing_data.get('overall_summary', 'No overall summary provided.')}\n")
+
+    # Key Facts (simple strings)
+    key_facts = briefing_data.get("key_facts", [])
+    if key_facts:
+        md_lines.append(f"## Key Facts\n")
+        for fact in key_facts:
+            md_lines.append(f"- {fact}")
+        md_lines.append("")
+
+    # Open Questions (simple strings)
+    open_questions = briefing_data.get("open_questions", [])
+    if open_questions:
+        md_lines.append(f"## Open Questions\n")
+        for question in open_questions:
+            md_lines.append(f"- {question}")
+        md_lines.append("")
 
     categories = briefing_data.get("categories", {})
     if not categories:
@@ -709,6 +725,13 @@ def main():
             k: len(v) if isinstance(v, list) else (len(v.get("new_issues_prs", [])) if isinstance(v, dict) else 0)
             for k, v in categories.items()
         }
+        # Include counts for key_facts and open_questions
+        key_facts = llm_output_data.get("key_facts", [])
+        open_questions = llm_output_data.get("open_questions", [])
+        if key_facts:
+            llm_metadata["facts_by_category"]["key_facts"] = len(key_facts)
+        if open_questions:
+            llm_metadata["facts_by_category"]["open_questions"] = len(open_questions)
         llm_metadata["total_facts"] = sum(llm_metadata["facts_by_category"].values())
 
         # Handle tags: merge LLM-generated tags with rule-based tags
