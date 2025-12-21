@@ -270,10 +270,10 @@ def main():
     OUTPUT_DIR_BASE.mkdir(parents=True, exist_ok=True)
     output_file = OUTPUT_DIR_BASE / f"{target_date_str}.json"
     try:
-        output_json = json.dumps(final_context, indent=2, ensure_ascii=False)
+        output_json = json.dumps(final_context, indent=2, ensure_ascii=True)
         final_context["_metadata"]["file_size_bytes"] = len(output_json.encode('utf-8'))
         # Re-serialize with file size included
-        output_json = json.dumps(final_context, indent=2, ensure_ascii=False)
+        output_json = json.dumps(final_context, indent=2, ensure_ascii=True)
         with open(output_file, 'w', encoding='utf-8') as f:
             f.write(output_json)
         logging.info(f"Aggregated context saved to: {output_file}")

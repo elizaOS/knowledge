@@ -147,7 +147,7 @@ def main():
                     "source": f.name,
                     "entities": entities,
                     "_metadata": {"extracted_at": datetime.utcnow().isoformat() + "Z"}
-                }, indent=2))
+                }, indent=2, ensure_ascii=True))
 
     merged = merge_entities(all_entities)
 
@@ -160,10 +160,10 @@ def main():
     }
 
     if args.output:
-        args.output.write_text(json.dumps(output, indent=2))
+        args.output.write_text(json.dumps(output, indent=2, ensure_ascii=True))
         logging.info(f"Saved {len(all_entities)} files + {args.output.name} to {out_dir}/")
     else:
-        print(json.dumps(output, indent=2))
+        print(json.dumps(output, indent=2, ensure_ascii=True))
 
     # Summary
     for cat, items in merged.items():

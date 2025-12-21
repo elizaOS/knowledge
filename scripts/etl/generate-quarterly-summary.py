@@ -265,7 +265,7 @@ def main():
     }
 
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
-    output_file.write_text(json.dumps(summary, indent=2))
+    output_file.write_text(json.dumps(summary, indent=2, ensure_ascii=True))
     logging.info(f"Summary saved to {output_file}")
 
     # Print executive summary

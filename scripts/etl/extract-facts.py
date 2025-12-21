@@ -346,7 +346,7 @@ def backfill_tags_for_file(file_path: Path, dry_run: bool = False, force: bool =
 
         # Write back
         with open(file_path, 'w', encoding='utf-8') as f:
-            json.dump(data, f, indent=2)
+            json.dump(data, f, indent=2, ensure_ascii=True)
 
         logging.info(f"    [done] Added {len(tags['themes'])} themes, story_type={tags['story_type']}")
         return True
@@ -733,7 +733,7 @@ def main():
     logging.info(f"Writing categorized fact briefing for '{log_date_context}' to: {args.output_file}")
     try:
         with open(args.output_file, 'w', encoding='utf-8') as f:
-            json.dump(llm_output_data, f, indent=2)
+            json.dump(llm_output_data, f, indent=2, ensure_ascii=True)
         logging.info(f"Successfully wrote categorized fact briefing to {args.output_file}.")
 
         if args.markdown_export_file and llm_output_data:

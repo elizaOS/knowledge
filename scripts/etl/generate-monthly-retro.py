@@ -404,7 +404,7 @@ def main():
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 
     output_file = args.output or OUTPUT_DIR / f"{target_year}-{target_month:02d}-retro.json"
-    output_file.write_text(json.dumps(episode, indent=2))
+    output_file.write_text(json.dumps(episode, indent=2, ensure_ascii=True))
     logging.info(f"Retrospective saved to {output_file}")
 
     # Update latest.json symlink (used by daily extraction for baseline)
@@ -417,7 +417,7 @@ def main():
     # Also save as an episode
     EPISODES_DIR.mkdir(parents=True, exist_ok=True)
     episode_file = EPISODES_DIR / f"episode-retro-{target_year}-{target_month:02d}.json"
-    episode_file.write_text(json.dumps(episode, indent=2))
+    episode_file.write_text(json.dumps(episode, indent=2, ensure_ascii=True))
     logging.info(f"Episode saved to {episode_file}")
 
     # Print summary
