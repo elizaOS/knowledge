@@ -23,7 +23,7 @@ SCRIPT_DIR = Path(__file__).parent.resolve()
 SCRIPTS_ROOT = SCRIPT_DIR.parent  # scripts/
 WORKSPACE_ROOT = SCRIPTS_ROOT.parent  # repository root
 RETROS_DIR = WORKSPACE_ROOT / "the-council" / "retros"
-OUTPUT_DIR = WORKSPACE_ROOT / "the-council" / "summaries"
+OUTPUT_DIR = RETROS_DIR  # Consolidated: summaries now live alongside retros
 
 logging.basicConfig(level=logging.INFO, format='[%(asctime)s] - %(levelname)s - %(message)s')
 
