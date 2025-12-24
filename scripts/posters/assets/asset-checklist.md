@@ -1,0 +1,557 @@
+# Asset Library Checklist
+
+Generated: 2025-12-21 18:35
+
+## Coverage Summary
+
+- **Tokens**: 25/96 (26%)
+- **Platforms**: 35/189 (19%)
+- **Tech**: 15/157 (10%)
+- **Projects**: 50/244 (20%)
+- **Plugins**: 53/175 (30%)
+
+## Tokens
+
+- [x] AI16Z
+- [x] bitcoin
+- [x] BNB
+- [x] BNB Chain
+- [x] BONK
+- [x] dogwifhat
+- [x] DOT
+- [x] ELIZA
+- [x] elizao
+- [x] ELIZAOS
+- [x] elizaOS chain
+- [x] ETH
+- [x] ethereum
+- [x] ICP
+- [x] Polygon
+- [x] Polygon zkEVM
+- [x] SOL
+- [x] SOLANA
+- [x] solana token 2022
+- [x] USDC
+- [x] VIRTUAL
+- [x] WBTC
+- [x] WETH
+- [x] worldcoin
+- [x] XMR
+- [ ] AGENTE
+- [ ] ALCH
+- [ ] ANI
+- [ ] AUTOFUN
+- [ ] Avalanche
+- [ ] Base
+- [ ] BOOBA
+- [ ] BSC
+- [ ] Cardano
+- [ ] Chainlink
+- [ ] COM
+- [ ] comput3
+- [ ] cto coin
+- [ ] CULTVESTING
+- [ ] defairrewards
+- [ ] DEGEN
+- [ ] DEGENAI
+- [ ] degenpartner
+- [ ] DOOD
+- [ ] doodles
+- [ ] EDDY
+- [ ] eli
+- [ ] ELI5
+- [ ] ERC-8004
+- [ ] EVM
+- [ ] FAN
+- [ ] farm2
+- [ ] fightfi
+- [ ] FUN
+- [ ] gaianet
+- [ ] gemini
+- [ ] glm-4.5
+- [ ] GOONFI
+- [ ] HEDERA
+- [ ] Hyperliquid
+- [ ] JIMMY
+- [ ] JIMMY CODED
+- [ ] JPROOF
+- [ ] l2s
+- [ ] l3
+- [ ] l3 blockchain
+- [ ] LAURA
+- [ ] lightning network
+- [ ] LUARA
+- [ ] Near
+- [ ] nous
+- [ ] ODDIE
+- [ ] Optimism
+- [ ] opus
+- [ ] OTTO
+- [ ] p2p blockchain
+- [ ] payxbt
+- [ ] Phala
+- [ ] Phala Network
+- [ ] princescrt
+- [ ] QUILL
+- [ ] Railway
+- [ ] Raydium
+- [ ] RUBY
+- [ ] secret network
+- [ ] SHAW
+- [ ] sonnet
+- [ ] squid
+- [ ] Starknet
+- [ ] Sui
+- [ ] SVM
+- [ ] Sydney
+- [ ] TANK
+- [ ] TAPS
+- [ ] web3
+- [ ] XUSD
+
+## Platforms
+
+- [x] auto.fun
+- [x] Autofun
+- [x] AWS
+- [x] Binance
+- [x] Coinbase
+- [x] CoinGecko
+- [x] Dexscreener
+- [x] Discord
+- [x] ELIZA CLOUD
+- [x] eliza.how
+- [x] elizaos.ai
+- [x] elizaos.news
+- [x] ethereum
+- [x] ethereumpaymentinterface
+- [x] farcaster
+- [x] github
+- [x] Instagram
+- [x] lm studio
+- [x] OpenAI
+- [x] OpenRouter
+- [x] postgresql
+- [x] slack
+- [x] solana
+- [x] Solflare
+- [x] sqlite
+- [x] suno
+- [x] Supabase
+- [x] TELEGRAM
+- [x] twilio
+- [x] virtuals.io
+- [x] whatsapp
+- [x] whatsapp cloud api
+- [x] Worldcoin
+- [x] x platform
+- [x] youtube
+- [ ] alchemy.com
+- [ ] Anthropic
+- [ ] Apple App Store
+- [ ] arc.fun
+- [ ] Bento.me
+- [ ] Bithumb
+- [ ] Bitpanda
+- [ ] BlackRock
+- [ ] Bluesky
+- [ ] Bubblemap
+- [ ] bun
+- [ ] Bybit
+- [ ] capacitor.js
+- [ ] CasaOS
+- [ ] chainlink
+- [ ] chainopera
+- [ ] Character.AI
+- [ ] ChatGPT
+- [ ] ChatGPT 4o
+- [ ] clanktank.tv
+- [ ] claude
+- [ ] Cloudflare
+- [ ] CNBC
+- [ ] Coinone
+- [ ] cointelegraph
+- [ ] collabland
+- [ ] Comput3
+- [ ] Coolify
+- [ ] cursor
+- [ ] daos.fun
+- [ ] DeepInfra
+- [ ] DEGA
+- [ ] DigitalOcean
+- [ ] Docker
+- [ ] Dune
+- [ ] Eleven Labs
+- [ ] Exa
+- [ ] Facebook Reels
+- [ ] Figma
+- [ ] fleek
+- [ ] Fly.io
+- [ ] Forbes
+- [ ] Gate.io
+- [ ] Gemini
+- [ ] Google
+- [ ] google generative ai
+- [ ] GPT-4o
+- [ ] Grok
+- [ ] HackMD
+- [ ] Hedra Labs
+- [ ] heroku
+- [ ] Hetzner
+- [ ] Hyperfy
+- [ ] immunefi
+- [ ] Jupiter
+- [ ] kraken
+- [ ] KuCoin
+- [ ] Ledger
+- [ ] LinkedIn
+- [ ] livepeer
+- [ ] Llama
+- [ ] local ai
+- [ ] localstack
+- [ ] Masa
+- [ ] Mastadata
+- [ ] Matrix
+- [ ] Mattermost
+- [ ] mcp
+- [ ] Meta
+- [ ] Meta Quest 3
+- [ ] MetaMask
+- [ ] Meteora
+- [ ] mexc
+- [ ] microsoft
+- [ ] Midjourney
+- [ ] minio
+- [ ] mirror.xyz
+- [ ] N8N
+- [ ] New York Times
+- [ ] nextjs-starter
+- [ ] Nifty Island
+- [ ] Node.js
+- [ ] Nostr
+- [ ] Notion
+- [ ] NPM
+- [ ] Oculus
+- [ ] ollama
+- [ ] OpenServAI
+- [ ] Opus-3
+- [ ] OVH
+- [ ] PacerMonitor
+- [ ] Perplexity
+- [ ] Phala
+- [ ] Phantom
+- [ ] PlayCanvas
+- [ ] pnpm
+- [ ] Polymarket
+- [ ] Privy
+- [ ] Protein Data Bank
+- [ ] pump.fun
+- [ ] quill lp
+- [ ] Rabby
+- [ ] railway
+- [ ] Raydium
+- [ ] react native
+- [ ] readyplayer.me
+- [ ] Reddit
+- [ ] Remix SDK
+- [ ] render
+- [ ] Replit
+- [ ] Reuters
+- [ ] Robinhood
+- [ ] roblox
+- [ ] runescape
+- [ ] Salesforce AppExchange
+- [ ] Samsung
+- [ ] Sentry
+- [ ] Shark Tank
+- [ ] SQL
+- [ ] SteamBot
+- [ ] Stripe
+- [ ] substack
+- [ ] SWAGGER
+- [ ] Talisman
+- [ ] Tally
+- [ ] Tapestry AI
+- [ ] teams
+- [ ] TestFlight
+- [ ] tiktok
+- [ ] time.fun
+- [ ] tip.cc
+- [ ] trigger.dev
+- [ ] Twitter
+- [ ] twitter/x
+- [ ] ubuntu wsl2
+- [ ] Umbrel
+- [ ] unreal engine
+- [ ] vapi.ai
+- [ ] VaultLayer
+- [ ] vercel
+- [ ] VPS
+- [ ] Whisper
+- [ ] wideworlds
+- [ ] windows
+- [ ] workos
+- [ ] WSL
+- [ ] x (twitter)
+- [ ] X Corp
+- [ ] x.com
+- [ ] X/Twitter
+- [ ] x402.org
+- [ ] x402scan.com
+- [ ] xpressioncamera.com
+- [ ] zep
+
+## Plugins
+
+- [x] @elizaos/plugin-bootstrap
+- [x] @elizaos/plugin-evm
+- [x] @elizaos/plugin-openai
+- [x] adapter-supabase
+- [x] Autocoder
+- [x] autonomous trader
+- [x] better-sqlite3
+- [x] birdeye
+- [x] bootstrap
+- [x] BOOTSTRAP PLUGIN
+- [x] coingecko
+- [x] coinmarketcap
+- [x] dexscreener plugin
+- [x] Discord
+- [x] Discord client
+- [x] discord integration
+- [x] Discord plugin
+- [x] ElizaCore Discord plugins
+- [x] elizaos discord plugin
+- [x] evm
+- [x] EVM chain
+- [x] EVM chains plugin
+- [x] EVM plugin
+- [x] farcaster
+- [x] Farcaster plugin
+- [x] Form Plugin
+- [x] Forms plugin
+- [x] giphy
+- [x] hyperliquid plugin
+- [x] Managed Compute Platform
+- [x] New Forms plugin
+- [x] OpenAI
+- [x] openai plugin
+- [x] openrouter plugin
+- [x] pdf
+- [x] PGLite
+- [x] plugin-bootstrap
+- [x] plugin-evm
+- [x] plugin-openai
+- [x] plugin-openrouter
+- [x] plugin-solana
+- [x] plugin-suno
+- [x] plugin-telegram
+- [x] Polygon zkEVM plugin
+- [x] postgres-plugin
+- [x] pyth
+- [x] Starknet plugin
+- [x] telegram
+- [x] TELEGRAM CLIENT
+- [x] telegram plugin
+- [x] twilio plugin
+- [x] video understanding
+- [x] whatsapp ai auto-reply system
+- [ ] @anthropic-ai/claude-code
+- [ ] @elizaos/plugins-ollama
+- [ ] @elizaos/react
+- [ ] admin plugin
+- [ ] agent-scoped plugins
+- [ ] agent-twitter-client
+- [ ] ai glasses
+- [ ] AI-powered plugin migration tool
+- [ ] ai16z ecosystem
+- [ ] airkit plugin
+- [ ] aisdk
+- [ ] Anthropic plugin
+- [ ] authentication middleware
+- [ ] BNB plugin
+- [ ] Brilliantlabs
+- [ ] browser plugin
+- [ ] browserbase plugin
+- [ ] bun.Build
+- [ ] bunified plugins
+- [ ] CLI test timeouts
+- [ ] client-twitter
+- [ ] client-twitter plugin
+- [ ] cloud-v2
+- [ ] community-investor
+- [ ] composio
+- [ ] Composio plugin
+- [ ] CSV plugins
+- [ ] custom plugins
+- [ ] DegenAI plugin
+- [ ] digital twin plugin
+- [ ] eli5
+- [ ] ElizaOS knowledge plugin
+- [ ] ElizaOS V2 plugin system
+- [ ] environment file lookup system
+- [ ] gaianet
+- [ ] gaianet plugin
+- [ ] groq
+- [ ] hedera eliza plugins
+- [ ] holo agent
+- [ ] inference plugin
+- [ ] intel
+- [ ] Jupiter Swap
+- [ ] knowledge
+- [ ] Knowledge plugin
+- [ ] knowledge plugins
+- [ ] linkedin
+- [ ] livepeer plugin
+- [ ] local-AI plugin
+- [ ] LocalAI plugin
+- [ ] login with eliza
+- [ ] markdown
+- [ ] MCP
+- [ ] morpheus plugin
+- [ ] ollama
+- [ ] OLLAMA PLUGIN
+- [ ] ollama-plugin
+- [ ] pluggy
+- [ ] plugin
+- [ ] plugin architecture
+- [ ] plugin capabilities
+- [ ] Plugin compatibility
+- [ ] plugin development
+- [ ] plugin ecosystem
+- [ ] plugin improvements
+- [ ] plugin infrastructure
+- [ ] plugin integration
+- [ ] plugin MCP
+- [ ] plugin-anthropic
+- [ ] plugin-browser
+- [ ] plugin-composio
+- [ ] plugin-elizacloud
+- [ ] plugin-embeddings
+- [ ] plugin-groq
+- [ ] plugin-knowledge
+- [ ] plugin-knowledge component
+- [ ] plugin-livepeer
+- [ ] plugin-local-ai
+- [ ] plugin-mcp
+- [ ] plugin-memory
+- [ ] plugin-mysql
+- [ ] plugin-ollama
+- [ ] plugin-quick-starter
+- [ ] plugin-redpill
+- [ ] plugin-sql
+- [ ] plugin-twitter
+- [ ] plugin-venice
+- [ ] plugin-waitlist
+- [ ] plugin/config
+- [ ] plugins
+- [ ] Polygon plugin
+- [ ] prediction market agents
+- [ ] Remotion
+- [ ] reveel
+- [ ] Shaw's browserbase plugin
+- [ ] sql
+- [ ] SQL plugin
+- [ ] sql plugins
+- [ ] starter plugin
+- [ ] tavily
+- [ ] third-party plugin installation support
+- [ ] tools plugin
+- [ ] trust marketplace plugin
+- [ ] Twitter
+- [ ] Twitter agent
+- [ ] Twitter API
+- [ ] Twitter client
+- [ ] TWITTER CLIENT PLUGIN
+- [ ] Twitter client plugins
+- [ ] Twitter integration
+- [ ] twitter plugin
+- [ ] Twitter plugin v1.2.16
+- [ ] twitter-plugin
+- [ ] Twitter/X plugin
+- [ ] twitterapi.io
+- [ ] Venice
+- [ ] weather plugin
+- [ ] web search plugin
+- [ ] web-search
+- [ ] web-search plugin
+- [ ] wolfram plugin
+- [ ] Xreal One Pro
+- [ ] zod
+
+## Tech
+
+*157 entities, 15 with assets*
+
+### Have:
+- [x] bootstrapper architecture
+- [x] BTC
+- [x] desktopcapture api
+- [x] EVM
+- [x] low-level api router
+- [x] mongodb
+- [x] nvidia
+- [x] OpenAI
+- [x] postgres
+- [x] postgresql
+- [x] postgresql row-level security
+- [x] Redis
+- [x] solana integration
+- [x] tee
+- [x] tts
+
+## Projects
+
+*244 entities, 50 with assets*
+
+### Have:
+- [x] aethircloud
+- [x] ai16z
+- [x] AUTO.FUN
+- [x] Autocasino
+- [x] autodotfun
+- [x] autofun
+- [x] autofun incubator
+- [x] awesome-eliza
+- [x] DAOSdotFUN
+- [x] DEVA
+- [x] eliza
+- [x] eliza agent registry
+- [x] eliza agents
+- [x] eliza cloud
+- [x] eliza cloud backend
+- [x] Eliza Cloud Platform
+- [x] Eliza Labs
+- [x] eliza v1
+- [x] eliza v2
+- [x] eliza-nextjs-starter
+- [x] eliza.how
+- [x] elizacloud
+- [x] elizadao
+- [x] elizafy
+- [x] elizao
+- [x] elizaOS
+- [x] elizaos cloud
+- [x] elizaos.ai
+- [x] elizaso
+- [x] elizav2
+- [x] ElizaWakesUp
+- [x] ethereum attestation service
+- [x] Ethereum Foundation
+- [x] farcaster
+- [x] geckoterminal
+- [x] HashWarlock TEE Starter Project
+- [x] Hyperliquid
+- [x] Keystone
+- [x] lmstudio
+- [x] OpenAI
+- [x] OpenRouter
+- [x] Otako
+- [x] otc bond desk
+- [x] PostgreSQL
+- [x] REMILIO CORPORATION AUTONOMOUS AGENT EXPERIMENT
+- [x] Solana Foundation
+- [x] the future history of eliza
+- [x] virtual
+- [x] virtuals
+- [x] virtuals ecosystem

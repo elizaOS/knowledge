@@ -23,7 +23,14 @@ The input will be a JSON object containing aggregated data from various sources 
     - Questions in issue comments without resolution
     Do NOT include rhetorical questions or questions you're inferring.
 6.  Extract and organize key information into the predefined `categories` detailed below. If no relevant information is found for a category or sub-category, you MAY omit it or represent it as an empty list/object as appropriate for the structure.
-7.  For each piece of extracted information, determine the path(s) within the original `input_json_string` that best support it. These paths should be represented as a list of strings in a `source` field (e.g., `["github.summaries.daily.content"]`).
+7.  For each piece of extracted information, identify the source file(s) from the repository that support it. Use relative file paths from the repository root in a `source` field (e.g., `["ai-news/elizaos/discord/md/2025-12-19.md"]`, `["github/summaries/day/2025-12-19.md"]`). The input data keys map to files as follows:
+    - `ai_news_elizaos_discord_md_YYYY-MM-DD` → `ai-news/elizaos/discord/md/YYYY-MM-DD.md`
+    - `ai_news_elizaos_daily_discord_json_YYYY-MM-DD` → `ai-news/elizaos/discord/json/YYYY-MM-DD.json`
+    - `ai_news_elizaos_daily_json_YYYY-MM-DD` → `ai-news/elizaos/json/YYYY-MM-DD.json`
+    - `ai_news_elizaos_daily_md_YYYY-MM-DD` → `ai-news/elizaos/md/YYYY-MM-DD.md`
+    - `github_summaries_daily_YYYY-MM-DD` → `github/summaries/day/YYYY-MM-DD.md`
+    - `github_summaries_week_latest_*` → `github/summaries/week/` + the filename
+    - `github_summaries_month_latest_*` → `github/summaries/month/` + the filename
 
 **Output JSON Structure:**
 Produce a single JSON object as your response, adhering strictly to this structure:
@@ -54,7 +61,7 @@ Produce a single JSON object as your response, adhering strictly to this structu
     "twitter_news_highlights": [
       {{
         "claim": "Key highlight or news from Twitter.",
-        "source": ["path.to.twitter.data"],
+        "source": ["ai-news/elizaos/discord/json/YYYY-MM-DD.json"],
         "sentiment": "positive|negative|neutral" // Optional, if discernible
       }}
       // ... more twitter highlights (can be an empty list)
@@ -76,7 +83,7 @@ Produce a single JSON object as your response, adhering strictly to this structu
       "overall_focus": [
          {{
             "claim": "Summary of overall development focus or trend observed from GitHub activity (e.g., specific features, refactoring efforts, bug squashing).",
-            "source": ["path.to.github.summary.data"]
+            "source": ["github/summaries/day/YYYY-MM-DD.md"]
          }}
          // (can be an empty list or a single item)
       ]
@@ -86,14 +93,14 @@ Produce a single JSON object as your response, adhering strictly to this structu
         "channel": "#channel-name", // Include # if applicable
         "summary": "Summary of key discussions, announcements, or emergent themes in the channel.",
         "key_participants": ["user1", "user2"], // Optional list of notable participants
-        "source": ["path.to.discord.channel.summary"]
+        "source": ["ai-news/elizaos/discord/md/YYYY-MM-DD.md"]
       }}
       // ... more discord channel summaries (can be an empty list)
     ],
     "user_feedback": [
       {{
         "feedback_summary": "Key theme, specific suggestion, or critical piece of user feedback.",
-        "source": ["path.to.feedback.source"],
+        "source": ["ai-news/elizaos/discord/md/YYYY-MM-DD.md"],
         "sentiment": "positive|negative|neutral|mixed" // Optional, if discernible
       }}
       // ... more feedback items (can be an empty list)
@@ -109,7 +116,7 @@ Produce a single JSON object as your response, adhering strictly to this structu
     "market_analysis": [
         {{
             "observation": "Key market observation, competitor activity, or relevant trend.",
-            "source": ["path.to.market.data"], // If market data is present in input
+            "source": ["ai-news/elizaos/discord/md/YYYY-MM-DD.md"], // Use appropriate source file
             "relevance": "Brief note on its relevance or potential impact on the project."
         }}
         // ... more market analysis points (can be an empty list if no market data)
@@ -186,7 +193,7 @@ Use these rules to avoid over-classification:
 **Important Considerations:**
 *   **Structure Adherence:** Strictly follow the JSON structure, including all specified field names and types. If a category or sub-category has no data, represent it as an empty list `[]` or an empty object `{{}}` as appropriate within the defined structure (e.g., `"twitter_news_highlights": []`). Do not omit the category keys themselves unless explicitly allowed for *new* categories not listed.
 *   **Conciseness & Significance:** Focus on genuinely important information. Summarize where appropriate.
-*   **Source Attribution (`source`):** Provide accurate dot-notation paths from the input JSON for all claims.
+*   **Source Attribution (`source`):** Provide repository-relative file paths (e.g., `ai-news/elizaos/discord/md/2025-12-19.md`) for all claims. Use the key-to-path mapping provided above.
 *   **No Redundancy:** Consolidate similar information.
 *   **Tag Consistency:** Use only tags from the controlled vocabularies above. Prefer reusable tags over one-off descriptions.
 *   **Output ONLY the JSON object.** No other text, explanations, or apologies. 

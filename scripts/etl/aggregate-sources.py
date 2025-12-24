@@ -9,9 +9,28 @@ If no date is provided, defaults to the current date.
 import argparse
 import json
 import logging
+import subprocess
 from datetime import datetime, timedelta
+from functools import lru_cache
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Union # For type hinting
+
+
+@lru_cache(maxsize=1)
+def get_repo_info() -> Optional[Dict[str, str]]:
+    """Get repository info via gh api for fork-friendly source resolution."""
+    try:
+        result = subprocess.run(
+            ["gh", "api", "repos/:owner/:repo", "--jq", "{owner: .owner.login, repo: .name, full_name: .full_name}"],
+            capture_output=True,
+            text=True,
+            timeout=10
+        )
+        if result.returncode == 0:
+            return json.loads(result.stdout.strip())
+    except Exception:
+        pass
+    return None
 
 # --- Configuration ---
 SCRIPT_DIR = Path(__file__).resolve().parent  # scripts/etl/
@@ -259,6 +278,7 @@ def main():
     final_context["_metadata"] = {
         "generated_at": datetime.utcnow().isoformat() + "Z",
         "target_date": target_date_str,
+        "source_repo": get_repo_info(),  # Fork-friendly: derived from gh api
         "sources_successful": len(sources_with_content),
         "sources_failed": len(sources_with_errors),
         "source_keys": sources_with_content,
