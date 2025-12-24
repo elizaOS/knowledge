@@ -1,17 +1,17 @@
-# Daily Report - 2025-11-30
+# Daily Report - 2025-11-26
 
 ## GitHub Activity Summary
-- From November 30 to December 1, 2025, the elizaOS/eliza repository showed moderate activity with 0 new pull requests opened while 2 were merged. During this period, 2 new issues were created, and the repository had 6 active contributors working on the project.
+- From November 26 to November 27, 2025, the elizaOS/eliza repository showed significant activity with 1 new pull request (which was successfully merged), 21 new issues opened, and contributions from 7 active developers during this period.
 
 ## Issues
-- Issue #5932 titled 'Technical Debt & CLI/Server Cleanup' by @borisudovicic is CLOSED. (Source: [https://github.com/elizaOS/eliza/issues/5932](https://github.com/elizaOS/eliza/issues/5932))
-- Issue #6073 titled 'Standardize Logging Across Core, CLI, and Server' by @borisudovicic is CLOSED. (Source: [https://github.com/elizaOS/eliza/issues/6073](https://github.com/elizaOS/eliza/issues/6073))
-- Issue #6196 titled 'Voice Support' by @borisudovicic is OPEN. (Source: [https://github.com/elizaOS/eliza/issues/6196](https://github.com/elizaOS/eliza/issues/6196))
-- Issue #6195 titled 'Mobile App' by @borisudovicic is OPEN. (Source: [https://github.com/elizaOS/eliza/issues/6195](https://github.com/elizaOS/eliza/issues/6195))
+- Issue #6191 titled 'Crypto Payments for Credits' by @borisudovicic is OPEN. (Source: https://github.com/elizaOS/eliza/issues/6191)
+- Issue #6190 titled 'Add Capability Toggles for Performance' by @borisudovicic is OPEN. (Source: https://github.com/elizaOS/eliza/issues/6190)
+- Issue #6189 titled 'Implement Inline Image/Video Generation' by @borisudovicic is OPEN. (Source: https://github.com/elizaOS/eliza/issues/6189)
+- Issue #6188 titled 'Fix "Dashboard" Button Pointer Event' by @borisudovicic is OPEN. (Source: https://github.com/elizaOS/eliza/issues/6188)
+- Issue #6187 titled 'Fix Container Deployment Bug' by @borisudovicic is OPEN. (Source: https://github.com/elizaOS/eliza/issues/6187)
 
 ## Pull Requests
-- PR #6169 titled 'refactor: Standardize Logging Across Core, CLI, and Server' is merged, standardizing logging functionality across different components of the Eliza system. (Source: [https://github.com/elizaOS/eliza/pull/6169](https://github.com/elizaOS/eliza/pull/6169))
-- PR #6194 titled 'rollback(plugin-sql): revert build configuration changes from 08d5141…' is merged, reverting previous build configuration changes in the SQL plugin. (Source: [https://github.com/elizaOS/eliza/pull/6194](https://github.com/elizaOS/eliza/pull/6194))
+- PR #6170 titled 'fix(core): resolve TS2358 instanceof error' by @standujar is merged, addressing a TypeScript instanceof error in the core module.
 
 ## Summary for github_other
 - The repository elizaOS/eliza has a list of top contributors, though specific contributor details are not provided in the input.
