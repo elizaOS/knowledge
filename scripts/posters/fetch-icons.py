@@ -3,6 +3,8 @@
 Fetch token icons from CoinGecko API.
 Rate limited: 3s between requests (free tier: ~10-30/min)
 
+Icon naming: token-{name}.png (flat structure with token- prefix)
+
 Usage:
   python scripts/posters/fetch-icons.py --tokens      # Fetch mapped tokens only (fast)
   python scripts/posters/fetch-icons.py --discover    # Try ALL inventory tokens on CoinGecko (slow)
@@ -102,22 +104,64 @@ def fetch_coingecko_icon(coin_id: str, output_path: Path) -> bool:
 COINGECKO_RATE_LIMIT = 3  # seconds between requests (free tier: ~10-30/min)
 
 
-def get_existing_icons(directory: Path) -> set:
-    """Get set of existing icon basenames (without extension)."""
-    if not directory.exists():
+def search_coingecko_id(query: str) -> Optional[str]:
+    """Search CoinGecko for a coin ID by name/ticker."""
+    url = "https://api.coingecko.com/api/v3/search"
+    try:
+        response = requests.get(url, params={"query": query}, timeout=10)
+        response.raise_for_status()
+        coins = response.json().get("coins", [])
+        if coins:
+            # Return the first match's ID
+            return coins[0]["id"]
+    except Exception:
+        pass
+    return None
+
+
+def get_existing_token_icons() -> set:
+    """Get set of existing token icon names (without token- prefix and extension)."""
+    if not ICONS_DIR.exists():
         return set()
-    return {f.stem.lower() for f in directory.iterdir() if f.is_file()}
+    existing = set()
+    for f in ICONS_DIR.iterdir():
+        if f.is_file() and f.name.startswith("token-"):
+            # Extract name without "token-" prefix and extension
+            name = f.stem[6:]  # Remove "token-" prefix
+            existing.add(name.lower())
+    return existing
+
+
+def get_token_icon_path(name: str) -> Path:
+    """Get the icon path for a token (with token- prefix)."""
+    normalized = name.lower().strip().replace(" ", "-")
+    return ICONS_DIR / f"token-{normalized}.png"
+
+
+def get_token_entities(inventory: dict) -> list[dict]:
+    """Get token entities from inventory (handles both v1 and v2 schema)."""
+    entities = inventory.get("entities", [])
+
+    # v2 schema: flat list with type field
+    if isinstance(entities, list):
+        return [e for e in entities if isinstance(e, dict) and e.get("type") == "token"]
+
+    # v1 schema: dict with category arrays
+    if isinstance(entities, dict):
+        tokens = entities.get("tokens", [])
+        return [{"name": t, "type": "token"} if isinstance(t, str) else t for t in tokens]
+
+    return []
 
 
 def fetch_tokens(specific: str = None, discover: bool = False):
     """Fetch token icons from CoinGecko."""
-    tokens_dir = ICONS_DIR / "tokens"
-    tokens_dir.mkdir(parents=True, exist_ok=True)
+    ICONS_DIR.mkdir(parents=True, exist_ok=True)
 
     if specific:
         # Fetch specific token
         coin_id = COINGECKO_IDS.get(specific.lower(), specific.lower())
-        output = tokens_dir / f"{specific.lower()}.png"
+        output = get_token_icon_path(specific)
         if output.exists():
             logging.info(f"Already have {specific}")
             return
@@ -126,32 +170,49 @@ def fetch_tokens(specific: str = None, discover: bool = False):
         return
 
     # Pre-scan existing icons
-    existing = get_existing_icons(tokens_dir)
+    existing = get_existing_token_icons()
     logging.info(f"Found {len(existing)} existing token icons")
 
     if discover and ENTITY_INVENTORY.exists():
         # Try to fetch all tokens from inventory
         with open(ENTITY_INVENTORY) as f:
             inventory = json.load(f)
-        tokens = inventory.get("entities", {}).get("tokens", [])
+        token_entities = get_token_entities(inventory)
 
         # Filter to only missing tokens
         to_fetch = []
-        for token in tokens:
-            name = token.lower().strip().lstrip('$')
+        for entity in token_entities:
+            name = entity.get("name", "") if isinstance(entity, dict) else str(entity)
+            name = name.lower().strip().lstrip('$')
             if len(name) >= 2 and name not in existing:
-                coin_id = COINGECKO_IDS.get(name, name)
+                # Use mapping if available, otherwise will search later
+                coin_id = COINGECKO_IDS.get(name)
                 to_fetch.append((name, coin_id))
 
-        logging.info(f"Need to fetch {len(to_fetch)} tokens ({len(tokens) - len(to_fetch)} already exist)")
+        logging.info(f"Need to fetch {len(to_fetch)} tokens ({len(token_entities) - len(to_fetch)} already exist)")
 
         if not to_fetch:
             return
 
-        success, failed = 0, 0
+        success, failed, searched = 0, 0, 0
         for i, (name, coin_id) in enumerate(to_fetch):
-            output = tokens_dir / f"{name}.png"
-            logging.info(f"  [{i+1}/{len(to_fetch)}] {name} ({coin_id})...")
+            output = get_token_icon_path(name)
+
+            # If no mapping, try search API first
+            if coin_id is None:
+                searched += 1
+                logging.info(f"  [{i+1}/{len(to_fetch)}] {name} - searching...")
+                coin_id = search_coingecko_id(name)
+                if coin_id:
+                    logging.info(f"    found: {coin_id}")
+                    time.sleep(COINGECKO_RATE_LIMIT)  # Rate limit the search
+                else:
+                    logging.warning(f"    [skip] {name} - not found in search")
+                    failed += 1
+                    continue
+            else:
+                logging.info(f"  [{i+1}/{len(to_fetch)}] {name} ({coin_id})...")
+
             if fetch_coingecko_icon(coin_id, output):
                 success += 1
             else:
@@ -159,7 +220,7 @@ def fetch_tokens(specific: str = None, discover: bool = False):
             if i < len(to_fetch) - 1:  # Don't sleep after last request
                 time.sleep(COINGECKO_RATE_LIMIT)
 
-        logging.info(f"Done: {success} fetched, {failed} not found")
+        logging.info(f"Done: {success} fetched, {failed} not found ({searched} auto-discovered)")
     else:
         # Fetch mapped tokens only
         to_fetch = [(name, cid) for name, cid in COINGECKO_IDS.items() if name not in existing]
@@ -171,7 +232,7 @@ def fetch_tokens(specific: str = None, discover: bool = False):
 
         success = 0
         for i, (entity_name, coin_id) in enumerate(to_fetch):
-            output = tokens_dir / f"{entity_name}.png"
+            output = get_token_icon_path(entity_name)
             if fetch_coingecko_icon(coin_id, output):
                 success += 1
             if i < len(to_fetch) - 1:
