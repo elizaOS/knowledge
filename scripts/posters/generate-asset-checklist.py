@@ -9,6 +9,7 @@ Usage:
 
 import json
 import argparse
+import re
 from pathlib import Path
 from datetime import datetime
 
@@ -19,13 +20,20 @@ ENTITY_INVENTORY = ASSETS_DIR / "manifest.json"
 
 
 def get_all_assets() -> set:
-    """Get lowercase names of ALL existing assets across all folders."""
+    """Get lowercase names of ALL existing assets (flat directory structure)."""
     assets = set()
-    for cat_dir in ICONS_DIR.iterdir():
-        if cat_dir.is_dir():
-            for f in cat_dir.iterdir():
-                if f.is_file():
-                    assets.add(f.stem.lower())
+    if not ICONS_DIR.exists():
+        return assets
+    for f in ICONS_DIR.iterdir():
+        if f.is_file() and not f.name.startswith('_'):
+            # Strip numbered suffix: "discord-1.png" -> "discord"
+            stem = f.stem.lower()
+            # Remove trailing -N suffix
+            match = re.match(r'^(.+?)-\d+$', stem)
+            if match:
+                assets.add(match.group(1))
+            else:
+                assets.add(stem)
     return assets
 
 
@@ -42,41 +50,47 @@ def entity_matches_asset(entity: str, assets: set) -> bool:
     return False
 
 
-def get_existing_assets(category: str, all_assets: set = None) -> set:
-    """Get asset names for a category.
+def get_existing_assets(entity_type: str, all_assets: set = None) -> set:
+    """Get asset names for an entity type.
 
-    For tech/projects, check all_assets since icons may exist in other folders.
+    With flat icon directory, all types share the same asset pool.
+    Type prefixes (token-, user-) are stripped by get_all_assets().
     """
-    SHARED_CATEGORIES = {"tech", "projects"}
-
-    if category in SHARED_CATEGORIES and all_assets:
-        return all_assets
-
-    cat_dir = ICONS_DIR / category
-    if not cat_dir.exists():
-        return all_assets if all_assets else set()
-
-    assets = set()
-    for f in cat_dir.iterdir():
-        if f.is_file():
-            assets.add(f.stem.lower())
-    return assets
+    # All types now share the flat icons directory
+    return all_assets if all_assets else set()
 
 
 def load_entities() -> dict:
-    """Load entities from inventory (simple array format)."""
+    """Load entities from manifest (flat list with type field).
+
+    New schema: {"entities": [{"name": "Bitcoin", "type": "token", ...}]}
+    Groups entities by type and returns: {"token": {"bitcoin": "Bitcoin"}, ...}
+    """
     with open(ENTITY_INVENTORY) as f:
         data = json.load(f)
 
     result = {}
-    for category, items in data.get("entities", {}).items():
+    entities = data.get("entities", [])
+
+    for entity in entities:
+        if not isinstance(entity, dict):
+            continue
+        name = entity.get("name", "")
+        entity_type = entity.get("type", "project")
+        status = entity.get("status", "keep")
+
+        # Skip entities marked as skip or review
+        if status in ("skip", "review"):
+            continue
+
+        if entity_type not in result:
+            result[entity_type] = {}
+
         # Dedupe by lowercase, keep original for display
-        seen = {}
-        for item in items:
-            key = item.lower()
-            if key not in seen:
-                seen[key] = item
-        result[category] = seen
+        key = name.lower()
+        if key not in result[entity_type]:
+            result[entity_type][key] = name
+
     return result
 
 
@@ -94,28 +108,31 @@ def generate_checklist() -> str:
         ""
     ]
 
-    # Calculate coverage for each category
+    # Entity types in the new schema
+    entity_types = ["token", "project", "user"]
+
+    # Calculate coverage for each type
     coverage = {}
-    for category in ["tokens", "platforms", "tech", "projects", "plugins"]:
-        entity_set = entities.get(category, {})
-        assets = get_existing_assets(category, all_assets)
+    for entity_type in entity_types:
+        entity_set = entities.get(entity_type, {})
+        assets = get_existing_assets(entity_type, all_assets)
 
         # Count matches using fuzzy containment
         have = sum(1 for entity in entity_set.values() if entity_matches_asset(entity, assets))
         total = len(entity_set)
         pct = (have / total * 100) if total > 0 else 0
 
-        coverage[category] = {"have": have, "total": total, "pct": pct, "assets": assets}
-        lines.append(f"- **{category.title()}**: {have}/{total} ({pct:.0f}%)")
+        coverage[entity_type] = {"have": have, "total": total, "pct": pct, "assets": assets}
+        lines.append(f"- **{entity_type.title()}**: {have}/{total} ({pct:.0f}%)")
 
     lines.append("")
 
-    # Generate checklist for each category
-    for category in ["tokens", "platforms", "plugins"]:
-        entity_set = entities.get(category, {})
-        assets = coverage[category]["assets"]
+    # Generate detailed checklist for tokens (smaller set)
+    for entity_type in ["token"]:
+        entity_set = entities.get(entity_type, {})
+        assets = coverage[entity_type]["assets"]
 
-        lines.append(f"## {category.title()}")
+        lines.append(f"## {entity_type.title()}s")
         lines.append("")
 
         # Sort by status (have first), then alphabetically
@@ -132,13 +149,13 @@ def generate_checklist() -> str:
 
         lines.append("")
 
-    # Tech and projects are large - just show summary
-    for category in ["tech", "projects"]:
-        entity_set = entities.get(category, {})
-        assets = coverage[category]["assets"]
-        have_count = coverage[category]["have"]
+    # Projects and users are large - just show summary
+    for entity_type in ["project", "user"]:
+        entity_set = entities.get(entity_type, {})
+        assets = coverage[entity_type]["assets"]
+        have_count = coverage[entity_type]["have"]
 
-        lines.append(f"## {category.title()}")
+        lines.append(f"## {entity_type.title()}s")
         lines.append("")
         lines.append(f"*{len(entity_set)} entities, {have_count} with assets*")
         lines.append("")
@@ -147,8 +164,10 @@ def generate_checklist() -> str:
         items = [display for display in entity_set.values() if entity_matches_asset(display, assets)]
         if items:
             lines.append("### Have:")
-            for display in sorted(items, key=str.lower):
+            for display in sorted(items, key=str.lower)[:50]:  # Limit to 50
                 lines.append(f"- [x] {display}")
+            if len(items) > 50:
+                lines.append(f"- ... and {len(items) - 50} more")
             lines.append("")
 
     return "\n".join(lines)

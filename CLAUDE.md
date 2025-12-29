@@ -126,6 +126,27 @@ npm install  # Only needed for Discord.js dependency
 - **`hackmd/create.py`**: HackMD note creation and management
 - **`hackmd/update.py`**: Daily HackMD content updates
 
+### Entity & Icon Pipeline (`scripts/etl/` and `scripts/posters/`)
+- **`extract-entities.py`**: Extract entities (tokens, projects, users) from facts with LLM classification
+- **`generate-icons.py`**: Generate icons for entities using Nano Banana Pro (Gemini 3 Image)
+- **`validate-icons.py`**: Validate icons and sync icon_paths to manifest
+
+See `scripts/posters/README_ICON_GENERATION.md` for detailed icon generation documentation.
+
+```bash
+# Extract entities from facts (with deduplication)
+python scripts/etl/extract-entities.py --dedupe
+
+# Interactive icon generation
+python scripts/posters/generate-icons.py -i -t project
+
+# Batch icon generation
+python scripts/posters/generate-icons.py --batch project --limit 4
+
+# Validate and sync icons
+python scripts/posters/validate-icons.py --sync-only
+```
+
 ## Prompt System
 
 The `scripts/prompts/` directory contains LLM interaction templates:

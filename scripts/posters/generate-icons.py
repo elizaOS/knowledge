@@ -411,9 +411,8 @@ def build_icon_prompt(
         entities = [entities]
 
     if batch and len(entities) > 1:
-        # Batch mode: grid of icons
-        rows = (len(entities) + GRID_SIZE - 1) // GRID_SIZE
-        cols = min(len(entities), GRID_SIZE)
+        # Batch mode: grid of icons (square-ish layout)
+        rows, cols = calculate_grid_dimensions(len(entities))
 
         entity_lines = []
         for i, entity in enumerate(entities, 1):
@@ -423,32 +422,28 @@ def build_icon_prompt(
             # Format: "1. Discord — gaming chat platform"
             line = f"{i}. {name}"
             if desc:
-                # Truncate long descriptions
-                short_desc = desc[:80] + "..." if len(desc) > 80 else desc
-                line += f" — {short_desc}"
+                line += f" — {desc}"
             entity_lines.append(line)
 
         entities_text = "\n".join(entity_lines)
 
-        return f"""Generate a {rows}x{cols} grid image of logos/icons.
+        return f"""Generate a {rows}x{cols} grid of logos/icons in a square image.
 
-GRID LAYOUT:
-- {rows} rows × {cols} columns = {len(entities)} equal square cells
-- NO gridlines, NO borders, NO separators between cells
-- Background: pure white (#FFFFFF)
+Layout: {rows} rows, {cols} columns, {len(entities)} total icons
+- Equal square cells, no gridlines or borders between them
+- Background: pure white
 - Each logo centered in its cell with equal padding
-- All logos visually balanced to same optical size (~70% of cell)
-- NO overlap between cells
+- No overlap between cells
 
-ENTITIES (left to right, top to bottom):
+Logos needed (left-to-right, top-to-bottom):
 {entities_text}
 
-IMPORTANT:
-- For KNOWN brands/projects, recreate their ACTUAL official logo as accurately as possible
+Requirements:
+- For known brands/projects, recreate their actual official logo accurately
 - For unknown/new projects, create a distinctive, professional icon
-- If uncertain about a logo, create a clean symbolic icon rather than guessing wrong
-- NO text labels on the icons
-- Flat vector style, full brand colors where known"""
+- If uncertain about a logo, create a clean symbolic icon
+- No text, no labels, no captions, no names - logos only
+- Flat vector style, full brand colors"""
 
     else:
         # Single icon mode
@@ -482,15 +477,36 @@ REQUIREMENTS:
 - Should work at small sizes (high contrast, simple shapes)"""
 
 
-def generate_image(prompt: str, aspect_ratio: str = "1:1") -> bytes:
-    """Call OpenRouter to generate image, return PNG bytes.
+def generate_image(prompt: str, aspect_ratio: str = "1:1", use_search: bool = True) -> tuple[bytes, str]:
+    """Call OpenRouter to generate image with optional Google Search grounding.
 
     Args:
         prompt: Text prompt for image generation
         aspect_ratio: Image aspect ratio (default "1:1" = 1024x1024)
             Supported: 1:1, 2:3, 3:2, 3:4, 4:3, 9:16, 16:9
+        use_search: Enable Google Search grounding for accurate brand logos
+
+    Returns:
+        Tuple of (image_bytes, text_response) where text_response contains
+        model's description/confidence about generated icons.
     """
-    logging.info("Generating image via OpenRouter...")
+    logging.info(f"Generating image via OpenRouter (search={'on' if use_search else 'off'})...")
+
+    request_json = {
+        "model": IMAGE_MODEL,
+        "modalities": ["image", "text"],
+        "messages": [{
+            "role": "user",
+            "content": [{"type": "text", "text": prompt}]
+        }],
+        "image_config": {
+            "aspect_ratio": aspect_ratio
+        }
+    }
+
+    # Enable web search for brand logo accuracy
+    if use_search:
+        request_json["plugins"] = [{"id": "web"}]
 
     response = requests.post(
         OPENROUTER_ENDPOINT,
@@ -500,26 +516,40 @@ def generate_image(prompt: str, aspect_ratio: str = "1:1") -> bytes:
             "HTTP-Referer": "https://github.com/elizaOS/knowledge",
             "X-Title": "ElizaOS Icon Generator"
         },
-        json={
-            "model": IMAGE_MODEL,
-            "modalities": ["image", "text"],
-            "messages": [{
-                "role": "user",
-                "content": [{"type": "text", "text": prompt}]
-            }],
-            "image_config": {
-                "aspect_ratio": aspect_ratio
-            }
-        },
+        json=request_json,
         timeout=180
     )
+    if not response.ok:
+        logging.error(f"API error response: {response.text[:500]}")
     response.raise_for_status()
 
     result = response.json()
 
     try:
-        images = result["choices"][0]["message"]["images"]
+        message = result["choices"][0]["message"]
+        logging.debug(f"Response message keys: {message.keys()}")
+
+        # Extract text response (model's description/confidence)
+        text_response = message.get("content", "")
+        if isinstance(text_response, list):
+            # Handle structured content format
+            text_parts = [p.get("text", "") for p in text_response if p.get("type") == "text"]
+            text_response = "\n".join(text_parts)
+
+        # Extract image - check multiple possible locations
+        images = message.get("images", [])
+
+        # OpenRouter may return images in content array for some models
+        if not images and isinstance(message.get("content"), list):
+            for part in message["content"]:
+                if part.get("type") == "image_url":
+                    images.append(part)
+                elif part.get("type") == "image" and part.get("image_url"):
+                    images.append(part)
+
         if not images:
+            logging.error(f"No images found. Response text: {text_response[:500] if text_response else 'None'}")
+            logging.debug(f"Full message: {json.dumps(message, indent=2)[:1000]}")
             raise ValueError("No images in response")
 
         image_url = images[0]["image_url"]["url"]
@@ -527,7 +557,12 @@ def generate_image(prompt: str, aspect_ratio: str = "1:1") -> bytes:
             raise ValueError(f"Unexpected image URL format: {image_url[:50]}")
 
         base64_data = image_url.split(",", 1)[1]
-        return base64.b64decode(base64_data)
+        image_bytes = base64.b64decode(base64_data)
+
+        if text_response:
+            logging.info(f"Model response: {text_response[:200]}...")
+
+        return image_bytes, text_response
 
     except (KeyError, IndexError) as e:
         logging.error(f"Failed to extract image: {e}")
@@ -535,17 +570,69 @@ def generate_image(prompt: str, aspect_ratio: str = "1:1") -> bytes:
         raise ValueError(f"Failed to extract image from API response: {e}")
 
 
-def slice_grid(image_bytes: bytes, num_icons: int) -> list[Image.Image]:
-    """Slice a grid image into individual icons."""
+def calculate_grid_dimensions(num_icons: int) -> tuple[int, int]:
+    """Calculate square-ish grid dimensions for N icons.
+
+    Returns (rows, cols) optimized for square grids:
+    - 1-4 icons: 2x2
+    - 5-9 icons: 3x3
+    - 10-16 icons: 4x4
+    """
+    import math
+    cols = math.ceil(math.sqrt(num_icons))
+    rows = math.ceil(num_icons / cols)
+    return rows, cols
+
+
+def parse_grid_from_text(text_response: str, num_icons: int) -> tuple[int, int] | None:
+    """Try to parse grid dimensions from model's text response.
+
+    Looks for patterns like:
+    - "GRID: 2x2" or "LAYOUT: 4x4"
+    - "2 rows x 2 columns"
+    - "arranged in a 3x3 grid"
+
+    Returns (rows, cols) or None if not found.
+    """
+    import re
+
+    # Pattern: NxM or N×M
+    match = re.search(r'(\d+)\s*[x×]\s*(\d+)', text_response, re.IGNORECASE)
+    if match:
+        rows, cols = int(match.group(1)), int(match.group(2))
+        # Sanity check: should fit our icons
+        if rows * cols >= num_icons and rows <= 4 and cols <= 4:
+            return rows, cols
+
+    return None
+
+
+def slice_grid(image_bytes: bytes, num_icons: int, text_response: str = "") -> list[Image.Image]:
+    """Slice a grid image into individual icons.
+
+    Args:
+        image_bytes: PNG image data
+        num_icons: Number of icons to extract
+        text_response: Model's text response (may contain layout info)
+    """
     img = Image.open(io.BytesIO(image_bytes)).convert("RGBA")
     width, height = img.size
 
-    # Calculate grid dimensions
-    cols = min(num_icons, GRID_SIZE)
-    rows = (num_icons + GRID_SIZE - 1) // GRID_SIZE
+    # Try to get grid dimensions from model's text response first
+    parsed_dims = parse_grid_from_text(text_response, num_icons) if text_response else None
+
+    if parsed_dims:
+        rows, cols = parsed_dims
+        logging.info(f"Using model-specified grid: {rows}x{cols}")
+    else:
+        # Fall back to calculated square-ish grid
+        rows, cols = calculate_grid_dimensions(num_icons)
+        logging.debug(f"Using calculated grid: {rows}x{cols}")
 
     cell_width = width // cols
     cell_height = height // rows
+
+    logging.debug(f"Slicing {width}x{height} image into {rows}x{cols} grid ({cell_width}x{cell_height} cells)")
 
     icons = []
     for i in range(num_icons):
@@ -590,7 +677,7 @@ def save_icon(icon: Image.Image, entity: dict, use_numbered: bool = True) -> Pat
     return output_path
 
 
-def generate_batch(entity_type: str, entities: list[dict], use_context: bool = True) -> list[Path]:
+def generate_batch(entity_type: str, entities: list[dict], use_context: bool = True, use_search: bool = True) -> list[Path]:
     """Generate a batch of icons for entities."""
     if not entities:
         logging.info("No entities to generate")
@@ -615,7 +702,7 @@ def generate_batch(entity_type: str, entities: list[dict], use_context: bool = T
     prompt = build_icon_prompt(batch, entity_type)
     logging.debug(f"Prompt:\n{prompt}")
 
-    image_bytes = generate_image(prompt)
+    image_bytes, text_response = generate_image(prompt, use_search=use_search)
 
     # Save raw grid for debugging
     grid_path = ICONS_DIR / f"_grid_{entity_type}_latest.png"
@@ -623,8 +710,14 @@ def generate_batch(entity_type: str, entities: list[dict], use_context: bool = T
     grid_path.write_bytes(image_bytes)
     logging.info(f"Saved grid: {grid_path}")
 
-    # Slice into individual icons
-    icons = slice_grid(image_bytes, len(batch))
+    # Save model's text response for post-processing insights
+    if text_response:
+        response_path = ICONS_DIR / f"_grid_{entity_type}_latest.txt"
+        response_path.write_text(text_response)
+        logging.info(f"Saved model response: {response_path}")
+
+    # Slice into individual icons (pass text_response for layout hints)
+    icons = slice_grid(image_bytes, len(batch), text_response)
 
     # Process and save each icon
     saved = []
@@ -642,7 +735,7 @@ def generate_batch(entity_type: str, entities: list[dict], use_context: bool = T
     return saved
 
 
-def generate_single(entity: dict, use_context: bool = True, skip_coingecko: bool = False, force: bool = False) -> Optional[Path]:
+def generate_single(entity: dict, use_context: bool = True, skip_coingecko: bool = False, force: bool = False, use_search: bool = True) -> Optional[Path]:
     """Generate a single icon for an entity.
 
     For tokens, tries CoinGecko first (unless skip_coingecko=True), falls back to AI.
@@ -674,7 +767,10 @@ def generate_single(entity: dict, use_context: bool = True, skip_coingecko: bool
     logging.info(f"Generating icon for {name} via AI...")
 
     prompt = build_icon_prompt(entity, batch=False)
-    image_bytes = generate_image(prompt)
+    image_bytes, text_response = generate_image(prompt, use_search=use_search)
+
+    if text_response:
+        logging.info(f"Model notes: {text_response[:150]}...")
 
     # Load and process
     icon = Image.open(io.BytesIO(image_bytes)).convert("RGBA")
@@ -684,6 +780,35 @@ def generate_single(entity: dict, use_context: bool = True, skip_coingecko: bool
     logging.info(f"Saved: {output_path}")
 
     return output_path
+
+
+def sync_manifest_icons():
+    """Sync icon_paths in manifest with actual files on disk."""
+    inventory = load_inventory()
+    all_icons = [f.name for f in ICONS_DIR.iterdir()
+                 if f.is_file() and f.suffix.lower() in ('.png', '.jpg', '.jpeg')
+                 and not f.name.startswith('_')]
+
+    updated = 0
+    for entity in inventory.get("entities", []):
+        base = get_icon_base(entity)
+        # Find matching icons (base-1.png, base-2.png, etc.)
+        matches = [f for f in all_icons if f.startswith(base + "-") or f.startswith(base + ".")]
+
+        old_paths = entity.get("icon_paths", [])
+        new_paths = [f"icons/{m}" for m in sorted(matches)]
+
+        if new_paths != old_paths:
+            if new_paths:
+                entity["icon_paths"] = new_paths
+            else:
+                entity.pop("icon_paths", None)
+            updated += 1
+
+    with open(ENTITY_INVENTORY, "w") as f:
+        json.dump(inventory, f, indent=2)
+
+    return updated
 
 
 def list_missing(inventory: dict, entity_type: str = None):
@@ -734,6 +859,11 @@ def main():
         action="store_true",
         help="List entities that need icons"
     )
+    mode.add_argument(
+        "--interactive", "-i",
+        action="store_true",
+        help="Interactive mode: generate, curate, repeat"
+    )
 
     # Options
     parser.add_argument(
@@ -746,6 +876,11 @@ def main():
         "--no-context",
         action="store_true",
         help="Skip context lookup from facts (faster, simpler prompts)"
+    )
+    parser.add_argument(
+        "--no-search",
+        action="store_true",
+        help="Disable Google Search grounding (faster, but less accurate for known brands)"
     )
     parser.add_argument(
         "--force",
@@ -782,8 +917,9 @@ def main():
         logging.error("OPENROUTER_API_KEY environment variable not set")
         return 1
 
-    # Context lookup enabled by default
+    # Context lookup and search grounding enabled by default
     use_context = not args.no_context
+    use_search = not args.no_search
 
     try:
         if args.batch:
@@ -798,7 +934,7 @@ def main():
             to_generate = missing[:args.limit]
             logging.info(f"Found {len(missing)} missing, generating {len(to_generate)}")
 
-            saved = generate_batch(entity_type, to_generate, use_context=use_context)
+            saved = generate_batch(entity_type, to_generate, use_context=use_context, use_search=use_search)
             logging.info(f"Generated {len(saved)} icons")
 
         elif args.entity:
@@ -808,7 +944,7 @@ def main():
                 logging.error(f"Entity not found: {args.entity}")
                 return 1
 
-            generate_single(entity, use_context=use_context, force=args.force)
+            generate_single(entity, use_context=use_context, force=args.force, use_search=use_search)
 
         elif args.missing:
             # Generate all missing
@@ -845,12 +981,101 @@ def main():
                     if ai_needed:
                         for i in range(0, len(ai_needed), GRID_SIZE * GRID_SIZE):
                             batch = ai_needed[i:i + GRID_SIZE * GRID_SIZE]
-                            generate_batch(et, batch, use_context=use_context)
+                            generate_batch(et, batch, use_context=use_context, use_search=use_search)
                 else:
                     # Non-tokens: AI batch generation
                     for i in range(0, min(len(missing), args.limit), GRID_SIZE * GRID_SIZE):
                         batch = missing[i:i + GRID_SIZE * GRID_SIZE]
-                        generate_batch(et, batch, use_context=use_context)
+                        generate_batch(et, batch, use_context=use_context, use_search=use_search)
+        elif args.interactive:
+            # Interactive curation loop
+            entity_type = args.entity_type or "project"
+            batch_size = min(args.limit, 9)  # Cap at 9 for search token limits
+
+            print(f"\n=== Interactive Icon Generation ({entity_type}) ===")
+            print(f"Batch size: {batch_size}")
+            print(f"Icons dir: {ICONS_DIR}")
+            print("\nWorkflow: Generate → Curate (delete bad ones) → Enter → Repeat")
+            print("Deleted icons → entity marked 'review' (won't regenerate)")
+            print("Press Ctrl+C to exit\n")
+
+            round_num = 0
+            while True:
+                round_num += 1
+
+                # Reload inventory and get missing (picks up deletions)
+                inventory = load_inventory()
+                missing = get_missing_entities(inventory, entity_type)
+
+                if not missing:
+                    print(f"\nNo more missing {entity_type} icons!")
+                    break
+
+                print(f"\n--- Round {round_num}: {len(missing)} missing ---")
+                batch = missing[:batch_size]
+                names = [e.get("name", "?") for e in batch]
+                print(f"Generating: {', '.join(names)}")
+
+                try:
+                    saved = generate_batch(entity_type, batch, use_context=use_context, use_search=use_search)
+                    print(f"\nGenerated {len(saved)} icons:")
+                    for p in saved:
+                        print(f"  {p}")
+
+                    # Show model's text response if available
+                    response_file = ICONS_DIR / f"_grid_{entity_type}_latest.txt"
+                    if response_file.exists():
+                        text = response_file.read_text().strip()
+                        if text:
+                            print(f"\nModel notes:\n{text[:500]}")
+                except Exception as e:
+                    logging.error(f"Generation failed: {e}")
+                    continue
+
+                # Map saved paths to entities for tracking
+                saved_map = {p.name: batch[i] for i, p in enumerate(saved) if i < len(batch)}
+
+                # Wait for user curation
+                print(f"\n>>> Review icons in: {ICONS_DIR}")
+                print(">>> Delete any bad ones, then press Enter to continue (or 'q' to quit)")
+
+                try:
+                    user_input = input().strip().lower()
+                    if user_input in ('q', 'quit', 'exit'):
+                        break
+                except (KeyboardInterrupt, EOFError):
+                    print("\nExiting...")
+                    break
+
+                # Check which icons were kept vs deleted
+                kept = []
+                deleted = []
+                for filename, entity in saved_map.items():
+                    if (ICONS_DIR / filename).exists():
+                        kept.append(entity.get("name"))
+                    else:
+                        deleted.append(entity.get("name"))
+
+                # Update manifest: mark deleted as "review", sync kept icons
+                inventory = load_inventory()
+                for entity in inventory.get("entities", []):
+                    name = entity.get("name")
+                    if name in deleted:
+                        entity["status"] = "review"
+                        entity.pop("icon_paths", None)
+
+                with open(ENTITY_INVENTORY, "w") as f:
+                    json.dump(inventory, f, indent=2)
+
+                # Sync icon_paths for kept ones
+                updated = sync_manifest_icons()
+
+                print(f"Kept: {len(kept)}, Marked for review: {len(deleted)}")
+                if deleted:
+                    print(f"  Review: {', '.join(deleted)}")
+
+            print("\nDone!")
+
         else:
             parser.print_help()
             return 1
