@@ -226,17 +226,39 @@ def show_coverage_stats(output_path: Path = None):
     overall_pct = (total_with_icons / total_entities * 100) if total_entities > 0 else 0
     lines.extend(["", f"**Total**: {total_with_icons}/{total_entities} ({overall_pct:.0f}%)"])
 
-    # Show entities missing icons (limited)
-    lines.extend(["", "### Missing Icons", ""])
-    for entity_type in ENTITY_TYPES:
-        missing = [e["name"] for e in by_type[entity_type] if not e.get("icon_paths")]
+    # Detailed checklist for tokens (smaller set, show all)
+    lines.extend(["", "### Tokens", ""])
+    token_items = []
+    for e in by_type.get("token", []):
+        has_icon = bool(e.get("icon_paths"))
+        token_items.append((has_icon, e["name"]))
+    token_items.sort(key=lambda x: (not x[0], x[1].lower()))  # Have first, then alpha
+    for has_icon, name in token_items:
+        check = "x" if has_icon else " "
+        lines.append(f"- [{check}] {name}")
+
+    # Projects and users - just show missing (too many to list all)
+    for entity_type in ["project", "user"]:
+        type_entities = by_type.get(entity_type, [])
+        missing = [e["name"] for e in type_entities if not e.get("icon_paths")]
+        have = [e["name"] for e in type_entities if e.get("icon_paths")]
+
+        lines.extend(["", f"### {entity_type.title()}s", ""])
+        lines.append(f"*{len(type_entities)} total, {len(have)} with icons*")
+
+        if have:
+            lines.extend(["", "**Have:**"])
+            for name in sorted(have)[:20]:
+                lines.append(f"- [x] {name}")
+            if len(have) > 20:
+                lines.append(f"- ... and {len(have) - 20} more")
+
         if missing:
-            lines.append(f"**{entity_type.title()}** ({len(missing)}):")
-            for name in sorted(missing)[:10]:
-                lines.append(f"  - {name}")
-            if len(missing) > 10:
-                lines.append(f"  - ... and {len(missing) - 10} more")
-            lines.append("")
+            lines.extend(["", "**Missing:**"])
+            for name in sorted(missing)[:20]:
+                lines.append(f"- [ ] {name}")
+            if len(missing) > 20:
+                lines.append(f"- ... and {len(missing) - 20} more")
 
     output = "\n".join(lines)
     print(output)
