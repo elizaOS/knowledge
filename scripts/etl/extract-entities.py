@@ -30,6 +30,7 @@ import logging
 from pathlib import Path
 from datetime import datetime
 from difflib import SequenceMatcher
+from concurrent.futures import ThreadPoolExecutor, as_completed
 import requests
 
 OPENROUTER_API_KEY = os.environ.get("OPENROUTER_API_KEY", "")
@@ -66,16 +67,23 @@ SKIP_ENTITIES = {
     "eli5", "eli5 token", "meme", "memes", "memecoin", "memecoins",
 }
 
-EXTRACT_PROMPT = """Extract named entities from this content.
-
-Content:
-{content}
+# Split into system (cacheable) and user (dynamic) parts
+EXTRACT_SYSTEM = """Extract named entities from content provided by the user.
 
 For each entity, provide:
 - name: canonical name (properly cased)
 - type: MUST be one of: token | project | user
-- description: 1-sentence explaining what it is
+- description: 1-3 sentence DEFINITIONAL description (what it IS, not what it did)
 - aliases: other names/spellings used in the content
+
+CRITICAL for description:
+- Describe WHAT the entity IS, not what it did or was mentioned for
+- Include visual identity hints if known (logo colors, shape, style)
+- BAD: "An individual who answered a question about migration"
+- GOOD: "Fast JavaScript runtime, bundler, and package manager. Logo is a white bun/dumpling on black."
+- BAD: "A project mentioned in discussion about token launches"
+- GOOD: "Unified API gateway for accessing multiple LLM providers. Teal circular ring logo."
+- If unknown or ambiguous, write "Unknown - needs research"
 
 Type definitions (use ONLY these 3 types):
 - token: cryptocurrencies, blockchains, L1/L2s (Bitcoin, Ethereum, Base, SOL)
@@ -91,17 +99,28 @@ IMPORTANT: Do not create new types. Map everything to these 3 categories.
 - Dates → omit entirely
 
 Output JSON only:
-{{"entities": [
-  {{"name": "Example", "type": "token", "description": "...", "aliases": []}}
-]}}
-"""
+{"entities": [
+  {"name": "Example", "type": "token", "description": "...", "aliases": []}
+]}"""
+
+EXTRACT_USER = """Content:
+{content}"""
 
 NORMALIZE_PROMPT = """Normalize and dedupe these entities:
 1. Merge duplicates (same entity with different names/casing)
 2. Use canonical names (e.g., "Ethereum" not "eth")
 3. Remove generic terms that aren't specific named entities
-4. Combine descriptions from duplicates
-5. Keep the most recognizable form of each entity
+4. Keep the most recognizable form of each entity
+5. Fix descriptions to be DEFINITIONAL (1-3 sentences: what it IS, not what it did)
+
+CRITICAL for descriptions:
+- Rewrite contextual descriptions to be definitional
+- Include visual identity hints if known (logo colors, shape, style)
+- BAD: "An individual who answered a question about migration"
+- GOOD: "Fast JavaScript runtime, bundler, and package manager. Logo is a white bun/dumpling on black."
+- BAD: "A project mentioned in discussion about token launches"
+- GOOD: "Unified API gateway for accessing multiple LLM providers. Teal circular ring logo."
+- If unknown or ambiguous, write "Unknown - needs research"
 
 Input:
 {entities}
@@ -188,13 +207,21 @@ def load_content(file_path: Path) -> tuple[str, dict]:
     return text_content[:12000], data  # Limit size
 
 
-def call_llm(prompt: str) -> tuple[dict, dict]:
-    """Call LLM with prompt, return (parsed_result, usage_stats)."""
+def call_llm(prompt: str, system_prompt: str = None) -> tuple[dict, dict]:
+    """Call LLM with prompt, return (parsed_result, usage_stats).
+
+    Uses system prompt separation for better prompt caching on OpenRouter.
+    """
     empty_usage = {"input_tokens": 0, "output_tokens": 0}
 
     if not OPENROUTER_API_KEY:
         logging.error("OPENROUTER_API_KEY not set")
         return {}, empty_usage
+
+    messages = []
+    if system_prompt:
+        messages.append({"role": "system", "content": system_prompt})
+    messages.append({"role": "user", "content": prompt})
 
     try:
         response = requests.post(
@@ -205,7 +232,7 @@ def call_llm(prompt: str) -> tuple[dict, dict]:
             },
             json={
                 "model": MODEL,
-                "messages": [{"role": "user", "content": prompt}],
+                "messages": messages,
                 "response_format": {"type": "json_object"},
             },
             timeout=120
@@ -236,7 +263,7 @@ def extract_entities(content: str, source_context: str = "") -> tuple[dict, dict
     full_content = content
     if source_context:
         full_content = f"{content}\n\n--- Additional Context from Sources ---\n{source_context}"
-    return call_llm(EXTRACT_PROMPT.format(content=full_content))
+    return call_llm(EXTRACT_USER.format(content=full_content), system_prompt=EXTRACT_SYSTEM)
 
 
 def normalize_entities(entities: list) -> tuple[list, dict]:
@@ -444,8 +471,9 @@ def main():
     parser.add_argument("--normalize", action="store_true", help="Run LLM normalization pass on merged results")
     parser.add_argument("--normalize-only", action="store_true", help="Only normalize existing inventory (no extraction)")
     parser.add_argument("--dedupe", action="store_true", help="Dedupe existing inventory file by name, resolve type conflicts")
-    parser.add_argument("--with-context", action="store_true", help="Follow source paths to fetch additional context")
+    parser.add_argument("--no-context", action="store_true", help="Skip fetching additional context from source paths (faster, fewer tokens)")
     parser.add_argument("--since", type=str, help="Only process files dated after YYYY-MM-DD (for incremental runs)")
+    parser.add_argument("--parallel", "-p", type=int, default=1, metavar="N", help="Process N files in parallel (default: 1)")
     args = parser.parse_args()
 
     # Dedupe mode: dedupe existing inventory by name
@@ -533,7 +561,7 @@ def main():
     else:
         parser.error("Use --batch for directories")
 
-    logging.info(f"Processing {len(files)} file(s)...")
+    logging.info(f"Processing {len(files)} file(s) with {args.parallel} worker(s)...")
 
     out_dir = args.output.parent if args.output else None
     if out_dir:
@@ -543,30 +571,52 @@ def main():
     total_input_tokens = 0
     total_output_tokens = 0
 
-    for f in files:
-        logging.info(f"  {f.name}")
+    def process_file(f):
+        """Process a single file and return (extraction, usage, filename)."""
         content, raw_data = load_content(f)
 
-        # Optionally follow source paths for additional context
+        # Follow source paths for additional context (default: on)
         source_context = ""
-        if args.with_context and raw_data:
+        if not args.no_context and raw_data:
             source_context = get_source_context(raw_data)
-            if source_context:
-                logging.info(f"    + added context from {len(source_context.split('---'))-1} source(s)")
 
         extraction, usage = extract_entities(content, source_context)
-        total_input_tokens += usage["input_tokens"]
-        total_output_tokens += usage["output_tokens"]
+        return extraction, usage, f
 
-        if extraction and extraction.get("entities"):
-            all_extractions.append(extraction)
-            # Save individual file immediately
-            if out_dir:
-                (out_dir / f.name).write_text(json.dumps({
-                    "source": f.name,
-                    "entities": extraction.get("entities", []),
-                    "_metadata": {"extracted_at": datetime.utcnow().isoformat() + "Z"}
-                }, indent=2, ensure_ascii=True))
+    if args.parallel > 1:
+        # Parallel processing
+        with ThreadPoolExecutor(max_workers=args.parallel) as executor:
+            futures = {executor.submit(process_file, f): f for f in files}
+            for future in as_completed(futures):
+                extraction, usage, f = future.result()
+                logging.info(f"  {f.name} ({usage['input_tokens']} in, {usage['output_tokens']} out)")
+                total_input_tokens += usage["input_tokens"]
+                total_output_tokens += usage["output_tokens"]
+
+                if extraction and extraction.get("entities"):
+                    all_extractions.append(extraction)
+                    if out_dir:
+                        (out_dir / f.name).write_text(json.dumps({
+                            "source": f.name,
+                            "entities": extraction.get("entities", []),
+                            "_metadata": {"extracted_at": datetime.utcnow().isoformat() + "Z"}
+                        }, indent=2, ensure_ascii=True))
+    else:
+        # Sequential processing
+        for f in files:
+            extraction, usage, _ = process_file(f)
+            logging.info(f"  {f.name} ({usage['input_tokens']} in, {usage['output_tokens']} out)")
+            total_input_tokens += usage["input_tokens"]
+            total_output_tokens += usage["output_tokens"]
+
+            if extraction and extraction.get("entities"):
+                all_extractions.append(extraction)
+                if out_dir:
+                    (out_dir / f.name).write_text(json.dumps({
+                        "source": f.name,
+                        "entities": extraction.get("entities", []),
+                        "_metadata": {"extracted_at": datetime.utcnow().isoformat() + "Z"}
+                    }, indent=2, ensure_ascii=True))
 
     merged = merge_entities(all_extractions)
 
