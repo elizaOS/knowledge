@@ -264,8 +264,9 @@ def main():
     parser.add_argument("-o", "--output", type=Path, help="Output markdown file for --stats")
     args = parser.parse_args()
 
-    # Stats mode - just show coverage
+    # Stats mode - sync first, then show coverage
     if args.stats:
+        sync_inventory_icons()
         show_coverage_stats(output_path=args.output)
         sys.exit(0)
 

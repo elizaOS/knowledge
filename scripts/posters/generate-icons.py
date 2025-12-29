@@ -867,7 +867,9 @@ Search for and recreate the ACTUAL OFFICIAL LOGOS of these companies/projects:
 CRITICAL:
 - Use web search to find each brand's current official logo
 - Recreate logos accurately based on search results
+- Symbol/icon marks only (not wordmarks or text-based logos)
 - Flat vector style, full brand colors
+- Seamless cells with clean edges (no visible gridlines or borders)
 - Leave cell WHITE if logo cannot be found"""
 
         else:
@@ -883,6 +885,7 @@ CELL LAYOUT:
 - Each cell: equal square portion of the image
 - Each logo centered in its cell, ~70% of cell size
 - Equal padding on all sides
+- Seamless cells (no visible gridlines or borders between them)
 
 Search for and recreate the ACTUAL OFFICIAL LOGOS of these companies/projects:
 
@@ -891,6 +894,7 @@ Search for and recreate the ACTUAL OFFICIAL LOGOS of these companies/projects:
 CRITICAL:
 - Use web search to find each brand's current official logo
 - Recreate logos accurately based on search results
+- Symbol/icon marks only (not wordmarks or text-based logos)
 - Flat vector style, full brand colors
 - Leave cell WHITE if logo cannot be found"""
 
@@ -918,11 +922,12 @@ Type: {etype}
 
 REQUIREMENTS:
 - Use web search to find the actual official logo
-- Background: pure white or transparent
+- Background: pure white
 - Logo centered with padding (~70% of image)
+- Symbol/icon mark only (not wordmarks or text-based logos)
 - Recreate the ACTUAL official logo accurately based on search results
 - If not found via search, create a distinctive, professional icon
-- Flat vector style, clean lines
+- Flat vector style, clean lines, full brand colors
 - Should work at small sizes (high contrast, simple shapes)"""
 
 
