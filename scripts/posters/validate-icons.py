@@ -237,28 +237,15 @@ def show_coverage_stats(output_path: Path = None):
         check = "x" if has_icon else " "
         lines.append(f"- [{check}] {name}")
 
-    # Projects and users - just show missing (too many to list all)
+    # Projects and users - just summary stats (too many to list)
     for entity_type in ["project", "user"]:
         type_entities = by_type.get(entity_type, [])
-        missing = [e["name"] for e in type_entities if not e.get("icon_paths")]
-        have = [e["name"] for e in type_entities if e.get("icon_paths")]
+        have_count = sum(1 for e in type_entities if e.get("icon_paths"))
+        missing_count = len(type_entities) - have_count
 
         lines.extend(["", f"### {entity_type.title()}s", ""])
-        lines.append(f"*{len(type_entities)} total, {len(have)} with icons*")
-
-        if have:
-            lines.extend(["", "**Have:**"])
-            for name in sorted(have)[:20]:
-                lines.append(f"- [x] {name}")
-            if len(have) > 20:
-                lines.append(f"- ... and {len(have) - 20} more")
-
-        if missing:
-            lines.extend(["", "**Missing:**"])
-            for name in sorted(missing)[:20]:
-                lines.append(f"- [ ] {name}")
-            if len(missing) > 20:
-                lines.append(f"- ... and {len(missing) - 20} more")
+        lines.append(f"- Have: {have_count}")
+        lines.append(f"- Missing: {missing_count}")
 
     output = "\n".join(lines)
     print(output)
