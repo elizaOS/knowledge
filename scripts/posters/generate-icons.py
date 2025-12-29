@@ -106,6 +106,46 @@ logging.basicConfig(
     datefmt='%H:%M:%S'
 )
 
+# Retry configuration
+MAX_RETRIES = 3
+RETRY_BACKOFF_BASE = 2  # seconds
+
+
+def retry_with_backoff(func, max_retries: int = MAX_RETRIES, backoff_base: float = RETRY_BACKOFF_BASE):
+    """Decorator/wrapper for retrying API calls with exponential backoff.
+
+    Retries on:
+    - Connection errors
+    - Timeout errors
+    - 429 (rate limit) and 5xx (server) HTTP errors
+    """
+    def wrapper(*args, **kwargs):
+        last_exception = None
+        for attempt in range(max_retries):
+            try:
+                return func(*args, **kwargs)
+            except requests.exceptions.Timeout as e:
+                last_exception = e
+                wait_time = backoff_base ** attempt
+                logging.warning(f"Timeout on attempt {attempt + 1}/{max_retries}, retrying in {wait_time}s...")
+                time.sleep(wait_time)
+            except requests.exceptions.ConnectionError as e:
+                last_exception = e
+                wait_time = backoff_base ** attempt
+                logging.warning(f"Connection error on attempt {attempt + 1}/{max_retries}, retrying in {wait_time}s...")
+                time.sleep(wait_time)
+            except requests.exceptions.HTTPError as e:
+                # Only retry on rate limit (429) or server errors (5xx)
+                if e.response is not None and (e.response.status_code == 429 or e.response.status_code >= 500):
+                    last_exception = e
+                    wait_time = backoff_base ** attempt
+                    logging.warning(f"HTTP {e.response.status_code} on attempt {attempt + 1}/{max_retries}, retrying in {wait_time}s...")
+                    time.sleep(wait_time)
+                else:
+                    raise  # Don't retry client errors (4xx except 429)
+        raise last_exception
+    return wrapper
+
 
 def load_inventory() -> dict:
     """Load entity inventory."""
@@ -324,13 +364,17 @@ def fetch_coingecko_icon(coin_id: str, entity: dict) -> Optional[Path]:
     """Fetch token icon from CoinGecko API.
 
     Returns Path to saved icon if successful, None otherwise.
-    Uses numbered filename scheme.
+    Uses numbered filename scheme. Includes retry logic for transient errors.
     """
     url = f"https://api.coingecko.com/api/v3/coins/{coin_id}"
 
+    def get_coin_data():
+        resp = requests.get(url, timeout=10)
+        resp.raise_for_status()
+        return resp
+
     try:
-        response = requests.get(url, timeout=10)
-        response.raise_for_status()
+        response = retry_with_backoff(get_coin_data)()
         data = response.json()
 
         # Get the large image URL
@@ -339,9 +383,13 @@ def fetch_coingecko_icon(coin_id: str, entity: dict) -> Optional[Path]:
             logging.warning(f"  [warn] {coin_id} - no image found")
             return None
 
-        # Download the image
-        img_response = requests.get(image_url, timeout=10)
-        img_response.raise_for_status()
+        # Download the image (with retry)
+        def download_image():
+            resp = requests.get(image_url, timeout=10)
+            resp.raise_for_status()
+            return resp
+
+        img_response = retry_with_backoff(download_image)()
 
         # Save with numbered filename
         ICONS_DIR.mkdir(parents=True, exist_ok=True)
@@ -353,7 +401,7 @@ def fetch_coingecko_icon(coin_id: str, entity: dict) -> Optional[Path]:
         return output_path
 
     except requests.exceptions.HTTPError as e:
-        if e.response.status_code == 404:
+        if e.response is not None and e.response.status_code == 404:
             logging.debug(f"  [404] {coin_id} - not found on CoinGecko")
         else:
             logging.warning(f"  [error] {coin_id} - {e}")
@@ -508,21 +556,22 @@ def generate_image(prompt: str, aspect_ratio: str = "1:1", use_search: bool = Tr
     if use_search:
         request_json["plugins"] = [{"id": "web"}]
 
-    response = requests.post(
-        OPENROUTER_ENDPOINT,
-        headers={
-            "Authorization": f"Bearer {OPENROUTER_API_KEY}",
-            "Content-Type": "application/json",
-            "HTTP-Referer": "https://github.com/elizaOS/knowledge",
-            "X-Title": "ElizaOS Icon Generator"
-        },
-        json=request_json,
-        timeout=180
-    )
-    if not response.ok:
-        logging.error(f"API error response: {response.text[:500]}")
-    response.raise_for_status()
+    def make_request():
+        resp = requests.post(
+            OPENROUTER_ENDPOINT,
+            headers={
+                "Authorization": f"Bearer {OPENROUTER_API_KEY}",
+                "Content-Type": "application/json",
+            },
+            json=request_json,
+            timeout=180
+        )
+        if not resp.ok:
+            logging.error(f"API error response: {resp.text[:500]}")
+        resp.raise_for_status()
+        return resp
 
+    response = retry_with_backoff(make_request)()
     result = response.json()
 
     try:
