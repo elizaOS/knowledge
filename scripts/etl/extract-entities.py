@@ -364,6 +364,10 @@ def classify_entities(entities: list) -> tuple[list, dict]:
             e["type"] = max(e["type_votes"], key=e["type_votes"].get)
         e.pop("type_votes", None)
 
+        # Normalize any remaining invalid types (e.g., platform → project)
+        if e.get("type") in TYPE_NORMALIZATION:
+            e["type"] = TYPE_NORMALIZATION[e["type"]]
+
     logging.info(f"  Classified: {keep_count} keep, {skip_count} skip, {review_count} review")
     return entities, usage
 
