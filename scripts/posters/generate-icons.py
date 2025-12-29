@@ -437,14 +437,378 @@ def try_coingecko(entity: dict) -> Optional[Path]:
 
 
 # =============================================================================
+# Reference Image Fetching (for accurate logo recreation)
+# =============================================================================
+
+# Try to import cairosvg for SVG->PNG conversion
+try:
+    import cairosvg
+    HAS_CAIROSVG = True
+except ImportError:
+    HAS_CAIROSVG = False
+    logging.debug("cairosvg not available, SVG icons will be skipped")
+
+
+def svg_to_png(svg_bytes: bytes, size: int = 256) -> Optional[bytes]:
+    """Convert SVG to PNG using cairosvg.
+
+    Returns PNG bytes or None if conversion fails.
+    """
+    if not HAS_CAIROSVG:
+        return None
+
+    try:
+        png_bytes = cairosvg.svg2png(
+            bytestring=svg_bytes,
+            output_width=size,
+            output_height=size
+        )
+        return png_bytes
+    except Exception as e:
+        logging.debug(f"  SVG conversion failed: {e}")
+        return None
+
+
+def fetch_simple_icon(name: str) -> Optional[bytes]:
+    """Fetch icon from Simple Icons CDN, converted to PNG.
+
+    Simple Icons has 3000+ tech brand icons.
+    https://simpleicons.org/
+
+    Returns PNG bytes (converted from SVG) or None.
+    """
+    # Normalize name to slug format
+    slug = name.lower().replace(" ", "").replace(".", "").replace("-", "")
+    url = f"https://cdn.simpleicons.org/{slug}"
+
+    try:
+        resp = requests.get(url, timeout=10)
+        if resp.ok and resp.headers.get("content-type", "").startswith("image/svg"):
+            # Convert SVG to PNG for Gemini compatibility
+            png_bytes = svg_to_png(resp.content)
+            if png_bytes:
+                logging.debug(f"  [simpleicons] Found {slug} (converted to PNG)")
+                return png_bytes
+            else:
+                logging.debug(f"  [simpleicons] Found {slug} but SVG conversion failed")
+    except Exception as e:
+        logging.debug(f"  [simpleicons] {slug} failed: {e}")
+    return None
+
+
+def fetch_github_avatar(org_or_user: str) -> Optional[bytes]:
+    """Fetch avatar from GitHub.
+
+    Works for both organizations and users.
+    """
+    url = f"https://github.com/{org_or_user}.png?size=256"
+
+    try:
+        resp = requests.get(url, timeout=10, allow_redirects=True)
+        if resp.ok and "image" in resp.headers.get("content-type", ""):
+            logging.debug(f"  [github] Found {org_or_user}")
+            return resp.content
+    except Exception as e:
+        logging.debug(f"  [github] {org_or_user} failed: {e}")
+    return None
+
+
+def fetch_google_favicon(domain: str) -> Optional[bytes]:
+    """Fetch favicon via Google's service.
+
+    Universal fallback - works for any domain.
+    """
+    # Clean domain
+    domain = domain.replace("https://", "").replace("http://", "").split("/")[0]
+    url = f"https://www.google.com/s2/favicons?domain={domain}&sz=128"
+
+    try:
+        resp = requests.get(url, timeout=10)
+        if resp.ok and "image" in resp.headers.get("content-type", ""):
+            # Check if it's not the default favicon (very small)
+            if len(resp.content) > 500:
+                logging.debug(f"  [favicon] Found {domain}")
+                return resp.content
+    except Exception as e:
+        logging.debug(f"  [favicon] {domain} failed: {e}")
+    return None
+
+
+# =============================================================================
+# Simple Icons Fuzzy Matching (with false positive prevention)
+# =============================================================================
+
+SIMPLE_ICONS_DATA_URL = "https://cdn.jsdelivr.net/npm/simple-icons@latest/_data/simple-icons.json"
+_simple_icons_cache: dict = None  # Cached data with full metadata
+MIN_SUBSTRING_LENGTH = 4  # Minimum name length for substring matching
+
+
+def _load_simple_icons_data() -> dict:
+    """Load and cache Simple Icons data with full metadata.
+
+    Returns dict with two indices:
+    - "by_title": {lowercase_title: {slug, title, source, aliases}}
+    - "by_alias": {lowercase_alias: {slug, title, source, aliases}}
+    """
+    global _simple_icons_cache
+    if _simple_icons_cache is not None:
+        return _simple_icons_cache
+
+    _simple_icons_cache = {"by_title": {}, "by_alias": {}}
+    try:
+        resp = requests.get(SIMPLE_ICONS_DATA_URL, timeout=15)
+        if not resp.ok:
+            logging.warning(f"Failed to load Simple Icons data: {resp.status_code}")
+            return _simple_icons_cache
+
+        data = resp.json()
+        for icon in data:
+            title = icon.get("title", "")
+            if not title:
+                continue
+
+            # Slug defaults to slugified title if not specified
+            slug = icon.get("slug") or title.lower().replace(" ", "").replace(".", "").replace("-", "")
+
+            # Collect all aliases
+            icon_aliases = icon.get("aliases", {})
+            all_aliases = []
+            all_aliases.extend(icon_aliases.get("aka", []))
+            all_aliases.extend(icon_aliases.get("old", []))
+
+            entry = {
+                "slug": slug,
+                "title": title,
+                "source": icon.get("source", ""),
+                "aliases": [a.lower() for a in all_aliases],
+            }
+
+            # Index by title
+            _simple_icons_cache["by_title"][title.lower()] = entry
+
+            # Index by each alias
+            for alias in all_aliases:
+                _simple_icons_cache["by_alias"][alias.lower()] = entry
+
+        total = len(_simple_icons_cache["by_title"]) + len(_simple_icons_cache["by_alias"])
+        logging.debug(f"Loaded {len(_simple_icons_cache['by_title'])} Simple Icons ({total} total mappings)")
+
+    except Exception as e:
+        logging.warning(f"Error loading Simple Icons data: {e}")
+
+    return _simple_icons_cache
+
+
+def _extract_domain(url: str) -> str:
+    """Extract domain from URL for verification."""
+    if not url:
+        return ""
+    # Remove protocol and path
+    domain = url.replace("https://", "").replace("http://", "").split("/")[0]
+    # Remove www prefix
+    if domain.startswith("www."):
+        domain = domain[4:]
+    return domain.lower()
+
+
+def _is_word_boundary_match(search: str, target: str) -> bool:
+    """Check if search term matches target at word boundaries.
+
+    "Gemini" should match "Google Gemini" but "Go" should NOT match "Google".
+    """
+    search = search.lower()
+    target = target.lower()
+
+    # Split target into words
+    words = target.replace("-", " ").replace(".", " ").split()
+
+    # Search must match a complete word or be the target itself
+    return search in words or search == target
+
+
+def find_simple_icon_slug(name: str, description: str = "") -> Optional[str]:
+    """Find Simple Icons slug with false positive prevention.
+
+    Matching priority:
+    1. Exact title match (HIGH confidence)
+    2. Alias match (HIGH confidence)
+    3. Suffix-stripped match (MEDIUM confidence)
+    4. Word boundary substring match (only if name >= 4 chars)
+
+    Args:
+        name: Entity name to search for
+        description: Entity description for domain verification (bonus, not required)
+
+    Returns slug or None if no confident match.
+    """
+    icons = _load_simple_icons_data()
+    if not icons.get("by_title"):
+        return None
+
+    name_lower = name.lower().strip()
+    desc_lower = description.lower() if description else ""
+
+    # 1. Exact title match (HIGH confidence)
+    if name_lower in icons["by_title"]:
+        match = icons["by_title"][name_lower]
+        logging.debug(f"  [simpleicons] Exact title match: {name} -> {match['slug']}")
+        return match["slug"]
+
+    # 2. Alias match (HIGH confidence)
+    if name_lower in icons["by_alias"]:
+        match = icons["by_alias"][name_lower]
+        logging.debug(f"  [simpleicons] Alias match: {name} -> {match['slug']} (alias of {match['title']})")
+        return match["slug"]
+
+    # 3. Suffix-stripped match (MEDIUM confidence)
+    for suffix in [" api", " sdk", " plugin", " client", " integration", " app"]:
+        if name_lower.endswith(suffix):
+            stripped = name_lower[:-len(suffix)].strip()
+            if stripped in icons["by_title"]:
+                match = icons["by_title"][stripped]
+                # Domain verification as bonus (prefer verified, accept without)
+                source_domain = _extract_domain(match["source"])
+                if source_domain and source_domain in desc_lower:
+                    logging.debug(f"  [simpleicons] Suffix match (verified): {name} -> {match['slug']}")
+                else:
+                    logging.debug(f"  [simpleicons] Suffix match: {name} -> {match['slug']}")
+                return match["slug"]
+
+    # 4. Word boundary substring match (only if name >= MIN_SUBSTRING_LENGTH)
+    if len(name_lower) >= MIN_SUBSTRING_LENGTH:
+        # Look for icons where our name appears as a complete word
+        best_match = None
+        for title, entry in icons["by_title"].items():
+            if _is_word_boundary_match(name_lower, title):
+                # Prefer shorter titles (more specific match)
+                if best_match is None or len(title) < len(best_match["title"]):
+                    best_match = entry
+
+        if best_match:
+            logging.debug(f"  [simpleicons] Word boundary match: {name} -> {best_match['slug']} (from {best_match['title']})")
+            return best_match["slug"]
+
+    return None
+
+
+# GitHub org mappings for brands where org name differs from brand
+GITHUB_ORG_MAPPINGS = {
+    "anthropic": "anthropics",
+    "eliza": "elizaos",
+    "elizaos": "elizaos",
+}
+
+
+def get_name_variations(name: str, aliases: list[str] = None, description: str = "") -> list[str]:
+    """Generate variations of entity name for lookup.
+
+    Args:
+        name: Primary entity name
+        aliases: Alternative names for the entity
+        description: Entity description for domain verification
+
+    Returns list of slugs to try, in priority order.
+    """
+    variations = []
+    base = name.lower().strip()
+
+    # 1. Try smart match against Simple Icons data first
+    if matched_slug := find_simple_icon_slug(base, description):
+        variations.append(matched_slug)
+
+    # 2. Try aliases with smart match
+    if aliases:
+        for alias in aliases:
+            if matched_slug := find_simple_icon_slug(alias, description):
+                if matched_slug not in variations:
+                    variations.append(matched_slug)
+
+    # 3. Original name (slugified) as fallback for CDN direct lookup
+    slug = base.replace(" ", "").replace(".", "").replace("-", "")
+    if slug not in variations:
+        variations.append(slug)
+
+    # 4. Try without common suffixes (for CDN fallback)
+    for suffix in [" api", " sdk", " plugin", " integration", " client"]:
+        if base.endswith(suffix):
+            clean = base[:-len(suffix)].replace(" ", "").replace(".", "")
+            if clean not in variations:
+                variations.append(clean)
+
+    return variations
+
+
+def fetch_reference_image(entity: dict) -> Optional[bytes]:
+    """Try to fetch a reference image for an entity.
+
+    Tries sources in priority order:
+    1. Simple Icons (tech brands) - with smart matching
+    2. GitHub avatar (with org mappings)
+    3. Google Favicon (website fallback)
+
+    Returns image bytes or None if not found.
+    """
+    name = entity.get("name", "")
+    aliases = entity.get("aliases", [])
+    description = entity.get("description", "")
+
+    # Get all name variations to try (pass description for verification)
+    variations = get_name_variations(name, aliases, description)
+
+    # 1. Try Simple Icons with all variations
+    for variant in variations:
+        if img := fetch_simple_icon(variant):
+            return img
+
+    # 2. Try GitHub avatar
+    github_url = entity.get("github_url", "")
+    if github_url:
+        # Extract org/user from URL
+        parts = github_url.replace("https://github.com/", "").split("/")
+        if parts and parts[0]:
+            if img := fetch_github_avatar(parts[0]):
+                return img
+
+    # Try mapped GitHub orgs
+    name_lower = name.lower().strip()
+    if name_lower in GITHUB_ORG_MAPPINGS:
+        if img := fetch_github_avatar(GITHUB_ORG_MAPPINGS[name_lower]):
+            return img
+
+    # Try guessing GitHub org from variations
+    for variant in variations[:3]:  # Limit attempts
+        if img := fetch_github_avatar(variant):
+            return img
+
+    # 3. Try Google Favicon
+    website = entity.get("website", "")
+    if website:
+        if img := fetch_google_favicon(website):
+            return img
+    else:
+        # Try guessing domain
+        for variant in variations[:2]:
+            for tld in [".com", ".ai"]:
+                if img := fetch_google_favicon(f"{variant}{tld}"):
+                    return img
+
+    return None
+
+
+# =============================================================================
 # Prompt Building
 # =============================================================================
+
+# Prompt style for A/B testing (set via --prompt-style flag)
+PROMPT_STYLE = "proportional"  # "exact" or "proportional"
+
 
 def build_icon_prompt(
     entities: list[dict] | dict,
     batch: bool = True,
     entity_type: str = None,
-    use_context: bool = True
+    use_context: bool = True,
+    prompt_style: str = None
 ) -> str:
     """Build prompt for icon generation.
 
@@ -453,7 +817,10 @@ def build_icon_prompt(
         batch: If True, generate grid layout; if False, single icon
         entity_type: Override type for style selection (batch mode)
         use_context: Include context in prompts
+        prompt_style: "exact" (pixel specs) or "proportional" (relative specs)
     """
+    style = prompt_style or PROMPT_STYLE
+
     # Normalize to list
     if not batch:
         entities = [entities]
@@ -475,23 +842,57 @@ def build_icon_prompt(
 
         entities_text = "\n".join(entity_lines)
 
-        return f"""Generate a {rows}x{cols} grid of logos/icons in a square image.
+        if style == "exact":
+            # A/B Test A: Exact pixel specifications
+            cell_size = 1024 // max(rows, cols)
+            logo_size = int(cell_size * 0.7)
 
-Layout: {rows} rows, {cols} columns, {len(entities)} total icons
-- Equal square cells, no gridlines or borders between them
-- Background: pure white
-- Each logo centered in its cell with equal padding
-- No overlap between cells
+            return f"""Search the web for official logos, then generate a {rows}x{cols} grid image.
 
-Logos needed (left-to-right, top-to-bottom):
+IMAGE SPECIFICATIONS:
+- Output: exactly 1024x1024 pixels
+- Grid: {rows} rows × {cols} columns = {len(entities)} equal cells
+- Each cell: exactly {cell_size}x{cell_size} pixels
+- Background: pure white (#FFFFFF)
+
+CELL LAYOUT:
+- Each logo centered exactly in its cell
+- Logo size: {logo_size}x{logo_size} pixels max (70% of cell)
+- Equal padding on all sides within each cell
+
+Search for and recreate the ACTUAL OFFICIAL LOGOS of these companies/projects:
+
 {entities_text}
 
-Requirements:
-- For known brands/projects, recreate their actual official logo accurately
-- For unknown/new projects, create a distinctive, professional icon
-- If uncertain about a logo, create a clean symbolic icon
-- No text, no labels, no captions, no names - logos only
-- Flat vector style, full brand colors"""
+CRITICAL:
+- Use web search to find each brand's current official logo
+- Recreate logos accurately based on search results
+- Flat vector style, full brand colors
+- Leave cell WHITE if logo cannot be found"""
+
+        else:
+            # A/B Test B: Proportional specifications (default)
+            return f"""Search the web for official logos, then generate a {rows}x{cols} grid image.
+
+IMAGE SPECIFICATIONS:
+- Square image output
+- Grid: {rows} rows × {cols} columns = {len(entities)} equal cells
+- Background: pure white (#FFFFFF)
+
+CELL LAYOUT:
+- Each cell: equal square portion of the image
+- Each logo centered in its cell, ~70% of cell size
+- Equal padding on all sides
+
+Search for and recreate the ACTUAL OFFICIAL LOGOS of these companies/projects:
+
+{entities_text}
+
+CRITICAL:
+- Use web search to find each brand's current official logo
+- Recreate logos accurately based on search results
+- Flat vector style, full brand colors
+- Leave cell WHITE if logo cannot be found"""
 
     else:
         # Single icon mode
@@ -510,51 +911,89 @@ Requirements:
 
         details_text = "\n".join(details) if details else ""
 
-        return f"""Generate a single logo/icon for: {name}
+        return f"""Search the web for the official logo, then generate a single logo/icon for: {name}
 
 Type: {etype}
 {details_text}
 
 REQUIREMENTS:
+- Use web search to find the actual official logo
 - Background: pure white or transparent
 - Logo centered with padding (~70% of image)
-- If this is a KNOWN brand/project, recreate the ACTUAL official logo accurately
-- If unknown, create a distinctive, professional, memorable icon
-- NO text labels
+- Recreate the ACTUAL official logo accurately based on search results
+- If not found via search, create a distinctive, professional icon
 - Flat vector style, clean lines
 - Should work at small sizes (high contrast, simple shapes)"""
 
 
-def generate_image(prompt: str, aspect_ratio: str = "1:1", use_search: bool = True) -> tuple[bytes, str]:
-    """Call OpenRouter to generate image with optional Google Search grounding.
+def generate_image(
+    prompt: str,
+    aspect_ratio: str = "1:1",
+    use_search: bool = True,
+    reference_images: list[tuple[int, str, bytes]] = None
+) -> tuple[bytes, str]:
+    """Call OpenRouter to generate image with optional labeled reference images.
 
     Args:
         prompt: Text prompt for image generation
         aspect_ratio: Image aspect ratio (default "1:1" = 1024x1024)
             Supported: 1:1, 2:3, 3:2, 3:4, 4:3, 9:16, 16:9
-        use_search: Enable Google Search grounding for accurate brand logos
+        use_search: Enable web search grounding (text context only)
+        reference_images: List of (grid_position, entity_name, image_bytes) tuples.
+            Each image is labeled with its grid cell number and entity name.
 
     Returns:
         Tuple of (image_bytes, text_response) where text_response contains
         model's description/confidence about generated icons.
     """
-    logging.info(f"Generating image via OpenRouter (search={'on' if use_search else 'off'})...")
+    ref_count = len(reference_images) if reference_images else 0
+    logging.info(f"Generating image via OpenRouter (refs={ref_count}, search={'on' if use_search else 'off'})...")
+
+    # Build content array - interleave labels with images to prevent mixups
+    content = []
+
+    if reference_images:
+        # First, show all labeled reference images with grid positions
+        content.append({"type": "text", "text": "REFERENCE IMAGES WITH GRID CELL NUMBERS:"})
+        for grid_pos, entity_name, img_bytes in reference_images:
+            # Add label with cell number before each image
+            content.append({"type": "text", "text": f"[Cell #{grid_pos}: {entity_name}]"})
+            # Convert to base64 data URL
+            b64 = base64.b64encode(img_bytes).decode("utf-8")
+            # Detect image type from magic bytes
+            if img_bytes[:4] == b'\x89PNG':
+                mime = "image/png"
+            elif img_bytes[:2] == b'\xff\xd8':
+                mime = "image/jpeg"
+            else:
+                mime = "image/png"  # Default (SVGs should be converted to PNG already)
+            content.append({
+                "type": "image_url",
+                "image_url": {"url": f"data:{mime};base64,{b64}"}
+            })
+        content.append({"type": "text", "text": "---"})
+
+    # Add the main prompt after reference images
+    content.append({"type": "text", "text": prompt})
 
     request_json = {
         "model": IMAGE_MODEL,
         "modalities": ["image", "text"],
-        "messages": [{
-            "role": "user",
-            "content": [{"type": "text", "text": prompt}]
-        }],
+        "messages": [{"role": "user", "content": content}],
         "image_config": {
             "aspect_ratio": aspect_ratio
         }
     }
 
-    # Enable web search for brand logo accuracy
+    # Enable web search grounding (OpenRouter's web plugin)
+    # Note: Search provides TEXT context that helps model understand/verify reference images
+    # Always enable if use_search=True - search COMPLEMENTS references, doesn't replace them
     if use_search:
-        request_json["plugins"] = [{"id": "web"}]
+        request_json["plugins"] = [{"id": "web", "max_results": 5}]
+
+    # Debug: show request payload (excluding prompt for brevity)
+    debug_payload = {k: v for k, v in request_json.items() if k != "messages"}
+    logging.debug(f"Request payload: {json.dumps(debug_payload, indent=2)}")
 
     def make_request():
         resp = requests.post(
@@ -574,16 +1013,28 @@ def generate_image(prompt: str, aspect_ratio: str = "1:1", use_search: bool = Tr
     response = retry_with_backoff(make_request)()
     result = response.json()
 
+    # Debug: check for annotations (indicates search was used)
+    if logging.getLogger().level <= logging.DEBUG:
+        annotations = result.get("choices", [{}])[0].get("message", {}).get("annotations", [])
+        if annotations:
+            logging.debug(f"Search annotations found: {len(annotations)} citations")
+        else:
+            logging.debug("No search annotations in response")
+
     try:
         message = result["choices"][0]["message"]
         logging.debug(f"Response message keys: {message.keys()}")
 
         # Extract text response (model's description/confidence)
         text_response = message.get("content", "")
+        logging.debug(f"Raw content type: {type(text_response)}, preview: {str(text_response)[:200]}")
+
         if isinstance(text_response, list):
             # Handle structured content format
             text_parts = [p.get("text", "") for p in text_response if p.get("type") == "text"]
             text_response = "\n".join(text_parts)
+        elif not isinstance(text_response, str):
+            text_response = str(text_response) if text_response else ""
 
         # Extract image - check multiple possible locations
         images = message.get("images", [])
@@ -726,7 +1177,7 @@ def save_icon(icon: Image.Image, entity: dict, use_numbered: bool = True) -> Pat
     return output_path
 
 
-def generate_batch(entity_type: str, entities: list[dict], use_context: bool = True, use_search: bool = True) -> list[Path]:
+def generate_batch(entity_type: str, entities: list[dict], use_context: bool = True, use_search: bool = True, prompt_style: str = None) -> list[Path]:
     """Generate a batch of icons for entities."""
     if not entities:
         logging.info("No entities to generate")
@@ -747,11 +1198,47 @@ def generate_batch(entity_type: str, entities: list[dict], use_context: bool = T
 
     logging.info(f"Generating batch of {len(batch)} icons for {entity_type}...")
 
+    # Try to fetch reference images for each entity
+    # Store as (grid_position, entity_name, image_bytes) tuples to ensure correct placement
+    reference_images = []
+    for idx, entity in enumerate(batch, start=1):
+        name = entity.get("name", "?")
+        ref_img = fetch_reference_image(entity)
+        if ref_img:
+            reference_images.append((idx, name, ref_img))
+
+    if reference_images:
+        ref_names = [f"{pos}:{name}" for pos, name, _ in reference_images]
+        logging.info(f"  Found {len(reference_images)} reference images: {', '.join(ref_names)}")
+
     # Build prompt and generate
-    prompt = build_icon_prompt(batch, batch=True, entity_type=entity_type, use_context=use_context)
+    prompt = build_icon_prompt(batch, batch=True, entity_type=entity_type, use_context=use_context, prompt_style=prompt_style)
+
+    # If we have reference images, modify prompt to emphasize using them
+    if reference_images:
+        ref_list = [f"Cell #{pos}: {name}" for pos, name, _ in reference_images]
+        prompt = f"""Above are labeled reference images with their GRID CELL NUMBERS.
+
+REFERENCE IMAGE ASSIGNMENTS:
+{chr(10).join(ref_list)}
+
+TASK: Place each logo in its NUMBERED grid cell position.
+
+{prompt}
+
+CRITICAL PLACEMENT RULES:
+- [Cell #N: EntityName] means put that logo in grid cell N (numbered left-to-right, top-to-bottom)
+- Use web search to verify what each logo should look like
+- Reference images show the correct logo - match colors, shapes, proportions
+- For cells WITHOUT a reference image, search for the official logo"""
+
     logging.debug(f"Prompt:\n{prompt}")
 
-    image_bytes, text_response = generate_image(prompt, use_search=use_search)
+    image_bytes, text_response = generate_image(
+        prompt,
+        use_search=use_search,
+        reference_images=reference_images if reference_images else None
+    )
 
     # Save raw grid for debugging
     grid_path = ICONS_DIR / f"_grid_{entity_type}_latest.png"
@@ -947,6 +1434,12 @@ def main():
         action="store_true",
         help="Enable verbose logging"
     )
+    parser.add_argument(
+        "--prompt-style",
+        choices=["exact", "proportional"],
+        default="proportional",
+        help="Prompt style: 'exact' (pixel specs) or 'proportional' (relative specs). Default: proportional"
+    )
 
     args = parser.parse_args()
 
@@ -983,7 +1476,7 @@ def main():
             to_generate = missing[:args.limit]
             logging.info(f"Found {len(missing)} missing, generating {len(to_generate)}")
 
-            saved = generate_batch(entity_type, to_generate, use_context=use_context, use_search=use_search)
+            saved = generate_batch(entity_type, to_generate, use_context=use_context, use_search=use_search, prompt_style=args.prompt_style)
             logging.info(f"Generated {len(saved)} icons")
 
         elif args.entity:
@@ -1030,12 +1523,12 @@ def main():
                     if ai_needed:
                         for i in range(0, len(ai_needed), GRID_SIZE * GRID_SIZE):
                             batch = ai_needed[i:i + GRID_SIZE * GRID_SIZE]
-                            generate_batch(et, batch, use_context=use_context, use_search=use_search)
+                            generate_batch(et, batch, use_context=use_context, use_search=use_search, prompt_style=args.prompt_style)
                 else:
                     # Non-tokens: AI batch generation
                     for i in range(0, min(len(missing), args.limit), GRID_SIZE * GRID_SIZE):
                         batch = missing[i:i + GRID_SIZE * GRID_SIZE]
-                        generate_batch(et, batch, use_context=use_context, use_search=use_search)
+                        generate_batch(et, batch, use_context=use_context, use_search=use_search, prompt_style=args.prompt_style)
         elif args.interactive:
             # Interactive curation loop
             entity_type = args.entity_type or "project"
@@ -1066,7 +1559,7 @@ def main():
                 print(f"Generating: {', '.join(names)}")
 
                 try:
-                    saved = generate_batch(entity_type, batch, use_context=use_context, use_search=use_search)
+                    saved = generate_batch(entity_type, batch, use_context=use_context, use_search=use_search, prompt_style=args.prompt_style)
                     print(f"\nGenerated {len(saved)} icons:")
                     for p in saved:
                         print(f"  {p}")
