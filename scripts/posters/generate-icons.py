@@ -12,11 +12,12 @@ Modes:
   --missing            Generate icons for all missing entities (smart routing)
   --list               Show entities that need icons
 
-Entity types: token, platform, project
+Entity types: token, project, user
 
 Icon naming convention:
   - tokens: token-{name}-{n}.png (numbered, prefixed)
-  - platforms/projects: {name}-{n}.png (numbered)
+  - users: user-{name}-{n}.png (numbered, prefixed)
+  - projects: {name}-{n}.png (numbered)
 
 The numbering allows multiple icons per entity (artist reference/moodboard).
 
@@ -287,6 +288,7 @@ def get_missing_entities(inventory: dict, entity_type: str = None) -> list[dict]
     """Get entities that don't have icons yet.
 
     Uses icon_paths field from inventory (populated by validate-icons.py --sync-only).
+    Only includes entities with status="keep" (or no status field for backward compat).
     """
     entities = inventory.get("entities", [])
 
@@ -300,6 +302,11 @@ def get_missing_entities(inventory: dict, entity_type: str = None) -> list[dict]
             continue
         name = entity.get("name", "")
         if len(name) < 2:
+            continue
+
+        # Skip entities marked as skip or review
+        status = entity.get("status")
+        if status in ("skip", "review"):
             continue
 
         # Check if entity has icon_paths (populated by validate-icons.py)
@@ -681,7 +688,7 @@ def generate_single(entity: dict, use_context: bool = True, skip_coingecko: bool
 
 def list_missing(inventory: dict, entity_type: str = None):
     """List entities missing icons."""
-    entity_types = [entity_type] if entity_type else ["token", "platform", "project"]
+    entity_types = [entity_type] if entity_type else ["token", "project", "user"]
 
     for et in entity_types:
         missing = get_missing_entities(inventory, et)
@@ -732,7 +739,7 @@ def main():
     parser.add_argument(
         "--type", "-t",
         dest="entity_type",
-        choices=["token", "platform", "project"],
+        choices=["token", "project", "user"],
         help="Entity type to filter (use with --missing, --list, or --entity)"
     )
     parser.add_argument(
@@ -805,7 +812,7 @@ def main():
 
         elif args.missing:
             # Generate all missing
-            entity_types = [args.entity_type] if args.entity_type else ["token", "platform", "project"]
+            entity_types = [args.entity_type] if args.entity_type else ["token", "project", "user"]
 
             for et in entity_types:
                 missing = get_missing_entities(inventory, et)

@@ -41,8 +41,8 @@ logging.basicConfig(level=logging.INFO, format='[%(asctime)s] %(message)s')
 SCRIPT_DIR = Path(__file__).resolve().parent
 WORKSPACE_ROOT = SCRIPT_DIR.parent.parent
 
-# Entity types for flat schema (4 valid types only)
-ENTITY_TYPES = ["token", "platform", "project", "user"]
+# Entity types for flat schema (3 types - platform merged into project)
+ENTITY_TYPES = ["token", "project", "user"]
 
 # Type normalization for LLM outputs that don't follow instructions
 TYPE_NORMALIZATION = {
@@ -52,6 +52,7 @@ TYPE_NORMALIZATION = {
     "company": "project",
     "organization": "project",
     "event": "project",
+    "platform": "project",  # Merged into project
 }
 
 # Types to skip entirely
@@ -72,19 +73,19 @@ Content:
 
 For each entity, provide:
 - name: canonical name (properly cased)
-- type: MUST be one of: token | platform | project | user
+- type: MUST be one of: token | project | user
 - description: 1-sentence explaining what it is
 - aliases: other names/spellings used in the content
 
-Type definitions (use ONLY these 4 types):
+Type definitions (use ONLY these 3 types):
 - token: cryptocurrencies, blockchains, L1/L2s (Bitcoin, Ethereum, Base, SOL)
-- platform: services, APIs, apps, websites (Discord, GitHub, OpenAI, CoinGecko)
-- project: software, protocols, plugins, DAOs, organizations (elizaOS, Uniswap, EVM)
+- project: software, services, platforms, protocols, DAOs (elizaOS, Discord, GitHub, Uniswap)
 - user: people, contributors, community members (Shaw, Jin, vitalik)
 
-IMPORTANT: Do not create new types. Map everything to these 4 categories.
+IMPORTANT: Do not create new types. Map everything to these 3 categories.
 - Companies → project
 - Organizations → project
+- Platforms → project
 - Developers → user
 - Events → project
 - Dates → omit entirely
@@ -109,19 +110,23 @@ Return cleaned JSON with same structure:
 {{"entities": [...]}}
 """
 
-RESOLVE_TYPES_PROMPT = """Resolve entity type conflicts. For each entity below, pick the BEST type.
+CLASSIFY_PROMPT = """Classify each entity.
 
-Types (pick exactly one):
+For type, pick ONE:
 - token: cryptocurrencies, blockchains (Bitcoin, ETH, SOL)
-- platform: services, APIs, websites (Discord, GitHub, CoinGecko)
-- project: software, protocols, DAOs, organizations (elizaOS, Uniswap)
-- user: people, contributors (Shaw, Jin, vitalik)
+- project: software, services, platforms, DAOs (Discord, elizaOS, GitHub)
+- user: people (Shaw, vitalik)
 
-Entities with conflicting types:
-{conflicts}
+For status:
+- keep: Has recognizable logo/icon (Discord, Bitcoin, vitalik)
+- skip: Generic phrase, not a proper noun ("Shaw's team", "the token")
+- review: Unsure
 
-Return JSON mapping name to best type:
-{{"Jin": "user", "ai16z": "token", ...}}
+Input:
+{entities}
+
+Return JSON object mapping name to {{type, status}}:
+{{"Discord": {{"type": "project", "status": "keep"}}, "Shaw's team": {{"type": "project", "status": "skip"}}, ...}}
 """
 
 
@@ -321,41 +326,45 @@ def merge_entities(all_extractions: list[dict], fuzzy: bool = True) -> list:
     return result
 
 
-def resolve_type_conflicts(entities: list) -> tuple[list, dict]:
-    """Use LLM to resolve entities with multiple type votes."""
-    conflicts = []
+def classify_entities(entities: list) -> tuple[list, dict]:
+    """Single LLM call to resolve types and set status for all entities."""
+    # Build input: include types_seen for conflicts, current type otherwise
+    input_list = []
     for e in entities:
-        votes = e.get("type_votes", {})
-        if len(votes) > 1:
-            conflicts.append({
-                "name": e["name"],
-                "types_seen": votes,
-                "description": e.get("description", "")[:100]
-            })
+        entry = {"name": e["name"]}
+        if "type_votes" in e and len(e["type_votes"]) > 1:
+            entry["types_seen"] = e["type_votes"]
+        else:
+            entry["type"] = e.get("type", "project")
+        input_list.append(entry)
 
-    if not conflicts:
-        # No conflicts, clean up type_votes
-        for e in entities:
-            e.pop("type_votes", None)
-        return entities, {"input_tokens": 0, "output_tokens": 0}
+    logging.info(f"Classifying {len(input_list)} entities via LLM...")
+    result, usage = call_llm(CLASSIFY_PROMPT.format(
+        entities=json.dumps(input_list, indent=2)
+    ))
 
-    logging.info(f"Resolving {len(conflicts)} type conflicts via LLM...")
-    conflicts_json = json.dumps(conflicts, indent=2)
-    result, usage = call_llm(RESOLVE_TYPES_PROMPT.format(conflicts=conflicts_json))
-
-    # Apply resolutions
-    resolutions = result if isinstance(result, dict) else {}
+    # Apply classifications (validate against allowed values)
+    classifications = result if isinstance(result, dict) else {}
+    keep_count = skip_count = review_count = 0
     for e in entities:
-        if e["name"] in resolutions:
-            resolved_type = resolutions[e["name"]]
-            if resolved_type in ENTITY_TYPES:
-                e["type"] = resolved_type
+        if e["name"] in classifications:
+            c = classifications[e["name"]]
+            if c.get("type") in ENTITY_TYPES:
+                e["type"] = c["type"]
+            if c.get("status") in ("keep", "skip", "review"):
+                e["status"] = c["status"]
+                if c["status"] == "keep":
+                    keep_count += 1
+                elif c["status"] == "skip":
+                    skip_count += 1
+                else:
+                    review_count += 1
         elif len(e.get("type_votes", {})) > 1:
-            # Fallback: pick most common type
+            # Fallback: pick most common type if LLM missed it
             e["type"] = max(e["type_votes"], key=e["type_votes"].get)
         e.pop("type_votes", None)
 
-    logging.info(f"  Resolved {len(resolutions)} conflicts")
+    logging.info(f"  Classified: {keep_count} keep, {skip_count} skip, {review_count} review")
     return entities, usage
 
 
@@ -451,16 +460,15 @@ def main():
         deduped = dedupe_entities(entities)
         logging.info(f"Deduped to {len(deduped)} entities ({len(entities) - len(deduped)} merged)")
 
-        # Resolve type conflicts via LLM
-        deduped, usage = resolve_type_conflicts(deduped)
+        # Classify entities (type + status) via LLM
+        deduped, usage = classify_entities(deduped)
 
         output = {
             "entities": deduped,
             "_metadata": {
-                **data.get("_metadata", {}),
-                "deduped_at": datetime.utcnow().isoformat() + "Z",
-                "dedupe_input_tokens": usage["input_tokens"],
-                "dedupe_output_tokens": usage["output_tokens"],
+                "classified_at": datetime.utcnow().isoformat() + "Z",
+                "classify_input_tokens": usage["input_tokens"],
+                "classify_output_tokens": usage["output_tokens"],
             }
         }
 
@@ -558,10 +566,10 @@ def main():
 
     merged = merge_entities(all_extractions)
 
-    # Resolve type conflicts via LLM
-    merged, resolve_usage = resolve_type_conflicts(merged)
-    total_input_tokens += resolve_usage["input_tokens"]
-    total_output_tokens += resolve_usage["output_tokens"]
+    # Classify entities (type + status) via LLM
+    merged, classify_usage = classify_entities(merged)
+    total_input_tokens += classify_usage["input_tokens"]
+    total_output_tokens += classify_usage["output_tokens"]
 
     # Optional LLM normalization pass
     if args.normalize:
