@@ -247,41 +247,31 @@ def get_next_icon_filename(entity: dict, icons_dir: Path = None) -> str:
     """Get next available numbered filename for entity icon.
 
     Returns filename like: token-bitcoin-1.png, discord-2.png
-
-    Handles legacy files without numbers (e.g., token-bitcoin.png counts as #1).
     """
     if icons_dir is None:
         icons_dir = ICONS_DIR
 
     base = get_icon_base(entity)
 
-    # Find existing files (both numbered and legacy unnumbered)
-    numbered = list(icons_dir.glob(f"{base}-*.png")) + list(icons_dir.glob(f"{base}-*.jpg"))
-    legacy = list(icons_dir.glob(f"{base}.png")) + list(icons_dir.glob(f"{base}.jpg"))
+    # Find existing numbered files
+    existing = list(icons_dir.glob(f"{base}-*.png")) + list(icons_dir.glob(f"{base}-*.jpg"))
 
-    if not numbered and not legacy:
+    if not existing:
         return f"{base}-1.png"
 
-    # Get numbers from numbered files
+    # Get highest number from existing files
     nums = []
-    for f in numbered:
+    for f in existing:
         match = re.search(rf"{re.escape(base)}-(\d+)\.", f.name)
         if match:
             nums.append(int(match.group(1)))
-
-    # Legacy file (base.png) counts as 1
-    if legacy:
-        nums.append(1)
 
     next_num = max(nums, default=0) + 1
     return f"{base}-{next_num}.png"
 
 
 def get_icon_filename(entity: dict) -> str:
-    """Get the first icon filename for an entity (for backwards compatibility).
-
-    This returns the -1 numbered filename pattern.
-    """
+    """Get the primary icon filename for an entity."""
     base = get_icon_base(entity)
     return f"{base}-1.png"
 
