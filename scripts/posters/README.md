@@ -279,3 +279,56 @@ python scripts/posters/illustrate.py --list-characters
 | `--list-styles` | List available art styles |
 | `--list-characters` | List characters with reference sheets |
 | `--dry-run` | Show prompt without generating |
+
+---
+
+## Entity Icons
+
+Generate icons for entities (projects, tokens, users) extracted from the knowledge base.
+
+### Files
+
+| File | Purpose |
+|------|---------|
+| `generate-icons.py` | Generate icons via AI with reference image pipeline |
+| `validate-icons.py` | Validate icons, sync manifest, show coverage stats |
+| `assets/manifest.json` | Entity inventory with icon_paths |
+| `assets/icons/` | Generated icon files |
+
+### Reference Image Pipeline
+
+Before AI generation, attempts to fetch real logos:
+1. **Simple Icons** - 3300+ brand SVGs (with fuzzy matching)
+2. **GitHub Avatars** - For GitHub users/orgs
+3. **Google Favicon** - For entities with URLs
+4. **CoinGecko** - Token logos for crypto assets
+
+### Usage
+
+```bash
+# Interactive mode - generate, review, repeat
+python scripts/posters/generate-icons.py -i -t project
+
+# Batch mode
+python scripts/posters/generate-icons.py --batch project --limit 4
+
+# Single entity
+python scripts/posters/generate-icons.py --entity Discord
+
+# List entities missing icons
+python scripts/posters/generate-icons.py --list
+
+# Validate icons and sync manifest
+python scripts/posters/validate-icons.py
+
+# Show coverage stats
+python scripts/posters/validate-icons.py --stats
+```
+
+### Entity Status Flow
+
+```
+Entity extracted -> status: "keep" (curated)
+                 -> status: "skip" (filtered out)
+                 -> status: "review" (icon rejected)
+```

@@ -6,6 +6,7 @@ Usage:
   python scripts/posters/validate-icons.py                  # Validate + sync inventory
   python scripts/posters/validate-icons.py --fix            # Remove invalid + sync
   python scripts/posters/validate-icons.py --sync-only      # Just sync inventory (no validation)
+  python scripts/posters/validate-icons.py --stats          # Show coverage statistics
 """
 
 import argparse
@@ -25,6 +26,7 @@ ASSETS_DIR = SCRIPT_DIR / "assets"
 ICONS_DIR = ASSETS_DIR / "icons"
 ENTITY_INVENTORY = ASSETS_DIR / "manifest.json"
 MIN_SIZE = 64  # minimum 64x64
+ENTITY_TYPES = ["token", "project", "user"]
 
 
 def validate_icons(fix: bool = False) -> bool:
@@ -180,11 +182,73 @@ def sync_inventory_icons() -> dict:
     return inventory
 
 
+def show_coverage_stats():
+    """Show icon coverage statistics by entity type."""
+    if not ENTITY_INVENTORY.exists():
+        print(f"Error: Entity inventory not found: {ENTITY_INVENTORY}")
+        return
+
+    with open(ENTITY_INVENTORY) as f:
+        inventory = json.load(f)
+
+    entities = inventory.get("entities", [])
+
+    # Group by type
+    by_type = {t: [] for t in ENTITY_TYPES}
+    for entity in entities:
+        if not isinstance(entity, dict):
+            continue
+        status = entity.get("status", "keep")
+        if status in ("skip", "review"):
+            continue
+        entity_type = entity.get("type", "project")
+        if entity_type in by_type:
+            by_type[entity_type].append(entity)
+
+    print("\n## Icon Coverage\n")
+
+    total_entities = 0
+    total_with_icons = 0
+
+    for entity_type in ENTITY_TYPES:
+        type_entities = by_type[entity_type]
+        with_icons = sum(1 for e in type_entities if e.get("icon_paths"))
+        total = len(type_entities)
+        pct = (with_icons / total * 100) if total > 0 else 0
+
+        total_entities += total
+        total_with_icons += with_icons
+
+        print(f"- **{entity_type.title()}**: {with_icons}/{total} ({pct:.0f}%)")
+
+    # Overall
+    overall_pct = (total_with_icons / total_entities * 100) if total_entities > 0 else 0
+    print(f"\n**Total**: {total_with_icons}/{total_entities} ({overall_pct:.0f}%)")
+
+    # Show entities missing icons (limited)
+    print("\n### Missing Icons\n")
+    for entity_type in ENTITY_TYPES:
+        missing = [e["name"] for e in by_type[entity_type] if not e.get("icon_paths")]
+        if missing:
+            print(f"**{entity_type.title()}** ({len(missing)}):")
+            for name in sorted(missing)[:10]:
+                print(f"  - {name}")
+            if len(missing) > 10:
+                print(f"  - ... and {len(missing) - 10} more")
+            print()
+
+
 def main():
     parser = argparse.ArgumentParser(description="Validate icons and sync inventory")
     parser.add_argument("--fix", action="store_true", help="Remove invalid icons")
     parser.add_argument("--sync-only", action="store_true", help="Only sync inventory (skip validation)")
+    parser.add_argument("--stats", action="store_true", help="Show coverage statistics")
     args = parser.parse_args()
+
+    # Stats mode - just show coverage
+    if args.stats:
+        show_coverage_stats()
+        sys.exit(0)
 
     success = True
 
