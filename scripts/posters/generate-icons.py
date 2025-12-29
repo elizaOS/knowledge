@@ -699,7 +699,7 @@ def generate_batch(entity_type: str, entities: list[dict], use_context: bool = T
     logging.info(f"Generating batch of {len(batch)} icons for {entity_type}...")
 
     # Build prompt and generate
-    prompt = build_icon_prompt(batch, entity_type)
+    prompt = build_icon_prompt(batch, batch=True, entity_type=entity_type, use_context=use_context)
     logging.debug(f"Prompt:\n{prompt}")
 
     image_bytes, text_response = generate_image(prompt, use_search=use_search)
@@ -842,7 +842,7 @@ def main():
     mode.add_argument(
         "--batch",
         metavar="TYPE",
-        help="Generate 4x4 grid batch for entity type (token, platform, project)"
+        help="Generate 4x4 grid batch for entity type (token, project, user)"
     )
     mode.add_argument(
         "--entity",
