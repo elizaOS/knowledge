@@ -20,10 +20,14 @@ Usage:
 
   # Normalize existing inventory (no re-extraction, saves API calls)
   python scripts/etl/extract-entities.py -i scripts/posters/assets/manifest.json --normalize-only
+
+  # Filter invalid entities (no LLM, fast) - removes numbers, IDs, timestamps, etc.
+  python scripts/etl/extract-entities.py -i scripts/posters/assets/manifest.json --filter-only
 """
 
 import os
 import sys
+import re
 import json
 import argparse
 import logging
@@ -279,14 +283,58 @@ def normalize_entities(entities: list) -> tuple[list, dict]:
     return entities, usage
 
 
+def is_invalid_entity_name(name: str) -> bool:
+    """Check if entity name is invalid (numeric, ID-like, timestamp, etc.)."""
+    name = name.strip()
+
+    # Too short
+    if len(name) < 2:
+        return True
+
+    # Purely numeric (4124, 100k, $50,000)
+    if re.match(r'^[\d$,.\-\s%kKmMbB]+$', name):
+        return True
+
+    # ID patterns (2:4134, 1253563209462448241, 02c148ea-fb77-...)
+    if re.match(r'^\d+:\d+', name):  # colon-separated numbers
+        return True
+    if re.match(r'^[0-9a-f\-]{20,}$', name, re.I):  # long hex/UUID
+        return True
+
+    # Timestamps (11:40 UTC, 2025-01-15)
+    if re.match(r'^\d{1,2}:\d{2}\s*(UTC|AM|PM)?$', name, re.I):
+        return True
+    if re.match(r'^\d{4}-\d{2}-\d{2}', name):
+        return True
+
+    # Price ranges ($124.53-$124.63, $1806-$1822)
+    if re.match(r'^\$[\d,]+\.?\d*\s*-\s*\$[\d,]+', name):
+        return True
+
+    # Memory/storage sizes (0.4GB, 100MB)
+    if re.match(r'^[\d.]+\s*(GB|MB|KB|TB)$', name, re.I):
+        return True
+
+    # Time durations (1-2 weeks)
+    if re.match(r'^\d+\s*-\s*\d+\s*(weeks?|days?|hours?|months?)$', name, re.I):
+        return True
+
+    return False
+
+
 def normalize_entity_type(entity: dict) -> dict:
     """Normalize entity type and filter generic names."""
     raw_type = entity.get("type", "project")
     if raw_type in SKIP_TYPES:
         return None  # Signal to skip this entity
 
+    # Skip invalid entity names (numbers, IDs, timestamps, etc.)
+    name = entity.get("name", "").strip()
+    if is_invalid_entity_name(name):
+        return None
+
     # Skip generic entity names that aren't specific named entities
-    name_lower = entity.get("name", "").lower().strip()
+    name_lower = name.lower()
     if name_lower in SKIP_ENTITIES:
         return None
 
@@ -470,6 +518,7 @@ def main():
     parser.add_argument("--batch", action="store_true", help="Process all JSON files in directory")
     parser.add_argument("--normalize", action="store_true", help="Run LLM normalization pass on merged results")
     parser.add_argument("--normalize-only", action="store_true", help="Only normalize existing inventory (no extraction)")
+    parser.add_argument("--filter-only", action="store_true", help="Only filter invalid entities (no LLM, fast)")
     parser.add_argument("--dedupe", action="store_true", help="Dedupe existing inventory file by name, resolve type conflicts")
     parser.add_argument("--no-context", action="store_true", help="Skip fetching additional context from source paths (faster, fewer tokens)")
     parser.add_argument("--since", type=str, help="Only process files dated after YYYY-MM-DD (for incremental runs)")
@@ -514,6 +563,44 @@ def main():
             t = entity.get("type", "unknown")
             by_type[t] = by_type.get(t, 0) + 1
         logging.info(f"Types: {by_type}")
+        return
+
+    # Filter-only mode: apply code-based filters (no LLM)
+    if args.filter_only:
+        if not args.input.is_file():
+            parser.error("--filter-only requires -i to be an existing JSON file")
+
+        logging.info(f"Loading {args.input}...")
+        with open(args.input) as f:
+            data = json.load(f)
+
+        entities = data.get("entities", [])
+        before = len(entities)
+
+        # Filter invalid names and skip types
+        filtered = []
+        for entity in entities:
+            if not isinstance(entity, dict) or "name" not in entity:
+                continue
+            name = entity.get("name", "").strip()
+            if is_invalid_entity_name(name):
+                continue
+            if name.lower() in SKIP_ENTITIES:
+                continue
+            filtered.append(entity)
+
+        after = len(filtered)
+        logging.info(f"Filtered: {before} -> {after} entities ({before - after} removed)")
+
+        output = {
+            "entities": filtered,
+            "_metadata": data.get("_metadata", {})
+        }
+        output["_metadata"]["filtered_at"] = datetime.utcnow().isoformat() + "Z"
+
+        out_path = args.output or args.input
+        out_path.write_text(json.dumps(output, indent=2, ensure_ascii=False))
+        logging.info(f"Saved to {out_path}")
         return
 
     # Normalize-only mode: just process existing inventory
