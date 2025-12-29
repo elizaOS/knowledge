@@ -7,19 +7,19 @@ Usage:
   python scripts/etl/extract-entities.py -i the-council/facts/2025-12-20.json
 
   # Batch extract from directory
-  python scripts/etl/extract-entities.py -i the-council/facts/ --batch -o scripts/posters/assets/entity-inventory.json
+  python scripts/etl/extract-entities.py -i the-council/facts/ --batch -o scripts/posters/assets/manifest.json
 
   # Batch extract + normalize in one pass
-  python scripts/etl/extract-entities.py -i the-council/facts/ --batch --normalize -o scripts/posters/assets/entity-inventory.json
+  python scripts/etl/extract-entities.py -i the-council/facts/ --batch --normalize -o scripts/posters/assets/manifest.json
 
   # Incremental extraction (only files after date - for CI/CD)
-  python scripts/etl/extract-entities.py -i the-council/facts/ --batch --since 2025-12-20 -o scripts/posters/assets/entity-inventory.json
+  python scripts/etl/extract-entities.py -i the-council/facts/ --batch --since 2025-12-20 -o scripts/posters/assets/manifest.json
 
   # Dedupe existing inventory (merge duplicates by name, resolve type conflicts)
-  python scripts/etl/extract-entities.py -i scripts/posters/assets/entity-inventory.json --dedupe
+  python scripts/etl/extract-entities.py -i scripts/posters/assets/manifest.json --dedupe
 
   # Normalize existing inventory (no re-extraction, saves API calls)
-  python scripts/etl/extract-entities.py -i scripts/posters/assets/entity-inventory.json --normalize-only
+  python scripts/etl/extract-entities.py -i scripts/posters/assets/manifest.json --normalize-only
 """
 
 import os
@@ -56,6 +56,14 @@ TYPE_NORMALIZATION = {
 
 # Types to skip entirely
 SKIP_TYPES = {"date", "location", "security"}
+
+# Generic entity names to skip (not specific named entities)
+SKIP_ENTITIES = {
+    "crypto", "cryptocurrency", "token", "tokens", "nft", "nfts",
+    "blockchain", "defi", "wallet", "exchange", "trading",
+    "agent", "agents", "agent tokens", "ai agent", "ai agents",
+    "eli5", "eli5 token", "meme", "memes", "memecoin", "memecoins",
+}
 
 EXTRACT_PROMPT = """Extract named entities from this content.
 
@@ -240,10 +248,16 @@ def normalize_entities(entities: list) -> tuple[list, dict]:
 
 
 def normalize_entity_type(entity: dict) -> dict:
-    """Normalize entity type using fallback mapping."""
+    """Normalize entity type and filter generic names."""
     raw_type = entity.get("type", "project")
     if raw_type in SKIP_TYPES:
         return None  # Signal to skip this entity
+
+    # Skip generic entity names that aren't specific named entities
+    name_lower = entity.get("name", "").lower().strip()
+    if name_lower in SKIP_ENTITIES:
+        return None
+
     entity["type"] = TYPE_NORMALIZATION.get(raw_type, raw_type)
     return entity
 

@@ -1,32 +1,39 @@
 #!/usr/bin/env python3
 """
-Generate icons for entities using AI image generation.
+Generate icons for entities using AI image generation with CoinGecko integration.
+
+Smart routing for tokens:
+  - Tries CoinGecko API first (free, fast) for mapped tokens
+  - Falls back to AI generation if not found on CoinGecko
 
 Modes:
-  --batch <type>       Generate 4x4 grid of icons for an entity type, slice into individual icons
+  --batch <type>       Generate 4x4 grid of icons for an entity type
   --entity <name>      Generate single icon for specific entity
-  --missing            Generate icons for all entities missing from assets/icons/
+  --missing            Generate icons for all missing entities (smart routing)
+  --list               Show entities that need icons
 
 Entity types: token, platform, project
 
 Icon naming convention:
-  - tokens: token-{name}.png (prefixed for CoinGecko compatibility)
-  - platforms/projects: {name}.png (shortname only)
+  - tokens: token-{name}-{n}.png (numbered, prefixed)
+  - platforms/projects: {name}-{n}.png (numbered)
 
-Uses OpenRouter (Gemini) for image generation, PIL for slicing.
+The numbering allows multiple icons per entity (artist reference/moodboard).
 
 Usage:
-  python scripts/posters/generate-icons.py --batch platform
+  python scripts/posters/generate-icons.py --missing                # All types, smart routing
+  python scripts/posters/generate-icons.py --missing --type token   # Tokens with CoinGecko
   python scripts/posters/generate-icons.py --entity Discord
-  python scripts/posters/generate-icons.py --missing --type token
-  python scripts/posters/generate-icons.py --list  # Show entities needing icons
+  python scripts/posters/generate-icons.py --list
 """
 
 import os
 import sys
 import io
 import json
+import re
 import base64
+import time
 import argparse
 import logging
 from pathlib import Path
@@ -49,11 +56,48 @@ SCRIPT_DIR = Path(__file__).parent.resolve()
 WORKSPACE_ROOT = SCRIPT_DIR.parent.parent
 ASSETS_DIR = SCRIPT_DIR / "assets"
 ICONS_DIR = ASSETS_DIR / "icons"
-ENTITY_INVENTORY = ASSETS_DIR / "entity-inventory.json"
+ENTITY_INVENTORY = ASSETS_DIR / "manifest.json"
 FACTS_DIR = WORKSPACE_ROOT / "the-council" / "facts"
 
 GRID_SIZE = 4  # 4x4 grid = 16 icons per batch
 ICON_SIZE = 256  # Output icon size
+COINGECKO_RATE_LIMIT = 3  # seconds between CoinGecko requests
+
+# CoinGecko ID mappings for common tokens
+# Maps normalized entity name -> CoinGecko coin ID
+# NOTE: Be careful with ambiguous names - verify CoinGecko IDs before adding
+COINGECKO_IDS = {
+    # Major tokens
+    "bitcoin": "bitcoin",
+    "btc": "bitcoin",
+    "ethereum": "ethereum",
+    "eth": "ethereum",
+    "solana": "solana",
+    "sol": "solana",
+    "usdc": "usd-coin",
+    "usdt": "tether",
+    "weth": "weth",
+    "wbtc": "wrapped-bitcoin",
+    "bonk": "bonk",
+    "dogwifhat": "dogwifcoin",
+    # Ecosystem tokens
+    "ai16z": "ai16z",              # ElizaOS project token (rebranded from ai16z)
+    "elizaos": "ai16z",            # ElizaOS token = ai16z on CoinGecko
+    "elizaos token": "ai16z",
+    # NOTE: "eliza" is a DIFFERENT token on CoinGecko (not ElizaOS)
+    # Do NOT add "eliza" -> "eliza" mapping to avoid confusion
+    "virtual": "virtual-protocol",
+    "worldcoin": "worldcoin-wld",
+    "wld": "worldcoin-wld",
+    "dot": "polkadot",
+    "icp": "internet-computer",
+    "bnb": "binancecoin",
+    "avax": "avalanche-2",
+    "matic": "matic-network",
+    "polygon": "matic-network",
+    "xmr": "monero",
+    "monero": "monero",
+}
 
 logging.basicConfig(
     level=logging.INFO,
@@ -147,13 +191,8 @@ def enrich_entity_with_context(entity: dict) -> dict:
 
 
 def get_entity_info(inventory: dict, name: str, entity_type: str = None) -> dict:
-    """Get entity info from inventory (flat schema v2)."""
+    """Get entity info from inventory."""
     entities = inventory.get("entities", [])
-
-    # Skip if legacy format (dict of categories)
-    if isinstance(entities, dict):
-        logging.warning("Legacy inventory format detected. Run extract-entities.py to regenerate.")
-        return None
 
     for entity in entities:
         if not isinstance(entity, dict):
@@ -175,34 +214,76 @@ def get_entity_info(inventory: dict, name: str, entity_type: str = None) -> dict
 def get_entities_by_type(inventory: dict, entity_type: str) -> list[dict]:
     """Get all entities of a given type."""
     entities = inventory.get("entities", [])
-
-    # Skip if legacy format (dict of categories)
-    if isinstance(entities, dict):
-        logging.warning("Legacy inventory format detected. Run extract-entities.py to regenerate.")
-        return []
-
     return [e for e in entities if isinstance(e, dict) and e.get("type") == entity_type]
 
 
 
 
-def get_icon_filename(entity: dict) -> str:
-    """Get the icon filename for an entity.
+def slugify_name(name: str) -> str:
+    """Convert entity name to filename-safe slug."""
+    return name.lower().strip().replace(" ", "-").replace(".", "-").lstrip("$@")
+
+
+def get_icon_base(entity: dict) -> str:
+    """Get the base icon filename pattern for an entity (without number/extension).
 
     Convention:
-    - tokens: token-{name}.png (prefixed for CoinGecko compatibility)
-    - users: user-{name}.png (for avatars/profile pics)
-    - everything else: {name}.png (shortname only)
+    - tokens: token-{name}
+    - users: user-{name}
+    - everything else: {name}
     """
-    name = entity.get("name", "unknown").lower().strip().replace(" ", "-")
+    name = slugify_name(entity.get("name", "unknown"))
     entity_type = entity.get("type", "project")
 
     if entity_type == "token":
-        return f"token-{name}.png"
+        return f"token-{name}"
     elif entity_type == "user":
-        return f"user-{name}.png"
+        return f"user-{name}"
     else:
-        return f"{name}.png"
+        return name
+
+
+def get_next_icon_filename(entity: dict, icons_dir: Path = None) -> str:
+    """Get next available numbered filename for entity icon.
+
+    Returns filename like: token-bitcoin-1.png, discord-2.png
+
+    Handles legacy files without numbers (e.g., token-bitcoin.png counts as #1).
+    """
+    if icons_dir is None:
+        icons_dir = ICONS_DIR
+
+    base = get_icon_base(entity)
+
+    # Find existing files (both numbered and legacy unnumbered)
+    numbered = list(icons_dir.glob(f"{base}-*.png")) + list(icons_dir.glob(f"{base}-*.jpg"))
+    legacy = list(icons_dir.glob(f"{base}.png")) + list(icons_dir.glob(f"{base}.jpg"))
+
+    if not numbered and not legacy:
+        return f"{base}-1.png"
+
+    # Get numbers from numbered files
+    nums = []
+    for f in numbered:
+        match = re.search(rf"{re.escape(base)}-(\d+)\.", f.name)
+        if match:
+            nums.append(int(match.group(1)))
+
+    # Legacy file (base.png) counts as 1
+    if legacy:
+        nums.append(1)
+
+    next_num = max(nums, default=0) + 1
+    return f"{base}-{next_num}.png"
+
+
+def get_icon_filename(entity: dict) -> str:
+    """Get the first icon filename for an entity (for backwards compatibility).
+
+    This returns the -1 numbered filename pattern.
+    """
+    base = get_icon_base(entity)
+    return f"{base}-1.png"
 
 
 def get_existing_icons() -> set:
@@ -213,19 +294,15 @@ def get_existing_icons() -> set:
 
 
 def get_missing_entities(inventory: dict, entity_type: str = None) -> list[dict]:
-    """Get entities that don't have icons yet."""
-    entities = inventory.get("entities", [])
+    """Get entities that don't have icons yet.
 
-    # Skip if legacy format (dict of categories) - requires regeneration
-    if isinstance(entities, dict):
-        logging.warning("Legacy inventory format detected. Run extract-entities.py to regenerate.")
-        return []
+    Uses icon_paths field from inventory (populated by validate-icons.py --sync-only).
+    """
+    entities = inventory.get("entities", [])
 
     # Filter by type if specified
     if entity_type:
         entities = [e for e in entities if isinstance(e, dict) and e.get("type") == entity_type]
-
-    existing = get_existing_icons()
 
     missing = []
     for entity in entities:
@@ -235,115 +312,187 @@ def get_missing_entities(inventory: dict, entity_type: str = None) -> list[dict]
         if len(name) < 2:
             continue
 
-        icon_filename = get_icon_filename(entity)
-        if icon_filename.lower() not in existing:
+        # Check if entity has icon_paths (populated by validate-icons.py)
+        if not entity.get("icon_paths"):
             missing.append(entity)
 
     return missing
 
 
-def build_icon_prompt(entities: list[dict], entity_type: str = None, use_context: bool = True) -> str:
-    """Build prompt for generating a grid of icons."""
-    # Build entity descriptions using rich metadata
-    entity_lines = []
-    for i, entity in enumerate(entities, 1):
-        name = entity.get("name", "Unknown")
-        desc = entity.get("description", "")
-        visual_hints = entity.get("visual_hints", "")
-        context = entity.get("_context", [])
+# =============================================================================
+# CoinGecko Integration
+# =============================================================================
 
-        parts = [f"{i}. {name}"]
-        if desc:
-            parts.append(f"({desc})")
-        if visual_hints:
-            parts.append(f"[style: {visual_hints}]")
-        elif context and use_context:
-            # Use first context snippet as hint
-            hint = context[0][:100].replace("\n", " ")
-            parts.append(f"[context: {hint}...]")
+def fetch_coingecko_icon(coin_id: str, entity: dict) -> Optional[Path]:
+    """Fetch token icon from CoinGecko API.
 
-        entity_lines.append(" ".join(parts))
+    Returns Path to saved icon if successful, None otherwise.
+    Uses numbered filename scheme.
+    """
+    url = f"https://api.coingecko.com/api/v3/coins/{coin_id}"
 
-    entities_text = "\n".join(entity_lines)
+    try:
+        response = requests.get(url, timeout=10)
+        response.raise_for_status()
+        data = response.json()
 
-    # Type-specific style hints
-    style_hints = {
-        "token": "cryptocurrency token logos, coin/token style, clean geometric designs",
-        "platform": "tech company logos, app icons, recognizable brand marks",
-        "project": "software project logos, modern tech emblems, distinctive brand marks",
-    }
-    style = style_hints.get(entity_type, "clean modern icons")
+        # Get the large image URL
+        image_url = data.get("image", {}).get("large")
+        if not image_url:
+            logging.warning(f"  [warn] {coin_id} - no image found")
+            return None
 
-    rows = (len(entities) + GRID_SIZE - 1) // GRID_SIZE
-    cols = min(len(entities), GRID_SIZE)
+        # Download the image
+        img_response = requests.get(image_url, timeout=10)
+        img_response.raise_for_status()
 
-    prompt = f"""Generate a {rows}x{cols} grid of icon logos.
+        # Save with numbered filename
+        ICONS_DIR.mkdir(parents=True, exist_ok=True)
+        filename = get_next_icon_filename(entity)
+        output_path = ICONS_DIR / filename
 
-ENTITIES (in order, left-to-right, top-to-bottom):
+        output_path.write_bytes(img_response.content)
+        logging.info(f"  [coingecko] {coin_id} -> {output_path.name}")
+        return output_path
+
+    except requests.exceptions.HTTPError as e:
+        if e.response.status_code == 404:
+            logging.debug(f"  [404] {coin_id} - not found on CoinGecko")
+        else:
+            logging.warning(f"  [error] {coin_id} - {e}")
+        return None
+    except Exception as e:
+        logging.warning(f"  [error] {coin_id} - {e}")
+        return None
+
+
+def try_coingecko(entity: dict) -> Optional[Path]:
+    """Try to fetch icon from CoinGecko using hardcoded mappings.
+
+    Returns Path to saved icon if successful, None if not mapped or fetch failed.
+    Only works for token entities with entries in COINGECKO_IDS.
+    """
+    name = entity.get("name", "").lower().strip().lstrip("$")
+
+    # Check hardcoded mapping
+    coin_id = COINGECKO_IDS.get(name)
+
+    # Try aliases if name not mapped
+    if not coin_id:
+        for alias in entity.get("aliases", []):
+            normalized_alias = alias.lower().strip().lstrip("$")
+            coin_id = COINGECKO_IDS.get(normalized_alias)
+            if coin_id:
+                break
+
+    if not coin_id:
+        return None
+
+    return fetch_coingecko_icon(coin_id, entity)
+
+
+# =============================================================================
+# Prompt Building
+# =============================================================================
+
+def build_icon_prompt(
+    entities: list[dict] | dict,
+    batch: bool = True,
+    entity_type: str = None,
+    use_context: bool = True
+) -> str:
+    """Build prompt for icon generation.
+
+    Args:
+        entities: List of entities (batch) or single entity dict
+        batch: If True, generate grid layout; if False, single icon
+        entity_type: Override type for style selection (batch mode)
+        use_context: Include context in prompts
+    """
+    # Normalize to list
+    if not batch:
+        entities = [entities]
+
+    if batch and len(entities) > 1:
+        # Batch mode: grid of icons
+        rows = (len(entities) + GRID_SIZE - 1) // GRID_SIZE
+        cols = min(len(entities), GRID_SIZE)
+
+        entity_lines = []
+        for i, entity in enumerate(entities, 1):
+            name = entity.get("name", "Unknown")
+            desc = entity.get("description", "")
+
+            # Format: "1. Discord — gaming chat platform"
+            line = f"{i}. {name}"
+            if desc:
+                # Truncate long descriptions
+                short_desc = desc[:80] + "..." if len(desc) > 80 else desc
+                line += f" — {short_desc}"
+            entity_lines.append(line)
+
+        entities_text = "\n".join(entity_lines)
+
+        return f"""Generate a {rows}x{cols} grid image of logos/icons.
+
+GRID LAYOUT:
+- {rows} rows × {cols} columns = {len(entities)} equal square cells
+- NO gridlines, NO borders, NO separators between cells
+- Background: pure white (#FFFFFF)
+- Each logo centered in its cell with equal padding
+- All logos visually balanced to same optical size (~70% of cell)
+- NO overlap between cells
+
+ENTITIES (left to right, top to bottom):
 {entities_text}
 
-STYLE: {style}
+IMPORTANT:
+- For KNOWN brands/projects, recreate their ACTUAL official logo as accurately as possible
+- For unknown/new projects, create a distinctive, professional icon
+- If uncertain about a logo, create a clean symbolic icon rather than guessing wrong
+- NO text labels on the icons
+- Flat vector style, full brand colors where known"""
 
-REQUIREMENTS:
-- Each icon in its own cell, evenly spaced grid
-- Clean, simple, recognizable designs
-- Solid or transparent backgrounds (no gradients behind icons)
-- Professional quality, suitable for UI use
-- Each icon should be distinct and match its entity
-- No text labels on the icons
-- Consistent size and spacing between icons
-- Square aspect ratio for the overall image"""
+    else:
+        # Single icon mode
+        entity = entities[0]
+        name = entity.get("name", "Unknown")
+        desc = entity.get("description", "")
+        etype = entity.get("type", "project")
+        context = entity.get("_context", [])
 
-    return prompt
+        details = []
+        if desc:
+            details.append(f"Description: {desc}")
+        if context and use_context:
+            context_text = " ".join(c[:200] for c in context[:2])
+            details.append(f"Context: {context_text}")
 
+        details_text = "\n".join(details) if details else ""
 
-def build_single_icon_prompt(entity: dict) -> str:
-    """Build prompt for generating a single icon."""
-    name = entity.get("name", "Unknown")
-    desc = entity.get("description", "")
-    visual_hints = entity.get("visual_hints", "")
-    entity_type = entity.get("type", "project")
-    context = entity.get("_context", [])
+        return f"""Generate a single logo/icon for: {name}
 
-    details = []
-    if desc:
-        details.append(f"Description: {desc}")
-    if visual_hints:
-        details.append(f"Visual style: {visual_hints}")
-    if context:
-        # Add context as background info
-        context_text = " ".join(c[:200] for c in context[:2])
-        details.append(f"Context: {context_text}")
-
-    details_text = "\n".join(details) if details else "Create a distinctive, recognizable icon"
-
-    # Type-specific hints
-    type_hints = {
-        "token": "cryptocurrency/blockchain token style",
-        "platform": "tech company/service logo style",
-        "project": "software project/protocol logo style",
-    }
-    type_hint = type_hints.get(entity_type, "")
-
-    prompt = f"""Generate a single icon logo for: {name}
-
+Type: {etype}
 {details_text}
-{f"Style category: {type_hint}" if type_hint else ""}
 
 REQUIREMENTS:
-- Clean, professional icon design
-- Transparent or solid color background
-- Recognizable and distinctive
-- Suitable for use as app icon or logo
-- No text or labels
-- Square format, centered design
-- High contrast, works at small sizes"""
-
-    return prompt
+- Background: pure white or transparent
+- Logo centered with padding (~70% of image)
+- If this is a KNOWN brand/project, recreate the ACTUAL official logo accurately
+- If unknown, create a distinctive, professional, memorable icon
+- NO text labels
+- Flat vector style, clean lines
+- Should work at small sizes (high contrast, simple shapes)"""
 
 
-def generate_image(prompt: str) -> bytes:
-    """Call OpenRouter to generate image, return PNG bytes."""
+def generate_image(prompt: str, aspect_ratio: str = "1:1") -> bytes:
+    """Call OpenRouter to generate image, return PNG bytes.
+
+    Args:
+        prompt: Text prompt for image generation
+        aspect_ratio: Image aspect ratio (default "1:1" = 1024x1024)
+            Supported: 1:1, 2:3, 3:2, 3:4, 4:3, 9:16, 16:9
+    """
     logging.info("Generating image via OpenRouter...")
 
     response = requests.post(
@@ -360,7 +509,10 @@ def generate_image(prompt: str) -> bytes:
             "messages": [{
                 "role": "user",
                 "content": [{"type": "text", "text": prompt}]
-            }]
+            }],
+            "image_config": {
+                "aspect_ratio": aspect_ratio
+            }
         },
         timeout=180
     )
@@ -420,11 +572,21 @@ def process_icon(icon: Image.Image) -> Image.Image:
     return icon
 
 
-def save_icon(icon: Image.Image, entity: dict) -> Path:
-    """Save icon to the flat icons directory."""
+def save_icon(icon: Image.Image, entity: dict, use_numbered: bool = True) -> Path:
+    """Save icon to the flat icons directory.
+
+    Args:
+        icon: PIL Image to save
+        entity: Entity dict
+        use_numbered: If True, use auto-incrementing numbered filename
+    """
     ICONS_DIR.mkdir(parents=True, exist_ok=True)
 
-    filename = get_icon_filename(entity)
+    if use_numbered:
+        filename = get_next_icon_filename(entity)
+    else:
+        filename = get_icon_filename(entity)
+
     output_path = ICONS_DIR / filename
 
     icon.save(output_path, "PNG", optimize=True)
@@ -483,19 +645,38 @@ def generate_batch(entity_type: str, entities: list[dict], use_context: bool = T
     return saved
 
 
-def generate_single(entity: dict, use_context: bool = True) -> Optional[Path]:
-    """Generate a single icon for an entity."""
-    name = entity.get("name", "Unknown")
+def generate_single(entity: dict, use_context: bool = True, skip_coingecko: bool = False, force: bool = False) -> Optional[Path]:
+    """Generate a single icon for an entity.
 
-    # Enrich with context
+    For tokens, tries CoinGecko first (unless skip_coingecko=True), falls back to AI.
+    Skips if icon already exists (unless force=True).
+    """
+    name = entity.get("name", "Unknown")
+    entity_type = entity.get("type", "project")
+
+    # Check if icon already exists
+    icon_path = ICONS_DIR / get_icon_filename(entity)
+    if icon_path.exists() and not force:
+        logging.info(f"Icon already exists for {name}, skipping (use --force to regenerate)")
+        return icon_path
+
+    # For tokens, try CoinGecko first
+    if entity_type == "token" and not skip_coingecko:
+        logging.info(f"Trying CoinGecko for {name}...")
+        cg_path = try_coingecko(entity)
+        if cg_path:
+            return cg_path
+        logging.info(f"CoinGecko failed for {name}, falling back to AI")
+
+    # Enrich with context for AI generation
     if use_context:
         entity = enrich_entity_with_context(entity)
         if entity.get("_context"):
             logging.info(f"Found context for {name}")
 
-    logging.info(f"Generating icon for {name}...")
+    logging.info(f"Generating icon for {name} via AI...")
 
-    prompt = build_single_icon_prompt(entity)
+    prompt = build_icon_prompt(entity, batch=False)
     image_bytes = generate_image(prompt)
 
     # Load and process
@@ -570,6 +751,11 @@ def main():
         help="Skip context lookup from facts (faster, simpler prompts)"
     )
     parser.add_argument(
+        "--force",
+        action="store_true",
+        help="Regenerate icons even if they already exist"
+    )
+    parser.add_argument(
         "--limit", "-n",
         type=int,
         default=16,
@@ -625,7 +811,7 @@ def main():
                 logging.error(f"Entity not found: {args.entity}")
                 return 1
 
-            generate_single(entity, use_context=use_context)
+            generate_single(entity, use_context=use_context, force=args.force)
 
         elif args.missing:
             # Generate all missing
@@ -638,10 +824,36 @@ def main():
 
                 logging.info(f"\n=== {et.upper()} ({len(missing)} missing) ===")
 
-                # Process in batches
-                for i in range(0, min(len(missing), args.limit), GRID_SIZE * GRID_SIZE):
-                    batch = missing[i:i + GRID_SIZE * GRID_SIZE]
-                    generate_batch(et, batch, use_context=use_context)
+                # For tokens: try CoinGecko first, collect failures for AI batch
+                if et == "token":
+                    coingecko_success = 0
+                    ai_needed = []
+
+                    for i, entity in enumerate(missing[:args.limit]):
+                        name = entity.get("name", "?")
+                        logging.info(f"  [{i+1}/{min(len(missing), args.limit)}] {name}...")
+
+                        if try_coingecko(entity):
+                            coingecko_success += 1
+                        else:
+                            ai_needed.append(entity)
+
+                        # Rate limit CoinGecko requests
+                        if i < min(len(missing), args.limit) - 1:
+                            time.sleep(COINGECKO_RATE_LIMIT)
+
+                    logging.info(f"CoinGecko: {coingecko_success} fetched, {len(ai_needed)} need AI")
+
+                    # Generate remaining with AI in batches
+                    if ai_needed:
+                        for i in range(0, len(ai_needed), GRID_SIZE * GRID_SIZE):
+                            batch = ai_needed[i:i + GRID_SIZE * GRID_SIZE]
+                            generate_batch(et, batch, use_context=use_context)
+                else:
+                    # Non-tokens: AI batch generation
+                    for i in range(0, min(len(missing), args.limit), GRID_SIZE * GRID_SIZE):
+                        batch = missing[i:i + GRID_SIZE * GRID_SIZE]
+                        generate_batch(et, batch, use_context=use_context)
         else:
             parser.print_help()
             return 1

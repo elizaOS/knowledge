@@ -15,7 +15,7 @@ from datetime import datetime
 SCRIPT_DIR = Path(__file__).parent.resolve()
 ASSETS_DIR = SCRIPT_DIR / "assets"
 ICONS_DIR = ASSETS_DIR / "icons"
-ENTITY_INVENTORY = ASSETS_DIR / "entity-inventory.json"
+ENTITY_INVENTORY = ASSETS_DIR / "manifest.json"
 
 
 def get_all_assets() -> set:
