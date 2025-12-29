@@ -7,6 +7,7 @@ Usage:
   python scripts/posters/validate-icons.py --fix            # Remove invalid + sync
   python scripts/posters/validate-icons.py --sync-only      # Just sync inventory (no validation)
   python scripts/posters/validate-icons.py --stats          # Show coverage statistics
+  python scripts/posters/validate-icons.py --stats -o coverage.md  # Save stats to file
 """
 
 import argparse
@@ -182,7 +183,7 @@ def sync_inventory_icons() -> dict:
     return inventory
 
 
-def show_coverage_stats():
+def show_coverage_stats(output_path: Path = None):
     """Show icon coverage statistics by entity type."""
     if not ENTITY_INVENTORY.exists():
         print(f"Error: Entity inventory not found: {ENTITY_INVENTORY}")
@@ -205,7 +206,7 @@ def show_coverage_stats():
         if entity_type in by_type:
             by_type[entity_type].append(entity)
 
-    print("\n## Icon Coverage\n")
+    lines = ["## Icon Coverage", ""]
 
     total_entities = 0
     total_with_icons = 0
@@ -219,23 +220,31 @@ def show_coverage_stats():
         total_entities += total
         total_with_icons += with_icons
 
-        print(f"- **{entity_type.title()}**: {with_icons}/{total} ({pct:.0f}%)")
+        lines.append(f"- **{entity_type.title()}**: {with_icons}/{total} ({pct:.0f}%)")
 
     # Overall
     overall_pct = (total_with_icons / total_entities * 100) if total_entities > 0 else 0
-    print(f"\n**Total**: {total_with_icons}/{total_entities} ({overall_pct:.0f}%)")
+    lines.extend(["", f"**Total**: {total_with_icons}/{total_entities} ({overall_pct:.0f}%)"])
 
     # Show entities missing icons (limited)
-    print("\n### Missing Icons\n")
+    lines.extend(["", "### Missing Icons", ""])
     for entity_type in ENTITY_TYPES:
         missing = [e["name"] for e in by_type[entity_type] if not e.get("icon_paths")]
         if missing:
-            print(f"**{entity_type.title()}** ({len(missing)}):")
+            lines.append(f"**{entity_type.title()}** ({len(missing)}):")
             for name in sorted(missing)[:10]:
-                print(f"  - {name}")
+                lines.append(f"  - {name}")
             if len(missing) > 10:
-                print(f"  - ... and {len(missing) - 10} more")
-            print()
+                lines.append(f"  - ... and {len(missing) - 10} more")
+            lines.append("")
+
+    output = "\n".join(lines)
+    print(output)
+
+    # Write to file if path specified
+    if output_path:
+        output_path.write_text(output)
+        print(f"\nWritten to: {output_path}")
 
 
 def main():
@@ -243,11 +252,12 @@ def main():
     parser.add_argument("--fix", action="store_true", help="Remove invalid icons")
     parser.add_argument("--sync-only", action="store_true", help="Only sync inventory (skip validation)")
     parser.add_argument("--stats", action="store_true", help="Show coverage statistics")
+    parser.add_argument("-o", "--output", type=Path, help="Output markdown file for --stats")
     args = parser.parse_args()
 
     # Stats mode - just show coverage
     if args.stats:
-        show_coverage_stats()
+        show_coverage_stats(output_path=args.output)
         sys.exit(0)
 
     success = True
