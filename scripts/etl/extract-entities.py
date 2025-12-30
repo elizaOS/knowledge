@@ -100,7 +100,14 @@ IMPORTANT: Do not create new types. Map everything to these 3 categories.
 - Platforms → project
 - Developers → user
 - Events → project
-- Dates → omit entirely
+
+OMIT ENTIRELY (these are NOT entities):
+- Dates, times, timestamps (2025-01-15, 11:40 UTC)
+- Numbers, amounts, prices ($124.53, 100k, $50,000/month)
+- IDs, hashes, addresses (1253563209462448241, 0x5AM, 9NyLL...)
+- Durations (1-2 weeks, 3 months)
+- Sizes/measurements (0.4GB, 100MB)
+- Generic phrases that aren't proper nouns
 
 Output JSON only:
 {"entities": [
