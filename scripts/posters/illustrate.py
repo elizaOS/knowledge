@@ -40,6 +40,9 @@ from datetime import datetime
 import requests
 from PIL import Image
 
+# Icon sheet for entity logos
+from utils.icon_sheet import make_icon_sheet, extract_entities_from_facts
+
 # --------------- Config ---------------
 
 OPENROUTER_API_KEY = os.environ.get("OPENROUTER_API_KEY")
@@ -477,9 +480,18 @@ def prompt_for_style(idea: dict, all_styles: list[str]) -> tuple[str, bool]:
         return default_style, False
 
 
-def interactive_mode(facts_path: Path, dry_run: bool = False) -> int:
+def interactive_mode(facts_path: Path, dry_run: bool = False, with_icons: bool = False) -> int:
     """Run interactive mode - present ideas and generate selected ones."""
     print(f"\nAnalyzing {facts_path.name}...")
+
+    # Generate icon sheet if requested
+    icon_sheet_bytes = None
+    if with_icons:
+        entities = extract_entities_from_facts(facts_path)
+        if entities:
+            icon_sheet_bytes, found = make_icon_sheet(entities[:12])  # Limit to 12 icons
+            if icon_sheet_bytes:
+                print(f"Icon sheet: {len(found)} entities ({', '.join(found[:5])}{'...' if len(found) > 5 else ''})")
     ideas = generate_illustration_ideas(facts_path)
 
     if not ideas:
@@ -602,7 +614,7 @@ def interactive_mode(facts_path: Path, dry_run: bool = False) -> int:
 
                     # Build and generate with character references
                     prompt = build_illustration_prompt(manifests, scene, style=gen_style)
-                    image_bytes = generate_illustration(collage_bytes, prompt)
+                    image_bytes = generate_illustration(collage_bytes, prompt, icon_sheet_bytes)
 
                 # Save with style in filename
                 cat_str = idea["category"].replace("_", "-")
@@ -619,29 +631,143 @@ def interactive_mode(facts_path: Path, dry_run: bool = False) -> int:
     return 0
 
 
+def batch_mode(facts_path: Path, dry_run: bool = False, with_icons: bool = False) -> int:
+    """Batch mode - generate all category visuals automatically.
+
+    Outputs to posters/{date}/ directory:
+      - overall.png (hero/editorial)
+      - github-updates.png (dataviz)
+      - discord-updates.png (comic_panel)
+      - strategic-insights.png (cinematic_anime)
+      - market-analysis.png (dataviz)
+      - icons.png (entity icon sheet)
+    """
+    print(f"\nBatch generating from {facts_path.name}...")
+
+    ideas = generate_illustration_ideas(facts_path)
+    if not ideas:
+        print("No illustration ideas found.")
+        return 1
+
+    # Extract date for output directory
+    with open(facts_path) as f:
+        facts = json.load(f)
+    date_str = facts.get("briefing_date", facts_path.stem)
+
+    # Create output directory
+    output_dir = OUTPUT_DIR / date_str
+    output_dir.mkdir(parents=True, exist_ok=True)
+
+    # Generate icon sheet once (shared across all illustrations)
+    icon_sheet_bytes = None
+    if with_icons:
+        entities = extract_entities_from_facts(facts_path)
+        if entities:
+            icon_sheet_bytes, found = make_icon_sheet(entities[:12])
+            if icon_sheet_bytes:
+                # Save icon sheet
+                icon_path = output_dir / "icons.png"
+                icon_path.write_bytes(icon_sheet_bytes)
+                print(f"Icon sheet: {icon_path} ({len(found)} entities)")
+
+    print(f"\nGenerating {len(ideas)} visuals to {output_dir}/\n")
+
+    generated = []
+    for i, idea in enumerate(ideas, 1):
+        cat_slug = idea["category"].replace("_", "-")
+        style = idea["style"]
+        output_path = output_dir / f"{cat_slug}.png"
+
+        print(f"[{i}/{len(ideas)}] {idea['title']} ({style})...")
+
+        try:
+            if dry_run:
+                chars = ", ".join(idea["characters"])
+                print(f"   Style: {style}, Characters: {chars}")
+                print(f"   Content: {idea['content'][:80]}...")
+                print(f"   -> {output_path}")
+                continue
+
+            if is_data_visualization_style(style):
+                # Data viz - no characters
+                viz_desc = generate_scene_from_content(
+                    idea["content"], idea["characters"], style=style
+                )
+                print(f"   Viz: {viz_desc[:60]}...")
+
+                prompt = build_dataviz_prompt(viz_desc, style, idea["content"])
+                image_bytes = generate_dataviz(prompt)
+            else:
+                # Character-based
+                collage_bytes, manifests = make_reference_collage(idea["characters"])
+
+                scene = generate_scene_from_content(
+                    idea["content"], idea["characters"], style=style
+                )
+                print(f"   Scene: {scene[:60]}...")
+
+                prompt = build_illustration_prompt(manifests, scene, style=style)
+                image_bytes = generate_illustration(collage_bytes, prompt, icon_sheet_bytes)
+
+            output_path.write_bytes(image_bytes)
+            print(f"   Saved: {output_path}")
+            generated.append(output_path)
+
+        except Exception as e:
+            print(f"   Error: {e}")
+            continue
+
+    print(f"\nBatch complete: {len(generated)}/{len(ideas)} visuals in {output_dir}/")
+    return 0
+
+
 # --------------- Image Generation ---------------
 
 
-def generate_illustration(collage_bytes: bytes, prompt: str) -> bytes:
-    """Call image generation API."""
+def generate_illustration(
+    collage_bytes: bytes,
+    prompt: str,
+    icon_sheet_bytes: bytes = None
+) -> bytes:
+    """Call image generation API.
+
+    Args:
+        collage_bytes: Character reference sheet PNG
+        prompt: Generation prompt
+        icon_sheet_bytes: Optional logo/icon sheet for brand references
+    """
     collage_b64 = base64.b64encode(collage_bytes).decode("utf-8")
 
-    preamble = (
-        "Reference sheet showing character design(s). "
-        "Use these EXACT character appearances in the illustration. "
-        "Maintain colors, costume, and distinguishing features.\n\n"
-    )
-
+    # Build content with reference images
     content = [
         {
             "type": "image_url",
             "image_url": {"url": f"data:image/png;base64,{collage_b64}"}
-        },
-        {
-            "type": "text",
-            "text": preamble + prompt
         }
     ]
+
+    # Add icon sheet if provided
+    if icon_sheet_bytes:
+        icon_b64 = base64.b64encode(icon_sheet_bytes).decode("utf-8")
+        content.append({
+            "type": "image_url",
+            "image_url": {"url": f"data:image/png;base64,{icon_b64}"}
+        })
+        preamble = (
+            "IMAGE 1: Character reference sheet - use EXACT appearances.\n"
+            "IMAGE 2: Logo/icon sheet - incorporate relevant logos as visual elements.\n\n"
+        )
+    else:
+        preamble = (
+            "Reference sheet showing character design(s). "
+            "Use these EXACT character appearances in the illustration. "
+            "Maintain colors, costume, and distinguishing features.\n\n"
+        )
+
+    content.append({
+        "type": "text",
+        "text": preamble + prompt
+    })
 
     logging.info(f"Calling {IMAGE_MODEL}...")
 
@@ -776,6 +902,11 @@ def main():
         help="Interactive mode: analyze facts and pick from multiple ideas"
     )
     parser.add_argument(
+        "--batch",
+        action="store_true",
+        help="Batch mode: generate all category visuals from facts file"
+    )
+    parser.add_argument(
         "-o", "--output",
         help="Output path (default: posters/illustration-{timestamp}.png)"
     )
@@ -793,6 +924,11 @@ def main():
         "--dry-run",
         action="store_true",
         help="Show prompt without generating"
+    )
+    parser.add_argument(
+        "--with-icons",
+        action="store_true",
+        help="Include logo/icon sheet for entities mentioned in facts"
     )
     parser.add_argument(
         "-v", "--verbose",
@@ -825,7 +961,20 @@ def main():
         if not OPENROUTER_API_KEY and not args.dry_run:
             logging.error("OPENROUTER_API_KEY not set")
             return 1
-        return interactive_mode(facts_path, dry_run=args.dry_run)
+        return interactive_mode(facts_path, dry_run=args.dry_run, with_icons=args.with_icons)
+
+    # Batch mode
+    if args.batch:
+        if not args.facts:
+            parser.error("Batch mode requires -f/--facts")
+        facts_path = Path(args.facts)
+        if not facts_path.exists():
+            logging.error(f"Facts file not found: {facts_path}")
+            return 1
+        if not OPENROUTER_API_KEY and not args.dry_run:
+            logging.error("OPENROUTER_API_KEY not set")
+            return 1
+        return batch_mode(facts_path, dry_run=args.dry_run, with_icons=args.with_icons)
 
     # Validate args
     if not args.args:
@@ -869,6 +1018,17 @@ def main():
         collage_bytes, manifests = make_reference_collage(characters)
         logging.info(f"Loaded {len(manifests)} character(s)")
 
+        # Generate icon sheet if requested
+        icon_sheet_bytes = None
+        if args.with_icons and args.facts:
+            facts_path = Path(args.facts)
+            if facts_path.exists():
+                entities = extract_entities_from_facts(facts_path)
+                if entities:
+                    icon_sheet_bytes, found = make_icon_sheet(entities[:12])
+                    if icon_sheet_bytes:
+                        logging.info(f"Icon sheet: {len(found)} entities")
+
         # Get scene description
         if args.facts:
             facts_path = Path(args.facts)
@@ -909,7 +1069,7 @@ def main():
 
         # Generate
         logging.info(f"Generating illustration (style: {args.style})...")
-        image_bytes = generate_illustration(collage_bytes, prompt)
+        image_bytes = generate_illustration(collage_bytes, prompt, icon_sheet_bytes)
 
         # Save
         OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
