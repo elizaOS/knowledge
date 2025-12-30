@@ -53,6 +53,9 @@ OPENROUTER_API_KEY = os.environ.get("OPENROUTER_API_KEY")
 OPENROUTER_ENDPOINT = "https://openrouter.ai/api/v1/chat/completions"
 IMAGE_MODEL = "google/gemini-3-pro-image-preview"
 
+# selfhst/icons library path (optional, set via env var)
+SELFHST_ICONS_PATH = os.environ.get("SELFHST_ICONS_PATH", "")
+
 SCRIPT_DIR = Path(__file__).parent.resolve()
 WORKSPACE_ROOT = SCRIPT_DIR.parent.parent
 ASSETS_DIR = SCRIPT_DIR / "assets"
@@ -535,6 +538,68 @@ def fetch_google_favicon(domain: str) -> Optional[bytes]:
 
 
 # =============================================================================
+# selfhst/icons Integration
+# =============================================================================
+
+_selfhst_index_cache: list = None
+
+
+def _load_selfhst_index() -> list:
+    """Load and cache selfhst/icons index.json."""
+    global _selfhst_index_cache
+    if _selfhst_index_cache is not None:
+        return _selfhst_index_cache
+
+    if not SELFHST_ICONS_PATH:
+        _selfhst_index_cache = []
+        return _selfhst_index_cache
+
+    index_path = Path(SELFHST_ICONS_PATH) / "index.json"
+    if not index_path.exists():
+        logging.debug(f"selfhst/icons index not found: {index_path}")
+        _selfhst_index_cache = []
+        return _selfhst_index_cache
+
+    try:
+        _selfhst_index_cache = json.loads(index_path.read_text())
+        logging.debug(f"Loaded {len(_selfhst_index_cache)} selfhst/icons entries")
+    except Exception as e:
+        logging.warning(f"Failed to load selfhst/icons: {e}")
+        _selfhst_index_cache = []
+
+    return _selfhst_index_cache
+
+
+def fetch_selfhst_icon(name: str) -> Optional[bytes]:
+    """Fetch icon from selfhst/icons library.
+
+    Matches on Name or Reference (exact, case-insensitive).
+    Prefers standard variant over -light/-dark.
+    """
+    index = _load_selfhst_index()
+    if not index:
+        return None
+
+    name_lower = name.lower().strip()
+    icons_dir = Path(SELFHST_ICONS_PATH)
+
+    for entry in index:
+        entry_name = entry.get("Name", "").lower()
+        entry_ref = entry.get("Reference", "").lower()
+
+        if name_lower == entry_name or name_lower == entry_ref:
+            # Try PNG first (standard, then light variant)
+            ref = entry.get("Reference", "")
+            for variant in [f"{ref}.png", f"{ref}-light.png"]:
+                png_path = icons_dir / "png" / variant
+                if png_path.exists():
+                    logging.debug(f"  [selfhst] Found {name} -> {variant}")
+                    return png_path.read_bytes()
+
+    return None
+
+
+# =============================================================================
 # Simple Icons Fuzzy Matching (with false positive prevention)
 # =============================================================================
 
@@ -743,8 +808,9 @@ def fetch_reference_image(entity: dict) -> Optional[bytes]:
 
     Tries sources in priority order:
     1. Simple Icons (tech brands) - with smart matching
-    2. GitHub avatar (with org mappings)
-    3. Google Favicon (website fallback)
+    2. selfhst/icons (self-hosted apps) - exact matching
+    3. GitHub avatar (with org mappings)
+    4. Google Favicon (website fallback)
 
     Returns image bytes or None if not found.
     """
@@ -760,7 +826,14 @@ def fetch_reference_image(entity: dict) -> Optional[bytes]:
         if img := fetch_simple_icon(variant):
             return img
 
-    # 2. Try GitHub avatar
+    # 2. Try selfhst/icons (exact match on name/aliases)
+    if img := fetch_selfhst_icon(name):
+        return img
+    for alias in aliases[:3]:
+        if img := fetch_selfhst_icon(alias):
+            return img
+
+    # 3. Try GitHub avatar
     github_url = entity.get("github_url", "")
     if github_url:
         # Extract org/user from URL
@@ -780,7 +853,7 @@ def fetch_reference_image(entity: dict) -> Optional[bytes]:
         if img := fetch_github_avatar(variant):
             return img
 
-    # 3. Try Google Favicon
+    # 4. Try Google Favicon
     website = entity.get("website", "")
     if website:
         if img := fetch_google_favicon(website):

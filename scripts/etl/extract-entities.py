@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Extract named entities from files to identify what visual assets to source.
+Extract ICONIFIABLE entities from files for a digital asset library.
 
 Usage:
   # Extract from single file
@@ -9,19 +9,13 @@ Usage:
   # Batch extract from directory
   python scripts/etl/extract-entities.py -i the-council/facts/ --batch -o scripts/posters/assets/manifest.json
 
-  # Batch extract + normalize in one pass
-  python scripts/etl/extract-entities.py -i the-council/facts/ --batch --normalize -o scripts/posters/assets/manifest.json
+  # Reclassify existing manifest (LLM iconifiability check)
+  python scripts/etl/extract-entities.py -i scripts/posters/assets/manifest.json --reclassify
 
-  # Incremental extraction (only files after date - for CI/CD)
-  python scripts/etl/extract-entities.py -i the-council/facts/ --batch --since 2025-12-20 -o scripts/posters/assets/manifest.json
-
-  # Dedupe existing inventory (merge duplicates by name, resolve type conflicts)
+  # Dedupe existing inventory (merge duplicates by name)
   python scripts/etl/extract-entities.py -i scripts/posters/assets/manifest.json --dedupe
 
-  # Normalize existing inventory (no re-extraction, saves API calls)
-  python scripts/etl/extract-entities.py -i scripts/posters/assets/manifest.json --normalize-only
-
-  # Filter invalid entities (no LLM, fast) - removes numbers, IDs, timestamps, etc.
+  # Filter obvious non-entities (no LLM, fast)
   python scripts/etl/extract-entities.py -i scripts/posters/assets/manifest.json --filter-only
 """
 
@@ -72,7 +66,13 @@ SKIP_ENTITIES = {
 }
 
 # Split into system (cacheable) and user (dynamic) parts
-EXTRACT_SYSTEM = """Extract named entities from content provided by the user.
+EXTRACT_SYSTEM = """Extract ICONIFIABLE entities for a digital asset library.
+
+ICONIFIABILITY TEST - Only extract if ALL are true:
+1. Has visual identity - Could a designer create a recognizable logo/icon?
+2. Is a proper noun - A brand, project, company, or person (not a descriptor)
+3. Is reusable - Would this icon appear in multiple future articles?
+4. Is searchable - Can you find reference images by Googling "[name] logo"?
 
 For each entity, provide:
 - name: canonical name (properly cased)
@@ -87,7 +87,7 @@ CRITICAL for description:
 - GOOD: "Fast JavaScript runtime, bundler, and package manager. Logo is a white bun/dumpling on black."
 - BAD: "A project mentioned in discussion about token launches"
 - GOOD: "Unified API gateway for accessing multiple LLM providers. Teal circular ring logo."
-- If unknown or ambiguous, write "Unknown - needs research"
+- If you cannot describe what it IS, DO NOT EXTRACT IT
 
 Type definitions (use ONLY these 3 types):
 - token: cryptocurrencies, blockchains, L1/L2s (Bitcoin, Ethereum, Base, SOL)
@@ -99,15 +99,21 @@ IMPORTANT: Do not create new types. Map everything to these 3 categories.
 - Organizations → project
 - Platforms → project
 - Developers → user
-- Events → project
+- Events → project (only if named event with logo, e.g., "ETHDenver")
 
-OMIT ENTIRELY (these are NOT entities):
-- Dates, times, timestamps (2025-01-15, 11:40 UTC)
-- Numbers, amounts, prices ($124.53, 100k, $50,000/month)
-- IDs, hashes, addresses (1253563209462448241, 0x5AM, 9NyLL...)
-- Durations (1-2 weeks, 3 months)
-- Sizes/measurements (0.4GB, 100MB)
-- Generic phrases that aren't proper nouns
+NOT ICONIFIABLE - OMIT ENTIRELY:
+- Versions: v1.0.0, v2dev, v0.10.0, 1.0.0-beta (these are ATTRIBUTES, not entities)
+- Dates/times: April 14th, Q4 2025, 11:40 UTC, 2025-01-15
+- Numbers/metrics: 300+, $50k, 100k, 10x, $124.53
+- IDs/hashes: 1253563209462448241, 0x5AM, 02c148ea-fb77...
+- Durations: 1-2 weeks, 3 months, 7 days
+- Episodes without context: "Episode 2" (unless full show name)
+- Sizes: 0.4GB, 100MB
+- Generic phrases: "the platform", "new feature", "migration challenge"
+- Cryptic abbreviations: Short codes that aren't well-known brands
+
+ASK YOURSELF: "Would a newspaper's art department create an icon for this?"
+If no → don't extract it.
 
 Output JSON only:
 {"entities": [
@@ -140,23 +146,31 @@ Return cleaned JSON with same structure:
 {{"entities": [...]}}
 """
 
-CLASSIFY_PROMPT = """Classify each entity.
+CLASSIFY_PROMPT = """Classify entities for a DIGITAL ASSET LIBRARY.
 
 For type, pick ONE:
 - token: cryptocurrencies, blockchains (Bitcoin, ETH, SOL)
 - project: software, services, platforms, DAOs (Discord, elizaOS, GitHub)
 - user: people (Shaw, vitalik)
 
-For status:
-- keep: Has recognizable logo/icon (Discord, Bitcoin, vitalik)
-- skip: Generic phrase, not a proper noun ("Shaw's team", "the token")
-- review: Unsure
+For status, apply the ICONIFIABILITY TEST:
+"Would a newspaper's art department create a reusable icon for this?"
+
+- keep: YES - Has recognizable visual identity (Discord logo, Bitcoin symbol, person's avatar)
+- skip: NO - NOT iconifiable:
+  * Versions (v1.0.0, v2dev) - attributes, not entities
+  * Dates (April 14th, Q4 2025) - temporal, not visual
+  * Numbers/metrics (300+, $50k) - quantities, not brands
+  * Generic phrases ("the platform", "new feature")
+  * "Unknown - needs research" descriptions - if we can't define it, can't icon it
+  * Cryptic abbreviations that aren't well-known
+- review: Maybe - Has brand but icon would be complex/unclear
 
 Input:
 {entities}
 
 Return JSON object mapping name to {{type, status}}:
-{{"Discord": {{"type": "project", "status": "keep"}}, "Shaw's team": {{"type": "project", "status": "skip"}}, ...}}
+{{"Discord": {{"type": "project", "status": "keep"}}, "v1.0.0": {{"type": "project", "status": "skip"}}, ...}}
 """
 
 
@@ -300,43 +314,33 @@ def normalize_entities(entities: list) -> tuple[list, dict]:
     return entities, usage
 
 
-def is_invalid_entity_name(name: str) -> bool:
-    """Check if entity name is invalid (numeric, ID-like, timestamp, etc.)."""
+def is_obviously_not_iconifiable(name: str) -> bool:
+    """Minimal code filter for the most obvious non-entities.
+
+    Only catches things that are unambiguously not iconifiable.
+    Let LLM classification handle nuanced cases.
+    """
     name = name.strip()
 
     # Too short
     if len(name) < 2:
         return True
 
-    # Purely numeric (4124, 100k, $50,000)
-    if re.match(r'^[\d$,.\-\s%kKmMbB]+$', name):
+    # Purely numeric (obvious non-entity)
+    stripped = name.replace('$', '').replace(',', '').replace('.', '').replace(' ', '')
+    if stripped.isdigit():
         return True
 
-    # ID patterns (2:4134, 1253563209462448241, 02c148ea-fb77-...)
-    if re.match(r'^\d+:\d+', name):  # colon-separated numbers
-        return True
-    if re.match(r'^[0-9a-f\-]{20,}$', name, re.I):  # long hex/UUID
-        return True
-
-    # Timestamps (11:40 UTC, 2025-01-15)
-    if re.match(r'^\d{1,2}:\d{2}\s*(UTC|AM|PM)?$', name, re.I):
-        return True
-    if re.match(r'^\d{4}-\d{2}-\d{2}', name):
-        return True
-
-    # Price ranges ($124.53-$124.63, $1806-$1822)
-    if re.match(r'^\$[\d,]+\.?\d*\s*-\s*\$[\d,]+', name):
-        return True
-
-    # Memory/storage sizes (0.4GB, 100MB)
-    if re.match(r'^[\d.]+\s*(GB|MB|KB|TB)$', name, re.I):
-        return True
-
-    # Time durations (1-2 weeks)
-    if re.match(r'^\d+\s*-\s*\d+\s*(weeks?|days?|hours?|months?)$', name, re.I):
+    # Long hex/UUID strings (technical IDs, not brands)
+    cleaned = name.replace('-', '')
+    if len(cleaned) >= 20 and all(c in '0123456789abcdefABCDEF' for c in cleaned):
         return True
 
     return False
+
+
+# Backward compatibility alias
+is_invalid_entity_name = is_obviously_not_iconifiable
 
 
 def normalize_entity_type(entity: dict) -> dict:
@@ -418,50 +422,65 @@ def merge_entities(all_extractions: list[dict], fuzzy: bool = True) -> list:
     return result
 
 
+CLASSIFY_BATCH_SIZE = 200  # Process in batches to avoid token limits
+
+
 def classify_entities(entities: list) -> tuple[list, dict]:
-    """Single LLM call to resolve types and set status for all entities."""
-    # Build input: include types_seen for conflicts, current type otherwise
-    input_list = []
-    for e in entities:
-        entry = {"name": e["name"]}
-        if "type_votes" in e and len(e["type_votes"]) > 1:
-            entry["types_seen"] = e["type_votes"]
-        else:
-            entry["type"] = e.get("type", "project")
-        input_list.append(entry)
-
-    logging.info(f"Classifying {len(input_list)} entities via LLM...")
-    result, usage = call_llm(CLASSIFY_PROMPT.format(
-        entities=json.dumps(input_list, indent=2)
-    ))
-
-    # Apply classifications (validate against allowed values)
-    classifications = result if isinstance(result, dict) else {}
+    """Classify entities via LLM in batches."""
+    total_usage = {"input_tokens": 0, "output_tokens": 0}
     keep_count = skip_count = review_count = 0
-    for e in entities:
-        if e["name"] in classifications:
-            c = classifications[e["name"]]
-            if c.get("type") in ENTITY_TYPES:
-                e["type"] = c["type"]
-            if c.get("status") in ("keep", "skip", "review"):
-                e["status"] = c["status"]
-                if c["status"] == "keep":
-                    keep_count += 1
-                elif c["status"] == "skip":
-                    skip_count += 1
-                else:
-                    review_count += 1
-        elif len(e.get("type_votes", {})) > 1:
-            # Fallback: pick most common type if LLM missed it
-            e["type"] = max(e["type_votes"], key=e["type_votes"].get)
-        e.pop("type_votes", None)
 
-        # Normalize any remaining invalid types (e.g., platform → project)
-        if e.get("type") in TYPE_NORMALIZATION:
-            e["type"] = TYPE_NORMALIZATION[e["type"]]
+    # Process in batches
+    for batch_start in range(0, len(entities), CLASSIFY_BATCH_SIZE):
+        batch = entities[batch_start:batch_start + CLASSIFY_BATCH_SIZE]
+        batch_num = batch_start // CLASSIFY_BATCH_SIZE + 1
+        total_batches = (len(entities) + CLASSIFY_BATCH_SIZE - 1) // CLASSIFY_BATCH_SIZE
 
-    logging.info(f"  Classified: {keep_count} keep, {skip_count} skip, {review_count} review")
-    return entities, usage
+        # Build input for this batch
+        input_list = []
+        for e in batch:
+            entry = {"name": e["name"]}
+            if "type_votes" in e and len(e["type_votes"]) > 1:
+                entry["types_seen"] = e["type_votes"]
+            else:
+                entry["type"] = e.get("type", "project")
+            # Include description for iconifiability judgment
+            if e.get("description"):
+                entry["description"] = e["description"][:100]
+            input_list.append(entry)
+
+        logging.info(f"Classifying batch {batch_num}/{total_batches} ({len(batch)} entities)...")
+        result, usage = call_llm(CLASSIFY_PROMPT.format(
+            entities=json.dumps(input_list, indent=2)
+        ))
+
+        total_usage["input_tokens"] += usage.get("input_tokens", 0)
+        total_usage["output_tokens"] += usage.get("output_tokens", 0)
+
+        # Apply classifications
+        classifications = result if isinstance(result, dict) else {}
+        for e in batch:
+            if e["name"] in classifications:
+                c = classifications[e["name"]]
+                if c.get("type") in ENTITY_TYPES:
+                    e["type"] = c["type"]
+                if c.get("status") in ("keep", "skip", "review"):
+                    e["status"] = c["status"]
+                    if c["status"] == "keep":
+                        keep_count += 1
+                    elif c["status"] == "skip":
+                        skip_count += 1
+                    else:
+                        review_count += 1
+            elif len(e.get("type_votes", {})) > 1:
+                e["type"] = max(e["type_votes"], key=e["type_votes"].get)
+            e.pop("type_votes", None)
+
+            if e.get("type") in TYPE_NORMALIZATION:
+                e["type"] = TYPE_NORMALIZATION[e["type"]]
+
+    logging.info(f"Total: {keep_count} keep, {skip_count} skip, {review_count} review")
+    return entities, total_usage
 
 
 def find_fuzzy_match(name: str, seen: dict, threshold: float = 0.85) -> str | None:
@@ -536,6 +555,7 @@ def main():
     parser.add_argument("--normalize", action="store_true", help="Run LLM normalization pass on merged results")
     parser.add_argument("--normalize-only", action="store_true", help="Only normalize existing inventory (no extraction)")
     parser.add_argument("--filter-only", action="store_true", help="Only filter invalid entities (no LLM, fast)")
+    parser.add_argument("--reclassify", action="store_true", help="Re-run LLM classification on existing manifest (iconifiability check)")
     parser.add_argument("--dedupe", action="store_true", help="Dedupe existing inventory file by name, resolve type conflicts")
     parser.add_argument("--no-context", action="store_true", help="Skip fetching additional context from source paths (faster, fewer tokens)")
     parser.add_argument("--since", type=str, help="Only process files dated after YYYY-MM-DD (for incremental runs)")
@@ -580,6 +600,43 @@ def main():
             t = entity.get("type", "unknown")
             by_type[t] = by_type.get(t, 0) + 1
         logging.info(f"Types: {by_type}")
+        return
+
+    # Reclassify mode: re-run LLM classification for iconifiability
+    if args.reclassify:
+        if not args.input.is_file():
+            parser.error("--reclassify requires -i to be an existing JSON file")
+
+        logging.info(f"Loading {args.input}...")
+        with open(args.input) as f:
+            data = json.load(f)
+
+        entities = data.get("entities", [])
+        logging.info(f"Reclassifying {len(entities)} entities for iconifiability...")
+
+        # Run LLM classification (this applies the iconifiability test)
+        entities, usage = classify_entities(entities)
+
+        # Count results
+        by_status = {}
+        for e in entities:
+            s = e.get("status", "keep")
+            by_status[s] = by_status.get(s, 0) + 1
+
+        logging.info(f"Results: {by_status}")
+
+        output = {
+            "entities": entities,
+            "_metadata": {
+                "reclassified_at": datetime.utcnow().isoformat() + "Z",
+                "classify_input_tokens": usage["input_tokens"],
+                "classify_output_tokens": usage["output_tokens"],
+            }
+        }
+
+        out_path = args.output or args.input
+        out_path.write_text(json.dumps(output, indent=2, ensure_ascii=False))
+        logging.info(f"Saved to {out_path}")
         return
 
     # Filter-only mode: apply code-based filters (no LLM)
