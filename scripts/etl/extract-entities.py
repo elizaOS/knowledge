@@ -191,9 +191,9 @@ def get_source_context(facts_data: dict) -> str:
     return "\n\n".join(context_parts)
 
 
-# Fields to skip when extracting text (metadata, not content)
-SKIP_FIELDS = {"source", "url", "date", "briefing_date", "number", "status", "author",
-               "item_type", "sentiment", "extracted_at", "schema_version"}
+# Content fields to extract (allowlist approach - more robust than blocklist)
+CONTENT_FIELDS = {"claim", "title", "description", "significance", "summary",
+                  "content", "text", "body", "message", "details", "notes"}
 
 
 def load_content(file_path: Path) -> tuple[str, dict]:
@@ -211,13 +211,13 @@ def load_content(file_path: Path) -> tuple[str, dict]:
                 if isinstance(cat, list):
                     for item in cat:
                         if isinstance(item, dict):
-                            # Only extract content fields, skip metadata
+                            # Only extract known content fields (allowlist)
                             for k, v in item.items():
-                                if k not in SKIP_FIELDS and isinstance(v, str):
+                                if k in CONTENT_FIELDS and isinstance(v, str):
                                     texts.append(v)
                 elif isinstance(cat, dict):
                     for k, v in cat.items():
-                        if k not in SKIP_FIELDS and isinstance(v, str):
+                        if k in CONTENT_FIELDS and isinstance(v, str):
                             texts.append(v)
             text_content = "\n".join(texts)
         except json.JSONDecodeError:
