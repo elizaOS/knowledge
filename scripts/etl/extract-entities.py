@@ -191,6 +191,11 @@ def get_source_context(facts_data: dict) -> str:
     return "\n\n".join(context_parts)
 
 
+# Fields to skip when extracting text (metadata, not content)
+SKIP_FIELDS = {"source", "url", "date", "briefing_date", "number", "status", "author",
+               "item_type", "sentiment", "extracted_at", "schema_version"}
+
+
 def load_content(file_path: Path) -> tuple[str, dict]:
     """Load and extract text from file. Returns (text_content, raw_data)."""
     raw_content = file_path.read_text(encoding='utf-8')
@@ -206,9 +211,14 @@ def load_content(file_path: Path) -> tuple[str, dict]:
                 if isinstance(cat, list):
                     for item in cat:
                         if isinstance(item, dict):
-                            texts.extend(str(v) for v in item.values() if isinstance(v, str))
+                            # Only extract content fields, skip metadata
+                            for k, v in item.items():
+                                if k not in SKIP_FIELDS and isinstance(v, str):
+                                    texts.append(v)
                 elif isinstance(cat, dict):
-                    texts.extend(str(v) for v in cat.values() if isinstance(v, str))
+                    for k, v in cat.items():
+                        if k not in SKIP_FIELDS and isinstance(v, str):
+                            texts.append(v)
             text_content = "\n".join(texts)
         except json.JSONDecodeError:
             text_content = raw_content
