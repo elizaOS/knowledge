@@ -53,8 +53,9 @@ OPENROUTER_API_KEY = os.environ.get("OPENROUTER_API_KEY")
 OPENROUTER_ENDPOINT = "https://openrouter.ai/api/v1/chat/completions"
 IMAGE_MODEL = "google/gemini-3-pro-image-preview"
 
-# selfhst/icons library path (optional, set via env var)
+# Local icon libraries (optional, set via env vars)
 SELFHST_ICONS_PATH = os.environ.get("SELFHST_ICONS_PATH", "")
+GILBARBARA_LOGOS_PATH = os.environ.get("GILBARBARA_LOGOS_PATH", "")
 
 SCRIPT_DIR = Path(__file__).parent.resolve()
 WORKSPACE_ROOT = SCRIPT_DIR.parent.parent
@@ -600,6 +601,70 @@ def fetch_selfhst_icon(name: str) -> Optional[bytes]:
 
 
 # =============================================================================
+# gilbarbara/logos Integration
+# =============================================================================
+
+_gilbarbara_logos_cache: list = None
+
+
+def _load_gilbarbara_logos() -> list:
+    """Load and cache gilbarbara/logos logos.json."""
+    global _gilbarbara_logos_cache
+    if _gilbarbara_logos_cache is not None:
+        return _gilbarbara_logos_cache
+
+    if not GILBARBARA_LOGOS_PATH:
+        _gilbarbara_logos_cache = []
+        return _gilbarbara_logos_cache
+
+    index_path = Path(GILBARBARA_LOGOS_PATH) / "logos.json"
+    if not index_path.exists():
+        logging.debug(f"gilbarbara/logos index not found: {index_path}")
+        _gilbarbara_logos_cache = []
+        return _gilbarbara_logos_cache
+
+    try:
+        _gilbarbara_logos_cache = json.loads(index_path.read_text())
+        logging.debug(f"Loaded {len(_gilbarbara_logos_cache)} gilbarbara/logos entries")
+    except Exception as e:
+        logging.warning(f"Failed to load gilbarbara/logos: {e}")
+        _gilbarbara_logos_cache = []
+
+    return _gilbarbara_logos_cache
+
+
+def fetch_gilbarbara_logo(name: str) -> Optional[bytes]:
+    """Fetch logo from gilbarbara/logos library.
+
+    Matches on name or shortname (exact, case-insensitive).
+    Converts SVG to PNG for Gemini compatibility.
+    """
+    logos = _load_gilbarbara_logos()
+    if not logos:
+        return None
+
+    name_lower = name.lower().strip()
+    logos_dir = Path(GILBARBARA_LOGOS_PATH) / "logos"
+
+    for entry in logos:
+        entry_name = entry.get("name", "").lower()
+        entry_short = entry.get("shortname", "").lower()
+
+        if name_lower == entry_name or name_lower == entry_short:
+            # Try each file in the files array
+            for svg_file in entry.get("files", []):
+                svg_path = logos_dir / svg_file
+                if svg_path.exists():
+                    # Convert SVG to PNG
+                    png_bytes = svg_to_png(svg_path.read_bytes())
+                    if png_bytes:
+                        logging.debug(f"  [gilbarbara] Found {name} -> {svg_file}")
+                        return png_bytes
+
+    return None
+
+
+# =============================================================================
 # Simple Icons Fuzzy Matching (with false positive prevention)
 # =============================================================================
 
@@ -809,8 +874,9 @@ def fetch_reference_image(entity: dict) -> Optional[bytes]:
     Tries sources in priority order:
     1. Simple Icons (tech brands) - with smart matching
     2. selfhst/icons (self-hosted apps) - exact matching
-    3. GitHub avatar (with org mappings)
-    4. Google Favicon (website fallback)
+    3. gilbarbara/logos (SVG logos) - exact matching
+    4. GitHub avatar (with org mappings)
+    5. Google Favicon (website fallback)
 
     Returns image bytes or None if not found.
     """
@@ -833,7 +899,14 @@ def fetch_reference_image(entity: dict) -> Optional[bytes]:
         if img := fetch_selfhst_icon(alias):
             return img
 
-    # 3. Try GitHub avatar
+    # 3. Try gilbarbara/logos (exact match on name/aliases)
+    if img := fetch_gilbarbara_logo(name):
+        return img
+    for alias in aliases[:3]:
+        if img := fetch_gilbarbara_logo(alias):
+            return img
+
+    # 4. Try GitHub avatar
     github_url = entity.get("github_url", "")
     if github_url:
         # Extract org/user from URL
@@ -853,7 +926,7 @@ def fetch_reference_image(entity: dict) -> Optional[bytes]:
         if img := fetch_github_avatar(variant):
             return img
 
-    # 4. Try Google Favicon
+    # 5. Try Google Favicon
     website = entity.get("website", "")
     if website:
         if img := fetch_google_favicon(website):

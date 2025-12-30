@@ -88,6 +88,7 @@ npm install  # Only needed for Discord.js dependency
 - `HMD_API_ACCESS_TOKEN` or `HACKMD_API_TOKEN` - For HackMD API
 - `DISCORD_BOT_TOKEN` - For Discord posting
 - `SELFHST_ICONS_PATH` - (Optional) Path to selfhst/icons repo for reference images
+- `GILBARBARA_LOGOS_PATH` - (Optional) Path to gilbarbara/logos repo for SVG logos
 
 ## Data Flow
 
