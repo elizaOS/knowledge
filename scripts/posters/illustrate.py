@@ -335,9 +335,99 @@ COMPOSITIONS = [
     "Split frame showing cause and effect",
 ]
 
+# Holiday moods - override seasonal mood on special days
+# Format: (month, day): ("holiday_name", "mood description")
+HOLIDAY_MOODS = {
+    # New Year's (Dec 31 - Jan 2)
+    (12, 31): ("new_years", "new beginnings, celebration, fireworks and confetti"),
+    (1, 1): ("new_years", "new beginnings, celebration, fireworks and confetti"),
+    (1, 2): ("new_years", "new beginnings, fresh starts, optimistic energy"),
+
+    # Valentine's Day (Feb 13-15)
+    (2, 13): ("valentines", "warmth and connection, soft pinks and reds"),
+    (2, 14): ("valentines", "love and connection, romantic warmth, heartfelt moments"),
+    (2, 15): ("valentines", "warmth and connection, soft pinks and reds"),
+
+    # St. Patrick's Day (Mar 16-17)
+    (3, 16): ("st_patricks", "lucky green, festive Irish energy"),
+    (3, 17): ("st_patricks", "lucky green, Irish charm, festive celebration"),
+
+    # April Fools (Apr 1) - Easter takes priority if they overlap
+    (4, 1): ("april_fools", "playful mischief, unexpected twists, lighthearted chaos"),
+
+    # Bitcoin Pizza Day (May 22)
+    (5, 22): ("bitcoin_pizza", "crypto nostalgia, pizza celebration, early adopter vibes"),
+
+    # 4th of July (Jul 3-5)
+    (7, 3): ("july_4th", "patriotic energy, summer celebration, anticipation"),
+    (7, 4): ("july_4th", "bold patriotic energy, fireworks, summer celebration"),
+    (7, 5): ("july_4th", "summer celebration, post-fireworks glow"),
+
+    # Ethereum Birthday (Jul 30)
+    (7, 30): ("eth_birthday", "blockchain celebration, network anniversary, crypto milestone"),
+
+    # Halloween (Oct 29-31)
+    (10, 29): ("halloween", "mysterious atmosphere, autumn shadows, spooky anticipation"),
+    (10, 30): ("halloween", "spooky and playful, orange and purple, eerie shadows"),
+    (10, 31): ("halloween", "peak spooky energy, costumes and candy, haunted atmosphere"),
+
+    # Christmas (Dec 23-26)
+    (12, 23): ("christmas", "festive anticipation, cozy warmth, holiday preparations"),
+    (12, 24): ("christmas", "Christmas Eve magic, warm glow, gift-giving anticipation"),
+    (12, 25): ("christmas", "Christmas joy, festive warmth, red and green, celebration"),
+    (12, 26): ("christmas", "post-Christmas cozy, relaxed holiday warmth"),
+}
+
+# Variable holidays - hardcoded dates for 2025-2035
+# Thanksgiving: 4th Thursday of November (Wed-Fri window)
+THANKSGIVING_DATES = {
+    2025: 27, 2026: 26, 2027: 25, 2028: 23, 2029: 22,
+    2030: 28, 2031: 27, 2032: 25, 2033: 24, 2034: 23, 2035: 27,
+}
+THANKSGIVING_MOOD = "gratitude and abundance, harvest warmth, family gathering"
+
+# Easter Sunday dates (Sat-Mon window)
+EASTER_DATES = {
+    2025: (4, 20), 2026: (4, 5), 2027: (3, 28), 2028: (4, 16), 2029: (4, 1),
+    2030: (4, 21), 2031: (4, 13), 2032: (5, 2), 2033: (4, 24), 2034: (4, 9), 2035: (4, 29),
+}
+EASTER_MOOD = "renewal and rebirth, pastel colors, spring awakening"
+
+
+def get_holiday_mood(date: datetime) -> str | None:
+    """Check if date falls on a holiday, return mood if so.
+
+    Priority: Easter > Thanksgiving > Fixed holidays > Seasonal
+    """
+    month, day, year = date.month, date.day, date.year
+
+    # Check Easter first (takes priority over April Fools in 2029)
+    if year in EASTER_DATES:
+        easter_month, easter_day = EASTER_DATES[year]
+        if month == easter_month and easter_day - 1 <= day <= easter_day + 1:
+            return EASTER_MOOD
+
+    # Check Thanksgiving (Wed-Fri window around Thursday)
+    if month == 11 and year in THANKSGIVING_DATES:
+        thurs = THANKSGIVING_DATES[year]
+        if thurs - 1 <= day <= thurs + 1:
+            return THANKSGIVING_MOOD
+
+    # Check fixed holidays
+    if (month, day) in HOLIDAY_MOODS:
+        return HOLIDAY_MOODS[(month, day)][1]
+
+    return None
+
 
 def get_seasonal_mood(date: datetime) -> str:
-    """Get atmospheric mood based on season."""
+    """Get atmospheric mood - holiday override or seasonal default."""
+    # Holiday takes priority
+    holiday_mood = get_holiday_mood(date)
+    if holiday_mood:
+        return holiday_mood
+
+    # Fall back to seasonal
     month = date.month
     if month in [12, 1, 2]:
         return "winter stillness, contemplative, cool tones"
