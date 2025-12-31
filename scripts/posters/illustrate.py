@@ -34,8 +34,9 @@ import json
 import base64
 import argparse
 import logging
+import time
 from pathlib import Path
-from datetime import datetime
+from datetime import datetime, timezone
 
 import requests
 from PIL import Image
@@ -861,12 +862,14 @@ def batch_mode(facts_path: Path, dry_run: bool = False, with_icons: bool = False
       - strategic-insights.png (cinematic_anime)
       - market-analysis.png (dataviz)
       - icons.png (entity icon sheet)
+      - manifest.json (generation metadata)
 
     Uses organic variation system:
       - Style rotation from suggested_styles per category
       - Character shuffle with date-seeded RNG
       - Creative brief injection for interpretive variation
     """
+    batch_start_time = time.time()
     print(f"\nBatch generating from {facts_path.name}...")
 
     # Extract date for output directory and creative brief
@@ -897,8 +900,34 @@ def batch_mode(facts_path: Path, dry_run: bool = False, with_icons: bool = False
     output_dir = OUTPUT_DIR / date_str
     output_dir.mkdir(parents=True, exist_ok=True)
 
+    # Initialize manifest
+    manifest = {
+        "version": "1.0",
+        "generated_at": datetime.now(timezone.utc).isoformat(),
+        "source_facts": str(facts_path),
+        "facts_date": date_str,
+        "output_dir": str(output_dir),
+        "models": {
+            "image": IMAGE_MODEL,
+            "llm": LLM_MODEL,
+        },
+        "options": {
+            "with_icons": with_icons,
+            "dry_run": dry_run,
+        },
+        "generations": [],
+        "icon_sheet": None,
+        "stats": {
+            "total_generations": len(ideas),
+            "successful": 0,
+            "failed": 0,
+            "total_time_seconds": 0,
+        },
+    }
+
     # Generate icon sheet once (shared across all illustrations)
     icon_sheet_bytes = None
+    icon_sheet_info = None
     if with_icons:
         entities = extract_entities_from_facts(facts_path)
         if entities:
@@ -908,6 +937,14 @@ def batch_mode(facts_path: Path, dry_run: bool = False, with_icons: bool = False
                 icon_path = output_dir / "icons.png"
                 icon_path.write_bytes(icon_sheet_bytes)
                 print(f"Icon sheet: {icon_path} ({len(found)} entities)")
+                icon_sheet_info = {
+                    "output_file": "icons.png",
+                    "entities_requested": entities[:12],
+                    "entities_found": found,
+                    "entity_count": len(found),
+                }
+
+    manifest["icon_sheet"] = icon_sheet_info
 
     print(f"\nGenerating {len(ideas)} visuals to {output_dir}/\n")
 
@@ -919,12 +956,33 @@ def batch_mode(facts_path: Path, dry_run: bool = False, with_icons: bool = False
 
         print(f"[{i}/{len(ideas)}] {idea['title']} ({style})...")
 
+        # Track generation metadata
+        gen_meta = {
+            "category": idea["category"],
+            "output_file": f"{cat_slug}.png",
+            "style": style,
+            "characters": idea["characters"],
+            "content_context": idea["content"][:500],
+            "is_dataviz": is_data_visualization_style(style),
+            "scene_or_viz_prompt": None,
+            "full_prompt": None,
+            "success": False,
+            "error": None,
+            "generation_time_seconds": 0,
+        }
+
+        gen_start = time.time()
+
         try:
             if dry_run:
                 chars = ", ".join(idea["characters"])
                 print(f"   Style: {style}, Characters: {chars}")
                 print(f"   Content: {idea['content'][:80]}...")
                 print(f"   -> {output_path}")
+                gen_meta["success"] = True
+                gen_meta["generation_time_seconds"] = 0
+                manifest["generations"].append(gen_meta)
+                manifest["stats"]["successful"] += 1
                 continue
 
             if is_data_visualization_style(style):
@@ -936,6 +994,9 @@ def batch_mode(facts_path: Path, dry_run: bool = False, with_icons: bool = False
 
                 prompt = build_dataviz_prompt(viz_desc, style, idea["content"])
                 image_bytes = generate_dataviz(prompt)
+
+                gen_meta["scene_or_viz_prompt"] = viz_desc
+                gen_meta["full_prompt"] = prompt
             else:
                 # Character-based - inject creative brief for organic variation
                 collage_bytes, manifests = make_reference_collage(idea["characters"])
@@ -949,15 +1010,34 @@ def batch_mode(facts_path: Path, dry_run: bool = False, with_icons: bool = False
                 prompt = build_illustration_prompt(manifests, scene, style=style)
                 image_bytes = generate_illustration(collage_bytes, prompt, icon_sheet_bytes)
 
+                gen_meta["scene_or_viz_prompt"] = scene
+                gen_meta["full_prompt"] = prompt
+
             output_path.write_bytes(image_bytes)
             print(f"   Saved: {output_path}")
             generated.append(output_path)
 
+            gen_meta["success"] = True
+            manifest["stats"]["successful"] += 1
+
         except Exception as e:
             print(f"   Error: {e}")
-            continue
+            gen_meta["error"] = str(e)
+            manifest["stats"]["failed"] += 1
 
-    print(f"\nBatch complete: {len(generated)}/{len(ideas)} visuals in {output_dir}/")
+        gen_meta["generation_time_seconds"] = round(time.time() - gen_start, 2)
+        manifest["generations"].append(gen_meta)
+
+    # Finalize manifest
+    manifest["stats"]["total_time_seconds"] = round(time.time() - batch_start_time, 2)
+
+    # Write manifest
+    manifest_path = output_dir / "manifest.json"
+    with open(manifest_path, "w") as f:
+        json.dump(manifest, f, indent=2)
+    print(f"\nManifest: {manifest_path}")
+
+    print(f"Batch complete: {len(generated)}/{len(ideas)} visuals in {output_dir}/")
     return 0
 
 

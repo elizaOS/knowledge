@@ -1,0 +1,182 @@
+name: Generate Illustrations (Batch + CDN)
+
+on:
+  workflow_dispatch:
+    inputs:
+      facts_date:
+        description: 'Facts file date (YYYY-MM-DD) or "today" for latest'
+        required: false
+        default: 'today'
+      with_icons:
+        description: 'Include icon sheet'
+        required: false
+        default: 'true'
+        type: choice
+        options:
+          - 'true'
+          - 'false'
+      upload_to_cdn:
+        description: 'Upload to Bunny CDN'
+        required: false
+        default: 'true'
+        type: choice
+        options:
+          - 'true'
+          - 'false'
+      update_facts:
+        description: 'Update facts.json with media URLs'
+        required: false
+        default: 'true'
+        type: choice
+        options:
+          - 'true'
+          - 'false'
+      dry_run:
+        description: 'Dry run (no generation or upload)'
+        required: false
+        default: 'false'
+        type: choice
+        options:
+          - 'true'
+          - 'false'
+
+concurrency:
+  group: knowledge-repo-writes
+  cancel-in-progress: false
+
+env:
+  PYTHONPATH: ${{ github.workspace }}/scripts/posters
+
+jobs:
+  generate-and-upload:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install requests pillow
+
+      - name: Determine facts file
+        id: facts
+        run: |
+          REPO_ROOT="${{ github.workspace }}"
+
+          if [ "${{ inputs.facts_date }}" = "today" ]; then
+            FACTS_FILE=$(ls -t "${REPO_ROOT}/the-council/facts/"????-??-??.json 2>/dev/null | head -1)
+            if [ -z "$FACTS_FILE" ]; then
+              echo "::error::No facts files found"
+              exit 1
+            fi
+          else
+            FACTS_FILE="${REPO_ROOT}/the-council/facts/${{ inputs.facts_date }}.json"
+          fi
+
+          if [ ! -f "$FACTS_FILE" ]; then
+            echo "::error::Facts file not found: $FACTS_FILE"
+            exit 1
+          fi
+
+          FACTS_DATE=$(python3 -c "import json; print(json.load(open('${FACTS_FILE}'))['briefing_date'])")
+          OUTPUT_DIR="${REPO_ROOT}/posters/${FACTS_DATE}"
+
+          echo "facts_file=${FACTS_FILE}" >> "$GITHUB_OUTPUT"
+          echo "facts_date=${FACTS_DATE}" >> "$GITHUB_OUTPUT"
+          echo "output_dir=${OUTPUT_DIR}" >> "$GITHUB_OUTPUT"
+          echo "output_dir_rel=posters/${FACTS_DATE}" >> "$GITHUB_OUTPUT"
+
+          echo "Facts file: ${FACTS_FILE}"
+          echo "Facts date: ${FACTS_DATE}"
+          echo "Output dir: ${OUTPUT_DIR}"
+
+      - name: Generate illustrations (batch mode)
+        id: generate
+        env:
+          OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
+        working-directory: ${{ github.workspace }}/scripts/posters
+        run: |
+          FLAGS=""
+          [ "${{ inputs.with_icons }}" = "true" ] && FLAGS="$FLAGS --with-icons"
+          [ "${{ inputs.dry_run }}" = "true" ] && FLAGS="$FLAGS --dry-run"
+
+          echo "Running: python illustrate.py -f ${{ steps.facts.outputs.facts_file }} --batch $FLAGS"
+          python illustrate.py -f "${{ steps.facts.outputs.facts_file }}" --batch $FLAGS
+
+          if [ -d "${{ steps.facts.outputs.output_dir }}" ]; then
+            echo "generated=true" >> "$GITHUB_OUTPUT"
+            ls -la "${{ steps.facts.outputs.output_dir }}/"
+          else
+            echo "generated=false" >> "$GITHUB_OUTPUT"
+            echo "Output directory not created"
+          fi
+
+      - name: Upload to Bunny CDN
+        if: inputs.upload_to_cdn == 'true' && inputs.dry_run == 'false' && steps.generate.outputs.generated == 'true'
+        env:
+          BUNNY_STORAGE_PASSWORD: ${{ secrets.BUNNY_STORAGE_PASSWORD }}
+          BUNNY_STORAGE_HOST: https://la.storage.bunnycdn.com
+        working-directory: ${{ github.workspace }}
+        run: |
+          python scripts/integrations/cdn/upload.py \
+            "${{ steps.facts.outputs.output_dir_rel }}" \
+            --update-manifest \
+            -v
+
+      - name: Update facts.json with media URLs
+        if: inputs.update_facts == 'true' && inputs.upload_to_cdn == 'true' && inputs.dry_run == 'false' && steps.generate.outputs.generated == 'true'
+        working-directory: ${{ github.workspace }}
+        run: |
+          python scripts/integrations/cdn/update_facts_media.py \
+            --facts "${{ steps.facts.outputs.facts_file }}" \
+            --manifest "${{ steps.facts.outputs.output_dir }}/manifest.json"
+
+      - name: Commit changes
+        if: inputs.dry_run == 'false' && steps.generate.outputs.generated == 'true'
+        working-directory: ${{ github.workspace }}
+        run: |
+          git config --global user.name 'GitHub Actions Bot'
+          git config --global user.email 'actions@github.com'
+
+          git add "${{ steps.facts.outputs.output_dir_rel }}/" || true
+
+          if [ "${{ inputs.update_facts }}" = "true" ]; then
+            git add "the-council/facts/${{ steps.facts.outputs.facts_date }}.json" || true
+          fi
+
+          if ! git diff --staged --quiet; then
+            git commit -m "Automated: Generate illustrations for ${{ steps.facts.outputs.facts_date }}"
+            git pull --rebase origin main
+            git push
+            echo "Changes committed and pushed"
+          else
+            echo "No changes to commit"
+          fi
+
+      - name: Summary
+        run: |
+          echo "## Generation Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| Setting | Value |" >> $GITHUB_STEP_SUMMARY
+          echo "|---------|-------|" >> $GITHUB_STEP_SUMMARY
+          echo "| Facts file | \`${{ steps.facts.outputs.facts_date }}.json\` |" >> $GITHUB_STEP_SUMMARY
+          echo "| Output | \`${{ steps.facts.outputs.output_dir_rel }}/\` |" >> $GITHUB_STEP_SUMMARY
+          echo "| With icons | ${{ inputs.with_icons }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| CDN upload | ${{ inputs.upload_to_cdn }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Update facts | ${{ inputs.update_facts }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Dry run | ${{ inputs.dry_run }} |" >> $GITHUB_STEP_SUMMARY
+
+          if [ "${{ inputs.upload_to_cdn }}" = "true" ] && [ "${{ inputs.dry_run }}" = "false" ]; then
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "### CDN Base URL" >> $GITHUB_STEP_SUMMARY
+            echo "\`https://m3tv.b-cdn.net/${{ steps.facts.outputs.output_dir_rel }}/\`" >> $GITHUB_STEP_SUMMARY
+          fi
