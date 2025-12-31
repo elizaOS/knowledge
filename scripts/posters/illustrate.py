@@ -54,7 +54,7 @@ IMAGE_MODEL = "google/gemini-3-pro-image-preview"
 SCRIPT_DIR = Path(__file__).parent.resolve()
 WORKSPACE_ROOT = SCRIPT_DIR.parent.parent
 CHARACTERS_DIR = SCRIPT_DIR / "characters"
-OUTPUT_DIR = WORKSPACE_ROOT / "posters"
+OUTPUT_DIR = WORKSPACE_ROOT / "media"
 STYLE_PRESETS_FILE = SCRIPT_DIR / "config" / "style-presets.json"
 
 logging.basicConfig(
@@ -855,7 +855,7 @@ def interactive_mode(facts_path: Path, dry_run: bool = False, with_icons: bool =
 def batch_mode(facts_path: Path, dry_run: bool = False, with_icons: bool = False) -> int:
     """Batch mode - generate all category visuals automatically.
 
-    Outputs to posters/{date}/ directory:
+    Outputs to media/{date}/ directory:
       - overall.png (hero/editorial)
       - github-updates.png (dataviz)
       - discord-updates.png (comic_panel)

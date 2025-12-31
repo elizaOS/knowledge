@@ -92,7 +92,7 @@ python scripts/posters/utils/vision.py image.png -p "List the main colors" --jso
 cat image.png | python scripts/posters/utils/vision.py - -p "describe"
 
 # Batch analysis
-for f in posters/*.png; do
+for f in media/*.png; do
   echo "=== $f ==="
   python scripts/posters/utils/vision.py "$f" -p "One sentence summary"
 done
@@ -274,8 +274,8 @@ export OPENROUTER_API_KEY="your-key-here"
 | Type | Location |
 |------|----------|
 | Reference sheets | `scripts/posters/characters/{name}/reference-sheet*.png` |
-| News posters | `posters/` |
-| Style samplers | `posters/sampler-{date}/` |
+| News posters | `media/` |
+| Style samplers | `media/sampler-{date}/` |
 
 ---
 
@@ -409,9 +409,9 @@ python scripts/posters/illustrate.py -f the-council/facts/2025-12-21.json --batc
 python scripts/posters/illustrate.py -f facts.json --batch --dry-run
 ```
 
-Output structure (`posters/{date}/`):
+Output structure (`media/{date}/`):
 ```
-posters/2025-12-21/
+media/2025-12-21/
 ├── overall.png          (editorial - hero story)
 ├── github-updates.png   (dataviz)
 ├── discord-updates.png  (comic_panel)
@@ -488,17 +488,17 @@ export BUNNY_CDN_URL=https://m3tv.b-cdn.net
 
 ```bash
 # Upload entire directory
-python scripts/integrations/cdn/upload.py posters/2025-12-25/
+python scripts/integrations/cdn/upload.py media/2025-12-25/
 
 # With manifest update (adds cdn_url to manifest.json)
-python scripts/integrations/cdn/upload.py posters/2025-12-25/ --update-manifest
+python scripts/integrations/cdn/upload.py media/2025-12-25/ --update-manifest
 
 # Dry run first
-python scripts/integrations/cdn/upload.py posters/2025-12-25/ --dry-run
+python scripts/integrations/cdn/upload.py media/2025-12-25/ --dry-run
 
 # Update facts.json with CDN URLs from manifest
 python scripts/integrations/cdn/update_facts_media.py \
-  -m posters/2025-12-25/manifest.json \
+  -m media/2025-12-25/manifest.json \
   -f the-council/facts/2025-12-25.json
 ```
 
@@ -511,11 +511,11 @@ DATE=2025-12-25
 python scripts/posters/illustrate.py --batch -f the-council/facts/${DATE}.json --with-icons
 
 # 2. Upload to Bunny CDN
-python scripts/integrations/cdn/upload.py posters/${DATE}/ --update-manifest
+python scripts/integrations/cdn/upload.py media/${DATE}/ --update-manifest
 
 # 3. Update facts with CDN URLs
 python scripts/integrations/cdn/update_facts_media.py \
-  -m posters/${DATE}/manifest.json \
+  -m media/${DATE}/manifest.json \
   -f the-council/facts/${DATE}.json
 ```
 

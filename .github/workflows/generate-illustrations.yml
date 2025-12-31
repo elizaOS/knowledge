@@ -88,12 +88,12 @@ jobs:
           fi
 
           FACTS_DATE=$(python3 -c "import json; print(json.load(open('${FACTS_FILE}'))['briefing_date'])")
-          OUTPUT_DIR="${REPO_ROOT}/posters/${FACTS_DATE}"
+          OUTPUT_DIR="${REPO_ROOT}/media/${FACTS_DATE}"
 
           echo "facts_file=${FACTS_FILE}" >> "$GITHUB_OUTPUT"
           echo "facts_date=${FACTS_DATE}" >> "$GITHUB_OUTPUT"
           echo "output_dir=${OUTPUT_DIR}" >> "$GITHUB_OUTPUT"
-          echo "output_dir_rel=posters/${FACTS_DATE}" >> "$GITHUB_OUTPUT"
+          echo "output_dir_rel=media/${FACTS_DATE}" >> "$GITHUB_OUTPUT"
 
           echo "Facts file: ${FACTS_FILE}"
           echo "Facts date: ${FACTS_DATE}"
