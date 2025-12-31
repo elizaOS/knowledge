@@ -367,16 +367,16 @@ HOLIDAY_MOODS = {
     # Ethereum Birthday (Jul 30)
     (7, 30): ("eth_birthday", "blockchain celebration, network anniversary, crypto milestone"),
 
-    # Halloween (Oct 29-31)
-    (10, 29): ("halloween", "mysterious atmosphere, autumn shadows, spooky anticipation"),
-    (10, 30): ("halloween", "spooky and playful, orange and purple, eerie shadows"),
-    (10, 31): ("halloween", "peak spooky energy, costumes and candy, haunted atmosphere"),
+    # Halloween (Oct 29-31) - characters wear costumes!
+    (10, 29): ("halloween", "mysterious atmosphere, autumn shadows, spooky anticipation, characters wearing Halloween costumes"),
+    (10, 30): ("halloween", "spooky and playful, orange and purple, eerie shadows, characters in creative Halloween costumes"),
+    (10, 31): ("halloween", "peak spooky energy, haunted atmosphere, characters dressed in fun Halloween costumes"),
 
-    # Christmas (Dec 23-26)
-    (12, 23): ("christmas", "festive anticipation, cozy warmth, holiday preparations"),
-    (12, 24): ("christmas", "Christmas Eve magic, warm glow, gift-giving anticipation"),
-    (12, 25): ("christmas", "Christmas joy, festive warmth, red and green, celebration"),
-    (12, 26): ("christmas", "post-Christmas cozy, relaxed holiday warmth"),
+    # Christmas (Dec 23-26) - characters wear Santa hats!
+    (12, 23): ("christmas", "festive anticipation, cozy warmth, holiday preparations, characters wearing Santa hats"),
+    (12, 24): ("christmas", "Christmas Eve magic, warm glow, gift-giving anticipation, characters in Santa hats"),
+    (12, 25): ("christmas", "Christmas joy, festive warmth, red and green, characters wearing Santa hats and holiday attire"),
+    (12, 26): ("christmas", "post-Christmas cozy, relaxed holiday warmth, characters in cozy holiday wear"),
 }
 
 # Variable holidays - hardcoded dates for 2025-2035
