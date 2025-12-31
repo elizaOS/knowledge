@@ -124,6 +124,7 @@ jobs:
         if: inputs.upload_to_cdn == 'true' && inputs.dry_run == 'false' && steps.generate.outputs.generated == 'true'
         env:
           BUNNY_STORAGE_PASSWORD: ${{ secrets.BUNNY_STORAGE_PASSWORD }}
+          BUNNY_STORAGE_HOST: https://la.storage.bunnycdn.com
         working-directory: ${{ github.workspace }}
         run: |
           python scripts/integrations/cdn/upload.py \

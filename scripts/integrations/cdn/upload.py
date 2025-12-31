@@ -39,8 +39,10 @@ STORAGE_ZONE = os.environ.get("BUNNY_STORAGE_ZONE", "m3tv")
 STORAGE_PASSWORD = os.environ.get("BUNNY_STORAGE_PASSWORD", "")
 CDN_URL = os.environ.get("BUNNY_CDN_URL", "https://m3tv.b-cdn.net")
 
-# Bunny Storage API endpoint
-STORAGE_API_BASE = "https://storage.bunnycdn.com"
+# Bunny Storage API endpoint (region-specific)
+# Common regions: storage.bunnycdn.com, la.storage.bunnycdn.com, ny.storage.bunnycdn.com,
+#                 sg.storage.bunnycdn.com, uk.storage.bunnycdn.com, etc.
+STORAGE_API_BASE = os.environ.get("BUNNY_STORAGE_HOST", "https://la.storage.bunnycdn.com")
 
 # File types to upload
 ALLOWED_EXTENSIONS = {".png", ".jpg", ".jpeg", ".gif", ".webp", ".svg", ".json"}
@@ -260,6 +262,7 @@ def main():
 
     if args.verbose:
         print(f"Storage Zone: {storage_zone}")
+        print(f"Storage Host: {STORAGE_API_BASE}")
         print(f"CDN URL: {cdn_base}")
         print()
 
