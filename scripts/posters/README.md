@@ -276,6 +276,8 @@ python scripts/posters/illustrate.py --list-characters
 | `-s, --style` | Art style (default: editorial) |
 | `-f, --facts` | Generate scene from facts JSON file |
 | `-o, --output` | Custom output path |
+| `--with-icons` | Include logo/icon sheet for entities in facts |
+| `--batch` | Generate all category visuals from facts file |
 | `--list-styles` | List available art styles |
 | `--list-characters` | List characters with reference sheets |
 | `--dry-run` | Show prompt without generating |
@@ -292,6 +294,7 @@ Generate icons for entities (projects, tokens, users) extracted from the knowled
 |------|---------|
 | `generate-icons.py` | Generate icons via AI with reference image pipeline |
 | `validate-icons.py` | Validate icons, sync manifest, show coverage stats |
+| `utils/icon_sheet.py` | Create icon sheet montages for poster composition |
 | `assets/manifest.json` | Entity inventory with icon_paths |
 | `assets/icons/` | Generated icon files |
 
@@ -299,9 +302,17 @@ Generate icons for entities (projects, tokens, users) extracted from the knowled
 
 Before AI generation, attempts to fetch real logos:
 1. **Simple Icons** - 3300+ brand SVGs (with fuzzy matching)
-2. **GitHub Avatars** - For GitHub users/orgs
-3. **Google Favicon** - For entities with URLs
-4. **CoinGecko** - Token logos for crypto assets
+2. **selfhst/icons** - 2300+ self-hosted app icons (PNG)
+3. **gilbarbara/logos** - 1000+ tech brand logos (SVG)
+4. **GitHub Avatars** - For GitHub users/orgs
+5. **Google Favicon** - For entities with URLs
+6. **CoinGecko** - Token logos for crypto assets
+
+Configure local icon libraries via environment variables:
+```bash
+export SELFHST_ICONS_PATH=/path/to/selfhst/icons
+export GILBARBARA_LOGOS_PATH=/path/to/gilbarbara/logos
+```
 
 ### Usage
 
@@ -331,4 +342,66 @@ python scripts/posters/validate-icons.py --stats
 Entity extracted -> status: "keep" (curated)
                  -> status: "skip" (filtered out)
                  -> status: "review" (icon rejected)
+```
+
+### Icon Sheet Montages
+
+Create icon sheets for use in poster composition:
+
+```bash
+# From entity names
+python scripts/posters/utils/icon_sheet.py bitcoin ethereum discord -o tokens.png
+
+# From facts file (auto-extract entities)
+python scripts/posters/utils/icon_sheet.py -f the-council/facts/2025-12-21.json -o daily.png
+
+# Filter by entity type
+python scripts/posters/utils/icon_sheet.py -f facts.json -t token -o tokens.png
+
+# Dry run (show what icons would be included)
+python scripts/posters/utils/icon_sheet.py -f facts.json --dry-run
+```
+
+### Batch Mode (Multi-Story Generation)
+
+Generate all category visuals for an HTML front page:
+
+```bash
+# Batch generate all visuals with icons
+python scripts/posters/illustrate.py -f the-council/facts/2025-12-21.json --batch --with-icons
+
+# Dry run to preview what will be generated
+python scripts/posters/illustrate.py -f facts.json --batch --dry-run
+```
+
+Output structure (`posters/{date}/`):
+```
+posters/2025-12-21/
+├── overall.png          (editorial - hero story)
+├── github-updates.png   (dataviz)
+├── discord-updates.png  (comic_panel)
+├── strategic-insights.png (cinematic_anime)
+├── market-analysis.png  (dataviz)
+└── icons.png            (entity icon sheet)
+```
+
+Each category gets its appropriate style:
+| Category | Style | Characters |
+|----------|-------|------------|
+| overall | editorial | eliza |
+| github_updates | dataviz | shaw, eliza |
+| discord_updates | comic_panel | eliza, peepo |
+| strategic_insights | cinematic_anime | eliza, marc, spartan |
+| market_analysis | dataviz | marc, spartan |
+
+### Illustration with Icons
+
+Use `--with-icons` flag to include entity logos:
+
+```bash
+# Interactive mode with icon sheet
+python scripts/posters/illustrate.py -f the-council/facts/2025-12-21.json -i --with-icons
+
+# Direct generation with icons
+python scripts/posters/illustrate.py eliza -f facts.json --with-icons -o poster.png
 ```
