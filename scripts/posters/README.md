@@ -469,3 +469,100 @@ python scripts/posters/illustrate.py -f the-council/facts/2025-12-21.json -i --w
 # Direct generation with icons
 python scripts/posters/illustrate.py eliza -f facts.json --with-icons -o poster.png
 ```
+
+---
+
+## CDN Upload
+
+Upload generated posters to Bunny CDN for hosting.
+
+### Setup
+
+```bash
+export BUNNY_STORAGE_ZONE=m3tv
+export BUNNY_STORAGE_PASSWORD=your-api-key
+export BUNNY_CDN_URL=https://m3tv.b-cdn.net
+```
+
+### Usage
+
+```bash
+# Upload entire directory
+python scripts/integrations/cdn/upload.py posters/2025-12-25/
+
+# With manifest update (adds cdn_url to manifest.json)
+python scripts/integrations/cdn/upload.py posters/2025-12-25/ --update-manifest
+
+# Dry run first
+python scripts/integrations/cdn/upload.py posters/2025-12-25/ --dry-run
+
+# Update facts.json with CDN URLs from manifest
+python scripts/integrations/cdn/update_facts_media.py \
+  -m posters/2025-12-25/manifest.json \
+  -f the-council/facts/2025-12-25.json
+```
+
+### Full Workflow
+
+```bash
+DATE=2025-12-25
+
+# 1. Generate posters (creates manifest.json)
+python scripts/posters/illustrate.py --batch -f the-council/facts/${DATE}.json --with-icons
+
+# 2. Upload to Bunny CDN
+python scripts/integrations/cdn/upload.py posters/${DATE}/ --update-manifest
+
+# 3. Update facts with CDN URLs
+python scripts/integrations/cdn/update_facts_media.py \
+  -m posters/${DATE}/manifest.json \
+  -f the-council/facts/${DATE}.json
+```
+
+---
+
+## Organic Variation System
+
+Batch mode uses date-seeded variation to produce unique outputs each day:
+
+### Creative Brief Components
+
+| Component | Options | Description |
+|-----------|---------|-------------|
+| **Lens** | 7 | Interpretive approach (emotion, journey, conflict, etc.) |
+| **Composition** | 6 | Visual framing (bird's eye, close-up, silhouette, etc.) |
+| **Mood** | 16 | Seasonal (4) + Holiday (12) atmospheric tone |
+
+**Total combinations:** 7 × 6 × 16 = **672 unique briefs**
+
+### Holiday Moods
+
+Special moods override seasonal defaults on ~27 days/year:
+
+| Holiday | Dates | Special Features |
+|---------|-------|------------------|
+| New Year's | Dec 31 - Jan 2 | Celebration, fireworks |
+| Valentine's | Feb 13-15 | Warm pinks and reds |
+| St. Patrick's | Mar 16-17 | Lucky green |
+| Easter | Variable (3 days) | Pastel colors, renewal |
+| April Fools | Apr 1 | Playful mischief |
+| Bitcoin Pizza Day | May 22 | Crypto nostalgia |
+| 4th of July | Jul 3-5 | Patriotic fireworks |
+| Ethereum Birthday | Jul 30 | Blockchain celebration |
+| Halloween | Oct 29-31 | **Characters wear costumes** |
+| Thanksgiving | Variable (3 days) | Harvest warmth |
+| Christmas | Dec 23-26 | **Characters wear Santa hats** |
+
+### Style Rotation
+
+Each category rotates through its `suggested_styles` from `config/style-presets.json`:
+
+```
+github_updates:    dataviz → blueprint → infographic → ...
+discord_updates:   comic_panel → editorial → council → ...
+strategic_insights: cinematic_anime → tarot → editorial → ...
+```
+
+### Reproducibility
+
+All randomness is date-seeded: **same date = same output**.
