@@ -50,8 +50,11 @@ scripts/posters/
 │
 ├── utils/                # Utility scripts
 │   ├── generate-sampler.py
-│   └── backfill-ai-images.py
-│   └── vision.py         # General-purpose image analysis
+│   ├── backfill-ai-images.py
+│   ├── vision.py         # General-purpose image analysis
+│   ├── screenshot.py     # Web page screenshots with anti-detection
+│   ├── reality_context.py # Temporal context (crypto, weather, news)
+│   └── icon_sheet.py     # Icon montage generation
 │
 └── _deprecated/          # Old/experimental scripts
 ```
@@ -103,6 +106,38 @@ python scripts/posters/utils/vision.py output.png -p "Rate clarity 1-10. What wo
 | `-p, --prompt` | Analysis prompt (default: describe image) |
 | `--json` | Request JSON output from model |
 | `-m, --model` | Model override |
+
+### screenshot.py - Web Page Screenshots
+
+Take screenshots of web pages with anti-detection measures for sites that block bots.
+
+```bash
+# Basic screenshot
+python scripts/posters/utils/screenshot.py https://cryptobubbles.net -o bubbles.png
+
+# Custom viewport size
+python scripts/posters/utils/screenshot.py https://dexscreener.com/solana --width 1280 --height 720
+
+# Full page capture (scrollable content)
+python scripts/posters/utils/screenshot.py https://defillama.com/ --full-page -o defi.png
+
+# With custom timeout for slow-loading pages
+python scripts/posters/utils/screenshot.py https://example.com --timeout 60000 -o slow-site.png
+```
+
+| Flag | Description |
+|------|-------------|
+| `-o, --output` | Output path (default: screenshot.png) |
+| `--width` | Viewport width (default: 1920) |
+| `--height` | Viewport height (default: 1080) |
+| `--full-page` | Capture full scrollable page |
+| `--timeout` | Navigation timeout in ms (default: 30000) |
+
+**Dependencies:** Requires Playwright with Chromium:
+```bash
+pip install playwright
+playwright install chromium
+```
 
 ### generate.py - Reference Sheet Generator
 
@@ -382,7 +417,36 @@ posters/2025-12-21/
 ├── discord-updates.png  (comic_panel)
 ├── strategic-insights.png (cinematic_anime)
 ├── market-analysis.png  (dataviz)
-└── icons.png            (entity icon sheet)
+├── icons.png            (entity icon sheet)
+└── manifest.json        (generation metadata)
+```
+
+#### Generation Manifest
+
+Batch mode exports a `manifest.json` with metadata for pipeline review:
+
+```json
+{
+  "version": "1.0",
+  "generated_at": "2025-12-21T04:00:00+00:00",
+  "source_facts": "the-council/facts/2025-12-21.json",
+  "facts_date": "2025-12-21",
+  "models": {"image": "google/gemini-3-pro-image-preview", "llm": "openai/gpt-4.1"},
+  "generations": [
+    {
+      "category": "overall",
+      "output_file": "overall.png",
+      "style": "editorial",
+      "characters": ["eliza"],
+      "scene_or_viz_prompt": "Eliza presenting at a conference...",
+      "full_prompt": "Create an illustration for a tech news magazine...",
+      "success": true,
+      "generation_time_seconds": 45.2
+    }
+  ],
+  "icon_sheet": {"output_file": "icons.png", "entities_found": ["Discord", "GitHub"]},
+  "stats": {"total_generations": 5, "successful": 5, "failed": 0}
+}
 ```
 
 Each category gets its appropriate style:
