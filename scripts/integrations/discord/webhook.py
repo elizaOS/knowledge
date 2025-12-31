@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
-"""Optimized Discord Facts Briefing Bot - Under 200 lines with smart features"""
-import json, sys, os, argparse, discord, requests, asyncio, glob
+"""Optimized Discord Facts Briefing Bot"""
+import json, sys, os, argparse, discord, requests, asyncio
 from discord import Embed
-from datetime import datetime, timedelta
+from datetime import datetime
 from dataclasses import dataclass
 from typing import Dict, List, Optional, Tuple
 
@@ -12,7 +12,6 @@ class Config:
     openrouter_url = "https://openrouter.ai/api/v1/chat/completions"
     model = "google/gemini-2.5-flash-preview"
     hackmd_url = "https://hackmd.io/@elizaos/book"
-    poster_url = "https://elizaos.github.io/knowledge/posters/"
     total_budget, min_section = 1600, 200
 
 config = Config()
@@ -146,16 +145,18 @@ class EmbedFactory:
         return Embed(title=title, description=content, color=config.colors.get(key, config.colors["default"]))
     
     @staticmethod
-    def create_poster(url: str, date: str) -> Embed:
-        embed = Embed(title="📊 Visual Summary", color=0x1abc9c)
+    def create_poster(url: str, date: str) -> Optional[Embed]:
+        if not url:
+            return None
+        embed = Embed(title="📰 Daily Visual", color=0x1abc9c)
         embed.set_image(url=url)
         embed.set_footer(text=f"AI generated • {date}")
         return embed
 
 class BriefingProcessor:
     def __init__(self, api_key: Optional[str] = None): self.api_key = api_key
-    
-    async def create_embeds(self, file_path: str, poster_file: str) -> Tuple[List[Embed], Optional[str]]:
+
+    async def create_embeds(self, file_path: str) -> Tuple[List[Embed], Optional[str]]:
         try:
             with open(file_path) as f: data = json.load(f)
         except Exception as e:
@@ -207,15 +208,18 @@ class BriefingProcessor:
         
         # Removed separate PR/Issues sections to avoid redundancy
         # GitHub overall_focus already contains the important activity summary
-        
-        # Only add poster if a filename is provided
-        if poster_file:
-            embeds.append(EmbedFactory.create_poster(f"{config.poster_url}{poster_file}", data['briefing_date']))
+
+        # Add poster from CDN if available in facts media
+        poster_url = data.get('media', {}).get('posters', {}).get('overall')
+        if poster_url:
+            poster_embed = EmbedFactory.create_poster(poster_url, data['briefing_date'])
+            if poster_embed:
+                embeds.append(poster_embed)
         return embeds, None
 
-async def send_to_discord(file_path: str, channels: str, api_key: str, poster: Optional[str]):
+async def send_to_discord(file_path: str, channels: str, api_key: str):
     processor = BriefingProcessor(api_key)
-    embeds, error = await processor.create_embeds(file_path, poster)
+    embeds, error = await processor.create_embeds(file_path)
     
     if error: return Logger.error(f"Processing failed: {error}")
     
@@ -254,44 +258,15 @@ async def send_to_discord(file_path: str, channels: str, api_key: str, poster: O
         # Give a moment for cleanup
         await asyncio.sleep(0.1)
 
-async def export_json(file_path: str, output: str, api_key: str, poster: Optional[str]):
+async def export_json(file_path: str, output: str, api_key: str):
     processor = BriefingProcessor(api_key)
-    embeds, error = await processor.create_embeds(file_path, poster)
+    embeds, error = await processor.create_embeds(file_path)
     
     if error: return Logger.error(f"Processing failed: {error}")
     
     payload = {"embeds": [embed.to_dict() for embed in embeds]}
     with open(output, 'w') as f: json.dump(payload, f, indent=2)
     Logger.success(f"Exported to {output}")
-
-def cleanup_old_posters(days_to_keep: int = 7) -> None:
-    """Remove poster files older than specified days to keep repo size manageable"""
-    poster_dir = "posters"
-    if not os.path.exists(poster_dir):
-        Logger.warn(f"Poster directory {poster_dir} not found")
-        return
-    
-    cutoff_date = datetime.now() - timedelta(days=days_to_keep)
-    cutoff_str = cutoff_date.strftime("%Y-%m-%d")
-    
-    # Find all dated poster files (YYYY-MM-DD_*.png)
-    pattern = os.path.join(poster_dir, "????-??-??_*.png")
-    dated_files = glob.glob(pattern)
-    
-    removed_count = 0
-    for file_path in dated_files:
-        filename = os.path.basename(file_path)
-        file_date_str = filename[:10]  # Extract date (YYYY-MM-DD)
-        
-        try:
-            if file_date_str < cutoff_str:
-                os.remove(file_path)
-                Logger.info(f"Removed old poster: {filename}")
-                removed_count += 1
-        except (ValueError, OSError) as e:
-            Logger.error(f"Error removing {filename}: {e}")
-    
-    Logger.success(f"Cleanup complete. Removed {removed_count} old posters (kept {cutoff_str}+)")
 
 def main():
     parser = argparse.ArgumentParser(description="Discord Facts Briefing Bot - Priority Sections Only")
@@ -300,29 +275,15 @@ def main():
     parser.add_argument("-c", "--channels", help="Discord channel IDs (comma-separated)")
     parser.add_argument("-o", "--out", help="Export to JSON file")
     parser.add_argument("-s", "--summarize", action="store_true", help="Enable LLM summarization")
-    parser.add_argument(
-        "-p", "--poster", 
-        nargs='?', 
-        const="hackmd-facts-briefing.png", 
-        default=None, 
-        help="Poster filename. If -p is used alone, defaults to hackmd-facts-briefing.png. If no -p, no poster."
-    )
-    parser.add_argument("--cleanup", action="store_true", help="Clean up old poster files (keeps last 7 days)")
-    
+
     args = parser.parse_args()
     api_key = os.getenv("OPENROUTER_API_KEY") if args.summarize else None
-    
-    # Handle cleanup first if requested
-    if args.cleanup:
-        cleanup_old_posters()
-        if not (args.discord or args.out):
-            return  # Exit if only cleanup was requested
-    
+
     if args.discord:
         if not args.channels: Logger.error("--channels required with --discord"); sys.exit(1)
-        asyncio.run(send_to_discord(args.json_file, args.channels, api_key, args.poster))
+        asyncio.run(send_to_discord(args.json_file, args.channels, api_key))
     elif args.out:
-        asyncio.run(export_json(args.json_file, args.out, api_key, args.poster))
+        asyncio.run(export_json(args.json_file, args.out, api_key))
     else:
         Logger.info(f"Use -d for Discord or -o for JSON export")
 
