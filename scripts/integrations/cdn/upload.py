@@ -47,6 +47,9 @@ STORAGE_API_BASE = os.environ.get("BUNNY_STORAGE_HOST", "https://la.storage.bunn
 # File types to upload
 ALLOWED_EXTENSIONS = {".png", ".jpg", ".jpeg", ".gif", ".webp", ".svg", ".json"}
 
+# Max file size (10MB) - prevents accidental huge uploads
+MAX_FILE_SIZE = 10 * 1024 * 1024
+
 
 # --------------- Upload Functions ---------------
 
@@ -56,6 +59,26 @@ def get_cdn_url(storage_zone: str) -> str:
     if CDN_URL:
         return CDN_URL.rstrip("/")
     return f"https://{storage_zone}.b-cdn.net"
+
+
+def validate_remote_path(remote_path: str) -> tuple[bool, str]:
+    """Validate remote path for security issues.
+
+    Returns:
+        (is_valid, sanitized_path_or_error)
+    """
+    # Strip leading slashes
+    clean_path = remote_path.lstrip("/")
+
+    # Block path traversal
+    if ".." in clean_path:
+        return False, "Path traversal not allowed"
+
+    # Block suspicious patterns
+    if any(c in clean_path for c in ["<", ">", "|", "\x00"]):
+        return False, "Invalid characters in path"
+
+    return True, clean_path
 
 
 def upload_file(
@@ -75,29 +98,56 @@ def upload_file(
     Returns:
         (success, message) tuple
     """
+    # Validate remote path
+    is_valid, result = validate_remote_path(remote_path)
+    if not is_valid:
+        return False, f"Invalid path: {result}"
+    remote_path = result
+
+    # Check file size
+    file_size = local_path.stat().st_size
+    if file_size > MAX_FILE_SIZE:
+        return False, f"File too large: {file_size / 1024 / 1024:.1f}MB (max {MAX_FILE_SIZE / 1024 / 1024:.0f}MB)"
+
     url = f"{STORAGE_API_BASE}/{storage_zone}/{remote_path}"
 
-    try:
-        with open(local_path, "rb") as f:
-            response = requests.put(
-                url,
-                headers={
-                    "AccessKey": password,
-                    "Content-Type": "application/octet-stream",
-                },
-                data=f,
-                timeout=120,
-            )
+    # Simple retry for transient errors
+    last_error = None
+    for attempt in range(2):
+        try:
+            with open(local_path, "rb") as f:
+                response = requests.put(
+                    url,
+                    headers={
+                        "AccessKey": password,
+                        "Content-Type": "application/octet-stream",
+                    },
+                    data=f,
+                    timeout=120,
+                )
 
-        if response.status_code in (200, 201):
-            return True, "uploaded"
-        else:
-            return False, f"HTTP {response.status_code}: {response.text[:100]}"
+            if response.status_code in (200, 201):
+                return True, "uploaded"
+            elif response.status_code >= 500:
+                # Server error - retry
+                last_error = f"HTTP {response.status_code}"
+                continue
+            else:
+                # Client error - don't retry
+                return False, f"HTTP {response.status_code}: {response.text[:100]}"
 
-    except requests.RequestException as e:
-        return False, f"Request error: {e}"
-    except IOError as e:
-        return False, f"File error: {e}"
+        except requests.ConnectionError as e:
+            last_error = f"Connection error: {e}"
+            continue
+        except requests.Timeout as e:
+            last_error = f"Timeout: {e}"
+            continue
+        except requests.RequestException as e:
+            return False, f"Request error: {e}"
+        except IOError as e:
+            return False, f"File error: {e}"
+
+    return False, f"Failed after retry: {last_error}"
 
 
 def upload_directory(
