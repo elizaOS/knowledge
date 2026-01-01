@@ -527,19 +527,21 @@ def generate_illustration_ideas(facts_path: Path, facts_date: datetime = None) -
 
     # Always add overall summary as first option
     if facts.get("overall_summary"):
-        # Rotate overall style too
+        # Rotate overall style by day
         overall_styles = ["editorial", "cinematic_anime", "tarot"]
         overall_style = overall_styles[day_of_year % len(overall_styles)]
+
         ideas.append({
             "category": "overall",
             "title": "Daily Overview",
-            "content": facts["overall_summary"][:300],
+            "content": facts["overall_summary"],
             "characters": ["eliza"],
             "style": overall_style,
         })
 
     # Add ideas for each category with content
     categories = facts.get("categories", {})
+
     for cat_name, cat_data in categories.items():
         content = extract_category_content(facts, cat_name)
         if not content or len(content) < 50:
@@ -567,12 +569,118 @@ def generate_illustration_ideas(facts_path: Path, facts_date: datetime = None) -
         ideas.append({
             "category": cat_name,
             "title": cat_name.replace("_", " ").title(),
-            "content": content[:300],
+            "content": content,
             "characters": chars,
             "style": style,
         })
 
     return ideas
+
+
+def get_visual_approaches() -> dict:
+    """Load visual approaches from config."""
+    presets = load_style_presets()
+    return presets.get("visual_approaches", {})
+
+
+def get_category_visual_hint(category: str) -> str:
+    """Get the visual hint for a category."""
+    presets = load_style_presets()
+    cat_config = presets.get("categories", {}).get(category, {})
+    return cat_config.get("visual_hint", "")
+
+
+def decide_visual_format(
+    content: str,
+    category: str,
+    date_seed: int = None
+) -> dict:
+    """Use LLM to decide the best visual format for this content.
+
+    Args:
+        content: The story content to visualize
+        category: Category name (github_updates, discord_updates, etc.)
+        date_seed: Optional seed for reproducibility
+
+    Returns:
+        dict with:
+            - approach: "abstract_dataviz" | "conceptual_metaphor" | "character_scene"
+            - style: specific style name from available styles
+            - reasoning: why this format fits the content
+    """
+    approaches = get_visual_approaches()
+    visual_hint = get_category_visual_hint(category)
+
+    # Build approach descriptions for the prompt
+    approach_descriptions = []
+    for name, config in approaches.items():
+        if name.startswith("_"):
+            continue
+        styles = ", ".join(config.get("suggested_styles", []))
+        approach_descriptions.append(
+            f"- {name}: {config.get('description', '')} (styles: {styles})"
+        )
+
+    approaches_text = "\n".join(approach_descriptions)
+
+    system_prompt = f"""You are a creative director for a tech news publication deciding how to visualize stories.
+
+AVAILABLE VISUAL APPROACHES:
+{approaches_text}
+
+CATEGORY: {category}
+CATEGORY HINT: {visual_hint}
+
+Based on the story content, decide the best visual approach. The hint is a soft suggestion - override it if the content calls for something different.
+
+Consider:
+- Is this data-heavy content that would benefit from visualization?
+- Is this about community/people where characters add personality?
+- Is this conceptual/strategic where abstract metaphors work best?
+- What would a reader find most informative and engaging?
+
+Respond in JSON format:
+{{
+  "approach": "abstract_dataviz" | "conceptual_metaphor" | "character_scene",
+  "style": "<specific style from the approach's suggested styles>",
+  "reasoning": "<1-2 sentences explaining why this format fits>"
+}}"""
+
+    try:
+        response = requests.post(
+            OPENROUTER_ENDPOINT,
+            headers={
+                "Authorization": f"Bearer {OPENROUTER_API_KEY}",
+                "Content-Type": "application/json"
+            },
+            json={
+                "model": LLM_MODEL,
+                "messages": [
+                    {"role": "system", "content": system_prompt},
+                    {"role": "user", "content": f"Story content:\n{content[:1000]}"}
+                ],
+                "response_format": {"type": "json_object"}
+            },
+            timeout=60
+        )
+        response.raise_for_status()
+        result = response.json()
+        decision = json.loads(result["choices"][0]["message"]["content"])
+
+        # Validate the response
+        valid_approaches = [k for k in approaches.keys() if not k.startswith("_")]
+        if decision.get("approach") not in valid_approaches:
+            decision["approach"] = "conceptual_metaphor"  # safe default
+
+        return decision
+
+    except Exception as e:
+        logging.warning(f"Visual format decision failed: {e}, using default")
+        return {
+            "approach": "conceptual_metaphor",
+            "style": "editorial",
+            "reasoning": "Default fallback due to decision error"
+        }
 
 
 def generate_scene_from_content(
@@ -977,7 +1085,7 @@ def batch_mode(facts_path: Path, dry_run: bool = False, with_icons: bool = False
             if dry_run:
                 chars = ", ".join(idea["characters"])
                 print(f"   Style: {style}, Characters: {chars}")
-                print(f"   Content: {idea['content'][:80]}...")
+                print(f"   Content: {idea['content'][:100]}...")
                 print(f"   -> {output_path}")
                 gen_meta["success"] = True
                 gen_meta["generation_time_seconds"] = 0

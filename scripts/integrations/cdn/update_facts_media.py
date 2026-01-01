@@ -28,7 +28,9 @@ def update_facts_with_media(
 ) -> bool:
     """Update facts.json with media URLs from manifest.
 
-    Adds a 'media' section to facts.json with poster URLs.
+    Meshes media into the facts structure:
+    - overall_media: poster for the overall summary
+    - categories[category].media: poster for each category
 
     Args:
         facts_path: Path to facts JSON file
@@ -54,36 +56,66 @@ def update_facts_with_media(
         print("No cdn_urls found in manifest. Run upload.py --update-manifest first.", file=sys.stderr)
         return False
 
-    # Build media section
-    media = {
-        "posters": {},
-        "generated_at": manifest.get("generated_at"),
-        "source_manifest": str(manifest_path),
-    }
+    changes = []
 
-    # Map category files to URLs
+    # Process each generation and mesh into appropriate location
     for gen in manifest.get("generations", []):
         category = gen.get("category", "").replace("-", "_")
         output_file = gen.get("output_file")
         cdn_url = gen.get("cdn_url") or cdn_urls.get(output_file)
 
-        if category and cdn_url:
-            media["posters"][category] = cdn_url
+        if not category or not cdn_url:
+            continue
 
-    # Add icon sheet if present
+        if category == "overall":
+            # Overall poster goes to top-level overall_media
+            facts["overall_media"] = {
+                "poster_url": cdn_url,
+            }
+            changes.append(f"overall_media.poster_url = {cdn_url}")
+        else:
+            # Category posters mesh into categories[category].media
+            if "categories" in facts and category in facts["categories"]:
+                if "media" not in facts["categories"][category]:
+                    facts["categories"][category]["media"] = {}
+                facts["categories"][category]["media"]["poster_url"] = cdn_url
+                changes.append(f"categories.{category}.media.poster_url = {cdn_url}")
+
+    # Add icon sheet to overall_media if present
     icon_sheet = manifest.get("icon_sheet")
     if icon_sheet:
         icon_file = icon_sheet.get("output_file")
         icon_url = icon_sheet.get("cdn_url") or cdn_urls.get(icon_file)
         if icon_url:
-            media["posters"]["icon_sheet"] = icon_url
+            if "overall_media" not in facts:
+                facts["overall_media"] = {}
+            facts["overall_media"]["icon_sheet_url"] = icon_url
+            changes.append(f"overall_media.icon_sheet_url = {icon_url}")
 
-    # Update facts
-    facts["media"] = media
+    # Also keep legacy media node for backward compatibility (can remove later)
+    legacy_media = {
+        "posters": {},
+        "generated_at": manifest.get("generated_at"),
+        "source_manifest": str(manifest_path),
+    }
+    for gen in manifest.get("generations", []):
+        category = gen.get("category", "").replace("-", "_")
+        output_file = gen.get("output_file")
+        cdn_url = gen.get("cdn_url") or cdn_urls.get(output_file)
+        if category and cdn_url:
+            legacy_media["posters"][category] = cdn_url
+    if icon_sheet:
+        icon_file = icon_sheet.get("output_file")
+        icon_url = icon_sheet.get("cdn_url") or cdn_urls.get(icon_file)
+        if icon_url:
+            legacy_media["posters"]["icon_sheet"] = icon_url
+    facts["media"] = legacy_media
 
     if dry_run:
-        print("Would add to facts.json:")
-        print(json.dumps({"media": media}, indent=2))
+        print("Would update facts.json with meshed media:")
+        for change in changes:
+            print(f"  {change}")
+        print(f"\nLegacy media node also updated for backward compatibility")
         return True
 
     # Write updated facts
@@ -91,7 +123,8 @@ def update_facts_with_media(
         with open(facts_path, "w") as f:
             json.dump(facts, f, indent=2)
         print(f"Updated: {facts_path}")
-        print(f"  Added {len(media['posters'])} poster URLs")
+        print(f"  Meshed {len(changes)} media URLs into structure")
+        print(f"  Legacy media node also updated")
         return True
     except IOError as e:
         print(f"Error writing facts: {e}", file=sys.stderr)

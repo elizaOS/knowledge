@@ -1,6 +1,25 @@
 {
-  "_version": "2.0",
-  "_notes": "Key principles: images first then text, sandwich prompt structure, technique keywords over style names, avoid format words that imply text.",
+  "_version": "2.1",
+  "_notes": "Key principles: images first then text, sandwich prompt structure, technique keywords over style names, avoid format words that imply text. v2.1: Added LLM-driven visual format selection with soft category hints.",
+
+  "visual_approaches": {
+    "_description": "Available visual approaches - LLM picks based on content",
+    "abstract_dataviz": {
+      "description": "Data visualization, infographics, diagrams - no characters",
+      "suggested_styles": ["dataviz", "infographic", "blueprint"],
+      "uses_characters": false
+    },
+    "conceptual_metaphor": {
+      "description": "Abstract editorial illustration using visual metaphors",
+      "suggested_styles": ["editorial", "tarot", "bauhaus", "ukiyo_e"],
+      "uses_characters": false
+    },
+    "character_scene": {
+      "description": "Scene featuring ElizaOS mascot characters",
+      "suggested_styles": ["council", "comic_panel", "cinematic_anime"],
+      "uses_characters": true
+    }
+  },
 
   "base_constraints": {
     "anti_text": "NO text, NO typography, NO letters, NO numbers, NO logos, NO watermarks, NO UI, NO readable symbols, NO signatures.",
@@ -152,37 +171,43 @@
       "focus": "development activity, code changes, technical progress",
       "suggested_styles": ["dataviz", "blueprint", "infographic"],
       "extract_key": "overall_focus",
-      "preferred_character": "eliza"
+      "preferred_character": "eliza",
+      "visual_hint": "often works well as data visualization or technical diagrams showing code flow, commits, or system architecture"
     },
     "discord_updates": {
       "focus": "community discussions, user interactions, social dynamics",
       "suggested_styles": ["comic_panel", "editorial", "council"],
       "extract_key": "summary",
-      "preferred_character": "peepo"
+      "preferred_character": "peepo",
+      "visual_hint": "community energy often benefits from character presence, but abstract works for technical discussions"
     },
     "user_feedback": {
       "focus": "user sentiment, pain points, feature requests",
       "suggested_styles": ["editorial", "infographic", "noir_ink"],
       "extract_key": "feedback_summary",
-      "preferred_character": "eliza"
+      "preferred_character": "eliza",
+      "visual_hint": "feedback patterns and themes often visualize well as infographics or conceptual metaphors"
     },
     "strategic_insights": {
       "focus": "trends, opportunities, strategic themes",
-      "suggested_styles": ["cinematic_anime", "tarot", "editorial"],
+      "suggested_styles": ["editorial", "tarot", "cinematic_anime"],
       "extract_key": "insight",
-      "preferred_character": "marc"
+      "preferred_character": "marc",
+      "visual_hint": "strategic themes work well as abstract conceptual metaphors or symbolic editorial illustrations"
     },
     "market_analysis": {
       "focus": "market trends, partnerships, ecosystem growth",
       "suggested_styles": ["dataviz", "infographic", "synthwave"],
       "extract_key": "observation",
-      "preferred_character": "marc"
+      "preferred_character": "marc",
+      "visual_hint": "market data naturally suits data visualization, charts, or comparative infographics"
     },
     "twitter_news_highlights": {
       "focus": "social media buzz, announcements, viral content",
       "suggested_styles": ["comic_panel", "collage", "risograph"],
       "extract_key": "summary",
-      "preferred_character": "peepo"
+      "preferred_character": "peepo",
+      "visual_hint": "social buzz and announcements often have energy that characters can express, but memes/viral content might suit collage"
     }
   },
 

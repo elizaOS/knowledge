@@ -210,7 +210,9 @@ class BriefingProcessor:
         # GitHub overall_focus already contains the important activity summary
 
         # Add poster from CDN if available in facts media
-        poster_url = data.get('media', {}).get('posters', {}).get('overall')
+        # Try new meshed location first, fall back to legacy
+        poster_url = data.get('overall_media', {}).get('poster_url') or \
+                     data.get('media', {}).get('posters', {}).get('overall')
         if poster_url:
             poster_embed = EmbedFactory.create_poster(poster_url, data['briefing_date'])
             if poster_embed:
