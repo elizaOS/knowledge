@@ -1,0 +1,357 @@
+{
+  "briefing_date": "2025-03-18",
+  "overall_summary": "ElizaOS v2 beta is in active rollout with new connectivity (WebSockets) and substantial GUI memory/knowledge management work landing alongside a large wave of bug fixes. Community discussion is simultaneously dominated by unresolved Twitter-client reliability issues and partner tension around marketing cadence and unclear tokenomics/utility messaging.",
+  "key_facts": [
+    "Shaw stated that the ElizaOS v2 beta is out, with a full launch planned for the end of March.",
+    "WebSockets functionality was added to enable connecting agents to web interfaces.",
+    "PR #3958 added opt-in support for custom embedding servers via environment variables (e.g., USE_CUSTOM_EMBEDDING, CUSTOM_EMBEDDING_ENDPOINT).",
+    "PR #3954 added a feature to view and edit memories associated with an agent.",
+    "PR #3950 added a RAG Knowledge tab in the GUI with document upload, chunking, search, and delete functionality.",
+    "PR #3962 implemented user interaction history scoring (stored in the Account table) to modulate agent tone, currently implemented for the Twitter client.",
+    "Multiple Discord users reported that the Twitter client can post on command but does not run autonomously in the latest version.",
+    "Users troubleshooting RAG were told knowledge directories should be placed under ./knowledge and that enableRag must be set to true.",
+    "A new dao-organization channel was created to strengthen ElizaDAO governance and organize contribution pathways.",
+    "The daily market snapshot reported ai16z token at $0.20 and WBTC at $83,847.71."
+  ],
+  "open_questions": [
+    "How to make Twitter client work in latest version?",
+    "Does the AI agent's response generation rely solely on user-provided examples, or is it also influenced by the underlying model architecture and integrated model providers?",
+    "Does anyone know how to calculate/estimate the finetuning cost for 58k rows in .jsonl?",
+    "How to see what's being passed into the context to the model?",
+    "What models/flavors are more compatible for agents?",
+    "How do I get the Twitter client to stop auto replying and only use action handlers?",
+    "What is the significance of the TEXT_EMBEDDING model compared to other models?",
+    "Is it clear how projects that launch without a token can participate in the model / flywheel of the elizaOS launchpad model?",
+    "Is the team still launching \"three groundbreaking products\" by end of March?",
+    "Is there a team on the implementation of any of it and where to monitor their progress?",
+    "Does the team have good tokenomics people who understand the landscape and feedback loops?"
+  ],
+  "tags": {
+    "themes": [
+      "release",
+      "bug-fix",
+      "tokenomics",
+      "governance",
+      "documentation"
+    ],
+    "sentiment": {
+      "overall": "mixed",
+      "context": [
+        "technical",
+        "economic",
+        "social"
+      ]
+    },
+    "story_type": [
+      "debate"
+    ],
+    "derived": [
+      "social",
+      "development",
+      "community",
+      "feedback",
+      "strategy",
+      "market"
+    ],
+    "priority": [
+      "routine"
+    ],
+    "manual": []
+  },
+  "categories": {
+    "twitter_news_highlights": [
+      {
+        "claim": "Shaw posted about progress on a v2 beta and described a goal of making an app.exe so non-technical users can run agents.",
+        "source": [
+          "ai-news/elizaos/json/2025-03-17.json"
+        ],
+        "sentiment": "neutral"
+      },
+      {
+        "claim": "Shaw discussed prior work on an MMO concept using a grid approach and shared old code as potential input for Claude.",
+        "source": [
+          "ai-news/elizaos/json/2025-03-17.json"
+        ],
+        "sentiment": "neutral"
+      },
+      {
+        "claim": "DankVR engaged in multiple conversations about agents and related topics (VR, geography, and general commentary).",
+        "source": [
+          "ai-news/elizaos/json/2025-03-17.json"
+        ],
+        "sentiment": "neutral"
+      }
+    ],
+    "github_updates": {
+      "new_issues_prs": [
+        {
+          "item_type": "pull_request",
+          "title": "support any custom embedding server",
+          "number": 3958,
+          "url": "https://github.com/elizaOS/eliza/pull/3958",
+          "status": "merged",
+          "author": "hishboy",
+          "significance": "Adds a configurable 'Custom' embedding provider to support OpenAI-compatible embedding endpoints without core code changes."
+        },
+        {
+          "item_type": "pull_request",
+          "title": "feat: view and edit memories of an agent",
+          "number": 3954,
+          "url": "https://github.com/elizaOS/eliza/pull/3954",
+          "status": "merged",
+          "author": "wtfsayo",
+          "significance": "Introduces the ability to view/edit agent memories in the product UI."
+        },
+        {
+          "item_type": "pull_request",
+          "title": "client knowledge management (RAG Knowledge tab)",
+          "number": 3950,
+          "url": "https://github.com/elizaOS/eliza/pull/3950",
+          "status": "merged",
+          "author": "0xbbjoker",
+          "significance": "Adds GUI-based document upload/search/delete for RAG knowledge management."
+        },
+        {
+          "item_type": "pull_request",
+          "title": "User interaction history scoring for Twitter client",
+          "number": 3962,
+          "url": "https://github.com/elizaOS/eliza/pull/3962",
+          "status": "merged",
+          "author": "nusk0",
+          "significance": "Stores post-conversation scores and uses them to modulate interaction tone for future responses (Twitter client implementation)."
+        },
+        {
+          "item_type": "pull_request",
+          "title": "fix: Make client use relative URL & firefox fixes",
+          "number": 3979,
+          "url": "https://github.com/elizaOS/eliza/pull/3979",
+          "status": "merged",
+          "author": "odilitime",
+          "significance": "Improves client compatibility by removing localhost assumptions and addressing Firefox crypto.randomUUID constraints."
+        },
+        {
+          "item_type": "pull_request",
+          "title": "fix: store postgres connection URL properly in global config",
+          "number": 3977,
+          "url": "https://github.com/elizaOS/eliza/pull/3977",
+          "status": "merged",
+          "author": "0xbbjoker",
+          "significance": "Fixes project-creation Postgres URL validation and persistence via ~/.eliza/.env."
+        },
+        {
+          "item_type": "pull_request",
+          "title": "fix: error in plugin-tee",
+          "number": 3982,
+          "url": "https://github.com/elizaOS/eliza/pull/3982",
+          "status": "merged",
+          "author": "HashWarlock",
+          "significance": "Restores compatibility by removing a non-existent TEEVendors reference."
+        },
+        {
+          "item_type": "issue",
+          "title": "Check if packages are recognized as plugins based on package.json configuration",
+          "number": 3981,
+          "url": "https://github.com/elizaOS/eliza/issues/3981",
+          "status": "open",
+          "author": "jmikedupont2",
+          "significance": "Targets plugin discoverability/verification behavior based on package metadata."
+        },
+        {
+          "item_type": "issue",
+          "title": "Inquiry on debugging remotely (process and example)",
+          "number": 3978,
+          "url": "https://github.com/elizaOS/eliza/issues/3978",
+          "status": "open",
+          "author": "jmikedupont2",
+          "significance": "Requests guidance for remote debugging workflows."
+        }
+      ],
+      "overall_focus": [
+        {
+          "claim": "Development focus on 2025-03-18 emphasized bug fixes (syntax/typos/config handling), client compatibility improvements, and documentation accessibility updates, alongside new issues about plugin verification and remote debugging.",
+          "source": [
+            "github/summaries/day/2025-03-18.md"
+          ]
+        },
+        {
+          "claim": "Across the 2025-03-17 daily report, notable additions included custom embedding-server support, expanded memory/knowledge tooling in the GUI, and multiple UI/UX and logging improvements.",
+          "source": [
+            "ai-news/elizaos/json/2025-03-17.json",
+            "ai-news/elizaos/md/2025-03-17.md"
+          ]
+        }
+      ]
+    },
+    "discord_updates": [
+      {
+        "channel": "#\ud83d\udcbb-coders",
+        "summary": "Users discussed v2 implementation problems (Twitter client reliability, RAG directory structure and enableRag flag, plugin installation errors such as Paradex, version mismatches across npm packages, and core-runtime TEXT_EMBEDDING initialization errors). WebSockets support was highlighted as enabling website chat-terminal connectivity, and plugin auto-updating was described as in-progress.",
+        "key_participants": [
+          "shaw",
+          "jin",
+          "jintern",
+          "notorious_d_e_v",
+          "ThanosDaSith24",
+          "bradtheaverage",
+          "chris.troutner"
+        ],
+        "source": [
+          "ai-news/elizaos/discord/md/2025-03-17.md",
+          "ai-news/elizaos/discord/json/2025-03-17.json"
+        ]
+      },
+      {
+        "channel": "#\ud83e\udd47-partners",
+        "summary": "Partners discussed v2 beta status and launch timing, raised concerns about communication/marketing cadence, and repeatedly asked for clearer tokenomics and token utility explanations. A product-first posture was reiterated, with social/brand work described as a focus after GTM for the launchpad.",
+        "key_participants": [
+          "shaw",
+          "jin",
+          "Ben",
+          "Zolo",
+          "Patt",
+          "vincentpaul"
+        ],
+        "source": [
+          "ai-news/elizaos/discord/md/2025-03-17.md",
+          "ai-news/elizaos/discord/json/2025-03-17.json"
+        ]
+      },
+      {
+        "channel": "#dao-organization",
+        "summary": "A new working group formed to improve governance and contribution pathways, including proposals for a partner specialty directory, a DAO resources dashboard, and a process for partners to flag repost-worthy community content. Jin shared where docs and analytics live and described a pipeline that collects retweets into a SQLite database feeding eliza.how/news.",
+        "key_participants": [
+          "vincentpaul",
+          "jin",
+          "Patt"
+        ],
+        "source": [
+          "ai-news/elizaos/discord/json/2025-03-17.json",
+          "ai-news/elizaos/discord/md/2025-03-17.md"
+        ]
+      },
+      {
+        "channel": "#tokenomics",
+        "summary": "Users asked for clarification on a HackMD tokenomics document, requested visibility into an implementation team and progress tracking, and proposed using ai16z tokens to pay for API/compute on agents.",
+        "key_participants": [
+          "Alsara2k",
+          "yikesawjeez",
+          "Patt"
+        ],
+        "source": [
+          "ai-news/elizaos/discord/json/2025-03-17.json",
+          "ai-news/elizaos/discord/md/2025-03-17.md"
+        ]
+      }
+    ],
+    "user_feedback": [
+      {
+        "feedback_summary": "Partners requested clearer and more accessible tokenomics documentation and concrete token utility details beyond a HackMD draft.",
+        "source": [
+          "ai-news/elizaos/discord/md/2025-03-17.md"
+        ],
+        "sentiment": "mixed"
+      },
+      {
+        "feedback_summary": "Multiple users reported that Twitter agents can post on command but do not run autonomously in the latest version.",
+        "source": [
+          "ai-news/elizaos/discord/md/2025-03-16.md"
+        ],
+        "sentiment": "negative"
+      },
+      {
+        "feedback_summary": "Users encountered RAG setup errors and were instructed to place knowledge folders under ./knowledge and set enableRag: true to use RAG.",
+        "source": [
+          "ai-news/elizaos/discord/md/2025-03-17.md",
+          "ai-news/elizaos/discord/md/2025-03-16.md"
+        ],
+        "sentiment": "neutral"
+      },
+      {
+        "feedback_summary": "Partners provided marketing feedback emphasizing co-marketing coordination and more frequent product communications leading into the v2 launch.",
+        "source": [
+          "ai-news/elizaos/discord/md/2025-03-17.md"
+        ],
+        "sentiment": "mixed"
+      },
+      {
+        "feedback_summary": "Users highlighted confusion over plugin installation syntax and asked for improved plugin documentation and onboarding.",
+        "source": [
+          "ai-news/elizaos/discord/md/2025-03-15.md",
+          "ai-news/elizaos/discord/md/2025-03-16.md"
+        ],
+        "sentiment": "mixed"
+      }
+    ],
+    "strategic_insights": [
+      {
+        "theme": "V2 readiness depends on resolving client reliability and cross-platform friction",
+        "insight": "Discord discussions repeatedly center on Twitter-client autonomy failures, plugin dependency/version mismatches, and Windows/Mac issues while v2 is positioned as consumer-friendly. This creates a launch risk where \u201canyone can run an agent\u201d messaging depends on reducing setup and runtime failures across clients.",
+        "implications_or_questions": [
+          "Should the team publish a short v2 preflight checklist (LLM, Twitter login, Discord connect, plugin load) ahead of full launch?",
+          "Is there a single canonical \u201cknown-good\u201d version set for core + clients + plugins to reduce mismatch reports?"
+        ]
+      },
+      {
+        "theme": "Tokenomics narrative gap is driving partner friction",
+        "insight": "Partners and tokenomics channel users are asking for clearer documentation and progress visibility, while responses point to a draft HackMD and a \u201cproduct first\u201d posture. Without an implementation/progress surface, repeated questions persist across channels.",
+        "implications_or_questions": [
+          "Is there an owner and public progress tracker for tokenomics deliverables (even if provisional)?",
+          "What minimal token-utility statement can be published now without overcommitting?"
+        ]
+      },
+      {
+        "theme": "Knowledge and memory tooling is becoming a core product surface",
+        "insight": "Multiple merged PRs focus on viewing/editing memories and GUI-based RAG document management, while Discord support requests continue around RAG directory structure and PDF ingestion. The volume of improvements and questions suggests knowledge tooling should be treated as a primary UX path with first-class documentation.",
+        "implications_or_questions": [
+          "Should RAG setup guidance be promoted to a top-level quickstart page for v2?",
+          "Are default paths and error messages sufficient to prevent 'Directory does not exist' failures?"
+        ]
+      }
+    ],
+    "market_analysis": [
+      {
+        "observation": "WBTC was reported at $83,847.71, up from $82,423.27 (+1.73%).",
+        "source": [
+          "ai-news/elizaos/json/2025-03-17.json",
+          "ai-news/elizaos/md/2025-03-17.md"
+        ],
+        "relevance": "Provides broad crypto market context for community sentiment and risk appetite."
+      },
+      {
+        "observation": "ai16z token was reported at $0.20, up from $0.195 (+3.46%).",
+        "source": [
+          "ai-news/elizaos/json/2025-03-17.json",
+          "ai-news/elizaos/md/2025-03-17.md"
+        ],
+        "relevance": "Directly relevant to tokenomics discussions and partner expectations around utility and communications."
+      },
+      {
+        "observation": "Discord discussions referenced a token price decline described as ~70% down from prior highs.",
+        "source": [
+          "ai-news/elizaos/discord/md/2025-03-17.md"
+        ],
+        "relevance": "Context for increased pressure on token utility explanations and marketing cadence."
+      }
+    ]
+  },
+  "_metadata": {
+    "model": "openai/gpt-5.2",
+    "extracted_at": "2026-01-01T03:46:12.651644Z",
+    "prompt_tokens": 65705,
+    "completion_tokens": 4250,
+    "total_tokens": 69955,
+    "processing_seconds": 51.37,
+    "status": "success",
+    "facts_by_category": {
+      "twitter_news_highlights": 3,
+      "github_updates": 9,
+      "discord_updates": 4,
+      "user_feedback": 5,
+      "strategic_insights": 3,
+      "market_analysis": 3,
+      "key_facts": 10,
+      "open_questions": 11
+    },
+    "total_facts": 48
+  }
+}
