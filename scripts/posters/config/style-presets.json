@@ -6,17 +6,22 @@
     "_description": "Available visual approaches - LLM picks based on content",
     "abstract_dataviz": {
       "description": "Data visualization, infographics, diagrams - no characters",
-      "suggested_styles": ["dataviz", "infographic", "blueprint"],
+      "suggested_styles": ["dataviz", "infographic", "blueprint", "cyberpunk_hud", "isometric_city"],
       "uses_characters": false
     },
     "conceptual_metaphor": {
       "description": "Abstract editorial illustration using visual metaphors",
-      "suggested_styles": ["editorial", "tarot", "bauhaus", "ukiyo_e"],
+      "suggested_styles": ["editorial", "tarot", "bauhaus", "ukiyo_e", "noir_ink", "paper_cutout"],
+      "uses_characters": false
+    },
+    "retro_tech": {
+      "description": "Nostalgic computing aesthetics - terminals, pixels, synthwave",
+      "suggested_styles": ["retro_terminal", "pixel_art", "synthwave"],
       "uses_characters": false
     },
     "character_scene": {
       "description": "Scene featuring ElizaOS mascot characters",
-      "suggested_styles": ["council", "comic_panel", "cinematic_anime"],
+      "suggested_styles": ["council", "comic_panel", "cinematic_anime", "collage", "risograph"],
       "uses_characters": true
     }
   },
@@ -163,51 +168,83 @@
       "description": "Dynamic manga/comic style with action lines, screen tones, and expressive poses",
       "system_prompt": "You are an expert comic artist creating dynamic panel illustrations.\n\n**Art Style Requirements:**\n- Manga meets western comics hybrid style\n- Bold black outlines, dynamic compositions\n- Action lines, speed effects, impact frames\n- Screen tone textures (halftone dots for shading)\n- Expressive character poses and reactions\n\n**Prompt Structure (output in this exact order):**\n1. Start with: \"dynamic comic panel illustration, manga style,\"\n2. Describe action or reaction moment with dramatic angle\n3. Add: \"bold black outlines, action lines, speed effects\"\n4. Include: \"screen tone shading, dramatic perspective\"\n5. Add: \"expressive poses, comic book energy, high contrast\"\n6. MUST end with: \"Comic panel artwork. No speech bubbles, no sound effects text, no captions.\"\n\n**Rules:**\n- Dramatic angles increase impact (low angle, dutch tilt)\n- Action lines show movement direction\n- Screen tones add depth without color complexity\n- Should feel like a key moment from a manga\n\n**Output ONLY the image prompt, nothing else.**",
       "style_suffix": ", comic panel, manga style, bold outlines, action lines, screen tone, dynamic"
+    },
+
+    "retro_terminal": {
+      "name": "Retro Terminal",
+      "description": "80s computing aesthetic with green phosphor glow, CRT scan lines, and monospace elements",
+      "system_prompt": "You are an expert AI art director creating retro computing terminal illustrations.\n\n**Art Style Requirements:**\n- 80s computing terminal aesthetic\n- Green or amber phosphor glow on black background\n- CRT scan lines, slight bloom/glow effects\n- ASCII-style borders and frame elements\n- Monospace grid structure, command-line feel\n\n**Prompt Structure (output in this exact order):**\n1. Start with: \"retro computer terminal illustration, CRT monitor aesthetic,\"\n2. Describe abstract data/system representation on the 'screen'\n3. Add: \"green phosphor glow on black, CRT scan lines, slight bloom\"\n4. Include: \"ASCII art borders, pixel grid structure, monospace feel\"\n5. Add: \"80s computing nostalgia, hacker aesthetic, glowing elements\"\n6. MUST end with: \"Retro terminal display. No readable text, no actual code, abstract visual representation only.\"\n\n**Rules:**\n- Everything should look like it's displayed on an old CRT\n- Use abstract shapes/patterns to represent data, not actual text\n- The scan lines and glow are essential to the style\n- Should feel like a scene from WarGames or Tron\n\n**Output ONLY the image prompt, nothing else.**",
+      "style_suffix": ", retro terminal, CRT aesthetic, green phosphor, scan lines, 80s computing"
+    },
+
+    "cyberpunk_hud": {
+      "name": "Cyberpunk HUD",
+      "description": "Holographic heads-up display with neon metrics, glitch effects, and futuristic UI elements",
+      "is_data_visualization": true,
+      "system_prompt": "You are an expert AI art director creating cyberpunk HUD data displays.\n\n**Art Style Requirements:**\n- Futuristic heads-up display / holographic interface\n- Neon accents on dark void background (cyan, magenta, orange)\n- Floating metric panels, circular gauges, connection lines\n- Subtle glitch artifacts, digital noise, scanline textures\n- Think: Blade Runner 2049, Ghost in the Shell interfaces\n\n**Prompt Structure (output in this exact order):**\n1. Start with: \"cyberpunk holographic HUD, futuristic data interface,\"\n2. Describe data panels and metrics as floating holographic elements\n3. Add: \"neon glow effects, dark void background, transparent overlays\"\n4. Include: \"circular gauges, connection lines, floating panels\"\n5. Add: \"subtle glitch artifacts, digital rain accents, scanline texture\"\n6. End with: \"Holographic data display with metric indicators. Futuristic UI aesthetic.\"\n\n**Rules:**\n- DO include visual metric elements (gauges, bars, indicators)\n- Everything should look holographic and floating\n- Neon glow on dark is essential\n- Should feel like a sci-fi movie interface\n\n**Output ONLY the image prompt, nothing else.**",
+      "style_suffix": ", cyberpunk HUD, holographic interface, neon glow, futuristic, sci-fi",
+      "scene_generation_prompt": "You are creating a cyberpunk HUD data display. Extract KEY METRICS from this content.\n\nOutput a visualization description that includes:\n1. Main metric panels to display (as holographic floating elements)\n2. Key indicators or gauges to show\n3. Connection lines or data flows between elements\n4. Suggested color accents (cyan, magenta, orange)\n\nDescribe as HOLOGRAPHIC UI ELEMENTS, not characters or scenes.\nKeep under 100 words. Output ONLY the HUD description."
+    },
+
+    "isometric_city": {
+      "name": "Isometric Tech City",
+      "description": "Clean isometric architecture with interconnected modular components and data flow paths",
+      "is_data_visualization": true,
+      "system_prompt": "You are an expert AI art director creating isometric tech city visualizations.\n\n**Art Style Requirements:**\n- Isometric 3D city/architecture illustration\n- Clean vector aesthetic with soft shadows\n- Modular building-like components representing system parts\n- Glowing data paths flowing between structures\n- Think: tech startup office posters, SimCity meets data architecture\n\n**Prompt Structure (output in this exact order):**\n1. Start with: \"isometric tech city illustration, clean vector architecture,\"\n2. Describe the system/ecosystem as interconnected buildings/structures\n3. Add: \"soft shadows, pastel accent colors, glowing connection paths\"\n4. Include: \"modular components, organized grid layout, floating elements\"\n5. Add: \"tech startup aesthetic, professional infographic quality\"\n6. End with: \"Isometric system architecture with labeled components. Clean editorial style.\"\n\n**Rules:**\n- DO include component labels/section names\n- Each 'building' should represent a system component\n- Data flows shown as glowing paths between structures\n- Should feel organized, approachable, and professional\n\n**Output ONLY the image prompt, nothing else.**",
+      "style_suffix": ", isometric city, tech architecture, clean vector, soft shadows, modular",
+      "scene_generation_prompt": "You are creating an isometric tech city visualization. Map the SYSTEM COMPONENTS to buildings/structures.\n\nOutput a visualization description that includes:\n1. Main 'buildings' representing key system components\n2. Data flow paths between structures\n3. Organizational zones or districts\n4. Suggested component labels\n\nDescribe as ARCHITECTURAL ELEMENTS, not characters.\nKeep under 100 words. Output ONLY the isometric description."
     }
   },
 
   "categories": {
     "github_updates": {
       "focus": "development activity, code changes, technical progress",
-      "suggested_styles": ["dataviz", "blueprint", "infographic"],
+      "suggested_styles": ["dataviz", "blueprint", "infographic", "retro_terminal", "isometric_city"],
       "extract_key": "overall_focus",
       "preferred_character": "eliza",
       "visual_hint": "often works well as data visualization or technical diagrams showing code flow, commits, or system architecture"
     },
     "discord_updates": {
       "focus": "community discussions, user interactions, social dynamics",
-      "suggested_styles": ["comic_panel", "editorial", "council"],
+      "suggested_styles": ["comic_panel", "editorial", "council", "collage", "risograph"],
       "extract_key": "summary",
       "preferred_character": "peepo",
       "visual_hint": "community energy often benefits from character presence, but abstract works for technical discussions"
     },
     "user_feedback": {
       "focus": "user sentiment, pain points, feature requests",
-      "suggested_styles": ["editorial", "infographic", "noir_ink"],
+      "suggested_styles": ["editorial", "infographic", "noir_ink", "paper_cutout"],
       "extract_key": "feedback_summary",
       "preferred_character": "eliza",
       "visual_hint": "feedback patterns and themes often visualize well as infographics or conceptual metaphors"
     },
     "strategic_insights": {
       "focus": "trends, opportunities, strategic themes",
-      "suggested_styles": ["editorial", "tarot", "cinematic_anime"],
+      "suggested_styles": ["editorial", "tarot", "bauhaus", "ukiyo_e", "cinematic_anime"],
       "extract_key": "insight",
       "preferred_character": "marc",
       "visual_hint": "strategic themes work well as abstract conceptual metaphors or symbolic editorial illustrations"
     },
     "market_analysis": {
       "focus": "market trends, partnerships, ecosystem growth",
-      "suggested_styles": ["dataviz", "infographic", "synthwave"],
+      "suggested_styles": ["dataviz", "cyberpunk_hud", "infographic", "synthwave"],
       "extract_key": "observation",
       "preferred_character": "marc",
       "visual_hint": "market data naturally suits data visualization, charts, or comparative infographics"
     },
     "twitter_news_highlights": {
       "focus": "social media buzz, announcements, viral content",
-      "suggested_styles": ["comic_panel", "collage", "risograph"],
+      "suggested_styles": ["comic_panel", "collage", "risograph", "pixel_art"],
       "extract_key": "summary",
       "preferred_character": "peepo",
       "visual_hint": "social buzz and announcements often have energy that characters can express, but memes/viral content might suit collage"
+    },
+    "overall": {
+      "focus": "daily summary, key highlights, main narrative",
+      "suggested_styles": ["editorial", "tarot", "council", "cinematic_anime", "isometric_city"],
+      "extract_key": "overall_summary",
+      "preferred_character": "eliza",
+      "visual_hint": "overall summaries can use character scenes for narrative or abstract visualization for data-heavy days"
     }
   },
 
