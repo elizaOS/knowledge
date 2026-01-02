@@ -1,198 +1,343 @@
 {
-  "period": "Year 2025 (April-November)",
-  "executive_summary": "The final two-thirds of 2025 marked ElizaOS's transition from experimental framework to production-ready platform, culminating in successful v1.0 and v2.0 releases with major architectural improvements. The period was characterized by exceptional technical velocity (157+ PRs per month), comprehensive CLI modernization, and expanded AI provider ecosystem integration. However, this rapid innovation came at the cost of persistent reliability issues\u2014particularly with Twitter integration\u2014and community trust erosion due to communication gaps and platform dependencies. The period ended with a critical token migration from AI16Z to ElizaOS, highlighting both the platform's growing independence and the challenges of managing community expectations during major transitions.",
+  "period": "Year 2025",
+  "executive_summary": "Across 2025, ElizaOS substantially expanded capability and modernized its foundations: the plugin ecosystem and AI provider surface grew rapidly, social/real-time clients widened the public-facing footprint, and core architecture moved toward modular, agent-scoped, multi-tenant readiness. The product also matured with a redesigned management UI, better observability, and multiple refactors (eventing, messaging, server separation) that collectively set a stronger baseline for cloud deployment and long-lived agents.\n\nHowever, the year also revealed a consistent pattern: capability expansion routinely outpaced the stability budget. Onboarding and packaging friction persisted, social integrations (especially Twitter/X) remained a high-cost reliability sink, and RAG ingestion continued to fail under real-world document loads. Operational trust was further stressed by CLI instability episodes and token migration UX/comms gaps. Late-year work (server refactor, TypeScript/CI stabilization, security fixes, early streaming work) meaningfully improved the core, but the \u201cfirst-run success + boring reliability\u201d loop still needs to become the dominant shipping constraint.\n\nNet: ElizaOS exited 2025 with stronger architecture and broader reach, but leadership should treat 2026 as an execution-and-trust consolidation phase\u2014defined by measurable reliability, secure-by-default multi-user design, and platform-sovereign distribution/communications\u2014so ecosystem growth compounds rather than resets after each regression.",
   "key_achievements": [
     {
-      "theme": "Platform Maturity & Architecture",
+      "theme": "Capability expansion (plugins, chains/DeFi, providers, models, voice)",
       "accomplishments": [
-        "Successful v1.0 and v2.0 releases with comprehensive feature sets",
-        "Major architectural refactoring: server separation, agent-scoped plugins, messaging system overhaul",
-        "Migration from EventEmitter to EventTarget API with standardized service interfaces",
-        "UUID-based agent identification and unified messaging APIs"
+        "Expanded cross-chain and infra integrations (Cosmos/IBC swap, TON, Sei, Stargaze; Ankr/Moralis; CoinGecko/CoinMarketCap) increasing builder options and reach.",
+        "Broadened AI provider portability and reduced lock-in (Amazon Bedrock, NVIDIA NIM, DeepSeek, Infera, updated Google configs; Kluster AI; Mem0 SDK).",
+        "Added voice and media capabilities (OpenAI TTS, ElevenLabs improvements, transcription provider selection) enabling richer agent experiences."
       ],
-      "impact": "Transformed ElizaOS from experimental tool to enterprise-ready platform with scalable architecture"
+      "impact": "High: increased platform attractiveness and differentiated ElizaOS as a composable agent stack across models and ecosystems."
     },
     {
-      "theme": "Developer Experience Revolution",
+      "theme": "Core architecture modernization (modularity, eventing, runtime, messaging, server separation)",
       "accomplishments": [
-        "Complete CLI migration to @clack/prompts with modern UX patterns",
-        "AI-powered plugin migration tool and comprehensive documentation overhaul",
-        "Unified testing framework reducing CI/CD complexity",
-        "Plugin ecosystem expansion with improved publishing and third-party installation workflows"
+        "Implemented dynamic plugin loading and continued provider-to-plugin refactors, reducing core coupling.",
+        "Migrated runtime from Node to Bun and core messaging from WebSockets to Socket.io; later standardized messaging APIs and UUID-based agent identification.",
+        "Refactored core event system (Evt) and later moved from EventEmitter to EventTarget; introduced action chaining and standardized service interfaces.",
+        "Major server separation/refactor and optimization in December to reduce timeout risk and prepare for scale."
       ],
-      "impact": "Reduced developer onboarding friction and enabled rapid ecosystem growth"
+      "impact": "High: created the technical prerequisites for cloud deployment, composability, and long-term maintainability\u2014though transitions increased short-term churn."
     },
     {
-      "theme": "AI Provider Ecosystem Expansion",
+      "theme": "Product surface improvements (UI, observability, management workflows)",
       "accomplishments": [
-        "Integration of OpenAI TTS, Kluster AI, Mem0, and improved model tracking",
-        "Expanded knowledge management with PDF RAG capabilities",
-        "Enhanced embedding handlers and contextual agent interactions",
-        "Cross-platform AI provider flexibility"
+        "Shipped a major Agent Management UI redesign with streamlined setup, plugin/env configuration, env upload tooling, and memory visibility.",
+        "Added in-product observability (agent actions + runtime logs in UI), reducing black-box debugging."
       ],
-      "impact": "Established ElizaOS as provider-agnostic platform supporting diverse AI use cases"
+      "impact": "High: improved developer/operator effectiveness and reduced time-to-diagnose failures."
     },
     {
-      "theme": "Cloud Infrastructure & Independence",
+      "theme": "Knowledge/memory and multi-agent foundations",
       "accomplishments": [
-        "Successful Railway deployment and cloud platform development",
-        "ElizaOS Cloud infrastructure progress toward revenue generation",
-        "Implementation of entity-level security and agent settings persistence",
-        "Foundation for platform sovereignty and censorship resistance"
+        "Introduced a separate knowledge system for multi-agent RAG optimization; added scopable knowledge and a foundational world-state provider.",
+        "Improved adapter consistency (getMemoryByIds), directory loading, double-byte support; added PgLite adapter.",
+        "Delivered partial RAG reliability improvements (OOM guards, splitText safeguards, better fact retrieval)."
       ],
-      "impact": "Created sustainable business model while reducing platform dependencies"
+      "impact": "High: established critical primitives for long-lived agents, though real-world ingestion reliability remains incomplete."
+    },
+    {
+      "theme": "Social and real-time presence expansion",
+      "accomplishments": [
+        "Added/expanded real-time and social clients (Twitter Spaces, Instagram client, XMTP encrypted messaging, Telegram improvements, Discord typing simulation).",
+        "Improved Twitter feature completeness (long tweets, delete support) and Telegram supergroup sync/community manager."
+      ],
+      "impact": "High: expanded distribution and visibility, but also amplified reputational risk due to reliability regressions."
+    },
+    {
+      "theme": "Reliability, CI/type safety, and security hardening (late-year)",
+      "accomplishments": [
+        "Resolved widespread TypeScript build issues and dependency upgrades, improving CI health and monorepo integration reliability.",
+        "Fixed a critical vulnerability in character secret encryption; advanced entity-level security and settings persistence fixes.",
+        "Initiated streaming support across OpenAI/Anthropic/OpenRouter plugins to enable real-time conversational UX."
+      ],
+      "impact": "High: reduced systemic breakage and improved trust posture, while opening the door to \u201calive\u201d agent UX."
+    },
+    {
+      "theme": "Cloud deployment progress",
+      "accomplishments": [
+        "Achieved successful Railway deployment and accelerated cloud platform development."
+      ],
+      "impact": "Medium-to-High: validates deployability, but must be paired with multi-user/auth clarity and operational SLOs."
+    },
+    {
+      "theme": "Token migration execution (ecosystem transition)",
+      "accomplishments": [
+        "Launched AI16Z \u2192 ElizaOS token migration (1:6 ratio) and opened the migration window."
+      ],
+      "impact": "High (ecosystem trust): strategically necessary transition, but user experience and comms issues reduced upside."
     }
   ],
   "persistent_challenges": [
     {
-      "issue": "Twitter Integration Fragility",
+      "issue": "Onboarding, install/build, and packaging reliability (time-to-first-agent)",
       "months_affected": [
+        "2025-01",
+        "2025-02",
+        "2025-03",
         "2025-04",
         "2025-05",
-        "2025-06",
-        "2025-07"
-      ],
-      "root_cause": "Fundamental dependency on unstable external APIs combined with rapid feature development outpacing integration testing",
-      "recommendation": "Implement circuit breaker patterns and alternative social media integrations to reduce single-platform dependency"
-    },
-    {
-      "issue": "Documentation Infrastructure Decay",
-      "months_affected": [
-        "2025-05",
-        "2025-06",
         "2025-07",
-        "2025-09",
-        "2025-11"
+        "2025-10",
+        "2025-12"
       ],
-      "root_cause": "Feature velocity consistently outpacing documentation updates, treating docs as afterthought rather than infrastructure",
-      "recommendation": "Make documentation updates mandatory part of feature development process with automated checks"
+      "root_cause": "Frequent architectural shifts (runtime, plugin system, client-vs-plugin conventions), inconsistent environment assumptions (Node/Bun/OS native deps), incomplete packaging discipline (npm publishing gaps), and lack of continuously-tested \u201cgolden path\u201d templates.",
+      "recommendation": "Establish a single blessed onboarding path with CI-enforced reproducibility (OS matrix + pinned toolchain), ship it as a versioned artifact (template + lockfile + smoke tests), and treat onboarding regressions as release blockers."
     },
     {
-      "issue": "Community Communication Gaps",
+      "issue": "Twitter/X integration instability and public-behavior safety risk",
       "months_affected": [
+        "2025-01",
+        "2025-02",
+        "2025-03",
         "2025-04",
         "2025-05",
-        "2025-08",
-        "2025-10",
-        "2025-11"
+        "2025-06",
+        "2025-08"
       ],
-      "root_cause": "Technical team prioritizing development over community engagement, lacking structured communication processes",
-      "recommendation": "Establish dedicated community relations role with regular update cadence and transparency protocols"
+      "root_cause": "High external API volatility (auth/rate limits/media), insufficient rate-limit/backoff and idempotency guarantees, inadequate safety defaults for posting/reply behavior, and limited contract/integration testing against real-world edge cases.",
+      "recommendation": "Define \u201cgold path\u201d social SLOs, implement strict idempotency + dedupe, safe default posting policies, and a staged rollout (canary accounts + kill switches) with automated monitoring."
     },
     {
-      "issue": "CLI/Developer Onboarding Instability",
+      "issue": "RAG/knowledge ingestion reliability (OOM, large docs/PDFs, embedding instability)",
       "months_affected": [
+        "2025-01",
+        "2025-03",
+        "2025-04",
+        "2025-05"
+      ],
+      "root_cause": "Unbounded memory usage during ingestion, inconsistent chunking/embedding contracts across providers, and insufficient deterministic pipelines for large-file processing (PDF parsing, batching, retry semantics).",
+      "recommendation": "Ship a deterministic ingestion pipeline (streaming chunker, bounded concurrency, resumable jobs, canonical embedding dimension management) with hard limits and clear operator feedback."
+    },
+    {
+      "issue": "Release discipline gaps and regression cycles under high PR velocity",
+      "months_affected": [
+        "2025-02",
+        "2025-03",
         "2025-04",
         "2025-09",
         "2025-10"
       ],
-      "root_cause": "CLI serves as primary developer entry point but suffers from architectural changes and insufficient testing",
-      "recommendation": "Implement CLI stability testing in CI/CD pipeline and maintain backwards compatibility guarantees"
+      "root_cause": "High throughput without consistent quality gates, weak compatibility contracts (plugins/providers/adapters), and insufficient fixture-based integration testing across common stack combinations.",
+      "recommendation": "Adopt release gates (smoke tests, upgrade tests, plugin contract tests), enforce semantic versioning policy, and publish migration guides simultaneously with breaking changes."
+    },
+    {
+      "issue": "CLI instability and DX fragmentation",
+      "months_affected": [
+        "2025-04",
+        "2025-06",
+        "2025-07",
+        "2025-09",
+        "2025-10"
+      ],
+      "root_cause": "CLI treated as a rapidly evolving surface without the same stability guarantees as core runtime; architectural changes outpaced backward compatibility and test coverage.",
+      "recommendation": "Separate CLI \u201ccore\u201d (stable) from experimental features, add snapshot tests and end-to-end scaffolding tests, and maintain a strict compatibility policy for one major line."
+    },
+    {
+      "issue": "Documentation lag, broken public surfaces, and information taming",
+      "months_affected": [
+        "2025-01",
+        "2025-02",
+        "2025-03",
+        "2025-05",
+        "2025-09",
+        "2025-11"
+      ],
+      "root_cause": "Docs not shipped as a release artifact, high change rate, unclear canonical sources, and insufficient doc ownership/review gates.",
+      "recommendation": "Make docs a versioned deliverable tied to releases (docs PR required for breaking changes), add \u201cknown issues\u201d registry, and implement docs uptime/search SLOs."
+    },
+    {
+      "issue": "Platform sovereignty and centralized dependency risk (account bans/censorship)",
+      "months_affected": [
+        "2025-08"
+      ],
+      "root_cause": "Over-reliance on centralized social channels for brand and distribution without redundant, censorship-resistant communication pathways.",
+      "recommendation": "Create a platform-sovereign communications and distribution stack (email/RSS, mirrors, signed announcements, decentralized/social alternatives) and ensure critical operations don\u2019t depend on a single platform."
+    },
+    {
+      "issue": "Token migration UX/comms and ecosystem trust erosion",
+      "months_affected": [
+        "2025-10",
+        "2025-11",
+        "2025-12"
+      ],
+      "root_cause": "Complex multi-stakeholder coordination (portal, CEX support, documentation), insufficient operational comms discipline (status, SLAs, anti-scam messaging), and unclear single source of truth.",
+      "recommendation": "Run migrations as an ops product: public status page, weekly updates, clear support paths, explicit exchange support matrix, and signed canonical documentation to reduce scams and confusion."
     }
   ],
   "resolution_tracking": {
     "improved": [
       {
-        "issue": "Core Architecture Scalability",
-        "progress": "Successfully transitioned from monolithic to modular architecture with server separation and plugin isolation"
+        "issue": "Monorepo TypeScript build stability and CI health",
+        "progress": "By 2025-12, widespread TS build issues were resolved and dependencies updated, reducing integration friction and improving confidence in merges/releases."
       },
       {
-        "issue": "AI Provider Lock-in",
-        "progress": "Achieved provider agnostic design with multiple AI service integrations and flexible model selection"
+        "issue": "Core architecture readiness for scale (server refactor, messaging/eventing modernization)",
+        "progress": "2025-06 through 2025-12 delivered server separation and optimization plus messaging/eventing standardization, improving reliability patterns and maintainability."
       },
       {
-        "issue": "Platform Sovereignty",
-        "progress": "Reduced Twitter dependency exposure and built cloud infrastructure for independent deployment"
+        "issue": "Observability for developers/operators",
+        "progress": "2025-03 surfaced actions/logs in UI, shortening debug cycles and making failures more actionable."
+      },
+      {
+        "issue": "Security posture (secrets handling and entity-level security)",
+        "progress": "Secret salting earlier in the year and a critical encryption vulnerability fixed in 2025-12; entity-level security landed in 2025-11, though auth enforcement still needs follow-through."
+      },
+      {
+        "issue": "Cloud deployability",
+        "progress": "Successful Railway deployment (2025-08) and late-year server improvements increased confidence in production deployment paths."
       }
     ],
     "stagnant": [
       {
-        "issue": "Auto.fun Platform Utilization",
-        "blocker": "Unclear product-market fit and user acquisition strategy amid V2 development focus"
+        "issue": "Twitter/X reliability and safety",
+        "blocker": "External API volatility plus insufficient idempotency, rate-limit resilience, and test coverage; repeated regressions kept it a visible trust liability all year."
       },
       {
-        "issue": "Community Governance Implementation",
-        "blocker": "Technical development prioritized over governance structure definition and implementation"
+        "issue": "Time-to-first-agent onboarding reliability",
+        "blocker": "Packaging gaps, native dependency issues across OSes, and shifting conventions; improvements were incremental but not converted into a continuously-tested golden path."
       },
       {
-        "issue": "Cross-Platform Compatibility",
-        "blocker": "Windows compatibility issues persist due to testing environment limitations"
+        "issue": "RAG ingestion reliability beyond small demos",
+        "blocker": "Large-doc/PDF pipelines remained memory- and parsing-fragile; partial safeguards were added but not a deterministic, resumable ingestion system."
+      },
+      {
+        "issue": "Docs as canonical, always-current infrastructure",
+        "blocker": "Documentation and public surfaces repeatedly lagged behind shipping velocity; no hard gating ensured docs parity with breaking changes."
+      },
+      {
+        "issue": "CLI stability as a product contract",
+        "blocker": "CLI underwent multiple major changes and a crisis/reversion event (2025-09), indicating insufficient testing and compatibility guarantees."
+      },
+      {
+        "issue": "Token migration user experience and trust operations",
+        "blocker": "Portal issues, unclear CEX support, and documentation clarity gaps; required stronger operational discipline rather than only technical fixes."
       }
     ]
   },
   "strategic_recommendations": [
     {
       "priority": 1,
-      "area": "Platform Reliability Standards",
-      "rationale": "Twitter integration failures and CLI instability directly contradict 'most reliable' positioning and block mainstream adoption",
-      "success_criteria": "99% uptime for core integrations, automated reliability testing, zero regression policy for CLI"
+      "area": "Gold Path Reliability: \u201cHello Agent\u201d that stays working (onboarding + packaging + templates)",
+      "rationale": "Ecosystem growth is capped by first-run failures; every additional capability has diminishing returns until install/run success is predictable.",
+      "success_criteria": "\u226590% time-to-first-agent success within 30 minutes across macOS/Linux/Windows (WSL2 acceptable initially); single-command scaffold+run; nightly CI validates templates against pinned toolchains."
     },
     {
       "priority": 2,
-      "area": "Community Trust Infrastructure",
-      "rationale": "Token migration confusion and communication gaps reveal systematic trust erosion that threatens ecosystem growth",
-      "success_criteria": "Weekly community updates, transparent roadmap, community satisfaction >80% in quarterly surveys"
+      "area": "Release Discipline and Compatibility Contracts (core, CLI, plugins, adapters)",
+      "rationale": "Velocity without gates produced regressions, reverts, and trust loss; stability must become measurable and enforced.",
+      "success_criteria": "Pre-release test matrix for top stacks; documented breaking-change policy; regression rate decreases release-over-release; plugin contract tests required for \u201cstable tier\u201d plugins."
     },
     {
       "priority": 3,
-      "area": "Developer Success Metrics",
-      "rationale": "Technical excellence means nothing if developers can't successfully deploy their first agent within 30 minutes",
-      "success_criteria": "Time-to-first-agent <30 minutes, onboarding completion rate >90%, developer NPS >50"
+      "area": "Social Integrations as a Brand SLO (Twitter/Telegram/Discord \u2018boring reliability\u2019)",
+      "rationale": "Public agents define reputation; failures are externally visible and costly (including account risk).",
+      "success_criteria": "Defined SLOs (post success rate, duplicate rate, rate-limit recovery time); idempotency/dedupe guarantees; kill switches; canary rollout; incident playbooks."
     },
     {
       "priority": 4,
-      "area": "Revenue Infrastructure Activation",
-      "rationale": "ElizaOS Cloud represents path to sustainability but needs go-to-market execution to prove platform value",
-      "success_criteria": "Launch paying customers by Q1 2026, achieve $50k MRR, prove enterprise deployment model"
+      "area": "Deterministic RAG/Knowledge Pipeline (bounded memory, resumable ingestion, canonical embeddings)",
+      "rationale": "Durable agents require durable knowledge. Real deployments will fail until ingestion is reliable for large, messy documents.",
+      "success_criteria": "Successful ingestion of large PDFs/docs under bounded RAM; resumable job model; embedding dimension mismatches eliminated via canonical configuration; clear operator-facing failure reasons."
+    },
+    {
+      "priority": 5,
+      "area": "Secure-by-default, Multi-user by Design (auth, tenancy, permissions, secrets)",
+      "rationale": "Cloud, marketplace, and serious deployments require coherent multi-tenant security and enforced auth defaults; late-year fixes show both risk and momentum.",
+      "success_criteria": "Explicit tenant model (user/org/entity/agent); enforced auth token checks by default; secrets never logged; periodic security review cadence; vulnerability response SLA."
+    },
+    {
+      "priority": 6,
+      "area": "Docs and Comms as Infrastructure (canonical sources, signed announcements, status discipline)",
+      "rationale": "Docs lag and token migration confusion show that trust depends on a single source of truth and operational communication, not just code.",
+      "success_criteria": "Docs required for breaking changes; versioned docs per release; known-issues registry; public status page for incidents/migrations; signed/canonical announcements to reduce phishing and rumor churn."
+    },
+    {
+      "priority": 7,
+      "area": "Platform Sovereignty (distribution + communication redundancy)",
+      "rationale": "The X/Twitter account loss demonstrated centralized platform fragility; decentralization must include comms and distribution channels.",
+      "success_criteria": "Redundant official channels (mirrors, RSS/email, decentralized socials); verified identity practices; critical updates never depend on a single platform."
     }
   ],
   "north_star_evolution": {
     "current_gaps": [
-      "No explicit reliability commitment despite 'most reliable' claim",
-      "Missing emphasis on community-driven development and transparency",
-      "Lacks acknowledgment of platform sovereignty and censorship resistance goals",
-      "No mention of seamless user experience beyond developer tools"
+      "\u201cMost reliable\u201d is not operationally defined, making it hard to prioritize tradeoffs and defend the positioning externally.",
+      "Docs, onboarding, and migration tooling are not consistently treated as first-class product surfaces with release gates.",
+      "Security and multi-user/tenancy design are not yet explicit pillars despite cloud/marketplace ambitions.",
+      "Platform sovereignty (censorship resistance) emerged as a strategic requirement but is not reflected in the mission framing.",
+      "Community trust operations (clear comms, transparent decisions) are under-specified relative to token and ecosystem realities."
     ],
     "suggested_additions": [
-      "Platform sovereignty and censorship resistance",
-      "Community-driven governance and transparent development",
-      "Measurable reliability and stability commitments",
-      "Seamless user experience from development to deployment"
+      "Measurable reliability (install success, crash-free sessions, integration success rates, deterministic ingestion).",
+      "Docs/observability/migrations as release artifacts (versioned, tested, and owned).",
+      "Secure-by-default and multi-user by design (tenancy, auth, permissions, secrets).",
+      "Platform-sovereign distribution and communications (censorship-resistant posture).",
+      "Community-driven development norms (transparent decision-making and canonical communications)."
     ],
-    "proposed_revision": "ElizaOS is the most reliable, community-driven platform for building and deploying autonomous AI agents. We enable developers to create censorship-resistant agents that can operate across any platform through our open-source, provider-agnostic architecture. Our commitment to radical transparency, seamless user experience, and platform sovereignty ensures that the agent economy remains decentralized and accessible to all."
+    "proposed_revision": "ElizaOS exists to power a decentralized agent economy by being the most reliable, developer-first, and platform-sovereign agent framework\u2014secure-by-default and multi-user by design\u2014backed by measurable reliability (onboarding success, crash-free operation, integration SLOs, deterministic knowledge ingestion) and shipped with first-class docs, observability, and migration tooling as versioned release artifacts."
   },
   "metrics_to_track": [
     {
-      "metric": "Integration Uptime",
-      "why": "Persistent Twitter and platform issues directly impact reliability claims",
-      "target": "99% uptime for core social media integrations"
+      "metric": "Time-to-First-Agent (TTFA) success rate (<=30 min) by OS",
+      "why": "Directly measures onboarding reality and ecosystem conversion.",
+      "target": "\u226590% success on macOS/Linux; \u226580% on Windows/WSL2; improve quarterly."
     },
     {
-      "metric": "Developer Time-to-Success",
-      "why": "CLI instability and onboarding friction block ecosystem growth",
-      "target": "First agent deployed within 30 minutes of setup"
+      "metric": "Install/build reproducibility (CI green rate for templates across OS/toolchain matrix)",
+      "why": "Prevents regressions from landing and validates the golden path continuously.",
+      "target": "Nightly matrix pass rate \u226595%."
     },
     {
-      "metric": "Community Sentiment Score",
-      "why": "Communication gaps and migration confusion erode trust",
-      "target": "Maintain >75% positive sentiment in community channels"
+      "metric": "Crash-free sessions (runtime) and error budget consumption",
+      "why": "Operational definition of \u201cmost reliable\u201d at runtime.",
+      "target": "\u226599% crash-free sessions for stable releases."
     },
     {
-      "metric": "Platform Dependency Risk",
-      "why": "X/Twitter suspension exposed vulnerability to centralized control",
-      "target": "No single external platform dependency >40% of user interactions"
+      "metric": "Social integration SLOs (post success rate, duplicate post rate, rate-limit recovery time)",
+      "why": "Public brand and trust depend on boring reliability and safe behavior.",
+      "target": "Post success \u226599%; duplicates \u22640.1%; recovery time p95 \u22645 min."
     },
     {
-      "metric": "Documentation Currency",
-      "why": "Outdated docs create user friction and support burden",
-      "target": "100% of features documented within 48 hours of release"
+      "metric": "RAG ingestion success rate for large documents (e.g., 50\u2013200MB PDFs) under bounded RAM",
+      "why": "Gates real deployments; demo-only ingestion undermines platform claims.",
+      "target": "\u226595% success on reference workload; bounded memory within defined limits."
+    },
+    {
+      "metric": "Regression rate per release (P0/P1 incidents within 7 days of release)",
+      "why": "Measures release discipline effectiveness and stability trajectory.",
+      "target": "Reduce by 50% over two quarters; maintain downward trend."
+    },
+    {
+      "metric": "Docs freshness and coverage (docs PR required for breaking changes; % of top workflows documented)",
+      "why": "Docs are infrastructure; lag creates support burden and trust loss.",
+      "target": "100% of breaking changes documented at release; \u226590% of top-10 workflows covered."
+    },
+    {
+      "metric": "Security posture (vuln remediation SLA; secret leakage incidents)",
+      "why": "Cloud and ecosystem trust depend on predictable security operations.",
+      "target": "Critical fixes <72 hours; zero known secret leakage incidents per quarter."
+    },
+    {
+      "metric": "Plugin ecosystem health (stable-tier count, contract test pass rate, maintainer coverage)",
+      "why": "Controls plugin sprawl while preserving ecosystem growth.",
+      "target": "100% stable-tier plugins have maintainer + contract tests; pass rate \u226595%."
+    },
+    {
+      "metric": "Token migration operations (completion rate, support ticket volume, mean time to resolution, scam incident rate)",
+      "why": "Trust infrastructure for the ecosystem; operational clarity reduces reputational bleed.",
+      "target": "High completion rate within window; MTTR <48 hours; scam incidents trending to zero via signed comms and clear UX."
     }
   ],
   "_metadata": {
-    "generated_at": "2025-12-12T05:58:10.341738Z",
-    "model": "anthropic/claude-sonnet-4",
-    "retros_analyzed": 8,
+    "generated_at": "2026-01-02T06:03:06.332277Z",
+    "model": "openai/gpt-5.2",
+    "retros_analyzed": 12,
     "months_covered": [
+      "2025-01",
+      "2025-02",
+      "2025-03",
       "2025-04",
       "2025-05",
       "2025-06",
@@ -200,7 +345,8 @@
       "2025-08",
       "2025-09",
       "2025-10",
-      "2025-11"
+      "2025-11",
+      "2025-12"
     ]
   }
 }
