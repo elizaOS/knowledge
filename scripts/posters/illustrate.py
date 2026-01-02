@@ -54,7 +54,7 @@ IMAGE_MODEL = "google/gemini-3-pro-image-preview"
 SCRIPT_DIR = Path(__file__).parent.resolve()
 WORKSPACE_ROOT = SCRIPT_DIR.parent.parent
 CHARACTERS_DIR = SCRIPT_DIR / "characters"
-OUTPUT_DIR = WORKSPACE_ROOT / "posters"
+OUTPUT_DIR = WORKSPACE_ROOT / "media"
 STYLE_PRESETS_FILE = SCRIPT_DIR / "config" / "style-presets.json"
 
 logging.basicConfig(
@@ -310,6 +310,150 @@ CATEGORY_CHARACTERS = {
     "twitter_news_highlights": ["eliza", "peepo"],
 }
 
+# --------------- Organic Variation System ---------------
+# Date-seeded creative briefs for natural variation in batch outputs
+
+import random
+
+# Interpretive lenses - HOW to see the story
+DAILY_LENSES = [
+    "Focus on the HUMAN EMOTION behind this news",
+    "Show this as a JOURNEY or TRANSFORMATION",
+    "Capture the TENSION or CONFLICT in this story",
+    "Emphasize the COLLABORATION and TEAMWORK",
+    "Frame this as a BREAKTHROUGH or DISCOVERY moment",
+    "Show the SCALE and MAGNITUDE of this development",
+    "Focus on the INDIVIDUAL IMPACT on one person",
+]
+
+# Compositional approaches - HOW to frame it visually
+COMPOSITIONS = [
+    "Bird's eye view looking down on the scene",
+    "Intimate close-up on a meaningful detail",
+    "Wide establishing shot showing full context",
+    "Dynamic diagonal composition suggesting movement",
+    "Silhouette against dramatic backdrop",
+    "Split frame showing cause and effect",
+]
+
+# Holiday moods - override seasonal mood on special days
+# Format: (month, day): ("holiday_name", "mood description")
+HOLIDAY_MOODS = {
+    # New Year's (Dec 31 - Jan 2)
+    (12, 31): ("new_years", "new beginnings, celebration, fireworks and confetti"),
+    (1, 1): ("new_years", "new beginnings, celebration, fireworks and confetti"),
+    (1, 2): ("new_years", "new beginnings, fresh starts, optimistic energy"),
+
+    # Valentine's Day (Feb 13-15)
+    (2, 13): ("valentines", "warmth and connection, soft pinks and reds"),
+    (2, 14): ("valentines", "love and connection, romantic warmth, heartfelt moments"),
+    (2, 15): ("valentines", "warmth and connection, soft pinks and reds"),
+
+    # St. Patrick's Day (Mar 16-17)
+    (3, 16): ("st_patricks", "lucky green, festive Irish energy"),
+    (3, 17): ("st_patricks", "lucky green, Irish charm, festive celebration"),
+
+    # April Fools (Apr 1) - Easter takes priority if they overlap
+    (4, 1): ("april_fools", "playful mischief, unexpected twists, lighthearted chaos"),
+
+    # Bitcoin Pizza Day (May 22)
+    (5, 22): ("bitcoin_pizza", "crypto nostalgia, pizza celebration, early adopter vibes"),
+
+    # 4th of July (Jul 3-5)
+    (7, 3): ("july_4th", "patriotic energy, summer celebration, anticipation"),
+    (7, 4): ("july_4th", "bold patriotic energy, fireworks, summer celebration"),
+    (7, 5): ("july_4th", "summer celebration, post-fireworks glow"),
+
+    # Ethereum Birthday (Jul 30)
+    (7, 30): ("eth_birthday", "blockchain celebration, network anniversary, crypto milestone"),
+
+    # Halloween (Oct 29-31) - characters wear costumes!
+    (10, 29): ("halloween", "mysterious atmosphere, autumn shadows, spooky anticipation, characters wearing Halloween costumes"),
+    (10, 30): ("halloween", "spooky and playful, orange and purple, eerie shadows, characters in creative Halloween costumes"),
+    (10, 31): ("halloween", "peak spooky energy, haunted atmosphere, characters dressed in fun Halloween costumes"),
+
+    # Christmas (Dec 23-26) - characters wear Santa hats!
+    (12, 23): ("christmas", "festive anticipation, cozy warmth, holiday preparations, characters wearing Santa hats"),
+    (12, 24): ("christmas", "Christmas Eve magic, warm glow, gift-giving anticipation, characters in Santa hats"),
+    (12, 25): ("christmas", "Christmas joy, festive warmth, red and green, characters wearing Santa hats and holiday attire"),
+    (12, 26): ("christmas", "post-Christmas cozy, relaxed holiday warmth, characters in cozy holiday wear"),
+}
+
+# Variable holidays - hardcoded dates for 2025-2035
+# Thanksgiving: 4th Thursday of November (Wed-Fri window)
+THANKSGIVING_DATES = {
+    2025: 27, 2026: 26, 2027: 25, 2028: 23, 2029: 22,
+    2030: 28, 2031: 27, 2032: 25, 2033: 24, 2034: 23, 2035: 27,
+}
+THANKSGIVING_MOOD = "gratitude and abundance, harvest warmth, family gathering"
+
+# Easter Sunday dates (Sat-Mon window)
+EASTER_DATES = {
+    2025: (4, 20), 2026: (4, 5), 2027: (3, 28), 2028: (4, 16), 2029: (4, 1),
+    2030: (4, 21), 2031: (4, 13), 2032: (5, 2), 2033: (4, 24), 2034: (4, 9), 2035: (4, 29),
+}
+EASTER_MOOD = "renewal and rebirth, pastel colors, spring awakening"
+
+
+def get_holiday_mood(date: datetime) -> str | None:
+    """Check if date falls on a holiday, return mood if so.
+
+    Priority: Easter > Thanksgiving > Fixed holidays > Seasonal
+    """
+    month, day, year = date.month, date.day, date.year
+
+    # Check Easter first (takes priority over April Fools in 2029)
+    if year in EASTER_DATES:
+        easter_month, easter_day = EASTER_DATES[year]
+        if month == easter_month and easter_day - 1 <= day <= easter_day + 1:
+            return EASTER_MOOD
+
+    # Check Thanksgiving (Wed-Fri window around Thursday)
+    if month == 11 and year in THANKSGIVING_DATES:
+        thurs = THANKSGIVING_DATES[year]
+        if thurs - 1 <= day <= thurs + 1:
+            return THANKSGIVING_MOOD
+
+    # Check fixed holidays
+    if (month, day) in HOLIDAY_MOODS:
+        return HOLIDAY_MOODS[(month, day)][1]
+
+    return None
+
+
+def get_seasonal_mood(date: datetime) -> str:
+    """Get atmospheric mood - holiday override or seasonal default."""
+    # Holiday takes priority
+    holiday_mood = get_holiday_mood(date)
+    if holiday_mood:
+        return holiday_mood
+
+    # Fall back to seasonal
+    month = date.month
+    if month in [12, 1, 2]:
+        return "winter stillness, contemplative, cool tones"
+    if month in [3, 4, 5]:
+        return "spring energy, renewal, fresh growth"
+    if month in [6, 7, 8]:
+        return "summer vibrancy, peak activity, warm light"
+    return "autumn transition, harvest, golden hues"
+
+
+def generate_creative_brief(date: datetime) -> dict:
+    """Generate today's unique creative direction.
+
+    Uses date-seeded RNG for reproducibility: same date = same brief.
+    7 lenses × 6 compositions × 4 seasons = 168 unique combinations.
+    """
+    seed = int(date.strftime("%Y%m%d"))
+    rng = random.Random(seed)
+
+    return {
+        "lens": rng.choice(DAILY_LENSES),
+        "composition": rng.choice(COMPOSITIONS),
+        "mood": get_seasonal_mood(date),
+    }
+
 
 def get_available_characters() -> list[str]:
     """Get list of characters with reference sheets."""
@@ -349,28 +493,55 @@ def extract_category_content(facts: dict, category: str) -> str:
     return ""
 
 
-def generate_illustration_ideas(facts_path: Path) -> list[dict]:
-    """Analyze facts file and generate multiple illustration ideas."""
+def generate_illustration_ideas(facts_path: Path, facts_date: datetime = None) -> list[dict]:
+    """Analyze facts file and generate multiple illustration ideas.
+
+    Args:
+        facts_path: Path to facts JSON file
+        facts_date: Date for seeded randomness (style rotation, character shuffle).
+                   If None, uses date from facts file or current date.
+    """
     with open(facts_path) as f:
         facts = json.load(f)
 
     date_str = facts.get("briefing_date", "unknown")
     available_chars = get_available_characters()
 
+    # Parse date for seeded randomness
+    if facts_date is None:
+        try:
+            facts_date = datetime.strptime(date_str, "%Y-%m-%d")
+        except (ValueError, TypeError):
+            facts_date = datetime.now()
+
+    # Date-seeded RNG for reproducible variation
+    date_seed = int(facts_date.strftime("%Y%m%d"))
+    rng = random.Random(date_seed)
+    day_of_year = facts_date.timetuple().tm_yday
+
+    # Load category configs for style rotation
+    presets = load_style_presets()
+    category_configs = presets.get("categories", {})
+
     ideas = []
 
     # Always add overall summary as first option
     if facts.get("overall_summary"):
+        # Rotate overall style by day
+        overall_styles = ["editorial", "cinematic_anime", "tarot"]
+        overall_style = overall_styles[day_of_year % len(overall_styles)]
+
         ideas.append({
             "category": "overall",
             "title": "Daily Overview",
-            "content": facts["overall_summary"][:300],
+            "content": facts["overall_summary"],
             "characters": ["eliza"],
-            "style": "editorial",
+            "style": overall_style,
         })
 
     # Add ideas for each category with content
     categories = facts.get("categories", {})
+
     for cat_name, cat_data in categories.items():
         content = extract_category_content(facts, cat_name)
         if not content or len(content) < 50:
@@ -378,23 +549,155 @@ def generate_illustration_ideas(facts_path: Path) -> list[dict]:
 
         # Get suggested characters (filter to available)
         suggested = CATEGORY_CHARACTERS.get(cat_name, ["eliza"])
-        chars = [c for c in suggested if c in available_chars][:3]
+        chars = [c for c in suggested if c in available_chars]
         if not chars:
             chars = [available_chars[0]] if available_chars else ["eliza"]
+
+        # Shuffle characters with date seed for varied arrangements
+        chars_copy = chars.copy()
+        rng.shuffle(chars_copy)
+        # Vary character count: sometimes 1, sometimes 2, sometimes all
+        char_count_options = [1, 2, len(chars_copy)]
+        char_count = rng.choice([c for c in char_count_options if c <= len(chars_copy)])
+        chars = chars_copy[:char_count]
+
+        # Style rotation: use suggested_styles from config, rotate by day
+        cat_config = category_configs.get(cat_name, {})
+        suggested_styles = cat_config.get("suggested_styles", [CATEGORY_STYLES.get(cat_name, "editorial")])
+        style = suggested_styles[day_of_year % len(suggested_styles)]
 
         ideas.append({
             "category": cat_name,
             "title": cat_name.replace("_", " ").title(),
-            "content": content[:300],
+            "content": content,
             "characters": chars,
-            "style": CATEGORY_STYLES.get(cat_name, "editorial"),
+            "style": style,
         })
 
     return ideas
 
 
-def generate_scene_from_content(content: str, characters: list[str], style: str = None) -> str:
-    """Use LLM to convert content into a scene/visualization description."""
+def get_visual_approaches() -> dict:
+    """Load visual approaches from config."""
+    presets = load_style_presets()
+    return presets.get("visual_approaches", {})
+
+
+def get_category_visual_hint(category: str) -> str:
+    """Get the visual hint for a category."""
+    presets = load_style_presets()
+    cat_config = presets.get("categories", {}).get(category, {})
+    return cat_config.get("visual_hint", "")
+
+
+def decide_visual_format(
+    content: str,
+    category: str,
+    date_seed: int = None
+) -> dict:
+    """Use LLM to decide the best visual format for this content.
+
+    Args:
+        content: The story content to visualize
+        category: Category name (github_updates, discord_updates, etc.)
+        date_seed: Optional seed for reproducibility
+
+    Returns:
+        dict with:
+            - approach: "abstract_dataviz" | "conceptual_metaphor" | "character_scene"
+            - style: specific style name from available styles
+            - reasoning: why this format fits the content
+    """
+    approaches = get_visual_approaches()
+    visual_hint = get_category_visual_hint(category)
+
+    # Build approach descriptions for the prompt
+    approach_descriptions = []
+    for name, config in approaches.items():
+        if name.startswith("_"):
+            continue
+        styles = ", ".join(config.get("suggested_styles", []))
+        approach_descriptions.append(
+            f"- {name}: {config.get('description', '')} (styles: {styles})"
+        )
+
+    approaches_text = "\n".join(approach_descriptions)
+
+    system_prompt = f"""You are a creative director for a tech news publication deciding how to visualize stories.
+
+AVAILABLE VISUAL APPROACHES:
+{approaches_text}
+
+CATEGORY: {category}
+CATEGORY HINT: {visual_hint}
+
+Based on the story content, decide the best visual approach. The hint is a soft suggestion - override it if the content calls for something different.
+
+Consider:
+- Is this data-heavy content that would benefit from visualization?
+- Is this about community/people where characters add personality?
+- Is this conceptual/strategic where abstract metaphors work best?
+- What would a reader find most informative and engaging?
+
+Respond in JSON format:
+{{
+  "approach": "abstract_dataviz" | "conceptual_metaphor" | "character_scene",
+  "style": "<specific style from the approach's suggested styles>",
+  "reasoning": "<1-2 sentences explaining why this format fits>"
+}}"""
+
+    try:
+        response = requests.post(
+            OPENROUTER_ENDPOINT,
+            headers={
+                "Authorization": f"Bearer {OPENROUTER_API_KEY}",
+                "Content-Type": "application/json"
+            },
+            json={
+                "model": LLM_MODEL,
+                "messages": [
+                    {"role": "system", "content": system_prompt},
+                    {"role": "user", "content": f"Story content:\n{content[:1000]}"}
+                ],
+                "response_format": {"type": "json_object"}
+            },
+            timeout=60
+        )
+        response.raise_for_status()
+        result = response.json()
+        decision = json.loads(result["choices"][0]["message"]["content"])
+
+        # Validate the response
+        valid_approaches = [k for k in approaches.keys() if not k.startswith("_")]
+        if decision.get("approach") not in valid_approaches:
+            decision["approach"] = "conceptual_metaphor"  # safe default
+
+        return decision
+
+    except Exception as e:
+        logging.warning(f"Visual format decision failed: {e}, using default")
+        return {
+            "approach": "conceptual_metaphor",
+            "style": "editorial",
+            "reasoning": "Default fallback due to decision error"
+        }
+
+
+def generate_scene_from_content(
+    content: str,
+    characters: list[str],
+    style: str = None,
+    creative_brief: dict = None
+) -> str:
+    """Use LLM to convert content into a scene/visualization description.
+
+    Args:
+        content: News content to visualize
+        characters: List of character names for the scene
+        style: Art style (affects prompt for dataviz styles)
+        creative_brief: Optional dict with 'lens', 'composition', 'mood' keys
+                       for organic variation in how the scene is interpreted
+    """
 
     # Check if this is a data visualization style
     if style and is_data_visualization_style(style):
@@ -407,9 +710,18 @@ Do NOT describe characters. Focus on DATA REPRESENTATION.
 Keep under 100 words."""
         )
     else:
-        # Character-based scene
+        # Character-based scene with optional creative brief
+        brief_section = ""
+        if creative_brief:
+            brief_section = f"""
+TODAY'S CREATIVE DIRECTION:
+- Interpretive lens: {creative_brief.get('lens', '')}
+- Composition: {creative_brief.get('composition', '')}
+- Atmosphere: {creative_brief.get('mood', '')}
+
+"""
         system_prompt = f"""Convert this news content into a brief scene description for an illustration.
-The scene should feature: {', '.join(characters)}
+{brief_section}The scene should feature: {', '.join(characters)}
 Keep it under 50 words. Focus on a single compelling visual moment.
 Output ONLY the scene description, no explanation."""
 
@@ -485,6 +797,22 @@ def interactive_mode(facts_path: Path, dry_run: bool = False, with_icons: bool =
     """Run interactive mode - present ideas and generate selected ones."""
     print(f"\nAnalyzing {facts_path.name}...")
 
+    # Parse date for creative brief
+    with open(facts_path) as f:
+        facts_data = json.load(f)
+    date_str = facts_data.get("briefing_date", facts_path.stem)
+    try:
+        facts_date = datetime.strptime(date_str, "%Y-%m-%d")
+    except (ValueError, TypeError):
+        facts_date = datetime.now()
+
+    # Generate creative brief for organic variation
+    creative_brief = generate_creative_brief(facts_date)
+    print(f"\nToday's creative direction:")
+    print(f"  Lens: {creative_brief['lens']}")
+    print(f"  Composition: {creative_brief['composition']}")
+    print(f"  Mood: {creative_brief['mood']}")
+
     # Generate icon sheet if requested
     icon_sheet_bytes = None
     if with_icons:
@@ -493,7 +821,7 @@ def interactive_mode(facts_path: Path, dry_run: bool = False, with_icons: bool =
             icon_sheet_bytes, found = make_icon_sheet(entities[:12])  # Limit to 12 icons
             if icon_sheet_bytes:
                 print(f"Icon sheet: {len(found)} entities ({', '.join(found[:5])}{'...' if len(found) > 5 else ''})")
-    ideas = generate_illustration_ideas(facts_path)
+    ideas = generate_illustration_ideas(facts_path, facts_date)
 
     if not ideas:
         print("No illustration ideas found in this facts file.")
@@ -555,8 +883,7 @@ def interactive_mode(facts_path: Path, dry_run: bool = False, with_icons: bool =
     total = sum(3 if v else 1 for _, _, v in style_choices)
     print(f"\nGenerating {total} illustration(s)...\n")
 
-    # Generate each selected idea
-    date_str = facts_path.stem  # e.g., "2025-12-01"
+    # Generate each selected idea (date_str already parsed from facts file above)
     generated = []
     gen_num = 0
 
@@ -601,11 +928,12 @@ def interactive_mode(facts_path: Path, dry_run: bool = False, with_icons: bool =
                     prompt = build_dataviz_prompt(viz_desc, gen_style, idea["content"])
                     image_bytes = generate_dataviz(prompt)
                 else:
-                    # Character-based illustration path
+                    # Character-based illustration path - inject creative brief
                     collage_bytes, manifests = make_reference_collage(idea["characters"])
 
                     scene = generate_scene_from_content(
-                        idea["content"], idea["characters"], style=gen_style
+                        idea["content"], idea["characters"], style=gen_style,
+                        creative_brief=creative_brief
                     )
                     print(f"   Scene: {scene[:60]}...")
 
@@ -635,7 +963,7 @@ def interactive_mode(facts_path: Path, dry_run: bool = False, with_icons: bool =
 def batch_mode(facts_path: Path, dry_run: bool = False, with_icons: bool = False) -> int:
     """Batch mode - generate all category visuals automatically.
 
-    Outputs to posters/{date}/ directory:
+    Outputs to media/{date}/ directory:
       - overall.png (hero/editorial)
       - github-updates.png (dataviz)
       - discord-updates.png (comic_panel)
@@ -643,19 +971,38 @@ def batch_mode(facts_path: Path, dry_run: bool = False, with_icons: bool = False
       - market-analysis.png (dataviz)
       - icons.png (entity icon sheet)
       - manifest.json (generation metadata)
+
+    Uses organic variation system:
+      - Style rotation from suggested_styles per category
+      - Character shuffle with date-seeded RNG
+      - Creative brief injection for interpretive variation
     """
     batch_start_time = time.time()
     print(f"\nBatch generating from {facts_path.name}...")
 
-    ideas = generate_illustration_ideas(facts_path)
-    if not ideas:
-        print("No illustration ideas found.")
-        return 1
-
-    # Extract date for output directory
+    # Extract date for output directory and creative brief
     with open(facts_path) as f:
         facts = json.load(f)
     date_str = facts.get("briefing_date", facts_path.stem)
+
+    # Parse date for creative brief
+    try:
+        facts_date = datetime.strptime(date_str, "%Y-%m-%d")
+    except (ValueError, TypeError):
+        facts_date = datetime.now()
+
+    # Generate today's creative brief for organic variation
+    creative_brief = generate_creative_brief(facts_date)
+    print(f"\nToday's creative direction:")
+    print(f"  Lens: {creative_brief['lens']}")
+    print(f"  Composition: {creative_brief['composition']}")
+    print(f"  Mood: {creative_brief['mood']}")
+
+    # Generate ideas with date-seeded style rotation and character shuffle
+    ideas = generate_illustration_ideas(facts_path, facts_date)
+    if not ideas:
+        print("No illustration ideas found.")
+        return 1
 
     # Create output directory
     output_dir = OUTPUT_DIR / date_str
@@ -738,7 +1085,7 @@ def batch_mode(facts_path: Path, dry_run: bool = False, with_icons: bool = False
             if dry_run:
                 chars = ", ".join(idea["characters"])
                 print(f"   Style: {style}, Characters: {chars}")
-                print(f"   Content: {idea['content'][:80]}...")
+                print(f"   Content: {idea['content'][:100]}...")
                 print(f"   -> {output_path}")
                 gen_meta["success"] = True
                 gen_meta["generation_time_seconds"] = 0
@@ -747,7 +1094,7 @@ def batch_mode(facts_path: Path, dry_run: bool = False, with_icons: bool = False
                 continue
 
             if is_data_visualization_style(style):
-                # Data viz - no characters
+                # Data viz - no characters, no creative brief needed
                 viz_desc = generate_scene_from_content(
                     idea["content"], idea["characters"], style=style
                 )
@@ -759,11 +1106,12 @@ def batch_mode(facts_path: Path, dry_run: bool = False, with_icons: bool = False
                 gen_meta["scene_or_viz_prompt"] = viz_desc
                 gen_meta["full_prompt"] = prompt
             else:
-                # Character-based
+                # Character-based - inject creative brief for organic variation
                 collage_bytes, manifests = make_reference_collage(idea["characters"])
 
                 scene = generate_scene_from_content(
-                    idea["content"], idea["characters"], style=style
+                    idea["content"], idea["characters"], style=style,
+                    creative_brief=creative_brief
                 )
                 print(f"   Scene: {scene[:60]}...")
 

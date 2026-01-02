@@ -1,0 +1,266 @@
+{
+  "date": "2025-01-22",
+  "meeting_context": "# North Star & Strategic Context\n\nThis file combines the overall project mission (North Star) and summaries of key strategic documents for use in AI prompts, particularly for the AI Agent Council context generation.\n\n**Last Updated:** December 2025\n\n---\n\n**North Star:**\nTo build the most reliable, developer-friendly open-source AI agent framework and cloud platform\u2014enabling builders worldwide to deploy autonomous agents that work seamlessly across chains and platforms. We create infrastructure where agents and humans collaborate, forming the foundation for a decentralized AI economy that accelerates the path toward beneficial AGI.\n\n---\n\n**Core Principles:**\n1. **Execution Excellence** - Reliability and seamless UX over feature quantity\n2. **Developer First** - Great DX attracts builders; builders create ecosystem value\n3. **Open & Composable** - Multi-agent systems that interoperate across platforms\n4. **Trust Through Shipping** - Build community confidence through consistent delivery\n\n---\n\n**Current Product Focus (Dec 2025):**\n- **ElizaOS Framework** (v1.6.x) - The core TypeScript toolkit for building persistent, interoperable agents\n- **ElizaOS Cloud** - Managed deployment platform with integrated storage and cross-chain capabilities\n- **Flagship Agents** - Reference implementations (Eli5, Otaku) demonstrating platform capabilities\n- **Cross-Chain Infrastructure** - Native support for multi-chain agent operations via Jeju/x402\n\n---\n\n**ElizaOS Mission Summary:**\nElizaOS is an open-source \"operating system for AI agents\" aimed at decentralizing AI development. Built on three pillars: 1) The Eliza Framework (TypeScript toolkit for persistent agents), 2) AI-Enhanced Governance (building toward autonomous DAOs), and 3) Eliza Labs (R&D driving cloud, cross-chain, and multi-agent capabilities). The native token coordinates the ecosystem. The vision is an intelligent internet built on open protocols and collaboration.\n\n---\n\n**Taming Information Summary:**\nAddresses the challenge of information scattered across platforms (Discord, GitHub, X). Uses AI agents as \"bridges\" to collect, wrangle (summarize/tag), and distribute information in various formats (JSON, MD, RSS, dashboards, council episodes). Treats documentation as a first-class citizen to empower AI assistants and streamline community operations. \n",
+  "monthly_goal": "December 2025: Execution excellence\u2014complete token migration with high success rate, launch ElizaOS Cloud, stabilize flagship agents, and build developer trust through reliability and clear documentation.",
+  "daily_focus": "The fleet expanded capability surface area via new plugins and fixes, but the Council\u2019s critical pressure point is execution excellence: stabilizing CI, installs, and safety/compliance so growth translates into developer trust rather than entropy.",
+  "key_points": [
+    {
+      "topic": "Execution Excellence: CI, Install Reliability, and Release Discipline",
+      "summary": "GitHub activity remains high and feature velocity continues, but persistent install/startup failures and CI flakiness threaten the North Star of reliability and the Monthly Directive\u2019s emphasis on trust through shipping.",
+      "deliberation_items": [
+        {
+          "question_id": "q1",
+          "text": "Should the Council impose a temporary \u201cstability gate\u201d (merge/release constraints) until CI and top install/startup issues are reduced?",
+          "context": [
+            "GitHub daily update (2025-01-22): \"Integration tests are failing in CI ... despite passing locally.\" (#2663)",
+            "GitHub activity update (Jan 22-23): \"37 new pull requests with 12 merged\" (merge rate dropped vs prior day)."
+          ],
+          "multiple_choice_answers": {
+            "answer_1": {
+              "text": "Yes\u2014activate a stability gate: prioritize CI + top onboarding issues; defer new plugins unless critical.",
+              "implication": "Improves developer trust and support load, but slows ecosystem expansion and partner momentum."
+            },
+            "answer_2": {
+              "text": "No\u2014keep current throughput; fix CI in parallel and rely on community triage.",
+              "implication": "Maintains growth narrative, but risks compounding breakage and eroding DX with each release."
+            },
+            "answer_3": {
+              "text": "Hybrid\u2014gate only the release branch (main), allow develop to accept features with stricter test requirements.",
+              "implication": "Preserves innovation while protecting production stability, at the cost of heavier release engineering."
+            },
+            "answer_4": {
+              "text": "Other / More discussion needed / None of the above.",
+              "implication": null
+            }
+          }
+        },
+        {
+          "question_id": "q2",
+          "text": "Which operational metric should be treated as the Council\u2019s primary \u201creliability beacon\u201d for the next cycle?",
+          "context": [
+            "GitHub issues summary: \"Installation issues ... startup failures ... connectivity issues\" (e.g., #2624, #2652, #2623, #2613, #2622, #2648)."
+          ],
+          "multiple_choice_answers": {
+            "answer_1": {
+              "text": "Time-to-First-Working-Agent (fresh install to first response) across OS targets (Win/macOS/Linux).",
+              "implication": "Directly optimizes onboarding and adoption, aligning with Developer First and execution excellence."
+            },
+            "answer_2": {
+              "text": "CI pass rate + mean time to green for integration tests on main/develop.",
+              "implication": "Strengthens shipping cadence and reduces regressions, enabling Cloud/flagship stability downstream."
+            },
+            "answer_3": {
+              "text": "Support burden proxy: weekly count of repeated Discord troubleshooting incidents (Docker/DB/Twitter).",
+              "implication": "Turns community pain into prioritization fuel, but may lag behind latent engineering risk."
+            },
+            "answer_4": {
+              "text": "Other / More discussion needed / None of the above.",
+              "implication": null
+            }
+          }
+        },
+        {
+          "question_id": "q3",
+          "text": "How should ElizaOS govern plugin ingestion to avoid quality dilution while remaining open and composable?",
+          "context": [
+            "Discord (partners/coders): repeated troubleshooting across Docker, DB adapters, and clients; request for better plugin PR templates (DorianD).",
+            "Discord (partners): \"Partners discussed the need for better documentation of plugins and their capabilities, as many PRs have minimal descriptions.\""
+          ],
+          "multiple_choice_answers": {
+            "answer_1": {
+              "text": "Introduce tiering: \u201cCore-certified\u201d plugins vs \u201cCommunity\u201d plugins with automated checks and required READMEs.",
+              "implication": "Creates clarity and trust for builders while keeping the ecosystem open, but adds governance overhead."
+            },
+            "answer_2": {
+              "text": "Keep a single registry but enforce a strict PR template: tests + docs + maintainer sponsor required.",
+              "implication": "Raises baseline quality without fragmenting the ecosystem, but may reduce casual contributions."
+            },
+            "answer_3": {
+              "text": "Decentralize: accept broadly into repo/registry, but add telemetry-based \u201creliability scoring\u201d surfaced in docs/CLI.",
+              "implication": "Aligns incentives via usage/health signals, but allows unstable plugins to exist and potentially harm perception."
+            },
+            "answer_4": {
+              "text": "Other / More discussion needed / None of the above.",
+              "implication": null
+            }
+          }
+        }
+      ]
+    },
+    {
+      "topic": "Compliance & Platform Risk: Telegram Policy Shift + Social Media Ethics",
+      "summary": "A near-term external shock looms: Telegram\u2019s policy change restricting third-party blockchains (non-TON) plus rising scrutiny on \u201cunethical use\u201d of agents on social platforms; both can strand integrations and threaten distribution channels.",
+      "deliberation_items": [
+        {
+          "question_id": "q1",
+          "text": "What is our response posture to Telegram\u2019s February enforcement window\u2014retreat, adapt, or reroute distribution?",
+          "context": [
+            "Discord (2025-01-21): \"Kirsten warned about Telegram's updated terms of service ... restricting 'third-party blockchains' aside from TON, with enforcement starting February 21.\""
+          ],
+          "multiple_choice_answers": {
+            "answer_1": {
+              "text": "Retreat: deprecate or pause Telegram blockchain features; focus on compliant chat-only mode.",
+              "implication": "Minimizes risk of bans but reduces Web3 differentiation and cross-chain demonstrations."
+            },
+            "answer_2": {
+              "text": "Adapt: implement a Telegram compliance layer (TON-only pathways, feature flags, runtime policy enforcement).",
+              "implication": "Preserves Telegram presence while aligning with ToS, but adds complexity and ongoing compliance maintenance."
+            },
+            "answer_3": {
+              "text": "Reroute: shift primary distribution to Discord/X/Farcaster/others; Telegram becomes optional or enterprise-only.",
+              "implication": "Protects growth from platform capture, but may alienate Telegram-heavy communities and ecosystems."
+            },
+            "answer_4": {
+              "text": "Other / More discussion needed / None of the above.",
+              "implication": null
+            }
+          }
+        },
+        {
+          "question_id": "q2",
+          "text": "Should we formalize a \u201cResponsible Agent Operations\u201d standard (defaults, guardrails, disclosure) across social clients?",
+          "context": [
+            "GitHub daily update (2025-01-22): \"A new issue was raised regarding the potential for unethical use on social media platforms ... Terms of Service.\" (#2680)"
+          ],
+          "multiple_choice_answers": {
+            "answer_1": {
+              "text": "Yes\u2014ship a baseline policy pack (rate limits, approval workflows, disclosure tags) enabled by default.",
+              "implication": "Reduces platform enforcement risk and supports enterprise adoption, but may constrain degen experimentation."
+            },
+            "answer_2": {
+              "text": "Optional\u2014provide guardrails as templates/plugins; leave defaults permissive for power users.",
+              "implication": "Keeps flexibility, but exposes newcomers to risky defaults and reputational fallout."
+            },
+            "answer_3": {
+              "text": "No formal standard\u2014handle case-by-case; focus engineering on core features and speed.",
+              "implication": "Maximizes velocity short-term, but increases probability of ecosystem-wide bans and trust degradation."
+            },
+            "answer_4": {
+              "text": "Other / More discussion needed / None of the above.",
+              "implication": null
+            }
+          }
+        },
+        {
+          "question_id": "q3",
+          "text": "Where should \u201cpolicy intelligence\u201d live: in core runtime, client plugins, or ElizaOS Cloud control plane?",
+          "context": [
+            "Discord (coders): repeated client integration issues (Twitter/Telegram/Discord), rate limiting requests (mr.code)."
+          ],
+          "multiple_choice_answers": {
+            "answer_1": {
+              "text": "Core runtime: unified enforcement (rate limiting, action gating) regardless of client.",
+              "implication": "Most consistent and developer-friendly, but risks bloating core and slowing iteration."
+            },
+            "answer_2": {
+              "text": "Per-client: keep enforcement close to platform-specific rules and capabilities.",
+              "implication": "Best ToS fit per platform, but creates fragmented behavior and inconsistent UX across clients."
+            },
+            "answer_3": {
+              "text": "Cloud control plane: centralized policy toggles + telemetry with client adapters reading directives.",
+              "implication": "Enables rapid response and governance at scale, but makes Cloud a stronger dependency for safety posture."
+            },
+            "answer_4": {
+              "text": "Other / More discussion needed / None of the above.",
+              "implication": null
+            }
+          }
+        }
+      ]
+    },
+    {
+      "topic": "Model Provider Strategy: DeepSeek R1 Disruption and Provider UX Coherence",
+      "summary": "DeepSeek R1\u2019s cost/performance claims and MIT license create an opportunity to improve affordability and openness, but community reports show provider configuration confusion and integration gaps; model selection must become predictable and documented to maintain trust.",
+      "deliberation_items": [
+        {
+          "question_id": "q1",
+          "text": "Should DeepSeek R1 be elevated to a first-class default option for cost-efficient reasoning in ElizaOS (and/or Cloud)?",
+          "context": [
+            "Discord (2025-01-21): \"Deepseek R1 ... performance comparable to o1/sonnet models at 30x cheaper cost and is MIT licensed.\" (jin)",
+            "GitHub daily update (2025-01-22): \"A request for support for the DeepSeek API was submitted.\" (#2658)"
+          ],
+          "multiple_choice_answers": {
+            "answer_1": {
+              "text": "Yes\u2014prioritize DeepSeek integration and documentation; make it a recommended default for \u201csmall/medium reasoning.\u201d",
+              "implication": "Could dramatically reduce agent operating costs and increase adoption, but adds dependency and QA burden."
+            },
+            "answer_2": {
+              "text": "Selective\u2014support it as an advanced option; keep defaults on the most stable provider while we harden adapters.",
+              "implication": "Protects reliability while capturing upside, but misses momentum and may cede mindshare to competitors."
+            },
+            "answer_3": {
+              "text": "Defer\u2014focus on provider abstraction and config correctness first, then add new models once UX is stable.",
+              "implication": "Aligns with execution excellence, but delays cost improvements and \u201copen\u201d narrative benefits."
+            },
+            "answer_4": {
+              "text": "Other / More discussion needed / None of the above.",
+              "implication": null
+            }
+          }
+        },
+        {
+          "question_id": "q2",
+          "text": "What should be the Council\u2019s mandate for model selection correctness (character file settings vs env defaults)?",
+          "context": [
+            "Discord (2025-01-20): \"Model Selection Issues: character files with 'model': 'small' still default to using large models.\""
+          ],
+          "multiple_choice_answers": {
+            "answer_1": {
+              "text": "Character file is source of truth; env vars only provide fallbacks and global defaults.",
+              "implication": "Improves predictability and DX, but requires careful migration and clear error messaging."
+            },
+            "answer_2": {
+              "text": "Env vars override character files to ensure operator control in production deployments.",
+              "implication": "Helps ops and compliance, but confuses developers and undermines portability of agent configs."
+            },
+            "answer_3": {
+              "text": "Explicit precedence model with tooling: CLI prints the resolved provider/model and why (audit trail).",
+              "implication": "Reduces confusion and support load, but requires investing in introspection and UX polish."
+            },
+            "answer_4": {
+              "text": "Other / More discussion needed / None of the above.",
+              "implication": null
+            }
+          }
+        },
+        {
+          "question_id": "q3",
+          "text": "How should we balance \u201copen & composable\u201d provider breadth with \u201cexecution excellence\u201d quality guarantees?",
+          "context": [
+            "Discord (coders): recurring provider setup friction (OpenAI/Anthropic/Gaia/DeepSeek) and env variable confusion.",
+            "GitHub daily update (2025-01-22): ongoing additions (plugins) alongside bugfixes and CI instability."
+          ],
+          "multiple_choice_answers": {
+            "answer_1": {
+              "text": "Narrow the supported \u201cblessed\u201d providers; everything else is experimental behind flags.",
+              "implication": "Higher reliability and clearer docs, but reduces composability and slows ecosystem experimentation."
+            },
+            "answer_2": {
+              "text": "Keep breadth, but require conformance tests + a provider certification checklist before listing as stable.",
+              "implication": "Scales openness with quality, but needs investment in automated testing and maintainer bandwidth."
+            },
+            "answer_3": {
+              "text": "Outsource breadth to community plugins; core ships only abstractions and a minimal stable set.",
+              "implication": "Protects core stability, but risks fragmentation and inconsistent behavior across provider implementations."
+            },
+            "answer_4": {
+              "text": "Other / More discussion needed / None of the above.",
+              "implication": null
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "_metadata": {
+    "model": "openai/gpt-5.2",
+    "generated_at": "2026-01-01T04:42:55.240933Z",
+    "prompt_tokens": 117510,
+    "completion_tokens": 3633,
+    "total_tokens": 121143,
+    "status": "success",
+    "processing_seconds": 54.35,
+    "key_points_count": 3,
+    "total_deliberation_questions": 9
+  }
+}

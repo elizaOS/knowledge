@@ -1,0 +1,311 @@
+{
+  "briefing_date": "2025-01-07",
+  "overall_summary": "Across Discord and GitHub, the dominant themes were rapid ElizaOS framework iteration (many plugin adds + test/bugfix work) and recurring operational pain points around Twitter auth/formatting and memory/embedding database stability. Community discussions also centered on partner eligibility/token roles, the Hyperfy airdrop, and ongoing tokenomics/DegenAI roadmap clarity.",
+  "key_facts": [
+    "The Eliza framework is open-source and described as having 250+ contributors adding plugins and upgrades daily, maintained by Eliza Labs (the ai16z team).",
+    "AI16Z partner role requires holding 100k+ AI16Z tokens (or 1M DegenAI tokens) and verifying through CollabLand; Associate role requires 10k+ AI16Z tokens.",
+    "AI16Z Partners eligible for the Hyperfy airdrop received 46,120 HYPER tokens per wallet, with eligibility based on holding 100k AI16Z in a single wallet at the Dec 7 snapshot.",
+    "A fix for SQLite 'zero-length vectors are not supported' was merged as PR #1984 in elizaOS/eliza.",
+    "A database initialization race condition affecting builds was fixed in PR #1968 in elizaOS/eliza.",
+    "A new Spheron plugin was added in PR #1966 in elizaOS/eliza.",
+    "New issues reported include Twitter plugin triggering security alerts due to repeated logins (#1969) and composeContext omitting memories (#1971).",
+    "Discord discussions reported that the Twitter integration uses browser simulation via agent-twitter-client (not the Twitter API)."
+  ],
+  "open_questions": [
+    "How can I transfer memories between agent instances?",
+    "How can I make my agent work with Twitter search without getting banned?",
+    "How do I make my agent use a specific model like GPT-4o-mini for all interactions?",
+    "How do I enable plugins like EVM and Solana?",
+    "How do I make my agent only respond to @ mentions on Telegram?",
+    "When can DegenAI function like AixBT, providing valuable advice and trade?",
+    "How come DegenAI partners didn't get Hyperfi airdrop?"
+  ],
+  "tags": {
+    "themes": [
+      "ai-agents",
+      "plugins",
+      "integrations",
+      "tokenomics",
+      "documentation"
+    ],
+    "sentiment": {
+      "overall": "mixed",
+      "context": [
+        "technical",
+        "economic",
+        "social"
+      ]
+    },
+    "story_type": [
+      "maintenance"
+    ],
+    "derived": [
+      "social",
+      "development",
+      "community",
+      "feedback",
+      "strategy",
+      "market"
+    ],
+    "priority": [
+      "routine"
+    ],
+    "manual": []
+  },
+  "categories": {
+    "twitter_news_highlights": [
+      {
+        "claim": "DankVR shared multiple Hyperfy worlds relevant to AI16Z DAO concepts (e.g., 'The Council' for agent proposal discussions and a stonk exchange concept for watching agents trade).",
+        "source": [
+          "ai-news/elizaos/json/2025-01-06.json",
+          "ai-news/elizaos/md/2025-01-06.md"
+        ],
+        "sentiment": "neutral"
+      },
+      {
+        "claim": "DankVR described Hyperfy as more like a '3D Figma' or infinite canvas app and stated Hyperfy v2 will be open source.",
+        "source": [
+          "ai-news/elizaos/json/2025-01-06.json",
+          "ai-news/elizaos/md/2025-01-06.md"
+        ],
+        "sentiment": "neutral"
+      }
+    ],
+    "github_updates": {
+      "new_issues_prs": [
+        {
+          "item_type": "issue",
+          "title": "Twitter plugin triggering security alerts due to repeated logins",
+          "number": 1969,
+          "url": "https://github.com/elizaos/eliza/issues/1969",
+          "status": "open",
+          "author": "unknown",
+          "significance": "User-reported operational reliability and account-security friction for Twitter automation."
+        },
+        {
+          "item_type": "issue",
+          "title": "composeContext function omitting memories",
+          "number": 1971,
+          "url": "https://github.com/elizaos/eliza/issues/1971",
+          "status": "open",
+          "author": "unknown",
+          "significance": "Memory omission affects agent response quality and continuity."
+        },
+        {
+          "item_type": "issue",
+          "title": "Memory leaks in getLocalEmbedding function",
+          "number": 1942,
+          "url": "https://github.com/elizaos/eliza/issues/1942",
+          "status": "open",
+          "author": "unknown",
+          "significance": "Potential performance/stability risk when using local embeddings."
+        },
+        {
+          "item_type": "issue",
+          "title": "Discord integration using disallowed intents",
+          "number": 1940,
+          "url": "https://github.com/elizaos/eliza/issues/1940",
+          "status": "open",
+          "author": "unknown",
+          "significance": "Compliance risk for Discord bots if intents are not permitted."
+        },
+        {
+          "item_type": "pull_request",
+          "title": "fix: SQLITE ERROR, zero-lenght vectors not supported",
+          "number": 1984,
+          "url": "https://github.com/elizaos/eliza/pull/1984",
+          "status": "merged",
+          "author": "unknown",
+          "significance": "Fixes a common SQLite vector storage failure encountered by users."
+        },
+        {
+          "item_type": "pull_request",
+          "title": "Fix db init race condition affecting builds",
+          "number": 1968,
+          "url": "https://github.com/elizaos/eliza/pull/1968",
+          "status": "merged",
+          "author": "unknown",
+          "significance": "Build reliability fix targeting startup/initialization failures."
+        },
+        {
+          "item_type": "pull_request",
+          "title": "feat: add new plugin - spheron",
+          "number": 1966,
+          "url": "https://github.com/elizaos/eliza/pull/1966",
+          "status": "merged",
+          "author": "unknown",
+          "significance": "Expands ecosystem integrations via a new plugin."
+        }
+      ],
+      "overall_focus": [
+        {
+          "claim": "GitHub work emphasized adding new plugins, improving logging, and fixing reliability issues in Twitter/Telegram and database initialization, alongside test improvements.",
+          "source": [
+            "github/summaries/day/2025-01-07.md",
+            "ai-news/elizaos/json/2025-01-06.json"
+          ]
+        }
+      ]
+    },
+    "discord_updates": [
+      {
+        "channel": "#discussion",
+        "summary": "General community orientation and role verification topics (Partner vs Associate), partner eligibility and claim mechanics for the Hyperfy airdrop, and broad onboarding questions about building agents.",
+        "key_participants": [
+          "shakejr",
+          "BOSSU",
+          "ses\u0101me"
+        ],
+        "source": [
+          "ai-news/elizaos/discord/json/2025-01-06.json"
+        ]
+      },
+      {
+        "channel": "#\ud83d\udcbb-coders",
+        "summary": "Developer troubleshooting focused on Twitter auth/login failures (including cookie-based workarounds), tweet formatting controls, and database/vector embedding failures; contributors shared fixes and PRs for repeated login attempts and other bugs.",
+        "key_participants": [
+          "Oracle",
+          "jeanayala.eth",
+          "rferrari",
+          "eschnou"
+        ],
+        "source": [
+          "ai-news/elizaos/discord/json/2025-01-06.json",
+          "ai-news/elizaos/discord/md/2025-01-06.md"
+        ]
+      },
+      {
+        "channel": "#\ud83e\udd47-partners",
+        "summary": "Partner-focused discussion around the Hyperfy airdrop (46,120 HYPER eligibility and claim process), scam-warning mitigations (Phantom warnings), and process improvements for partnership announcements.",
+        "key_participants": [
+          "jin",
+          "shakejr"
+        ],
+        "source": [
+          "ai-news/elizaos/discord/json/2025-01-06.json",
+          "ai-news/elizaos/discord/md/2025-01-06.md"
+        ]
+      },
+      {
+        "channel": "#tokenomics",
+        "summary": "Debate over pool pairing strategies and fee distributions, documentation gaps about DegenAI\u2019s role and buyback mechanisms, and exploration of making AI16Z omni-chain via wrapping/bridge options (e.g., Hyperlane).",
+        "key_participants": [
+          "jin",
+          "yikesawjeez",
+          "eskender.eth"
+        ],
+        "source": [
+          "ai-news/elizaos/discord/json/2025-01-06.json",
+          "ai-news/elizaos/discord/md/2025-01-06.md"
+        ]
+      },
+      {
+        "channel": "#spartan_holders",
+        "summary": "Repeated requests for clearer DegenAI roadmap/timelines and communication cadence; a proposal emerged to track development via a structured table (feature, status, dates, owner).",
+        "key_participants": [
+          "jin",
+          "PrudentSpartan"
+        ],
+        "source": [
+          "ai-news/elizaos/discord/json/2025-01-06.json",
+          "ai-news/elizaos/discord/md/2025-01-05.md"
+        ]
+      },
+      {
+        "channel": "#3d-ai-tv",
+        "summary": "Iteration on an AI-powered news show using Unity+VRM models, covering camera cuts, lip-sync timing, and show JSON schema documentation and tooling (recording scripts).",
+        "key_participants": [
+          "boom",
+          "SM Sith Lord",
+          "jin"
+        ],
+        "source": [
+          "ai-news/elizaos/discord/json/2025-01-06.json",
+          "ai-news/elizaos/discord/md/2025-01-06.md"
+        ]
+      }
+    ],
+    "user_feedback": [
+      {
+        "feedback_summary": "Community members repeatedly requested clearer DegenAI progress updates, roadmap, and timelines, and proposed a public status/dashboard-style tracker.",
+        "source": [
+          "ai-news/elizaos/discord/md/2025-01-05.md",
+          "ai-news/elizaos/discord/json/2025-01-06.json"
+        ],
+        "sentiment": "negative"
+      },
+      {
+        "feedback_summary": "Developers reported recurring Twitter integration friction (authentication challenges, repeated login behavior, formatting issues) and sought better docs and error handling.",
+        "source": [
+          "ai-news/elizaos/discord/md/2025-01-06.md",
+          "ai-news/elizaos/discord/md/2025-01-05.md",
+          "github/summaries/day/2025-01-07.md"
+        ],
+        "sentiment": "mixed"
+      },
+      {
+        "feedback_summary": "Users reported database/memory issues (SQLite vector errors, embedding dimension mismatches) and discussed PostgreSQL as an alternative for production.",
+        "source": [
+          "ai-news/elizaos/discord/md/2025-01-05.md",
+          "ai-news/elizaos/discord/md/2025-01-06.md",
+          "github/summaries/day/2025-01-07.md"
+        ],
+        "sentiment": "neutral"
+      }
+    ],
+    "strategic_insights": [
+      {
+        "theme": "Operational reliability as a gating factor for social-agent adoption",
+        "insight": "Repeated Discord troubleshooting and GitHub issues around Twitter logins, posting reliability, and memory handling are recurring across days, implying that social integrations and memory stability are major adoption blockers compared with adding new plugins.",
+        "implications_or_questions": [
+          "Should engineering prioritize Twitter auth stability and memory/vector consistency over new plugin additions in the near term?"
+        ]
+      },
+      {
+        "theme": "Documentation and status transparency demand",
+        "insight": "Multiple channels converged on the need for structured documentation (tokenomics, DegenAI roadmap, plugin guides) and automation proposals (scribe agent/ETL pipeline) to reduce repeated questions and ambiguity.",
+        "implications_or_questions": [
+          "Should a single source-of-truth roadmap/status dashboard be formalized and updated on a fixed cadence?"
+        ]
+      }
+    ],
+    "market_analysis": [
+      {
+        "observation": "Hyperfy airdrop distribution (46,120 HYPER per eligible wallet) became a focal discussion among partners, with value estimates cited in the community ranging from ~$3\u20134k initially to ~$10\u201312k later.",
+        "source": [
+          "ai-news/elizaos/discord/md/2025-01-06.md",
+          "ai-news/elizaos/discord/json/2025-01-06.json"
+        ],
+        "relevance": "Partner incentives and eligibility rules affect participation and perceptions of value within the ecosystem."
+      },
+      {
+        "observation": "Community compared DegenAI to AixBT in terms of trading-advice capability and asked when DegenAI will offer similar value.",
+        "source": [
+          "ai-news/elizaos/discord/md/2025-01-06.md",
+          "ai-news/elizaos/discord/json/2025-01-06.json"
+        ],
+        "relevance": "Competitive benchmarks influence expectations for feature delivery and positioning."
+      }
+    ]
+  },
+  "_metadata": {
+    "model": "openai/gpt-5.2",
+    "extracted_at": "2026-01-01T02:31:49.646080Z",
+    "prompt_tokens": 228774,
+    "completion_tokens": 3375,
+    "total_tokens": 232149,
+    "processing_seconds": 55.76,
+    "status": "success",
+    "facts_by_category": {
+      "twitter_news_highlights": 2,
+      "github_updates": 7,
+      "discord_updates": 6,
+      "user_feedback": 3,
+      "strategic_insights": 2,
+      "market_analysis": 2,
+      "key_facts": 8,
+      "open_questions": 7
+    },
+    "total_facts": 37
+  }
+}

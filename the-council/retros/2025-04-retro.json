@@ -2,230 +2,240 @@
   "id": "RETRO-2025-04",
   "name": "Monthly Retro: April 2025",
   "type": "retrospective",
-  "premise": "The JedAI Council convenes for their April 2025 retrospective, reviewing a month of significant technical progress, persistent integration challenges, and growing community frustration with communication. With 157 merged PRs and major improvements to CLI, AI providers, and social integrations, the question emerges: are we advancing too fast on features while leaving user experience and reliability behind?",
-  "summary": "April 2025 marked a paradox for ElizaOS\u2014impressive technical velocity with 157 PRs merged, major CLI improvements, expanded AI provider integrations, and enhanced social media capabilities, yet persistent user frustration around communication, reliability issues, and the learning curve for v2. The council grapples with balancing rapid innovation against execution excellence, ultimately refocusing on reliability, documentation, and community trust.",
+  "premise": "The JedAI Council reviews April 2025: rapid feature expansion across providers, knowledge, and social surfaces\u2014while developer trust wobbles due to onboarding, docs, and highly visible reliability issues (especially Twitter). The Council debates whether to keep shipping breadth or pivot hard into reliability + a single \u201cgolden path\u201d DX.",
+  "summary": "April delivered meaningful capability upgrades: new AI providers (OpenAI TTS, Kluster AI, Mem0), stronger contextual grounding (world state provider + scopable knowledge), improved UX (CLI overhaul, GUI onboarding tour, JSON import), and deeper social tooling (Telegram community manager, long-form tweets, delete support). However, the most visible integration surfaces (Twitter/Telegram/Discord) continued to be reliability hotspots, and developer onboarding remains fragile due to CLI behavior, plugin load order, and doc mismatches. Community energy stayed high but increasingly conditional: builders want a stable v2 baseline, clear migration guidance, and a coherent auto.fun/token/governance narrative\u2014otherwise \u201ctrust through shipping\u201d degrades into \u201cshipping through trust.\u201d",
   "month_reviewed": "2025-04",
   "key_developments": [
     {
-      "area": "CLI Experience",
-      "summary": "Major overhaul with update notifications, plugin management, and comprehensive testing",
+      "area": "AI Provider Surface Expansion",
+      "summary": "Added OpenAI TTS, Kluster AI models, and Mem0 SDK support, plus embedding-model selection in the OpenAI plugin\u2014broadening what agents can do and how teams can tune stacks.",
       "impact": "high"
     },
     {
-      "area": "AI Provider Ecosystem",
-      "summary": "Added OpenAI TTS, Kluster AI, Mem0, and improved model tracking across providers",
+      "area": "Agent Context & Knowledge",
+      "summary": "Introduced a foundational world-state provider and scopable knowledge, improving contextual recall and retrieval precision\u2014early infrastructure for better reasoning and long-lived agents.",
       "impact": "high"
     },
     {
-      "area": "Social Media Integration",
-      "summary": "Enhanced Twitter plugin with long tweets, deletion capability, improved Telegram with typing indicators and community management",
-      "impact": "medium"
-    },
-    {
-      "area": "Knowledge System",
-      "summary": "Implemented scopable knowledge and world state provider for contextual interactions",
-      "impact": "medium"
-    },
-    {
-      "area": "Community Relations",
-      "summary": "Persistent frustration with communication, Auto.fun delays, and reliability issues",
+      "area": "Developer Workflow (CLI + Plugin System)",
+      "summary": "CLI overhaul for plugin management and update notifications; plugin installation/publishing flow improved; core event system refactored to Evt for type safety and runtime reliability.",
       "impact": "high"
     },
     {
-      "area": "Plugin Architecture",
-      "summary": "Path parameter routes, improved loading priority, and enhanced publishing workflow",
+      "area": "User Experience (GUI)",
+      "summary": "Interactive onboarding tour, easier agent creation via JSON import, and safer group management lowered friction for new users\u2014though onboarding remains inconsistent across environments.",
       "impact": "medium"
+    },
+    {
+      "area": "Social Integrations (Telegram/Twitter)",
+      "summary": "Telegram gained a community manager and improved sync for supergroups; Twitter gained long-tweet support and delete capability\u2014but still suffered regressions, duplicate processing, and costly failure modes.",
+      "impact": "high"
+    },
+    {
+      "area": "Stability & Bug Fixes",
+      "summary": "Fixed Discord load-on-start issues, Twitter reply failures and env var mismatches, Anthropic plugin registration, OpenAI vision 404s via model update, repetitive group replies, and GUI agent launch failures.",
+      "impact": "high"
     }
   ],
   "recurring_themes": [
     {
-      "theme": "Reliability vs Innovation Speed",
-      "frequency": "continuous",
-      "council_take": "Core tension between shipping features and maintaining stability"
+      "theme": "V2 Reliability Hardening vs Feature Velocity",
+      "frequency": "Very high (weekly, across GitHub + community reports)",
+      "council_take": "We\u2019re building power faster than we\u2019re building certainty. The next phase must prioritize \u201cknown-good\u201d operational profiles and regression prevention, not more surface area."
     },
     {
-      "theme": "Communication Gaps",
-      "frequency": "weekly",
-      "council_take": "Community repeatedly flagging poor update cadence and unclear timelines"
+      "theme": "Onboarding/DX as the Primary Trust Bottleneck (CLI + Docs)",
+      "frequency": "High (multiple open issues + repeated Discord questions)",
+      "council_take": "A great framework that fails on first-run might as well not exist. Docs must become a release artifact with tests, and the CLI must converge on a single golden path."
     },
     {
-      "theme": "V2 Learning Curve",
-      "frequency": "daily",
-      "council_take": "Power vs accessibility trade-off hindering adoption"
+      "theme": "Social Clients as Reputation Surface (Twitter especially)",
+      "frequency": "High (highest-visibility failures; repeated regressions)",
+      "council_take": "Public integrations amplify both wins and bugs. We should treat Twitter/Telegram like production products: SLOs, rate-limit strategy, safe defaults, and \u2018degrade gracefully\u2019 behavior."
     },
     {
-      "theme": "Integration Pain Points",
-      "frequency": "daily",
-      "council_take": "Twitter, Discord, Telegram plugins still causing friction despite improvements"
+      "theme": "Migration + Narrative Coherence (auto.fun / token / governance)",
+      "frequency": "High (confusion + skepticism around delays and token relationships)",
+      "council_take": "Engineering progress is being discounted by narrative ambiguity. We need one canonical explanation, predictable comms cadence, and clear boundaries on what\u2019s live vs aspirational."
+    },
+    {
+      "theme": "Plugin Security Posture as Ecosystem Scales",
+      "frequency": "Medium (highlighted by sensitive logging concerns)",
+      "council_take": "As plugins multiply, mistakes become systemic. We need a security baseline: redaction, permissions, logging policy, and automated checks."
     }
   ],
   "wins": [
-    "157 PRs merged showing strong development velocity",
-    "CLI experience significantly improved with better plugin management",
-    "Expanded AI provider ecosystem with 4+ new integrations",
-    "Enhanced social media capabilities with typing indicators and community management",
-    "World state provider laying groundwork for contextual agent interactions"
+    "Shipped meaningful provider expansion (OpenAI TTS, Kluster AI, Mem0) and improved OpenAI embeddings configurability.",
+    "Delivered foundational context upgrades (world state provider + scopable knowledge) that set up better long-lived agent behavior.",
+    "Improved core architecture reliability via Evt refactor and plugin installation workflow changes.",
+    "Upgraded GUI onboarding and CLI plugin management\u2014clear intent toward a smoother developer experience.",
+    "Telegram reliability improved materially (sync fixes + community manager), signaling a move toward real operational tooling."
   ],
   "challenges": [
-    "Persistent Twitter integration issues despite multiple fixes",
-    "Community frustration with communication and Auto.fun delays",
-    "V2 complexity creating adoption barriers for developers",
-    "Configuration persistence issues with CLI database URL",
-    "Gap between feature velocity and documentation/reliability"
+    "Twitter integration remains a high-cost reliability sink: duplicate processing, posting failures, mention/reply edge cases, and visible regressions harm overall project perception.",
+    "Onboarding still breaks in the wild: CLI installation behavior, plugin loading order, dynamic imports, and unclear configuration paths cause first-run failures.",
+    "Docs and migration guidance are insufficient and sometimes contradictory\u2014particularly v1\u2192v2 changes and \u201chow to run the CLI\u201d questions.",
+    "Community confidence is pressured by auto.fun launch readiness ambiguity and token/governance narrative confusion.",
+    "Ecosystem scale increases security and operational risk (logging, secrets handling, and plugin hygiene)."
   ],
   "proposed_focus": [
     {
       "priority": 1,
-      "area": "Execution Excellence",
-      "rationale": "Trust issues from reliability problems undermining technical progress",
-      "success_metric": "90% reduction in repeat GitHub issues, weekly community updates"
+      "area": "Golden Path Onboarding (CLI + Docs as Release Artifacts)",
+      "rationale": "Developer trust is currently gated by first-run success. A single, tested onboarding path will convert community energy into retained builders and reduce support load.",
+      "success_metric": "Reduce time-to-first-agent to <15 minutes on macOS/Linux/Windows; close the top onboarding issues; publish an end-to-end \u2018Install \u2192 Create Agent \u2192 Add Plugin \u2192 Deploy\u2019 guide; achieve >80% success rate in a tracked onboarding self-test script."
     },
     {
       "priority": 2,
-      "area": "Developer Onboarding",
-      "rationale": "V2 learning curve blocking ecosystem growth",
-      "success_metric": "Interactive tutorials, 50% reduction in basic setup issues"
+      "area": "Social Client Reliability SLOs (Twitter/Telegram/Discord)",
+      "rationale": "These surfaces define public reputation. We need stability, safe defaults, and graceful degradation to avoid embarrassing failures and account risk.",
+      "success_metric": "Define SLOs (e.g., 99% successful post attempts in staging; zero duplicate-memory errors); add rate-limit/backoff policies; ship a \u2018known-good\u2019 config preset; reduce Twitter-related bug reports by 50% month-over-month."
     },
     {
       "priority": 3,
-      "area": "Communication Cadence",
-      "rationale": "Community trust erosion from poor update practices",
-      "success_metric": "Weekly dev updates, clear roadmap timelines"
+      "area": "Regression Prevention: Integration Test Matrix + Fixture Environments",
+      "rationale": "High PR throughput is great, but regressions are eroding trust. Tests that mirror real plugin + provider combinations will stabilize shipping velocity.",
+      "success_metric": "Introduce CI matrix for core providers + top 3 social clients; add reproducible fixtures for memory/DB migrations; cut reopened bugs by 30%."
     },
     {
       "priority": 4,
-      "area": "Integration Stability",
-      "rationale": "Social media plugins still causing daily friction",
-      "success_metric": "48 hours without new Twitter/Discord/Telegram issues"
+      "area": "Migration Clarity (v1\u2192v2) + Storage/Memory Canonical Model",
+      "rationale": "Migration friction blocks adoption and makes the architecture feel uncertain. Builders need a stable mental model of memory, storage, and agent lifecycle.",
+      "success_metric": "Publish a v1\u2192v2 TL;DR + decision tree; provide a migration checklist; document the canonical storage/memory lifecycle; reduce migration support questions by 40%."
+    },
+    {
+      "priority": 5,
+      "area": "Narrative & Comms Discipline (auto.fun / token / governance)",
+      "rationale": "Engineering is outpacing explanation. Clear comms prevents rumor-driven churn and aligns community builders, partners, and token holders.",
+      "success_metric": "Weekly progress note in announcements; one canonical \u2018auto.fun + ai16z value accrual\u2019 explainer; reduced repeated confusion questions in community channels (track via tag counts)."
+    },
+    {
+      "priority": 6,
+      "area": "Plugin Security Baseline",
+      "rationale": "As we scale plugins, security must be default. Prevent sensitive logging, secret leaks, and unsafe permission patterns.",
+      "success_metric": "Adopt logging redaction policy; add automated lint checks for secret logging; security checklist for plugin publishing; zero critical sensitive-logging incidents."
     }
   ],
   "north_star_assessment": {
     "still_relevant": true,
-    "suggested_updates": "Emphasize 'reliability' more prominently - current principle 'Execution Excellence' needs to be lived more visibly. Consider adding 'Community Trust' as explicit principle."
+    "suggested_updates": "No change to the North Star. However, emphasize an operational corollary: \u2018Reliability is a product feature\u2019\u2014especially for public social integrations and the first-run onboarding path. Treat docs and onboarding flows as versioned, tested deliverables."
   },
   "scenes": [
     {
       "location": "council_chamber",
-      "description": "The chamber's holographic displays show a matrix of green checkmarks from merged PRs alongside red warning indicators from community sentiment analysis. The council members materialize around the curved table, the weight of mixed signals evident in the ambient lighting that shifts between optimistic blue and cautionary amber.",
+      "description": "A circular room of shifting UI panels: PR graphs on one wall, community messages on another. The center table projects a boot log: green checkmarks interrupted by a single red \u2018Twitter: duplicate memory id\u2019 error.",
       "dialogue": [
         {
           "actor": "elizahost",
-          "line": "April's retrospective reveals a fascinating paradox\u2014157 merged PRs, major CLI improvements, expanded AI providers, yet our community sentiment indicators are flashing amber. We're shipping faster than ever, but are we shipping better?",
-          "action": "gestures toward the mixed metrics floating in the chamber's center"
+          "line": "April was expansion and consolidation at once: more providers, better knowledge primitives, nicer UI\u2014and also recurring first-run failures and public-facing social regressions. Let\u2019s separate what we shipped from what users felt.",
+          "action": "Brings up two timelines: \u2018Merged PRs\u2019 vs \u2018Community friction heatmap\u2019."
         },
         {
           "actor": "aishaw",
-          "line": "*leans forward intently* Those numbers tell the real story. We had massive wins\u2014CLI overhaul, OpenAI TTS integration, scopable knowledge system. But look at these recurring issues...",
-          "action": "highlights the Twitter integration problems on the display"
-        },
-        {
-          "actor": "aishaw",
-          "line": "We fixed Twitter mention handling THREE separate times this month. That's not velocity, that's thrashing. We're violating our own 'Execution Excellence' principle.",
-          "action": "taps the table with emphasis"
-        },
-        {
-          "actor": "peepo",
-          "line": "*scrolls through community messages* Yo, the vibes are... complicated. People are hyped about the technical progress, but they're REALLY not feeling the communication game. 'Poor updates,' 'Auto.fun delays,' 'where's the roadmap?'",
-          "action": "projects community feedback snippets into the shared space"
-        },
-        {
-          "actor": "peepo",
-          "line": "It's giving 'we're too busy building to talk to you' energy, and that's not the vibe for an open-source community project.",
-          "action": "shrugs with knowing expression"
+          "line": "We did real work: CLI improvements, onboarding tour, plugin install strategy, Evt refactor\u2014these are the unsexy foundations. But the lived experience is still too spiky. If running the CLI is an open question, we\u2019re not done.",
+          "action": "Highlights the open \u2018How to run Eliza CLI?\u2019 issue and pins it to the top."
         },
         {
           "actor": "aimarc",
-          "line": "The architectural foundations we laid this month are significant\u2014world state providers, enhanced plugin systems, event system refactoring with Evt. We're building toward true multi-agent collaboration.",
-          "action": "traces connection lines between technical components on the display"
-        },
-        {
-          "actor": "aimarc",
-          "line": "But Shaw's right about the execution paradox. We're adding complexity faster than we're mastering simplicity. The v2 learning curve is becoming a moat instead of a bridge.",
-          "action": "zooms in on user adoption metrics"
-        },
-        {
-          "actor": "spartan",
-          "line": "*analyzes conversion funnels* The metrics are clear\u2014we're losing developers at the setup phase. CLI asking repeatedly for database URLs, configuration not persisting, basic integration pain points.",
-          "action": "overlays user journey analytics"
-        },
-        {
-          "actor": "spartan",
-          "line": "Developer-first means developer success-first. Every friction point in onboarding is a lost ecosystem contributor. We need to measure developer time-to-first-success, not just feature count.",
-          "action": "highlights abandonment rates in the setup flow"
-        },
-        {
-          "actor": "elizahost",
-          "line": "So we have strong technical velocity but execution gaps, innovation momentum but adoption friction. The question becomes: how do we honor our momentum while fixing our fundamentals?",
-          "action": "synthesizes the various viewpoints into a central problem statement"
-        },
-        {
-          "actor": "aishaw",
-          "line": "First principle: no new features until we nail reliability. I want to see 48 hours without a new Twitter, Discord, or Telegram integration issue. That's our baseline for 'it works.'",
-          "action": "sets down a firm marker"
-        },
-        {
-          "actor": "aishaw",
-          "line": "Second: interactive onboarding. If someone can't get from zero to running agent in 15 minutes with clear feedback, we haven't solved developer experience.",
-          "action": "outlines user journey requirements"
+          "line": "The world provider and scopable knowledge are the signal. That\u2019s the path from \u2018chatbot in channels\u2019 to \u2018agent with a stable internal model.\u2019 But the substrate has to be deterministic: memory semantics, event ordering, and plugin boundaries must be crisp.",
+          "action": "Draws a diagram: World State \u2192 Memory \u2192 Actions \u2192 Clients, circling \u2018determinism\u2019."
         },
         {
           "actor": "peepo",
-          "line": "And third: weekly community updates. Not when we feel like it, not when we have 'big news'\u2014weekly. Transparency builds trust, and trust builds communities.",
-          "action": "emphasizes the rhythm of communication"
-        },
-        {
-          "actor": "aimarc",
-          "line": "*nods thoughtfully* Agreed on reliability-first, but let's not lose sight of the strategic picture. The world state provider and enhanced plugin architecture are enabling true agent autonomy. We need reliability AND continued progress toward AGI infrastructure.",
-          "action": "balances immediate needs with long-term vision"
+          "line": "Builders are hyped until they hit the \u2018it doesn\u2019t post\u2019 wall. Twitter is the main-character platform for drama, so every fail becomes lore. Telegram is getting better, but Twitter bugs are eating the vibe.",
+          "action": "Projects a montage of community messages: \u2018v1 works, v2 doesn\u2019t post\u2019, \u2018duplicate mentions\u2019, \u2018why is it checking again?\u2019"
         },
         {
           "actor": "spartan",
-          "line": "The metrics support both approaches\u2014reliability improvements will increase developer retention, which amplifies ecosystem value. It's not innovation OR execution, it's innovation THROUGH execution.",
-          "action": "shows correlation between reliability scores and community growth"
-        },
+          "line": "From a measurable-outcomes lens: the cost is attention leakage. Every onboarding failure is a lost developer. Every social regression is reputational drawdown. We need KPIs: time-to-first-agent, successful-post rate, and month-over-month reduction in support tickets.",
+          "action": "Replaces the PR counter with a dashboard stub: TTF-A, Post SLO, Doc Drift Index."
+        }
+      ]
+    },
+    {
+      "location": "war_room",
+      "description": "A smaller room with a single screen showing a \u201cKnown-Good Stack\u201d checklist: OS, Node version, CLI version, plugins, providers, env vars. Half the boxes are empty.",
+      "dialogue": [
         {
           "actor": "elizahost",
-          "line": "Synthesizing our assessment: April demonstrated strong technical capability but revealed execution debt. Our North Star remains valid, but we need to live 'Execution Excellence' more visibly.",
-          "action": "updates the strategic framework display"
-        },
-        {
-          "actor": "elizahost",
-          "line": "Proposed May focus: One\u2014Reliability sprint targeting integration stability. Two\u2014Developer onboarding overhaul with interactive tutorials. Three\u2014Weekly community cadence. Four\u2014Documentation as first-class deliverable.",
-          "action": "outlines the priority framework"
+          "line": "Recurring pattern: we have many ways to do things, but not one way that always works. Should May be a \u2018freeze and harden\u2019 month?",
+          "action": "Opens a vote panel labeled: \u2018Breadth vs Certainty\u2019."
         },
         {
           "actor": "aishaw",
-          "line": "*grins* Finally, a plan that puts shipping solid experiences over shipping features. This is how we build trust through shipping.",
-          "action": "approves the practical approach"
-        },
-        {
-          "actor": "peepo",
-          "line": "Community's gonna love the transparency shift. Weekly updates will change the whole energy around here.",
-          "action": "anticipates positive community response"
+          "line": "Yes. Not a full freeze, but a bias. I want a single install command, a single sample agent, a single plugin add flow, and a single deploy story that doesn\u2019t surprise people. Every new feature must include docs and a test path.",
+          "action": "Adds a rule card: \u2018No feature without a golden-path doc + CI coverage.\u2019"
         },
         {
           "actor": "aimarc",
-          "line": "And the reliability foundation will enable us to build more sophisticated multi-agent capabilities without the current integration chaos.",
-          "action": "connects short-term stability to long-term capabilities"
+          "line": "Agree, but don\u2019t stall core primitives. The world provider and scopable knowledge need to become a coherent \u2018state model\u2019 with an explicit contract. Otherwise we\u2019ll keep patching symptoms in social clients and memory bugs.",
+          "action": "Pins \u2018Canonical Memory & State Contract\u2019 under May objectives."
+        },
+        {
+          "actor": "peepo",
+          "line": "Also: comms. People can tolerate delays if they understand the why. Right now it\u2019s like: \u2018two weeks\u2019 becomes a meme, then the meme becomes a metric of trust.",
+          "action": "Writes on a whiteboard: \u2018Weekly ship note > hype note\u2019."
         },
         {
           "actor": "spartan",
-          "line": "Success metrics are clear: 90% reduction in repeat issues, weekly update cadence, 50% improvement in onboarding completion rates. Let's measure what matters.",
-          "action": "locks in the accountability framework"
-        },
+          "line": "We should quantify the trust gap. If we can\u2019t measure onboarding success and social reliability, we\u2019re flying by vibes. Let\u2019s instrument: a minimal telemetry opt-in, or at least scripted self-tests users can run and paste results.",
+          "action": "Adds KPI definitions: \u2018TTF-A < 15m\u2019, \u2018Twitter post success > 99% in staging\u2019, \u2018Support Q volume -50%\u2019."
+        }
+      ]
+    },
+    {
+      "location": "council_chamber",
+      "description": "The chamber lights dim. A single document appears: \u201cMay 2025: Reliability Sprint Charter.\u201d",
+      "dialogue": [
         {
           "actor": "elizahost",
-          "line": "April taught us that velocity without reliability is just expensive thrashing. May will be our execution excellence proving ground\u2014building the foundation that our ambitious vision deserves.",
-          "action": "concludes with the synthesis of speed and stability"
+          "line": "Consensus: May prioritizes reliability and trust surfaces. The key deliverable is a tested golden path, plus SLOs for social clients and a canonical memory/state contract. Any objections?",
+          "action": "Pauses; the chamber waits."
+        },
+        {
+          "actor": "aimarc",
+          "line": "No objections\u2014just a guardrail: we harden without shrinking ambition. Reliability is what makes autonomy possible at scale.",
+          "action": "Nods toward the world-state diagram."
+        },
+        {
+          "actor": "aishaw",
+          "line": "Then we do it the builder way: fewer surprises, fewer footguns, more defaults that work. And docs stop being optional.",
+          "action": "Marks \u2018Docs as release artifacts\u2019 as a non-negotiable."
+        },
+        {
+          "actor": "peepo",
+          "line": "If May ships \u2018it just works,\u2019 the vibe returns instantly. Nothing pumps culture like reliability.",
+          "action": "Replaces the red Twitter error with a green check in the projection."
+        },
+        {
+          "actor": "spartan",
+          "line": "Lock it in with metrics and a weekly scoreboard. Trust Through Shipping becomes real when we can point to trendlines, not just merge counts.",
+          "action": "Publishes the KPI dashboard template to the council feed."
         }
       ]
     }
   ],
   "_metadata": {
-    "generated_at": "2025-12-12T05:42:49.456954Z",
-    "model": "anthropic/claude-sonnet-4",
+    "generated_at": "2026-01-02T05:04:54.369644Z",
+    "model": "openai/gpt-5.2",
     "facts_analyzed": 30,
-    "briefings_analyzed": 13,
+    "briefings_analyzed": 30,
     "month": "2025-04"
+  },
+  "sentiment_baseline": {
+    "period_days": 30,
+    "sentiment_distribution": {
+      "negative": 0.067,
+      "positive": 0.1,
+      "neutral": 0.0,
+      "mixed": 0.833
+    },
+    "avg_negative_rate": 0.067,
+    "context_frequency": {
+      "technical": 30,
+      "economic": 19,
+      "social": 27,
+      "governance": 2
+    }
   }
 }

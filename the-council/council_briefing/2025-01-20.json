@@ -1,0 +1,271 @@
+{
+  "date": "2025-01-20",
+  "meeting_context": "# North Star & Strategic Context\n\nThis file combines the overall project mission (North Star) and summaries of key strategic documents for use in AI prompts, particularly for the AI Agent Council context generation.\n\n**Last Updated:** December 2025\n\n---\n\n**North Star:**\nTo build the most reliable, developer-friendly open-source AI agent framework and cloud platform\u2014enabling builders worldwide to deploy autonomous agents that work seamlessly across chains and platforms. We create infrastructure where agents and humans collaborate, forming the foundation for a decentralized AI economy that accelerates the path toward beneficial AGI.\n\n---\n\n**Core Principles:**\n1. **Execution Excellence** - Reliability and seamless UX over feature quantity\n2. **Developer First** - Great DX attracts builders; builders create ecosystem value\n3. **Open & Composable** - Multi-agent systems that interoperate across platforms\n4. **Trust Through Shipping** - Build community confidence through consistent delivery\n\n---\n\n**Current Product Focus (Dec 2025):**\n- **ElizaOS Framework** (v1.6.x) - The core TypeScript toolkit for building persistent, interoperable agents\n- **ElizaOS Cloud** - Managed deployment platform with integrated storage and cross-chain capabilities\n- **Flagship Agents** - Reference implementations (Eli5, Otaku) demonstrating platform capabilities\n- **Cross-Chain Infrastructure** - Native support for multi-chain agent operations via Jeju/x402\n\n---\n\n**ElizaOS Mission Summary:**\nElizaOS is an open-source \"operating system for AI agents\" aimed at decentralizing AI development. Built on three pillars: 1) The Eliza Framework (TypeScript toolkit for persistent agents), 2) AI-Enhanced Governance (building toward autonomous DAOs), and 3) Eliza Labs (R&D driving cloud, cross-chain, and multi-agent capabilities). The native token coordinates the ecosystem. The vision is an intelligent internet built on open protocols and collaboration.\n\n---\n\n**Taming Information Summary:**\nAddresses the challenge of information scattered across platforms (Discord, GitHub, X). Uses AI agents as \"bridges\" to collect, wrangle (summarize/tag), and distribute information in various formats (JSON, MD, RSS, dashboards, council episodes). Treats documentation as a first-class citizen to empower AI assistants and streamline community operations. \n",
+  "monthly_goal": "December 2025: Execution excellence\u2014complete token migration with high success rate, launch ElizaOS Cloud, stabilize flagship agents, and build developer trust through reliability and clear documentation.",
+  "daily_focus": "A high-velocity code surge delivered meaningful stability and DX improvements (Devin plugin, Telegram prerequisites, build/start fixes), but the Council must now contain reliability regressions emerging from rapid feature intake (embedding/vector mismatches, misleading startup errors, brittle config parsing).",
+  "key_points": [
+    {
+      "topic": "Runtime Stability & Build Integrity (Execution Excellence)",
+      "summary": "Core stability improved with develop-branch build/start fixes and CI workflow simplification, yet new defect signals are clustering around embeddings/vectors and misreported provider errors\u2014directly threatening developer trust and Cloud-readiness.",
+      "deliberation_items": [
+        {
+          "question_id": "q1",
+          "text": "Do we declare an immediate reliability freeze (triage-first) until the top failure modes (embeddings/vectors + misleading provider errors) are closed, even if it slows new plugins?",
+          "context": [
+            "GitHub Daily Update (2025-01-20): \"Resolved build/start failures in the develop branch\" (#2545, #2546).",
+            "GitHub Daily Update (2025-01-20): \"vector dimension mismatch error when switching to gpt-4o-mini in SQLite\" (#2577) and \"incorrect OpenAI error on startup when no API key is provided\" (#2569)."
+          ],
+          "multiple_choice_answers": {
+            "answer_1": {
+              "text": "Yes\u2014announce a short-term stability freeze with explicit exit criteria (top issues closed + regression tests added).",
+              "implication": "Signals \"Execution Excellence\" to builders, reduces churn, and strengthens Cloud launch credibility."
+            },
+            "answer_2": {
+              "text": "Partial freeze\u2014allow only bugfixes, docs, and tests in core; new plugins allowed only behind feature flags.",
+              "implication": "Balances ecosystem momentum with a controlled reliability campaign, but requires strong enforcement."
+            },
+            "answer_3": {
+              "text": "No\u2014continue parallel feature and fixes, relying on increased contributor volume to outpace regressions.",
+              "implication": "Maximizes short-term growth optics, but risks compounding support load and eroding developer trust."
+            },
+            "answer_4": {
+              "text": "Other / More discussion needed / None of the above.",
+              "implication": null
+            }
+          }
+        },
+        {
+          "question_id": "q2",
+          "text": "What is our canonical strategy for embedding/vector compatibility across adapters (SQLite/PGlite/Postgres/Supabase) to prevent recurring dimension mismatch incidents?",
+          "context": [
+            "GitHub Daily Update (2025-01-20): \"vector dimension mismatch error when switching to gpt-4o-mini in SQLite\" (#2577).",
+            "Discord coders (2025-01-19): recurring SQLite/Postgres/Supabase relation/connection errors and manual SQLite binding builds."
+          ],
+          "multiple_choice_answers": {
+            "answer_1": {
+              "text": "Enforce a single default embedding dimension per release line (pinned) with automatic migration tooling.",
+              "implication": "Minimizes runtime surprises and support incidents, at the cost of slower adoption of new embedding models."
+            },
+            "answer_2": {
+              "text": "Support multi-dimension embeddings via per-room/per-agent metadata and adapter-level validation + re-embed workflow.",
+              "implication": "Maximizes flexibility for advanced users, but increases complexity and testing surface area."
+            },
+            "answer_3": {
+              "text": "Defer\u2014document best practices only and treat dimension mismatch as user configuration responsibility.",
+              "implication": "Low engineering cost now, but continues to leak reliability pain into onboarding and production deployments."
+            },
+            "answer_4": {
+              "text": "Other / More discussion needed / None of the above.",
+              "implication": null
+            }
+          }
+        },
+        {
+          "question_id": "q3",
+          "text": "How aggressive should we be in CI hardening to prevent \"config parsing\" and \"misleading error\" defects from reaching users?",
+          "context": [
+            "GitHub Daily Update (2025-01-20): \"Identified an issue with boolean parsing for ENABLE_OPEN_AI_COMMUNITY_PLUGIN\" (#2559).",
+            "GitHub Daily Update (2025-01-20): \"Removed unnecessary cleanup steps from the integration tests workflow\" (#2551, #2553)."
+          ],
+          "multiple_choice_answers": {
+            "answer_1": {
+              "text": "Add a strict 'configuration contract' test suite (env parsing, provider selection, error messages) as release-gating.",
+              "implication": "Reduces support burden and improves perceived polish, aligning with the North Star's reliability mandate."
+            },
+            "answer_2": {
+              "text": "Add targeted smoke tests only for the top 5 user journeys (start agent, connect DB, run Telegram/Twitter, basic RAG).",
+              "implication": "Faster to implement and still meaningful, but may miss edge-case regressions that frustrate power users."
+            },
+            "answer_3": {
+              "text": "Rely on community issue reports and rapid patching; keep CI lean to preserve merge velocity.",
+              "implication": "Maintains throughput, but perpetuates a reactive posture that undermines \"Trust Through Shipping.\""
+            },
+            "answer_4": {
+              "text": "Other / More discussion needed / None of the above.",
+              "implication": null
+            }
+          }
+        }
+      ]
+    },
+    {
+      "topic": "Plugin Ecosystem Velocity vs. Coherence (Composability with Guardrails)",
+      "summary": "Feature additions expanded capability breadth (NVIDIA inference, Anthropic vision, Lightning, filesystem agent storage), but Discord signals show developer confusion around multi-plugin use and V2 backward compatibility\u2014suggesting we need stricter composability guarantees.",
+      "deliberation_items": [
+        {
+          "question_id": "q1",
+          "text": "Should we introduce a formal 'Composability Contract' for plugins (multi-plugin support, dependency hygiene, consistent config schema) before accelerating V2 migration messaging?",
+          "context": [
+            "Discord (2025-01-19): \"Implement multi-plugin support for Eliza characters\" (action item; question was unanswered in discussion).",
+            "Discord partners (2025-01-19): \"There's an effort to make things backwards compatible\" (re: V2 plugins)."
+          ],
+          "multiple_choice_answers": {
+            "answer_1": {
+              "text": "Yes\u2014define and enforce a composability contract (interfaces + test matrix) as a prerequisite for V2 plugin stability claims.",
+              "implication": "Prevents fragmented plugin behavior and builds a durable ecosystem foundation for Cloud and multi-agent systems."
+            },
+            "answer_2": {
+              "text": "Partially\u2014publish a 'recommended plugin set' and compatibility tiers, but keep enforcement light until V2 ships.",
+              "implication": "Reduces immediate friction without blocking community contributions, but may leave long-tail inconsistency."
+            },
+            "answer_3": {
+              "text": "No\u2014prioritize feature growth; composability will emerge organically via community iteration.",
+              "implication": "High ecosystem velocity, but risks turning ElizaOS into a plugin bazaar without predictable integration quality."
+            },
+            "answer_4": {
+              "text": "Other / More discussion needed / None of the above.",
+              "implication": null
+            }
+          }
+        },
+        {
+          "question_id": "q2",
+          "text": "How do we gate high-impact provider additions (e.g., NVIDIA inference, OpenAI integration, new vision providers) to avoid destabilizing default paths for new developers?",
+          "context": [
+            "GitHub Updates (2025-01-19 summary): \"Added support for NVIDIA inference\" (#2512), \"Added Anthropic image provider\" (#2524), \"Integrated OpenAI for text generation\" (#2463).",
+            "Discord coders (2025-01-19): \"Model selection (small/medium/large) is not being respected\" (reported issue)."
+          ],
+          "multiple_choice_answers": {
+            "answer_1": {
+              "text": "Provider additions must ship behind explicit opt-in flags until validated across reference agents + adapters.",
+              "implication": "Protects onboarding defaults and reduces surprise regressions, while still allowing power-user experimentation."
+            },
+            "answer_2": {
+              "text": "Allow providers to land freely, but lock the 'default provider + default models' to a conservative LTS set.",
+              "implication": "Maintains contribution velocity while keeping a stable runway for most users."
+            },
+            "answer_3": {
+              "text": "Treat all providers as first-class immediately to maximize perceived capability and competitive positioning.",
+              "implication": "Improves headline features, but increases the chance that basic setups break or behave inconsistently."
+            },
+            "answer_4": {
+              "text": "Other / More discussion needed / None of the above.",
+              "implication": null
+            }
+          }
+        },
+        {
+          "question_id": "q3",
+          "text": "What is the Council\u2019s stance on agent-to-agent interoperability as a near-term platform differentiator versus a post-V2 milestone?",
+          "context": [
+            "Discord partners (2025-01-19): \"Yes, that's the intention, with full multiplayer chat\" (agent-to-agent interactions).",
+            "Discord (2025-01-19): emphasis on V2 development and smooth transition for plugin developers."
+          ],
+          "multiple_choice_answers": {
+            "answer_1": {
+              "text": "Make multiplayer agent interaction a flagship near-term objective; prioritize a minimal, reliable protocol now.",
+              "implication": "Differentiates ElizaOS as a true multi-agent OS, but increases scope pressure during stabilization."
+            },
+            "answer_2": {
+              "text": "Treat it as a V2+ milestone; focus current cycles on reliability, deployment, and plugin compatibility.",
+              "implication": "Strengthens \"Execution Excellence\" and Cloud readiness, but delays a compelling multi-agent narrative."
+            },
+            "answer_3": {
+              "text": "Keep it experimental: ship prototypes in reference agents only, while core remains stable and conservative.",
+              "implication": "Enables learning and marketing demos without committing the core platform to immature interfaces."
+            },
+            "answer_4": {
+              "text": "Other / More discussion needed / None of the above.",
+              "implication": null
+            }
+          }
+        }
+      ]
+    },
+    {
+      "topic": "Developer Onboarding & Deployment Friction (DX as Trust Engine)",
+      "summary": "Telegram prerequisites documentation and new tooling landed, yet Discord logs show recurring onboarding failures (npm/package confusion, Twitter/Telegram client breakage, Windows SQLite builds, Supabase schema errors), indicating our DX is still brittle at the edges.",
+      "deliberation_items": [
+        {
+          "question_id": "q1",
+          "text": "What is the single highest-leverage onboarding fix we should ship next to convert community troubleshooting into reliable self-serve setup?",
+          "context": [
+            "GitHub Updates (2025-01-19 summary): \"Updated README with prerequisites for enabling Telegram bot\" (#2547).",
+            "Discord coders (2025-01-19): recurring \"package not found in npm registry\" confusion and Telegram/Twitter install issues."
+          ],
+          "multiple_choice_answers": {
+            "answer_1": {
+              "text": "Ship a 'Doctor' CLI that validates environment, Node/pnpm versions, adapters, and client prerequisites with actionable fixes.",
+              "implication": "Turns fragmented tribal knowledge into productized reliability, reducing Discord support load."
+            },
+            "answer_2": {
+              "text": "Create a single canonical 'Production Deployment' guide (Railway/VPS/Docker) with known-good templates and defaults.",
+              "implication": "Accelerates serious builders to production, but may not solve first-run local setup failures."
+            },
+            "answer_3": {
+              "text": "Prioritize platform-specific fixes (Windows SQLite build + Supabase schema) as the biggest blockers to first success.",
+              "implication": "Improves success rate for a large segment quickly, but risks whack-a-mole if root causes are systemic."
+            },
+            "answer_4": {
+              "text": "Other / More discussion needed / None of the above.",
+              "implication": null
+            }
+          }
+        },
+        {
+          "question_id": "q2",
+          "text": "Do we standardize and officially support one default persistence path (SQLite -> Postgres) to reduce DB confusion, or continue broad adapter parity?",
+          "context": [
+            "Discord coders (2025-01-19): repeated SQLite/PostgreSQL/Supabase errors (relation missing, connection not open).",
+            "GitHub Daily Update (2025-01-20): SQLite vector mismatch issue when switching models (#2577)."
+          ],
+          "multiple_choice_answers": {
+            "answer_1": {
+              "text": "Standardize: Officially support SQLite for local + Postgres for production, with a documented migration path.",
+              "implication": "Improves clarity and reduces support burden while still serving both prototyping and production."
+            },
+            "answer_2": {
+              "text": "Maintain broad parity across adapters, but add conformance tests so adapters behave identically.",
+              "implication": "Maximizes openness and composability, but requires sustained investment in testing and maintenance."
+            },
+            "answer_3": {
+              "text": "De-emphasize local DB complexity by pushing ElizaOS Cloud storage as the default for most users.",
+              "implication": "Simplifies onboarding and aligns with Cloud strategy, but may alienate self-hosting/open-source purists."
+            },
+            "answer_4": {
+              "text": "Other / More discussion needed / None of the above.",
+              "implication": null
+            }
+          }
+        },
+        {
+          "question_id": "q3",
+          "text": "How should we handle packaging/publishing expectations to avoid \"package not found\" failures and repo-vs-npm confusion?",
+          "context": [
+            "Discord coders (2025-01-19): \"The packages are already installed in the repo; they appear in the packages folder. You don't need to install them separately.\" (answer by skeeet.........)",
+            "GitHub issues (2025-01-19.json): install issues include \"Problems with installing @elizaos/plugin-0g\" (#2513) and Telegram client not working (#2557)."
+          ],
+          "multiple_choice_answers": {
+            "answer_1": {
+              "text": "Declare a clear distribution model: Starter repo consumes published packages; monorepo is for contributors (with explicit docs).",
+              "implication": "Reduces ambiguity and aligns with a professional developer experience."
+            },
+            "answer_2": {
+              "text": "Make everything publishable and consistently available on npm, so repo and npm flows behave the same.",
+              "implication": "Simplifies mental model but increases release engineering overhead and versioning complexity."
+            },
+            "answer_3": {
+              "text": "Keep the current hybrid approach but add prominent install-time warnings and better error messages.",
+              "implication": "Low effort, but ongoing friction may persist and continue leaking into support channels."
+            },
+            "answer_4": {
+              "text": "Other / More discussion needed / None of the above.",
+              "implication": null
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "_metadata": {
+    "model": "openai/gpt-5.2",
+    "generated_at": "2026-01-01T04:40:53.497902Z",
+    "prompt_tokens": 117584,
+    "completion_tokens": 3999,
+    "total_tokens": 121583,
+    "status": "success",
+    "processing_seconds": 62.77,
+    "key_points_count": 3,
+    "total_deliberation_questions": 9
+  }
+}

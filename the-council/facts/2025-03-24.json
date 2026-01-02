@@ -1,0 +1,328 @@
+{
+  "briefing_date": "2025-03-24",
+  "overall_summary": "ElizaOS v2 beta adoption is being constrained by recurring setup and plugin (notably plugin-sql) failures, while the team is concurrently addressing plugin/security messaging amid competitor-driven vulnerability narratives. GitHub activity shows active hardening and agent-management work, plus new attention on Twitter agent targeting behavior.",
+  "key_facts": [
+    "Users reported ElizaOS v2 beta startup failures involving plugin-sql errors and database connection issues, and community guidance recommended using `@elizaos/cli@beta` to resolve some of these issues.",
+    "A Princeton research group contacted the team about potential security risks with trader plugins, and team members stated trader plugins are isolated while noting plugin security varies by author and model used.",
+    "Hubert is building an automated system to pull updates from a JSON file and post them to X via @ai16znews, with the JSON updating daily at midnight UTC.",
+    "DankVR announced a demo day at 2pm EST in Hyperfy.io with developer-focused talks (including Behind the Scenes of Clank Tank) and stated the event would be recorded.",
+    "In elizaOS/eliza, PR #4056 introduced salting for agent secrets using `SECRET_SALT` with a fallback mechanism.",
+    "In elizaOS/eliza, PR #4059 improved encryption of character secrets managed via the GUI.",
+    "In elizaOS/eliza, PR #4052 fixed a bug related to Telegram negative chat IDs during UUID conversion.",
+    "A new GitHub issue, #4054, requested investigation into why the Twitter agent replies to only a subset of `TWITTER_TARGET_USERS`."
+  ],
+  "open_questions": [
+    "Do we have any Eliza TG?",
+    "Is docs folder inside eliza repo manually typed by devs or it was generated through the code?",
+    "What version should I run to test and experiment with? I was wanting to have multiple agents communicating with each other?",
+    "Are you considering adding extended thinking for anthropic?",
+    "Why does my Docker setup only show the default \"Eliza\" character despite successfully loading my custom character?",
+    "Is WSL 2 still the best option for Windows PC?",
+    "Where are the \"APP [elizaos]\" messages coming from?",
+    "What is the use of relationships in ElizaOS?",
+    "Can we create custom events for plugins?",
+    "Has anybody built an agent that scrapes and analyses the history of a twitter feed and can create a comms framework from it?"
+  ],
+  "tags": {
+    "themes": [
+      "release",
+      "developer-experience",
+      "plugins",
+      "security",
+      "documentation"
+    ],
+    "sentiment": {
+      "overall": "mixed",
+      "context": [
+        "technical",
+        "social",
+        "economic"
+      ]
+    },
+    "story_type": [
+      "maintenance"
+    ],
+    "derived": [
+      "social",
+      "development",
+      "community",
+      "feedback",
+      "strategy",
+      "market"
+    ],
+    "priority": [
+      "high-attention"
+    ],
+    "manual": []
+  },
+  "categories": {
+    "twitter_news_highlights": [
+      {
+        "claim": "DankVR announced a demo day at 2pm EST in Hyperfy.io featuring developer talks (including AI 3D Avatars, an Eliza Plugin for Unreal, and Behind the Scenes of Clank Tank) and stated it would be recorded.",
+        "source": [
+          "ai-news/elizaos/json/2025-03-23.json",
+          "ai-news/elizaos/md/2025-03-23.md"
+        ],
+        "sentiment": "neutral"
+      },
+      {
+        "claim": "DankVR shared a development philosophy of focusing on building projects with 'undeniable value' and stated ElizaOS has been refactored 'to meet this moment.'",
+        "source": [
+          "ai-news/elizaos/json/2025-03-23.json",
+          "ai-news/elizaos/md/2025-03-23.md"
+        ],
+        "sentiment": "neutral"
+      }
+    ],
+    "github_updates": {
+      "new_issues_prs": [
+        {
+          "item_type": "issue",
+          "title": "Investigate why the Twitter agent is only replying to a subset of TWITTER_TARGET_USERS",
+          "number": 4054,
+          "url": "https://github.com/elizaos/eliza/issues/4054",
+          "status": "open",
+          "author": "JimiPatel2023",
+          "significance": "Impacts reliability of Twitter targeting behavior for agents."
+        },
+        {
+          "item_type": "pull_request",
+          "title": "feat: show client on received messages memory",
+          "number": 4058,
+          "url": "https://github.com/elizaOS/eliza/pull/4058",
+          "status": "merged",
+          "author": "unknown",
+          "significance": "Improves observability by storing client information on received messages."
+        },
+        {
+          "item_type": "pull_request",
+          "title": "feat: salt agent secrets",
+          "number": 4056,
+          "url": "https://github.com/elizaOS/eliza/pull/4056",
+          "status": "merged",
+          "author": "wtfsayo",
+          "significance": "Security hardening for secret handling via salting."
+        },
+        {
+          "item_type": "pull_request",
+          "title": "feat: add partial agent update",
+          "number": 4026,
+          "url": "https://github.com/elizaOS/eliza/pull/4026",
+          "status": "merged",
+          "author": "unknown",
+          "significance": "Adds partial agent update functionality for agent management workflows."
+        },
+        {
+          "item_type": "pull_request",
+          "title": "chore: encrypt character secrets from GUI",
+          "number": 4059,
+          "url": "https://github.com/elizaOS/eliza/pull/4059",
+          "status": "merged",
+          "author": "0xbbjoker",
+          "significance": "Security improvement to ensure secrets added/updated through the GUI are encrypted."
+        },
+        {
+          "item_type": "pull_request",
+          "title": "fix: tg negative id",
+          "number": 4052,
+          "url": "https://github.com/elizaOS/eliza/pull/4052",
+          "status": "merged",
+          "author": "0xbbjoker",
+          "significance": "Fixes Telegram group chat ID handling that could break world creation."
+        },
+        {
+          "item_type": "pull_request",
+          "title": "chore: update docs (visuals, core cleanup)",
+          "number": 4032,
+          "url": "https://github.com/elizaOS/eliza/pull/4032",
+          "status": "merged",
+          "author": "unknown",
+          "significance": "Documentation cleanup and navigation improvements."
+        }
+      ],
+      "overall_focus": [
+        {
+          "claim": "Development focus included agent management improvements and security hardening (secret salting and GUI encryption), alongside a Telegram ID bug fix and documentation cleanup.",
+          "source": [
+            "github/summaries/day/2025-03-24.md",
+            "ai-news/elizaos/json/2025-03-23.json",
+            "ai-news/elizaos/md/2025-03-23.md"
+          ]
+        }
+      ]
+    },
+    "discord_updates": [
+      {
+        "channel": "#\ud83d\udcbb-coders",
+        "summary": "Troubleshooting centered on v2 beta CLI/Docker/plugin failures (including plugin-sql and DB connection problems). Guidance included using `@elizaos/cli@beta`, clearing node_modules, and reinstalling dependencies; character behavior controls were discussed (explicitly disallowing emojis/pirate talk).",
+        "key_participants": [
+          "jin",
+          "MobesE46",
+          "Pedro",
+          "SecretRecipe"
+        ],
+        "source": [
+          "ai-news/elizaos/discord/md/2025-03-23.md",
+          "ai-news/elizaos/discord/json/2025-03-23.json"
+        ]
+      },
+      {
+        "channel": "#\ud83e\udd47-partners",
+        "summary": "Discussion addressed external security allegations (including references to Sentient and a Princeton outreach) with statements that trader plugins are isolated while plugin security varies; participants also discussed partner allocation mechanisms and a v2/launchpad/tokenomics timeline expectation of ~2 weeks.",
+        "key_participants": [
+          "Odilitime",
+          "shaw",
+          "django",
+          "yikesawjeez"
+        ],
+        "source": [
+          "ai-news/elizaos/discord/md/2025-03-23.md",
+          "ai-news/elizaos/discord/json/2025-03-23.json"
+        ]
+      },
+      {
+        "channel": "#dao-organization",
+        "summary": "A social media automation plan was shared to post daily update threads from a JSON feed at midnight UTC to @ai16znews, with proposals to add a HackMD-based editing pass; the channel also discussed coordinated negative messaging and a Telegram chat summarization bot concept.",
+        "key_participants": [
+          "hubert",
+          "jin",
+          "Rick"
+        ],
+        "source": [
+          "ai-news/elizaos/discord/md/2025-03-23.md",
+          "ai-news/elizaos/discord/json/2025-03-23.json"
+        ]
+      },
+      {
+        "channel": "#spartan_holders",
+        "summary": "Members stated Spartan v2 is not changing the underlying model versus v1 but changes how it 'experiences the world'; tokenomics discussion included that a DegenAI buyback is in drafts but pending synchronization with ai16z, and a new public channel was created while keeping holders private.",
+        "key_participants": [
+          "Odilitime",
+          "rhota"
+        ],
+        "source": [
+          "ai-news/elizaos/discord/md/2025-03-23.md",
+          "ai-news/elizaos/discord/json/2025-03-23.json"
+        ]
+      },
+      {
+        "channel": "#discussion",
+        "summary": "Questions included PDF ingestion into agent knowledge and LLM model compatibility; responses indicated PDF integration exists via local folder configuration, and that different LLM models can be used though output quality may vary.",
+        "key_participants": [
+          "Patt",
+          "SecretRecipe"
+        ],
+        "source": [
+          "ai-news/elizaos/discord/json/2025-03-23.json",
+          "ai-news/elizaos/discord/md/2025-03-23.md"
+        ]
+      }
+    ],
+    "user_feedback": [
+      {
+        "feedback_summary": "Users reported repeated ElizaOS v2 beta setup/start issues (CLI/Docker/plugin integration), including plugin-sql module errors and database connection failures.",
+        "source": [
+          "ai-news/elizaos/discord/md/2025-03-23.md",
+          "ai-news/elizaos/discord/md/2025-03-22.md"
+        ],
+        "sentiment": "negative"
+      },
+      {
+        "feedback_summary": "Users requested better control over agent style/personality persistence, specifically stopping emojis and pirate-style speech through character configuration.",
+        "source": [
+          "ai-news/elizaos/discord/md/2025-03-23.md",
+          "ai-news/elizaos/discord/md/2025-03-22.md"
+        ],
+        "sentiment": "neutral"
+      },
+      {
+        "feedback_summary": "Requests were made for features including streaming responses (ChatGPT/Claude-like), multi-agent communication, Telegram message deletion, and improved Windows setup guidance.",
+        "source": [
+          "ai-news/elizaos/discord/md/2025-03-22.md",
+          "ai-news/elizaos/discord/md/2025-03-23.md"
+        ],
+        "sentiment": "neutral"
+      },
+      {
+        "feedback_summary": "Community members requested clearer communication about plugin security risks and LLM/tooling mechanisms for non-technical users.",
+        "source": [
+          "ai-news/elizaos/discord/md/2025-03-23.md",
+          "ai-news/elizaos/discord/json/2025-03-23.json"
+        ],
+        "sentiment": "mixed"
+      }
+    ],
+    "strategic_insights": [
+      {
+        "theme": "v2 beta onboarding friction",
+        "insight": "Recurring reports of CLI/Docker/plugin startup failures in the v2 beta are generating repeated support cycles and documentation requests, especially for Windows and plugin-sql setup. Consolidated troubleshooting guidance and version pinning guidance appear to be recurring needs in community support.",
+        "implications_or_questions": [
+          "Should a single canonical 'v2 beta known issues' page be published and linked from the CLI output?",
+          "Should plugin-sql and DB setup be validated preflight in the CLI to reduce repeated failures?"
+        ]
+      },
+      {
+        "theme": "Security narrative management",
+        "insight": "External security messaging (Princeton outreach and competitor claims) is driving partner-room discussion and action items focused on clarifying isolation boundaries and communicating plugin risk differences. Coordination with an Immunefi partnership announcement is being discussed as part of response timing.",
+        "implications_or_questions": [
+          "What public guidance will define 'isolated' vs 'non-isolated' plugin behavior and expected author controls?",
+          "What is the plan for responding to competitor claims while aligning with any partnership announcements?"
+        ]
+      },
+      {
+        "theme": "Automation of outward communications",
+        "insight": "Work is underway to operationalize daily public communications by turning internal JSON updates into scheduled X threads, with additional editorial workflow proposed via HackMD. This introduces a repeatable content pipeline that can incorporate GitHub and Discord artifacts.",
+        "implications_or_questions": [
+          "Who owns editorial approval and what is the cutoff time relative to midnight UTC publishing?",
+          "Should the pipeline include automated redaction rules for security-sensitive items?"
+        ]
+      }
+    ],
+    "market_analysis": [
+      {
+        "observation": "A scam ElizaOS token on BSC was flagged to the community.",
+        "source": [
+          "ai-news/elizaos/discord/md/2025-03-22.md",
+          "ai-news/elizaos/json/2025-03-23.json"
+        ],
+        "relevance": "Impersonation risk can harm users and brand trust; may require public warnings and verification guidance."
+      },
+      {
+        "observation": "Community discussions referenced competitor Sentient highlighting security vulnerabilities and described coordinated negative messaging about ElizaOS.",
+        "source": [
+          "ai-news/elizaos/discord/md/2025-03-23.md",
+          "ai-news/elizaos/discord/json/2025-03-23.json"
+        ],
+        "relevance": "Competitor narratives may affect adoption and partnerships; drives need for clear security positioning and documentation."
+      },
+      {
+        "observation": "Crypto market data in the daily report listed WBTC trading between approximately $83,729.89 and $85,895.12 and ai16z around $0.19.",
+        "source": [
+          "ai-news/elizaos/json/2025-03-23.json",
+          "ai-news/elizaos/md/2025-03-23.md"
+        ],
+        "relevance": "Provides context for token/community discussions and partner allocation debates."
+      }
+    ]
+  },
+  "_metadata": {
+    "model": "openai/gpt-5.2",
+    "extracted_at": "2026-01-01T03:51:34.141082Z",
+    "prompt_tokens": 62464,
+    "completion_tokens": 4087,
+    "total_tokens": 66551,
+    "processing_seconds": 56.02,
+    "status": "success",
+    "facts_by_category": {
+      "twitter_news_highlights": 2,
+      "github_updates": 7,
+      "discord_updates": 5,
+      "user_feedback": 4,
+      "strategic_insights": 3,
+      "market_analysis": 3,
+      "key_facts": 8,
+      "open_questions": 10
+    },
+    "total_facts": 42
+  }
+}

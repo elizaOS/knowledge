@@ -1,0 +1,392 @@
+{
+  "briefing_date": "2025-02-17",
+  "overall_summary": "Conversation and incident response centered on the compromise of Shaw\u2019s X/Twitter account, which was used to distribute phishing links and a fake token migration, alongside ongoing mitigation steps and calls for verifiable official communications. In parallel, GitHub activity focused on test reliability (Telegram/Discord/Twitter), bug fixes (race conditions, Bedrock inference), and security patching (CVE-2024-48930).",
+  "key_facts": [
+    "Shaw\u2019s Twitter/X account was compromised and used to post malicious links to fake ElizaOS sites including eliza-os.net and elizaos.co.",
+    "At least one user reported losing $40,000 after interacting with the scam content shared from the compromised account.",
+    "Jin proposed a verifiable on-chain communications approach using token memos and a frontend that links to Solscan for verification.",
+    "Community members stated the token rebrand will not change the contract address, only the ticker and name.",
+    "The team stated they are accelerating plans to bring Degen AI back to Discord due to the degenspartanai X/Twitter account suspension.",
+    "Users reported better-sqlite3 errors in the eliza-starter repo and shared a rebuild command sequence as a workaround.",
+    "PR #3522 merged the develop branch into main for the 0.25.8 release.",
+    "PR #2958 patched security vulnerability CVE-2024-48930.",
+    "Issue #3556 reported a build failure with exit code 137 during `pnpm build` in WSL.",
+    "Community members began compiling REST API documentation for client-direct endpoints at https://hackmd.io/@lefrogg/eliza-REST-API."
+  ],
+  "open_questions": [
+    "How do I add some docs while running the agent so that it uses these docs as a knowledge base?",
+    "How does an Eliza agent evade getting banned on X when using the frontend API?",
+    "How can we get a market maker like the one mentioned in the tweet?",
+    "Is the degenspartanai official twitter still banned?",
+    "What's the sentiment of ai16z in cn and asia?"
+  ],
+  "tags": {
+    "themes": [
+      "security",
+      "token-migration",
+      "documentation",
+      "ai-agents",
+      "plugins"
+    ],
+    "sentiment": {
+      "overall": "mixed",
+      "context": [
+        "technical",
+        "economic",
+        "social"
+      ]
+    },
+    "story_type": [
+      "crisis"
+    ],
+    "derived": [
+      "social",
+      "development",
+      "community",
+      "feedback",
+      "strategy",
+      "market"
+    ],
+    "priority": [
+      "high-attention"
+    ],
+    "manual": []
+  },
+  "categories": {
+    "twitter_news_highlights": [
+      {
+        "claim": "Shaw reported their Twitter/X account was hacked despite having 2FA and strong credential hygiene, and warned about the incident.",
+        "source": [
+          "ai-news/elizaos/json/2025-02-16.json",
+          "ai-news/elizaos/md/2025-02-16.md"
+        ],
+        "sentiment": "negative"
+      },
+      {
+        "claim": "Shaw stated that posts and connected accounts were removed after the compromise was detected.",
+        "source": [
+          "ai-news/elizaos/json/2025-02-16.json"
+        ],
+        "sentiment": "neutral"
+      }
+    ],
+    "github_updates": {
+      "new_issues_prs": [
+        {
+          "item_type": "issue",
+          "title": "A build failure with error code 137, indicating the process was terminated during the build process.",
+          "number": 3556,
+          "url": "https://github.com/elizaOS/eliza/issues/3556",
+          "status": "closed",
+          "author": "KristofferGW",
+          "significance": "Build blocker reported for WSL environments."
+        },
+        {
+          "item_type": "issue",
+          "title": "Error with the RAG (Retrieval-Augmented Generation) Search functionality.",
+          "number": 3546,
+          "url": "https://github.com/elizaOS/eliza/issues/3546",
+          "status": "closed",
+          "author": "WNUMIK",
+          "significance": "Reported functional error in RAG knowledge search."
+        },
+        {
+          "item_type": "issue",
+          "title": "A plugin for notion.so integration.",
+          "number": 3547,
+          "url": "https://github.com/elizaOS/eliza/issues/3547",
+          "status": "closed",
+          "author": "cpereiramt",
+          "significance": "Requested integration capability (Notion)."
+        },
+        {
+          "item_type": "issue",
+          "title": "A problem with incorrect imports in the advanced-sdk-ts component.",
+          "number": 3527,
+          "url": "https://github.com/elizaOS/eliza/issues/3527",
+          "status": "closed",
+          "author": "andyvalerio",
+          "significance": "Reported SDK import bug affecting builds/usage."
+        },
+        {
+          "item_type": "pull_request",
+          "title": "chore: develop => main (0.25.8 release)",
+          "number": 3522,
+          "url": "https://github.com/elizaOS/eliza/pull/3522",
+          "status": "merged",
+          "author": "unknown",
+          "significance": "Release merge for version 0.25.8."
+        },
+        {
+          "item_type": "pull_request",
+          "title": "fix: CVE-2024-48930",
+          "number": 2958,
+          "url": "https://github.com/elizaOS/eliza/pull/2958",
+          "status": "merged",
+          "author": "unknown",
+          "significance": "Security patch addressing CVE-2024-48930."
+        },
+        {
+          "item_type": "pull_request",
+          "title": "fix: race condition",
+          "number": 3549,
+          "url": "https://github.com/elizaOS/eliza/pull/3549",
+          "status": "merged",
+          "author": "unknown",
+          "significance": "Fix for race condition affecting plugin loading/embedding dimension setup."
+        },
+        {
+          "item_type": "pull_request",
+          "title": "fix: Fix bedrock inference",
+          "number": 3553,
+          "url": "https://github.com/elizaOS/eliza/pull/3553",
+          "status": "merged",
+          "author": "unknown",
+          "significance": "Fix for Bedrock model provider inference failures."
+        },
+        {
+          "item_type": "pull_request",
+          "title": "feat: telegram test suite",
+          "number": 3538,
+          "url": "https://github.com/elizaOS/eliza/pull/3538",
+          "status": "merged",
+          "author": "unknown",
+          "significance": "Introduced Telegram test suite to improve integration stability."
+        },
+        {
+          "item_type": "pull_request",
+          "title": "feat: new plugin zapper",
+          "number": 3554,
+          "url": "https://github.com/elizaOS/eliza/pull/3554",
+          "status": "open",
+          "author": "unknown",
+          "significance": "Adds a new Zapper plugin capability."
+        },
+        {
+          "item_type": "pull_request",
+          "title": "feat: add Extractor Agent Firewall plugin",
+          "number": 3544,
+          "url": "https://github.com/elizaOS/eliza/pull/3544",
+          "status": "open",
+          "author": "unknown",
+          "significance": "Adds an agent firewall-style plugin for extraction tooling."
+        }
+      ],
+      "overall_focus": [
+        {
+          "claim": "GitHub work emphasized test coverage and stability across Telegram/Discord/Twitter, alongside targeted bug fixes (race conditions, Bedrock inference) and dependency/security patching.",
+          "source": [
+            "github/summaries/day/2025-02-17.md",
+            "ai-news/elizaos/md/2025-02-16.md",
+            "ai-news/elizaos/json/2025-02-16.json"
+          ]
+        }
+      ]
+    },
+    "discord_updates": [
+      {
+        "channel": "#discussion",
+        "summary": "The channel focused on responding to Shaw\u2019s compromised Twitter/X account and scam links, including warnings not to connect wallets or sign transactions, and discussion of better official comms. There were also questions about roadmap/project structure and references to Block Tank/Clank Tank submissions.",
+        "key_participants": [
+          "jin",
+          "BOSSU",
+          "Bealers",
+          "Ka_yari"
+        ],
+        "source": [
+          "ai-news/elizaos/discord/json/2025-02-16.json",
+          "ai-news/elizaos/discord/md/2025-02-16.md"
+        ]
+      },
+      {
+        "channel": "#\ud83d\udcbb-coders",
+        "summary": "Developers troubleshot better-sqlite3 build errors, client-direct REST API usage (including userId/roomId for memory separation), plugin loading/debugging, and Twitter client configuration issues (rate limits/shadow bans). Community began drafting REST API docs on HackMD.",
+        "key_participants": [
+          "lefrog",
+          "cipher009",
+          "Odilitime",
+          "Mr. Stark"
+        ],
+        "source": [
+          "ai-news/elizaos/discord/json/2025-02-16.json",
+          "ai-news/elizaos/discord/md/2025-02-16.md"
+        ]
+      },
+      {
+        "channel": "#spartan_holders",
+        "summary": "Moderators discussed the suspension of the degenspartanai X/Twitter account and stated they are accelerating plans to move Degen AI functionality back into Discord via a new test channel before broader release.",
+        "key_participants": [
+          "rhota",
+          "Odilitime"
+        ],
+        "source": [
+          "ai-news/elizaos/discord/json/2025-02-16.json"
+        ]
+      },
+      {
+        "channel": "#associates",
+        "summary": "Participants flagged scam posts and phishing domains impersonating ElizaOS and shared steps to report the domains to the registrar. Some comments referenced unfavorable market conditions for rushed launches.",
+        "key_participants": [
+          "Bealers",
+          "Zapdart",
+          "hyper"
+        ],
+        "source": [
+          "ai-news/elizaos/discord/json/2025-02-16.json"
+        ]
+      },
+      {
+        "channel": "#tokenomics",
+        "summary": "Discussion proposed creating liquidity pairs between AI16 and other agent tokens held by the treasury to position AI16 as a hub; counterpoints emphasized AI16\u2019s positioning as a leading agent platform rather than an index-fund product alone.",
+        "key_participants": [
+          "yikesawjeez",
+          "DorianD"
+        ],
+        "source": [
+          "ai-news/elizaos/discord/json/2025-02-16.json"
+        ]
+      },
+      {
+        "channel": "#\ud83e\udd47-partners",
+        "summary": "Partners coordinated scam mitigation, discussed accelerating the AI16Z\u2192ElizaOS rebrand, considered multichain expansion, and discussed a proposal for verifiable on-chain official messaging via token memos.",
+        "key_participants": [
+          "jin",
+          "Whimsical",
+          "Bealers",
+          "mat"
+        ],
+        "source": [
+          "ai-news/elizaos/discord/json/2025-02-16.json",
+          "ai-news/elizaos/discord/md/2025-02-16.md"
+        ]
+      },
+      {
+        "channel": "#3d-ai-tv",
+        "summary": "Work continued on an AI TV/podcast intro/outro package (music selection, transitions, voiceovers), with feedback to shorten the intro and keep category text visible on-screen; a repository for music tracks was proposed.",
+        "key_participants": [
+          "fishai",
+          "boom",
+          "jin",
+          "SM Sith Lord"
+        ],
+        "source": [
+          "ai-news/elizaos/discord/json/2025-02-16.json"
+        ]
+      },
+      {
+        "channel": "#ideas-feedback-rants",
+        "summary": "Users noted eliza.gg was not working and were told docs are being migrated. A community member announced an open-source 'Agentic Web' decentralized p2p network for AI agents and indicated it is in prototype ahead of a potential TGE.",
+        "key_participants": [
+          "Kenk",
+          "Evan"
+        ],
+        "source": [
+          "ai-news/elizaos/discord/json/2025-02-16.json"
+        ]
+      }
+    ],
+    "user_feedback": [
+      {
+        "feedback_summary": "Users requested clearer REST API documentation for client-direct endpoints and began compiling it collaboratively on HackMD.",
+        "source": [
+          "ai-news/elizaos/discord/md/2025-02-16.md",
+          "ai-news/elizaos/discord/json/2025-02-16.json"
+        ],
+        "sentiment": "neutral"
+      },
+      {
+        "feedback_summary": "Users reported recurring better-sqlite3 installation/build issues in eliza-starter and circulated manual rebuild steps as a workaround.",
+        "source": [
+          "ai-news/elizaos/discord/md/2025-02-16.md",
+          "ai-news/elizaos/discord/md/2025-02-15.md"
+        ],
+        "sentiment": "mixed"
+      },
+      {
+        "feedback_summary": "Community requested improvements to plugin loading/registration (especially for v2) and better debugging/logging for plugin failures.",
+        "source": [
+          "ai-news/elizaos/discord/json/2025-02-16.json",
+          "ai-news/elizaos/discord/md/2025-02-16.md"
+        ],
+        "sentiment": "neutral"
+      },
+      {
+        "feedback_summary": "Multiple participants requested more robust official communication methods after the phishing incident, including verifiable on-chain announcements.",
+        "source": [
+          "ai-news/elizaos/discord/md/2025-02-16.md",
+          "ai-news/elizaos/discord/md/2025-02-15.md"
+        ],
+        "sentiment": "mixed"
+      },
+      {
+        "feedback_summary": "Users requested documentation updates, including adding the Discord link to the website and documenting how to change client listening/host configuration.",
+        "source": [
+          "ai-news/elizaos/discord/json/2025-02-16.json"
+        ],
+        "sentiment": "neutral"
+      }
+    ],
+    "strategic_insights": [
+      {
+        "theme": "Verifiable official communications",
+        "insight": "The account compromise triggered immediate community losses and rapid social dissemination of phishing links; multiple members proposed migrating official announcements to verifiable on-chain mechanisms (e.g., token memos) to reduce impersonation risk.",
+        "implications_or_questions": [
+          "Should the project designate an official on-chain announcement channel and publish a verification guide?",
+          "What operational process will govern emergency comms when social accounts are compromised?"
+        ]
+      },
+      {
+        "theme": "Developer experience as adoption constraint",
+        "insight": "Repeated reports of better-sqlite3 build errors, missing REST API documentation, and plugin-loading confusion show that setup friction remains a frequent blocker for new builders, even as core work adds tests and refactors.",
+        "implications_or_questions": [
+          "Which top onboarding failure modes (sqlite install, plugin loading, API usage) should be addressed in the Quickstart first?"
+        ]
+      },
+      {
+        "theme": "Brand/ticker transition timing pressure",
+        "insight": "Partners and community members repeatedly referenced accelerating the AI16Z\u2192ElizaOS rebrand and clarifying that the contract address remains unchanged, indicating ongoing confusion that can be exploited by scammers during transition periods.",
+        "implications_or_questions": [
+          "Is there a single canonical rebrand FAQ and anti-phishing checklist that can be pinned across channels?"
+        ]
+      }
+    ],
+    "market_analysis": [
+      {
+        "observation": "Participants discussed liquidity and positioning ideas such as creating AI16 liquidity pairs with other agent tokens held in treasury and capturing fees from trading pools.",
+        "source": [
+          "ai-news/elizaos/discord/md/2025-02-16.md",
+          "ai-news/elizaos/discord/md/2025-02-15.md",
+          "ai-news/elizaos/discord/json/2025-02-16.json"
+        ],
+        "relevance": "These proposals relate to token utility and market access (swap-hop reduction) and may affect treasury risk and liquidity deployment."
+      },
+      {
+        "observation": "A comment in associates noted unfavorable market conditions and referenced that delaying certain launches was preferable to rushing.",
+        "source": [
+          "ai-news/elizaos/discord/json/2025-02-16.json"
+        ],
+        "relevance": "Community launch pacing feedback may influence timing decisions for product and token-related announcements."
+      }
+    ]
+  },
+  "_metadata": {
+    "model": "openai/gpt-5.2",
+    "extracted_at": "2026-01-01T03:21:12.666377Z",
+    "prompt_tokens": 64137,
+    "completion_tokens": 4960,
+    "total_tokens": 69097,
+    "processing_seconds": 58.14,
+    "status": "success",
+    "facts_by_category": {
+      "twitter_news_highlights": 2,
+      "github_updates": 11,
+      "discord_updates": 8,
+      "user_feedback": 5,
+      "strategic_insights": 3,
+      "market_analysis": 2,
+      "key_facts": 10,
+      "open_questions": 5
+    },
+    "total_facts": 46
+  }
+}

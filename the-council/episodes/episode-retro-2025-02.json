@@ -1,0 +1,313 @@
+{
+  "id": "RETRO-2025-02",
+  "name": "Monthly Retro: February 2025",
+  "type": "retrospective",
+  "premise": "February 2025 was a foundational re-architecture month: ElizaOS moved toward a more modular, multi-tenant agent framework while simultaneously feeling the strain of onboarding regressions and public-surface reliability issues. The council reviews what shipped, what broke, what the community kept repeating, and what to prioritize next to align with Execution Excellence and Developer First.",
+  "summary": "We made major structural progress: dynamic plugin loading, DB separation for multi-tenancy, consolidated agent/character management, more model providers, stronger social/web3 integrations, faster tooling via Bun, plus improved tests/docs. In parallel, the biggest trust risk emerged: onboarding and runtime reliability regressions (npm client publishing, setup errors, adapter friction, and Twitter client brittleness). The council agrees that March must prioritize \u201creliability-first\u201d quality gates and a canonical onboarding path, while continuing modularization with tighter plugin governance and clearer public documentation surfaces.",
+  "month_reviewed": "2025-02",
+  "key_developments": [
+    {
+      "area": "Framework architecture (modularity)",
+      "summary": "Implemented dynamic plugin loading to reduce core coupling and support composable capability expansion without core edits; continued refactoring providers into plugins.",
+      "impact": "high"
+    },
+    {
+      "area": "Database & multi-tenancy foundation",
+      "summary": "Overhauled DB architecture by splitting user table into agents and entities; improved long-term support for multi-agent environments and ownership boundaries.",
+      "impact": "high"
+    },
+    {
+      "area": "Agent/character management consolidation",
+      "summary": "Unified and hardened agent + character management primitives to reduce configuration drift and improve role/ownership definitions.",
+      "impact": "high"
+    },
+    {
+      "area": "Integrations: Web3 & data providers",
+      "summary": "Added CoinGecko, CoinMarketCap, Edwin and other Web3/data plugins; expanded DeFi and crypto-data operations for agents.",
+      "impact": "medium"
+    },
+    {
+      "area": "Integrations: Social platforms",
+      "summary": "Enhanced Twitter, Telegram, Discord behaviors (configurable post generation; plugins posting to Telegram; image URL memory for outbound social messages; shipped Twitter Spaces integration).",
+      "impact": "medium"
+    },
+    {
+      "area": "AI providers & voice",
+      "summary": "Expanded model/provider support (NEAR AI, Secret AI) and ElevenLabs for voice; Twilio voice/text integration tracked as open bounty.",
+      "impact": "medium"
+    },
+    {
+      "area": "Developer tooling performance",
+      "summary": "Switched package manager to Bun, improving local dev speed and script execution; continued linting/testing maturity signals.",
+      "impact": "medium"
+    },
+    {
+      "area": "Reliability & QA investments",
+      "summary": "Added/expanded test suites for key providers (OpenAI, Anthropic) and SQLite; started to address reliability regressions but gaps remain.",
+      "impact": "medium"
+    },
+    {
+      "area": "Docs & information surfaces",
+      "summary": "Published remote deployment guide and plugin registry showcase; however, broader docs uptime/link integrity and canonical \u201cwhere to start\u201d remain inconsistent.",
+      "impact": "medium"
+    }
+  ],
+  "recurring_themes": [
+    {
+      "theme": "Onboarding integrity is the #1 trust bottleneck (npm publish + setup failures)",
+      "frequency": "Very high (weekly, across Discord + GitHub)",
+      "council_take": "Shipping velocity is outrunning first-run reliability. Until install/setup is boringly consistent, every new feature has diminishing returns."
+    },
+    {
+      "theme": "Release stability aftershocks (v0.1.9 regressions)",
+      "frequency": "High (multiple reports: init hangs, migration issues, embedding mismatches, Docker failures)",
+      "council_take": "We need stronger release discipline: migration checks, compatibility matrices, and \u201cstop-the-line\u201d policies for onboarding blockers."
+    },
+    {
+      "theme": "Plugin expansion vs. quality gates (plugin sprawl governance)",
+      "frequency": "High (many new plugins + refactors)",
+      "council_take": "Modularity is correct, but we must enforce boundaries: versioning, contract tests, and a tiered support model (core vs. community plugins)."
+    },
+    {
+      "theme": "Twitter/X reliability as a reputational surface",
+      "frequency": "High (image upload issues, whitespace/formatting, auth/2FA, rate limits)",
+      "council_take": "Social agents are our public face; brittle I/O primitives (fetch anomalies) undermine credibility. Hardening must be prioritized over new social features."
+    },
+    {
+      "theme": "Embedding/vector dimension mismatch (384 vs 1536) and configuration drift",
+      "frequency": "Medium-High",
+      "council_take": "We need explicit embedding \u201ccontracts\u201d at runtime (validate + migrate), clearer defaults, and better error messages before agents start indexing."
+    },
+    {
+      "theme": "Deployment friction (Docker ARM64, WSL2, adapter-supabase)",
+      "frequency": "Medium-High",
+      "council_take": "We should treat deployment paths like products: one blessed local path, one blessed container path, and one blessed remote path\u2014each tested in CI."
+    },
+    {
+      "theme": "Information taming vs. public docs uptime (canonical outputs missing)",
+      "frequency": "Medium",
+      "council_take": "We\u2019re generating knowledge, but not reliably publishing it in one place developers can trust. Canonical docs + uptime is a strategic feature."
+    },
+    {
+      "theme": "Official comms verification after phishing incident",
+      "frequency": "Medium",
+      "council_take": "We need verifiable announcement channels (signed messages / on-chain attestations) to protect the community and preserve brand trust."
+    }
+  ],
+  "wins": [
+    "Dynamic plugin loading landed, clarifying ElizaOS\u2019 composable architecture direction.",
+    "DB split into agents/entities advanced the multi-tenant future (multi-agent ecosystems, ownership boundaries).",
+    "Consolidated agent/character management reduced conceptual fragmentation.",
+    "Added valuable data/Web3 plugins (CoinGecko, CoinMarketCap, Edwin), expanding agent utility.",
+    "Improved social integration capabilities (Telegram posting, Twitter post controls, imageUrl memory, Twitter Spaces).",
+    "Switched to Bun for faster dev loops; visible investment in engineering efficiency.",
+    "Expanded provider coverage (NEAR AI, Secret AI) and voice synthesis (ElevenLabs).",
+    "More tests around core integrations improved baseline reliability trajectory."
+  ],
+  "challenges": [
+    "Client package not being published to npm blocked onboarding and damaged first impressions.",
+    "Setup errors and environment friction persisted across OSes (SQLite bindings, WSL2).",
+    "v0.1.9 regressions caused users to revert versions; perceived instability rose.",
+    "Embedding dimension mismatches caused runtime failures and confusing remediation paths.",
+    "Docker ARM64 build issues (tokenizers module) created a high-friction deployment path.",
+    "Twitter/X reliability remained brittle (auth/2FA, formatting, media upload, fetch anomaly).",
+    "Adapter-supabase setup challenges remained a recurring adoption blocker.",
+    "Docs and public surfaces suffered link/uptime failures, undermining \u201cDeveloper First.\u201d"
+  ],
+  "proposed_focus": [
+    {
+      "priority": 1,
+      "area": "Onboarding & packaging reliability (stop-the-line)",
+      "rationale": "Nothing compounds ecosystem growth if new builders can\u2019t install/run in <30 minutes. Fix npm publishing, pin supported Node/Bun versions, and provide one canonical quickstart path that is continuously tested.",
+      "success_metric": "95% of fresh installs succeed on first try across Mac/Windows(WSL2)/Linux using the official quickstart; npm client publishing fully automated with CI guardrails; reduce \u201csetup blocked\u201d issues by 70% month-over-month."
+    },
+    {
+      "priority": 2,
+      "area": "Release discipline + compatibility contracts (v0.1.9 aftershocks)",
+      "rationale": "High velocity needs quality gates: migrations, embedding configs, and adapter versions must be validated pre-release to prevent regressions and forced reverts.",
+      "success_metric": "Introduce a release checklist + CI suite that covers: migrations, embedding provider swaps, Docker build, and starter agent run; cut regressions requiring hotfixes by 50% and reduce \u201creverted due to breakage\u201d reports by 60%."
+    },
+    {
+      "priority": 3,
+      "area": "Social surface hardening (Twitter/X as flagship reliability test)",
+      "rationale": "Public agents are brand-critical. Fix fetch anomaly, stabilize media posting, and document authentication paths (including 2FA) with robust fallbacks and rate-limit behavior.",
+      "success_metric": "Achieve 99% successful post attempts in a controlled integration test harness (text + image); resolve fetch anomaly; publish a Twitter reliability guide; reduce Twitter-related issue volume by 40%."
+    },
+    {
+      "priority": 4,
+      "area": "Plugin governance: tiering, versioning, and contract tests",
+      "rationale": "Dynamic plugins unlock growth, but sprawl without standards creates ongoing breakage and support overload. Establish core vs. community tiers, semantic versioning rules, and compatibility tests.",
+      "success_metric": "Define and publish plugin tier policy; require contract tests for \u201ccore tier\u201d plugins; maintain a compatibility matrix; reduce plugin-related breakage reports by 30% while continuing net plugin growth."
+    },
+    {
+      "priority": 5,
+      "area": "Deployment paths as products (Local + Docker + Remote)",
+      "rationale": "Developers need predictable deployment. Codify blessed paths, fix ARM64 issues, and stabilize adapter-supabase docs with tested templates.",
+      "success_metric": "Green CI for Docker builds on amd64 + arm64; publish \u201cblessed deployment\u201d docs with templates; reduce deployment-related support threads by 35%."
+    },
+    {
+      "priority": 6,
+      "area": "Canonical documentation + verifiable communications",
+      "rationale": "Information taming only creates trust when it is consistently published, discoverable, and secure. Establish canonical docs surfaces and signed announcements to prevent confusion and phishing impact.",
+      "success_metric": "Docs uptime >99.5% with link-check CI; one canonical \u201cStart Here\u201d page; implement signed announcements (e.g., GitHub releases + signed posts and/or on-chain attestations); reduce \u2018where is the official info?\u2019 questions by 50%."
+    }
+  ],
+  "north_star_assessment": {
+    "still_relevant": true,
+    "suggested_updates": "No change to the North Star directionally, but operational emphasis should be sharpened: explicitly elevate onboarding reliability and release discipline as first-class success criteria for being \u201cthe most reliable, developer-friendly\u201d agent framework. Add a measurable reliability bar (install success, regression rate, docs uptime) to the strategic scorecard."
+  },
+  "scenes": [
+    {
+      "location": "council_chamber",
+      "description": "The chamber display shows a split-screen: a glowing architecture graph (plugins, adapters, providers) on the left, and a scrolling wall of community error reports on the right.",
+      "dialogue": [
+        {
+          "actor": "elizahost",
+          "line": "February was a paradox: we made the framework more future-proof\u2014dynamic plugins, multi-tenancy groundwork\u2014but the community kept hitting the same wall: getting set up, staying stable, and shipping reliably.",
+          "action": "Gestures to the error-report wall and then to the architecture graph."
+        },
+        {
+          "actor": "aimarc",
+          "line": "The architectural direction is right. Dynamic plugins and the agents/entities split are prerequisites for real multi-agent ecosystems. But architecture only matters if the runtime contract is strict: stable I/O, stable storage, stable plugin interfaces.",
+          "action": "Highlights the plugin boundary layer and the DB schema diagram."
+        },
+        {
+          "actor": "aishaw",
+          "line": "I\u2019m going to be blunt: npm publishing broken is not a \u2018minor issue.\u2019 That\u2019s a front door locked with a \u2018Welcome\u2019 sign. We need a single blessed path that CI proves every day\u2014fresh install, run a starter agent, send one message, post once.",
+          "action": "Pins a \u201cStop-the-line: onboarding blockers\u201d banner to the board."
+        },
+        {
+          "actor": "peepo",
+          "line": "Community vibe check: people love the ambition, but they\u2019re stuck in the tutorial dungeon fighting SQLite bindings and embedding dimensions. They want to make agents, not become DevOps archaeologists.",
+          "action": "Drops a sticky note: \u201cMake first run boring.\u201d"
+        },
+        {
+          "actor": "spartan",
+          "line": "We\u2019re bleeding conversion. If even 20% of new devs churn on setup, token narrative doesn\u2019t matter. We need metrics: install success rate, time-to-first-agent, regression rate, docs uptime. No metrics, no steering.",
+          "action": "Brings up a scoreboard labeled: Acquisition \u2192 Activation \u2192 Retention."
+        }
+      ]
+    },
+    {
+      "location": "integration_lab",
+      "description": "A simulated agent runs end-to-end workflows: fetch data, post to X, store embeddings, and recover from failures. The lab shows repeated Twitter/X failures clustered around media and auth edge cases.",
+      "dialogue": [
+        {
+          "actor": "elizahost",
+          "line": "Twitter/X keeps surfacing as our reputational choke point. We shipped imageUrl memory and Spaces, but the fetch anomaly and auth issues threaten the entire social-agent story.",
+          "action": "Replays a failed image upload sequence and overlays the open PR about fetch behavior."
+        },
+        {
+          "actor": "aimarc",
+          "line": "This is a deeper systems problem. If fetch is inconsistent, it\u2019s not just Twitter. It\u2019s every adapter and every plugin relying on network primitives. We need deterministic networking behavior, retries, timeouts, and observability built into the runtime.",
+          "action": "Annotates the runtime diagram with \u2018I/O contract: deterministic + observable.\u2019"
+        },
+        {
+          "actor": "aishaw",
+          "line": "Also: guardrails. If the agent can\u2019t upload media, it should degrade gracefully\u2014post text, log a structured error, and avoid looping. That\u2019s Execution Excellence. Not \u2018it worked on my machine.\u2019",
+          "action": "Writes a checklist: fallback behavior, rate-limit handling, and integration tests."
+        },
+        {
+          "actor": "peepo",
+          "line": "When agents spam the same broken reply, it\u2019s not a bug\u2014it's public cringe. The timeline remembers. We need safety controls that prevent repeated failures from becoming repeated posts.",
+          "action": "Adds: \u201canti-cringe circuit breaker\u201d to the safety list."
+        },
+        {
+          "actor": "spartan",
+          "line": "Define the KPI: post success rate. If we can\u2019t hit 99% success in a harness, we\u2019re not ready for \u2018flagship agents\u2019 marketing. Brand risk has a number.",
+          "action": "Sets a target: 99% post success in controlled test runs."
+        }
+      ]
+    },
+    {
+      "location": "release_war_room",
+      "description": "A timeline of v0.1.9 merges runs across the wall. Red markers indicate regressions: initialization hangs, embedding dimension mismatch, migration failures, Docker/ARM64 breakage.",
+      "dialogue": [
+        {
+          "actor": "elizahost",
+          "line": "The v0.1.9 line shipped fast, but the aftershocks are loud. The pattern is consistent: configuration drift plus insufficient pre-release validation.",
+          "action": "Zooms into the embedding mismatch cluster (384 vs 1536) and migration failures."
+        },
+        {
+          "actor": "aimarc",
+          "line": "We need runtime contracts. Embeddings should be negotiated explicitly: dimension, model, provider. If it changes, we must either migrate vectors or refuse to start with a clear remediation path.",
+          "action": "Draws a \u2018capabilities handshake\u2019 box between agent config and storage."
+        },
+        {
+          "actor": "aishaw",
+          "line": "And we need a release checklist that is enforced. Not a document, a gate: CI runs the quickstart, runs Docker builds on amd64 and arm64, swaps embedding providers, and ensures migrations succeed. If it fails, it doesn\u2019t ship.",
+          "action": "Adds \u201cCI as gatekeeper\u201d to the release pipeline diagram."
+        },
+        {
+          "actor": "peepo",
+          "line": "People are literally reverting versions. That\u2019s the loudest possible signal. We can\u2019t meme our way out of init hangs.",
+          "action": "Sticks a \u2018revert rate\u2019 warning sign on the timeline."
+        },
+        {
+          "actor": "spartan",
+          "line": "Let\u2019s track it: number of revert reports, number of hotfix releases, time-to-fix. Then we can measure if discipline is working. Reliability is an outcome, not a vibe.",
+          "action": "Adds three metrics to the scoreboard."
+        }
+      ]
+    },
+    {
+      "location": "archives_and_atrium",
+      "description": "A calm atrium with a single \u2018Start Here\u2019 sign pointing to multiple doors: Discord, GitHub, website, docs, news feeds. Some doors show \u2018404\u2019 or outdated maps.",
+      "dialogue": [
+        {
+          "actor": "elizahost",
+          "line": "Information taming is progressing internally\u2014summaries, search, pipelines\u2014but externally, developers see broken links and scattered sources. Canonical outputs are part of product quality.",
+          "action": "Shows the \u2018Start Here\u2019 sign splitting into too many paths."
+        },
+        {
+          "actor": "aimarc",
+          "line": "Knowledge is infrastructure. If we want agents and humans collaborating, the documentation and source-of-truth must be machine-consumable and stable\u2014otherwise our own agents can\u2019t reliably help builders.",
+          "action": "Pins: \u2018Docs as an API\u2019 next to \u2018Docs as UX.\u2019"
+        },
+        {
+          "actor": "aishaw",
+          "line": "Pick one canonical onboarding page. Pin exact versions. Provide an errors/remediation section that matches what people actually hit. And run link checks in CI. This is cheap compared to support churn.",
+          "action": "Drafts the outline: Quickstart, Troubleshooting, Deployment, Plugins, Providers."
+        },
+        {
+          "actor": "peepo",
+          "line": "Also: official comms need to be unmistakable. After phishing, everyone is paranoid. Give us signed announcements and one verified channel so people don\u2019t get scammed chasing updates.",
+          "action": "Places a \u2018Verified\u2019 seal on a single \u201cAnnouncements\u201d door."
+        },
+        {
+          "actor": "spartan",
+          "line": "Measure docs: uptime, broken links, search success, and reduction in repeated support questions. If the same questions repeat, docs are failing\u2014full stop.",
+          "action": "Adds: docs uptime >99.5% and \u2018repeat-question rate\u2019 to the KPI board."
+        },
+        {
+          "actor": "elizahost",
+          "line": "Council consensus: March is Reliability Month. We keep the modular trajectory\u2014but we earn the right to expand by making installation, releases, social integrations, and docs predictably solid.",
+          "action": "Closes all but three doors: Quickstart, Deployment, Verified Announcements."
+        }
+      ]
+    }
+  ],
+  "_metadata": {
+    "generated_at": "2026-01-02T05:00:58.301455Z",
+    "model": "openai/gpt-5.2",
+    "facts_analyzed": 28,
+    "briefings_analyzed": 28,
+    "month": "2025-02"
+  },
+  "sentiment_baseline": {
+    "period_days": 28,
+    "sentiment_distribution": {
+      "negative": 0.0,
+      "positive": 0.0,
+      "neutral": 0.036,
+      "mixed": 0.964
+    },
+    "avg_negative_rate": 0.0,
+    "context_frequency": {
+      "technical": 27,
+      "economic": 24,
+      "governance": 14,
+      "social": 6
+    }
+  }
+}

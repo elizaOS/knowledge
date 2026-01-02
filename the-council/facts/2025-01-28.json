@@ -1,0 +1,341 @@
+{
+  "briefing_date": "2025-01-28",
+  "overall_summary": "ElizaOS development activity remained high, with broad plugin expansion and multiple bugfixes (including packaging/publication and model provider additions) while Discord discussions focused on DeepSeek R1 adoption, deployment friction, and persistent Solana/Twitter integration issues. Tokenomics and market conversations centered on treasury LP strategy, liquidity imbalance on the AI16Z/SOL pool, and proposals to expand liquidity via Base.",
+  "key_facts": [
+    "DeepSeek R1 support is available in the latest ElizaOS development branch and can be configured via the DEEPSEEK_API_URL environment variable.",
+    "A one-sided liquidity pool strategy using DAO treasury assets paired with AI16Z tokens was described as a tokenomics update.",
+    "Community members cited an AI16Z/SOL liquidity pool imbalance of approximately $3M AI16Z versus $600K SOL.",
+    "ElizaOS is rebranding from ai16z to ElizaOS, and the $ai16z ticker is expected to remain until a future community vote after the DAO voting module launches.",
+    "A new model provider for LM Studio was added via PR #2913.",
+    "Public access to packages (enabling non-private packages to be published to npm) was introduced via PR #2933.",
+    "Twitter media posting capability was added via PR #2818.",
+    "A workaround for the Solana plugin error \"Named export 'BN' not found\" involved changing an import in node_modules/@solana-developers/helpers/dist/esm/lib/transaction.js to use an import pkg/CommonJS-style pattern."
+  ],
+  "open_questions": [
+    "Is launchpad related to metav?",
+    "When will the official rebrand happen?",
+    "When is DegenAI going to get his own potato servers?",
+    "Is Skyle still leading the development of degenai?",
+    "What trading strategies would you like to see?",
+    "What is the best module for creating a swarm?",
+    "Does anyone have any experience with ZKPs on SOL?",
+    "Is this fully open source and free to use for other types of news?",
+    "Is there plans for an actual dedicated channel? With eventual time slots?",
+    "How are you loading up the video atlas for the stonks?"
+  ],
+  "tags": {
+    "themes": [
+      "ai-agents",
+      "plugins",
+      "bug-fix",
+      "tokenomics",
+      "deployment"
+    ],
+    "sentiment": {
+      "overall": "mixed",
+      "context": [
+        "technical",
+        "economic",
+        "social"
+      ]
+    },
+    "story_type": [
+      "maintenance"
+    ],
+    "derived": [
+      "social",
+      "development",
+      "community",
+      "feedback",
+      "strategy",
+      "market"
+    ],
+    "priority": [
+      "routine"
+    ],
+    "manual": []
+  },
+  "categories": {
+    "twitter_news_highlights": [
+      {
+        "claim": "Open source AI discussion highlighted DeepSeek model releases as a notable development being used with Eliza agents.",
+        "source": [
+          "ai-news/elizaos/json/2025-01-27.json",
+          "ai-news/elizaos/md/2025-01-27.md"
+        ],
+        "sentiment": "neutral"
+      },
+      {
+        "claim": "Posts cited that DeepSeek progress could increase willingness of VCs to fund smaller AI labs, according to a referenced statement by Shaw.",
+        "source": [
+          "ai-news/elizaos/json/2025-01-27.json",
+          "ai-news/elizaos/md/2025-01-27.md"
+        ],
+        "sentiment": "neutral"
+      },
+      {
+        "claim": "Community Twitter discourse referenced coordination of open source model training efforts on Solana and framed the AI/crypto intersection as a key theme.",
+        "source": [
+          "ai-news/elizaos/json/2025-01-27.json",
+          "ai-news/elizaos/md/2025-01-27.md"
+        ],
+        "sentiment": "neutral"
+      }
+    ],
+    "github_updates": {
+      "new_issues_prs": [
+        {
+          "item_type": "pull_request",
+          "title": "feat: add public access to packages.",
+          "number": 2933,
+          "url": "https://github.com/elizaos/eliza/pull/2933",
+          "status": "merged",
+          "author": "unknown",
+          "significance": "Enables publishing of non-private packages to npm by ensuring correct scoping."
+        },
+        {
+          "item_type": "pull_request",
+          "title": "feat: new model provider for LM Studio",
+          "number": 2913,
+          "url": "https://github.com/elizaos/eliza/pull/2913",
+          "status": "merged",
+          "author": "unknown",
+          "significance": "Adds an additional local-model provider pathway for the framework."
+        },
+        {
+          "item_type": "pull_request",
+          "title": "feat: twitter post media",
+          "number": 2818,
+          "url": "https://github.com/elizaos/eliza/pull/2818",
+          "status": "merged",
+          "author": "unknown",
+          "significance": "Adds support for media attachments in tweets."
+        },
+        {
+          "item_type": "issue",
+          "title": "A request to implement Reranked Contextual Embedding as the default RAG implementation",
+          "number": 2919,
+          "url": "https://github.com/elizaos/eliza/issues/2919",
+          "status": "open",
+          "author": "unknown",
+          "significance": "Requests a change to the default retrieval approach for improved contextual retrieval."
+        },
+        {
+          "item_type": "issue",
+          "title": "Bug: template tag {{maxTweetLength}} does not exist in the tweet post template",
+          "number": 2927,
+          "url": "https://github.com/elizaos/eliza/issues/2927",
+          "status": "open",
+          "author": "unknown",
+          "significance": "Template mismatch affecting tweet composition."
+        },
+        {
+          "item_type": "issue",
+          "title": "facts functionality not working correctly due to message count limitations",
+          "number": 2915,
+          "url": "https://github.com/elizaos/eliza/issues/2915",
+          "status": "open",
+          "author": "unknown",
+          "significance": "Reports functional limitation/bug in facts evaluator behavior."
+        }
+      ],
+      "overall_focus": [
+        {
+          "claim": "Daily GitHub activity emphasized package accessibility changes, new model provider integration (LM Studio), and broad plugin bugfixing and lint/type cleanup.",
+          "source": [
+            "github/summaries/day/2025-01-28.md"
+          ]
+        }
+      ]
+    },
+    "discord_updates": [
+      {
+        "channel": "#discussion",
+        "summary": "Users discussed DeepSeek R1 usage with ElizaOS, launchpad timing questions, and general project/token chatter; a Builder Demo Day was referenced, including a claim that a demo project (PVPAI) rugged shortly after presenting.",
+        "key_participants": [
+          "BOSSU",
+          "kingdode",
+          "jin"
+        ],
+        "source": [
+          "ai-news/elizaos/discord/json/2025-01-27.json",
+          "ai-news/elizaos/discord/md/2025-01-27.md"
+        ]
+      },
+      {
+        "channel": "#\ud83d\udcbb-coders",
+        "summary": "Primary technical support topics included Solana plugin BN import failures, DeepSeek API reliability and output formatting issues, deployment guidance (VPS/Docker/cloud), memory constraints, and Twitter client configuration for autonomous posting.",
+        "key_participants": [
+          "custodian",
+          "tcm390",
+          "kAI wilder",
+          "ITZMIZZLE"
+        ],
+        "source": [
+          "ai-news/elizaos/discord/json/2025-01-27.json",
+          "ai-news/elizaos/discord/md/2025-01-27.md"
+        ]
+      },
+      {
+        "channel": "#tokenomics",
+        "summary": "Discussion covered token utility approaches (including Yellowstone model), launchpad progress, and proposals to deploy AI16Z on Base and establish interchain liquidity between Base and Solana.",
+        "key_participants": [
+          "jin",
+          "Akin",
+          "mat"
+        ],
+        "source": [
+          "ai-news/elizaos/discord/json/2025-01-27.json",
+          "ai-news/elizaos/discord/md/2025-01-27.md"
+        ]
+      },
+      {
+        "channel": "#\ud83e\udd47-partners",
+        "summary": "Partners discussed rebranding to ElizaOS, consolidation of Twitter accounts, DeepSeek integration timing, and organizational structure (teams for v1/v2/launchpad/tokenomics/AI traders).",
+        "key_participants": [
+          "shaw",
+          "jin",
+          "jasyn_bjorn"
+        ],
+        "source": [
+          "ai-news/elizaos/discord/json/2025-01-27.json",
+          "ai-news/elizaos/discord/md/2025-01-27.md"
+        ]
+      },
+      {
+        "channel": "#spartan_holders",
+        "summary": "DegenAI holders raised concerns about delayed development; updates referenced implementation of a new data layer, improved execution integration, and an added sentiment layer similar to aixbt, with a roadmap planned for release.",
+        "key_participants": [
+          "rhota"
+        ],
+        "source": [
+          "ai-news/elizaos/discord/json/2025-01-27.json",
+          "ai-news/elizaos/discord/md/2025-01-27.md"
+        ]
+      },
+      {
+        "channel": "#3d-ai-tv",
+        "summary": "Work focused on Unity implementation for an AI news show and 'Block Tank', including web texture loading for TV screens, lipsync integration (OVR LipSync + ElevenLabs), camera management, and discussions about JSON schema for the news aggregator.",
+        "key_participants": [
+          "boom",
+          "SM Sith Lord",
+          "fishai"
+        ],
+        "source": [
+          "ai-news/elizaos/discord/json/2025-01-27.json",
+          "ai-news/elizaos/discord/md/2025-01-27.md"
+        ]
+      }
+    ],
+    "user_feedback": [
+      {
+        "feedback_summary": "Users reported persistent Solana plugin build/runtime failures involving the @coral-xyz/anchor BN export error and requested durable fixes and documentation.",
+        "source": [
+          "ai-news/elizaos/discord/md/2025-01-27.md",
+          "ai-news/elizaos/discord/md/2025-01-26.md"
+        ],
+        "sentiment": "negative"
+      },
+      {
+        "feedback_summary": "Multiple users reported Twitter/X login and posting failures (including 2FA/IP reputation constraints) and requested safeguards against reply loops and improved automation controls.",
+        "source": [
+          "ai-news/elizaos/discord/md/2025-01-25.md",
+          "ai-news/elizaos/discord/md/2025-01-26.md"
+        ],
+        "sentiment": "negative"
+      },
+      {
+        "feedback_summary": "Users reported DeepSeek API instability/outages and undesirable response artifacts (e.g., '(NONE)') and requested improved parsing/prompt handling or routing through OpenRouter.",
+        "source": [
+          "ai-news/elizaos/discord/md/2025-01-26.md",
+          "ai-news/elizaos/discord/md/2025-01-27.md"
+        ],
+        "sentiment": "mixed"
+      },
+      {
+        "feedback_summary": "Community members requested clearer deployment and multi-agent operational guidance (Docker/cloud guides, running multiple agents, RSS integration documentation).",
+        "source": [
+          "ai-news/elizaos/discord/md/2025-01-26.md",
+          "ai-news/elizaos/discord/md/2025-01-27.md"
+        ],
+        "sentiment": "neutral"
+      },
+      {
+        "feedback_summary": "DegenAI holders expressed frustration about perceived slow development and requested clearer roadmap/marketing cadence and more consistent social posting behavior.",
+        "source": [
+          "ai-news/elizaos/discord/md/2025-01-27.md"
+        ],
+        "sentiment": "negative"
+      }
+    ],
+    "strategic_insights": [
+      {
+        "theme": "Cost-sensitive model provider adoption",
+        "insight": "DeepSeek R1 configuration support and active discussion of OpenRouter-mediated usage show users actively optimizing inference cost while maintaining model quality requirements.",
+        "implications_or_questions": [
+          "Should provider documentation be consolidated into a single 'model providers' deployment guide?",
+          "Are additional guardrails needed for provider-specific output formatting (JSON parsing, line breaks)?"
+        ]
+      },
+      {
+        "theme": "Operational friction concentrated in a small set of blockers",
+        "insight": "Repeated Discord support threads cluster around Solana BN import failures, Twitter authentication reliability, and memory/context limits, indicating a small number of recurring blockers affecting many deployments.",
+        "implications_or_questions": [
+          "Should these be addressed via hotfix releases and pinned troubleshooting docs?",
+          "Should CI include targeted checks for Solana plugin dependency compatibility?"
+        ]
+      },
+      {
+        "theme": "Token utility and liquidity expansion debate",
+        "insight": "Tokenomics discussions emphasize utility gating (Yellowstone-style tiers), while market conversations emphasize liquidity depth and chain expansion (Base + bridging) as near-term priorities.",
+        "implications_or_questions": [
+          "What is the sequencing between launchpad release, tiered access design, and cross-chain liquidity plans?"
+        ]
+      }
+    ],
+    "market_analysis": [
+      {
+        "observation": "Community members cited an AI16Z/SOL liquidity pool imbalance of approximately $3M AI16Z versus $600K SOL.",
+        "source": [
+          "ai-news/elizaos/discord/md/2025-01-27.md"
+        ],
+        "relevance": "Liquidity depth and imbalance were discussed as a market-structure risk and a target for remediation via added SOL/wBTC."
+      },
+      {
+        "observation": "Proposals were discussed to deploy AI16Z on Base and create interchain liquidity between Base and Solana (e.g., via Wormhole), referencing Venice (VVV) as a comparable Base strategy.",
+        "source": [
+          "ai-news/elizaos/discord/md/2025-01-27.md"
+        ],
+        "relevance": "Cross-chain deployment and bridging were presented as options to improve liquidity access and exchange listing pathways."
+      },
+      {
+        "observation": "DAO tokenomics discussion described a treasury approach using one-sided liquidity pools paired with AI16Z tokens.",
+        "source": [
+          "ai-news/elizaos/discord/md/2025-01-25.md",
+          "ai-news/elizaos/discord/md/2025-01-26.md"
+        ],
+        "relevance": "Treasury LP deployment was framed as a mechanism for liquidity provision without selling treasury assets."
+      }
+    ]
+  },
+  "_metadata": {
+    "model": "openai/gpt-5.2",
+    "extracted_at": "2026-01-01T02:54:10.070669Z",
+    "prompt_tokens": 131947,
+    "completion_tokens": 4215,
+    "total_tokens": 136162,
+    "processing_seconds": 63.14,
+    "status": "success",
+    "facts_by_category": {
+      "twitter_news_highlights": 3,
+      "github_updates": 6,
+      "discord_updates": 6,
+      "user_feedback": 5,
+      "strategic_insights": 3,
+      "market_analysis": 3,
+      "key_facts": 8,
+      "open_questions": 10
+    },
+    "total_facts": 44
+  }
+}
