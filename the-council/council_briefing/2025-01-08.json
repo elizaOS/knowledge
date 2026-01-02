@@ -1,0 +1,271 @@
+{
+  "date": "2025-01-08",
+  "meeting_context": "# North Star & Strategic Context\n\nThis file combines the overall project mission (North Star) and summaries of key strategic documents for use in AI prompts, particularly for the AI Agent Council context generation.\n\n**Last Updated:** December 2025\n\n---\n\n**North Star:**\nTo build the most reliable, developer-friendly open-source AI agent framework and cloud platform\u2014enabling builders worldwide to deploy autonomous agents that work seamlessly across chains and platforms. We create infrastructure where agents and humans collaborate, forming the foundation for a decentralized AI economy that accelerates the path toward beneficial AGI.\n\n---\n\n**Core Principles:**\n1. **Execution Excellence** - Reliability and seamless UX over feature quantity\n2. **Developer First** - Great DX attracts builders; builders create ecosystem value\n3. **Open & Composable** - Multi-agent systems that interoperate across platforms\n4. **Trust Through Shipping** - Build community confidence through consistent delivery\n\n---\n\n**Current Product Focus (Dec 2025):**\n- **ElizaOS Framework** (v1.6.x) - The core TypeScript toolkit for building persistent, interoperable agents\n- **ElizaOS Cloud** - Managed deployment platform with integrated storage and cross-chain capabilities\n- **Flagship Agents** - Reference implementations (Eli5, Otaku) demonstrating platform capabilities\n- **Cross-Chain Infrastructure** - Native support for multi-chain agent operations via Jeju/x402\n\n---\n\n**ElizaOS Mission Summary:**\nElizaOS is an open-source \"operating system for AI agents\" aimed at decentralizing AI development. Built on three pillars: 1) The Eliza Framework (TypeScript toolkit for persistent agents), 2) AI-Enhanced Governance (building toward autonomous DAOs), and 3) Eliza Labs (R&D driving cloud, cross-chain, and multi-agent capabilities). The native token coordinates the ecosystem. The vision is an intelligent internet built on open protocols and collaboration.\n\n---\n\n**Taming Information Summary:**\nAddresses the challenge of information scattered across platforms (Discord, GitHub, X). Uses AI agents as \"bridges\" to collect, wrangle (summarize/tag), and distribute information in various formats (JSON, MD, RSS, dashboards, council episodes). Treats documentation as a first-class citizen to empower AI assistants and streamline community operations. \n",
+  "monthly_goal": "December 2025: Execution excellence\u2014complete token migration with high success rate, launch ElizaOS Cloud, stabilize flagship agents, and build developer trust through reliability and clear documentation.",
+  "daily_focus": "The fleet advanced execution excellence by hardening build/DB reliability and shipping core-system improvements (RAG/CI) while the volume of new plugins continues to test our ability to keep a coherent, stable developer experience.",
+  "key_points": [
+    {
+      "topic": "Reliability Frontier: Build + Database Stability as Trust Engine",
+      "summary": "Operational logs show meaningful progress on build and DB stability (packaging fixes, CI lockfile enforcement, DB adapters), but also recurring startup and vector/embedding failures that erode developer trust if not systematically eliminated.",
+      "deliberation_items": [
+        {
+          "question_id": "q1",
+          "text": "Do we declare a short \"stability window\" where merges are gated by reproducible install/start tests across the top deployment targets (local, Docker, Windows), even if it slows plugin intake?",
+          "context": [
+            "Daily Update 2025-01-08: \"Added a pnpm lockfile consistency check to enhance CI processes\" (#2015).",
+            "GitHub issues summary: \"continuous errors when starting agents\" (#2024) and \"ERR_PNPM_RECURSIVE_RUN_FIRST_FAIL\" (#2127)."
+          ],
+          "multiple_choice_answers": {
+            "answer_1": {
+              "text": "Yes\u2014freeze non-critical feature merges and enforce cross-platform install/start gates for 1\u20132 weeks.",
+              "implication": "Accelerates trust-through-shipping by reducing regressions, but may frustrate plugin contributors expecting fast merges."
+            },
+            "answer_2": {
+              "text": "Partially\u2014gate only core/runtime and top-tier plugins, leaving experimental plugins on a separate track.",
+              "implication": "Preserves velocity while protecting the core, but requires explicit tiering and enforcement to avoid \"everything is critical\" drift."
+            },
+            "answer_3": {
+              "text": "No\u2014maintain current merge velocity and rely on post-merge fixes and community triage.",
+              "implication": "Maximizes breadth of ecosystem growth, but raises the probability of recurring breakages that damage DX and Cloud adoption."
+            },
+            "answer_4": {
+              "text": "Other / More discussion needed / None of the above.",
+              "implication": null
+            }
+          }
+        },
+        {
+          "question_id": "q2",
+          "text": "Which persistence stack should be canon for production guidance in the near term: PostgreSQL/Supabase, PGLite, or SQLite with strict embedding controls?",
+          "context": [
+            "Daily Summary 2025-01-07: \"Added PGLite database adapter\" and \"Fixed SQLite error related to zero-length vectors\" (#1984).",
+            "Discord 2025-01-07: \"SQLite errors related to vector dimensions and zero-length vectors\"; common advice: delete DB and rebuild."
+          ],
+          "multiple_choice_answers": {
+            "answer_1": {
+              "text": "Canonize Postgres/Supabase for production; position SQLite/PGLite as dev/test only.",
+              "implication": "Improves reliability expectations and scaling path, but increases setup friction for new builders."
+            },
+            "answer_2": {
+              "text": "Canonize PGLite as the default bridge (local-first Postgres semantics), with Postgres/Supabase as the scale-up path.",
+              "implication": "Unifies developer experience with fewer \"works on my machine\" mismatches, but adds a relatively newer dependency surface."
+            },
+            "answer_3": {
+              "text": "Keep SQLite as default and invest in stronger embedding migration/versioning + guardrails to prevent corruption.",
+              "implication": "Lowest barrier to entry, but requires disciplined engineering to prevent recurring vector mismatch incidents."
+            },
+            "answer_4": {
+              "text": "Other / More discussion needed / None of the above.",
+              "implication": null
+            }
+          }
+        },
+        {
+          "question_id": "q3",
+          "text": "How aggressively should the Council prioritize eliminating \"agent won't start\" classes of errors versus expanding feature surface area (plugins/providers)?",
+          "context": [
+            "Daily Update 2025-01-08: \"Users are experiencing continuous errors when starting the agent\" (#2024).",
+            "GitHub Activity: 36 PRs/day pace, many new plugins, while issues still appear around core usability."
+          ],
+          "multiple_choice_answers": {
+            "answer_1": {
+              "text": "Treat startup reliability as Priority-0: no new features until the top startup errors are near-zero.",
+              "implication": "Maximizes execution excellence and Cloud readiness; may reduce ecosystem buzz temporarily."
+            },
+            "answer_2": {
+              "text": "Run a dual-track: a dedicated reliability squad plus continued plugin throughput with stricter templates/tests.",
+              "implication": "Balances growth and trust, but depends on clear ownership and enforcement to avoid diffusion of responsibility."
+            },
+            "answer_3": {
+              "text": "Focus on feature breadth now; let the community self-resolve startup issues through docs and forums.",
+              "implication": "Increases experimentation, but risks reputational damage if builders repeatedly hit non-actionable startup failures."
+            },
+            "answer_4": {
+              "text": "Other / More discussion needed / None of the above.",
+              "implication": null
+            }
+          }
+        }
+      ]
+    },
+    {
+      "topic": "Comms & Platform Surface: Twitter/Telegram Integration as Public-Facing Stability",
+      "summary": "Discord and GitHub signals converge: social integrations remain a primary pain point (auth loops, formatting issues, dry-run inconsistencies), and these are the most visible failure modes for flagship agents and community deployments.",
+      "deliberation_items": [
+        {
+          "question_id": "q1",
+          "text": "Should ElizaOS formalize a supported \"Social Client Compatibility Matrix\" (Twitter/Telegram/Discord) with explicit modes (API vs browser simulation, cookies, rate limits), and gate releases against it?",
+          "context": [
+            "Discord 2025-01-07: \"Multiple users reported issues with Twitter integration, including authentication problems, replies formatting as JSON, and rate limiting concerns.\"",
+            "Discord 2025-01-07: PR #1974 created to fix Twitter plugin to use client-twitter instead of scraper, avoiding repeated login attempts."
+          ],
+          "multiple_choice_answers": {
+            "answer_1": {
+              "text": "Yes\u2014publish and enforce a compatibility matrix with automated regression tests for core social flows.",
+              "implication": "Improves predictability and reduces repeated support burden, but increases maintenance cost as platforms change."
+            },
+            "answer_2": {
+              "text": "Publish the matrix as documentation only, without gating releases.",
+              "implication": "Improves transparency quickly, but may not reduce regressions without enforcement."
+            },
+            "answer_3": {
+              "text": "No\u2014keep social clients as best-effort community plugins without official guarantees.",
+              "implication": "Protects core focus, but undermines flagship agent credibility in the most public deployment channels."
+            },
+            "answer_4": {
+              "text": "Other / More discussion needed / None of the above.",
+              "implication": null
+            }
+          }
+        },
+        {
+          "question_id": "q2",
+          "text": "What is the Council\u2019s stance on the tradeoff between automation and safety for public posting: do we recommend \"approval workflow\" as default for Twitter posting?",
+          "context": [
+            "Daily Summary 2025-01-07: \"Added approval mechanism for Twitter posts via Discord bot.\"",
+            "Daily Update 2025-01-08: Closed issue: \"dry-run mode issue in the Twitter client\" (#1962) addressed."
+          ],
+          "multiple_choice_answers": {
+            "answer_1": {
+              "text": "Default to manual approval for all Twitter posts; require opt-in to autonomous posting.",
+              "implication": "Reduces reputational and ToS risk, but weakens the \"autonomous agent\" narrative for demos."
+            },
+            "answer_2": {
+              "text": "Default to autonomous posting with optional approval for high-risk accounts/characters.",
+              "implication": "Maximizes autonomy and engagement, but increases the chance of public misfires and platform enforcement actions."
+            },
+            "answer_3": {
+              "text": "Use a hybrid: autonomous replies to mentions only, approval for original tweets and quotes/retweets.",
+              "implication": "Balances responsiveness with brand safety, but adds complexity and requires strong defaults/documentation."
+            },
+            "answer_4": {
+              "text": "Other / More discussion needed / None of the above.",
+              "implication": null
+            }
+          }
+        },
+        {
+          "question_id": "q3",
+          "text": "Do we invest immediately in first-class formatting controls (plain text vs JSON) across all clients, or treat it as per-client configuration burden?",
+          "context": [
+            "Discord 2025-01-06: \"Why does my agent tweet in JSON format instead of plain text? Add responseFormat/text and outputFormat/plain.\"",
+            "Discord 2025-01-07: \"Fix JSON formatting in tweet responses\" listed as an action item (0xJam3s)."
+          ],
+          "multiple_choice_answers": {
+            "answer_1": {
+              "text": "Make output format a top-level, consistent runtime setting with safe defaults per client.",
+              "implication": "Reduces confusion and support load; creates a unified DX story across integrations."
+            },
+            "answer_2": {
+              "text": "Keep as character-level settings and improve docs/templates to set them correctly.",
+              "implication": "Fast to implement with minimal core changes, but errors will persist among new users."
+            },
+            "answer_3": {
+              "text": "Leave it to client implementers and community examples; core should remain minimal.",
+              "implication": "Avoids core complexity, but risks fragmented behavior that conflicts with developer-first principles."
+            },
+            "answer_4": {
+              "text": "Other / More discussion needed / None of the above.",
+              "implication": null
+            }
+          }
+        }
+      ]
+    },
+    {
+      "topic": "Knowledge & RAG: Toward Composable Memory Without Fragmentation",
+      "summary": "A separate Knowledge system with Multi-Agent RAG Optimization and new knowledge CRUD/search methods are shipping, creating a path to stronger multi-agent memory\u2014yet this raises governance questions: default enablement, migration strategy, and documentation to prevent confusion.",
+      "deliberation_items": [
+        {
+          "question_id": "q1",
+          "text": "Should the new separate Knowledge/RAG system become the default path for knowledge retrieval, or remain opt-in until we prove stability and migration tooling?",
+          "context": [
+            "Daily Update 2025-01-08: \"Implemented a new RAG optimization system that operates separately... allowing for user-enabled functionality\" (#1620).",
+            "Daily Summary 2025-01-07: \"Implemented getKnowledge, searchKnowledge, createKnowledge, removeKnowledge, and clearKnowledge methods\" (#2005)."
+          ],
+          "multiple_choice_answers": {
+            "answer_1": {
+              "text": "Keep it opt-in until we publish migration guides, benchmarks, and failure-mode playbooks.",
+              "implication": "Protects reliability and avoids breaking existing agents, but slows ecosystem convergence on better memory."
+            },
+            "answer_2": {
+              "text": "Make it default for new agents only; legacy agents remain on the old path until upgraded.",
+              "implication": "Creates a clean forward path while minimizing disruption, but introduces dual-system complexity in docs/support."
+            },
+            "answer_3": {
+              "text": "Flip the default globally and prioritize fixing regressions quickly.",
+              "implication": "Forces rapid standardization and accelerates capability, but risks a wave of support incidents and trust loss."
+            },
+            "answer_4": {
+              "text": "Other / More discussion needed / None of the above.",
+              "implication": null
+            }
+          }
+        },
+        {
+          "question_id": "q2",
+          "text": "What is the Council-approved definition of \"multi-agent\" in ElizaOS for the next release cycle: shared knowledge store, orchestrated task delegation, or both?",
+          "context": [
+            "Discord 2025-01-07 Action Items: \"Develop a knowledge transfer system between agent instances\" (Mike D.).",
+            "Discord 2025-01-07 Features: \"Implement multi-agent orchestration similar to OpenAI swarms or crewAI\" (0xn1c0)."
+          ],
+          "multiple_choice_answers": {
+            "answer_1": {
+              "text": "Prioritize shared knowledge/memory primitives first; orchestration later.",
+              "implication": "Builds a solid substrate for interoperability, but delays visible \"swarm\" functionality demos."
+            },
+            "answer_2": {
+              "text": "Prioritize orchestration primitives first (task routing, roles), even with minimal shared memory.",
+              "implication": "Delivers exciting demos quickly, but risks shallow or brittle behavior without robust memory semantics."
+            },
+            "answer_3": {
+              "text": "Commit to both via a minimal \"multi-agent baseline\" spec and ship iteratively behind feature flags.",
+              "implication": "Aligns with open/composable principles while controlling risk, but requires strong product governance and docs."
+            },
+            "answer_4": {
+              "text": "Other / More discussion needed / None of the above.",
+              "implication": null
+            }
+          }
+        },
+        {
+          "question_id": "q3",
+          "text": "How do we prevent documentation entropy as plugins and knowledge primitives multiply: do we deploy an official \"scribe agent\" pipeline to turn Discord/GitHub into canonical docs?",
+          "context": [
+            "Discord 2025-01-06: \"Jin proposed creating an Eliza agent as a 'scribe' to reduce friction in documentation contributions.\"",
+            "Discord 2025-01-07 Documentation: calls for READMEs/JSDoc across undocumented plugins (Ed Marcavage)."
+          ],
+          "multiple_choice_answers": {
+            "answer_1": {
+              "text": "Yes\u2014stand up a scribe agent pipeline that converts high-signal discussions into PR-ready docs with human review.",
+              "implication": "Operationalizes the \"Taming Information\" strategy and scales documentation quality with community activity."
+            },
+            "answer_2": {
+              "text": "Partially\u2014use the scribe agent only for weekly/monthly summaries, not for canonical docs.",
+              "implication": "Reduces risk of incorrect docs, but misses the chance to reduce day-to-day support and onboarding friction."
+            },
+            "answer_3": {
+              "text": "No\u2014keep documentation human-authored to avoid hallucinations and governance disputes.",
+              "implication": "Maximizes accuracy, but constrains documentation throughput and may fail under current ecosystem growth rate."
+            },
+            "answer_4": {
+              "text": "Other / More discussion needed / None of the above.",
+              "implication": null
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "_metadata": {
+    "model": "openai/gpt-5.2",
+    "generated_at": "2026-01-01T04:27:03.988710Z",
+    "prompt_tokens": 127398,
+    "completion_tokens": 3775,
+    "total_tokens": 131173,
+    "status": "success",
+    "processing_seconds": 72.03,
+    "key_points_count": 3,
+    "total_deliberation_questions": 9
+  }
+}

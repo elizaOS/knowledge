@@ -1,0 +1,269 @@
+{
+  "date": "2025-01-23",
+  "meeting_context": "# North Star & Strategic Context\n\nThis file combines the overall project mission (North Star) and summaries of key strategic documents for use in AI prompts, particularly for the AI Agent Council context generation.\n\n**Last Updated:** December 2025\n\n---\n\n**North Star:**\nTo build the most reliable, developer-friendly open-source AI agent framework and cloud platform\u2014enabling builders worldwide to deploy autonomous agents that work seamlessly across chains and platforms. We create infrastructure where agents and humans collaborate, forming the foundation for a decentralized AI economy that accelerates the path toward beneficial AGI.\n\n---\n\n**Core Principles:**\n1. **Execution Excellence** - Reliability and seamless UX over feature quantity\n2. **Developer First** - Great DX attracts builders; builders create ecosystem value\n3. **Open & Composable** - Multi-agent systems that interoperate across platforms\n4. **Trust Through Shipping** - Build community confidence through consistent delivery\n\n---\n\n**Current Product Focus (Dec 2025):**\n- **ElizaOS Framework** (v1.6.x) - The core TypeScript toolkit for building persistent, interoperable agents\n- **ElizaOS Cloud** - Managed deployment platform with integrated storage and cross-chain capabilities\n- **Flagship Agents** - Reference implementations (Eli5, Otaku) demonstrating platform capabilities\n- **Cross-Chain Infrastructure** - Native support for multi-chain agent operations via Jeju/x402\n\n---\n\n**ElizaOS Mission Summary:**\nElizaOS is an open-source \"operating system for AI agents\" aimed at decentralizing AI development. Built on three pillars: 1) The Eliza Framework (TypeScript toolkit for persistent agents), 2) AI-Enhanced Governance (building toward autonomous DAOs), and 3) Eliza Labs (R&D driving cloud, cross-chain, and multi-agent capabilities). The native token coordinates the ecosystem. The vision is an intelligent internet built on open protocols and collaboration.\n\n---\n\n**Taming Information Summary:**\nAddresses the challenge of information scattered across platforms (Discord, GitHub, X). Uses AI agents as \"bridges\" to collect, wrangle (summarize/tag), and distribute information in various formats (JSON, MD, RSS, dashboards, council episodes). Treats documentation as a first-class citizen to empower AI assistants and streamline community operations. \n",
+  "monthly_goal": "December 2025: Execution excellence\u2014complete token migration with high success rate, launch ElizaOS Cloud, stabilize flagship agents, and build developer trust through reliability and clear documentation.",
+  "daily_focus": "The project showed high throughput shipping (new plugins and rapid merges) while reliability debt surfaced as the main strategic risk\u2014core client stability, installation friction, and documentation gaps now threaten developer trust more than missing features.",
+  "key_points": [
+    {
+      "topic": "Execution Excellence vs. Expansion: Stabilization Gate for Core + Plugins",
+      "summary": "Development velocity is strong (new plugins, fixes, and high merge rates), but recurring breakages in Twitter, Docker/Windows, embeddings, and plugin bootstrapping are generating support load and eroding the \"reliable framework\" promise; Council must decide where to place a stabilization gate to protect DX while continuing ecosystem expansion.",
+      "deliberation_items": [
+        {
+          "question_id": "q1",
+          "text": "Do we impose a temporary stabilization gate (limited merges + stricter CI/docs requirements) for core clients and installation paths before accepting additional new plugins?",
+          "context": [
+            "GitHub summary (Jan 22-23): \"37 new PRs (12 merged)...\" then \"28 new PRs (24 merged)\" indicating high merge velocity.",
+            "Discord coders (Jan 22): recurring issues with \"bootstrap, node, solana, and dexscreener plugins\" plus Docker/Windows workarounds."
+          ],
+          "multiple_choice_answers": {
+            "answer_1": {
+              "text": "Yes\u2014freeze non-critical feature merges for 1\u20132 weeks; prioritize install/boot, core clients, and top-5 community pain points.",
+              "implication": "Short-term feature slowdown buys long-term trust and reduces support drag, aligning with Execution Excellence."
+            },
+            "answer_2": {
+              "text": "Partial gate\u2014allow new plugins only if they meet a higher bar (README + tests + lint + compatibility checklist), while core fixes proceed normally.",
+              "implication": "Maintains ecosystem momentum while raising the quality floor and making expansion composable instead of chaotic."
+            },
+            "answer_3": {
+              "text": "No gate\u2014keep shipping broadly and rely on community triage; optimize merge throughput as the primary strategy.",
+              "implication": "Maximizes growth optics but risks compounding reliability debt and undermining the \"developer-friendly\" promise."
+            },
+            "answer_4": {
+              "text": "Other / More discussion needed / None of the above.",
+              "implication": null
+            }
+          }
+        },
+        {
+          "question_id": "q2",
+          "text": "Which reliability front should be treated as the Council\u2019s immediate \"red alert\" because it blocks adoption most directly?",
+          "context": [
+            "Discord coders (Jan 22): \"Vector dimension mismatch\" when switching embedding models; workaround: delete db.sqlite.",
+            "Daily update (Jan 23): \"bug in the Twitter client related to fetching tweets, which needs urgent attention (#2700).\""
+          ],
+          "multiple_choice_answers": {
+            "answer_1": {
+              "text": "Install/boot & environment consistency (Docker, Windows/WSL, dependency errors) as the primary blocker.",
+              "implication": "Improving first-run success increases conversion from curious builders to retained builders."
+            },
+            "answer_2": {
+              "text": "Social clients reliability (Twitter/Telegram/Discord) because these are flagship-facing and highly visible.",
+              "implication": "Prevents public failures and brand damage, reinforcing \u201ctrust through shipping\u201d externally."
+            },
+            "answer_3": {
+              "text": "Data/memory correctness (embedding model switching, vector dimensions, caching duplication) because it corrupts agent behavior.",
+              "implication": "Protects long-lived agents and prevents subtle failures that are expensive to debug and fix later."
+            },
+            "answer_4": {
+              "text": "Other / More discussion needed / None of the above.",
+              "implication": null
+            }
+          }
+        },
+        {
+          "question_id": "q3",
+          "text": "Should we formalize a \"supported matrix\" (OS + DB adapters + model providers + clients) to reduce support chaos, even if it constrains flexibility?",
+          "context": [
+            "Discord (Jan 22): Windows users advised to use WSL2; repeated Docker build failures and environment-specific errors.",
+            "GitHub issues list (Jan 22): installation and dependency issues (e.g., \"Error installing @discordjs/opus...\", \"workspace dependency reference\" issue)."
+          ],
+          "multiple_choice_answers": {
+            "answer_1": {
+              "text": "Yes\u2014publish an explicit support matrix and treat everything else as \"best effort\" community support.",
+              "implication": "Sets clear expectations and focuses engineering on predictable reliability targets."
+            },
+            "answer_2": {
+              "text": "Hybrid\u2014define a supported matrix, but keep \"experimental\" lanes with clear warnings and telemetry-driven promotion to supported.",
+              "implication": "Balances innovation with clarity, creating a path for new providers/clients to mature."
+            },
+            "answer_3": {
+              "text": "No\u2014keep all combinations unofficially supported to preserve openness and maximal composability.",
+              "implication": "Avoids perceived restriction but increases ongoing support cost and inconsistent user experience."
+            },
+            "answer_4": {
+              "text": "Other / More discussion needed / None of the above.",
+              "implication": null
+            }
+          }
+        }
+      ]
+    },
+    {
+      "topic": "Persistent Identity: Cross-Client Memory and Personality Continuity",
+      "summary": "The system is approaching a multi-surface reality (Discord/Twitter/Telegram and multiple agent instances), but memory is not consistently shared\u2014risking fragmented personalities and unreliable autonomy; Council must choose an architectural stance for memory portability and correctness.",
+      "deliberation_items": [
+        {
+          "question_id": "q1",
+          "text": "What should be the canonical strategy for \"passing around memories\" across agent instances and clients to maintain consistent identity?",
+          "context": [
+            "Partners channel (Jan 22): jin: \"passing around memories\" between different agent instances will be important for maintaining consistent agent personalities.",
+            "Daily update (Jan 23): new issue on \"duplicate API calls in the memory cache\" affecting performance (#2688)."
+          ],
+          "multiple_choice_answers": {
+            "answer_1": {
+              "text": "Centralized memory service (Cloud-first): one canonical store per agent identity, clients become stateless front-ends.",
+              "implication": "Strong consistency and easier debugging, but increases reliance on Cloud and raises trust/availability requirements."
+            },
+            "answer_2": {
+              "text": "Federated sync: local-first stores with periodic reconciliation (CRDT/event-log style) across surfaces.",
+              "implication": "Resilient and decentralized, but more complex and risks emergent inconsistency without strong tooling."
+            },
+            "answer_3": {
+              "text": "Keep memory per-instance for now; focus on better prompts and clearer user expectations rather than sync.",
+              "implication": "Fastest to ship, but undermines the promise of persistent agents and makes autonomy brittle at scale."
+            },
+            "answer_4": {
+              "text": "Other / More discussion needed / None of the above.",
+              "implication": null
+            }
+          }
+        },
+        {
+          "question_id": "q2",
+          "text": "Should embedding model changes be treated as a breaking change that forces automatic data migration/versioning rather than manual DB deletion?",
+          "context": [
+            "Coders channel (Jan 22): Yoda26: switching embedding models causes \"Vector dimension mismatch\"; fix: `rm -f ./agent/data/db.sqlite`."
+          ],
+          "multiple_choice_answers": {
+            "answer_1": {
+              "text": "Yes\u2014implement embedding-dimension versioning and an automated migration/reset flow with explicit prompts to the operator.",
+              "implication": "Reduces foot-guns and support burden; improves professional DX for production deployments."
+            },
+            "answer_2": {
+              "text": "Partial\u2014detect mismatch and auto-disable vector features (RAG) until the operator explicitly rebuilds the index.",
+              "implication": "Avoids destructive actions while keeping core agent usable; preserves operator control."
+            },
+            "answer_3": {
+              "text": "No\u2014keep it manual and document the reset steps clearly as the expected workflow.",
+              "implication": "Lowest engineering cost now, but increases long-term churn from repeated \u201cmysterious breakage\u201d experiences."
+            },
+            "answer_4": {
+              "text": "Other / More discussion needed / None of the above.",
+              "implication": null
+            }
+          }
+        },
+        {
+          "question_id": "q3",
+          "text": "What is the Council\u2019s minimum definition of \"persistent agent\" required to claim execution excellence publicly?",
+          "context": [
+            "Meeting context (Core Principles): \"Execution Excellence\" and \"Trust Through Shipping\" imply reliability and clear UX.",
+            "Discord (Jan 22): multiple reports of client/plugin issues; users asking for better deployment and DB adapter documentation."
+          ],
+          "multiple_choice_answers": {
+            "answer_1": {
+              "text": "Persistence = stable long-term memory across restarts + consistent identity across at least two clients (e.g., Discord + Twitter).",
+              "implication": "Sets a high bar aligned with the North Star; may delay claims until architecture is ready."
+            },
+            "answer_2": {
+              "text": "Persistence = durable memory across restarts in a single deployment surface, with multi-client sync marked as \"coming soon\".",
+              "implication": "Allows nearer-term messaging while being honest about current limitations."
+            },
+            "answer_3": {
+              "text": "Persistence = best-effort memory with clear disclaimers; prioritize feature breadth and integrations.",
+              "implication": "Maximizes surface area but risks reputational mismatch with the \"most reliable\" positioning."
+            },
+            "answer_4": {
+              "text": "Other / More discussion needed / None of the above.",
+              "implication": null
+            }
+          }
+        }
+      ]
+    },
+    {
+      "topic": "Flagship Trust Surface: DegenAI Transparency, Tokenomics Credibility, and Platform Policy Risk",
+      "summary": "DegenAI\u2019s early performance is a strong proof signal, but public-wallet transparency may invite copy-trading/counter-trading; tokenomics work is in tension between fast simplicity and sophisticated trust mechanisms; and Telegram\u2019s TOS shift is a looming operational threat to a major client surface.",
+      "deliberation_items": [
+        {
+          "question_id": "q1",
+          "text": "How should we balance transparency and strategic edge for DegenAI given concerns about copy-trading and counter-strategies?",
+          "context": [
+            "Spartan holders (Jan 22): debate over a public wallet and strategy dilution; team considering \"multiple wallets\" (jin, M3xR).",
+            "Partners (Jan 22): DegenAI portfolio grew from \"$2,600 to $6,000 over 4 days\"."
+          ],
+          "multiple_choice_answers": {
+            "answer_1": {
+              "text": "Keep a single public wallet for maximal transparency; accept that edge erosion is the cost of credibility.",
+              "implication": "Strengthens community trust but may reduce performance over time and create public drawdown optics."
+            },
+            "answer_2": {
+              "text": "Adopt a dual-structure: one public \"audited\" wallet for visibility plus separate execution wallets for strategy protection.",
+              "implication": "Balances trust and performance, but requires careful messaging to avoid accusations of deception."
+            },
+            "answer_3": {
+              "text": "Make execution private; publish delayed reports (e.g., T+24h) and risk metrics instead of live wallet transparency.",
+              "implication": "Preserves edge but increases the burden of proving honesty and may reduce community confidence."
+            },
+            "answer_4": {
+              "text": "Other / More discussion needed / None of the above.",
+              "implication": null
+            }
+          }
+        },
+        {
+          "question_id": "q2",
+          "text": "For tokenomics, do we ship a simple draft quickly or wait for a more sophisticated trust/staking design (e.g., PoS/restaking) to avoid future reworks and reputational damage?",
+          "context": [
+            "Tokenomics channel (Jan 22): tension between \"release a simple draft quickly\" vs \"more sophisticated approach\"; Yardy introduced token engineer Vasily Sumanov and a detailed doc.",
+            "Tokenomics channel (Jan 22): unreadyplayer: \"77.5% traded on the curve\" and \"22.5% goes to locked LP\"; suggestion to leverage \"Jito's restaking platform\"."
+          ],
+          "multiple_choice_answers": {
+            "answer_1": {
+              "text": "Ship a minimal draft immediately (bonding curve + LP lock basics) and iterate publicly with community feedback.",
+              "implication": "Accelerates coordination and reduces rumor vacuum, but may entrench early assumptions and invite backlash if revised."
+            },
+            "answer_2": {
+              "text": "Ship a two-layer release: a short 2\u20133 page explainer now plus a parallel deep technical paper for audit-grade design.",
+              "implication": "Balances speed and rigor; improves communication without prematurely locking mechanism details."
+            },
+            "answer_3": {
+              "text": "Wait until the full sophisticated design (including staking/restaking trust mechanics) is coherent and testable.",
+              "implication": "Reduces redesign risk but prolongs uncertainty and may weaken near-term ecosystem momentum."
+            },
+            "answer_4": {
+              "text": "Other / More discussion needed / None of the above.",
+              "implication": null
+            }
+          }
+        },
+        {
+          "question_id": "q3",
+          "text": "How should we respond to Telegram\u2019s updated TOS restricting third-party blockchains (non-TON) before Feb 21 enforcement?",
+          "context": [
+            "Discord (Jan 22): kirsten warned Telegram TOS will restrict third-party blockchains aside from TON; enforcement begins \"February 21st\"."
+          ],
+          "multiple_choice_answers": {
+            "answer_1": {
+              "text": "Prioritize compliance: refactor Telegram integrations to minimize/abstract non-TON blockchain actions or disable them by default.",
+              "implication": "Protects continuity of Telegram presence but may reduce Web3 functionality on that surface."
+            },
+            "answer_2": {
+              "text": "Segment offerings: maintain a TON-compliant Telegram mode, and route cross-chain features to other clients (Discord/Web) and Cloud APIs.",
+              "implication": "Preserves capability breadth while reducing platform risk; requires clear product messaging."
+            },
+            "answer_3": {
+              "text": "Deprioritize Telegram: invest engineering in more permissive surfaces and accept potential Telegram degradation or exit.",
+              "implication": "Avoids compliance churn but risks losing a major distribution channel and community touchpoint."
+            },
+            "answer_4": {
+              "text": "Other / More discussion needed / None of the above.",
+              "implication": null
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "_metadata": {
+    "model": "openai/gpt-5.2",
+    "generated_at": "2026-01-01T04:43:50.674904Z",
+    "prompt_tokens": 120509,
+    "completion_tokens": 3926,
+    "total_tokens": 124435,
+    "status": "success",
+    "processing_seconds": 56.0,
+    "key_points_count": 3,
+    "total_deliberation_questions": 9
+  }
+}

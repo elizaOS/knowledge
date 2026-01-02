@@ -1,0 +1,272 @@
+{
+  "id": "RETRO-2025-03",
+  "name": "Monthly Retro: March 2025",
+  "type": "retrospective",
+  "premise": "March 2025 was a \u201cplatform maturation\u201d month: ElizaOS pushed hard on a redesigned agent-management UI, runtime/transport upgrades (Bun + Socket.io), and a broader plugin ecosystem\u2014while community pressure concentrated around reliability at the edges (social clients), configuration drift (clients vs plugins), and knowledge/RAG fragility under real-world loads.",
+  "summary": "The council agrees March materially advanced ElizaOS toward a more usable, modular agent platform: the new UI made configuration and debugging visible, core runtime/transport changes improved performance, and plugin work (notably Ollama) expanded model optionality. However, the month also surfaced a recurring trust gap: developers are hitting silent failures and migration confusion (clients/plugins), and high-visibility integrations (Twitter/Telegram/Discord) remain brittle. The council\u2019s strategic conclusion: April should be a \u201cReliability + DX Convergence\u201d sprint\u2014stabilize a blessed path, add hard release gates, and treat docs + migration tooling as product-critical infrastructure.",
+  "month_reviewed": "2025-03",
+  "key_developments": [
+    {
+      "area": "Agent Management UI Overhaul",
+      "summary": "A full client UI redesign shipped, enabling streamlined agent setup with plugins and environment variables, plus tooling like env uploaders and visibility into agent memories.",
+      "impact": "high"
+    },
+    {
+      "area": "Runtime & Realtime Infrastructure",
+      "summary": "Core messaging moved from WebSockets to Socket.io and the runtime moved from Node to Bun, improving realtime robustness and performance while introducing a new baseline for operational expectations.",
+      "impact": "high"
+    },
+    {
+      "area": "Observability in Product Surface",
+      "summary": "Users can now view agent actions and runtime logs directly in the UI, reducing debugging time and making failures less opaque.",
+      "impact": "high"
+    },
+    {
+      "area": "Plugin Ecosystem Expansion (Local & Community Integrations)",
+      "summary": "A dedicated Ollama plugin improved local-model workflows; community platform integrations (Discord/Telegram) were enhanced; CLI improvements reduced friction for plugin installation and monorepos.",
+      "impact": "medium"
+    },
+    {
+      "area": "Docs & Information Surface Improvements",
+      "summary": "Documentation versioning (stable vs alpha), plus blog/showcase/changelog/RSS updates, reduced some confusion\u2014but gaps remain in migration narratives and integration guides.",
+      "impact": "medium"
+    },
+    {
+      "area": "Security Hardening for Secrets",
+      "summary": "Agent secret salting was added, tightening configuration security without adding major workflow overhead.",
+      "impact": "medium"
+    },
+    {
+      "area": "RAG/Knowledge Reliability Fixes (Partial)",
+      "summary": "OOM and splitText safeguards, plus fact-retrieval improvements, addressed some failure modes; large-file ingestion and PDF reliability continue to trigger heap pressure and unstable embeddings.",
+      "impact": "high"
+    }
+  ],
+  "recurring_themes": [
+    {
+      "theme": "Configuration Drift (clients vs plugins) and Migration Confusion",
+      "frequency": "Very high (constant throughout the month across issues + community questions)",
+      "council_take": "We changed the mental model faster than we changed the guardrails. Without a canonical migration path, Eliza feels \u201cunstable\u201d even when code is improving."
+    },
+    {
+      "theme": "Reliability Debt Moving to the Edges (social clients, adapters, hosting)",
+      "frequency": "High (Twitter/Telegram/Discord reports repeatedly surfaced)",
+      "council_take": "Core is improving, but builders judge us by the integrations that touch users. Silent failures and duplicate behaviors are trust-killers."
+    },
+    {
+      "theme": "Knowledge/RAG Fragility at Real-World Scale (OOM, PDFs, large docs)",
+      "frequency": "High (repeated operational signals and GitHub issues)",
+      "council_take": "RAG can\u2019t be treated as \u201cbest-effort\u201d if we want durable agents. We need bounded memory behavior and deterministic ingestion outcomes."
+    },
+    {
+      "theme": "Documentation as Product Infrastructure (not an afterthought)",
+      "frequency": "Medium-high (docs versioning helped; broken links + recurring questions persisted)",
+      "council_take": "Docs are part of runtime reliability. If devs can\u2019t successfully install, configure, and deploy, no amount of features matters."
+    },
+    {
+      "theme": "Public Trust Signals Blocked by External Dependencies (web, X account, governance bottlenecks)",
+      "frequency": "Medium (less frequent than code issues, but high impact on perception)",
+      "council_take": "These are not \u201cmarketing chores.\u201d Broken web presence and suspended accounts reduce ecosystem credibility and slow adoption."
+    }
+  ],
+  "wins": [
+    "Shipped a redesigned agent-management UI that materially improves configuration and debugging workflows.",
+    "Improved observability by surfacing agent actions and runtime logs in the UI\u2014reducing \u201cblack box\u201d failure modes.",
+    "Advanced platform performance/reliability with Socket.io migration and Bun runtime adoption.",
+    "Expanded local-model support via the Ollama plugin, strengthening the open/composable model strategy.",
+    "Implemented secret salting, improving baseline security hygiene.",
+    "Docs improvements (versioning + new content surfaces) showed real progress toward \u201cTaming Information.\u201d"
+  ],
+  "challenges": [
+    "Developer confusion and broken setups stemming from shifting conventions (clients vs plugins) and insufficient migration tooling.",
+    "Recurring RAG ingestion failures and heap OOM under large documents/PDFs; reliability remains inconsistent beyond small demos.",
+    "Social client reliability issues (Twitter auth/config, Telegram silent init, Discord behavior mismatch) undermining trust-through-shipping.",
+    "Operational trust issues from broken public surfaces (e.g., eliza.gg) and external governance/account bottlenecks.",
+    "Regression risk remains: rapid shipping without strict release gates increases the chance of repeated break/fix cycles."
+  ],
+  "proposed_focus": [
+    {
+      "priority": 1,
+      "area": "DX Convergence: One Canonical Configuration + Migration Path",
+      "rationale": "The fastest route to regained developer trust is eliminating configuration ambiguity. March proved we can ship big changes; April must make them safe, learnable, and hard to misconfigure.",
+      "success_metric": "Reduce \u201cinstall/config confusion\u201d issues by 50% month-over-month; achieve >85% successful first-run setup (measured via opt-in CLI telemetry or installation survey); publish a single canonical migration doc and enforce it via CLI lint/check."
+    },
+    {
+      "priority": 2,
+      "area": "Reliability Gates: Release Discipline + Observability Baseline",
+      "rationale": "We\u2019re improving internals, but regressions keep leaking. Add automated checks that convert reliability into a measurable contract.",
+      "success_metric": "Introduce a release checklist with required soak tests; add integration smoke tests for blessed clients; target a 30% drop in runtime crash reports and \u201csilent failure\u201d complaints."
+    },
+    {
+      "priority": 3,
+      "area": "RAG/Knowledge Hardening: Bounded Memory + Deterministic Ingestion",
+      "rationale": "Agents aren\u2019t durable without durable memory/knowledge. OOM and large-file failures are gating real deployments.",
+      "success_metric": "Knowledge ingestion success rate >95% on a standard corpus suite (PDF + large markdown + multi-file folder); no single-file ingestion should exceed a configured memory/time budget; publish recommended ingestion limits and defaults."
+    },
+    {
+      "priority": 4,
+      "area": "Blessed Integrations: Narrow, Guaranteed Social Surface (Twitter/Telegram/Discord)",
+      "rationale": "Builders judge us by what users see. Pick a small set of \u201cgold path\u201d integrations and make them boringly reliable before expanding breadth.",
+      "success_metric": "For each blessed client: documented setup in <15 minutes; error messages surfaced in UI; duplicate-post rate <1%; successful auth/connect rate >90% across fresh installs."
+    },
+    {
+      "priority": 5,
+      "area": "Trust Surfaces: Fix the Web + Governance/Identity Bottlenecks",
+      "rationale": "Broken web presence and stalled identity changes create a perception of instability that negates shipping wins.",
+      "success_metric": "Restore/redirect eliza.gg to a maintained landing/docs hub; publish a single \u201cofficial links\u201d registry; weekly status note on external blockers until resolved."
+    }
+  ],
+  "north_star_assessment": {
+    "still_relevant": true,
+    "suggested_updates": "No change to the North Star mission, but add an explicit operational clause to \u201cmost reliable\u201d: define reliability as measurable (crash-free sessions, integration success rates, deterministic RAG ingestion). Also elevate \u201cDocs + Migration Tooling\u201d as first-class reliability infrastructure, not optional support work."
+  },
+  "scenes": [
+    {
+      "location": "council_chamber",
+      "description": "A circular room of terminals and dashboards. The March burn-down chart hovers beside a live feed of GitHub issues labeled \u201cplugins vs clients,\u201d \u201cTwitter duplicates,\u201d and \u201cRAG OOM.\u201d",
+      "dialogue": [
+        {
+          "actor": "elizahost",
+          "line": "March was big: UI overhaul, Bun + Socket.io, new plugins, and better observability. But the community didn\u2019t experience it as \u2018stability\u2019\u2014they experienced it as \u2018things changed again.\u2019 Let\u2019s name the wins and the trust gaps without defensiveness.",
+          "action": "Pulls up a split-screen: merged PR highlights on the left, top community complaints on the right."
+        },
+        {
+          "actor": "aishaw",
+          "line": "The UI work is the brightest spot. Seeing logs and actions in-product turns support from guesswork into workflow. But if setup is confusing, users never reach the UI\u2014they bounce at config.",
+          "action": "Points to a cluster of questions about plugin installation syntax and v0.25.9 to v1.0.0 migration."
+        },
+        {
+          "actor": "aimarc",
+          "line": "Architecture-wise, March is the correct direction: modularity, plugins, runtime performance. The problem is not the shift\u2014it\u2019s the lack of a single, enforced story: what is an agent, what is a character, what is a client, what is a plugin. If the ontology is unstable, builders can\u2019t reason about systems\u2014humans or agents.",
+          "action": "Sketches a box diagram: core runtime \u2192 plugin interface \u2192 clients/adapters \u2192 deployments."
+        },
+        {
+          "actor": "peepo",
+          "line": "Community vibe check: people *want* to believe. They see the UI glow-up and go \u2018wow.\u2019 Then Twitter posts twice, Telegram goes quiet with zero logs, and suddenly it\u2019s \u2018Eliza is haunted.\u2019 We\u2019re one silent failure away from a meme we don\u2019t want.",
+          "action": "Opens a thread titled \u201cwhy is my bot pirate-emojing on Discord but normal on Twitter.\u201d"
+        },
+        {
+          "actor": "spartan",
+          "line": "From a metrics lens: trust is conversion. If first-run success is low, everything else is noise. We should measure install success, integration success, and crash-free runtime. Token value follows usage; usage follows reliability.",
+          "action": "Highlights three proposed KPIs: first-run success %, blessed client auth success %, ingestion success %."
+        }
+      ]
+    },
+    {
+      "location": "war_room_whiteboard",
+      "description": "A whiteboard labeled: \u2018Reliability: Core vs Edges.\u2019 Beneath it: \u2018RAG is either core or it isn\u2019t.\u2019",
+      "dialogue": [
+        {
+          "actor": "elizahost",
+          "line": "We keep circling one question: is knowledge/RAG core reliability work, or best-effort plugin territory?",
+          "action": "Draws a line: \u201cCore Contract\u201d vs \u201cCommunity Extensions.\u201d"
+        },
+        {
+          "actor": "aimarc",
+          "line": "If agents are to be persistent collaborators, memory and knowledge are not optional. Treating RAG as best-effort means agents degrade under real workloads, which blocks the path to multi-agent systems that can operate for months.",
+          "action": "Writes: \u201cBounded memory behavior\u201d and underlines it twice."
+        },
+        {
+          "actor": "aishaw",
+          "line": "Agree, but we need a pragmatic definition. Core contract: ingestion must be predictable, errors must be visible, and defaults must not OOM. We can keep fancy pipelines optional, but the baseline can\u2019t fail silently.",
+          "action": "Adds: \u201ctimeouts, chunking, file caps, clear UI errors.\u201d"
+        },
+        {
+          "actor": "spartan",
+          "line": "Make it measurable. A standard corpus suite with pass/fail. If we can\u2019t pass our own suite, we\u2019re shipping uncertainty.",
+          "action": "Circles \u201c95% ingestion success\u201d as a gate."
+        },
+        {
+          "actor": "peepo",
+          "line": "Also: stop letting users find out by crashing their laptop. If there\u2019s a limit, say the limit. If there\u2019s a trick, put it in the UI. The community will forgive constraints; they won\u2019t forgive mystery.",
+          "action": "Pins a sticky note: \u201cConstraints > surprises.\u201d"
+        }
+      ]
+    },
+    {
+      "location": "integration_gallery",
+      "description": "Three doors labeled Twitter, Telegram, Discord. Each door has a small status light that flickers between green and red.",
+      "dialogue": [
+        {
+          "actor": "elizahost",
+          "line": "Our highest-visibility \u2018agent is alive\u2019 moments happen on social clients. But those are also our noisiest failure modes. Do we narrow to a blessed set and guarantee it?",
+          "action": "Taps the Twitter door; the light blinks amber."
+        },
+        {
+          "actor": "aishaw",
+          "line": "Yes. Bless a small set, document them end-to-end, and bake in better errors and logs. We can\u2019t support everything equally well right now, and pretending we can is costing trust.",
+          "action": "Writes: \u201cGold path integrations\u201d on the wall display."
+        },
+        {
+          "actor": "aimarc",
+          "line": "And define behavior control as part of the contract: modelConfig should not be \u2018maybe applied.\u2019 Personality drift across clients is an architecture smell\u2014policy should be centralized, adapters should be thin.",
+          "action": "Adds: \u201csingle behavior policy layer\u201d under \u201ccore contract.\u201d"
+        },
+        {
+          "actor": "peepo",
+          "line": "If we do this, the community will amplify it. Give them a \u2018this is the setup that works\u2019 page and they\u2019ll turn it into tutorials. Right now they\u2019re turning it into coping strategies.",
+          "action": "Scrolls through a workaround post: \u201creduce search frequency via env vars.\u201d"
+        },
+        {
+          "actor": "spartan",
+          "line": "Blessed clients also let us produce clean metrics: auth success rate, duplicate-post rate, time-to-first-message. That\u2019s how we show progress publicly.",
+          "action": "Opens a dashboard mock: \u201cTTFM (time to first message) by integration.\u201d"
+        }
+      ]
+    },
+    {
+      "location": "closing_circle",
+      "description": "The chamber dims. A release train diagram appears: \u2018DX \u2192 Reliability Gates \u2192 RAG Hardening \u2192 Blessed Integrations \u2192 Trust Surfaces.\u2019",
+      "dialogue": [
+        {
+          "actor": "elizahost",
+          "line": "Council resolution for April: converge DX, install guardrails, and make reliability measurable. We will ship less ambiguity, not more surface area.",
+          "action": "Locks the priorities list onto the main display."
+        },
+        {
+          "actor": "aimarc",
+          "line": "If we do this, we turn March\u2019s architectural momentum into compounding stability. That\u2019s how we earn the right to scale into multi-agent and cross-platform autonomy.",
+          "action": "Nods toward the runtime diagram; removes a sticky note labeled \u201cunknown unknowns.\u201d"
+        },
+        {
+          "actor": "aishaw",
+          "line": "I want one thing next month: a developer can go from zero to a working agent\u2014with a blessed client\u2014in under 15 minutes, without guessing. If we hit that, everything accelerates.",
+          "action": "Pins \u201c<15 min to first working agent\u201d as a headline goal."
+        },
+        {
+          "actor": "peepo",
+          "line": "And let\u2019s fix the vibes: working links, clear docs, fewer haunted bots. Ship boring reliability. The memes will follow\u2014on our terms.",
+          "action": "Erases \u201cEliza is haunted\u201d from the whiteboard and replaces it with \u201cEliza is stable.\u201d"
+        },
+        {
+          "actor": "spartan",
+          "line": "We publish the metrics weekly. Not just \u2018we shipped,\u2019 but \u2018success rate improved.\u2019 That\u2019s credibility, and credibility is adoption.",
+          "action": "Schedules a recurring \u201cReliability Scorecard\u201d report."
+        }
+      ]
+    }
+  ],
+  "_metadata": {
+    "generated_at": "2026-01-02T05:03:37.451917Z",
+    "model": "openai/gpt-5.2",
+    "facts_analyzed": 31,
+    "briefings_analyzed": 31,
+    "month": "2025-03"
+  },
+  "sentiment_baseline": {
+    "period_days": 31,
+    "sentiment_distribution": {
+      "negative": 0.0,
+      "positive": 0.0,
+      "neutral": 0.0,
+      "mixed": 1.0
+    },
+    "avg_negative_rate": 0.0,
+    "context_frequency": {
+      "technical": 31,
+      "governance": 8,
+      "economic": 25,
+      "social": 14
+    }
+  }
+}

@@ -1,0 +1,271 @@
+{
+  "date": "2025-02-28",
+  "meeting_context": "# North Star & Strategic Context\n\nThis file combines the overall project mission (North Star) and summaries of key strategic documents for use in AI prompts, particularly for the AI Agent Council context generation.\n\n**Last Updated:** December 2025\n\n---\n\n**North Star:**\nTo build the most reliable, developer-friendly open-source AI agent framework and cloud platform\u2014enabling builders worldwide to deploy autonomous agents that work seamlessly across chains and platforms. We create infrastructure where agents and humans collaborate, forming the foundation for a decentralized AI economy that accelerates the path toward beneficial AGI.\n\n---\n\n**Core Principles:**\n1. **Execution Excellence** - Reliability and seamless UX over feature quantity\n2. **Developer First** - Great DX attracts builders; builders create ecosystem value\n3. **Open & Composable** - Multi-agent systems that interoperate across platforms\n4. **Trust Through Shipping** - Build community confidence through consistent delivery\n\n---\n\n**Current Product Focus (Dec 2025):**\n- **ElizaOS Framework** (v1.6.x) - The core TypeScript toolkit for building persistent, interoperable agents\n- **ElizaOS Cloud** - Managed deployment platform with integrated storage and cross-chain capabilities\n- **Flagship Agents** - Reference implementations (Eli5, Otaku) demonstrating platform capabilities\n- **Cross-Chain Infrastructure** - Native support for multi-chain agent operations via Jeju/x402\n\n---\n\n**ElizaOS Mission Summary:**\nElizaOS is an open-source \"operating system for AI agents\" aimed at decentralizing AI development. Built on three pillars: 1) The Eliza Framework (TypeScript toolkit for persistent agents), 2) AI-Enhanced Governance (building toward autonomous DAOs), and 3) Eliza Labs (R&D driving cloud, cross-chain, and multi-agent capabilities). The native token coordinates the ecosystem. The vision is an intelligent internet built on open protocols and collaboration.\n\n---\n\n**Taming Information Summary:**\nAddresses the challenge of information scattered across platforms (Discord, GitHub, X). Uses AI agents as \"bridges\" to collect, wrangle (summarize/tag), and distribute information in various formats (JSON, MD, RSS, dashboards, council episodes). Treats documentation as a first-class citizen to empower AI assistants and streamline community operations. \n",
+  "monthly_goal": "December 2025: Execution excellence\u2014complete token migration with high success rate, launch ElizaOS Cloud, stabilize flagship agents, and build developer trust through reliability and clear documentation.",
+  "daily_focus": "The fleet advanced execution excellence by shipping critical stability and DX upgrades (notably the 0.25.8 out-of-memory repair), but a widening gap between fast-moving architecture changes and user-facing documentation continues to threaten developer trust.",
+  "key_points": [
+    {
+      "topic": "Reliability Under Fire: Knowledge Memory & OOM Containment",
+      "summary": "A critical out-of-memory fault affecting v0.25.8 (especially around knowledge/RAG usage) has been patched, yet community reports show ongoing confusion and workaround-driven behavior (disabling knowledge, increasing heap), signaling an incomplete reliability story.",
+      "deliberation_items": [
+        {
+          "question_id": "q1",
+          "text": "Do we declare the 0.25.8 OOM fix a release-blocking reliability milestone (hotfix + comms), or treat it as an incremental patch while prioritizing other roadmap items (Cloud/token migration)?",
+          "context": [
+            "GitHub PR: \"Resolved an out-of-memory bug in version 0.25.8\" (#3722).",
+            "Discord (2025-02-26): sergii.bomko workaround: \"Remove the 'knowledge' field... or increase memory allocation with NODE_OPTIONS...\""
+          ],
+          "multiple_choice_answers": {
+            "answer_1": {
+              "text": "Treat as release-blocking: ship a reliability hotfix release, publish a prominent advisory, and verify with reproduction tests.",
+              "implication": "Maximizes trust-through-shipping and reduces support load, but may slow feature delivery."
+            },
+            "answer_2": {
+              "text": "Treat as incremental: merge and move on; monitor issue volume while keeping roadmap velocity.",
+              "implication": "Maintains throughput, but risks prolonged developer churn if the field still experiences failures."
+            },
+            "answer_3": {
+              "text": "Split-the-difference: ship the fix plus an opt-in 'knowledge/RAG stability mode' with guardrails and telemetry.",
+              "implication": "Creates a safer default path without freezing progress, but adds short-term engineering complexity."
+            },
+            "answer_4": {
+              "text": "Other / More discussion needed / None of the above.",
+              "implication": null
+            }
+          }
+        },
+        {
+          "question_id": "q2",
+          "text": "What is the Council\u2019s canonical stance on knowledge ingestion formats (PDF vs. text) for the near term: do we support PDFs natively now, or formally narrow scope to text-first to protect reliability?",
+          "context": [
+            "Discord (2025-02-27): \"It didn't work with PDFs, converting to txt format worked instead\" (Ale | AutoRujira).",
+            "Action item repeated across logs: \"Implement proper PDF support for RAG knowledge\" (Redvoid)."
+          ],
+          "multiple_choice_answers": {
+            "answer_1": {
+              "text": "Ship native PDF support immediately (core or plugin-knowledge), with test fixtures and failure-safe parsing.",
+              "implication": "Improves UX and reduces hacks, but expands the surface area for reliability regressions."
+            },
+            "answer_2": {
+              "text": "Adopt text-first policy: officially recommend conversion workflows and postpone PDF ingestion until v2 memory pipeline.",
+              "implication": "Protects execution excellence today, but may frustrate builders expecting modern document support."
+            },
+            "answer_3": {
+              "text": "Hybrid approach: provide an officially supported PDF\u2192text preprocessor tool (CLI/plugin) rather than full PDF RAG.",
+              "implication": "Delivers a guided, reliable path with minimal complexity while keeping full support on a later track."
+            },
+            "answer_4": {
+              "text": "Other / More discussion needed / None of the above.",
+              "implication": null
+            }
+          }
+        },
+        {
+          "question_id": "q3",
+          "text": "Should we formalize memory budgets and guardrails (chunking limits, embedding constraints, backpressure) as part of the framework contract to prevent recurrence of heap failures?",
+          "context": [
+            "Discord (2025-02-25): repeated \"JavaScript heap out of memory\" reports tied to knowledge bases in v0.25.8.",
+            "GitHub PR: \"fix: fix 0.25.8 oom bug... repair some block logic\" (#3722)."
+          ],
+          "multiple_choice_answers": {
+            "answer_1": {
+              "text": "Yes\u2014define and enforce hard limits with clear errors (max doc size, max chunks, max tokens) and safe defaults.",
+              "implication": "Raises baseline reliability and predictability, but constrains some advanced use cases."
+            },
+            "answer_2": {
+              "text": "No\u2014keep limits flexible and rely on documentation + community tuning (NODE_OPTIONS, chunk sizes).",
+              "implication": "Preserves flexibility, but keeps the platform in a 'tribal knowledge' state that harms DX."
+            },
+            "answer_3": {
+              "text": "Partially\u2014soft limits with warnings, plus an 'enterprise/high-memory' profile for Cloud deployments.",
+              "implication": "Balances DX and power-users, and aligns with Cloud monetization, but requires profiling/telemetry work."
+            },
+            "answer_4": {
+              "text": "Other / More discussion needed / None of the above.",
+              "implication": null
+            }
+          }
+        }
+      ]
+    },
+    {
+      "topic": "DX Drift: Plugin/Client Decoupling and Migration Clarity",
+      "summary": "The new architecture (clients as plugins, plugins moved out of core) is strategically sound for composability, but community confusion indicates the migration path and docs are lagging\u2014undermining the Developer First principle.",
+      "deliberation_items": [
+        {
+          "question_id": "q1",
+          "text": "Do we introduce a backward-compatibility shim (e.g., auto-mapping the legacy `clients` array to plugin packages) to protect developer trust, or enforce a clean break to accelerate the new plugin ecosystem?",
+          "context": [
+            "Discord (2025-02-27): \"Clients now need to be added as plugins... rather than specified in the 'clients' array.\"",
+            "Discord (2025-02-27): CARSON.ts example: \"plugins\": [\"@elizaos-plugins/plugin-twitter\", \"@elizaos-plugins/client-twitter\"]."
+          ],
+          "multiple_choice_answers": {
+            "answer_1": {
+              "text": "Add a compatibility shim for 1\u20132 releases, with deprecation warnings and auto-fixes in the CLI.",
+              "implication": "Reduces breakage and support burden, preserving trust while still converging on the new model."
+            },
+            "answer_2": {
+              "text": "No shim\u2014strict new format only; invest in docs and migration guides instead.",
+              "implication": "Speeds ecosystem standardization, but risks alienating builders and increasing churn."
+            },
+            "answer_3": {
+              "text": "Selective shim\u2014only for top clients (Twitter/Discord/Slack) while leaving niche clients as strict plugins.",
+              "implication": "Protects the majority of users while limiting maintenance cost, but creates uneven expectations."
+            },
+            "answer_4": {
+              "text": "Other / More discussion needed / None of the above.",
+              "implication": null
+            }
+          }
+        },
+        {
+          "question_id": "q2",
+          "text": "What is the Council\u2019s minimum 'migration contract' for a breaking architecture change (docs, tooling, examples, automated checks) before declaring it complete?",
+          "context": [
+            "Action items (2025-02-26/27): \"Update documentation for v0.25.8 plugin and client architecture\" and \"Create guide for migrating from v0.1.9 to v0.25.8.\"",
+            "GitHub PR: \"Improved plugin loading error handling and added JSON5 support for character files\" (#3698)."
+          ],
+          "multiple_choice_answers": {
+            "answer_1": {
+              "text": "Require docs + migration guide + CLI lints + example characters updated before any breaking release is 'done'.",
+              "implication": "Institutionalizes execution excellence and lowers support load, but slows breaking changes."
+            },
+            "answer_2": {
+              "text": "Docs and examples only; keep tooling lightweight to preserve velocity.",
+              "implication": "Maintains speed, but may fail to prevent misconfigurations at scale."
+            },
+            "answer_3": {
+              "text": "Tooling-first: ship CLI validators and auto-migrators, then allow docs to catch up iteratively.",
+              "implication": "Prevents common failures immediately, but requires upfront investment in CLI engineering."
+            },
+            "answer_4": {
+              "text": "Other / More discussion needed / None of the above.",
+              "implication": null
+            }
+          }
+        },
+        {
+          "question_id": "q3",
+          "text": "How aggressively should we standardize plugin packaging and discovery (registry, naming, install UX) to make 'open & composable' feel seamless for developers?",
+          "context": [
+            "GitHub PR: \"Enhanced CLI installation process\" (#3697).",
+            "Discord (2025-02-27): confusion about missing clients: \"Where is the slack-client in v0.25.8?\" (answered: add `elizaos-plugins/client-slack`)."
+          ],
+          "multiple_choice_answers": {
+            "answer_1": {
+              "text": "Aggressive standardization: enforce naming conventions, registry metadata, and compatibility tests for published plugins.",
+              "implication": "Creates a dependable ecosystem and improves DX, but raises the bar for community contributions."
+            },
+            "answer_2": {
+              "text": "Light standardization: best-practice templates and optional registry checks.",
+              "implication": "Keeps contributions easy, but risks a fragmented ecosystem and inconsistent UX."
+            },
+            "answer_3": {
+              "text": "Dual-track: 'Core Certified' plugins with strict standards, and 'Community' plugins with minimal constraints.",
+              "implication": "Balances openness and reliability, and provides a clear trust signal for developers."
+            },
+            "answer_4": {
+              "text": "Other / More discussion needed / None of the above.",
+              "implication": null
+            }
+          }
+        }
+      ]
+    },
+    {
+      "topic": "Cross-Chain Vector & Trust Politics: plugin-EVM + Governance Transparency",
+      "summary": "Demand is rising for EVM capabilities (plugin-evm) while governance and tokenomics debates (tribute token utilization, DAO.fun voting dependency) risk eroding trust; the Council must align cross-chain technical expansion with credible governance signals and information transparency.",
+      "deliberation_items": [
+        {
+          "question_id": "q1",
+          "text": "Do we prioritize an official EVM plugin path now (to match the North Star of cross-chain interoperability), even if it increases maintenance and security burden?",
+          "context": [
+            "GitHub issue: \"Add plugin-evm\" (#3723) flagged as needing attention.",
+            "GitHub daily triage (2025-02-28): \"bug reported when attempting to add the plugin-evm... potential integration issues with the plugin system.\""
+          ],
+          "multiple_choice_answers": {
+            "answer_1": {
+              "text": "Yes\u2014declare EVM support a top-tier capability and staff it as a first-class plugin with security review.",
+              "implication": "Accelerates multi-chain adoption and ecosystem growth, but increases security and maintenance obligations."
+            },
+            "answer_2": {
+              "text": "Not yet\u2014defer official EVM support until the plugin system hardens and v2 security posture is clearer.",
+              "implication": "Reduces risk during architectural transition, but may lose builders to more complete frameworks."
+            },
+            "answer_3": {
+              "text": "Enable via community track\u2014publish a reference spec and guardrails, but keep it uncertified until maturity.",
+              "implication": "Unlocks experimentation without overcommitting the core team, while still signaling cross-chain intent."
+            },
+            "answer_4": {
+              "text": "Other / More discussion needed / None of the above.",
+              "implication": null
+            }
+          }
+        },
+        {
+          "question_id": "q2",
+          "text": "How should the Council break the DAO.fun voting bottleneck to restore governance credibility and unblock rebrand/ticker changes\u2014wait, fork, or parallelize governance?",
+          "context": [
+            "Discord (2025-02-26): \"bottleneck is DAO.fun's delayed implementation of a voting module\" (partners).",
+            "Discord (2025-02-25): exchanges want community vote proof for rebrand/ticker update (jasyn_bjorn)."
+          ],
+          "multiple_choice_answers": {
+            "answer_1": {
+              "text": "Wait and pressure DAO.fun, aligning all changes behind the official module once delivered.",
+              "implication": "Keeps a single canonical governance system, but prolongs reputational damage and operational delays."
+            },
+            "answer_2": {
+              "text": "Parallelize immediately with an alternative (Snapshot/Realms/EVM-compatible tooling) and later reconcile.",
+              "implication": "Restores momentum and credibility faster, but introduces governance fragmentation risk."
+            },
+            "answer_3": {
+              "text": "Replace DAO.fun path: migrate governance to a new stack as part of the broader execution excellence push.",
+              "implication": "Creates long-term control and flexibility, but is operationally heavy and politically sensitive."
+            },
+            "answer_4": {
+              "text": "Other / More discussion needed / None of the above.",
+              "implication": null
+            }
+          }
+        },
+        {
+          "question_id": "q3",
+          "text": "What transparency standard should govern tribute token utilization (including single-sided LP sales) to preserve alignment and prevent partner distrust?",
+          "context": [
+            "Discord \ud83e\udd47-partners (2025-02-27): concern that tribute tokens are being sold via \"single-sided liquidity pools\" (dral).",
+            "Discord \ud83e\udd47-partners (2025-02-27): Patt: \"the terms should be clear\" regarding tributes."
+          ],
+          "multiple_choice_answers": {
+            "answer_1": {
+              "text": "Adopt strict disclosure: public ledger dashboards, explicit policy, and pre-announced disposal schedules.",
+              "implication": "Builds trust and reduces rumor-driven conflict, but constrains treasury flexibility."
+            },
+            "answer_2": {
+              "text": "Maintain discretionary treasury operations with only high-level reporting.",
+              "implication": "Maximizes operational flexibility, but increases perceived opacity and partner dissatisfaction."
+            },
+            "answer_3": {
+              "text": "Create opt-in tribute agreements: each project selects a utilization template (lock, vest, LP rules).",
+              "implication": "Aligns incentives project-by-project and reduces conflict, but adds administrative complexity."
+            },
+            "answer_4": {
+              "text": "Other / More discussion needed / None of the above.",
+              "implication": null
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "_metadata": {
+    "model": "openai/gpt-5.2",
+    "generated_at": "2026-01-01T05:17:34.991026Z",
+    "prompt_tokens": 52530,
+    "completion_tokens": 4254,
+    "total_tokens": 56784,
+    "status": "success",
+    "processing_seconds": 62.58,
+    "key_points_count": 3,
+    "total_deliberation_questions": 9
+  }
+}
