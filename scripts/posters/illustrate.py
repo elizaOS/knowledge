@@ -54,7 +54,7 @@ IMAGE_MODEL = "google/gemini-3-pro-image-preview"
 SCRIPT_DIR = Path(__file__).parent.resolve()
 WORKSPACE_ROOT = SCRIPT_DIR.parent.parent
 CHARACTERS_DIR = SCRIPT_DIR / "characters"
-OUTPUT_DIR = WORKSPACE_ROOT / "media"
+OUTPUT_DIR = WORKSPACE_ROOT / "media" / "daily"
 STYLE_PRESETS_FILE = SCRIPT_DIR / "config" / "style-presets.json"
 
 logging.basicConfig(
@@ -338,19 +338,16 @@ COMPOSITIONS = [
 
 # Holiday moods - override seasonal mood on special days
 # Format: (month, day): ("holiday_name", "mood description")
+# Note: Deterministic holidays have minimal/no padding - the day is the day
 HOLIDAY_MOODS = {
-    # New Year's (Dec 31 - Jan 2)
+    # New Year's (Dec 31 - Jan 1 only, fireworks are over after NY Day)
     (12, 31): ("new_years", "new beginnings, celebration, fireworks and confetti"),
     (1, 1): ("new_years", "new beginnings, celebration, fireworks and confetti"),
-    (1, 2): ("new_years", "new beginnings, fresh starts, optimistic energy"),
 
-    # Valentine's Day (Feb 13-15)
-    (2, 13): ("valentines", "warmth and connection, soft pinks and reds"),
+    # Valentine's Day (Feb 14 only)
     (2, 14): ("valentines", "love and connection, romantic warmth, heartfelt moments"),
-    (2, 15): ("valentines", "warmth and connection, soft pinks and reds"),
 
-    # St. Patrick's Day (Mar 16-17)
-    (3, 16): ("st_patricks", "lucky green, festive Irish energy"),
+    # St. Patrick's Day (Mar 17 only)
     (3, 17): ("st_patricks", "lucky green, Irish charm, festive celebration"),
 
     # April Fools (Apr 1) - Easter takes priority if they overlap
@@ -359,24 +356,19 @@ HOLIDAY_MOODS = {
     # Bitcoin Pizza Day (May 22)
     (5, 22): ("bitcoin_pizza", "crypto nostalgia, pizza celebration, early adopter vibes"),
 
-    # 4th of July (Jul 3-5)
-    (7, 3): ("july_4th", "patriotic energy, summer celebration, anticipation"),
+    # 4th of July (Jul 4 only, no padding needed)
     (7, 4): ("july_4th", "bold patriotic energy, fireworks, summer celebration"),
-    (7, 5): ("july_4th", "summer celebration, post-fireworks glow"),
 
     # Ethereum Birthday (Jul 30)
     (7, 30): ("eth_birthday", "blockchain celebration, network anniversary, crypto milestone"),
 
-    # Halloween (Oct 29-31) - characters wear costumes!
-    (10, 29): ("halloween", "mysterious atmosphere, autumn shadows, spooky anticipation, characters wearing Halloween costumes"),
+    # Halloween (Oct 30-31) - 1 day buildup for spooky season
     (10, 30): ("halloween", "spooky and playful, orange and purple, eerie shadows, characters in creative Halloween costumes"),
     (10, 31): ("halloween", "peak spooky energy, haunted atmosphere, characters dressed in fun Halloween costumes"),
 
-    # Christmas (Dec 23-26) - characters wear Santa hats!
-    (12, 23): ("christmas", "festive anticipation, cozy warmth, holiday preparations, characters wearing Santa hats"),
+    # Christmas (Dec 24-25 only) - Christmas Eve + Christmas Day
     (12, 24): ("christmas", "Christmas Eve magic, warm glow, gift-giving anticipation, characters in Santa hats"),
     (12, 25): ("christmas", "Christmas joy, festive warmth, red and green, characters wearing Santa hats and holiday attire"),
-    (12, 26): ("christmas", "post-Christmas cozy, relaxed holiday warmth, characters in cozy holiday wear"),
 }
 
 # Variable holidays - hardcoded dates for 2025-2035

@@ -247,7 +247,7 @@ def run_pipeline(
 
     # Set output directory
     if output_dir is None:
-        output_dir = SCRIPT_DIR / "test_output" / f"{date_str}_director"
+        output_dir = SCRIPT_DIR.parent.parent / "media" / "editorial" / date_str
     output_dir.mkdir(parents=True, exist_ok=True)
 
     print("=" * 60)

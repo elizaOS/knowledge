@@ -27,7 +27,7 @@ IMAGE_MODEL = "google/gemini-3-pro-image-preview"
 SCRIPT_DIR = Path(__file__).parent.resolve()
 WORKSPACE_ROOT = SCRIPT_DIR.parent.parent
 FACTS_DIR = WORKSPACE_ROOT / "the-council" / "facts"
-OUTPUT_DIR = WORKSPACE_ROOT / "posters"
+OUTPUT_DIR = WORKSPACE_ROOT / "media" / "quick"
 STYLE_PRESETS_FILE = SCRIPT_DIR / "config" / "style-presets.json"
 
 # Default character reference images (council members)

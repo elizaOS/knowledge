@@ -62,7 +62,7 @@ OPENROUTER_ENDPOINT = "https://openrouter.ai/api/v1/chat/completions"
 LLM_MODEL = "openai/gpt-4.1"
 
 WORKSPACE_ROOT = SCRIPT_DIR.parent.parent
-OUTPUT_DIR = WORKSPACE_ROOT / "media"
+OUTPUT_DIR = WORKSPACE_ROOT / "media" / "daily"
 
 logging.basicConfig(level=logging.INFO, format='%(message)s')
 

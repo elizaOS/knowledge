@@ -30,7 +30,7 @@ OPENROUTER_API_KEY = os.environ.get("OPENROUTER_API_KEY")
 IMAGE_MODEL = "google/gemini-2.5-flash-image-preview"
 
 SCRIPT_DIR = Path(__file__).parent
-OUTPUT_DIR = SCRIPT_DIR / "tag-icons"
+OUTPUT_DIR = SCRIPT_DIR.parent.parent / "media" / "icons" / "tags"
 FACTS_DIR = SCRIPT_DIR.parent.parent / "the-council" / "facts"
 
 

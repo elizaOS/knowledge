@@ -8,7 +8,6 @@ This directory contains multiple approaches to generating editorial illustration
 
 | Script | Lines | Philosophy | Best For |
 |--------|-------|------------|----------|
-| `generate-ai-image.py` | ~550 | Simple & direct | Quick single images, style previews |
 | `illustrate.py` | ~1500 | Config-driven rules engine | Production batches, deterministic output |
 | `illustrate-adaptive.py` | ~650 | LLM content analyzer | Adaptive generation, icon integration |
 | `scene_director.py` | ~400 | LLM creative director | Editorial metaphors, cohesive day sets |
@@ -22,37 +21,6 @@ This directory contains multiple approaches to generating editorial illustration
 | `create-tag-icons.py` | Create icons from tag words |
 | `create-entity-icons.py` | Create icons for entities (projects, tokens) |
 | `validate-entity-icons.py` | Validate entity icons and sync to manifest |
-
----
-
-## generate-ai-image.py
-
-**The Quick Sketch Artist**
-
-Simple, straightforward image generation. Takes facts, generates a prompt, creates an image.
-
-```bash
-# Generate today's poster
-python generate-ai-image.py
-
-# Specific date and style
-python generate-ai-image.py -d 2025-10-28 --style noir_ink
-
-# Preview all styles
-python generate-ai-image.py --preview-styles
-
-# Generate per-category images
-python generate-ai-image.py --by-category
-```
-
-**Features:**
-- GPT-5.2 for prompt generation, Gemini 3 Pro for images
-- Simple asset-based character references (`assets/*.png`)
-- Style presets from `config/style-presets.json`
-- Category-based batch generation
-- Style preview mode
-
-**When to use:** Quick iterations, testing styles, simple one-off images.
 
 ---
 
@@ -154,7 +122,6 @@ python scene_director.py the-council/facts/2025-10-28.json -s "Warm Industrial"
 
 | Script | How style is chosen |
 |--------|---------------------|
-| `generate-ai-image.py` | CLI flag or category mapping |
 | `illustrate.py` | Category mapping + day-of-year rotation |
 | `illustrate-adaptive.py` | LLM picks based on content analysis |
 | `scene_director.py` | LLM picks ONE style for all 4 daily scenes |
@@ -163,7 +130,6 @@ python scene_director.py the-council/facts/2025-10-28.json -s "Warm Industrial"
 
 | Script | Reference approach |
 |--------|-------------------|
-| `generate-ai-image.py` | Simple PNGs in `assets/` |
 | `illustrate.py` | Reference sheets + manifests in `characters/*/` |
 | `illustrate-adaptive.py` | Same as illustrate.py |
 | `scene_director.py` | Same as illustrate.py |
@@ -172,7 +138,6 @@ python scene_director.py the-council/facts/2025-10-28.json -s "Warm Industrial"
 
 | Script | How scenes are described |
 |--------|-------------------------|
-| `generate-ai-image.py` | LLM generates prompt from summary |
 | `illustrate.py` | Template-based with creative brief modifiers |
 | `illustrate-adaptive.py` | LLM generates scene from content analysis |
 | `scene_director.py` | LLM creates visual METAPHORS (never literal) |
@@ -203,15 +168,11 @@ scripts/posters/
 
 ## Choosing an Artist
 
-**Need something quick?** → `generate-ai-image.py`
-
 **Need reliable production output?** → `illustrate.py --batch`
 
 **Content is unusual/varied?** → `illustrate-adaptive.py`
 
 **Want editorial storytelling?** → `scene_director.py`
-
-**Experimenting with styles?** → `generate-ai-image.py --preview-styles`
 
 ---
 
@@ -226,12 +187,38 @@ export OPENROUTER_API_KEY="your-key"
 
 ## Output Locations
 
+All scripts output to the `media/` directory with organized subfolders:
+
 | Script | Default output |
 |--------|---------------|
-| `generate-ai-image.py` | `../../posters/` (workspace root) |
-| `illustrate.py` | `media/{date}/` |
-| `illustrate-adaptive.py` | `media/{date}/` |
-| `scene_director.py` | `test_output/{date}_director/` |
+| `illustrate.py` | `media/daily/{date}/` |
+| `illustrate-adaptive.py` | `media/daily/{date}/` |
+| `scene_director.py` | `media/editorial/{date}/` |
+| `create-tag-icons.py` | `media/icons/tags/` |
+| `create-entity-icons.py` | `scripts/posters/assets/icons/` (permanent assets) |
+
+---
+
+## Testing & Comparison
+
+Use `test-all-scripts.py` to generate samples from all scripts and create an HTML comparison gallery:
+
+```bash
+# Run all tests with latest facts
+python scripts/posters/test-all-scripts.py
+
+# Test specific script
+python scripts/posters/test-all-scripts.py --only illustrate
+python scripts/posters/test-all-scripts.py --only scene_director
+
+# Dry run - see what would be generated
+python scripts/posters/test-all-scripts.py --dry-run
+
+# Just rebuild HTML gallery from existing samples
+python scripts/posters/test-all-scripts.py --html-only
+```
+
+Output: `media/samples/gallery.html` - interactive lightbox gallery comparing all script outputs
 
 ---
 
