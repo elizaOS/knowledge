@@ -310,12 +310,17 @@ def run_script(script_name: str, test_config: dict, date_str: str, dry_run: bool
             after_pngs = get_all_pngs_with_mtime(watch_dirs)
             new_pngs = find_new_or_modified_pngs(before_pngs, after_pngs)
 
-            # Copy new images to samples directory and track paths
+            # Copy new images and their prompts to samples directory
             sample_images = []
             for img in sorted(new_pngs):
                 dest = output_dir / img.name
-                if not dest.exists():
+                if img.resolve() != dest.resolve() and not dest.exists():
                     shutil.copy2(img, dest)
+                # Also copy prompt file if it exists (same name but .txt)
+                prompt_file = img.with_suffix(".txt")
+                prompt_dest = output_dir / prompt_file.name
+                if prompt_file.exists() and prompt_file.resolve() != prompt_dest.resolve():
+                    shutil.copy2(prompt_file, prompt_dest)
                 # Use path relative to SAMPLES_DIR for gallery (works for file:// and http server)
                 sample_images.append(str(dest.relative_to(SAMPLES_DIR)))
 
@@ -645,9 +650,12 @@ def generate_html_gallery(results: list, date_str: str) -> str:
     <div class="lightbox" id="lightbox" onclick="closeLightbox(event)">
         <span class="lightbox-close">&times;</span>
         <span class="lightbox-nav lightbox-prev" onclick="event.stopPropagation(); navigateLightbox(-1)">&#10094;</span>
-        <img id="lightbox-img" src="" alt="" onclick="event.stopPropagation()">
+        <div class="lightbox-content" onclick="event.stopPropagation()">
+            <img id="lightbox-img" src="" alt="">
+            <div class="lightbox-info" id="lightbox-info"></div>
+            <div class="lightbox-prompt" id="lightbox-prompt"></div>
+        </div>
         <span class="lightbox-nav lightbox-next" onclick="event.stopPropagation(); navigateLightbox(1)">&#10095;</span>
-        <div class="lightbox-info" id="lightbox-info"></div>
     </div>
 
     <style>
@@ -662,10 +670,40 @@ def generate_html_gallery(results: list, date_str: str) -> str:
             user-select: none;
             opacity: 0.7;
             transition: opacity 0.2s;
+            z-index: 10;
         }
         .lightbox-nav:hover { opacity: 1; }
         .lightbox-prev { left: 1rem; }
         .lightbox-next { right: 1rem; }
+        .lightbox-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            max-width: 90%;
+            max-height: 90%;
+        }
+        .lightbox-content img {
+            max-width: 100%;
+            max-height: 70vh;
+            object-fit: contain;
+        }
+        .lightbox-prompt {
+            background: rgba(0, 0, 0, 0.8);
+            color: #aaa;
+            padding: 1rem;
+            margin-top: 0.5rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            max-width: 800px;
+            max-height: 150px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            text-align: left;
+        }
+        .lightbox-prompt:empty {
+            display: none;
+        }
     </style>
 
     <script>
@@ -676,24 +714,43 @@ def generate_html_gallery(results: list, date_str: str) -> str:
         }));
         let currentIndex = 0;
 
-        function openLightbox(src, name) {
+        async function loadPrompt(imgSrc) {
+            const promptPath = imgSrc.replace(/\\.png$/i, '.txt');
+            try {
+                const response = await fetch(promptPath);
+                if (response.ok) {
+                    return await response.text();
+                }
+            } catch (e) {}
+            return '';
+        }
+
+        async function openLightbox(src, name) {
             currentIndex = allImages.findIndex(img => img.src.endsWith(src) || src.endsWith(img.src.split('/').pop()));
             if (currentIndex === -1) currentIndex = 0;
             document.getElementById('lightbox-img').src = src;
             document.getElementById('lightbox-info').textContent = name + ' (' + (currentIndex + 1) + '/' + allImages.length + ')';
             document.getElementById('lightbox').classList.add('active');
+
+            // Load and display prompt
+            const prompt = await loadPrompt(src);
+            document.getElementById('lightbox-prompt').textContent = prompt;
         }
 
         function closeLightbox(event) {
-            if (event && event.target.tagName === 'IMG') return;
+            if (event && (event.target.tagName === 'IMG' || event.target.classList.contains('lightbox-content'))) return;
             document.getElementById('lightbox').classList.remove('active');
         }
 
-        function navigateLightbox(direction) {
+        async function navigateLightbox(direction) {
             currentIndex = (currentIndex + direction + allImages.length) % allImages.length;
             const img = allImages[currentIndex];
             document.getElementById('lightbox-img').src = img.src;
             document.getElementById('lightbox-info').textContent = img.name + ' (' + (currentIndex + 1) + '/' + allImages.length + ')';
+
+            // Load and display prompt
+            const prompt = await loadPrompt(img.src);
+            document.getElementById('lightbox-prompt').textContent = prompt;
         }
 
         document.addEventListener('keydown', (e) => {

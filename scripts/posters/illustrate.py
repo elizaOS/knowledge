@@ -2,7 +2,7 @@
 """
 Generate story illustrations using character reference sheets.
 
-Uses reference-sheet.png from each character folder to maintain consistency.
+Uses reference-sheet-{character}.png from each character folder to maintain consistency.
 
 Usage:
   # Basic - character + prompt
@@ -112,14 +112,17 @@ def get_style_config(style_name: str) -> dict:
 
 
 def get_reference_sheet(character: str) -> Path:
-    """Get path to character's reference sheet."""
+    """Get path to character's reference sheet.
+
+    Filename includes character name for better model context.
+    """
     char_dir = CHARACTERS_DIR / character
-    ref_sheet = char_dir / "reference-sheet.png"
+    ref_sheet = char_dir / f"reference-sheet-{character}.png"
 
     if not ref_sheet.exists():
         raise FileNotFoundError(
             f"No reference sheet for '{character}'. "
-            f"Run: python scripts/posters/generate.py {character}"
+            f"Run: python scripts/posters/character-reference.py {character}"
         )
 
     return ref_sheet
@@ -336,6 +339,38 @@ COMPOSITIONS = [
     "Split frame showing cause and effect",
 ]
 
+# Lighting directions - HOW light shapes the scene
+LIGHTING_DIRECTIONS = [
+    "dramatic rim lighting from behind, subject edges glowing",
+    "soft golden hour side-lighting, warm and nostalgic",
+    "cool blue ambient light from above, calm and focused",
+    "harsh chiaroscuro with deep contrasting shadows",
+    "flat diffused lighting with soft gradients",
+    "dramatic spotlight from upper left, theatrical",
+    "backlighting creating silhouettes and halos",
+    "neon-tinged atmospheric glow, cyberpunk mood",
+]
+
+# Environment depth - HOW space is rendered
+ENVIRONMENT_DEPTH = [
+    "shallow depth of field - sharp subject, dreamy blurred background",
+    "deep focus - clear foreground object, subject, and detailed background",
+    "atmospheric depth - fog/haze separating visual planes",
+    "layered composition - distinct foreground, mid, and background elements",
+    "minimal environment - subject isolated against simple backdrop",
+    "environmental storytelling - rich contextual details throughout",
+]
+
+# Time of day - pure aesthetic choice (not tied to real-world seasonal daylight)
+TIME_OF_DAY = [
+    "dawn - soft pink/orange horizon, long shadows, quiet energy",
+    "midday - bright overhead light, minimal shadows, high energy",
+    "golden hour - warm directional light, long shadows, cinematic",
+    "blue hour - cool twilight tones, city lights emerging",
+    "night - artificial lighting, high contrast, intimate pools of light",
+    "overcast - soft diffused light, muted colors, contemplative",
+]
+
 # Holiday moods - override seasonal mood on special days
 # Format: (month, day): ("holiday_name", "mood description")
 # Note: Deterministic holidays have minimal/no padding - the day is the day
@@ -435,7 +470,7 @@ def generate_creative_brief(date: datetime) -> dict:
     """Generate today's unique creative direction.
 
     Uses date-seeded RNG for reproducibility: same date = same brief.
-    7 lenses × 6 compositions × 4 seasons = 168 unique combinations.
+    7 lenses × 6 compositions × 8 lighting × 6 depth × 6 time = 72,576 combinations.
     """
     seed = int(date.strftime("%Y%m%d"))
     rng = random.Random(seed)
@@ -444,6 +479,9 @@ def generate_creative_brief(date: datetime) -> dict:
         "lens": rng.choice(DAILY_LENSES),
         "composition": rng.choice(COMPOSITIONS),
         "mood": get_seasonal_mood(date),
+        "lighting": rng.choice(LIGHTING_DIRECTIONS),
+        "depth": rng.choice(ENVIRONMENT_DEPTH),
+        "time_of_day": rng.choice(TIME_OF_DAY),
     }
 
 
@@ -452,8 +490,9 @@ def get_available_characters() -> list[str]:
     chars = []
     for char_dir in CHARACTERS_DIR.iterdir():
         if char_dir.is_dir() and not char_dir.name.startswith("."):
-            if (char_dir / "reference-sheet.png").exists():
-                chars.append(char_dir.name)
+            char_name = char_dir.name
+            if (char_dir / f"reference-sheet-{char_name}.png").exists():
+                chars.append(char_name)
     return sorted(chars)
 
 
@@ -710,6 +749,9 @@ TODAY'S CREATIVE DIRECTION:
 - Interpretive lens: {creative_brief.get('lens', '')}
 - Composition: {creative_brief.get('composition', '')}
 - Atmosphere: {creative_brief.get('mood', '')}
+- Lighting: {creative_brief.get('lighting', '')}
+- Depth/Environment: {creative_brief.get('depth', '')}
+- Time of day: {creative_brief.get('time_of_day', '')}
 
 """
         system_prompt = f"""Convert this news content into a brief scene description for an illustration.
@@ -804,6 +846,9 @@ def interactive_mode(facts_path: Path, dry_run: bool = False, with_icons: bool =
     print(f"  Lens: {creative_brief['lens']}")
     print(f"  Composition: {creative_brief['composition']}")
     print(f"  Mood: {creative_brief['mood']}")
+    print(f"  Lighting: {creative_brief['lighting']}")
+    print(f"  Depth: {creative_brief['depth']}")
+    print(f"  Time: {creative_brief['time_of_day']}")
 
     # Generate icon sheet if requested
     icon_sheet_bytes = None
@@ -992,6 +1037,9 @@ def batch_mode(facts_path: Path, dry_run: bool = False, with_icons: bool = False
     print(f"  Lens: {creative_brief['lens']}")
     print(f"  Composition: {creative_brief['composition']}")
     print(f"  Mood: {creative_brief['mood']}")
+    print(f"  Lighting: {creative_brief['lighting']}")
+    print(f"  Depth: {creative_brief['depth']}")
+    print(f"  Time: {creative_brief['time_of_day']}")
 
     # Generate ideas with date-seeded style rotation and character shuffle
     ideas = generate_illustration_ideas(facts_path, facts_date)
@@ -1294,11 +1342,12 @@ def list_characters():
     print("Characters with reference sheets:")
     for char_dir in sorted(CHARACTERS_DIR.iterdir()):
         if char_dir.is_dir() and not char_dir.name.startswith("."):
-            ref_sheet = char_dir / "reference-sheet.png"
+            char_name = char_dir.name
+            ref_sheet = char_dir / f"reference-sheet-{char_name}.png"
             if ref_sheet.exists():
-                print(f"  {char_dir.name} [ready]")
+                print(f"  {char_name} [ready]")
             else:
-                print(f"  {char_dir.name} [needs generate.py]")
+                print(f"  {char_name} [needs character-reference.py]")
 
 
 def main():

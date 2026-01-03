@@ -8,12 +8,12 @@ Character-driven visual content generation for the ElizaOS digital newsmagazine.
 # 1. Analyze character images (creates manifest.json)
 python scripts/posters/analyze.py eliza
 
-# 2. Generate reference sheet (creates reference-sheet.png)
-python scripts/posters/generate.py eliza
+# 2. Generate reference sheet (creates reference-sheet-{character}.png)
+python scripts/posters/character-reference.py eliza
 
 # 3. Iterate
-python scripts/posters/generate.py eliza "shorter hair"
-python scripts/posters/generate.py eliza cyberpunk
+python scripts/posters/character-reference.py eliza "shorter hair"
+python scripts/posters/character-reference.py eliza cyberpunk
 ```
 
 ---
@@ -147,30 +147,30 @@ Creates canonical reference sheets with full body views and expressions.
 # Basic generation
 python scripts/posters/generate.py eliza
 
-# Iterate with adjustments (overwrites reference-sheet.png)
-python scripts/posters/generate.py eliza "bigger eyes"
-python scripts/posters/generate.py eliza "more orange in cap"
+# Iterate with adjustments (overwrites reference-sheet-{character}.png)
+python scripts/posters/character-reference.py eliza "bigger eyes"
+python scripts/posters/character-reference.py eliza "more orange in cap"
 
 # Themed variations (creates reference-sheet-{theme}.png)
-python scripts/posters/generate.py eliza cyberpunk
-python scripts/posters/generate.py eliza formal
+python scripts/posters/character-reference.py eliza cyberpunk
+python scripts/posters/character-reference.py eliza formal
 
 # Add extra reference images for inspiration
-python scripts/posters/generate.py eliza -i outfit.png
-python scripts/posters/generate.py eliza formal -i suit-ref.jpg
+python scripts/posters/character-reference.py eliza -i outfit.png
+python scripts/posters/character-reference.py eliza formal -i suit-ref.jpg
 
 # Add extra instructions
-python scripts/posters/generate.py eliza -t "more dynamic poses"
-python scripts/posters/generate.py eliza -i watercolor.jpg -t "apply style only to clothing"
+python scripts/posters/character-reference.py eliza -t "more dynamic poses"
+python scripts/posters/character-reference.py eliza -i watercolor.jpg -t "apply style only to clothing"
 
 # Custom output path
-python scripts/posters/generate.py eliza -o my-version.png
+python scripts/posters/character-reference.py eliza -o my-version.png
 
 # Preview without API call
-python scripts/posters/generate.py eliza --dry-run
+python scripts/posters/character-reference.py eliza --dry-run
 
 # List characters and themes
-python scripts/posters/generate.py --list
+python scripts/posters/character-reference.py --list
 ```
 
 #### Options
@@ -214,10 +214,10 @@ Located in `scripts/posters/characters/{name}/`:
 Each character folder contains:
 ```
 scripts/posters/characters/eliza/
-├── *.png                  # Source reference images
-├── manifest.json          # Analysis metadata
-├── reference-sheet.png    # Generated canonical sheet
-└── reference-sheet-*.png  # Themed variations
+├── *.png                       # Source reference images
+├── manifest.json               # Analysis metadata
+├── reference-sheet-eliza.png   # Generated canonical sheet (named for model context)
+└── reference-sheet-{theme}.png # Themed variations
 ```
 
 ---

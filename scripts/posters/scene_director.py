@@ -23,6 +23,7 @@ import json
 import argparse
 import os
 import base64
+import random
 from pathlib import Path
 from datetime import datetime
 
@@ -42,6 +43,25 @@ from illustrate import (
 # ---------------------------------------------------------------------------
 # Configuration
 # ---------------------------------------------------------------------------
+
+# Director-specific variety (independent from illustrate.py for more variation)
+DIRECTOR_LIGHTING = [
+    "cinematic three-point lighting with strong key",
+    "moody single-source dramatic shadows",
+    "soft diffused editorial lighting",
+    "high-contrast noir lighting",
+    "warm practical lighting from scene elements",
+    "cool backlit silhouette lighting",
+]
+
+DIRECTOR_ATMOSPHERE = [
+    "intimate and focused",
+    "epic and expansive",
+    "tense and claustrophobic",
+    "dreamy and ethereal",
+    "gritty and grounded",
+    "clean and minimal",
+]
 
 DIRECTOR_SYSTEM_PROMPT = """You are the Creative Director for 'ElizaOS Magazine'. Transform a daily briefing into 4 editorial illustrations.
 
@@ -178,8 +198,22 @@ def build_editorial_prompt(
     manifests: list[dict],
     scene: dict,
     day_style: str,
+    briefing_date: datetime = None,
 ) -> str:
-    """Build simple prompt matching consultant's successful format."""
+    """Build simple prompt matching consultant's successful format.
+
+    Uses date-seeded RNG for lighting/atmosphere variety (offset seed from illustrate.py).
+    """
+    # Date-seeded variety for lighting and atmosphere
+    if briefing_date:
+        seed = int(briefing_date.strftime("%Y%m%d")) + 1000  # Offset from illustrate.py
+        rng = random.Random(seed)
+        lighting = rng.choice(DIRECTOR_LIGHTING)
+        atmosphere = rng.choice(DIRECTOR_ATMOSPHERE)
+    else:
+        lighting = "cinematic three-point lighting with strong key"
+        atmosphere = "intimate and focused"
+
     # Build character sections - visual details only
     char_sections = []
     for m in manifests:
@@ -208,9 +242,9 @@ SCENE:
 {scene_desc}
 
 STYLE REQUIREMENTS:
-- Deep shadows with high contrast lighting
+- {lighting}
 - {day_style} aesthetic throughout
-- Dramatic rim lighting
+- {atmosphere} mood
 - Clean character rendering matching reference sheet
 - Cinematic composition
 
@@ -244,6 +278,12 @@ def run_pipeline(
         briefing = json.load(f)
 
     date_str = briefing.get("briefing_date", "unknown")
+
+    # Parse date for variety seeding
+    try:
+        briefing_date = datetime.strptime(date_str, "%Y-%m-%d")
+    except ValueError:
+        briefing_date = None  # Fall back to default lighting/atmosphere
 
     # Set output directory
     if output_dir is None:
@@ -298,6 +338,7 @@ def run_pipeline(
                     scene_manifests,
                     scene,
                     plan.get("day_style", "Editorial"),
+                    briefing_date,
                 )
 
                 prompt_path = output_dir / f"{i:02d}_{scene.get('id', 'scene')}_prompt.txt"
@@ -328,6 +369,7 @@ def run_pipeline(
                 scene_manifests,
                 scene,
                 plan.get("day_style", "Editorial"),
+                briefing_date,
             )
 
             # Generate

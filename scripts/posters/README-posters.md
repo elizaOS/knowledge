@@ -154,7 +154,7 @@ scripts/posters/
 │   └── style-presets.json    # Style definitions, category mappings
 ├── characters/
 │   ├── eliza/
-│   │   ├── reference-sheet.png
+│   │   ├── reference-sheet-eliza.png  # Named for model context
 │   │   └── manifest.json
 │   ├── shaw/
 │   ├── spartan/
