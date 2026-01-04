@@ -4,33 +4,34 @@ Generate character reference sheets.
 
 Creates a canonical reference sheet image with full body views and expressions.
 The reference sheet is reusable for future illustration generation.
+Filenames include character name for better model context (e.g., reference-sheet-eliza.png).
 
 Usage:
-  # Basic generation
-  python scripts/posters/generate.py eliza
+  # Basic generation (creates reference-sheet-{character}.png)
+  python scripts/posters/character-reference.py eliza
 
-  # Iterate with adjustments (overwrites reference-sheet.png)
-  python scripts/posters/generate.py eliza "shorter hair"
-  python scripts/posters/generate.py eliza "more orange cap"
+  # Iterate with adjustments (overwrites reference-sheet-{character}.png)
+  python scripts/posters/character-reference.py eliza "shorter hair"
+  python scripts/posters/character-reference.py eliza "more orange cap"
 
   # Themed variations (creates reference-sheet-{theme}.png)
-  python scripts/posters/generate.py eliza cyberpunk
-  python scripts/posters/generate.py eliza formal
+  python scripts/posters/character-reference.py eliza cyberpunk
+  python scripts/posters/character-reference.py eliza formal
 
   # Custom output path
-  python scripts/posters/generate.py eliza -o my-version.png
+  python scripts/posters/character-reference.py eliza -o my-version.png
 
   # Add extra reference images (e.g., outfit inspiration)
-  python scripts/posters/generate.py eliza -i dress.png
-  python scripts/posters/generate.py eliza formal -i suit-reference.png
+  python scripts/posters/character-reference.py eliza -i dress.png
+  python scripts/posters/character-reference.py eliza formal -i suit-reference.png
 
   # Add extra instructions with -t
-  python scripts/posters/generate.py eliza -t "more dynamic poses"
-  python scripts/posters/generate.py eliza -i watercolor.jpg -t "apply style only to clothing"
-  python scripts/posters/generate.py eliza -i ref.jpg -t "use this color palette for the background"
+  python scripts/posters/character-reference.py eliza -t "more dynamic poses"
+  python scripts/posters/character-reference.py eliza -i watercolor.jpg -t "apply style only to clothing"
+  python scripts/posters/character-reference.py eliza -i ref.jpg -t "use this color palette for the background"
 
 Workflow:
-  1. Run generate.py to create reference sheet
+  1. Run character-reference.py to create reference sheet
   2. View output with your image viewer
   3. Iterate until happy
 """
@@ -285,14 +286,20 @@ def generate(collage_bytes: bytes, prompt: str, has_style_refs: bool = False) ->
 
 
 def get_output_path(char_dir: Path, theme: str = None, custom_output: str = None) -> Path:
-    """Determine output path for the reference sheet."""
+    """Determine output path for the reference sheet.
+
+    Default naming: reference-sheet-{character}.png (helps Nano Banana Pro with context)
+    Themed naming: reference-sheet-{theme}.png
+    """
     if custom_output:
         return Path(custom_output)
 
     if theme and theme in THEMES:
         return char_dir / f"reference-sheet-{theme}.png"
 
-    return char_dir / "reference-sheet.png"
+    # Include character name in filename for model context
+    char_name = char_dir.name
+    return char_dir / f"reference-sheet-{char_name}.png"
 
 
 def list_characters():
@@ -301,8 +308,9 @@ def list_characters():
     print("-" * 50)
     for char_dir in sorted(CHARACTERS_DIR.iterdir()):
         if char_dir.is_dir() and not char_dir.name.startswith("."):
+            char_name = char_dir.name
             manifest = char_dir / "manifest.json"
-            ref_sheet = char_dir / "reference-sheet.png"
+            ref_sheet = char_dir / f"reference-sheet-{char_name}.png"
             status = []
             if manifest.exists():
                 status.append("analyzed")
@@ -310,7 +318,7 @@ def list_characters():
                 status.append("needs analysis")
             if ref_sheet.exists():
                 status.append("has ref sheet")
-            print(f"  {char_dir.name:15} [{', '.join(status)}]")
+            print(f"  {char_name:15} [{', '.join(status)}]")
 
     print()
     print("AVAILABLE THEMES:")

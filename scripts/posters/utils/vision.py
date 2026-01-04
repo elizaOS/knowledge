@@ -57,10 +57,27 @@ def load_image_base64(path: Path = None, stdin: bool = False) -> tuple[str, str]
     return f"data:{mime_type};base64,{b64}", mime_type
 
 
-def analyze(image_url: str, prompt: str, model: str, json_output: bool) -> str:
+def analyze(image_url: str, prompt: str, model: str, json_output: bool, reasoning: bool = False) -> str:
     """Send image to vision model and return response."""
     if json_output:
         prompt = f"{prompt}\n\nRespond with valid JSON only, no markdown."
+
+    payload = {
+        "model": model,
+        "messages": [
+            {
+                "role": "user",
+                "content": [
+                    {"type": "image_url", "image_url": {"url": image_url}},
+                    {"type": "text", "text": prompt}
+                ]
+            }
+        ]
+    }
+
+    # Enable reasoning for extended thinking
+    if reasoning:
+        payload["reasoning"] = {"enabled": True}
 
     response = requests.post(
         OPENROUTER_ENDPOINT,
@@ -68,19 +85,8 @@ def analyze(image_url: str, prompt: str, model: str, json_output: bool) -> str:
             "Authorization": f"Bearer {OPENROUTER_API_KEY}",
             "Content-Type": "application/json",
         },
-        json={
-            "model": model,
-            "messages": [
-                {
-                    "role": "user",
-                    "content": [
-                        {"type": "image_url", "image_url": {"url": image_url}},
-                        {"type": "text", "text": prompt}
-                    ]
-                }
-            ]
-        },
-        timeout=60
+        json=payload,
+        timeout=120  # Longer timeout for reasoning
     )
     response.raise_for_status()
 

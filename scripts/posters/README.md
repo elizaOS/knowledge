@@ -8,12 +8,12 @@ Character-driven visual content generation for the ElizaOS digital newsmagazine.
 # 1. Analyze character images (creates manifest.json)
 python scripts/posters/analyze.py eliza
 
-# 2. Generate reference sheet (creates reference-sheet.png)
-python scripts/posters/generate.py eliza
+# 2. Generate reference sheet (creates reference-sheet-{character}.png)
+python scripts/posters/character-reference.py eliza
 
 # 3. Iterate
-python scripts/posters/generate.py eliza "shorter hair"
-python scripts/posters/generate.py eliza cyberpunk
+python scripts/posters/character-reference.py eliza "shorter hair"
+python scripts/posters/character-reference.py eliza cyberpunk
 ```
 
 ---
@@ -147,30 +147,30 @@ Creates canonical reference sheets with full body views and expressions.
 # Basic generation
 python scripts/posters/generate.py eliza
 
-# Iterate with adjustments (overwrites reference-sheet.png)
-python scripts/posters/generate.py eliza "bigger eyes"
-python scripts/posters/generate.py eliza "more orange in cap"
+# Iterate with adjustments (overwrites reference-sheet-{character}.png)
+python scripts/posters/character-reference.py eliza "bigger eyes"
+python scripts/posters/character-reference.py eliza "more orange in cap"
 
 # Themed variations (creates reference-sheet-{theme}.png)
-python scripts/posters/generate.py eliza cyberpunk
-python scripts/posters/generate.py eliza formal
+python scripts/posters/character-reference.py eliza cyberpunk
+python scripts/posters/character-reference.py eliza formal
 
 # Add extra reference images for inspiration
-python scripts/posters/generate.py eliza -i outfit.png
-python scripts/posters/generate.py eliza formal -i suit-ref.jpg
+python scripts/posters/character-reference.py eliza -i outfit.png
+python scripts/posters/character-reference.py eliza formal -i suit-ref.jpg
 
 # Add extra instructions
-python scripts/posters/generate.py eliza -t "more dynamic poses"
-python scripts/posters/generate.py eliza -i watercolor.jpg -t "apply style only to clothing"
+python scripts/posters/character-reference.py eliza -t "more dynamic poses"
+python scripts/posters/character-reference.py eliza -i watercolor.jpg -t "apply style only to clothing"
 
 # Custom output path
-python scripts/posters/generate.py eliza -o my-version.png
+python scripts/posters/character-reference.py eliza -o my-version.png
 
 # Preview without API call
-python scripts/posters/generate.py eliza --dry-run
+python scripts/posters/character-reference.py eliza --dry-run
 
 # List characters and themes
-python scripts/posters/generate.py --list
+python scripts/posters/character-reference.py --list
 ```
 
 #### Options
@@ -214,10 +214,10 @@ Located in `scripts/posters/characters/{name}/`:
 Each character folder contains:
 ```
 scripts/posters/characters/eliza/
-├── *.png                  # Source reference images
-├── manifest.json          # Analysis metadata
-├── reference-sheet.png    # Generated canonical sheet
-└── reference-sheet-*.png  # Themed variations
+├── *.png                       # Source reference images
+├── manifest.json               # Analysis metadata
+├── reference-sheet-eliza.png   # Generated canonical sheet (named for model context)
+└── reference-sheet-{theme}.png # Themed variations
 ```
 
 ---
@@ -566,3 +566,184 @@ strategic_insights: cinematic_anime → tarot → editorial → ...
 ### Reproducibility
 
 All randomness is date-seeded: **same date = same output**.
+
+---
+
+## Testing & Validation Pipeline
+
+Tools for testing illustration scripts and validating output quality.
+
+### test-all-scripts.py - Comprehensive Test Runner
+
+Runs all poster scripts with various configurations and generates a comparison gallery.
+
+```bash
+# Run all tests
+python scripts/posters/test-all-scripts.py
+
+# Use specific facts file
+python scripts/posters/test-all-scripts.py -f the-council/facts/2025-05-15.json
+
+# Regenerate HTML gallery only (skip image generation)
+python scripts/posters/test-all-scripts.py --html-only
+
+# Clean previous outputs first
+python scripts/posters/test-all-scripts.py --clean
+```
+
+**Output:** `media/samples/`
+- `results.json` - Test results with commands, status, and image paths
+- `gallery.html` - Visual comparison of all test outputs
+- `illustrate/` - Generated images organized by test name
+
+**Test Coverage:**
+| Script | Tests |
+|--------|-------|
+| illustrate.py | batch-all, with-icons, style variations (editorial, dataviz, cinematic-anime, etc.) |
+| illustrate-adaptive.py | markdown input, retro JSON input |
+| create-tag-icons.py | from-facts entity extraction |
+
+### validate-illustrations.py - AI-Powered Quality Analysis
+
+Evaluates generated illustrations from multiple reader perspectives using vision models.
+
+```bash
+# Validate all images in results.json
+python scripts/posters/validate-illustrations.py
+
+# Validate specific test folder
+python scripts/posters/validate-illustrations.py --test style-editorial
+
+# Limit images analyzed
+python scripts/posters/validate-illustrations.py --limit 5
+
+# Dry run - show what would be analyzed
+python scripts/posters/validate-illustrations.py --dry-run
+```
+
+**Reader Perspectives:**
+| Archetype | Description |
+|-----------|-------------|
+| Casual Scroller | 2-second attention span, drawn to eye-catching visuals |
+| Community Member | Follows ElizaOS daily, wants progress updates |
+| Developer | Wants technical substance, dislikes generic AI art |
+| First-Time Visitor | Never heard of ElizaOS, trying to understand |
+
+**Output:** `media/samples/validation-*.json`
+- Per-image scores (1-5) and engagement predictions
+- Consensus rate across perspectives
+- Synthesized recommendations for improvement
+
+### enrich-facts.py - Add CDN Image URLs to Facts
+
+Enriches facts.json files with CDN URLs for generated illustrations.
+
+```bash
+# Dry run - see what URLs would be added
+python scripts/posters/enrich-facts.py the-council/facts/2025-12-25.json --dry-run
+
+# Enrich and overwrite
+python scripts/posters/enrich-facts.py the-council/facts/2025-12-25.json
+
+# Output to different file
+python scripts/posters/enrich-facts.py the-council/facts/2025-12-25.json -o enriched.json
+```
+
+**CDN URL Format:** `https://cdn.elizaos.news/posters/{date}/{filename}.png`
+
+---
+
+## HTML Viewers
+
+Interactive viewers for exploring generated content. Located in `media/viewers/`.
+
+### gallery.html - Test Output Gallery
+
+Visual comparison of all test outputs from `test-all-scripts.py`.
+
+- Character reference sheets
+- Side-by-side script comparisons
+- Test status (success/error) indicators
+- Exact commands used for each test
+- Lightbox for full-size viewing
+
+**URL:** `http://localhost:8000/media/samples/gallery.html`
+
+### validation-viewer.html - Validation Report Viewer
+
+Displays AI validation analysis with multi-perspective feedback.
+
+- Source context and stories analyzed
+- Character reference sheets
+- 50/50 image + prompt layout
+- Color-coded perspective cards (engaged/skipped)
+- Copy Full Report button for JSON export
+- Generation and validation commands
+
+**URL:** `http://localhost:8000/media/samples/validation-viewer.html`
+
+### facts-viewer.html - Daily Briefing Viewer
+
+Magazine-style visualization of enriched facts.json files.
+
+- Hero section with overall image
+- Key facts, news highlights, GitHub updates
+- Discord summaries, strategic insights
+- Market analysis with observations
+- Open questions and tags
+
+**URL:** `http://localhost:8000/media/facts-viewer.html`
+
+---
+
+## Sample Gallery
+
+The `media/samples/` directory contains committed test outputs showcasing the system's capabilities:
+
+```
+media/samples/
+├── gallery.html              # Test comparison viewer
+├── validation-viewer.html    # Validation report viewer
+├── results.json              # Test execution results
+├── validation-*.json         # AI validation reports
+├── characters/               # Character reference sheets
+│   ├── reference-sheet-eliza.png
+│   ├── reference-sheet-marc.png
+│   └── ...
+└── illustrate/               # Generated illustrations
+    ├── batch-all/
+    ├── with-icons/
+    ├── style-editorial/
+    └── ...
+```
+
+**Sample Images:**
+
+| Category | Description |
+|----------|-------------|
+| overall.png | Hero editorial illustration |
+| github-updates.png | Data visualization of PR/issue activity |
+| discord-updates.png | Comic panel of community discussions |
+| strategic-insights.png | Cinematic scene of strategic themes |
+| market-analysis.png | Market data visualization |
+| icons.png | Entity logo montage |
+
+---
+
+## RSS Integration
+
+Generated images can enhance RSS feeds by adding visual content to daily briefings:
+
+```python
+# In RSS generation pipeline
+from scripts.posters.enrich_facts import enrich_facts
+
+# Add CDN URLs to facts before RSS generation
+enriched = enrich_facts(facts_path)
+# enriched['images']['overall'] -> "https://cdn.elizaos.news/posters/2025-12-25/overall.png"
+```
+
+The `images` field in enriched facts can be used to:
+- Add `<enclosure>` tags in RSS items
+- Include `<media:content>` for podcast apps
+- Generate Open Graph images for social sharing

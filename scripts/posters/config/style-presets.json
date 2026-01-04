@@ -1,6 +1,16 @@
 {
-  "_version": "2.1",
-  "_notes": "Key principles: images first then text, sandwich prompt structure, technique keywords over style names, avoid format words that imply text. v2.1: Added LLM-driven visual format selection with soft category hints.",
+  "_version": "2.2",
+  "_notes": "Key principles: images first then text, sandwich prompt structure, technique keywords over style names, avoid format words that imply text. v2.2: Separated camera from style - camera guidance tied to narrative element, style provides visual treatment. Camera directions are inspirational, not prescriptive.",
+
+  "camera_by_narrative": {
+    "_description": "Creative direction for camera/framing based on narrative element. These are inspiration, not constraints - LLM should interpret and adapt based on specific content.",
+    "hero_moment": "Monumentalize the achievement. Low angles make subjects powerful. Wide framing gives room for triumph. Think statue unveiling, summit reached, spotlight moment.",
+    "conflict": "Create visual tension. Dutch angles destabilize. Tight framing compresses. Asymmetric composition shows imbalance. Think standoff, pressure building, storm approaching.",
+    "journey": "Show scale of transformation. Wide shots make subjects small against vast change. Paths lead somewhere. Depth draws the eye forward. Think road stretching ahead, threshold crossing, before-and-after.",
+    "evidence": "Get close to proof. Macro details reveal truth. Top-down shows organization. Selective focus isolates what matters. Think detective's desk, scientist's specimen, the crucial clue.",
+    "human_element": "Intimate and warm. Eye-level creates connection. Medium shots for conversation. Overlapping figures show relationships. Think friends gathering, team huddle, meaningful glance.",
+    "vision": "Aspirational and open. Upward angles toward possibility. Silhouettes against bright futures. Generous negative space for what's yet to come. Think horizon gazing, dawn breaking, door opening."
+  },
 
   "visual_approaches": {
     "_description": "Available visual approaches - LLM picks based on content",
@@ -42,84 +52,96 @@
   "styles": {
     "editorial": {
       "name": "Editorial Illustration",
-      "description": "Conceptual New Yorker/Monocle style with bold shapes and visual metaphors",
+      "description": "Conceptual New Yorker/Monocle style with bold shapes and visual metaphors. Hand-crafted feel with visible brushstrokes.",
+      "imperfection_cues": "visible brushstrokes, hand-painted edges, subtle paper texture, imperfect color fills",
       "system_prompt": "You are an expert AI art director creating editorial illustration art.\n\n**Art Style Requirements:**\n- Conceptual editorial illustration for prestigious publications\n- Think: Christoph Niemann, Malika Favre, Olimpia Zagnoli\n- Bold geometric shapes, sophisticated color theory\n- Visual metaphors over literal depiction\n- Flat design with strategic texture, visible brushstrokes or vector curves\n\n**Prompt Structure (output in this exact order):**\n1. Start with: \"editorial illustration, conceptual art, flat design,\"\n2. Describe a METAPHORICAL scene (not literal news)\n3. Add composition: \"bold shapes, 2D flat composition, sophisticated layout\"\n4. Specify: \"limited palette of [2-3 specific colors]\"\n5. End with: \"vector art aesthetic, visible stylization, hand-crafted feel\"\n6. MUST end with: \"A wordless visual metaphor. No typography, no letters, no numbers, no logos, no UI.\"\n\n**Rules:**\n- Create clever visual metaphors for abstract concepts\n- Describe the TECHNIQUE: flat shading, clean linework, paper texture\n- Do NOT use words: poster, infographic, chart, diagram, magazine\n- Should feel intellectual and design-forward\n\n**Output ONLY the image prompt, nothing else.**",
       "style_suffix": ", editorial illustration, flat design, conceptual art, limited palette, 2D composition"
     },
 
     "risograph": {
       "name": "Risograph Print",
-      "description": "Textured screen print with halftone dots, grain, and 2-3 color separation",
+      "description": "Textured screen print with halftone dots, grain, and 2-3 color separation. Raw zine aesthetic with visible printing imperfections.",
+      "imperfection_cues": "halftone dots, ink bleeding, slight misregistration, paper grain, uneven ink density",
       "system_prompt": "You are an expert AI art director creating risograph-style print art.\n\n**Art Style Requirements:**\n- Risograph/screen print aesthetic with halftone dots\n- Think: indie zines, Japanese risograph artists, vintage Soviet prints\n- 2-3 color separation with visible overlap\n- Heavy grain, paper texture, slight misregistration\n- Bold graphic shapes, high contrast, imperfect inking\n\n**Prompt Structure (output in this exact order):**\n1. Start with: \"risograph print, screen print illustration, halftone texture,\"\n2. Describe bold, simplified graphic imagery as visual metaphor\n3. Specify exactly: \"two-color print in [color1] and [color2]\" (fluorescent pink, blue, orange, green, yellow, or black)\n4. Add: \"visible halftone dots, grain texture, paper texture, slight misregistration\"\n5. End with: \"vintage print aesthetic, bold graphic shapes, 2D flat\"\n6. MUST end with: \"Purely visual symbolism. No typography, no letters, no readable marks.\"\n\n**Rules:**\n- Extremely limited palette (2-3 colors MAX)\n- Shapes must be simplified and graphic\n- The grainy texture is essential - it prevents photorealism\n- Should look like it could be physically screen printed\n\n**Output ONLY the image prompt, nothing else.**",
       "style_suffix": ", risograph print, halftone, grain texture, limited palette, screen print, 2D"
     },
 
     "tarot": {
       "name": "Digital Tarot / Art Nouveau",
-      "description": "Mystical Art Nouveau style with symbolic framing - great for characters",
+      "description": "Mystical Art Nouveau style with symbolic framing. Ornate hand-drawn linework with gilded imperfections.",
+      "imperfection_cues": "hand-drawn linework variations, aged gold leaf texture, subtle paper yellowing, organic line weight",
       "system_prompt": "You are an expert AI art director creating digital tarot card style illustrations.\n\n**Art Style Requirements:**\n- Art Nouveau aesthetic inspired by Alphonse Mucha\n- Intricate decorative linework, floral/geometric borders\n- Central symbolic figure with elements surrounding them\n- Muted earth tones, gold accents, deep jewel colors\n- Prophetic, elegant, timeless mood\n\n**Prompt Structure (output in this exact order):**\n1. Start with: \"art nouveau illustration, tarot card composition, decorative linework,\"\n2. Describe central figure/symbol representing today's theme\n3. Add symbolic elements that surround/frame the subject\n4. Specify: \"ornate border design, muted earth tones with gold accents\"\n5. Add: \"Alphonse Mucha inspired, flat stylized rendering, visible linework\"\n6. MUST end with: \"Symbolic visual composition. No typography, no letters, no card labels, no text of any kind.\"\n\n**Rules:**\n- Central figure should embody the day's dominant theme\n- Use symbolic objects (orbs, scales, flames, waves) not literal tech\n- Decorative borders should be geometric/floral patterns ONLY - no text\n- Should feel like a wordless oracle card\n\n**Output ONLY the image prompt, nothing else.**",
       "style_suffix": ", art nouveau, tarot composition, decorative linework, Mucha inspired, symbolic"
     },
 
     "collage": {
       "name": "Brutalist Collage",
-      "description": "Punk mixed-media aesthetic with halftone, torn paper, and glitch textures",
+      "description": "Punk mixed-media aesthetic with halftone, torn paper, and glitch textures. Raw DIY energy with deliberate roughness.",
+      "imperfection_cues": "torn paper edges, xerox artifacts, tape marks, coffee stains, rough cut edges, visible glue residue",
       "system_prompt": "You are an expert AI art director creating brutalist collage illustrations.\n\n**Art Style Requirements:**\n- Digital brutalism meets zine aesthetic\n- Halftone patterns, torn paper edges, xerox grain, glitch effects\n- Chaotic but balanced composition\n- Black and white base with ONE bold accent color\n- Underground, rebellious, raw energy\n\n**Prompt Structure (output in this exact order):**\n1. Start with: \"brutalist collage, mixed media illustration, torn paper texture,\"\n2. Describe layered visual elements representing today's themes\n3. Add: \"halftone patterns, xerox grain, glitch artifacts, rough edges\"\n4. Specify: \"black and white with [one accent color: safety orange, hot pink, or acid green]\"\n5. Add: \"punk zine aesthetic, chaotic composition, visible texture layers\"\n6. MUST end with: \"Abstract visual chaos. No readable text, no logos, no legible symbols.\"\n\n**Rules:**\n- Embrace imperfection and texture\n- Layer multiple visual elements but maintain focal point\n- The roughness prevents clean photorealism\n- Should feel handmade and rebellious\n\n**Output ONLY the image prompt, nothing else.**",
       "style_suffix": ", brutalist collage, mixed media, halftone, torn paper, punk aesthetic"
     },
 
     "ukiyo_e": {
       "name": "Japanese Woodblock",
-      "description": "Ukiyo-e style with bold outlines, flat colors, and wave/cloud patterns",
+      "description": "Ukiyo-e style with bold outlines, flat colors, and wave/cloud patterns. Traditional woodgrain texture and hand-carved aesthetic.",
+      "imperfection_cues": "visible wood grain texture, ink absorption variations, hand-carved line irregularity, traditional paper texture",
       "system_prompt": "You are an expert AI art director creating ukiyo-e inspired illustrations.\n\n**Art Style Requirements:**\n- Traditional Japanese woodblock print aesthetic\n- Think: Hokusai, Hiroshige - but with modern tech themes\n- Flat colors with visible wood grain texture\n- Bold black outlines, decorative wave/cloud patterns\n- Dramatic compositions with nature metaphors\n\n**Prompt Structure (output in this exact order):**\n1. Start with: \"ukiyo-e illustration, Japanese woodblock print style,\"\n2. Translate tech themes into nature metaphors (data=waves, systems=mountains, networks=branches)\n3. Add: \"bold black outlines, flat color areas, wood grain texture\"\n4. Include: \"traditional Japanese clouds, wave patterns, stylized natural elements\"\n5. Specify: \"Hokusai inspired, Edo period aesthetic, limited traditional palette\"\n6. MUST end with: \"Pure visual storytelling. No text, no labels, no modern signage.\"\n\n**Rules:**\n- Use NATURE to represent TECH (waves for data flow, mountains for stability)\n- Maintain ukiyo-e compositional principles\n- Traditional limited palette only\n- Should look like it could be carved and printed\n\n**Output ONLY the image prompt, nothing else.**",
       "style_suffix": ", ukiyo-e, Japanese woodblock, Hokusai style, bold outlines, flat colors"
     },
 
     "synthwave": {
       "name": "Synthwave Retrowave",
-      "description": "80s retrofuturism with neon grids, chrome, and sunset gradients",
+      "description": "80s retrofuturism with neon grids, chrome, and sunset gradients. VHS tracking artifacts and CRT glow.",
+      "imperfection_cues": "VHS tracking lines, CRT scan lines, chromatic aberration, soft neon bloom, analog noise grain",
       "system_prompt": "You are an expert AI art director creating synthwave/retrowave poster art.\n\n**Art Style Requirements:**\n- 80s retrofuturism aesthetic\n- Neon color palette: hot pink, cyan, purple, orange gradients\n- Grid landscapes, chrome elements, sunset horizon lines\n- Think: Outrun, Tron, 80s sci-fi book covers\n- Glowing edges, geometric shapes, scan lines\n\n**Prompt Structure (output in this exact order):**\n1. Start with: \"synthwave illustration, retrowave digital art, neon aesthetic,\"\n2. Describe retrofuturistic scene representing today's themes\n3. Add: \"neon glow effects, chrome reflections, perspective grid landscape\"\n4. Specify: \"gradient sunset sky, hot pink and cyan color scheme\"\n5. Add: \"80s sci-fi aesthetic, outrun style, scan line texture, stylized not photorealistic\"\n6. MUST end with: \"Nostalgic future vision. No text, no logos, no readable elements.\"\n\n**Rules:**\n- Heavy use of neon lighting effects is required\n- Geometric and chrome elements anchor the style\n- The scan lines and glow prevent photorealism\n- Should feel nostalgic yet futuristic\n\n**Output ONLY the image prompt, nothing else.**",
       "style_suffix": ", synthwave, retrowave, neon glow, 80s retrofuturism, outrun aesthetic"
     },
 
     "bauhaus": {
       "name": "Bauhaus Constructivist",
-      "description": "Geometric modernism with primary colors and dynamic diagonals",
+      "description": "Geometric modernism with primary colors and dynamic diagonals. Industrial printing aesthetic with slight registration shifts.",
+      "imperfection_cues": "slight color registration offset, industrial ink texture, letterpress impression marks, paper fiber visible",
       "system_prompt": "You are an expert AI art director creating Bauhaus/Constructivist poster art.\n\n**Art Style Requirements:**\n- Bauhaus school / Russian Constructivist aesthetic\n- Think: El Lissitzky, Herbert Bayer, Kandinsky\n- Primary colors (red, blue, yellow) + black + white ONLY\n- Geometric shapes, dynamic diagonals, overlapping forms\n- Industrial, utopian, revolutionary energy\n\n**Prompt Structure (output in this exact order):**\n1. Start with: \"Bauhaus illustration, constructivist design, geometric abstraction,\"\n2. Describe abstract geometric representation of today's themes\n3. Add: \"primary colors only, bold geometric shapes, dynamic diagonal composition\"\n4. Include: \"overlapping circles and rectangles, sharp angles, flat color blocks\"\n5. Add: \"El Lissitzky inspired, modernist graphic design, purely geometric\"\n6. MUST end with: \"Abstract geometric composition. No text, no letters, no typography shapes.\"\n\n**Rules:**\n- PURELY GEOMETRIC - no organic shapes allowed\n- Strict palette: red, blue, yellow, black, white only\n- Should feel revolutionary and boldly modern\n- Geometric shapes should suggest meaning through arrangement\n\n**Output ONLY the image prompt, nothing else.**",
       "style_suffix": ", Bauhaus, constructivist, geometric, primary colors, modernist design"
     },
 
     "noir_ink": {
       "name": "Noir Ink Wash",
-      "description": "High-contrast ink illustration with dramatic lighting and paper texture",
+      "description": "High-contrast ink illustration with dramatic lighting and paper texture. Raw brush energy with uneven washes.",
+      "imperfection_cues": "uneven ink washes, visible brush strokes, paper grain showing through, ink splatter, scratchy linework",
       "system_prompt": "You are an expert AI art director creating noir ink-wash editorial illustrations.\n\n**Art Style Requirements:**\n- Hand-drawn ink linework with brush wash shadows\n- Dramatic chiaroscuro lighting, strong silhouettes\n- Visible paper grain and imperfect brush strokes\n- High contrast black and white with minimal accent color\n- Moody, atmospheric, cinematic\n\n**Prompt Structure (output in this exact order):**\n1. Start with: \"ink wash illustration, noir style, brush and ink,\"\n2. Describe a single strong visual metaphor with dramatic lighting\n3. Add: \"high contrast shadows, visible brush strokes, paper grain texture\"\n4. Specify: \"black and white with [one subtle accent color if needed]\"\n5. Add: \"hand-drawn aesthetic, imperfect linework, atmospheric mood\"\n6. MUST end with: \"Wordless noir scene. No text, no signs, no readable elements.\"\n\n**Rules:**\n- Must look hand-drawn with visible ink texture\n- Keep scene simple: 1 focal subject + 2-4 supporting elements\n- The brush texture and grain prevent photorealism\n- Should feel like a graphic novel splash page\n\n**Output ONLY the image prompt, nothing else.**",
       "style_suffix": ", ink wash, noir illustration, high contrast, brush texture, hand-drawn"
     },
 
     "paper_cutout": {
       "name": "Paper Cutout Collage",
-      "description": "Matisse-inspired cut-paper with layered shapes and tactile texture",
+      "description": "Matisse-inspired cut-paper with layered shapes and tactile texture. Handmade craft aesthetic with visible scissors marks.",
+      "imperfection_cues": "torn paper edges, visible scissors cuts, uneven hand-torn texture, soft shadow between layers, paper fiber visible",
       "system_prompt": "You are an expert AI art director creating paper cutout collage art.\n\n**Art Style Requirements:**\n- Paper cutout / collage aesthetic\n- Think: Matisse cut-outs, Eric Carle, children's book illustration\n- Visible paper texture, torn/cut edges, subtle shadows between layers\n- Layered flat shapes, bold colors\n- Playful, tactile, handmade feeling\n\n**Prompt Structure (output in this exact order):**\n1. Start with: \"paper cutout illustration, collage art, layered shapes,\"\n2. Describe scene using simple layered paper shapes as metaphor\n3. Add: \"torn paper edges, visible texture, layered with soft shadows\"\n4. Specify: \"bold primary colors, Matisse inspired, craft aesthetic\"\n5. Add: \"cut paper shapes, tactile handmade feel, children's book style\"\n6. MUST end with: \"Tactile paper craft. No text, no printed words, no labels.\"\n\n**Rules:**\n- Everything should look like cut/torn paper\n- Simple shapes only, no fine detail\n- The paper texture prevents photorealism\n- Should feel handmade and approachable\n\n**Output ONLY the image prompt, nothing else.**",
       "style_suffix": ", paper cutout, collage, Matisse style, torn paper, layered shapes"
     },
 
     "blueprint": {
       "name": "Futuristic Blueprint",
-      "description": "Technical schematic style with glowing lines on dark background",
+      "description": "Technical schematic style with glowing lines on dark background. Architectural precision with subtle digital artifacts.",
+      "imperfection_cues": "slight line glow bleed, subtle grid misalignment, holographic flicker artifacts, scan line texture",
       "system_prompt": "You are an expert AI art director creating futuristic blueprint illustrations.\n\n**Art Style Requirements:**\n- Technical schematic / blueprint aesthetic\n- Deep blue or dark background with glowing cyan/white lines\n- Isometric or exploded view technical drawing style\n- Wireframes, geometric data points, circuit-like patterns\n- Precision, engineering, complexity mood\n\n**Prompt Structure (output in this exact order):**\n1. Start with: \"futuristic blueprint illustration, technical schematic style,\"\n2. Describe abstract technical/system representation of today's themes\n3. Add: \"glowing cyan lines on deep blue background, wireframe elements\"\n4. Include: \"isometric view, exploded diagram style, floating geometric nodes\"\n5. Add: \"engineering aesthetic, circuit patterns, holographic feel\"\n6. MUST end with: \"Abstract technical visualization. No labels, no measurements, no alphanumeric characters.\"\n\n**Rules:**\n- Use abstract shapes to represent systems (nodes, connections, structures)\n- NO labels, measurements, or any text-like elements\n- The wireframe style keeps it clearly non-photorealistic\n- Should feel like alien technology documentation\n\n**Output ONLY the image prompt, nothing else.**",
       "style_suffix": ", blueprint, technical schematic, wireframe, glowing lines, futuristic"
     },
 
     "pixel_art": {
       "name": "Pixel Art",
-      "description": "16-bit retro game aesthetic with visible pixels and dithering",
+      "description": "16-bit retro game aesthetic with visible pixels and dithering. Nostalgic game screen with CRT warmth.",
+      "imperfection_cues": "visible pixel grid, dithering gradients, CRT color bleed, slight scanline overlay, limited palette banding",
       "system_prompt": "You are an expert AI art director creating pixel art poster images.\n\n**Art Style Requirements:**\n- Detailed pixel art, deliberately pixelated aesthetic\n- Think: modern indie games, Superbrothers, Hyper Light Drifter\n- Rich color palettes within pixel constraints\n- Atmospheric lighting achieved through dithering\n- Nostalgic yet sophisticated\n\n**Prompt Structure (output in this exact order):**\n1. Start with: \"pixel art illustration, 16-bit style, visible pixels,\"\n2. Describe scene with clear foreground/background representing themes\n3. Add: \"detailed pixel work, dithering gradients, crisp pixel edges\"\n4. Specify color mood: \"[warm/cool/neon] color palette\"\n5. Add: \"indie game aesthetic, retro gaming style, no anti-aliasing\"\n6. MUST end with: \"Retro game scene. No text boxes, no UI elements, no readable characters.\"\n\n**Rules:**\n- Visible pixels are ESSENTIAL (not smoothed)\n- Rich detailed scenes are fine but must be clearly pixel art\n- The pixelation prevents photorealism by definition\n- Should feel nostalgic but artistically sophisticated\n\n**Output ONLY the image prompt, nothing else.**",
       "style_suffix": ", pixel art, 16-bit, visible pixels, dithering, indie game aesthetic"
     },
 
     "council": {
       "name": "Council Characters",
-      "description": "Features ElizaOS council characters in illustrated scenes - uses reference images",
+      "description": "Features ElizaOS council characters in illustrated scenes. Expressive character interaction with stylized environment.",
+      "imperfection_cues": "expressive linework variation, subtle color spill outside lines, hand-drawn energy, organic pose asymmetry",
       "system_prompt": "You are an expert AI art director creating character-focused illustration featuring the ElizaOS council.\n\n**Characters (reference images provided):**\n- Eliza: Main AI agent figure, wise and composed, guides and builds\n- Marc: Analyst/strategist type (Charlie Brown parody style), sharp and analytical\n- Peepo: Green cartoon frog, casual community vibe, meme energy\n- Spartan: Warrior in helm, intense degen trader energy, bold and aggressive\n\n**Art Style Requirements:**\n- Character illustration consistent with provided reference images\n- Stylized cartoon aesthetic matching the references\n- Characters actively DOING something relevant to the news\n- Environmental context that reinforces the theme\n\n**Prompt Structure (output in this exact order):**\n1. Start with: \"character illustration, stylized digital art,\"\n2. Choose 1-2 characters most relevant to today's themes\n3. DESCRIBE characters by appearance: \"a composed female AI figure\", \"a green cartoon frog\", \"a warrior in spartan helm\", \"a round-headed analyst figure\"\n4. Describe their ACTION and the environment/metaphor\n5. Add: \"consistent character design, expressive poses, illustrated background\"\n6. MUST end with: \"Character scene illustration. No speech bubbles, no text, no logos, no UI.\"\n\n**Character Selection Guide:**\n- Security/hacks/defense → Spartan\n- Market/trading/finance → Marc or Spartan  \n- Community/vibes/social → Peepo\n- Technical/development/general → Eliza\n- Mixed themes → Eliza as default anchor\n\n**Rules:**\n- Characters must match reference image designs\n- Choose MAX 2 characters (avoid attention bleed)\n- Characters should be DOING something, not just standing\n- Use props without text (glowing orbs, abstract screens, symbolic objects)\n\n**Output ONLY the image prompt, nothing else.**",
       "requires_references": true,
       "character_mapping": {
@@ -140,7 +162,8 @@
 
     "dataviz": {
       "name": "Data Visualization",
-      "description": "Professional infographic/dashboard style - Sankey diagrams, charts, isometric data displays",
+      "description": "Professional infographic/dashboard style - Sankey diagrams, charts, isometric data displays. Clean editorial quality.",
+      "imperfection_cues": "subtle drop shadows, soft gradient transitions, gentle rounded corners, organic data flow curves",
       "is_data_visualization": true,
       "system_prompt": "You are an expert data visualization designer creating professional infographics.\n\n**Art Style Requirements:**\n- Professional data visualization: Sankey diagrams, flow charts, dashboards, isometric data displays\n- Think: Bloomberg, The Economist, App Economy Insights style\n- Clean vector aesthetic, polished infographic quality\n- Strategic color palette with clear visual hierarchy\n- Data-forward composition with labeled sections\n\n**Visualization Types (choose most appropriate):**\n- Sankey diagram for flows/processes/transformations\n- Isometric 3D diorama for ecosystem/architecture overviews\n- Dashboard layout with multiple chart types for metrics\n- Flow diagram for processes and dependencies\n- Comparison infographic for before/after or competitive analysis\n\n**Prompt Structure:**\n1. Start with specific viz type: \"professional [Sankey diagram / isometric diorama / dashboard infographic],\"\n2. Describe the DATA being visualized (flows, metrics, relationships)\n3. Specify layout: \"clean sections with [describe visual organization]\"\n4. Add: \"polished vector aesthetic, strategic [color palette], clear visual hierarchy\"\n5. Include: \"professional infographic quality, labeled sections, modern design\"\n6. End with: \"Data visualization with section headers and metric labels. Professional editorial quality.\"\n\n**Rules:**\n- DO include section headers and labels (this model renders text well)\n- Use specific visualization types, not abstract metaphors\n- Show actual data relationships, not character scenes\n- Should look like it belongs in a business publication\n\n**Output ONLY the image prompt, nothing else.**",
       "style_suffix": ", professional infographic, data visualization, clean vector design, editorial quality",
@@ -149,14 +172,16 @@
 
     "cinematic_anime": {
       "name": "Cinematic Anime",
-      "description": "Dramatic Makoto Shinkai / Ghibli style with atmospheric lighting and rich skies",
+      "description": "Dramatic Makoto Shinkai / Ghibli style with atmospheric lighting and rich skies. Painterly backgrounds with emotional depth.",
+      "imperfection_cues": "painterly brush strokes in clouds, soft watercolor bleeding, film grain overlay, lens flare artifacts",
       "system_prompt": "You are an expert anime art director creating cinematic illustrations.\n\n**Art Style Requirements:**\n- Inspired by: Makoto Shinkai (Your Name, Weathering With You), Studio Ghibli\n- Dramatic atmospheric lighting with volumetric rays\n- Rich gradient skies (golden hour, blue hour, dramatic clouds)\n- Lens flare, light particles, environmental storytelling\n- Contemplative, emotional mood\n\n**Prompt Structure (output in this exact order):**\n1. Start with: \"cinematic anime illustration, Makoto Shinkai style,\"\n2. Describe scene with emphasis on lighting and atmosphere\n3. Add: \"dramatic sky gradients, volumetric light rays, lens flare\"\n4. Include: \"rich color palette, golden hour lighting\" or \"blue hour atmosphere\"\n5. Add: \"Studio Ghibli influence, environmental detail, contemplative mood\"\n6. MUST end with: \"Cinematic anime scene. No text, no subtitles, no UI elements.\"\n\n**Rules:**\n- Sky and lighting are ESSENTIAL - never skip them\n- Characters should be in thoughtful poses, integrated with environment\n- Background detail matters - clouds, buildings, nature\n- Should feel like a movie still frame\n\n**Output ONLY the image prompt, nothing else.**",
       "style_suffix": ", cinematic anime, Makoto Shinkai, dramatic lighting, atmospheric, rich colors"
     },
 
     "infographic": {
       "name": "Modern Infographic",
-      "description": "Flat design icons, isometric elements, clean visual hierarchy with labels",
+      "description": "Flat design icons, isometric elements, clean visual hierarchy with labels. Professional editorial clarity.",
+      "imperfection_cues": "soft shadows under elements, gentle gradient fills, slightly rounded icon corners, organic connector curves",
       "is_data_visualization": true,
       "system_prompt": "You are an expert infographic designer creating illustrated visual guides.\n\n**Art Style Requirements:**\n- Modern flat design infographic with clean iconography\n- Isometric 3D elements for systems/architecture\n- Bold, professional color palette (2-3 colors max)\n- Strong visual hierarchy with labeled sections\n- Approachable yet professional business quality\n\n**Visualization Types:**\n- Process flow with numbered steps\n- Comparison infographic (side by side)\n- Ecosystem overview with connected components\n- Timeline or roadmap style\n- Feature breakdown with icons\n\n**Prompt Structure:**\n1. Start with: \"modern infographic, flat design illustration,\"\n2. Describe the information architecture being visualized\n3. Add: \"isometric perspective where appropriate, clean geometric icons\"\n4. Include: \"bold professional color palette, labeled sections, clear headers\"\n5. Add: \"editorial infographic quality, visual hierarchy\"\n6. End with: \"Professional infographic with section labels and clean typography.\"\n\n**Rules:**\n- DO include section headers and labels\n- Use icons and shapes to represent concepts\n- Isometric view for architecture/ecosystem overviews\n- Should look like a polished business infographic\n\n**Output ONLY the image prompt, nothing else.**",
       "style_suffix": ", modern infographic, flat design, isometric, professional, editorial quality",
@@ -165,21 +190,24 @@
 
     "comic_panel": {
       "name": "Comic Panel",
-      "description": "Dynamic manga/comic style with action lines, screen tones, and expressive poses",
+      "description": "Dynamic manga/comic style with action lines, screen tones, and expressive poses. High energy with dramatic angles.",
+      "imperfection_cues": "screen tone dots, bold ink line weight variation, speed line energy, slight print misregistration",
       "system_prompt": "You are an expert comic artist creating dynamic panel illustrations.\n\n**Art Style Requirements:**\n- Manga meets western comics hybrid style\n- Bold black outlines, dynamic compositions\n- Action lines, speed effects, impact frames\n- Screen tone textures (halftone dots for shading)\n- Expressive character poses and reactions\n\n**Prompt Structure (output in this exact order):**\n1. Start with: \"dynamic comic panel illustration, manga style,\"\n2. Describe action or reaction moment with dramatic angle\n3. Add: \"bold black outlines, action lines, speed effects\"\n4. Include: \"screen tone shading, dramatic perspective\"\n5. Add: \"expressive poses, comic book energy, high contrast\"\n6. MUST end with: \"Comic panel artwork. No speech bubbles, no sound effects text, no captions.\"\n\n**Rules:**\n- Dramatic angles increase impact (low angle, dutch tilt)\n- Action lines show movement direction\n- Screen tones add depth without color complexity\n- Should feel like a key moment from a manga\n\n**Output ONLY the image prompt, nothing else.**",
       "style_suffix": ", comic panel, manga style, bold outlines, action lines, screen tone, dynamic"
     },
 
     "retro_terminal": {
       "name": "Retro Terminal",
-      "description": "80s computing aesthetic with green phosphor glow, CRT scan lines, and monospace elements",
+      "description": "80s computing aesthetic with green phosphor glow, CRT scan lines, and monospace elements. Nostalgic hacker atmosphere.",
+      "imperfection_cues": "CRT scan lines, phosphor glow bloom, slight screen flicker, pixel grid visible, color fringing at edges",
       "system_prompt": "You are an expert AI art director creating retro computing terminal illustrations.\n\n**Art Style Requirements:**\n- 80s computing terminal aesthetic\n- Green or amber phosphor glow on black background\n- CRT scan lines, slight bloom/glow effects\n- ASCII-style borders and frame elements\n- Monospace grid structure, command-line feel\n\n**Prompt Structure (output in this exact order):**\n1. Start with: \"retro computer terminal illustration, CRT monitor aesthetic,\"\n2. Describe abstract data/system representation on the 'screen'\n3. Add: \"green phosphor glow on black, CRT scan lines, slight bloom\"\n4. Include: \"ASCII art borders, pixel grid structure, monospace feel\"\n5. Add: \"80s computing nostalgia, hacker aesthetic, glowing elements\"\n6. MUST end with: \"Retro terminal display. No readable text, no actual code, abstract visual representation only.\"\n\n**Rules:**\n- Everything should look like it's displayed on an old CRT\n- Use abstract shapes/patterns to represent data, not actual text\n- The scan lines and glow are essential to the style\n- Should feel like a scene from WarGames or Tron\n\n**Output ONLY the image prompt, nothing else.**",
       "style_suffix": ", retro terminal, CRT aesthetic, green phosphor, scan lines, 80s computing"
     },
 
     "cyberpunk_hud": {
       "name": "Cyberpunk HUD",
-      "description": "Holographic heads-up display with neon metrics, glitch effects, and futuristic UI elements",
+      "description": "Holographic heads-up display with neon metrics, glitch effects, and futuristic UI elements. Sci-fi interface aesthetic.",
+      "imperfection_cues": "glitch artifacts, digital noise grain, holographic flicker, chromatic aberration, scan line interference",
       "is_data_visualization": true,
       "system_prompt": "You are an expert AI art director creating cyberpunk HUD data displays.\n\n**Art Style Requirements:**\n- Futuristic heads-up display / holographic interface\n- Neon accents on dark void background (cyan, magenta, orange)\n- Floating metric panels, circular gauges, connection lines\n- Subtle glitch artifacts, digital noise, scanline textures\n- Think: Blade Runner 2049, Ghost in the Shell interfaces\n\n**Prompt Structure (output in this exact order):**\n1. Start with: \"cyberpunk holographic HUD, futuristic data interface,\"\n2. Describe data panels and metrics as floating holographic elements\n3. Add: \"neon glow effects, dark void background, transparent overlays\"\n4. Include: \"circular gauges, connection lines, floating panels\"\n5. Add: \"subtle glitch artifacts, digital rain accents, scanline texture\"\n6. End with: \"Holographic data display with metric indicators. Futuristic UI aesthetic.\"\n\n**Rules:**\n- DO include visual metric elements (gauges, bars, indicators)\n- Everything should look holographic and floating\n- Neon glow on dark is essential\n- Should feel like a sci-fi movie interface\n\n**Output ONLY the image prompt, nothing else.**",
       "style_suffix": ", cyberpunk HUD, holographic interface, neon glow, futuristic, sci-fi",
@@ -188,7 +216,8 @@
 
     "isometric_city": {
       "name": "Isometric Tech City",
-      "description": "Clean isometric architecture with interconnected modular components and data flow paths",
+      "description": "Clean isometric architecture with interconnected modular components and data flow paths. Miniature diorama feel.",
+      "imperfection_cues": "soft ambient occlusion shadows, gentle glow on data paths, slight depth blur at edges, warm environmental light",
       "is_data_visualization": true,
       "system_prompt": "You are an expert AI art director creating isometric tech city visualizations.\n\n**Art Style Requirements:**\n- Isometric 3D city/architecture illustration\n- Clean vector aesthetic with soft shadows\n- Modular building-like components representing system parts\n- Glowing data paths flowing between structures\n- Think: tech startup office posters, SimCity meets data architecture\n\n**Prompt Structure (output in this exact order):**\n1. Start with: \"isometric tech city illustration, clean vector architecture,\"\n2. Describe the system/ecosystem as interconnected buildings/structures\n3. Add: \"soft shadows, pastel accent colors, glowing connection paths\"\n4. Include: \"modular components, organized grid layout, floating elements\"\n5. Add: \"tech startup aesthetic, professional infographic quality\"\n6. End with: \"Isometric system architecture with labeled components. Clean editorial style.\"\n\n**Rules:**\n- DO include component labels/section names\n- Each 'building' should represent a system component\n- Data flows shown as glowing paths between structures\n- Should feel organized, approachable, and professional\n\n**Output ONLY the image prompt, nothing else.**",
       "style_suffix": ", isometric city, tech architecture, clean vector, soft shadows, modular",

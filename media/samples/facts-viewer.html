@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daily Briefing</title>
+    <style>
+        :root {
+            --bg: #0a0a0f;
+            --surface: #12121a;
+            --surface-2: #1a1a24;
+            --border: #2a2a3a;
+            --text: #e8e8f0;
+            --text-muted: #8888a0;
+            --accent: #6366f1;
+            --accent-2: #818cf8;
+            --green: #22c55e;
+            --red: #ef4444;
+            --yellow: #eab308;
+            --blue: #3b82f6;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.7;
+        }
+
+        .studio-nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(10, 10, 15, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border);
+            padding: 0.5rem 2rem;
+            display: flex;
+            gap: 1.5rem;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .studio-nav a {
+            color: #8888a0;
+            text-decoration: none;
+            font-size: 0.85rem;
+            transition: color 0.2s;
+        }
+
+        .studio-nav a:hover { color: var(--accent); }
+        .studio-nav a.active { color: var(--accent-2); }
+        .studio-nav .home { font-weight: bold; color: var(--accent); }
+
+        /* Hero Section */
+        .hero {
+            position: relative;
+            min-height: 70vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .hero-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.4;
+            filter: blur(2px);
+        }
+
+        .hero-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(180deg, transparent 0%, var(--bg) 100%);
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            text-align: center;
+            padding: 2rem;
+            max-width: 900px;
+        }
+
+        .hero-date {
+            font-size: 0.9rem;
+            color: var(--accent-2);
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            margin-bottom: 1rem;
+        }
+
+        .hero-title {
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            line-height: 1.2;
+        }
+
+        .hero-summary {
+            font-size: 1.2rem;
+            color: var(--text-muted);
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        /* Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* Section */
+        .section {
+            margin-bottom: 4rem;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .section-icon {
+            width: 48px;
+            height: 48px;
+            background: var(--surface-2);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        .section-image {
+            width: 100%;
+            max-width: 800px;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .section-image:hover {
+            transform: scale(1.01);
+        }
+
+        /* Cards Grid */
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.5rem;
+            transition: border-color 0.2s;
+        }
+
+        .card:hover {
+            border-color: var(--accent);
+        }
+
+        .card-claim {
+            font-size: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .card-meta {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .card-tag {
+            font-size: 0.75rem;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            background: var(--surface-2);
+            color: var(--text-muted);
+        }
+
+        .card-tag.positive { background: rgba(34, 197, 94, 0.2); color: var(--green); }
+        .card-tag.negative { background: rgba(239, 68, 68, 0.2); color: var(--red); }
+        .card-tag.neutral { background: rgba(234, 179, 8, 0.2); color: var(--yellow); }
+
+        /* GitHub Updates */
+        .github-item {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1rem 1.25rem;
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+        }
+
+        .github-type {
+            font-size: 0.7rem;
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            text-transform: uppercase;
+            font-weight: 600;
+            flex-shrink: 0;
+        }
+
+        .github-type.pr { background: rgba(99, 102, 241, 0.2); color: var(--accent-2); }
+        .github-type.issue { background: rgba(34, 197, 94, 0.2); color: var(--green); }
+
+        .github-title {
+            font-size: 0.95rem;
+            flex: 1;
+        }
+
+        .github-number {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+
+        /* Discord */
+        .discord-channel {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .discord-channel-name {
+            color: var(--accent-2);
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+        }
+
+        .discord-summary {
+            color: var(--text-muted);
+        }
+
+        /* Insights */
+        .insight-card {
+            background: linear-gradient(135deg, var(--surface) 0%, var(--surface-2) 100%);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .insight-text {
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+        }
+
+        .insight-implications {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            padding-left: 1rem;
+            border-left: 2px solid var(--accent);
+        }
+
+        /* Tags */
+        .tags-section {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .tag {
+            background: var(--surface-2);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        /* File Selector */
+        .file-selector {
+            position: fixed;
+            top: 3.5rem;
+            right: 1rem;
+            z-index: 100;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 0.5rem;
+        }
+
+        .file-selector input {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            color: var(--text);
+            padding: 0.5rem;
+            border-radius: 4px;
+            font-size: 0.85rem;
+        }
+
+        /* Lightbox */
+        .lightbox {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .lightbox.active { display: flex; }
+
+        .lightbox img {
+            max-width: 95%;
+            max-height: 95%;
+            object-fit: contain;
+        }
+
+        /* Key Facts */
+        .key-facts-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .key-fact-item {
+            background: var(--surface);
+            border-left: 3px solid var(--accent);
+            padding: 1rem 1.25rem;
+            border-radius: 0 8px 8px 0;
+            font-size: 0.95rem;
+        }
+
+        /* Open Questions */
+        .questions-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .question-item {
+            background: var(--surface);
+            border-left: 3px solid var(--yellow);
+            padding: 1rem 1.25rem;
+            border-radius: 0 8px 8px 0;
+            font-size: 0.95rem;
+            font-style: italic;
+        }
+
+        /* Sentiment Badge */
+        .sentiment-badge {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+            background: var(--surface-2);
+        }
+
+        .sentiment-badge.positive { background: rgba(34, 197, 94, 0.2); color: var(--green); }
+        .sentiment-badge.negative { background: rgba(239, 68, 68, 0.2); color: var(--red); }
+        .sentiment-badge.mixed { background: rgba(234, 179, 8, 0.2); color: var(--yellow); }
+        .sentiment-badge.neutral { background: var(--surface-2); color: var(--text-muted); }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 4rem 2rem;
+            color: var(--text-muted);
+        }
+
+        .empty-state h2 {
+            margin-bottom: 1rem;
+            color: var(--text);
+        }
+    </style>
+</head>
+<body>
+    <nav class="studio-nav">
+        <a href="index.html" class="home">Media Studio</a>
+        <a href="gallery.html">Gallery</a>
+        <a href="validation-viewer.html">Validation</a>
+        <a href="facts-viewer.html" class="active">Facts</a>
+    </nav>
+    <div class="file-selector">
+        <input type="file" id="fileInput" accept=".json">
+    </div>
+
+    <div id="content">
+        <div class="empty-state">
+            <h2>Daily Briefing Viewer</h2>
+            <p>Load a facts.json file to view the briefing</p>
+        </div>
+    </div>
+
+    <div class="lightbox" id="lightbox" onclick="this.classList.remove('active')">
+        <img id="lightboxImg" src="" alt="">
+    </div>
+
+    <script>
+        document.getElementById('fileInput').addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    try {
+                        const data = JSON.parse(e.target.result);
+                        renderBriefing(data);
+                    } catch (err) {
+                        alert('Invalid JSON file');
+                    }
+                };
+                reader.readAsText(file);
+            }
+        });
+
+        function openLightbox(src) {
+            document.getElementById('lightboxImg').src = src;
+            document.getElementById('lightbox').classList.add('active');
+        }
+
+        function renderBriefing(data) {
+            const content = document.getElementById('content');
+            const images = data.images || {};
+
+            // Format date
+            const dateStr = data.briefing_date || 'Unknown Date';
+            const dateObj = new Date(dateStr + 'T00:00:00');
+            const formattedDate = dateObj.toLocaleDateString('en-US', {
+                weekday: 'long',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            });
+
+            let html = '';
+
+            // Hero Section
+            const heroImg = images.overall || images.hero || Object.values(images)[0];
+            html += `
+                <section class="hero">
+                    ${heroImg ? `<img class="hero-bg" src="${heroImg}" alt="">` : ''}
+                    <div class="hero-overlay"></div>
+                    <div class="hero-content">
+                        <div class="hero-date">${formattedDate}</div>
+                        <h1 class="hero-title">ElizaOS Daily Briefing</h1>
+                        <p class="hero-summary">${data.overall_summary || ''}</p>
+                    </div>
+                </section>
+            `;
+
+            html += '<div class="container">';
+
+            const cats = data.categories || {};
+
+            // Key Facts
+            if (data.key_facts?.length) {
+                html += `
+                    <section class="section">
+                        <div class="section-header">
+                            <div class="section-icon">🎯</div>
+                            <h2 class="section-title">Key Facts</h2>
+                        </div>
+                        <div class="key-facts-list">
+                            ${data.key_facts.map(fact => `
+                                <div class="key-fact-item">${fact}</div>
+                            `).join('')}
+                        </div>
+                    </section>
+                `;
+            }
+
+            // Twitter/News Highlights
+            if (cats.twitter_news_highlights?.length) {
+                html += `
+                    <section class="section">
+                        <div class="section-header">
+                            <div class="section-icon">📰</div>
+                            <h2 class="section-title">News Highlights</h2>
+                        </div>
+                        <div class="cards-grid">
+                            ${cats.twitter_news_highlights.map(item => `
+                                <div class="card">
+                                    <p class="card-claim">${item.claim || ''}</p>
+                                    <div class="card-meta">
+                                        ${item.sentiment ? `<span class="card-tag ${item.sentiment}">${item.sentiment}</span>` : ''}
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </section>
+                `;
+            }
+
+            // GitHub Updates
+            if (cats.github_updates) {
+                const github = cats.github_updates;
+                const githubImg = images.github_updates || images['github-updates'];
+
+                html += `
+                    <section class="section">
+                        <div class="section-header">
+                            <div class="section-icon">🔧</div>
+                            <h2 class="section-title">GitHub Updates</h2>
+                        </div>
+                        ${githubImg ? `<img class="section-image" src="${githubImg}" alt="GitHub Updates" onclick="openLightbox(this.src)">` : ''}
+                `;
+
+                // Overall focus
+                if (github.overall_focus?.length) {
+                    html += `<div class="cards-grid" style="margin-bottom: 2rem;">
+                        ${github.overall_focus.map(item => `
+                            <div class="card">
+                                <p class="card-claim">${item.claim || ''}</p>
+                            </div>
+                        `).join('')}
+                    </div>`;
+                }
+
+                // PRs and Issues
+                if (github.new_issues_prs?.length) {
+                    html += github.new_issues_prs.slice(0, 10).map(item => `
+                        <div class="github-item">
+                            <span class="github-type ${item.item_type === 'pull_request' ? 'pr' : 'issue'}">
+                                ${item.item_type === 'pull_request' ? 'PR' : 'Issue'}
+                            </span>
+                            <span class="github-title">${item.title || ''}</span>
+                            <span class="github-number">#${item.number || ''}</span>
+                        </div>
+                    `).join('');
+                }
+
+                html += '</section>';
+            }
+
+            // Discord Updates
+            if (cats.discord_updates?.length) {
+                const discordImg = images.discord_updates || images['discord-updates'];
+
+                html += `
+                    <section class="section">
+                        <div class="section-header">
+                            <div class="section-icon">💬</div>
+                            <h2 class="section-title">Discord Updates</h2>
+                        </div>
+                        ${discordImg ? `<img class="section-image" src="${discordImg}" alt="Discord Updates" onclick="openLightbox(this.src)">` : ''}
+                        ${cats.discord_updates.map(item => `
+                            <div class="discord-channel">
+                                <div class="discord-channel-name">${item.channel || ''}</div>
+                                <p class="discord-summary">${item.summary || ''}</p>
+                            </div>
+                        `).join('')}
+                    </section>
+                `;
+            }
+
+            // User Feedback
+            if (cats.user_feedback?.length) {
+                html += `
+                    <section class="section">
+                        <div class="section-header">
+                            <div class="section-icon">💭</div>
+                            <h2 class="section-title">User Feedback</h2>
+                        </div>
+                        <div class="cards-grid">
+                            ${cats.user_feedback.map(item => `
+                                <div class="card">
+                                    <p class="card-claim">${item.feedback_summary || ''}</p>
+                                    <div class="card-meta">
+                                        ${item.sentiment ? `<span class="card-tag ${item.sentiment}">${item.sentiment}</span>` : ''}
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </section>
+                `;
+            }
+
+            // Strategic Insights
+            if (cats.strategic_insights?.length) {
+                const insightImg = images.strategic_insights || images['strategic-insights'];
+
+                html += `
+                    <section class="section">
+                        <div class="section-header">
+                            <div class="section-icon">💡</div>
+                            <h2 class="section-title">Strategic Insights</h2>
+                        </div>
+                        ${insightImg ? `<img class="section-image" src="${insightImg}" alt="Strategic Insights" onclick="openLightbox(this.src)">` : ''}
+                        ${cats.strategic_insights.map(item => `
+                            <div class="insight-card">
+                                <p class="insight-text">${item.insight || ''}</p>
+                                ${item.implications ? `<p class="insight-implications">${item.implications}</p>` : ''}
+                            </div>
+                        `).join('')}
+                    </section>
+                `;
+            }
+
+            // Market Analysis
+            if (cats.market_analysis?.length) {
+                const marketImg = images.market_analysis || images['market-analysis'];
+
+                html += `
+                    <section class="section">
+                        <div class="section-header">
+                            <div class="section-icon">📊</div>
+                            <h2 class="section-title">Market Analysis</h2>
+                        </div>
+                        ${marketImg ? `<img class="section-image" src="${marketImg}" alt="Market Analysis" onclick="openLightbox(this.src)">` : ''}
+                        ${cats.market_analysis.map(item => `
+                            <div class="insight-card">
+                                <p class="insight-text">${item.observation || ''}</p>
+                                ${item.relevance ? `<p class="insight-implications">${item.relevance}</p>` : ''}
+                            </div>
+                        `).join('')}
+                    </section>
+                `;
+            }
+
+            // Open Questions
+            if (data.open_questions?.length) {
+                html += `
+                    <section class="section">
+                        <div class="section-header">
+                            <div class="section-icon">❓</div>
+                            <h2 class="section-title">Open Questions</h2>
+                        </div>
+                        <div class="questions-list">
+                            ${data.open_questions.map(q => `
+                                <div class="question-item">${q}</div>
+                            `).join('')}
+                        </div>
+                    </section>
+                `;
+            }
+
+            // Tags
+            if (data.tags) {
+                const allTags = [
+                    ...(data.tags.themes || []),
+                    ...(data.tags.derived || []),
+                    ...(data.tags.story_type || []),
+                    ...(data.tags.priority || [])
+                ].filter(Boolean);
+
+                const sentiment = data.tags.sentiment;
+
+                html += `
+                    <section class="section">
+                        <div class="section-header">
+                            <div class="section-icon">🏷️</div>
+                            <h2 class="section-title">Tags</h2>
+                        </div>
+                        ${sentiment ? `
+                            <div class="sentiment-badge ${sentiment.overall || ''}">
+                                Sentiment: ${sentiment.overall || 'unknown'}
+                                ${sentiment.context?.length ? ` (${sentiment.context.join(', ')})` : ''}
+                            </div>
+                        ` : ''}
+                        ${allTags.length ? `
+                            <div class="tags-section">
+                                ${allTags.map(tag => `<span class="tag">${tag}</span>`).join('')}
+                            </div>
+                        ` : ''}
+                    </section>
+                `;
+            }
+
+            html += '</div>';
+
+            content.innerHTML = html;
+        }
+
+        // Try to auto-load from URL param or default
+        const urlParams = new URLSearchParams(window.location.search);
+        const factsFile = urlParams.get('facts');
+        if (factsFile) {
+            fetch(factsFile)
+                .then(r => r.json())
+                .then(renderBriefing)
+                .catch(e => console.log('Could not load:', factsFile));
+        }
+    </script>
+</body>
+</html>

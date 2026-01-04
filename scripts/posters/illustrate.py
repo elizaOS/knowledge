@@ -2,7 +2,7 @@
 """
 Generate story illustrations using character reference sheets.
 
-Uses reference-sheet.png from each character folder to maintain consistency.
+Uses reference-sheet-{character}.png from each character folder to maintain consistency.
 
 Usage:
   # Basic - character + prompt
@@ -54,7 +54,7 @@ IMAGE_MODEL = "google/gemini-3-pro-image-preview"
 SCRIPT_DIR = Path(__file__).parent.resolve()
 WORKSPACE_ROOT = SCRIPT_DIR.parent.parent
 CHARACTERS_DIR = SCRIPT_DIR / "characters"
-OUTPUT_DIR = WORKSPACE_ROOT / "media"
+OUTPUT_DIR = WORKSPACE_ROOT / "media" / "daily"
 STYLE_PRESETS_FILE = SCRIPT_DIR / "config" / "style-presets.json"
 
 logging.basicConfig(
@@ -112,14 +112,17 @@ def get_style_config(style_name: str) -> dict:
 
 
 def get_reference_sheet(character: str) -> Path:
-    """Get path to character's reference sheet."""
+    """Get path to character's reference sheet.
+
+    Filename includes character name for better model context.
+    """
     char_dir = CHARACTERS_DIR / character
-    ref_sheet = char_dir / "reference-sheet.png"
+    ref_sheet = char_dir / f"reference-sheet-{character}.png"
 
     if not ref_sheet.exists():
         raise FileNotFoundError(
             f"No reference sheet for '{character}'. "
-            f"Run: python scripts/posters/generate.py {character}"
+            f"Run: python scripts/posters/character-reference.py {character}"
         )
 
     return ref_sheet
@@ -336,21 +339,50 @@ COMPOSITIONS = [
     "Split frame showing cause and effect",
 ]
 
+# Lighting directions - HOW light shapes the scene
+LIGHTING_DIRECTIONS = [
+    "dramatic rim lighting from behind, subject edges glowing",
+    "soft golden hour side-lighting, warm and nostalgic",
+    "cool blue ambient light from above, calm and focused",
+    "harsh chiaroscuro with deep contrasting shadows",
+    "flat diffused lighting with soft gradients",
+    "dramatic spotlight from upper left, theatrical",
+    "backlighting creating silhouettes and halos",
+    "neon-tinged atmospheric glow, cyberpunk mood",
+]
+
+# Environment depth - HOW space is rendered
+ENVIRONMENT_DEPTH = [
+    "shallow depth of field - sharp subject, dreamy blurred background",
+    "deep focus - clear foreground object, subject, and detailed background",
+    "atmospheric depth - fog/haze separating visual planes",
+    "layered composition - distinct foreground, mid, and background elements",
+    "minimal environment - subject isolated against simple backdrop",
+    "environmental storytelling - rich contextual details throughout",
+]
+
+# Time of day - pure aesthetic choice (not tied to real-world seasonal daylight)
+TIME_OF_DAY = [
+    "dawn - soft pink/orange horizon, long shadows, quiet energy",
+    "midday - bright overhead light, minimal shadows, high energy",
+    "golden hour - warm directional light, long shadows, cinematic",
+    "blue hour - cool twilight tones, city lights emerging",
+    "night - artificial lighting, high contrast, intimate pools of light",
+    "overcast - soft diffused light, muted colors, contemplative",
+]
+
 # Holiday moods - override seasonal mood on special days
 # Format: (month, day): ("holiday_name", "mood description")
+# Note: Deterministic holidays have minimal/no padding - the day is the day
 HOLIDAY_MOODS = {
-    # New Year's (Dec 31 - Jan 2)
+    # New Year's (Dec 31 - Jan 1 only, fireworks are over after NY Day)
     (12, 31): ("new_years", "new beginnings, celebration, fireworks and confetti"),
     (1, 1): ("new_years", "new beginnings, celebration, fireworks and confetti"),
-    (1, 2): ("new_years", "new beginnings, fresh starts, optimistic energy"),
 
-    # Valentine's Day (Feb 13-15)
-    (2, 13): ("valentines", "warmth and connection, soft pinks and reds"),
+    # Valentine's Day (Feb 14 only)
     (2, 14): ("valentines", "love and connection, romantic warmth, heartfelt moments"),
-    (2, 15): ("valentines", "warmth and connection, soft pinks and reds"),
 
-    # St. Patrick's Day (Mar 16-17)
-    (3, 16): ("st_patricks", "lucky green, festive Irish energy"),
+    # St. Patrick's Day (Mar 17 only)
     (3, 17): ("st_patricks", "lucky green, Irish charm, festive celebration"),
 
     # April Fools (Apr 1) - Easter takes priority if they overlap
@@ -359,24 +391,19 @@ HOLIDAY_MOODS = {
     # Bitcoin Pizza Day (May 22)
     (5, 22): ("bitcoin_pizza", "crypto nostalgia, pizza celebration, early adopter vibes"),
 
-    # 4th of July (Jul 3-5)
-    (7, 3): ("july_4th", "patriotic energy, summer celebration, anticipation"),
+    # 4th of July (Jul 4 only, no padding needed)
     (7, 4): ("july_4th", "bold patriotic energy, fireworks, summer celebration"),
-    (7, 5): ("july_4th", "summer celebration, post-fireworks glow"),
 
     # Ethereum Birthday (Jul 30)
     (7, 30): ("eth_birthday", "blockchain celebration, network anniversary, crypto milestone"),
 
-    # Halloween (Oct 29-31) - characters wear costumes!
-    (10, 29): ("halloween", "mysterious atmosphere, autumn shadows, spooky anticipation, characters wearing Halloween costumes"),
+    # Halloween (Oct 30-31) - 1 day buildup for spooky season
     (10, 30): ("halloween", "spooky and playful, orange and purple, eerie shadows, characters in creative Halloween costumes"),
     (10, 31): ("halloween", "peak spooky energy, haunted atmosphere, characters dressed in fun Halloween costumes"),
 
-    # Christmas (Dec 23-26) - characters wear Santa hats!
-    (12, 23): ("christmas", "festive anticipation, cozy warmth, holiday preparations, characters wearing Santa hats"),
+    # Christmas (Dec 24-25 only) - Christmas Eve + Christmas Day
     (12, 24): ("christmas", "Christmas Eve magic, warm glow, gift-giving anticipation, characters in Santa hats"),
     (12, 25): ("christmas", "Christmas joy, festive warmth, red and green, characters wearing Santa hats and holiday attire"),
-    (12, 26): ("christmas", "post-Christmas cozy, relaxed holiday warmth, characters in cozy holiday wear"),
 }
 
 # Variable holidays - hardcoded dates for 2025-2035
@@ -443,7 +470,7 @@ def generate_creative_brief(date: datetime) -> dict:
     """Generate today's unique creative direction.
 
     Uses date-seeded RNG for reproducibility: same date = same brief.
-    7 lenses × 6 compositions × 4 seasons = 168 unique combinations.
+    7 lenses × 6 compositions × 8 lighting × 6 depth × 6 time = 72,576 combinations.
     """
     seed = int(date.strftime("%Y%m%d"))
     rng = random.Random(seed)
@@ -452,6 +479,9 @@ def generate_creative_brief(date: datetime) -> dict:
         "lens": rng.choice(DAILY_LENSES),
         "composition": rng.choice(COMPOSITIONS),
         "mood": get_seasonal_mood(date),
+        "lighting": rng.choice(LIGHTING_DIRECTIONS),
+        "depth": rng.choice(ENVIRONMENT_DEPTH),
+        "time_of_day": rng.choice(TIME_OF_DAY),
     }
 
 
@@ -460,8 +490,9 @@ def get_available_characters() -> list[str]:
     chars = []
     for char_dir in CHARACTERS_DIR.iterdir():
         if char_dir.is_dir() and not char_dir.name.startswith("."):
-            if (char_dir / "reference-sheet.png").exists():
-                chars.append(char_dir.name)
+            char_name = char_dir.name
+            if (char_dir / f"reference-sheet-{char_name}.png").exists():
+                chars.append(char_name)
     return sorted(chars)
 
 
@@ -718,6 +749,9 @@ TODAY'S CREATIVE DIRECTION:
 - Interpretive lens: {creative_brief.get('lens', '')}
 - Composition: {creative_brief.get('composition', '')}
 - Atmosphere: {creative_brief.get('mood', '')}
+- Lighting: {creative_brief.get('lighting', '')}
+- Depth/Environment: {creative_brief.get('depth', '')}
+- Time of day: {creative_brief.get('time_of_day', '')}
 
 """
         system_prompt = f"""Convert this news content into a brief scene description for an illustration.
@@ -812,6 +846,9 @@ def interactive_mode(facts_path: Path, dry_run: bool = False, with_icons: bool =
     print(f"  Lens: {creative_brief['lens']}")
     print(f"  Composition: {creative_brief['composition']}")
     print(f"  Mood: {creative_brief['mood']}")
+    print(f"  Lighting: {creative_brief['lighting']}")
+    print(f"  Depth: {creative_brief['depth']}")
+    print(f"  Time: {creative_brief['time_of_day']}")
 
     # Generate icon sheet if requested
     icon_sheet_bytes = None
@@ -949,7 +986,10 @@ def interactive_mode(facts_path: Path, dry_run: bool = False, with_icons: bool =
                 cat_str = idea["category"].replace("_", "-")
                 output_path = OUTPUT_DIR / f"{date_str}-{cat_str}-{gen_style}.png"
                 output_path.write_bytes(image_bytes)
-                print(f"   Saved: {output_path}")
+                # Save prompt alongside image
+                prompt_path = output_path.with_suffix('.txt')
+                prompt_path.write_text(prompt)
+                print(f"   Saved: {output_path} (+prompt)")
                 generated.append(output_path)
 
             except Exception as e:
@@ -960,10 +1000,10 @@ def interactive_mode(facts_path: Path, dry_run: bool = False, with_icons: bool =
     return 0
 
 
-def batch_mode(facts_path: Path, dry_run: bool = False, with_icons: bool = False) -> int:
+def batch_mode(facts_path: Path, dry_run: bool = False, with_icons: bool = False, output_dir: Path = None) -> int:
     """Batch mode - generate all category visuals automatically.
 
-    Outputs to media/{date}/ directory:
+    Outputs to media/{date}/ directory (or custom -o path):
       - overall.png (hero/editorial)
       - github-updates.png (dataviz)
       - discord-updates.png (comic_panel)
@@ -997,6 +1037,9 @@ def batch_mode(facts_path: Path, dry_run: bool = False, with_icons: bool = False
     print(f"  Lens: {creative_brief['lens']}")
     print(f"  Composition: {creative_brief['composition']}")
     print(f"  Mood: {creative_brief['mood']}")
+    print(f"  Lighting: {creative_brief['lighting']}")
+    print(f"  Depth: {creative_brief['depth']}")
+    print(f"  Time: {creative_brief['time_of_day']}")
 
     # Generate ideas with date-seeded style rotation and character shuffle
     ideas = generate_illustration_ideas(facts_path, facts_date)
@@ -1004,8 +1047,9 @@ def batch_mode(facts_path: Path, dry_run: bool = False, with_icons: bool = False
         print("No illustration ideas found.")
         return 1
 
-    # Create output directory
-    output_dir = OUTPUT_DIR / date_str
+    # Create output directory (use provided or default to media/daily/{date})
+    if output_dir is None:
+        output_dir = OUTPUT_DIR / date_str
     output_dir.mkdir(parents=True, exist_ok=True)
 
     # Initialize manifest
@@ -1122,7 +1166,10 @@ def batch_mode(facts_path: Path, dry_run: bool = False, with_icons: bool = False
                 gen_meta["full_prompt"] = prompt
 
             output_path.write_bytes(image_bytes)
-            print(f"   Saved: {output_path}")
+            # Save prompt alongside image
+            prompt_path = output_path.with_suffix('.txt')
+            prompt_path.write_text(prompt)
+            print(f"   Saved: {output_path} (+prompt)")
             generated.append(output_path)
 
             gen_meta["success"] = True
@@ -1296,11 +1343,12 @@ def list_characters():
     print("Characters with reference sheets:")
     for char_dir in sorted(CHARACTERS_DIR.iterdir()):
         if char_dir.is_dir() and not char_dir.name.startswith("."):
-            ref_sheet = char_dir / "reference-sheet.png"
+            char_name = char_dir.name
+            ref_sheet = char_dir / f"reference-sheet-{char_name}.png"
             if ref_sheet.exists():
-                print(f"  {char_dir.name} [ready]")
+                print(f"  {char_name} [ready]")
             else:
-                print(f"  {char_dir.name} [needs generate.py]")
+                print(f"  {char_name} [needs character-reference.py]")
 
 
 def main():
@@ -1402,7 +1450,8 @@ def main():
         if not OPENROUTER_API_KEY and not args.dry_run:
             logging.error("OPENROUTER_API_KEY not set")
             return 1
-        return batch_mode(facts_path, dry_run=args.dry_run, with_icons=args.with_icons)
+        output_path = Path(args.output) if args.output else None
+        return batch_mode(facts_path, dry_run=args.dry_run, with_icons=args.with_icons, output_dir=output_path)
 
     # Validate args
     if not args.args:
@@ -1502,7 +1551,10 @@ def main():
         # Save
         OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
         output_path.write_bytes(image_bytes)
-        logging.info(f"Saved: {output_path}")
+        # Save prompt alongside image
+        prompt_path = output_path.with_suffix('.txt')
+        prompt_path.write_text(prompt)
+        logging.info(f"Saved: {output_path} (+prompt)")
 
         return 0
 

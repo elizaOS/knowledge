@@ -27,7 +27,7 @@ IMAGE_MODEL = "google/gemini-3-pro-image-preview"
 SCRIPT_DIR = Path(__file__).parent.resolve()
 WORKSPACE_ROOT = SCRIPT_DIR.parent.parent
 FACTS_DIR = WORKSPACE_ROOT / "the-council" / "facts"
-OUTPUT_DIR = WORKSPACE_ROOT / "posters"
+OUTPUT_DIR = WORKSPACE_ROOT / "media" / "quick"
 STYLE_PRESETS_FILE = SCRIPT_DIR / "config" / "style-presets.json"
 
 # Default character reference images (council members)
@@ -436,8 +436,11 @@ def generate_category_images(facts: dict, date_str: str, output_dir: Path,
 
             output_path = output_dir / f"{date_str}_ai-{category}.png"
             output_path.write_bytes(image_bytes)
+            # Save prompt alongside image
+            prompt_path = output_path.with_suffix('.txt')
+            prompt_path.write_text(prompt)
             generated.append(output_path)
-            logging.info(f"  Saved: {output_path}")
+            logging.info(f"  Saved: {output_path} (+prompt)")
 
         except Exception as e:
             logging.error(f"  Failed to generate image for '{category}': {e}")
@@ -473,8 +476,11 @@ def generate_preview_all_styles(facts: dict, date_str: str, output_dir: Path) ->
 
             output_path = output_dir / f"{date_str}_ai-{style}.png"
             output_path.write_bytes(image_bytes)
+            # Save prompt alongside image
+            prompt_path = output_path.with_suffix('.txt')
+            prompt_path.write_text(prompt)
             generated.append(output_path)
-            logging.info(f"  Saved: {output_path}")
+            logging.info(f"  Saved: {output_path} (+prompt)")
 
         except Exception as e:
             logging.error(f"  Failed to generate '{style}' style: {e}")
@@ -648,7 +654,10 @@ Available styles: {styles_list}
                 output_path = OUTPUT_DIR / f"{date_str}_ai-daily.png"
 
         output_path.write_bytes(image_bytes)
-        logging.info(f"Saved AI-generated image: {output_path}")
+        # Save prompt alongside image
+        prompt_path = output_path.with_suffix('.txt')
+        prompt_path.write_text(prompt)
+        logging.info(f"Saved AI-generated image: {output_path} (+prompt)")
 
         return 0
 

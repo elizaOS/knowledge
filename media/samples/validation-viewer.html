@@ -1,0 +1,819 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Illustration Validation Report</title>
+    <style>
+        :root {
+            --bg: #0d1117;
+            --surface: #161b22;
+            --border: #30363d;
+            --text: #e6edf3;
+            --text-muted: #8b949e;
+            --accent: #58a6ff;
+            --green: #3fb950;
+            --red: #f85149;
+            --yellow: #d29922;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            padding: 2rem;
+            padding-top: 4rem;
+        }
+
+        .studio-nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(13, 17, 23, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border);
+            padding: 0.5rem 2rem;
+            display: flex;
+            gap: 1.5rem;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .studio-nav a {
+            color: #8b949e;
+            text-decoration: none;
+            font-size: 0.85rem;
+            transition: color 0.2s;
+        }
+
+        .studio-nav a:hover { color: var(--accent); }
+        .studio-nav a.active { color: var(--yellow); }
+        .studio-nav .home { font-weight: bold; color: var(--accent); }
+
+        .container { max-width: 1400px; margin: 0 auto; }
+
+        h1 { color: var(--accent); margin-bottom: 0.5rem; }
+        h2 { color: var(--text); margin: 2rem 0 1rem; border-bottom: 1px solid var(--border); padding-bottom: 0.5rem; }
+        h3 { color: var(--accent); margin: 1rem 0 0.5rem; }
+
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+        }
+
+        .copy-report-btn {
+            padding: 0.75rem 1.5rem;
+            font-size: 1rem;
+        }
+
+        .meta { color: var(--text-muted); margin-bottom: 1rem; }
+        .meta span { margin-right: 2rem; }
+
+        /* File selector */
+        .file-selector {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .file-selector label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--text-muted);
+        }
+
+        .file-selector select, .file-selector input[type="file"] {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            color: var(--text);
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            margin-right: 1rem;
+        }
+
+        .file-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .file-btn {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            color: var(--text);
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .file-btn:hover, .file-btn.active {
+            background: var(--accent);
+            color: var(--bg);
+            border-color: var(--accent);
+        }
+
+        /* Context section */
+        .context-section {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .context-section h3 {
+            margin: 0 0 1rem 0;
+        }
+
+        .context-block {
+            background: var(--bg);
+            padding: 1rem;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            line-height: 1.6;
+            white-space: pre-wrap;
+            overflow-x: auto;
+            max-height: 400px;
+            overflow-y: auto;
+            margin: 0;
+        }
+
+        /* Character References */
+        .char-refs {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .char-refs h3 {
+            margin: 0 0 1rem 0;
+        }
+
+        .char-grid {
+            display: flex;
+            gap: 1rem;
+            overflow-x: auto;
+        }
+
+        .char-card {
+            flex-shrink: 0;
+            width: 120px;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .char-card:hover {
+            transform: scale(1.05);
+        }
+
+        .char-card img {
+            width: 100%;
+            height: 90px;
+            object-fit: cover;
+            border-radius: 4px;
+            border: 1px solid var(--border);
+        }
+
+        .char-card .char-name {
+            text-align: center;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            margin-top: 0.25rem;
+        }
+
+        /* Stats */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1rem;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--accent);
+        }
+
+        .stat-label {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+
+        /* Evaluations */
+        .evaluation-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+            overflow: hidden;
+        }
+
+        .eval-header {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            padding: 1rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .eval-image-container {
+            display: flex;
+            gap: 1rem;
+            align-items: stretch;
+        }
+
+        .eval-image {
+            width: 50%;
+            aspect-ratio: 4/3;
+            object-fit: cover;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .eval-image:hover { transform: scale(1.02); }
+
+        .eval-prompt-wrapper {
+            width: 50%;
+            display: flex;
+        }
+
+        .eval-prompt-preview {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            background: var(--bg);
+            padding: 1rem;
+            border-radius: 4px;
+            flex: 1;
+            overflow-y: auto;
+            line-height: 1.5;
+            white-space: pre-wrap;
+        }
+
+        .copy-btn {
+            background: var(--accent);
+            border: none;
+            color: var(--bg);
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: 600;
+            transition: opacity 0.2s, background 0.2s;
+        }
+
+        .copy-btn:hover {
+            background: #79b8ff;
+        }
+
+        /* Command display */
+        .command-box {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            padding: 0.75rem 1rem;
+            margin-bottom: 1.5rem;
+            font-family: 'SF Mono', 'Consolas', monospace;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            overflow-x: auto;
+        }
+
+        .command-box code {
+            color: var(--green);
+        }
+
+        .command-box div {
+            margin-bottom: 0.5rem;
+        }
+
+        .command-box div:last-child {
+            margin-bottom: 0;
+        }
+
+        .eval-top-row {
+            display: flex;
+            align-items: baseline;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .eval-title {
+            font-size: 1.1rem;
+            color: var(--text);
+            font-weight: 600;
+        }
+
+        .eval-meta {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+
+        /* Perspectives */
+        .perspectives {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1rem;
+            padding: 1rem;
+        }
+
+        .perspective-card {
+            background: var(--bg);
+            border-radius: 6px;
+            padding: 1rem;
+        }
+
+        .perspective-card.engaged {
+            background: rgba(63, 185, 80, 0.1);
+            border: 1px solid rgba(63, 185, 80, 0.3);
+        }
+
+        .perspective-card.skipped {
+            background: rgba(248, 81, 73, 0.1);
+            border: 1px solid rgba(248, 81, 73, 0.3);
+        }
+
+        .perspective-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .perspective-name {
+            font-weight: 600;
+            color: var(--accent);
+        }
+
+        .perspective-engage {
+            font-size: 1.2rem;
+        }
+
+        .perspective-reaction {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            font-style: italic;
+        }
+
+        /* Prompt */
+        .prompt-section {
+            padding: 1rem;
+            border-top: 1px solid var(--border);
+        }
+
+        .prompt-toggle {
+            background: none;
+            border: none;
+            color: var(--accent);
+            cursor: pointer;
+            font-size: 0.85rem;
+        }
+
+        .prompt-content {
+            display: none;
+            background: var(--bg);
+            padding: 1rem;
+            border-radius: 4px;
+            margin-top: 0.5rem;
+            font-family: monospace;
+            font-size: 0.8rem;
+            white-space: pre-wrap;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .prompt-content.show { display: block; }
+
+        /* Recommendations */
+        .recommendations {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1.5rem;
+        }
+
+        .rec-list {
+            list-style: none;
+            margin: 1rem 0;
+        }
+
+        .rec-list li {
+            padding: 0.5rem 0;
+            padding-left: 1.5rem;
+            position: relative;
+        }
+
+        .rec-list li::before {
+            content: "→";
+            position: absolute;
+            left: 0;
+            color: var(--accent);
+        }
+
+        .rec-highlight {
+            margin-top: 1rem;
+            padding: 1rem;
+            background: var(--bg);
+            border-radius: 4px;
+        }
+
+        .rec-highlight.good { border-left: 3px solid var(--green); }
+        .rec-highlight.bad { border-left: 3px solid var(--red); }
+
+        /* Lightbox */
+        .lightbox {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.95);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .lightbox.active { display: flex; }
+
+        .lightbox img {
+            max-width: 90%;
+            max-height: 90%;
+            object-fit: contain;
+        }
+
+        .lightbox-close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            color: white;
+            font-size: 2rem;
+            cursor: pointer;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 4rem;
+            color: var(--text-muted);
+        }
+    </style>
+</head>
+<body>
+    <nav class="studio-nav">
+        <a href="index.html" class="home">Media Studio</a>
+        <a href="gallery.html">Gallery</a>
+        <a href="validation-viewer.html" class="active">Validation</a>
+        <a href="facts-viewer.html">Facts</a>
+    </nav>
+    <div class="container">
+        <div class="page-header">
+            <div>
+                <h1>Illustration Validation Report</h1>
+                <p class="meta" id="reportMeta"></p>
+            </div>
+            <button class="copy-btn copy-report-btn" id="copyReportBtn" onclick="copyFullReport()" style="display:none;">Copy Full Report</button>
+        </div>
+
+        <div class="file-selector">
+            <label>Load validation report:</label>
+            <input type="file" id="fileInput" accept=".json">
+            <div class="file-list" id="fileList"></div>
+        </div>
+
+        <div id="content">
+            <div class="empty-state">
+                <p>Select a validation report JSON file to view</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="lightbox" id="lightbox" onclick="closeLightbox()">
+        <span class="lightbox-close">&times;</span>
+        <img id="lightboxImg" src="" alt="">
+    </div>
+
+    <script>
+        // Known report files to quick-load
+        const knownFiles = [
+            'validation-batch-all.json',
+            'validation-with-icons.json',
+            'validation-style-editorial.json',
+            'validation-style-cinematic-anime.json',
+            'validation-editorial-set.json',
+            'validation-facts-json.json'
+        ];
+
+        // Load results.json for command lookup
+        let resultsData = null;
+        fetch('results.json')
+            .then(r => r.json())
+            .then(data => { resultsData = data; })
+            .catch(() => { console.log('Could not load results.json for command lookup'); });
+
+        function getCommandForTest(testName) {
+            if (!resultsData?.results) return null;
+            const result = resultsData.results.find(r => r.test === testName);
+            return result?.command || null;
+        }
+
+        // Populate file buttons
+        const fileList = document.getElementById('fileList');
+        knownFiles.forEach(file => {
+            const btn = document.createElement('button');
+            btn.className = 'file-btn';
+            btn.textContent = file.replace('validation-', '').replace('.json', '');
+            btn.onclick = () => loadFile(file, btn);
+            fileList.appendChild(btn);
+        });
+
+        // File input handler
+        document.getElementById('fileInput').addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    try {
+                        const data = JSON.parse(e.target.result);
+                        renderReport(data);
+                    } catch (err) {
+                        alert('Invalid JSON file');
+                    }
+                };
+                reader.readAsText(file);
+            }
+        });
+
+        async function loadFile(filename, btn = null) {
+            try {
+                const resp = await fetch(filename);
+                if (!resp.ok) throw new Error('File not found');
+                const data = await resp.json();
+                renderReport(data);
+
+                // Update active button
+                document.querySelectorAll('.file-btn').forEach(b => b.classList.remove('active'));
+                if (btn) btn.classList.add('active');
+            } catch (err) {
+                console.log(`Could not load ${filename}: ${err.message}`);
+            }
+        }
+
+        // Store current report for copying
+        let currentReport = null;
+
+        function renderReport(data) {
+            currentReport = data;
+            const content = document.getElementById('content');
+
+            // Show copy button
+            document.getElementById('copyReportBtn').style.display = 'block';
+
+            // Meta
+            document.getElementById('reportMeta').innerHTML = `
+                <span>Date: ${data.date || 'N/A'}</span>
+                <span>Generated: ${data.generated_at ? new Date(data.generated_at).toLocaleString() : 'N/A'}</span>
+                <span>Model: ${data.model || 'N/A'}</span>
+            `;
+
+            let html = '';
+
+            // Commands used
+            const testName = data.evaluations?.[0]?.test || '';
+            const genCommand = getCommandForTest(testName);
+
+            const skipFlags = (data.skipped || []).map(s => `--skip ${s}`).join(' ');
+            const modelFlag = data.model ? `-m ${data.model}` : '';
+            const testFlag = testName ? `--test ${testName}` : '';
+            const valCommand = `python scripts/posters/validate-illustrations.py ${testFlag} ${modelFlag} ${skipFlags}`.replace(/\s+/g, ' ').trim();
+
+            html += `
+                <div class="command-box">
+                    ${genCommand ? `<div><strong>Generate:</strong> <code>${genCommand}</code></div>` : ''}
+                    <div><strong>Validate:</strong> <code>${valCommand}</code></div>
+                </div>
+            `;
+
+            // Context section
+            const contextText = `# Source Context (${data.date})
+
+## Summary
+${data.facts_summary || 'No summary available'}
+
+## Stories Analyzed
+${(data.stories_analyzed || []).map((s, i) => `${i + 1}. ${s}`).join('\n\n')}
+`;
+            html += `
+                <div class="context-section">
+                    <h3>Source Context</h3>
+                    <pre class="context-block">${contextText}</pre>
+                </div>
+            `;
+
+            // Character References
+            const characters = ['eliza', 'marc', 'peepo', 'shaw', 'spartan'];
+            html += `
+                <div class="char-refs">
+                    <h3>Character References</h3>
+                    <div class="char-grid">
+                        ${characters.map(c => `
+                            <div class="char-card" onclick="openLightbox('characters/reference-sheet-${c}.png')">
+                                <img src="characters/reference-sheet-${c}.png" alt="${c}" loading="lazy">
+                                <div class="char-name">${c}</div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+
+            // Stats
+            const summary = data.summary || {};
+            const avgScore = summary.average_score || 0;
+            const consensus = summary.consensus_pct || 0;
+            const total = summary.total || 0;
+
+            html += `
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-value">${avgScore.toFixed(1)}/5</div>
+                        <div class="stat-label">Average Score</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">${consensus.toFixed(0)}%</div>
+                        <div class="stat-label">Consensus Rate</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">${total}</div>
+                        <div class="stat-label">Images Analyzed</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">${Object.keys(data.archetypes || {}).length}</div>
+                        <div class="stat-label">Perspectives</div>
+                    </div>
+                </div>
+            `;
+
+            // Evaluations
+            html += '<h2>Image Evaluations</h2>';
+
+            (data.evaluations || []).forEach((ev, idx) => {
+                const scoreClass = ev.avg_score >= 4 ? 'good' : ev.avg_score >= 3 ? 'ok' : 'bad';
+                let imgPath = ev.image_path || ev.image;
+                // Strip leading media/samples/ if present (for older reports)
+                imgPath = imgPath.replace(/^media\/samples\//, '');
+
+                html += `
+                    <div class="evaluation-card">
+                        <div class="eval-header">
+                            <div class="eval-top-row">
+                                <span class="eval-title">${ev.image}</span>
+                                <span class="eval-meta">${ev.script || ''} | ${ev.test || ''}</span>
+                            </div>
+                            <div class="eval-image-container">
+                                <img class="eval-image" src="${imgPath}" alt="${ev.image}"
+                                     onclick="openLightbox(this.src)"
+                                     onerror="this.style.display='none'">
+                                ${ev.prompt_used ? `<div class="eval-prompt-wrapper">
+                                    <div class="eval-prompt-preview">${ev.prompt_used}</div>
+                                </div>` : ''}
+                            </div>
+                        </div>
+                        <div class="perspectives">
+                            ${Object.entries(ev.perspectives || {}).map(([key, p]) => `
+                                <div class="perspective-card ${p.would_engage ? 'engaged' : 'skipped'}">
+                                    <div class="perspective-header">
+                                        <span class="perspective-name">${p.name || key}</span>
+                                        <span class="perspective-engage">${p.would_engage ? '👍' : '👎'}</span>
+                                    </div>
+                                    <div class="perspective-reaction">"${p.reaction || 'No reaction'}"</div>
+                                </div>
+                            `).join('')}
+                        </div>
+                                            </div>
+                `;
+            });
+
+            // Recommendations
+            if (data.recommendations) {
+                const rec = data.recommendations;
+                html += `
+                    <h2>Recommendations</h2>
+                    <div class="recommendations">
+                        ${rec.patterns ? `
+                            <h3>Patterns Observed</h3>
+                            <ul class="rec-list">
+                                ${rec.patterns.map(p => `<li>${p}</li>`).join('')}
+                            </ul>
+                        ` : ''}
+
+                        ${rec.improvements ? `
+                            <h3>Suggested Improvements</h3>
+                            <ul class="rec-list">
+                                ${rec.improvements.map(p => `<li>${p}</li>`).join('')}
+                            </ul>
+                        ` : ''}
+
+                        ${rec.strongest ? `
+                            <div class="rec-highlight good">
+                                <strong>✓ Strongest:</strong> ${rec.strongest}
+                            </div>
+                        ` : ''}
+
+                        ${rec.weakest ? `
+                            <div class="rec-highlight bad">
+                                <strong>✗ Needs Work:</strong> ${rec.weakest}
+                            </div>
+                        ` : ''}
+
+                        ${rec.priority ? `
+                            <div class="rec-highlight" style="border-left-color: var(--accent);">
+                                <strong>Priority:</strong> ${rec.priority}
+                            </div>
+                        ` : ''}
+                    </div>
+                `;
+            }
+
+            content.innerHTML = html;
+        }
+
+        function togglePrompt(idx) {
+            document.getElementById(`prompt-${idx}`).classList.toggle('show');
+        }
+
+        async function copyText(btn, text) {
+            try {
+                await navigator.clipboard.writeText(text);
+                btn.textContent = 'Copied!';
+                setTimeout(() => btn.textContent = 'Copy', 1500);
+            } catch (err) {
+                btn.textContent = 'Failed';
+                setTimeout(() => btn.textContent = 'Copy', 1500);
+            }
+        }
+
+        async function copyPrompt(idx) {
+            const promptEl = document.getElementById(`prompt-${idx}`);
+            if (!promptEl) return;
+            const btn = event.target;
+            try {
+                await navigator.clipboard.writeText(promptEl.textContent);
+                btn.textContent = 'Copied!';
+                setTimeout(() => btn.textContent = 'Copy Prompt', 1500);
+            } catch (err) {
+                btn.textContent = 'Failed';
+                setTimeout(() => btn.textContent = 'Copy Prompt', 1500);
+            }
+        }
+
+        async function copyFullReport() {
+            if (!currentReport) return;
+            const btn = document.getElementById('copyReportBtn');
+            try {
+                await navigator.clipboard.writeText(JSON.stringify(currentReport, null, 2));
+                btn.textContent = 'Copied!';
+                setTimeout(() => btn.textContent = 'Copy Full Report', 1500);
+            } catch (err) {
+                btn.textContent = 'Failed';
+                setTimeout(() => btn.textContent = 'Copy Full Report', 1500);
+            }
+        }
+
+        function openLightbox(src) {
+            document.getElementById('lightboxImg').src = src;
+            document.getElementById('lightbox').classList.add('active');
+        }
+
+        function closeLightbox() {
+            document.getElementById('lightbox').classList.remove('active');
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') closeLightbox();
+        });
+
+        // Try to auto-load first available report
+        loadFile(knownFiles[0]).catch(() => {});
+    </script>
+</body>
+</html>
