@@ -40,11 +40,20 @@ OUTPUT_DIR_BASE = WORKSPACE_ROOT / "the-council" / "aggregated"
 LOG_LEVEL = logging.INFO
 
 AI_NEWS_ELIZAOS_JSON_DIR = WORKSPACE_ROOT / "ai-news/elizaos/json"
+AI_NEWS_ELIZAOS_JSON_CDN_DIR = WORKSPACE_ROOT / "ai-news/elizaos/json-cdn"  # CDN-enriched version with Discord URLs swapped
 AI_NEWS_ELIZAOS_MD_DIR = WORKSPACE_ROOT / "ai-news/elizaos/md"
 AI_NEWS_ELIZAOS_DISCORD_JSON_DIR = WORKSPACE_ROOT / "ai-news/elizaos/discord/json"
 AI_NEWS_ELIZAOS_DISCORD_MD_DIR = WORKSPACE_ROOT / "ai-news/elizaos/discord/md"
 # AI_NEWS_ELIZAOS_DEV_JSON_DIR = WORKSPACE_ROOT / "ai-news/elizaos/dev/json"  # DEPRECATED: Directory no longer exists
 # AI_NEWS_ELIZAOS_DEV_MD_DIR = WORKSPACE_ROOT / "ai-news/elizaos/dev/md"      # DEPRECATED: Directory no longer exists
+
+def get_ai_news_json_dir() -> Path:
+    """Return json-cdn dir if it exists and has files, otherwise fall back to json dir."""
+    if AI_NEWS_ELIZAOS_JSON_CDN_DIR.exists() and any(AI_NEWS_ELIZAOS_JSON_CDN_DIR.glob("*.json")):
+        logging.info(f"Using CDN-enriched JSON directory: {AI_NEWS_ELIZAOS_JSON_CDN_DIR}")
+        return AI_NEWS_ELIZAOS_JSON_CDN_DIR
+    logging.info(f"Falling back to standard JSON directory: {AI_NEWS_ELIZAOS_JSON_DIR}")
+    return AI_NEWS_ELIZAOS_JSON_DIR
 
 AI_NEWS_HYPERFY_JSON_DIR = WORKSPACE_ROOT / "ai-news/hyperfy/json"
 AI_NEWS_HYPERFY_MD_DIR = WORKSPACE_ROOT / "ai-news/hyperfy/md"
@@ -58,7 +67,7 @@ GITHUB_USER_SUMMARIES_FILE = WORKSPACE_ROOT / "github/user_summaries.ndjson"
 AI_NEWS_SOURCES_CONFIG = {
     "elizaos_discord_md": {"dir": AI_NEWS_ELIZAOS_DISCORD_MD_DIR, "suffix": ".md", "days": 3, "is_json": False, "prefix": ""},
     # "elizaos_dev_md": {"dir": AI_NEWS_ELIZAOS_DEV_MD_DIR, "suffix": ".md", "days": 3, "is_json": False, "prefix": ""},  # DEPRECATED: Directory no longer exists
-    "elizaos_daily_json": {"dir": AI_NEWS_ELIZAOS_JSON_DIR, "suffix": ".json", "is_json": True, "prefix": ""},
+    "elizaos_daily_json": {"dir": get_ai_news_json_dir(), "suffix": ".json", "is_json": True, "prefix": ""},  # Uses CDN-enriched if available
     "elizaos_daily_md": {"dir": AI_NEWS_ELIZAOS_MD_DIR, "suffix": ".md", "is_json": False, "prefix": ""},
     "elizaos_daily_discord_json": {"dir": AI_NEWS_ELIZAOS_DISCORD_JSON_DIR, "suffix": ".json", "is_json": True, "prefix": ""},
     "elizaos_daily_discord_md": {"dir": AI_NEWS_ELIZAOS_DISCORD_MD_DIR, "suffix": ".md", "is_json": False, "prefix": ""},
