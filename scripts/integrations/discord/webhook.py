@@ -209,9 +209,10 @@ class BriefingProcessor:
         # Removed separate PR/Issues sections to avoid redundancy
         # GitHub overall_focus already contains the important activity summary
 
-        # Add poster from CDN if available in facts media
-        # Try new meshed location first, fall back to legacy
-        poster_url = data.get('overall_media', {}).get('poster_url') or \
+        # Add poster from CDN if available in facts
+        # Try multiple locations: images.overall (enrich-facts.py), overall_media.poster_url, legacy media.posters.overall
+        poster_url = data.get('images', {}).get('overall') or \
+                     data.get('overall_media', {}).get('poster_url') or \
                      data.get('media', {}).get('posters', {}).get('overall')
         if poster_url:
             poster_embed = EmbedFactory.create_poster(poster_url, data['briefing_date'])
