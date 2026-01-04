@@ -56,19 +56,55 @@ SCRIPTS = {
                 "description": "Batch mode - generates all category visuals",
             },
             {
-                "name": "eliza-scene",
-                "args": ["eliza", "-f", "{facts}", "-s", "editorial"],
-                "description": "Single character scene from facts - Eliza in editorial style",
-            },
-            {
                 "name": "with-icons",
                 "args": ["-f", "{facts}", "--batch", "--with-icons"],
                 "description": "Batch mode with entity icon integration",
             },
+            # Style variations - single character scenes
             {
-                "name": "multi-character",
-                "args": ["eliza", "marc", "-f", "{facts}", "-s", "noir_ink"],
-                "description": "Multi-character scene - Eliza & Marc in noir style",
+                "name": "style-editorial",
+                "args": ["eliza", "-f", "{facts}", "-s", "editorial"],
+                "description": "Editorial - New Yorker/Monocle conceptual style",
+            },
+            {
+                "name": "style-cinematic-anime",
+                "args": ["eliza", "-f", "{facts}", "-s", "cinematic_anime"],
+                "description": "Cinematic anime - Makoto Shinkai atmospheric style",
+            },
+            {
+                "name": "style-comic-panel",
+                "args": ["eliza", "shaw", "-f", "{facts}", "-s", "comic_panel"],
+                "description": "Comic panel - manga style with action lines",
+            },
+            {
+                "name": "style-noir-ink",
+                "args": ["spartan", "-f", "{facts}", "-s", "noir_ink"],
+                "description": "Noir ink - high contrast dramatic lighting",
+            },
+            {
+                "name": "style-synthwave",
+                "args": ["eliza", "-f", "{facts}", "-s", "synthwave"],
+                "description": "Synthwave - 80s retrofuturism neon grids",
+            },
+            {
+                "name": "style-ukiyo-e",
+                "args": ["eliza", "-f", "{facts}", "-s", "ukiyo_e"],
+                "description": "Ukiyo-e - traditional Japanese woodblock style",
+            },
+            {
+                "name": "style-cyberpunk-hud",
+                "args": ["shaw", "-f", "{facts}", "-s", "cyberpunk_hud"],
+                "description": "Cyberpunk HUD - holographic interface aesthetic",
+            },
+            {
+                "name": "style-dataviz",
+                "args": ["-f", "{facts}", "-s", "dataviz", "--batch"],
+                "description": "Data visualization - charts and infographics (no characters)",
+            },
+            {
+                "name": "style-isometric-city",
+                "args": ["-f", "{facts}", "-s", "isometric_city", "--batch"],
+                "description": "Isometric city - modular architecture diorama",
             },
         ],
     },
@@ -84,18 +120,24 @@ SCRIPTS = {
         "tests": [
             {
                 "name": "facts-json",
-                "args": ["{facts}", "-n", "1"],
-                "description": "Analyze facts JSON - single illustration",
+                "args": ["{facts}", "-n", "4"],
+                "description": "Analyze facts JSON - generate 4 illustrations",
             },
             {
                 "name": "with-icons",
-                "args": ["{facts}", "-n", "1", "--with-icons"],
+                "args": ["{facts}", "-n", "4", "--with-icons"],
                 "description": "With entity icon extraction and integration",
             },
+            # Different input format tests
             {
-                "name": "multi-illustration",
-                "args": ["{facts}", "-n", "2"],
-                "description": "Generate multiple illustrations from same facts",
+                "name": "markdown-facts",
+                "args": ["{facts_md}", "-n", "4"],
+                "description": "Analyze markdown file - format agnostic test",
+            },
+            {
+                "name": "retro-json",
+                "args": ["{retro}", "-n", "4"],
+                "description": "Analyze monthly retro JSON - long-form content",
             },
         ],
     },
@@ -156,19 +198,12 @@ SCRIPTS = {
                 "args": ["{random_tag}", "-p", "random"],
                 "description": "Random prefix with dynamically selected tag from facts",
             },
-        ],
-    },
-    "character-reference": {
-        "file": "character-reference.py",
-        "description": "Reference Sheet Generator - Create canonical character reference sheets",
-        "features": [
-            "Full body views",
-            "Expression variations",
-            "Themed variations (cyberpunk, formal)",
-            "Iterative refinement",
-        ],
-        "tests": [
-            # Skip by default - expensive and changes character assets
+            # Batch generation from facts
+            {
+                "name": "from-facts",
+                "args": ["--from-facts", "-p", "random", "--skip-existing"],
+                "description": "Batch generate icons for all tags from facts files",
+            },
         ],
     },
 }
@@ -200,6 +235,16 @@ def get_random_tag_from_facts(facts_path: Path) -> str:
     return "innovation"  # fallback
 
 
+def get_latest_retro_path() -> Path:
+    """Find the most recent monthly retro file."""
+    retros_dir = WORKSPACE_ROOT / "the-council" / "retros"
+    retro_files = sorted(retros_dir.glob("*-retro.json"), reverse=True)
+    if retro_files:
+        return retro_files[0]
+    # Fallback to a specific retro if none found
+    return retros_dir / "2025-01-retro.json"
+
+
 def get_all_pngs_with_mtime(directories: list) -> dict:
     """Get all PNG files with their mtimes in given directories."""
     pngs = {}
@@ -228,11 +273,15 @@ def run_script(script_name: str, test_config: dict, date_str: str, dry_run: bool
 
     # Prepare arguments with variable substitution
     facts_path = FACTS_DIR / f"{date_str}.json"
+    facts_md_path = WORKSPACE_ROOT / "hackmd" / "facts" / f"{date_str}.md"
+    retro_path = get_latest_retro_path()  # Use latest retro for long-form content test
     random_tag = None  # Lazy load only if needed
     args = []
     for arg in test_config["args"]:
         arg = arg.replace("{date}", date_str)
         arg = arg.replace("{facts}", str(facts_path))
+        arg = arg.replace("{facts_md}", str(facts_md_path))
+        arg = arg.replace("{retro}", str(retro_path))
         if "{random_tag}" in arg:
             if random_tag is None:
                 random_tag = get_random_tag_from_facts(facts_path)
@@ -325,7 +374,11 @@ def run_script(script_name: str, test_config: dict, date_str: str, dry_run: bool
                 sample_images.append(str(dest.relative_to(SAMPLES_DIR)))
 
             result["images"] = sample_images
-            print(f"    Generated {len(result['images'])} images")
+            if len(sample_images) == 0:
+                result["status"] = "warning"
+                print(f"    WARNING: No images generated")
+            else:
+                print(f"    Generated {len(result['images'])} images")
 
     except subprocess.TimeoutExpired:
         result["status"] = "timeout"
@@ -455,6 +508,7 @@ def generate_html_gallery(results: list, date_str: str) -> str:
         }}
 
         .test-status.success {{ background: rgba(0, 255, 136, 0.2); color: var(--success); }}
+        .test-status.warning {{ background: rgba(255, 193, 7, 0.2); color: #ffc107; }}
         .test-status.error {{ background: rgba(255, 71, 87, 0.2); color: var(--error); }}
         .test-status.pending {{ background: rgba(255, 255, 255, 0.1); color: #888; }}
 
@@ -577,6 +631,40 @@ def generate_html_gallery(results: list, date_str: str) -> str:
 <body>
     <h1>Poster Scripts Comparison</h1>
     <p class="subtitle">Generated: {datetime.now().strftime("%Y-%m-%d %H:%M")} | Facts date: {date_str}</p>
+
+    <div class="script-section">
+        <div class="script-header">
+            <div class="script-name">Character References</div>
+            <div class="script-description">Reference sheets used for character consistency</div>
+        </div>
+        <div class="tests-container">
+            <div class="image-gallery">
+'''
+
+    # Add character reference sheets (copy to samples dir for HTTP server compatibility)
+    characters_dir = SCRIPT_DIR / "characters"
+    char_samples_dir = SAMPLES_DIR / "characters"
+    char_samples_dir.mkdir(parents=True, exist_ok=True)
+
+    for char_dir in sorted(characters_dir.iterdir()):
+        if char_dir.is_dir() and not char_dir.name.startswith("."):
+            char_name = char_dir.name
+            ref_sheet = char_dir / f"reference-sheet-{char_name}.png"
+            if ref_sheet.exists():
+                # Copy to samples directory
+                dest = char_samples_dir / f"reference-sheet-{char_name}.png"
+                if not dest.exists() or ref_sheet.stat().st_mtime > dest.stat().st_mtime:
+                    shutil.copy2(ref_sheet, dest)
+                rel_path = f"characters/reference-sheet-{char_name}.png"
+                html += f'''                <div class="image-card" onclick="openLightbox('{rel_path}', '{char_name}')">
+                    <img src="{rel_path}" alt="{char_name}" loading="lazy">
+                    <div class="image-name">{char_name}</div>
+                </div>
+'''
+
+    html += '''            </div>
+        </div>
+    </div>
 '''
 
     # Group results by script
@@ -842,6 +930,10 @@ def main():
                         for r in results:
                             if r["script"] == script_name and r["test"] == test_dir.name:
                                 r["images"] = images
+                                # Update status based on images found
+                                if images:
+                                    r["status"] = "success"
+                                    r["error"] = None
                                 found = True
                                 break
                         if not found and images:
@@ -851,8 +943,12 @@ def main():
                                 "description": "",
                                 "command": "",
                                 "images": images,
-                                "status": "existing",
+                                "status": "success",
                             })
+
+        # Save updated results
+        with open(results_path, "w") as f:
+            json.dump({"date": date_str, "results": results}, f, indent=2)
 
     # Generate HTML gallery
     html = generate_html_gallery(results, date_str)
@@ -864,8 +960,14 @@ def main():
     print("\n" + "=" * 60)
     total = len(results)
     success = sum(1 for r in results if r["status"] == "success")
+    warnings = sum(1 for r in results if r["status"] == "warning")
     errors = sum(1 for r in results if r["status"] == "error")
-    print(f"Tests: {success}/{total} successful, {errors} errors")
+    summary = f"Tests: {success}/{total} successful"
+    if warnings:
+        summary += f", {warnings} warnings"
+    if errors:
+        summary += f", {errors} errors"
+    print(summary)
     print(f"Gallery: file://{html_path.absolute()}")
 
 

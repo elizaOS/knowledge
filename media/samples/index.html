@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ElizaOS Media Studio</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #0a0a0f 0%, #1a1a2e 50%, #0a0a0f 100%);
+            min-height: 100vh;
+            color: #e0e0e0;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #00d9ff, #00ff88);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1rem;
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            color: #888;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .tool-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px;
+            padding: 2rem;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+
+        .tool-card:hover {
+            background: rgba(255, 255, 255, 0.06);
+            border-color: rgba(0, 217, 255, 0.3);
+            transform: translateY(-4px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .tool-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .tool-name {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: #fff;
+        }
+
+        .tool-desc {
+            color: #888;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+
+        .tool-features {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .feature-tag {
+            background: rgba(0, 217, 255, 0.1);
+            border: 1px solid rgba(0, 217, 255, 0.2);
+            padding: 0.25rem 0.75rem;
+            border-radius: 100px;
+            font-size: 0.75rem;
+            color: #00d9ff;
+        }
+
+        .gallery-card .feature-tag {
+            background: rgba(0, 255, 136, 0.1);
+            border-color: rgba(0, 255, 136, 0.2);
+            color: #00ff88;
+        }
+
+        .validation-card .feature-tag {
+            background: rgba(255, 170, 0, 0.1);
+            border-color: rgba(255, 170, 0, 0.2);
+            color: #ffaa00;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 4rem;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            color: #555;
+            font-size: 0.9rem;
+        }
+
+        footer a {
+            color: #00d9ff;
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>ElizaOS Media Studio</h1>
+            <p class="subtitle">Visual content generation, validation, and presentation tools for the ElizaOS knowledge pipeline</p>
+        </header>
+
+        <div class="tools-grid">
+            <a href="gallery.html" class="tool-card gallery-card">
+                <div class="tool-icon">🖼️</div>
+                <div class="tool-name">Image Gallery</div>
+                <p class="tool-desc">Browse generated illustrations organized by date, script, and test. View prompts, regenerate images, and explore the full catalog.</p>
+                <div class="tool-features">
+                    <span class="feature-tag">Date filtering</span>
+                    <span class="feature-tag">Prompt viewer</span>
+                    <span class="feature-tag">Lightbox</span>
+                </div>
+            </a>
+
+            <a href="validation-viewer.html" class="tool-card validation-card">
+                <div class="tool-icon">✅</div>
+                <div class="tool-name">Validation Viewer</div>
+                <p class="tool-desc">Review AI-generated validation reports with multi-persona analysis. See how images perform across casual, technical, and newcomer audiences.</p>
+                <div class="tool-features">
+                    <span class="feature-tag">Multi-persona</span>
+                    <span class="feature-tag">Recommendations</span>
+                    <span class="feature-tag">Export reports</span>
+                </div>
+            </a>
+
+            <a href="facts-viewer.html" class="tool-card">
+                <div class="tool-icon">📰</div>
+                <div class="tool-name">Facts Viewer</div>
+                <p class="tool-desc">Magazine-style presentation of daily facts with enriched images. Browse key facts, Discord/GitHub updates, market analysis, and strategic insights.</p>
+                <div class="tool-features">
+                    <span class="feature-tag">CDN images</span>
+                    <span class="feature-tag">All categories</span>
+                    <span class="feature-tag">Date picker</span>
+                </div>
+            </a>
+        </div>
+
+        <footer>
+            <p>Part of the <a href="https://github.com/elizaOS/knowledge">elizaOS/knowledge</a> repository</p>
+        </footer>
+    </div>
+</body>
+</html>

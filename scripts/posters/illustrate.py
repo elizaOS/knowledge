@@ -1000,10 +1000,10 @@ def interactive_mode(facts_path: Path, dry_run: bool = False, with_icons: bool =
     return 0
 
 
-def batch_mode(facts_path: Path, dry_run: bool = False, with_icons: bool = False) -> int:
+def batch_mode(facts_path: Path, dry_run: bool = False, with_icons: bool = False, output_dir: Path = None) -> int:
     """Batch mode - generate all category visuals automatically.
 
-    Outputs to media/{date}/ directory:
+    Outputs to media/{date}/ directory (or custom -o path):
       - overall.png (hero/editorial)
       - github-updates.png (dataviz)
       - discord-updates.png (comic_panel)
@@ -1047,8 +1047,9 @@ def batch_mode(facts_path: Path, dry_run: bool = False, with_icons: bool = False
         print("No illustration ideas found.")
         return 1
 
-    # Create output directory
-    output_dir = OUTPUT_DIR / date_str
+    # Create output directory (use provided or default to media/daily/{date})
+    if output_dir is None:
+        output_dir = OUTPUT_DIR / date_str
     output_dir.mkdir(parents=True, exist_ok=True)
 
     # Initialize manifest
@@ -1449,7 +1450,8 @@ def main():
         if not OPENROUTER_API_KEY and not args.dry_run:
             logging.error("OPENROUTER_API_KEY not set")
             return 1
-        return batch_mode(facts_path, dry_run=args.dry_run, with_icons=args.with_icons)
+        output_path = Path(args.output) if args.output else None
+        return batch_mode(facts_path, dry_run=args.dry_run, with_icons=args.with_icons, output_dir=output_path)
 
     # Validate args
     if not args.args:
