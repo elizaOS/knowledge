@@ -65,6 +65,14 @@ def prettify_xml(element: Element) -> str:
     return minidom.parseString(xml_str).toprettyxml(indent="  ")
 
 
+def add_stylesheet_reference(xml_str: str) -> str:
+    """Insert XSLT stylesheet reference after XML declaration."""
+    return xml_str.replace(
+        '<?xml version="1.0" ?>',
+        '<?xml version="1.0" ?>\n<?xml-stylesheet type="text/xsl" href="style.xsl"?>'
+    )
+
+
 # --- Facts Feed ---
 
 def format_facts_description(facts: dict) -> str:
@@ -124,6 +132,15 @@ def create_facts_feed(items: list[dict]) -> str:
             SubElement(item, "pubDate").text = pub_date.strftime("%a, %d %b %Y 12:00:00 +0000")
         except ValueError:
             pass
+
+        # Add image enclosure if available (CDN poster URL)
+        images = facts.get("images", {})
+        poster_url = images.get("overall")
+        if poster_url:
+            enclosure = SubElement(item, "enclosure")
+            enclosure.set("url", poster_url)
+            enclosure.set("type", "image/png")
+            enclosure.set("length", "0")
 
     return prettify_xml(rss)
 
@@ -191,7 +208,7 @@ def main():
     facts_items = load_json_files(FACTS_DIR, limit=20)
     if facts_items:
         logging.info(f"Loaded {len(facts_items)} facts files")
-        facts_feed = create_facts_feed(facts_items)
+        facts_feed = add_stylesheet_reference(create_facts_feed(facts_items))
         (OUTPUT_DIR / "feed.xml").write_text(facts_feed)
         logging.info(f"Facts feed written to {OUTPUT_DIR / 'feed.xml'}")
     else:
@@ -202,7 +219,7 @@ def main():
     council_items = load_json_files(COUNCIL_DIR, limit=20)
     if council_items:
         logging.info(f"Loaded {len(council_items)} council briefing files")
-        council_feed = create_council_feed(council_items)
+        council_feed = add_stylesheet_reference(create_council_feed(council_items))
         (OUTPUT_DIR / "council.xml").write_text(council_feed)
         logging.info(f"Council feed written to {OUTPUT_DIR / 'council.xml'}")
     else:
