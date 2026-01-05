@@ -1,38 +1,27 @@
-# ElizaOS Update - December 29, 2025
-
-## Community Highlights
-
-- Shaw (@shawmakesmagic) and the official ElizaOS account returned to X (formerly Twitter)
-- Shaw hosted a Twitter Space with over 5,000 listeners
-- Community excitement led to a price increase for the ElizaOS token
-- ElizaOS token migration from AI16Z is complete and available across multiple chains (Solana, Base, Ethereum, BSC)
-- DegenAI token holders (1M+ tokens) can access autotrader feature to copy trade with AI system
+# ElizaOS Community Update - December 31, 2025
 
 ## Development Progress
 
-### ElizaOS Core
-- Documentation coverage increased from ~60% to ~95%
-- Work on TypeScript patterns (decorators, dependency injection)
-- Discord plugin enhancements for audio and messaging
-- Consideration of bringing back SQLite support as a first-class feature
+- Core development team working on key projects including Cloud, Babylon, and Jeju Network infrastructure
+- Jeju backend development includes name servers routed through on-chain registry to IPFS assets
+- Developer Jin created a sophisticated image pipeline generating art based on daily summarized activities
+  - System includes variance tracking by dates for seasonal art changes
+  - Images designed to accompany stories like a newspaper
 
-### ElizaOS Cloud
-- Now in open beta with light support ahead of full launch
-- Integration work with various tools including DaVinci Resolve via MCP server
+## Token and Financial Updates
 
-## GitHub Activity (Dec 29-30, 2025)
-- 4 new pull requests (all merged)
-- 4 new issues created
-- 6 active contributors
+- ElizaOS token (rebranded from AI16Z) migration process ongoing until February
+- Token experiencing price movements with positive community sentiment
+- DegenAI project under development for autonomous trading for holders with 1M tokens
+- Recent X announcement well-received, helping stabilize price and value
 
-### Merged Pull Requests
-- Standardized message server route naming
-- Added comprehensive documentation to plugin-dummy-services module
-- Replaced execa and child_process with Bun.spawn and bun-exec utilities
-- Fixed documentation inconsistencies and added missing test flags
-- Enabled hot reload for backend development
+## Community Engagement
 
-### New Issues
-- UX improvement: Auto-open conversation when clicking on agent
-- Support for streaming Chain of Thought (CoT) reasoning
-- Implementation of world-class TypeScript patterns (Decorators, DI, advanced type system)
+- Discussions about future recreational projects like Zelda and RuneScape recreations planned after primary development goals
+- Partners expressing optimism about capital rotation from precious metals to ElizaOS
+- Community members exchanging New Year wishes and expressing excitement for building in the coming year
+- Strong community engagement around project development and token performance
+
+## GitHub Activity
+
+- Repository maintained 2 active contributors during this timeframe
