@@ -37,9 +37,10 @@ This repository serves as the central hub for aggregating, processing, and synth
 - Contributor profiles: https://elizaos.github.io/knowledge/github/contributors/
 - Eliza.how docs (llms-full.txt): https://eliza.how/llms-full.txt
 
-**RSS Feeds**
+**RSS Feeds** (self-rendering with XSLT - viewable in browser)
 - Daily Intelligence Feed: https://elizaos.github.io/knowledge/rss/feed.xml
 - Council Briefings Feed: https://elizaos.github.io/knowledge/rss/council.xml
+- GitHub Activity Feed: https://elizaos.github.io/rss.xml
 
 ## 🚀 Getting Started
 
