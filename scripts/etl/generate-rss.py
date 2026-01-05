@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
 """
-Generates RSS feeds from daily facts and council briefings.
-Output: rss/feed.xml (facts), rss/council.xml (council briefings)
+Generates RSS feeds from daily facts, council briefings, and GitHub activity.
+Output: rss/feed.xml (facts), rss/council.xml (council), rss/github.xml (github)
 """
 
 import json
 import logging
+import re
 from datetime import datetime
 from pathlib import Path
 from xml.etree.ElementTree import Element, SubElement, tostring
@@ -17,8 +18,16 @@ SCRIPTS_ROOT = SCRIPT_DIR.parent  # scripts/
 WORKSPACE_ROOT = SCRIPTS_ROOT.parent  # repository root
 FACTS_DIR = WORKSPACE_ROOT / "the-council" / "facts"
 COUNCIL_DIR = WORKSPACE_ROOT / "the-council" / "council_briefing"
+GITHUB_STATS_DIR = WORKSPACE_ROOT / "github" / "stats" / "day"
 OUTPUT_DIR = WORKSPACE_ROOT / "rss"
 SITE_URL = "https://elizaos.github.io/knowledge"
+
+# Character hosting (avatars deferred - see GitHub issue)
+# SHAW_AVATAR = "https://m3-org.github.io/avatars/shaw/thumb-bust_shaw.png"
+# ELIZA_AVATAR = "https://m3-org.github.io/avatars/eliza/thumb-bust_eliza.png"
+
+# Social links
+TWITTER_URL = "https://x.com/elizaos"
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
@@ -39,7 +48,7 @@ def load_json_files(directory: Path, limit: int = 20) -> list[dict]:
     return items
 
 
-def create_rss_channel(title: str, description: str, feed_url: str) -> tuple[Element, Element]:
+def create_rss_channel(title: str, description: str, feed_url: str, image_url: str = None) -> tuple[Element, Element]:
     """Create RSS root and channel elements."""
     rss = Element("rss", version="2.0")
     rss.set("xmlns:atom", "http://www.w3.org/2005/Atom")
@@ -51,10 +60,24 @@ def create_rss_channel(title: str, description: str, feed_url: str) -> tuple[Ele
     SubElement(channel, "language").text = "en-us"
     SubElement(channel, "lastBuildDate").text = datetime.utcnow().strftime("%a, %d %b %Y %H:%M:%S +0000")
 
+    # Self link
     atom_link = SubElement(channel, "{http://www.w3.org/2005/Atom}link")
     atom_link.set("href", feed_url)
     atom_link.set("rel", "self")
     atom_link.set("type", "application/rss+xml")
+
+    # Twitter/X social link
+    twitter_link = SubElement(channel, "{http://www.w3.org/2005/Atom}link")
+    twitter_link.set("href", TWITTER_URL)
+    twitter_link.set("rel", "related")
+    twitter_link.set("title", "@elizaos on X")
+
+    # Channel image (character avatar)
+    if image_url:
+        image = SubElement(channel, "image")
+        SubElement(image, "url").text = image_url
+        SubElement(image, "title").text = title
+        SubElement(image, "link").text = SITE_URL
 
     return rss, channel
 
@@ -65,11 +88,11 @@ def prettify_xml(element: Element) -> str:
     return minidom.parseString(xml_str).toprettyxml(indent="  ")
 
 
-def add_stylesheet_reference(xml_str: str) -> str:
+def add_stylesheet_reference(xml_str: str, stylesheet: str = "style.xsl") -> str:
     """Insert XSLT stylesheet reference after XML declaration."""
     return xml_str.replace(
         '<?xml version="1.0" ?>',
-        '<?xml version="1.0" ?>\n<?xml-stylesheet type="text/xsl" href="style.xsl"?>'
+        f'<?xml version="1.0" ?>\n<?xml-stylesheet type="text/xsl" href="{stylesheet}"?>'
     )
 
 
@@ -200,6 +223,104 @@ def create_council_feed(items: list[dict]) -> str:
     return prettify_xml(rss)
 
 
+# --- GitHub Feed (Hosted by Shaw) ---
+
+def load_github_stats(limit: int = 20) -> list[dict]:
+    """Load recent GitHub stats files."""
+    stats_files = sorted(GITHUB_STATS_DIR.glob("stats_*.json"), reverse=True)[:limit]
+
+    items = []
+    for f in stats_files:
+        try:
+            data = json.loads(f.read_text())
+            # Extract date from filename (stats_2025-12-29.json -> 2025-12-29)
+            match = re.search(r'stats_(\d{4}-\d{2}-\d{2})\.json', f.name)
+            if match:
+                data["_date"] = match.group(1)
+                items.append(data)
+        except Exception as e:
+            logging.warning(f"Failed to load {f}: {e}")
+
+    return items
+
+
+def format_github_description(stats: dict) -> str:
+    """Format GitHub stats into readable HTML description."""
+    lines = []
+
+    # Overview
+    overview = stats.get("overview", "")
+    if overview:
+        lines.append(f"<p>{overview}</p>")
+
+    # Code changes
+    code = stats.get("codeChanges", {})
+    if code:
+        additions = code.get("additions", 0)
+        deletions = code.get("deletions", 0)
+        commits = code.get("commitCount", 0)
+        files = code.get("files", 0)
+        lines.append(f"<p><strong>Code:</strong> +{additions:,}/-{deletions:,} lines across {files} files ({commits} commits)</p>")
+
+    # Top PRs
+    top_prs = stats.get("topPRs", [])
+    if top_prs:
+        lines.append("<p><strong>Notable PRs:</strong></p><ul>")
+        for pr in top_prs[:5]:
+            title = pr.get("title", "Untitled")
+            author = pr.get("author", "unknown")
+            number = pr.get("number", "")
+            lines.append(f"<li>#{number} {title} (@{author})</li>")
+        lines.append("</ul>")
+
+    # Top contributors
+    contributors = stats.get("topContributors", [])
+    if contributors:
+        names = [c.get("username", "unknown") for c in contributors[:5]]
+        lines.append(f"<p><strong>Top Contributors:</strong> {', '.join(names)}</p>")
+
+    return "\n".join(lines) if lines else "<p>No GitHub activity.</p>"
+
+
+def create_github_feed(items: list[dict]) -> str:
+    """Generate RSS XML from GitHub stats items."""
+    feed_url = f"{SITE_URL}/rss/github.xml"
+    base_url = f"{SITE_URL}/github/stats/day"
+
+    rss = Element("rss", version="2.0")
+    rss.set("xmlns:atom", "http://www.w3.org/2005/Atom")
+
+    channel = SubElement(rss, "channel")
+    SubElement(channel, "title").text = "elizaOS GitHub Activity"
+    SubElement(channel, "link").text = SITE_URL
+    SubElement(channel, "description").text = "Daily development activity from elizaOS repositories, hosted by ShawAI"
+    SubElement(channel, "language").text = "en-us"
+    SubElement(channel, "lastBuildDate").text = datetime.utcnow().strftime("%a, %d %b %Y %H:%M:%S +0000")
+
+    # Self link
+    atom_link = SubElement(channel, "{http://www.w3.org/2005/Atom}link")
+    atom_link.set("href", feed_url)
+    atom_link.set("rel", "self")
+    atom_link.set("type", "application/rss+xml")
+
+    # Twitter link
+    twitter_link = SubElement(channel, "{http://www.w3.org/2005/Atom}link")
+    twitter_link.set("href", TWITTER_URL)
+    twitter_link.set("rel", "related")
+    twitter_link.set("title", "@elizaos on X")
+
+    for stats in items:
+        date_str = stats.get("_date", "unknown")
+
+        item = SubElement(channel, "item")
+        SubElement(item, "title").text = f"GitHub Activity: {date_str}"
+        SubElement(item, "link").text = f"{base_url}/stats_{date_str}.json"
+        SubElement(item, "guid").text = f"{base_url}/stats_{date_str}.json"
+        SubElement(item, "description").text = format_github_description(stats)
+
+    return prettify_xml(rss)
+
+
 def main():
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 
@@ -224,6 +345,17 @@ def main():
         logging.info(f"Council feed written to {OUTPUT_DIR / 'council.xml'}")
     else:
         logging.warning("No council briefing files found")
+
+    # Generate GitHub feed (hosted by Shaw)
+    logging.info("Generating GitHub RSS feed...")
+    github_items = load_github_stats(limit=20)
+    if github_items:
+        logging.info(f"Loaded {len(github_items)} GitHub stats files")
+        github_feed = add_stylesheet_reference(create_github_feed(github_items), "github-style.xsl")
+        (OUTPUT_DIR / "github.xml").write_text(github_feed)
+        logging.info(f"GitHub feed written to {OUTPUT_DIR / 'github.xml'}")
+    else:
+        logging.warning("No GitHub stats files found")
 
 
 if __name__ == "__main__":
