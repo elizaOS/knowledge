@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 Generates RSS feeds from daily facts and council briefings.
-Output: rss/feed.xml (facts), rss/council.xml (council briefings)
+Output: rss/feed.xml (facts), rss/council.xml (council)
 """
 
 import json
@@ -19,6 +19,16 @@ FACTS_DIR = WORKSPACE_ROOT / "the-council" / "facts"
 COUNCIL_DIR = WORKSPACE_ROOT / "the-council" / "council_briefing"
 OUTPUT_DIR = WORKSPACE_ROOT / "rss"
 SITE_URL = "https://elizaos.github.io/knowledge"
+
+# External feeds (cross-linked in footers)
+GITHUB_FEED_URL = "https://elizaos.github.io/rss.xml"
+
+# Character hosting (avatars deferred - see GitHub issue)
+# SHAW_AVATAR = "https://m3-org.github.io/avatars/shaw/thumb-bust_shaw.png"
+# ELIZA_AVATAR = "https://m3-org.github.io/avatars/eliza/thumb-bust_eliza.png"
+
+# Social links
+TWITTER_URL = "https://x.com/elizaos"
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
@@ -39,7 +49,7 @@ def load_json_files(directory: Path, limit: int = 20) -> list[dict]:
     return items
 
 
-def create_rss_channel(title: str, description: str, feed_url: str) -> tuple[Element, Element]:
+def create_rss_channel(title: str, description: str, feed_url: str, image_url: str = None) -> tuple[Element, Element]:
     """Create RSS root and channel elements."""
     rss = Element("rss", version="2.0")
     rss.set("xmlns:atom", "http://www.w3.org/2005/Atom")
@@ -51,10 +61,30 @@ def create_rss_channel(title: str, description: str, feed_url: str) -> tuple[Ele
     SubElement(channel, "language").text = "en-us"
     SubElement(channel, "lastBuildDate").text = datetime.utcnow().strftime("%a, %d %b %Y %H:%M:%S +0000")
 
+    # Self link
     atom_link = SubElement(channel, "{http://www.w3.org/2005/Atom}link")
     atom_link.set("href", feed_url)
     atom_link.set("rel", "self")
     atom_link.set("type", "application/rss+xml")
+
+    # Twitter/X social link
+    twitter_link = SubElement(channel, "{http://www.w3.org/2005/Atom}link")
+    twitter_link.set("href", TWITTER_URL)
+    twitter_link.set("rel", "related")
+    twitter_link.set("title", "@elizaos on X")
+
+    # GitHub activity feed (external)
+    github_link = SubElement(channel, "{http://www.w3.org/2005/Atom}link")
+    github_link.set("href", GITHUB_FEED_URL)
+    github_link.set("rel", "related")
+    github_link.set("title", "GitHub Activity Feed")
+
+    # Channel image (character avatar)
+    if image_url:
+        image = SubElement(channel, "image")
+        SubElement(image, "url").text = image_url
+        SubElement(image, "title").text = title
+        SubElement(image, "link").text = SITE_URL
 
     return rss, channel
 
@@ -63,6 +93,14 @@ def prettify_xml(element: Element) -> str:
     """Convert Element to pretty-printed XML string."""
     xml_str = tostring(element, encoding="unicode")
     return minidom.parseString(xml_str).toprettyxml(indent="  ")
+
+
+def add_stylesheet_reference(xml_str: str, stylesheet: str = "style.xsl") -> str:
+    """Insert XSLT stylesheet reference after XML declaration."""
+    return xml_str.replace(
+        '<?xml version="1.0" ?>',
+        f'<?xml version="1.0" ?>\n<?xml-stylesheet type="text/xsl" href="{stylesheet}"?>'
+    )
 
 
 # --- Facts Feed ---
@@ -124,6 +162,15 @@ def create_facts_feed(items: list[dict]) -> str:
             SubElement(item, "pubDate").text = pub_date.strftime("%a, %d %b %Y 12:00:00 +0000")
         except ValueError:
             pass
+
+        # Add image enclosure if available (CDN poster URL)
+        images = facts.get("images", {})
+        poster_url = images.get("overall")
+        if poster_url:
+            enclosure = SubElement(item, "enclosure")
+            enclosure.set("url", poster_url)
+            enclosure.set("type", "image/png")
+            enclosure.set("length", "0")
 
     return prettify_xml(rss)
 
@@ -191,7 +238,7 @@ def main():
     facts_items = load_json_files(FACTS_DIR, limit=20)
     if facts_items:
         logging.info(f"Loaded {len(facts_items)} facts files")
-        facts_feed = create_facts_feed(facts_items)
+        facts_feed = add_stylesheet_reference(create_facts_feed(facts_items))
         (OUTPUT_DIR / "feed.xml").write_text(facts_feed)
         logging.info(f"Facts feed written to {OUTPUT_DIR / 'feed.xml'}")
     else:
@@ -202,7 +249,7 @@ def main():
     council_items = load_json_files(COUNCIL_DIR, limit=20)
     if council_items:
         logging.info(f"Loaded {len(council_items)} council briefing files")
-        council_feed = create_council_feed(council_items)
+        council_feed = add_stylesheet_reference(create_council_feed(council_items))
         (OUTPUT_DIR / "council.xml").write_text(council_feed)
         logging.info(f"Council feed written to {OUTPUT_DIR / 'council.xml'}")
     else:
