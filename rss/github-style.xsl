@@ -242,6 +242,12 @@
                 <xsl:value-of select="rss/channel/atom:link[@rel='related']/@title"/>
               </a>
             </xsl:if>
+            <div style="margin-top: 0.75rem; font-size: 0.8rem;">
+              <span style="color: #6b6b80;">More feeds:</span>
+              <a href="feed.xml" style="margin-left: 0.5rem; color: #00ff88;">Intelligence</a>
+              <a href="council.xml" style="margin-left: 0.5rem; color: #00ff88;">Council</a>
+              <a href="https://elizaos.github.io/rss.xml" style="margin-left: 0.5rem; color: #00ff88;">elizaOS Dev</a>
+            </div>
           </footer>
         </div>
       </body>

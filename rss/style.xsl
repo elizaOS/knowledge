@@ -272,6 +272,12 @@
 
           <footer>
             <a href="https://elizaos.github.io/knowledge">elizaOS Knowledge</a>
+            <div style="margin-top: 0.75rem; font-size: 0.8rem;">
+              <span style="color: #6b6b80;">More feeds:</span>
+              <a href="council.xml" style="margin-left: 0.5rem;">Council</a>
+              <a href="github.xml" style="margin-left: 0.5rem;">GitHub</a>
+              <a href="https://elizaos.github.io/rss.xml" style="margin-left: 0.5rem;">elizaOS Dev</a>
+            </div>
           </footer>
         </div>
       </body>
