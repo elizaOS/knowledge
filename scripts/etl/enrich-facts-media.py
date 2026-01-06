@@ -1,19 +1,28 @@
 #!/usr/bin/env python3
 """
-Enrich facts.json with media URLs from aggregated data and poster manifest.
+Enrich facts.json or source json-cdn files with media URLs.
 
-Combines:
-1. Source media (images/videos) from aggregated daily JSON content
-2. Generated poster CDN URLs from poster manifest
+Two modes:
+1. Facts mode (default): Enrich facts.json with images/videos from aggregated data
+   and poster URLs from manifest.
+2. Source mode (--source): Enrich json-cdn files with poster URLs based on topic field.
 
 Usage:
+  # Facts mode: Enrich facts.json
   python scripts/etl/enrich-facts-media.py \\
     -f the-council/facts/2026-01-06.json \\
     -a the-council/aggregated/2026-01-06.json \\
     -m media/2026-01-06/manifest.json \\
     -v
 
-  # Dry run
+  # Source mode: Enrich json-cdn file with poster URLs
+  python scripts/etl/enrich-facts-media.py --source \\
+    -f ai-news/elizaos/json-cdn/2026-01-03.json \\
+    -m media/daily/2026-01-03/manifest.json \\
+    --cdn-base "https://cdn.elizaos.news/media/daily/2026-01-03" \\
+    -v
+
+  # Dry run (either mode)
   python scripts/etl/enrich-facts-media.py \\
     -f the-council/facts/2026-01-06.json \\
     --dry-run -v
@@ -36,7 +45,24 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 # Default CDN base URL
-DEFAULT_CDN_BASE = "https://m3tv.b-cdn.net/media"
+DEFAULT_CDN_BASE = "https://cdn.elizaos.news/posters"
+
+# Topic → poster category mapping (for --source mode)
+# Maps json-cdn category topics to poster filenames
+TOPIC_TO_POSTER = {
+    # GitHub-related topics
+    "github_summary": "github_updates",
+    "pull_request": "github_updates",
+    "issue": "github_updates",
+    "completed_items": "github_updates",
+    "contributors": "github_updates",
+    # Discord-related topics
+    "discordrawdata": "discord_updates",
+    "discord": "discord_updates",
+    # Market-related topics
+    "crypto market": "market_analysis",
+    "market": "market_analysis",
+}
 
 
 def validate_url(url: str) -> bool:
@@ -236,6 +262,94 @@ def merge_media_into_facts(
     return facts
 
 
+def enrich_source_file(
+    source_path: Path,
+    manifest_path: Path,
+    cdn_base: str = None,
+    dry_run: bool = False,
+    output_path: Path = None,
+) -> bool:
+    """
+    Enrich json-cdn source file with poster URLs based on topic field.
+
+    This mode enriches the upstream source file (ai-news json-cdn output)
+    by adding poster URLs to each category based on the topic field mapping.
+
+    Args:
+        source_path: Path to json-cdn source file
+        manifest_path: Path to poster manifest
+        cdn_base: CDN base URL for constructing poster URLs
+        dry_run: If True, show changes without writing
+        output_path: Output path (default: overwrite input)
+
+    Returns:
+        True if successful
+    """
+    # Load source file
+    try:
+        with open(source_path) as f:
+            data = json.load(f)
+    except (json.JSONDecodeError, IOError) as e:
+        logger.error(f"Failed to read source file: {e}")
+        return False
+
+    # Extract poster URLs from manifest
+    if not manifest_path or not manifest_path.exists():
+        logger.error(f"Manifest file not found: {manifest_path}")
+        return False
+
+    posters = extract_poster_urls(manifest_path, cdn_base)
+    if not posters:
+        logger.warning("No poster URLs extracted from manifest")
+        return True  # Not an error, just nothing to do
+
+    logger.info(f"Extracted {len(posters)} poster URLs from manifest")
+
+    # Add poster to each category based on topic
+    enriched_count = 0
+    categories = data.get("categories", [])
+    for cat in categories:
+        if not isinstance(cat, dict):
+            continue
+        topic = cat.get("topic", "").lower()
+        poster_key = TOPIC_TO_POSTER.get(topic)
+        if poster_key and poster_key in posters:
+            cat["poster"] = posters[poster_key]
+            enriched_count += 1
+            logger.debug(f"  {topic} → {poster_key}")
+
+    # Add overall poster at top level
+    if "overall" in posters:
+        data["poster"] = posters["overall"]
+
+    # Add icon_sheet at top level
+    if "icon_sheet" in posters:
+        data["icon_sheet"] = posters["icon_sheet"]
+
+    if dry_run:
+        logger.info("Dry run - would add:")
+        logger.info(f"  categories enriched: {enriched_count}/{len(categories)}")
+        if "poster" in data:
+            logger.info(f"  poster: {data['poster']}")
+        if "icon_sheet" in data:
+            logger.info(f"  icon_sheet: {data['icon_sheet']}")
+        for cat in categories:
+            if isinstance(cat, dict) and "poster" in cat:
+                logger.info(f"  {cat.get('topic', 'unknown')}.poster: {cat['poster']}")
+        return True
+
+    # Write output
+    output = output_path or source_path
+    try:
+        with open(output, "w") as f:
+            json.dump(data, f, indent=2)
+        logger.info(f"Wrote enriched source to: {output} ({enriched_count} categories)")
+        return True
+    except IOError as e:
+        logger.error(f"Failed to write output: {e}")
+        return False
+
+
 def enrich_facts(
     facts_path: Path,
     aggregated_path: Path = None,
@@ -360,6 +474,12 @@ def main():
         action="store_true",
         help="Verbose output",
     )
+    parser.add_argument(
+        "--source",
+        action="store_true",
+        help="Enrich source file (json-cdn) instead of facts file. "
+             "Adds poster URLs to categories based on topic field.",
+    )
 
     args = parser.parse_args()
 
@@ -398,14 +518,27 @@ def main():
     if not cdn_base and facts_date:
         cdn_base = f"{DEFAULT_CDN_BASE}/{facts_date}"
 
-    success = enrich_facts(
-        facts_path=args.facts,
-        aggregated_path=aggregated_path,
-        manifest_path=manifest_path,
-        cdn_base=cdn_base,
-        dry_run=args.dry_run,
-        output_path=args.output,
-    )
+    # Handle --source mode (json-cdn enrichment) vs default (facts enrichment)
+    if args.source:
+        if not manifest_path:
+            logger.error("--source mode requires -m/--manifest to be provided or auto-detected")
+            sys.exit(1)
+        success = enrich_source_file(
+            source_path=args.facts,
+            manifest_path=manifest_path,
+            cdn_base=cdn_base,
+            dry_run=args.dry_run,
+            output_path=args.output,
+        )
+    else:
+        success = enrich_facts(
+            facts_path=args.facts,
+            aggregated_path=aggregated_path,
+            manifest_path=manifest_path,
+            cdn_base=cdn_base,
+            dry_run=args.dry_run,
+            output_path=args.output,
+        )
 
     sys.exit(0 if success else 1)
 

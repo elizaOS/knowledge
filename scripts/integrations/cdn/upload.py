@@ -33,6 +33,14 @@ from typing import Optional
 
 import requests
 
+# Load .env file if present
+try:
+    from dotenv import load_dotenv
+    load_dotenv()
+except ImportError:
+    # dotenv not installed, rely on environment variables
+    pass
+
 # --------------- Config ---------------
 
 STORAGE_ZONE = os.environ.get("BUNNY_STORAGE_ZONE", "m3tv")
