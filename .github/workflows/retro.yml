@@ -19,12 +19,16 @@ on:
           - quarterly
           - annual
         default: 'monthly'
-      year:
-        description: 'Year (YYYY) - leave empty for auto'
+      month:
+        description: '[monthly] Month 1-12 (empty = previous month)'
         required: false
         type: string
-      period:
-        description: 'Month (1-12) or Quarter (1-4) - leave empty for auto'
+      quarter:
+        description: '[quarterly] Quarter 1-4 (empty = previous quarter)'
+        required: false
+        type: string
+      year:
+        description: '[all types] Year YYYY (empty = auto)'
         required: false
         type: string
 
@@ -52,7 +56,7 @@ jobs:
         run: |
           ARGS=""
           [ -n "${{ inputs.year }}" ] && ARGS="$ARGS -y ${{ inputs.year }}"
-          [ -n "${{ inputs.period }}" ] && ARGS="$ARGS -m ${{ inputs.period }}"
+          [ -n "${{ inputs.month }}" ] && ARGS="$ARGS -m ${{ inputs.month }}"
           python scripts/etl/generate-monthly-retro.py $ARGS
 
       - uses: stefanzweifel/git-auto-commit-action@v5
@@ -88,7 +92,7 @@ jobs:
         run: |
           ARGS=""
           [ -n "${{ inputs.year }}" ] && ARGS="$ARGS -y ${{ inputs.year }}"
-          [ -n "${{ inputs.period }}" ] && ARGS="$ARGS -q ${{ inputs.period }}"
+          [ -n "${{ inputs.quarter }}" ] && ARGS="$ARGS -q ${{ inputs.quarter }}"
           python scripts/etl/generate-quarterly-summary.py $ARGS
 
       - uses: stefanzweifel/git-auto-commit-action@v5
