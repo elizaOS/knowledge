@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
 """
-Generates RSS feeds from daily facts and council briefings.
-Output: rss/feed.xml (facts), rss/council.xml (council)
+Generates RSS feeds from daily facts, council briefings, and retrospectives.
+Output: rss/feed.xml (facts), rss/council.xml (council + retros)
 """
 
 import json
 import logging
+import re
 from datetime import datetime
 from pathlib import Path
 from xml.etree.ElementTree import Element, SubElement, tostring
@@ -17,6 +18,7 @@ SCRIPTS_ROOT = SCRIPT_DIR.parent  # scripts/
 WORKSPACE_ROOT = SCRIPTS_ROOT.parent  # repository root
 FACTS_DIR = WORKSPACE_ROOT / "the-council" / "facts"
 COUNCIL_DIR = WORKSPACE_ROOT / "the-council" / "council_briefing"
+RETROS_DIR = WORKSPACE_ROOT / "the-council" / "retros"
 OUTPUT_DIR = WORKSPACE_ROOT / "rss"
 SITE_URL = "https://elizaos.github.io/knowledge"
 
@@ -201,33 +203,179 @@ def format_council_description(briefing: dict) -> str:
     return "\n".join(lines) if lines else "<p>No details available.</p>"
 
 
-def create_council_feed(items: list[dict]) -> str:
-    """Generate RSS XML from council briefing items."""
+def create_council_feed(briefings: list[dict], retros: list[dict] = None) -> str:
+    """Generate RSS XML from council briefings and retrospectives."""
     feed_url = f"{SITE_URL}/rss/council.xml"
-    base_url = f"{SITE_URL}/the-council/council_briefing"
+    briefing_base_url = f"{SITE_URL}/the-council/council_briefing"
+    retros_base_url = f"{SITE_URL}/the-council/retros"
 
     rss, channel = create_rss_channel(
         title="elizaOS Council Briefings",
-        description="Strategic briefings and deliberation items for elizaOS leadership",
+        description="Strategic briefings, retrospectives, and deliberation items for elizaOS leadership",
         feed_url=feed_url
     )
 
-    for briefing in items:
+    # Collect all items with sort dates
+    all_items = []
+
+    # Add briefings
+    for briefing in briefings:
         date_str = briefing.get("date") or briefing.get("_filename", "unknown")
+        all_items.append({
+            "type": "briefing",
+            "data": briefing,
+            "sort_date": date_str,
+            "base_url": briefing_base_url
+        })
 
+    # Add retros
+    if retros:
+        for retro in retros:
+            all_items.append({
+                "type": "retro",
+                "data": retro,
+                "sort_date": retro.get("_sort_date", ""),
+                "base_url": retros_base_url
+            })
+
+    # Sort all items by date (newest first)
+    all_items.sort(key=lambda x: x["sort_date"], reverse=True)
+
+    # Generate RSS items
+    for entry in all_items:
+        data = entry["data"]
         item = SubElement(channel, "item")
-        SubElement(item, "title").text = f"Council Briefing: {date_str}"
-        SubElement(item, "link").text = f"{base_url}/{briefing['_filename']}.json"
-        SubElement(item, "guid").text = f"{base_url}/{briefing['_filename']}.json"
-        SubElement(item, "description").text = format_council_description(briefing)
 
-        try:
-            pub_date = datetime.strptime(date_str, "%Y-%m-%d")
-            SubElement(item, "pubDate").text = pub_date.strftime("%a, %d %b %Y 14:00:00 +0000")
-        except ValueError:
-            pass
+        if entry["type"] == "briefing":
+            date_str = data.get("date") or data.get("_filename", "unknown")
+            SubElement(item, "title").text = f"Council Briefing: {date_str}"
+            SubElement(item, "link").text = f"{entry['base_url']}/{data['_filename']}.json"
+            SubElement(item, "guid").text = f"{entry['base_url']}/{data['_filename']}.json"
+            SubElement(item, "description").text = format_council_description(data)
+            try:
+                pub_date = datetime.strptime(date_str, "%Y-%m-%d")
+                SubElement(item, "pubDate").text = pub_date.strftime("%a, %d %b %Y 14:00:00 +0000")
+            except ValueError:
+                pass
+        else:  # retro
+            SubElement(item, "title").text = format_retro_title(data)
+            SubElement(item, "link").text = f"{entry['base_url']}/{data['_filename']}.json"
+            SubElement(item, "guid").text = f"{entry['base_url']}/{data['_filename']}.json"
+            SubElement(item, "description").text = format_retro_description(data)
+            try:
+                sort_date = data.get("_sort_date", "")
+                pub_date = datetime.strptime(sort_date, "%Y-%m-%d")
+                SubElement(item, "pubDate").text = pub_date.strftime("%a, %d %b %Y 16:00:00 +0000")
+            except ValueError:
+                pass
+            # Add category for retros
+            category = SubElement(item, "category")
+            category.text = data.get("_retro_type", "retrospective")
 
     return prettify_xml(rss)
+
+
+# --- Retrospectives (included in Council Feed) ---
+
+def load_retros(limit: int = 10) -> list[dict]:
+    """Load retrospective files (monthly retros, quarterly/annual summaries)."""
+    retro_files = sorted(RETROS_DIR.glob("*.json"), reverse=True)[:limit]
+
+    items = []
+    for f in retro_files:
+        # Skip symlinks like latest.json
+        if f.is_symlink():
+            continue
+        try:
+            data = json.loads(f.read_text())
+            data["_filename"] = f.stem
+            data["_retro_type"] = classify_retro(f.stem)
+            data["_sort_date"] = extract_retro_date(f.stem)
+            items.append(data)
+        except Exception as e:
+            logging.warning(f"Failed to load retro {f}: {e}")
+
+    return items
+
+
+def classify_retro(filename: str) -> str:
+    """Classify retro type from filename."""
+    if "annual" in filename:
+        return "annual"
+    elif "-Q" in filename:
+        return "quarterly"
+    elif "-retro" in filename:
+        return "monthly"
+    return "retro"
+
+
+def extract_retro_date(filename: str) -> str:
+    """Extract a sortable date string from retro filename."""
+    # Annual: 2025-annual-summary -> 2025-12-31
+    if "annual" in filename:
+        match = re.match(r"(\d{4})-annual", filename)
+        if match:
+            return f"{match.group(1)}-12-31"
+    # Quarterly: 2025-Q4-summary -> 2025-12-01
+    elif "-Q" in filename:
+        match = re.match(r"(\d{4})-Q(\d)", filename)
+        if match:
+            year, quarter = match.groups()
+            month = {"1": "03", "2": "06", "3": "09", "4": "12"}[quarter]
+            return f"{year}-{month}-01"
+    # Monthly: 2025-12-retro -> 2025-12-01
+    elif "-retro" in filename:
+        match = re.match(r"(\d{4})-(\d{2})-retro", filename)
+        if match:
+            return f"{match.group(1)}-{match.group(2)}-01"
+    return filename
+
+
+def format_retro_title(retro: dict) -> str:
+    """Format retro title with distinctive prefix."""
+    retro_type = retro.get("_retro_type", "retro")
+
+    if retro_type == "annual":
+        period = retro.get("period", retro.get("_filename", ""))
+        return f"Annual Summary: {period}"
+    elif retro_type == "quarterly":
+        period = retro.get("period", retro.get("_filename", ""))
+        return f"Quarterly Summary: {period}"
+    else:  # monthly
+        name = retro.get("name", "")
+        if name:
+            return name  # Already formatted like "Monthly Retro: December 2025"
+        return f"Monthly Retro: {retro.get('month_reviewed', retro.get('_filename', ''))}"
+
+
+def format_retro_description(retro: dict) -> str:
+    """Format retrospective into readable HTML description."""
+    lines = []
+    retro_type = retro.get("_retro_type", "retro")
+
+    # Premise/executive summary
+    premise = retro.get("premise") or retro.get("executive_summary", "")
+    if premise:
+        label = "Executive Summary" if retro_type in ("quarterly", "annual") else "Premise"
+        lines.append(f"<p><strong>{label}:</strong> {premise[:500]}{'...' if len(premise) > 500 else ''}</p>")
+
+    # Summary (for monthly)
+    summary = retro.get("summary", "")
+    if summary and retro_type == "monthly":
+        lines.append(f"<p>{summary[:300]}{'...' if len(summary) > 300 else ''}</p>")
+
+    # Key developments/achievements
+    key_items = retro.get("key_developments") or retro.get("key_achievements", [])
+    if key_items:
+        label = "Key Achievements" if retro_type in ("quarterly", "annual") else "Key Developments"
+        lines.append(f"<p><strong>{label}:</strong></p><ul>")
+        for item in key_items[:5]:
+            area = item.get("area") or item.get("theme", "")
+            item_summary = item.get("summary", "")[:150]
+            lines.append(f"<li><strong>{area}:</strong> {item_summary}...</li>")
+        lines.append("</ul>")
+
+    return "\n".join(lines) if lines else "<p>No details available.</p>"
 
 
 def main():
@@ -244,16 +392,18 @@ def main():
     else:
         logging.warning("No facts files found")
 
-    # Generate council feed
+    # Generate council feed (with retros)
     logging.info("Generating council RSS feed...")
     council_items = load_json_files(COUNCIL_DIR, limit=20)
-    if council_items:
-        logging.info(f"Loaded {len(council_items)} council briefing files")
-        council_feed = add_stylesheet_reference(create_council_feed(council_items))
+    retro_items = load_retros(limit=10)
+    logging.info(f"Loaded {len(council_items)} council briefings, {len(retro_items)} retrospectives")
+
+    if council_items or retro_items:
+        council_feed = add_stylesheet_reference(create_council_feed(council_items, retro_items))
         (OUTPUT_DIR / "council.xml").write_text(council_feed)
         logging.info(f"Council feed written to {OUTPUT_DIR / 'council.xml'}")
     else:
-        logging.warning("No council briefing files found")
+        logging.warning("No council briefing or retro files found")
 
 
 if __name__ == "__main__":
