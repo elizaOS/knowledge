@@ -2,251 +2,267 @@
   "id": "RETRO-2025-12",
   "name": "Monthly Retro: December 2025",
   "type": "retrospective",
-  "premise": "The JedAI Council reviews December 2025: a month of foundational stabilization, security fixes, and ecosystem expansion\u2014shadowed by token migration friction and a loud call for simpler developer onboarding. The council must decide what to prioritize next to reinforce trust through shipping while preparing ElizaOS for multi-user, real-time, production deployments.",
-  "summary": "December delivered meaningful core improvements (server refactor, monorepo build/type safety fixes, dependency updates) and closed a critical secret-encryption vulnerability. The ecosystem broadened via new registry plugins (DeFi, comms, Farcaster local hub), while an important cross-repo initiative began to add streaming across major model-provider plugins. UX debt was reduced and a v2 dashboard/onboarding overhaul was scoped through a large strategic issue set. Community energy stayed split: builders want dramatically better DX and clear multi-user architecture; token holders want migration clarity and visible product wins; everyone wants reliability and fewer sharp edges.",
+  "premise": "The JedAI Council reviews December 2025: a month of deep core hardening (refactors, type safety, dependency upgrades, security fixes), early groundwork for real-time streaming across model providers, and a parallel wave of UX planning\u2014while community trust was stressed by token migration friction, support gaps, and multi-user architecture uncertainty.",
+  "summary": "December delivered meaningful foundational progress: the core server was refactored for reliability and cleanliness, monorepo build health improved, and at least one critical security issue (secret handling/auth) was addressed. The plugin ecosystem expanded (DeFi, OpenChat, Farcaster local hub), and a coordinated cross-plugin effort began to add streaming support for more responsive agents. The month also revealed a recurring tension: engineering is moving toward a production-grade platform, but developer onboarding, multi-user auth, and community support (especially token migration) are lagging\u2014risking trust and adoption at the moment the project is trying to scale.",
   "month_reviewed": "2025-12",
   "key_developments": [
     {
-      "area": "Core server architecture",
-      "summary": "Major server refactor and optimization improved reliability patterns and code organization, reducing the risk of timeouts and preparing for scale.",
+      "area": "Core server reliability & architecture",
+      "summary": "Major server refactor and optimization in elizaos/eliza improved structure, reliability patterns, and performance; additional work opened to address concurrent timeouts.",
       "impact": "high"
     },
     {
-      "area": "Monorepo stability & type safety",
-      "summary": "Resolved widespread TypeScript build issues and updated dependencies, improving CI health and reducing integration friction across packages.",
+      "area": "Monorepo health & type safety",
+      "summary": "Resolved TypeScript build errors across the monorepo and updated dependencies, reducing breakage and improving maintainability.",
       "impact": "high"
     },
     {
       "area": "Security hardening",
-      "summary": "Fixed a critical vulnerability in character secret encryption; identified additional exposure risks around server auth token enforcement that require follow-through.",
+      "summary": "Fixed critical vulnerabilities related to character secret encryption and server authentication exposure (ELIZA_SERVER_AUTH_TOKEN), though the ecosystem still needs broader auditing.",
       "impact": "high"
     },
     {
-      "area": "Real-time agent responsiveness (streaming)",
-      "summary": "Initiated streaming work across OpenAI, Anthropic, and OpenRouter plugins to enable real-time conversational UX and faster perceived latency.",
-      "impact": "high"
-    },
-    {
-      "area": "Plugin ecosystem expansion (Web3 + comms)",
-      "summary": "Registry added Moralis DeFi, OpenChat, and a self-hosted Farcaster local hub plugin\u2014improving autonomy and composability.",
+      "area": "Streaming groundwork (real-time agents)",
+      "summary": "Initiated streaming support across OpenAI, Anthropic, and OpenRouter plugins\u2014setting up real-time conversational experiences as a platform primitive.",
       "impact": "medium"
     },
     {
-      "area": "Messaging API alignment",
-      "summary": "Discord and Telegram plugins began refactoring toward a unified messaging API aligned with core modernization, reducing long-term maintenance and enabling consistent behavior.",
+      "area": "Plugin ecosystem expansion",
+      "summary": "Registry added new community plugins (Moralis DeFi, OpenChat, self-hosted Farcaster hub), extending Web3 and comms capabilities and reducing third-party dependency.",
       "impact": "medium"
     },
     {
-      "area": "UX cleanup + v2 UX planning",
-      "summary": "Closed several UI/UX issues (navigation consolidation, feedback improvements) and created 20+ strategic issues for a redesigned dashboard and guided onboarding.",
+      "area": "Messaging API alignment across social plugins",
+      "summary": "Began refactors in Telegram and Discord plugins to unify messaging interfaces with the modernized core APIs.",
       "impact": "medium"
     },
     {
-      "area": "Cloud-first DX",
-      "summary": "ElizaOS Cloud became the default provider in CLI with browser-based login, simplifying initial setup while increasing reliance on Cloud reliability and clarity of local/offline paths.",
+      "area": "UX bugfixes + v2 dashboard planning",
+      "summary": "Closed multiple UI/UX issues and created a large set of strategic issues defining a redesigned dashboard and guided onboarding flow.",
+      "impact": "medium"
+    },
+    {
+      "area": "Cloud-first DX changes",
+      "summary": "ElizaOS Cloud became the default AI provider in the CLI with a new browser-based login flow\u2014reducing initial setup friction for many developers while raising questions about local-first parity.",
       "impact": "medium"
     }
   ],
   "recurring_themes": [
     {
-      "theme": "Reliability over novelty",
-      "frequency": "High (core refactors, build fixes, reliability patterns, messaging alignment)",
-      "council_take": "This is directly on North Star: if the framework isn\u2019t predictable under load, everything else (cloud, marketplace, flagship agents) becomes a credibility tax."
+      "theme": "Reliability-first engineering (stability, refactors, consistency)",
+      "frequency": "Very high",
+      "council_take": "This aligns tightly with the North Star and Core Principles. The risk: reliability work must translate into fewer support tickets, fewer setup failures, and clearly measured improvements\u2014not just cleaner code."
     },
     {
-      "theme": "Developer Experience crisis signals",
-      "frequency": "High (community feedback on boilerplate, setup complexity, provider best practices confusion)",
-      "council_take": "If \u2018time-to-first-agent\u2019 stays high, the ecosystem can\u2019t compound\u2014plugins and cloud won\u2019t matter if builders bounce early."
+      "theme": "Developer experience pain (setup, boilerplate, docs drift, plugin compatibility)",
+      "frequency": "High",
+      "council_take": "DX is becoming the adoption bottleneck. Fixing it is not a side quest: it is the growth engine. A fast 'hello world' and stable plugin template/contract would pay compounding dividends."
     },
     {
-      "theme": "Token migration friction & trust",
-      "frequency": "High (portal errors, exchange pauses, support backlogs, confusion/scams)",
-      "council_take": "Trust is a product surface. Shipping code while users feel abandoned is negative-sum\u2014support and communication need operational ownership and SLAs."
+      "theme": "Security and trust gaps",
+      "frequency": "High",
+      "council_take": "The community will forgive missing features; they won\u2019t forgive secret leakage or wallet-drain patterns. Security needs an explicit program: threat model, audits, and fast comms."
     },
     {
-      "theme": "Multi-user architecture decision pressure",
-      "frequency": "Medium-High (SaaS/multi-wallet blockers, auth strategy debates)",
-      "council_take": "We\u2019re at the edge of an architectural fork: postpone and pay compounding interest, or decide and unblock cloud + marketplace + serious deployments."
+      "theme": "Real-time agents (streaming everywhere)",
+      "frequency": "Medium",
+      "council_take": "Streaming is a platform capability, not a plugin feature. If done well, it becomes a signature feel of Eliza agents: alive, responsive, and continuously present."
     },
     {
-      "theme": "Streaming as the next UX step-change",
-      "frequency": "Medium (parallel PRs across provider plugins)",
-      "council_take": "Streaming is the difference between \u2018agent\u2019 and \u2018chatbot that sometimes stalls.\u2019 But it must be end-to-end (core events, clients, adapters), not just provider plumbing."
+      "theme": "Multi-user architecture uncertainty",
+      "frequency": "Medium",
+      "council_take": "Single-user assumptions are blocking SaaS, multi-wallet, and serious cloud deployments. This needs a clear architectural decision and migration path, otherwise every product initiative inherits fragility."
     },
     {
-      "theme": "Docs centralization & information hygiene",
-      "frequency": "Medium (docs moved to elizaos/docs; repeated confusion and support loops)",
-      "council_take": "Documentation is infrastructure. Without crisp canonical docs + in-product guidance, support load grows faster than engineering capacity."
+      "theme": "Token migration friction & community support load",
+      "frequency": "Very high",
+      "council_take": "Support and communication are part of product. Migration confusion plus scam reports are actively damaging trust. The team needs one canonical playbook, better UX, and a transparent status cadence."
+    },
+    {
+      "theme": "Marketplace/business model discussions (Cloud marketplace, revenue share)",
+      "frequency": "Medium",
+      "council_take": "The marketplace narrative is strong, but only works if the underlying dev platform is easy and safe. Monetization should follow reliability + DX, not precede it."
     }
   ],
   "wins": [
-    "Server refactor shipped: tangible progress on stability and maintainability.",
-    "Monorepo build/type safety improvements reduced developer friction and CI instability.",
-    "Critical secret encryption vulnerability fixed; security issues surfaced and tracked with urgency.",
-    "Streaming initiative kicked off across major model providers\u2014foundation for real-time agents.",
-    "Registry grew with practical plugins (DeFi, comms, Farcaster local hub) supporting autonomy and composability.",
-    "UX papercuts reduced and a concrete v2 dashboard/onboarding workplan created.",
-    "CLI moved toward simpler onboarding via Cloud default + browser login."
+    "Server refactor landed, improving architecture cleanliness and reliability under load.",
+    "Monorepo build health improved via TypeScript error resolution and dependency upgrades.",
+    "Critical security issues were identified and fixed (secrets/auth), demonstrating the team can respond.",
+    "Streaming support efforts aligned across OpenAI/Anthropic/OpenRouter\u2014good cross-repo coordination.",
+    "Plugin registry continued to grow with meaningful Web3 + comms capabilities, including a self-hosted Farcaster hub.",
+    "CLI flow improved by making Cloud default with browser login, reducing initial friction for many builders.",
+    "UX issues were cleaned up and a concrete roadmap for dashboard/onboarding v2 was articulated through strategic issues."
   ],
   "challenges": [
-    "Token migration experience remains a trust hazard: portal errors, exchange uncertainty, unresolved tickets, and scam risk.",
-    "Security posture still uneven: server auth token enforcement and other vulnerabilities need systematic hardening, not one-off fixes.",
-    "DX complaints persist: too much boilerplate, unclear provider responsibilities (caching, call minimization), and steep learning curve.",
-    "Multi-user architecture remains undecided, blocking SaaS-grade deployments and coherent auth patterns across Web2/Web3.",
-    "Streaming work is fragmented risk: without a single end-to-end spec, different providers may implement incompatible behaviors.",
-    "Community sentiment is polarized: builders want usability, token holders want visible progress and clear roadmap communication."
+    "Token migration confusion and exchange timelines created trust drag, especially in Korean communities; support tickets and comms gaps remain visible.",
+    "Security posture still feels reactive; additional vulnerabilities reportedly exist, and the migration-site compromise pattern raised alarms.",
+    "DX remains painful for many developers (boilerplate, local setup issues, Postgres permissions, plugin type churn).",
+    "Plugin compatibility friction (e.g., Starknet integration breakage, action handler gaps) signals missing templates and contract stability.",
+    "Multi-user auth and identity strategy is unresolved, limiting SaaS/multi-wallet deployments and complicating Cloud.",
+    "Streaming work is initiated but incomplete; without a unified interface and tests, it could fragment across providers."
   ],
   "proposed_focus": [
     {
       "priority": 1,
-      "area": "Security & trust hardening (server + secrets + auth defaults)",
-      "rationale": "Reliability and security are prerequisites for Cloud, marketplace, and enterprise/community adoption. One critical issue fixed is good; a consistent security posture is required to prevent trust regression.",
-      "success_metric": "Ship a security baseline release: (a) ELIZA_SERVER_AUTH_TOKEN enforced by default in all deployment modes, (b) threat model + security checklist added to docs, (c) 0 known critical vulns open at month end, (d) add automated security tests for auth-gated endpoints."
+      "area": "Security program + trust response loop",
+      "rationale": "Security incidents and wallet-drain allegations can erase months of engineering credibility. Establish proactive security hygiene, close remaining known gaps, and improve community trust through transparent comms.",
+      "success_metric": "Publish threat model + security checklist; complete at least 1 internal audit pass on auth/secret surfaces; reduce security-related issues opened/month by 50%; ship a public incident-response guide and a pinned 'migration safety' page."
     },
     {
       "priority": 2,
-      "area": "DX \u2018Time-to-First-Agent\u2019 overhaul (hello world that stays hello world)",
-      "rationale": "The loudest adoption limiter is setup complexity. A small number of high-leverage DX changes can unlock ecosystem growth faster than new features.",
-      "success_metric": "Reduce time-to-first-agent to <10 minutes from fresh install: (a) one-command scaffold, (b) minimal boilerplate agent example, (c) clear provider best-practices doc, (d) measured via a published reproducible benchmark and CI smoke test."
+      "area": "Multi-user / identity architecture decision (Cloud + local parity)",
+      "rationale": "Single-user assumptions block SaaS, multi-wallet, and marketplace futures. Decide the identity model (users/workspaces/agents), auth boundaries, and data isolation now to prevent rework and ecosystem fragmentation.",
+      "success_metric": "Ship an RFC with an accepted decision; implement a minimal multi-user scaffold (workspaces + agent ownership + token-scoped auth) behind a feature flag; at least 1 reference deployment validated with 2+ concurrent users."
     },
     {
       "priority": 3,
-      "area": "End-to-end streaming spec + implementation",
-      "rationale": "Streaming is only valuable if consistent from provider plugins through core eventing to clients (web/discord/telegram). This is the gateway to \u2018alive\u2019 agents.",
-      "success_metric": "Deliver one streaming reference path: OpenAI + core + web client with (a) <300ms first-token target under normal conditions, (b) unified streaming event schema, (c) documented adapter guidelines, (d) parity checklist started for Anthropic/OpenRouter."
+      "area": "DX fast path: 'Hello Agent' in under 10 minutes",
+      "rationale": "Adoption depends on quick success. Reduce boilerplate, stabilize templates, and fix the most common local setup failures (DB permissions/migrations, plugin conflicts).",
+      "success_metric": "New developer can create, run, and deploy a basic agent in <10 minutes following docs; reduce setup-related Discord/GitHub support requests by 30%; provide a single docker-compose dev environment that passes CI."
     },
     {
       "priority": 4,
-      "area": "Multi-user architecture decision (auth + tenancy + wallets)",
-      "rationale": "Cloud, marketplace revenue share, and serious deployments require a coherent user/tenant model. Prolonged ambiguity creates rework across CLI, dashboard, and plugins.",
-      "success_metric": "Publish an RFC + decision by month end: (a) chosen auth approach, (b) tenant/user model, (c) wallet linking strategy, (d) migration plan and phased rollout milestones."
+      "area": "Unified streaming interface + end-to-end tests",
+      "rationale": "Streaming should feel consistent across providers and clients. Without a shared contract and tests, streaming becomes a support nightmare and blocks flagship agent polish.",
+      "success_metric": "Define a provider-agnostic streaming API; implement in OpenAI/Anthropic/OpenRouter plugins; add golden-path e2e tests (CLI -> server -> client) that validate token streaming and tool-calls; latency-to-first-token baseline published."
     },
     {
       "priority": 5,
-      "area": "Token migration operations & communications reset",
-      "rationale": "Migration friction is eroding trust; it\u2019s not purely technical. A lightweight but disciplined ops layer (status, SLAs, anti-scam messaging) prevents reputational bleed.",
-      "success_metric": "Operational KPIs: (a) public migration status page + FAQ, (b) median ticket response time <24h, (c) top-5 portal errors resolved or clearly mitigated, (d) weekly migration update cadence maintained for 4 weeks."
+      "area": "Dashboard/onboarding v2: ship a narrow MVP, not a backlog",
+      "rationale": "December produced many UX planning issues; convert into a shipped onboarding flow that reduces confusion and support burden, especially around Cloud login, keys, and deployment.",
+      "success_metric": "Release an onboarding MVP (create agent -> select provider -> run -> deploy) with telemetry; improve activation rate (agents created per new login) by 20%; reduce 'where do I start' support queries by 25%."
+    },
+    {
+      "priority": 6,
+      "area": "Token migration comms + support operations hardening",
+      "rationale": "Migration friction is a social scalability problem. Establish a single source of truth, predictable updates, and tooling that makes scams harder to succeed.",
+      "success_metric": "Weekly migration status update cadence; consolidated FAQ + exchange status matrix; measured reduction in repeated migration questions by 40%; response SLA for migration tickets (e.g., 48 hours) met 90% of the time."
     }
   ],
   "north_star_assessment": {
     "still_relevant": true,
-    "suggested_updates": "No change to the North Star. Add an explicit sub-principle under Execution Excellence: 'Secure-by-default and multi-user by design' to reflect the next scale phase (Cloud + marketplace + SaaS deployments)."
+    "suggested_updates": "Keep the North Star intact, but add an explicit emphasis on (1) multi-user identity/workspace foundations for Cloud-scale deployments and (2) security as a first-class reliability requirement. Suggested phrasing: 'most reliable' should explicitly include 'secure-by-default' and 'multi-tenant ready'."
   },
   "scenes": [
     {
       "location": "council_chamber",
-      "description": "The chamber displays December\u2019s merge graph like a skyline\u2014tall towers in core refactors, a constellation of plugin PRs, and a pulsing red alert labeled 'migration friction.'",
+      "description": "A circular table of projected repos, issue graphs, and plugin dependency maps. The chamber\u2019s main display alternates between a server refactor diff and a community thread about migration confusion.",
       "dialogue": [
         {
           "actor": "elizahost",
-          "line": "December is a foundations month: server refactor, build stability, a critical security fix, and the first coordinated move toward streaming across providers. But the community conversation keeps snapping back to two things\u2014developer friction and token migration pain. Let\u2019s separate what shipped from what was felt.",
-          "action": "Highlights two columns on the wall: 'Code Wins' and 'Trust Wins.'"
+          "line": "December was a foundations month. We refactored the server, fixed monorepo build health, patched critical security issues, and kicked off streaming across model providers. But the community narrative is split: engineers see progress; users see migration friction, setup pain, and trust gaps. Let\u2019s reconcile those realities into January priorities.",
+          "action": "Brings up two panels: 'Engineering Throughput' vs 'User Trust Signals'."
         },
         {
           "actor": "aishaw",
-          "line": "Code wins are real, but builders judge us by the first 30 minutes. If hello world needs a pilgrimage through configs, providers, and plugins, we lose them. I want a ruthless DX sprint: one command, one working agent, one clear path to deploy.",
-          "action": "Pins 'Time-to-First-Agent' to the top of the agenda."
+          "line": "We shipped a lot of the unglamorous work that stops teams from drowning later\u2014types, dependencies, server cleanup. But we still don\u2019t have a brutally simple path from zero to agent. If a developer can\u2019t get a hello-agent running quickly, the marketplace and flagship stories won\u2019t matter.",
+          "action": "Highlights a list of recurring setup blockers: Postgres permissions, plugin conflicts, missing templates."
         },
         {
           "actor": "aimarc",
-          "line": "Agreed, and I\u2019ll add: streaming is not a feature\u2014it's an architecture constraint. Once the system is event-native, agents can reason in the loop instead of after the fact. But we must avoid three incompatible streaming implementations. One schema, one core contract, then providers conform.",
-          "action": "Sketches a simple event pipeline: provider -> core -> client -> memory."
+          "line": "Architecture is converging. The server refactor plus messaging API alignment is the beginning of a coherent substrate for multi-agent systems. But we\u2019re missing the identity layer: multi-user and workspace semantics. Without that, we can\u2019t safely compose agents as economic actors across chains and platforms.",
+          "action": "Draws a boundary diagram: user \u2192 workspace \u2192 agents \u2192 plugins \u2192 chains."
         },
         {
           "actor": "spartan",
-          "line": "Trust wins are lagging. Token migration is a live wound: exchange pauses, portal errors, and unanswered tickets. From a metrics standpoint, this is churn fuel. We need SLAs and a weekly cadence\u2014otherwise every product milestone gets discounted by credibility risk.",
-          "action": "Projects a chart: 'Support Response Time vs. Sentiment.'"
+          "line": "Metrics view: the month improved internal quality, but external trust took hits. Token migration confusion and exchange pauses are visible in sentiment. If we can\u2019t shorten support cycles and publish unambiguous status, we\u2019ll keep paying a tax in user churn and negative price narrative.",
+          "action": "Pins a chart titled 'Support Ticket Aging' next to 'Migration Questions per Day'."
         },
         {
           "actor": "peepo",
-          "line": "Community mood is basically: 'Show me it works, and don\u2019t make me feel dumb doing it.' Also scammers are eating the confusion for breakfast. If we can\u2019t explain migration in two screenshots and a status page, we\u2019re letting the timeline write our story for us.",
-          "action": "Drops a sticky note: 'Docs + Status Page = anti-chaos.'"
+          "line": "People don\u2019t experience refactors. They experience 'my wallet is scared' and 'the docs moved again.' Also: scammers love confusion. If we want community energy, we need one meme: safe, simple, shipping. Otherwise the vibes will keep getting hijacked by migration drama.",
+          "action": "Taps a sticky note: 'One canonical link. One checklist. One weekly update.'"
         }
       ]
     },
     {
       "location": "council_chamber",
-      "description": "The chamber shifts to a blueprint view of ElizaOS Cloud, the CLI, and a multi-tenant diagram with unanswered question marks around identity.",
+      "description": "The display zooms into streaming PRs across three providers. A second window shows Discord and Telegram messaging refactor branches waiting on interface decisions.",
       "dialogue": [
         {
           "actor": "elizahost",
-          "line": "We keep circling multi-user architecture. Is this a January decision, or do we defer again and accept rework later?",
-          "action": "Zooms in on 'auth/tenancy/wallet-linking' nodes."
+          "line": "Streaming was initiated in parallel across providers. Do we treat this as a feature, or as a platform contract that everything must implement consistently?",
+          "action": "Opens a draft interface: StreamChunk, ToolCallDelta, MemoryWriteEvent."
         },
         {
           "actor": "aimarc",
-          "line": "We decide now. Not every detail, but the governing model: tenant boundaries, identity primitives, and how wallets attach. Otherwise Cloud defaults in CLI are a footgun\u2014people will build assumptions we later break.",
-          "action": "Marks 'RFC required' in bold."
+          "line": "Contract. Always. Real-time is not an add-on; it\u2019s how agents feel alive. If each provider streams differently, we\u2019ll never stabilize the client or tool invocation semantics. Define the event model once, then adapters per provider.",
+          "action": "Marks 'provider adapters' as the only acceptable variance."
         },
         {
           "actor": "aishaw",
-          "line": "I\u2019m fine deciding now if we keep it shippable. An RFC with phased rollout. Part one: single-tenant but multi-user-ready. Part two: real tenancy. If the plan is too academic, we\u2019ll stall.",
-          "action": "Adds 'phases + migration plan' to the RFC requirements."
+          "line": "Agreed, and we need tests. Not unit tests that just mock providers\u2014end-to-end. CLI to server to client. If streaming breaks, CI must scream before users do.",
+          "action": "Adds 'golden path e2e' to the January board."
         },
         {
           "actor": "spartan",
-          "line": "Also: this connects to monetization. Multi-user and tenancy are prerequisites for a marketplace story that isn\u2019t hand-wavy. If we want revenue share and measurable adoption, we need an account model that supports it.",
-          "action": "Links 'multi-user' to 'marketplace KPI tree.'"
+          "line": "Streaming also gives measurable outcomes: time-to-first-token, completion rates, and session length. If we ship it right, we can prove improved engagement instead of arguing about it.",
+          "action": "Annotates KPIs: TTFT, avg. response latency, retention."
         },
         {
           "actor": "peepo",
-          "line": "And it helps the vibe. People want to run agents for communities, teams, and DAOs\u2014not just one wizard in a cave. Multi-user is the difference between a toy and a town square.",
-          "action": "Renames a diagram label from 'user' to 'crew.'"
+          "line": "And streaming demos well. A silent spinner is anti-viral. A talking agent is shareable. If auto.fun wants 24/7 energy, streaming is literally the heartbeat animation.",
+          "action": "Gestures at a mock feed of live agent posts."
         }
       ]
     },
     {
       "location": "council_chamber",
-      "description": "A final scoreboard appears: Security, DX, Streaming, Multi-user, Migration Ops\u2014each with an empty checkbox column titled 'Done, not discussed.'",
+      "description": "A red banner labeled 'Trust Debt' appears: token migration confusion, exchange timelines, and a reported wallet-drain pattern. The room shifts from roadmap to risk.",
       "dialogue": [
         {
           "actor": "elizahost",
-          "line": "Consensus is clear: January must convert foundational work into felt improvements. Our priorities: security baseline, DX time-to-first-agent, one end-to-end streaming path, and a multi-user architecture decision\u2014paired with migration operations that reduce ongoing trust loss.",
-          "action": "Checks the boxes in priority order and locks the plan."
-        },
-        {
-          "actor": "aishaw",
-          "line": "If we ship the DX slice and the streaming reference path, we\u2019ll have a demo that sells itself\u2014and we can stop arguing in abstractions.",
-          "action": "Queues a 'golden path' demo: install -> run -> stream -> deploy."
-        },
-        {
-          "actor": "aimarc",
-          "line": "And if we do the architectural decision work now, everything we build next month composes cleanly: agents, memory, tools, and humans\u2014at scale.",
-          "action": "Adds 'contract-first' to the engineering banner."
+          "line": "We need to be explicit: security and migration trust are gating factors. What is the smallest program that makes us credible in January?",
+          "action": "Creates a 3-column board: 'Prevent', 'Detect', 'Respond'."
         },
         {
           "actor": "spartan",
-          "line": "I\u2019ll measure it. Publish the metrics weekly: support response, install success rate, streaming latency, and release cadence. If we can\u2019t track it, we can\u2019t improve it\u2014and the market won\u2019t believe it.",
-          "action": "Creates a KPI dashboard outline."
+          "line": "Prevent: lock down auth/secret surfaces everywhere by default. Detect: telemetry for suspicious API access patterns. Respond: weekly migration status, a single canonical FAQ, and SLAs for tickets. Trust is a funnel. Right now the funnel leaks.",
+          "action": "Adds '48-hour migration ticket SLA' and 'weekly exchange matrix update'."
+        },
+        {
+          "actor": "aishaw",
+          "line": "Also: onboarding. Many migration and setup questions are UX failures. If Cloud is default in CLI, the flow must explain what happens, what data is stored, and how to run local. Reduce surprise, reduce tickets.",
+          "action": "Writes 'local-first parity' under onboarding tasks."
+        },
+        {
+          "actor": "aimarc",
+          "line": "Security is part of reliability. We should publish the threat model, even if imperfect. It forces architectural clarity: identity boundaries, plugin sandboxes, and least-privilege tool access. That also prepares us for a marketplace.",
+          "action": "Links 'threat model' to 'multi-user RFC' with a dependency arrow."
         },
         {
           "actor": "peepo",
-          "line": "And I\u2019ll say the quiet part out loud in community: fewer promises, more receipts. Give people a link they can click and a thing they can run. The memes will take care of themselves after that.",
-          "action": "Pins: 'Receipts > hype' above the exit."
+          "line": "Community needs a simple ritual: every week, one post that says what\u2019s true. What\u2019s shipping. What\u2019s fixed. And one big warning banner: 'Don\u2019t approve random token permissions.' People will actually share that.",
+          "action": "Drafts a template titled 'The One True Migration Update'."
+        },
+        {
+          "actor": "elizahost",
+          "line": "Consensus: January is Security + Identity + DX fast path, with streaming and onboarding as force multipliers. We\u2019ll measure success in setup time, support load reduction, and engagement improvements\u2014not just merged PRs.",
+          "action": "Locks the January priorities and assigns owners per area."
         }
       ]
     }
   ],
   "_metadata": {
-    "generated_at": "2025-12-31T21:11:47.667979Z",
+    "generated_at": "2026-01-06T01:52:04.510407Z",
     "model": "openai/gpt-5.2",
-    "facts_analyzed": 30,
+    "facts_analyzed": 31,
     "briefings_analyzed": 31,
     "month": "2025-12"
   },
   "sentiment_baseline": {
-    "period_days": 30,
+    "period_days": 31,
     "sentiment_distribution": {
-      "negative": 0.2,
+      "negative": 0.194,
       "positive": 0.0,
-      "neutral": 0.033,
-      "mixed": 0.767
+      "neutral": 0.032,
+      "mixed": 0.774
     },
-    "avg_negative_rate": 0.2,
+    "avg_negative_rate": 0.194,
     "context_frequency": {
-      "technical": 29,
-      "economic": 27,
-      "social": 25,
+      "technical": 30,
+      "economic": 28,
+      "social": 26,
       "governance": 1
     }
   }
