@@ -1,27 +1,37 @@
-# ElizaOS Community Update - December 31, 2025
-
-## Development Progress
-
-- Core development team working on key projects including Cloud, Babylon, and Jeju Network infrastructure
-- Jeju backend development includes name servers routed through on-chain registry to IPFS assets
-- Developer Jin created a sophisticated image pipeline generating art based on daily summarized activities
-  - System includes variance tracking by dates for seasonal art changes
-  - Images designed to accompany stories like a newspaper
-
-## Token and Financial Updates
-
-- ElizaOS token (rebranded from AI16Z) migration process ongoing until February
-- Token experiencing price movements with positive community sentiment
-- DegenAI project under development for autonomous trading for holders with 1M tokens
-- Recent X announcement well-received, helping stabilize price and value
-
-## Community Engagement
-
-- Discussions about future recreational projects like Zelda and RuneScape recreations planned after primary development goals
-- Partners expressing optimism about capital rotation from precious metals to ElizaOS
-- Community members exchanging New Year wishes and expressing excitement for building in the coming year
-- Strong community engagement around project development and token performance
+# Eliza OS Development Summary (2026-01-04)
 
 ## GitHub Activity
 
-- Repository maintained 2 active contributors during this timeframe
+### Recent Issues
+- Issue #6322: Conversation deletion requires page refresh
+- Issue #6321: Agent "following" functionality feature request
+- Issue #6320: Interface label change suggestion from "Chat" to "Talk"
+- Issue #6319: Agent sorting functionality issues
+
+### Repository Activity
+- 4 new issues opened
+- 3 active contributors
+
+## Discord Activity
+
+### General Discussion
+- Conversations about Hyperscape development and market movements
+- Mentions of developer discord accessible by invitation
+- Shaw interacting with Sterling on Twitter
+- New users being welcomed to the community
+
+### Coders Channel
+- Technical discussions about trading bots on Solana
+- Information about useModel with provider option
+- Explanations of Eliza's functionality:
+  * Creating agents with specific data
+  * AI models integration
+  * Plugin support (X, Discord, Telegram)
+  * Real-world tool connections
+  * Open-source operating system for plugin development
+
+### Core Developers Updates
+- Bootstrap optimizations in development for certain providers
+- Memory usage observations during builds (21GB to 27GB+)
+- Significant work on Eliza knowledge data pipelines
+- Documentation and presentation phases coming soon
