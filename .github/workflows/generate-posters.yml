@@ -76,6 +76,17 @@ jobs:
           fi
         continue-on-error: true
 
+      - name: Enrich facts with media URLs
+        if: steps.check-facts.outputs.facts_exist == 'true'
+        run: |
+          python scripts/etl/enrich-facts-media.py \
+            -f "${{ steps.check-facts.outputs.facts_file }}" \
+            -a "the-council/aggregated/${{ steps.date.outputs.date }}.json" \
+            -m "media/${{ steps.date.outputs.date }}/manifest.json" \
+            --cdn-base "https://m3tv.b-cdn.net/media/${{ steps.date.outputs.date }}" \
+            -v || echo "Enrichment skipped (missing files)"
+        continue-on-error: true
+
       - name: Cleanup old media (keep last 7 days)
         run: |
           # Find and remove media directories older than 7 days
