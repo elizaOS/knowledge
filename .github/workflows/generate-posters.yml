@@ -21,61 +21,91 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Install poster generation dependencies
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y pandoc wkhtmltopdf imagemagick libopenjp2-7 gifsicle xvfb fonts-inter chromium-browser
-
-      - name: Verify wkhtmltoimage installation
-        run: command -v wkhtmltoimage && wkhtmltoimage --version
-
-      - name: Set execute permissions
-        run: |
-          chmod +x scripts/posters/posters-enhanced.sh
-          chmod +x scripts/posters/run-poster-generation.sh
-
-      - name: Generate Posters
-        id: generate-posters
-        run: |
-          mkdir -p posters
-          if scripts/posters/run-poster-generation.sh; then
-            echo "posters_generated=true" >> "$GITHUB_OUTPUT"
-          else
-            echo "posters_generated=false" >> "$GITHUB_OUTPUT"
-          fi
-
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.x'
+          python-version: '3.12'
 
       - name: Install Python dependencies
-        run: pip install requests
+        run: |
+          pip install requests pillow
 
-      - name: Generate AI Daily Image
+      - name: Get today's date
+        id: date
+        run: echo "date=$(date +%Y-%m-%d)" >> "$GITHUB_OUTPUT"
+
+      - name: Check for facts file
+        id: check-facts
+        run: |
+          FACTS_FILE="the-council/facts/${{ steps.date.outputs.date }}.json"
+          if [ -f "$FACTS_FILE" ]; then
+            echo "facts_exist=true" >> "$GITHUB_OUTPUT"
+            echo "facts_file=$FACTS_FILE" >> "$GITHUB_OUTPUT"
+          else
+            # Fallback to daily.json symlink
+            if [ -f "the-council/facts/daily.json" ]; then
+              echo "facts_exist=true" >> "$GITHUB_OUTPUT"
+              echo "facts_file=the-council/facts/daily.json" >> "$GITHUB_OUTPUT"
+            else
+              echo "facts_exist=false" >> "$GITHUB_OUTPUT"
+              echo "No facts file found for today"
+            fi
+          fi
+
+      - name: Generate Illustrations
+        if: steps.check-facts.outputs.facts_exist == 'true'
+        id: generate
         env:
           OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
-        run: python scripts/posters/generate-ai-image.py
-        continue-on-error: true  # Don't fail workflow if image gen fails
-
-      - name: Cleanup old posters (keep last 7 days)
         run: |
-          # Reuse cleanup logic from webhook.py (--cleanup flag)
-          python scripts/integrations/discord/webhook.py the-council/facts/daily.json --cleanup || true
+          cd scripts/posters
+          python illustrate.py --batch -f "../../${{ steps.check-facts.outputs.facts_file }}" --with-icons || echo "Generation had errors"
+        continue-on-error: true
 
-      - name: Commit and Push Posters
+      - name: Upload to CDN (optional)
+        if: steps.check-facts.outputs.facts_exist == 'true'
+        env:
+          BUNNY_STORAGE_ZONE: ${{ secrets.BUNNY_STORAGE_ZONE }}
+          BUNNY_STORAGE_PASSWORD: ${{ secrets.BUNNY_STORAGE_PASSWORD }}
+          BUNNY_CDN_URL: ${{ secrets.BUNNY_CDN_URL }}
+        run: |
+          if [ -n "$BUNNY_STORAGE_PASSWORD" ] && [ -d "media/${{ steps.date.outputs.date }}" ]; then
+            python scripts/integrations/cdn/upload.py "media/${{ steps.date.outputs.date }}/" --update-manifest || true
+          else
+            echo "Skipping CDN upload (no credentials or no media generated)"
+          fi
+        continue-on-error: true
+
+      - name: Cleanup old media (keep last 7 days)
+        run: |
+          # Find and remove media directories older than 7 days
+          # Media dirs are named YYYY-MM-DD
+          CUTOFF_DATE=$(date -d '7 days ago' +%Y-%m-%d)
+          echo "Removing media directories older than $CUTOFF_DATE"
+
+          for dir in media/20??-??-??/; do
+            if [ -d "$dir" ]; then
+              DIR_DATE=$(basename "$dir")
+              if [[ "$DIR_DATE" < "$CUTOFF_DATE" ]]; then
+                echo "Removing old media: $dir"
+                rm -rf "$dir"
+              fi
+            fi
+          done
+
+      - name: Commit and Push
         run: |
           git config --global user.name 'GitHub Actions Bot'
           git config --global user.email 'actions@github.com'
 
-          # Stage new posters and deleted old ones
-          git add posters/*.png || true
-          git add -u posters/  # Stage deletions
+          # Stage generated media and deletions
+          git add media/ || true
+          git add the-council/facts/*.json || true
 
           if ! git diff --staged --quiet; then
-            git commit -m "Automated: Update content posters $(date +%Y-%m-%d)"
+            git commit -m "Automated: Generate posters for ${{ steps.date.outputs.date }}"
             git pull --rebase origin main
             git push
           else
-            echo "No changes to poster files to commit."
+            echo "No changes to commit."
           fi
