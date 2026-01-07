@@ -2,8 +2,8 @@ name: Aggregate Daily Sources
 
 on:
   schedule:
-    # Runs daily at 1:30 UTC
-    - cron: '30 1 * * *'
+    # Runs daily at 8:30 UTC (after sync.yml pulls fresh data at 8:00)
+    - cron: '30 8 * * *'
   workflow_dispatch: # Allows manual triggering
 
 concurrency:

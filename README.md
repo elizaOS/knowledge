@@ -29,7 +29,7 @@ This repository serves as the central hub for aggregating, processing, and synth
 - Eliza Daily HackMD Book: https://hackmd.io/@elizaos/book
 
 **Updated daily**
-(Data for these links is typically refreshed by 02:30 UTC each day.)
+(Data for these links is typically refreshed by 10:30 UTC each day.)
 - Latest aggregated data: https://elizaos.github.io/knowledge/the-council/aggregated/daily.json
 - Latest council briefing: https://elizaos.github.io/knowledge/the-council/council_briefing/daily.json
 - Latest ElizaOS AI news summary: https://elizaos.github.io/knowledge/ai-news/elizaos/json/daily.json
@@ -113,13 +113,18 @@ Once connected, you can ask Claude:
 The system follows a structured pipeline to transform raw data into actionable intelligence:
 
 ### Daily Automation Schedule (UTC)
-- **01:00** - External Data Ingestion (`.github/workflows/sync.yml`)
-- **01:15** - Context Aggregation (`.github/workflows/aggregate-daily-sources.yml`)
-- **01:35** - Daily Fact Extraction + RSS Generation (`.github/workflows/extract_daily_facts.yml`)
-- **01:50** - Council Briefing Generation + RSS Update (`.github/workflows/generate-council-briefing.yml`)
-- **02:30** - HackMD Note Updates (`.github/workflows/update_hackmd_notes.yml`)
-- **04:00** - Poster Generation (`.github/workflows/generate-posters.yml`)
-- **04:30** - Discord Briefing (`.github/workflows/daily_discord_briefing.yml`)
+
+The pipeline runs after upstream `M3-org/ai-news` completes its daily processing (~07:30 UTC):
+
+| Time | Workflow | Description |
+|------|----------|-------------|
+| **08:00** | `sync.yml` | Pull fresh data from ai-news (after upstream CDN upload) |
+| **08:30** | `aggregate-daily-sources.yml` | Consolidate all sources into daily JSON |
+| **08:45** | `extract_daily_facts.yml` | Extract key facts using LLM + generate RSS |
+| **09:00** | `generate-council-briefing.yml` | Generate strategic council briefing + RSS |
+| **09:30** | `update_hackmd_notes.yml` | Update HackMD documentation |
+| **10:00** | `generate-posters.yml` | Generate visual content (skips if upstream has posters) |
+| **10:30** | `daily_discord_briefing.yml` | Send daily briefing to Discord |
 
 ### Periodic Retrospectives (`.github/workflows/retro.yml`)
 - **Monthly** (1st of each month @ 03:00 UTC) - Council retrospective episode analyzing the previous month
@@ -130,44 +135,45 @@ Retrospectives output to `the-council/retros/` and `the-council/summaries/`.
 
 ### Pipeline Details
 
-1.  **External Data Ingestion (`.github/workflows/sync.yml`)**: (Runs at 01:00 UTC)
-    *   This workflow runs daily to synchronize data from external repositories and sources. This includes documentation from `elizaOS/eliza` and `madjin/daily-silk`, GitHub activity logs from `elizaos/elizaos.github.io`, AI news from `M3-org/ai-news`, and episode data from `m3-org/clanktank` and `m3-org/the-council`.
+1.  **External Data Ingestion (`.github/workflows/sync.yml`)**: (Runs at 08:00 UTC)
+    *   This workflow runs daily to synchronize data from external repositories and sources. Scheduled after upstream `M3-org/ai-news` CDN upload (~07:30 UTC) to ensure fresh data.
+    *   Sources include: documentation from `elizaOS/eliza` and `madjin/daily-silk`, GitHub activity logs from `elizaos/elizaos.github.io`, AI news from `M3-org/ai-news` (including CDN-enriched `json-cdn/`), and episode data from `m3-org/clanktank` and `m3-org/the-council`.
     *   Raw synced data is stored in directories like `docs/`, `daily-silk/`, `github/`, `ai-news/`, `clanktank/episodes/`, and `the-council/episodes/`.
 
-2.  **Daily Fact Extraction (`.github/workflows/extract_daily_facts.yml`)**: (Runs at 01:15 UTC)
-    *   This workflow runs `scripts/extract-facts.py` daily after data synchronization.
-    *   `scripts/extract-facts.py` takes the daily aggregated data (from the previous day, or requires `aggregate-daily-sources.yml` to have run if processing current day's live data, though its schedule suggests it processes already aggregated data from a prior step if available, or just focuses on what `aggregate-sources.py` can provide it if it were to be run by this workflow directly) and uses an LLM with a specialized prompt to distill significant information.
-    *   Outputs are structured JSON facts to `the-council/facts/YYYY-MM-DD.json` and a Markdown version to `hackmd/facts/YYYY-MM-DD.md`.
-    *   A permalink `the-council/facts/daily.json` is also created.
-
-3.  **Daily Context Aggregation (`.github/workflows/aggregate-daily-sources.yml`)**: (Runs at 01:30 UTC)
-    *   This workflow runs `scripts/aggregate-sources.py` daily.
-    *   `scripts/aggregate-sources.py` consolidates data from the synced external sources (e.g., `ai-news/`, `github/summaries/`) and internal structured data into a comprehensive daily JSON file: `the-council/aggregated/YYYY-MM-DD.json`.
+2.  **Daily Context Aggregation (`.github/workflows/aggregate-daily-sources.yml`)**: (Runs at 08:30 UTC)
+    *   This workflow runs `scripts/aggregate-sources.py` daily after sync completes.
+    *   Consolidates data from synced external sources (e.g., `ai-news/`, `github/summaries/`) and internal structured data into a comprehensive daily JSON file: `the-council/aggregated/YYYY-MM-DD.json`.
+    *   Prefers CDN-enriched JSON from `ai-news/elizaos/json-cdn/` when available (includes poster/meme URLs).
     *   A permalink `the-council/aggregated/daily.json` is created, pointing to the latest daily aggregated file.
 
-4.  **Council Briefing Generation (`.github/workflows/generate-council-briefing.yml`)**: (Runs at 02:00 UTC)
-    *   Triggered daily after context aggregation, this workflow runs `scripts/generate_council_context.py`.
+3.  **Daily Fact Extraction (`.github/workflows/extract_daily_facts.yml`)**: (Runs at 08:45 UTC)
+    *   This workflow runs `scripts/extract-facts.py` daily after aggregation.
+    *   Uses an LLM with a specialized prompt to distill significant information from the aggregated data.
+    *   Outputs are structured JSON facts to `the-council/facts/YYYY-MM-DD.json` and a Markdown version to `hackmd/facts/YYYY-MM-DD.md`.
+    *   Generates RSS feeds and creates permalink `the-council/facts/daily.json`.
+
+4.  **Council Briefing Generation (`.github/workflows/generate-council-briefing.yml`)**: (Runs at 09:00 UTC)
+    *   Triggered daily after fact extraction, this workflow runs `scripts/generate_council_context.py`.
     *   This script takes `the-council/aggregated/daily.json` as input and uses an LLM (via OpenRouter) with strategic prompts (e.g., `scripts/prompts/strategy/north-star.txt`) to produce a high-level strategic briefing.
     *   The output is saved as `the-council/council_briefing/YYYY-MM-DD.json`, with a permalink `the-council/council_briefing/daily.json`.
 
-5.  **HackMD Note Generation & Backup (`.github/workflows/update_hackmd_notes.yml`)**: (Runs at 02:30 UTC)
+5.  **HackMD Note Generation & Backup (`.github/workflows/update_hackmd_notes.yml`)**: (Runs at 09:30 UTC)
     *   This workflow runs daily to manage topical insights on HackMD.
     *   It first executes `scripts/create-hackmd.py` which ensures HackMD notes exist for prompts and updates `book.json`.
     *   Then, it runs `scripts/update-hackmd.py` which uses `the-council/aggregated/daily.json` as context to generate content for each prompt, update HackMD notes, and save local backups.
     *   Changes to `book.json`, `hackmd/**/*.md`, and `hackmd/**/*.json` are committed.
 
-6.  **Enhanced Poster Generation (`.github/workflows/generate-posters.yml`)**: (Runs at 04:00 UTC)
-    *   This workflow generates visual poster content using the enhanced `scripts/posters-enhanced.sh` script.
-    *   Features multiple rendering engines (wkhtmltoimage, Chromium, ImageMagick) with robust fallback handling.
-    *   Creates date-stamped posters (YYYY-MM-DD_category.png) to avoid Discord caching issues.
-    *   Generates 16+ poster categories daily with ElizaOS branding and responsive layouts.
-    *   All posters are hosted on GitHub Pages for reliable distribution.
+6.  **Poster Generation (`.github/workflows/generate-posters.yml`)**: (Runs at 10:00 UTC)
+    *   This workflow generates visual poster content using `scripts/posters/illustrate.py`.
+    *   **Checks upstream first**: If `ai-news/elizaos/json-cdn/` already has poster URLs, generation is skipped to avoid duplicate work.
+    *   When generating locally, creates illustrations with ElizaOS branding and uploads to Bunny CDN.
+    *   Enriches facts with media URLs (respects existing upstream values).
 
-7.  **Daily Discord Briefing (`.github/workflows/daily_discord_briefing.yml`)**: (Runs at 04:30 UTC)
+7.  **Daily Discord Briefing (`.github/workflows/daily_discord_briefing.yml`)**: (Runs at 10:30 UTC)
     *   This workflow runs `scripts/webhook.py` daily after all data processing and poster generation are complete.
-    *   Uses yesterday's date-stamped poster to avoid GitHub Pages deployment lag and Discord caching issues.
+    *   Uses poster URLs from facts (either upstream CDN or locally generated).
     *   Includes automatic poster cleanup and sends formatted briefings with LLM-generated summaries.
-    *   Integrates rich Discord embeds with poster images hosted on GitHub Pages.
+    *   Integrates rich Discord embeds with poster images.
     *   Requires `OPENROUTER_API_KEY` and `DISCORD_BOT_TOKEN` secrets for LLM summarization and Discord posting.
 
 ## Key Directories

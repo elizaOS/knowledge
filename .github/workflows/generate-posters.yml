@@ -2,7 +2,8 @@ name: Generate Content Posters
 
 on:
   schedule:
-    - cron: '0 4 * * *' # 4 AM UTC daily
+    # Runs daily at 10:00 UTC (after HackMD at 9:30, with fresh synced data)
+    - cron: '0 10 * * *'
   workflow_dispatch: # Allows manual triggering
 
 concurrency:
