@@ -84,12 +84,13 @@ jobs:
           BRIEFING_DATE=$(python3 -c "import json; print(json.load(open('${{ steps.check-facts.outputs.facts_file }}')).get('briefing_date', '${{ steps.date.outputs.date }}'))")
           echo "Briefing date: $BRIEFING_DATE"
 
-          # Enrich json-cdn source file if it exists
+          # Enrich json-cdn source file if it exists (skip existing upstream URLs)
           if [ -f "ai-news/elizaos/json-cdn/${BRIEFING_DATE}.json" ]; then
             python scripts/etl/enrich-facts-media.py --source \
               -f "ai-news/elizaos/json-cdn/${BRIEFING_DATE}.json" \
               -m "media/daily/${BRIEFING_DATE}/manifest.json" \
               --cdn-base "https://cdn.elizaos.news/media/daily/${BRIEFING_DATE}" \
+              --skip-existing \
               -v || echo "Source enrichment skipped"
           else
             echo "No json-cdn file found for ${BRIEFING_DATE}"
@@ -104,6 +105,7 @@ jobs:
             -a "the-council/aggregated/${{ steps.date.outputs.date }}.json" \
             -m "media/${{ steps.date.outputs.date }}/manifest.json" \
             --cdn-base "https://cdn.elizaos.news/posters/${{ steps.date.outputs.date }}" \
+            --skip-existing \
             -v || echo "Enrichment skipped (missing files)"
         continue-on-error: true
 
