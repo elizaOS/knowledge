@@ -1,37 +1,38 @@
-# Eliza OS Development Summary (2026-01-04)
+# ElizaOS Update - December 29, 2025
 
-## GitHub Activity
+## Community Highlights
 
-### Recent Issues
-- Issue #6322: Conversation deletion requires page refresh
-- Issue #6321: Agent "following" functionality feature request
-- Issue #6320: Interface label change suggestion from "Chat" to "Talk"
-- Issue #6319: Agent sorting functionality issues
+- Shaw (@shawmakesmagic) and the official ElizaOS account returned to X (formerly Twitter)
+- Shaw hosted a Twitter Space with over 5,000 listeners
+- Community excitement led to a price increase for the ElizaOS token
+- ElizaOS token migration from AI16Z is complete and available across multiple chains (Solana, Base, Ethereum, BSC)
+- DegenAI token holders (1M+ tokens) can access autotrader feature to copy trade with AI system
 
-### Repository Activity
-- 4 new issues opened
-- 3 active contributors
+## Development Progress
 
-## Discord Activity
+### ElizaOS Core
+- Documentation coverage increased from ~60% to ~95%
+- Work on TypeScript patterns (decorators, dependency injection)
+- Discord plugin enhancements for audio and messaging
+- Consideration of bringing back SQLite support as a first-class feature
 
-### General Discussion
-- Conversations about Hyperscape development and market movements
-- Mentions of developer discord accessible by invitation
-- Shaw interacting with Sterling on Twitter
-- New users being welcomed to the community
+### ElizaOS Cloud
+- Now in open beta with light support ahead of full launch
+- Integration work with various tools including DaVinci Resolve via MCP server
 
-### Coders Channel
-- Technical discussions about trading bots on Solana
-- Information about useModel with provider option
-- Explanations of Eliza's functionality:
-  * Creating agents with specific data
-  * AI models integration
-  * Plugin support (X, Discord, Telegram)
-  * Real-world tool connections
-  * Open-source operating system for plugin development
+## GitHub Activity (Dec 29-30, 2025)
+- 4 new pull requests (all merged)
+- 4 new issues created
+- 6 active contributors
 
-### Core Developers Updates
-- Bootstrap optimizations in development for certain providers
-- Memory usage observations during builds (21GB to 27GB+)
-- Significant work on Eliza knowledge data pipelines
-- Documentation and presentation phases coming soon
+### Merged Pull Requests
+- Standardized message server route naming
+- Added comprehensive documentation to plugin-dummy-services module
+- Replaced execa and child_process with Bun.spawn and bun-exec utilities
+- Fixed documentation inconsistencies and added missing test flags
+- Enabled hot reload for backend development
+
+### New Issues
+- UX improvement: Auto-open conversation when clicking on agent
+- Support for streaming Chain of Thought (CoT) reasoning
+- Implementation of world-class TypeScript patterns (Decorators, DI, advanced type system)
