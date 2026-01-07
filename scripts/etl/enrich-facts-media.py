@@ -216,7 +216,8 @@ def merge_media_into_facts(
     facts: dict,
     source_images: list[str],
     source_videos: list[str],
-    posters: dict
+    posters: dict,
+    skip_existing: bool = False,
 ) -> dict:
     """
     Merge media URLs into facts structure.
@@ -227,29 +228,37 @@ def merge_media_into_facts(
     - facts["overall_poster"] = posters["overall"] (top-level)
     - facts["icon_sheet"] = posters["icon_sheet"] (top-level)
     - facts["categories"][cat]["poster"] = url (per dict-type category)
+
+    Args:
+        skip_existing: If True, preserve existing values (don't overwrite upstream data)
     """
     # Build images array: source media + all poster URLs
-    all_images = source_images.copy()
-    for category, url in posters.items():
-        if url and url not in all_images:
-            all_images.append(url)
+    if not skip_existing or not facts.get("images"):
+        all_images = source_images.copy()
+        for category, url in posters.items():
+            if url and url not in all_images:
+                all_images.append(url)
+        facts["images"] = all_images
 
-    facts["images"] = all_images
-    facts["videos"] = source_videos
+    if not skip_existing or not facts.get("videos"):
+        facts["videos"] = source_videos
 
-    # Set overall poster at top level
+    # Set overall poster at top level (skip if exists and flag set)
     if "overall" in posters:
-        facts["overall_poster"] = posters["overall"]
+        if not skip_existing or not facts.get("overall_poster"):
+            facts["overall_poster"] = posters["overall"]
 
-    # Set icon sheet at top level
+    # Set icon sheet at top level (skip if exists and flag set)
     if "icon_sheet" in posters:
-        facts["icon_sheet"] = posters["icon_sheet"]
+        if not skip_existing or not facts.get("icon_sheet"):
+            facts["icon_sheet"] = posters["icon_sheet"]
 
-    # Set per-category posters (only for dict-type categories)
+    # Set per-category posters (only for dict-type categories, skip if exists)
     categories = facts.get("categories", {})
     for cat_name, cat_content in categories.items():
         if cat_name in posters and isinstance(cat_content, dict):
-            cat_content["poster"] = posters[cat_name]
+            if not skip_existing or not cat_content.get("poster"):
+                cat_content["poster"] = posters[cat_name]
 
     # Update metadata
     if "_metadata" not in facts:
@@ -268,6 +277,7 @@ def enrich_source_file(
     cdn_base: str = None,
     dry_run: bool = False,
     output_path: Path = None,
+    skip_existing: bool = False,
 ) -> bool:
     """
     Enrich json-cdn source file with poster URLs based on topic field.
@@ -281,6 +291,7 @@ def enrich_source_file(
         cdn_base: CDN base URL for constructing poster URLs
         dry_run: If True, show changes without writing
         output_path: Output path (default: overwrite input)
+        skip_existing: If True, preserve existing poster/meme URLs
 
     Returns:
         True if successful
@@ -307,6 +318,7 @@ def enrich_source_file(
 
     # Add poster to each category based on topic
     enriched_count = 0
+    skipped_count = 0
     categories = data.get("categories", [])
     for cat in categories:
         if not isinstance(cat, dict):
@@ -314,17 +326,31 @@ def enrich_source_file(
         topic = cat.get("topic", "").lower()
         poster_key = TOPIC_TO_POSTER.get(topic)
         if poster_key and poster_key in posters:
+            # Skip if already has poster and skip_existing is set
+            if skip_existing and cat.get("poster"):
+                skipped_count += 1
+                logger.debug(f"  {topic} → skipped (existing: {cat.get('poster')[:50]}...)")
+                continue
             cat["poster"] = posters[poster_key]
             enriched_count += 1
             logger.debug(f"  {topic} → {poster_key}")
 
-    # Add overall poster at top level
-    if "overall" in posters:
-        data["poster"] = posters["overall"]
+    if skipped_count:
+        logger.info(f"Skipped {skipped_count} categories with existing poster URLs")
 
-    # Add icon_sheet at top level
+    # Add overall poster at top level (skip if exists and flag set)
+    if "overall" in posters:
+        if not skip_existing or not data.get("poster"):
+            data["poster"] = posters["overall"]
+        elif skip_existing and data.get("poster"):
+            logger.info(f"Skipped top-level poster (existing: {data.get('poster')[:50]}...)")
+
+    # Add icon_sheet at top level (skip if exists and flag set)
     if "icon_sheet" in posters:
-        data["icon_sheet"] = posters["icon_sheet"]
+        if not skip_existing or not data.get("icon_sheet"):
+            data["icon_sheet"] = posters["icon_sheet"]
+        elif skip_existing and data.get("icon_sheet"):
+            logger.info(f"Skipped icon_sheet (existing: {data.get('icon_sheet')[:50]}...)")
 
     if dry_run:
         logger.info("Dry run - would add:")
@@ -357,6 +383,7 @@ def enrich_facts(
     cdn_base: str = None,
     dry_run: bool = False,
     output_path: Path = None,
+    skip_existing: bool = False,
 ) -> bool:
     """
     Main enrichment function with graceful degradation.
@@ -368,6 +395,7 @@ def enrich_facts(
         cdn_base: CDN base URL for constructing poster URLs
         dry_run: If True, show changes without writing
         output_path: Output path (default: overwrite input)
+        skip_existing: If True, preserve existing media URLs
 
     Returns:
         True if successful
@@ -403,7 +431,7 @@ def enrich_facts(
         return True  # Not an error, just nothing to do
 
     # Merge media into facts
-    enriched = merge_media_into_facts(facts, source_images, source_videos, posters)
+    enriched = merge_media_into_facts(facts, source_images, source_videos, posters, skip_existing)
 
     if dry_run:
         logger.info("Dry run - would add:")
@@ -480,6 +508,12 @@ def main():
         help="Enrich source file (json-cdn) instead of facts file. "
              "Adds poster URLs to categories based on topic field.",
     )
+    parser.add_argument(
+        "--skip-existing",
+        action="store_true",
+        help="Skip fields that already have valid URLs (preserve upstream values). "
+             "Useful when upstream json-cdn already has poster/meme URLs.",
+    )
 
     args = parser.parse_args()
 
@@ -529,6 +563,7 @@ def main():
             cdn_base=cdn_base,
             dry_run=args.dry_run,
             output_path=args.output,
+            skip_existing=args.skip_existing,
         )
     else:
         success = enrich_facts(
@@ -538,6 +573,7 @@ def main():
             cdn_base=cdn_base,
             dry_run=args.dry_run,
             output_path=args.output,
+            skip_existing=args.skip_existing,
         )
 
     sys.exit(0 if success else 1)
