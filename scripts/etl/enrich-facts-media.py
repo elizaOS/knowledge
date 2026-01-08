@@ -47,6 +47,30 @@ logger = logging.getLogger(__name__)
 # Default CDN base URL
 DEFAULT_CDN_BASE = "https://cdn.elizaos.news/posters"
 
+
+def get_as_list(obj: dict, singular: str, plural: str) -> list:
+    """
+    Get field as list, handling both scalar and array forms.
+
+    Supports the ai-news format where:
+    - Single items use singular key: {"image": "url"}
+    - Multiple items use plural key: {"images": ["url1", "url2"]}
+    - Empty fields are omitted entirely
+
+    Examples:
+        get_as_list({"image": "url"}, "image", "images") → ["url"]
+        get_as_list({"images": ["a", "b"]}, "image", "images") → ["a", "b"]
+        get_as_list({}, "image", "images") → []
+    """
+    if plural in obj:
+        val = obj[plural]
+        return val if isinstance(val, list) else [val] if val else []
+    elif singular in obj:
+        val = obj[singular]
+        return [val] if val else []
+    return []
+
+
 # Topic → poster category mapping (for --source mode)
 # Maps json-cdn category topics to poster filenames
 TOPIC_TO_POSTER = {
@@ -132,19 +156,11 @@ def extract_source_media(aggregated_path: Path) -> tuple[list[str], list[str]]:
                 if not isinstance(item, dict):
                     continue
 
-                # Extract images
-                item_images = item.get("images", [])
-                if isinstance(item_images, list):
-                    images.extend(item_images)
-                elif isinstance(item_images, str) and item_images:
-                    images.append(item_images)
+                # Extract images (handles both scalar and array formats)
+                images.extend(get_as_list(item, "image", "images"))
 
-                # Extract videos
-                item_videos = item.get("videos", [])
-                if isinstance(item_videos, list):
-                    videos.extend(item_videos)
-                elif isinstance(item_videos, str) and item_videos:
-                    videos.append(item_videos)
+                # Extract videos (handles both scalar and array formats)
+                videos.extend(get_as_list(item, "video", "videos"))
 
     # Validate and deduplicate
     images = deduplicate_urls([u for u in images if validate_url(u)])

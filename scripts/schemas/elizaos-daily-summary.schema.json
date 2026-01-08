@@ -1,0 +1,179 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://elizaos.github.io/knowledge/scripts/schemas/elizaos-daily-summary.schema.json",
+  "title": "ElizaOS Daily Summary",
+  "description": "Daily aggregated summary of ElizaOS ecosystem activity. Supports both singular (scalar) and plural (array) forms for media fields.",
+  "type": "object",
+  "required": ["type", "title", "categories"],
+  "properties": {
+    "type": {
+      "type": "string",
+      "const": "elizaosDailySummary"
+    },
+    "title": {
+      "type": "string",
+      "description": "Human-readable title, e.g., 'Daily Report - 2026-01-06'"
+    },
+    "date": {
+      "type": "string",
+      "format": "date",
+      "description": "ISO date (YYYY-MM-DD)"
+    },
+    "poster": {
+      "type": "string",
+      "format": "uri",
+      "description": "Overall poster image URL (optional, from upstream or generated)"
+    },
+    "icon_sheet": {
+      "type": "string",
+      "format": "uri",
+      "description": "Combined icon sheet URL (optional)"
+    },
+    "categories": {
+      "type": "array",
+      "description": "Content categories for the day",
+      "items": {
+        "$ref": "#/definitions/category"
+      }
+    },
+    "_metadata": {
+      "type": "object",
+      "description": "Processing metadata (optional)",
+      "properties": {
+        "generated_at": { "type": "string", "format": "date-time" },
+        "source": { "type": "string" },
+        "version": { "type": "string" }
+      }
+    }
+  },
+  "definitions": {
+    "category": {
+      "type": "object",
+      "required": ["title", "content"],
+      "properties": {
+        "title": {
+          "type": "string",
+          "description": "Category title"
+        },
+        "topic": {
+          "type": "string",
+          "description": "Normalized topic for poster mapping",
+          "enum": [
+            "discord",
+            "github",
+            "twitter",
+            "development",
+            "community",
+            "announcements",
+            "partnerships",
+            "other"
+          ]
+        },
+        "poster": {
+          "type": "string",
+          "format": "uri",
+          "description": "Category-specific poster URL (optional)"
+        },
+        "content": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/contentItem"
+          }
+        }
+      }
+    },
+    "contentItem": {
+      "type": "object",
+      "required": ["text"],
+      "properties": {
+        "text": {
+          "type": "string",
+          "description": "Markdown-formatted content"
+        },
+        "source": {
+          "type": "string",
+          "format": "uri",
+          "description": "Single source URL (Discord, GitHub, etc.)"
+        },
+        "sources": {
+          "type": "array",
+          "description": "Multiple source URLs (Discord, GitHub, etc.)",
+          "items": {
+            "type": "string",
+            "format": "uri"
+          }
+        },
+        "image": {
+          "type": "string",
+          "format": "uri",
+          "description": "Single image URL"
+        },
+        "images": {
+          "type": "array",
+          "description": "Multiple image URLs",
+          "items": {
+            "type": "string",
+            "format": "uri"
+          }
+        },
+        "video": {
+          "type": "string",
+          "format": "uri",
+          "description": "Single video URL"
+        },
+        "videos": {
+          "type": "array",
+          "description": "Multiple video URLs",
+          "items": {
+            "type": "string",
+            "format": "uri"
+          }
+        },
+        "meme": {
+          "$ref": "#/definitions/meme",
+          "description": "Single generated meme"
+        },
+        "memes": {
+          "type": "array",
+          "description": "Multiple generated memes",
+          "items": {
+            "$ref": "#/definitions/meme"
+          }
+        },
+        "poster": {
+          "type": "string",
+          "format": "uri",
+          "description": "Single generated poster URL"
+        },
+        "posters": {
+          "type": "array",
+          "description": "Multiple generated poster URLs",
+          "items": {
+            "type": "string",
+            "format": "uri"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "meme": {
+      "type": "object",
+      "required": ["url"],
+      "properties": {
+        "url": {
+          "type": "string",
+          "format": "uri",
+          "description": "Meme image URL"
+        },
+        "summary": {
+          "type": "string",
+          "description": "Brief description of the meme"
+        },
+        "template": {
+          "type": "string",
+          "description": "Imgflip template name used"
+        }
+      }
+    }
+  }
+}
