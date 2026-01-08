@@ -1,0 +1,244 @@
+{
+  "type": "elizaosDailySummary",
+  "title": "Daily Report - 2026-01-07",
+  "categories": [
+    {
+      "title": "ElizaOS Development Updates - January 7, 2026",
+      "content": [
+        {
+          "text": "## Discord Plugin Bootstrap Fixes\n\nOdilitime created a branch (odi-17) with fixes for bootstrap's actions/providers to address issues users were experiencing with version 1.7.0. The main problem involved serverId vs messageServerId migration causing \"No server ID found\" errors. A fix was submitted via PR #6333, though it still requires testing with discord plugin version 1.3.3. Users experiencing issues were advised to either wait for the fix or try using core version 1.6.5 as a temporary workaround. The team acknowledged the need to rush out a release with this critical fix.",
+          "sources": [
+            "https://discord.com/channels/1253563208833433701/1253563209462448241",
+            "https://discord.com/channels/1253563208833433701/1377726087789940836"
+          ],
+          "images": [
+            "https://cdn.elizaos.news/elizaos-media/screenshot_2026-01-06_at_4-28-45_pm_74425714.png"
+          ],
+          "videos": [],
+          "memes": [
+            {
+              "url": "https://cdn.elizaos.news/imgflip/ags6d8.jpg",
+              "summary": "Migration loses server ID."
+            }
+          ]
+        },
+        {
+          "text": "## Contract Address (CA) Visibility Discussion\n\nCommunity members raised concerns about the difficulty of finding official ElizaOS contract addresses on X/Twitter accounts. The team acknowledged this issue and committed to addressing it. Shaw confirmed they will post the CA across official accounts. Discussion ensued about best practices, with some noting that top projects don't typically put CAs in bios as it can appear scam-like. The consensus was that a pinned tweet on the Eliza account or better website integration would be more appropriate. The linktree is being refreshed to point to CoinGecko for token information.",
+          "sources": [
+            "https://discord.com/channels/1253563208833433701/1253563209462448241"
+          ],
+          "images": [],
+          "videos": [],
+          "memes": [
+            {
+              "url": "https://cdn.elizaos.news/imgflip/ags6ed.jpg",
+              "summary": "CAs in bios look scammy."
+            }
+          ],
+          "posters": [
+            "https://cdn.elizaos.news/posters/1767833849512-tp6spg.png"
+          ]
+        },
+        {
+          "text": "## ElizaOS Cloud API Integration Issues\n\nA developer reported getting \"Model not found\" errors when building ElizaOS cloud agents into their website using agent IDs and API endpoints. The solution provided was to use proper model parameter formatting with provider prefixes when calling agent API endpoints:\n- openai/gpt-4o-mini\n- anthropic/claude-sonnet-4.5\n- google/gemini-2.5-flash",
+          "sources": [
+            "https://discord.com/channels/1253563208833433701/1300025221834739744"
+          ],
+          "images": [],
+          "videos": [],
+          "memes": [
+            {
+              "url": "https://cdn.elizaos.news/imgflip/ags6gb.jpg",
+              "summary": "Fictional models fix real errors."
+            }
+          ],
+          "posters": [
+            "https://cdn.elizaos.news/posters/1767833875306-v5v89n.jpg"
+          ]
+        },
+        {
+          "text": "## Development Tools and Resources\n\nJin shared GitHub's agentics workflow documentation for updating docs, highlighting useful patterns for the team. HackMD was mentioned as a collaboration platform, with the team having a workspace at https://hackmd.io/@elizaos/book. A developer from HackMD reached out expressing support for Eliza builders using their platform.",
+          "sources": [
+            "https://discord.com/channels/1253563208833433701/1300025221834739744",
+            "https://discord.com/channels/1253563208833433701/1377726087789940836"
+          ],
+          "images": [
+            "https://cdn.elizaos.news/elizaos-media/agentics_e2a30a8f.jpg"
+          ],
+          "videos": [],
+          "memes": [
+            {
+              "url": "https://cdn.elizaos.news/imgflip/ags6hd.jpg",
+              "summary": "GitHub's agentics workflow exists."
+            }
+          ]
+        },
+        {
+          "text": "## Unified Messaging API Updates\n\nStan submitted pull requests for both Telegram and Discord plugins implementing unified messaging API with elizaOS support. The Discord PR specifically fixes the API to use handleMessage instead of the deprecated sendMessage method. Stan also shared an RFC document for review on Hybrid Architecture - Persistent Workers Exploration.",
+          "sources": [
+            "https://discord.com/channels/1253563208833433701/1377726087789940836"
+          ],
+          "images": [
+            "https://cdn.elizaos.news/elizaos-media/22_df803f0d.jpg",
+            "https://cdn.elizaos.news/elizaos-media/41_b6de2c4f.jpg"
+          ],
+          "videos": [],
+          "memes": [
+            {
+              "url": "https://cdn.elizaos.news/imgflip/ags6ht.jpg",
+              "summary": "elizaOS in Telegram Discord plugins."
+            }
+          ]
+        },
+        {
+          "text": "## Cloud Infrastructure Work\n\nStan provided an update on cloud infrastructure improvements, working on fixes to handle TOCTOU (Time-of-check to time-of-use) race conditions using a deduct-before, reconcile-after approach. Parallel work includes optimizations on runtime initialization. The team discussed Discord bridge implementation, with Odilitime recommending review of the Jeju cloud branch which contains Shaw's preferred implementation. Discussion touched on scaling considerations for event pumps, noting that voice connections will need higher priority/bandwidth than text, and preprocessing will be important.",
+          "sources": [
+            "https://discord.com/channels/1253563208833433701/1377726087789940836"
+          ],
+          "images": [],
+          "videos": [],
+          "memes": [
+            {
+              "url": "https://cdn.elizaos.news/imgflip/ags6ic.jpg",
+              "summary": "Jeju cloud branch preferred."
+            }
+          ]
+        },
+        {
+          "text": "## Development Tool Insights\n\nOdilitime shared a finding from a Cursor call: when using your own Claude API key in Cursor, you don't get the Cursor-optimized version of Claude where they apply tricks to improve output. A humorous observation was made that ElizaOS documentation incorrectly described it as \"a revolutionary peer to peer agent framework that you start in golang but code it in python.\"",
+          "sources": [
+            "https://discord.com/channels/1253563208833433701/1377726087789940836"
+          ],
+          "images": [
+            "https://cdn.elizaos.news/elizaos-media/screenshot_2026-01-06_at_5-16-54_pm_a21ac9df.png",
+            "https://cdn.elizaos.news/elizaos-media/img_2990_b56f0838.jpg"
+          ],
+          "videos": [],
+          "memes": [
+            {
+              "url": "https://cdn.elizaos.news/imgflip/ags6jx.jpg",
+              "summary": "ElizaOS: Golang start, Python code."
+            }
+          ]
+        }
+      ],
+      "topic": "discordrawdata"
+    },
+    {
+      "title": "Recent Bug Fixes in ElizaOS Plugins",
+      "content": [
+        {
+          "text": "Two pull requests have been submitted to fix issues in the ElizaOS plugin system:\n\n**PR #6333** by odilitime addresses a breaking change in the plugin-bootstrap and SQL plugins. This fix updates actions and providers to handle the renaming from `serverId` to `messageServerId`, ensuring compatibility across the affected plugins.\n\n**PR #6339** by standujar resolves an issue in the plugin-sql package by skipping the pgcrypto extension when using PGLite. This prevents errors that occur when attempting to enable pgcrypto in PGLite environments where the extension is not available.",
+          "sources": [
+            "https://github.com/elizaOS/eliza/pull/6333",
+            "https://github.com/elizaOS/eliza/pull/6339"
+          ],
+          "images": [
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/pull/6333",
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/pull/6339"
+          ],
+          "videos": [],
+          "memes": [
+            {
+              "url": "https://cdn.elizaos.news/imgflip/ags6k9.jpg",
+              "summary": "PGLite skips pgcrypto extension."
+            }
+          ]
+        }
+      ],
+      "topic": "pull_request"
+    },
+    {
+      "title": "elizaos/eliza GitHub Activity Summary (January 7-8, 2026)",
+      "content": [
+        {
+          "text": "During the two-day period from January 7-8, 2026, the elizaos/eliza repository showed moderate development activity. The project received 2 new pull requests, with 1 successfully merged into the codebase. Additionally, 7 new issues were opened, indicating ongoing bug reports, feature requests, or discussions from the community. The repository had 7 active contributors participating in development during this timeframe.",
+          "sources": [
+            "From 2026-01-07 to 2026-01-08, elizaos/eliza had 2 new PRs (1 merged), 7 new issues, and 7 active contributors."
+          ],
+          "images": [],
+          "videos": [],
+          "memes": [
+            {
+              "url": "https://cdn.elizaos.news/imgflip/ags6kh.jpg",
+              "summary": "Repository activity from 2026."
+            }
+          ],
+          "posters": [
+            "https://cdn.elizaos.news/posters/1767833968396-5ym9e.png"
+          ]
+        }
+      ],
+      "topic": "github_summary"
+    },
+    {
+      "title": "Chat Box UI Improvement - Dynamic Sizing",
+      "content": [
+        {
+          "text": "Issue #6310 proposes a user interface enhancement for the chat box component. The suggestion is to reduce the default size of the chat box to display only one line initially, with dynamic size adjustment that expands as users type more text across multiple lines. This improvement was contributed by borisudovicic and aims to optimize the chat interface for better space utilization and user experience.",
+          "sources": [
+            "https://github.com/elizaOS/eliza/issues/6310"
+          ],
+          "images": [
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/issues/6310"
+          ],
+          "videos": [],
+          "memes": [
+            {
+              "url": "https://cdn.elizaos.news/imgflip/ags6mg.jpg",
+              "summary": "Chat box defaults to one line."
+            }
+          ]
+        }
+      ],
+      "topic": "issue"
+    },
+    {
+      "title": "Plugin Bootstrap and SQL Minor Bug Fix",
+      "content": [
+        {
+          "text": "A bug fix was implemented in the plugin-bootstrap and SQL minor components to update actions and providers. The change addresses a property name modification from 'serverId' to 'messageServerId'. This update ensures consistency across the codebase and proper functionality of the affected plugins.",
+          "sources": [
+            "https://github.com/elizaOS/eliza/pull/6333"
+          ],
+          "images": [],
+          "videos": [],
+          "memes": [
+            {
+              "url": "https://cdn.elizaos.news/imgflip/ags6mt.jpg",
+              "summary": "Renamed serverId to messageServerId."
+            }
+          ],
+          "posters": [
+            "https://cdn.elizaos.news/posters/1767834006150-mr9yys.jpg"
+          ]
+        }
+      ],
+      "topic": "completed_items"
+    },
+    {
+      "title": "Top Contributors for elizaOS/eliza",
+      "content": [
+        {
+          "text": "This topic focuses on the top contributors to the elizaOS/eliza project. However, the provided source does not contain specific information about who the contributors are, their contribution statistics, or details about their involvement in the project. To provide accurate information about the top contributors, additional data such as commit counts, pull requests, code reviews, or other contribution metrics would be needed.",
+          "sources": [
+            "text: Top contributors for elizaOS/eliza"
+          ],
+          "images": [],
+          "videos": [],
+          "memes": [
+            {
+              "url": "https://cdn.elizaos.news/imgflip/ags6o5.jpg",
+              "summary": "No contributor data available."
+            }
+          ],
+          "posters": [
+            "https://cdn.elizaos.news/posters/1767834031242-ngr8hc.jpg"
+          ]
+        }
+      ],
+      "topic": "contributors"
+    }
+  ],
+  "date": 1767744000
+}

@@ -1,0 +1,16 @@
+{
+  "version": "1.0",
+  "type": "repository",
+  "interval": "week",
+  "date": "2026-01-04",
+  "generatedAt": "2026-01-07T23:14:50.902Z",
+  "sourceLastUpdated": "2026-01-07T23:14:50.902Z",
+  "contentFormat": "markdown",
+  "contentHash": "2266c9b33d6719cf1202dee0fdcb99943282871ed8b2cb0470f026494ecf24d6",
+  "entity": {
+    "repoId": "elizaos-plugins/plugin-discord",
+    "owner": "elizaos-plugins",
+    "repo": "plugin-discord"
+  },
+  "content": "# elizaos-plugins/plugin-discord Weekly Report (Jan 4 - 10, 2026)\n\n## 🚀 Highlights\nThis week's efforts were centered on maintenance and alignment. A significant long-standing issue with slash command visibility was resolved by making the command system extensible. Concurrently, a critical P1 publishing error ([#40](https://github.com/elizaos-plugins/plugin-discord/issues/40)) that caused version v1.3.4 to be skipped was identified and is now under active investigation. Work also began on modernizing the plugin's API usage to align with the broader ElizaOS framework, ensuring future compatibility and consistency.\n\n## 🛠️ Key Developments\nWhile no major features were completed, foundational work was initiated to align the plugin with the core ElizaOS API.\n\n- **API Unification:** A new pull request ([#41](https://github.com/elizaos-plugins/plugin-discord/pull/41)) was opened to begin the transition from `sendMessage` to the standardized `handleMessage` function. This change is a key step towards ensuring compatibility with the ElizaOS unified API for message handling across all plugins.\n\n## 🐛 Issues & Triage\nIssue management this week focused on resolving a legacy bug and triaging a new, high-priority publishing failure.\n\n- **Closed Issues:**\n    - **Slash Command Functionality Restored:** Issue [#15](https://github.com/elizaos-plugins/plugin-discord/issues/15), which reported the disappearance of `join` and `leave` slash commands, was closed. The resolution involved making the system extensible, empowering developers to add slash commands as needed.\n\n- **New & Active Issues:**\n    - **Critical Publishing Failure:** A new P1 issue, [#40](https://github.com/elizaos-plugins/plugin-discord/issues/40), was opened to address a failure in the publishing pipeline that prevented version v1.3.4 from being released, causing a version jump from v1.3.3 to v1.3.5.\n    - **Investigation Underway:** This issue is being actively investigated. The investigation has traced the last successful NPM publish to v1.3.3 and is analyzing specific TypeScript errors from previous build runs related to `EventPayloadMap` and `DiscordRegisterCommandsPayload`. The team is also reviewing dependencies on `@elizaos/config` and `@elizaos/^1.7.0` as potential sources of the problem.\n\n## 💬 Community & Collaboration\nCollaboration this week was concentrated on the investigation into the critical publishing failure. The detailed analysis documented in issue [#40](https://github.com/elizaos-plugins/plugin-discord/issues/40), including references to specific PRs, build runs, and an attempted manual publish by team member Stan, indicates a focused, collaborative effort to diagnose and resolve this high-impact bug."
+}

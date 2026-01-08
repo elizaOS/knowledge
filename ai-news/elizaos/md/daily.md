@@ -1,38 +1,63 @@
-# ElizaOS Update - December 29, 2025
+# ElizaOS Daily Report - January 6, 2026
 
-## Community Highlights
+## Development Updates and Technical Discussions
 
-- Shaw (@shawmakesmagic) and the official ElizaOS account returned to X (formerly Twitter)
-- Shaw hosted a Twitter Space with over 5,000 listeners
-- Community excitement led to a price increase for the ElizaOS token
-- ElizaOS token migration from AI16Z is complete and available across multiple chains (Solana, Base, Ethereum, BSC)
-- DegenAI token holders (1M+ tokens) can access autotrader feature to copy trade with AI system
+### Discord Plugin Fixes
 
-## Development Progress
+- Resolved persistent issues with Discord plugin not detecting server IDs, usernames, or server ownership
+- Traced "No server ID found 10" error to version compatibility issues between ElizaOS 1.7.0 and plugin-discord 1.3.3
+- Identified problem as transition from `serverId` to `messageServerId` in codebase
+- Created fix branch (odi-17) to address bootstrap actions/providers issues
+- Submitted PR #6333 to fix plugin-bootstrap and SQL minor actions/providers for serverId compatibility
 
-### ElizaOS Core
-- Documentation coverage increased from ~60% to ~95%
-- Work on TypeScript patterns (decorators, dependency injection)
-- Discord plugin enhancements for audio and messaging
-- Consideration of bringing back SQLite support as a first-class feature
+### Core Development Progress
 
-### ElizaOS Cloud
-- Now in open beta with light support ahead of full launch
-- Integration work with various tools including DaVinci Resolve via MCP server
+- Submitted PRs for unified messaging API implementation for Telegram (#22) and Discord (#41) plugins
+- Prepared RFC document on hybrid architecture with persistent workers exploration
+- Established HackMD workspace at https://hackmd.io/@elizaos/book for team collaboration
+- Implemented cloud fixes to handle TOCTOU race conditions using deduct-before, reconcile-after approach
+- Completed runtime initialization optimizations
 
-## GitHub Activity (Dec 29-30, 2025)
-- 4 new pull requests (all merged)
-- 4 new issues created
-- 6 active contributors
+### Database Migration Solutions
 
-### Merged Pull Requests
-- Standardized message server route naming
-- Added comprehensive documentation to plugin-dummy-services module
-- Replaced execa and child_process with Bun.spawn and bun-exec utilities
-- Fixed documentation inconsistencies and added missing test flags
-- Enabled hot reload for backend development
+- Provided solution for destructive migration errors when running `elizaos start`
+- Implemented `ELIZA_ALLOW_DESTRUCTIVE_MIGRATIONS=true` flag for local development
+- Established `elizaos dev` command as alternative for continuous monitoring during development
 
-### New Issues
-- UX improvement: Auto-open conversation when clicking on agent
-- Support for streaming Chain of Thought (CoT) reasoning
-- Implementation of world-class TypeScript patterns (Decorators, DI, advanced type system)
+### Cloud Infrastructure Improvements
+
+- Resolved "Model not found" error for cloud agents
+- Implemented proper model parameter formatting with provider prefixes:
+  - openai/gpt-4o-mini
+  - anthropic/claude-sonnet-4.5
+  - google/gemini-2.5-flash
+
+### Token Migration Updates
+
+- Clarified migration mechanics for tokens held before November 11 snapshot
+- Committed to improving contract address visibility across official channels
+- Refreshed linktree to point to CoinGecko for easier token information access
+
+### Community Integrations
+
+- Integrated x402 protocol library with ElizaOS: npm i @alleyboss/micropay-solana-x402-paywall
+- Shared GitHub Agentics workflow examples for documentation updates
+- Received support from HackMD team for ElizaOS builders
+
+### New Contributors
+
+- Onboarded blockchain and AI engineer interested in agent autonomy, onchain execution layers, prediction markets, and observability tooling
+- Connected new contributor with Spartan DeFi utilities project repository
+- Directed contributors to github.com/elizaos-plugins/ for available plugins
+
+## GitHub Activity
+
+### Repository Statistics
+
+- 2 new issues opened
+- 2 active contributors during January 6-7, 2026
+
+### Issues Reported
+
+- **Issue #6332**: Turbo build consuming excessive memory (21GB or more)
+- **Issue #6331**: "Model not found" error when using agent ID with API endpoints
