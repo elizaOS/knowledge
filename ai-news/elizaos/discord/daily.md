@@ -1,131 +1,94 @@
-# elizaOS Discord - 2026-01-07
+# elizaOS Discord - 2026-01-08
 
 ## Overall Discussion Highlights
 
-### Critical Bug Fixes and Version Compatibility
+### Token Migration & Exchange Listings
 
-**ElizaOS 1.7.0 Discord Integration Issues**
+The community faced significant concerns regarding the ai16z to elizaOS token migration process. Multiple users reported eligibility verification issues, particularly with LP tokens showing "max amount reached" errors. A major development emerged with the confirmed delisting of ai16z/elizaOS from Korean exchanges (Bithumb, Coinone, Korbit) scheduled for February 2026. DAXA cited lack of transparency in rebranding/token swap procedures as the primary reason. Questions arose about whether exchanges would automatically migrate tokens for pre-November holders, receiving conflicting responses from community helpers.
 
-A critical bug was identified in ElizaOS version 1.7.0 affecting Discord bot integration. DigitalDiva reported persistent "No server ID found 10" errors related to the bootstrap plugin, with the bot failing to recognize server IDs despite having admin permissions. Odilitime diagnosed the root cause as incomplete serverId to messageServerId migration in the codebase, creating compatibility issues between the bootstrap plugin's actions/providers and plugin-discord 1.3.3.
+### Token Utility & Ecosystem Strategy
 
-**Resolution Path**
+A critical discussion emerged around elizaOS token utility within the ecosystem. Community member stoikol raised pointed questions about why the token isn't being used for payments or gas fees, questioning the fundamental need for a token without clear utility. No definitive answers were provided by team members regarding the token's utility roadmap, highlighting a documentation gap that needs addressing.
 
-Odilitime created a fix branch (odi-17) on GitHub with patches addressing the bootstrap compatibility issues. He recommended either downgrading to core version 1.6.5 or waiting for the fixes to be tested and merged. An urgent release (PR #6333) was planned to address the 1.7.0 issues, though additional testing across multiple Discord branches would be required before cutting a new Discord release.
+### Technical Development & Infrastructure
 
-### Architectural Decisions and Scaling Strategy
+**Jeju Layer2 & Bazaar Protocol**: Development activity was observed on the Kamiyo protocol via GitHub commits. The Bazaar protocol was clarified as a decentralized marketplace application running on Jeju, described as "the appstore for agents." This represents a key infrastructure component connecting Eliza's ecosystem.
 
-**Connector Gateway Architecture**
+**Data Foundation & Context Graphs**: Jin emphasized the platform's strong data foundation for building context graphs, noting that Foundation Capital's article on context graphs aligns with Eliza's capabilities. The agentic workflows generate high-quality daily, weekly, and monthly insights, though integration into last-mile applications (agents, webhooks, apps) remains a gap.
 
-A significant architectural discussion emerged in the core-devs channel regarding connector gateways and scaling. Odilitime proposed moving toward simple event pumps as the primary direction, emphasizing the need for multiple daemon instances per service to handle scale. The conversation highlighted different requirements for voice connections (requiring higher bandwidth/priority event pumps) versus text connections, with preprocessing identified as a valuable optimization strategy.
+**Deployment Configurations**: Technical questions arose about ElizaCloud container deployments, specifically database choices between Pglite and PostgreSQL (both confirmed as viable options).
 
-Odilitime recommended reviewing the Jeju cloud branch containing Shaw's preferred Discord bridge implementation as a reference for connector architecture.
+### AI Agent Development & Data Collection
 
-### Cloud Infrastructure Improvements
+An innovative discussion emerged around data collection strategies for AI training. DorianD proposed several forward-thinking concepts:
 
-Stan provided a standup update detailing work on cloud fixes addressing TOCTOU (Time-of-Check-Time-of-Use) race conditions using a deduct-before, reconcile-after approach. Runtime initialization optimizations were also implemented, with corresponding Linear tickets created for tracking.
+- **Eliza Phone App**: Users could share data in exchange for reputation points for LLM training
+- **Agent-Paid Data Collection**: Agents could pay IOUs for user-generated data (e.g., "fishingcoin" for fly-fishing footage)
+- **Motion Capture Data**: Inertial motion capture suits for various professions (McDonald's workers, hairdressers, battlefield applications) where workers earn royalties when AI/androids use their captured movement data
+- **Babylon Game Experiment**: Mentioned as an ongoing data collection initiative
 
-### API Integration and Model Configuration
+### Market Dynamics
 
-ElizaBAO encountered "Model not found" errors when integrating elizaoscloud agents into their website using agent IDs and API endpoints. cjft provided the solution: using provider prefix formats for the model parameter (e.g., openai/gpt-4o-mini, anthropic/claude-sonnet-4.5, or google/gemini-2.5-flash). This format (provider/model-name) was confirmed as the recommended approach.
-
-### Community and Documentation
-
-**Contract Address Visibility**
-
-Multiple community members raised concerns about the difficulty of finding the official ElizaOS contract address (CA) on X/Twitter accounts. Broccolex and others noted that the current discoverability flow doesn't work well for most users. Kenk mentioned the linktree is being refreshed to point to CoinGecko for token information, and shaw confirmed the team would improve CA visibility across official channels.
-
-**Documentation Resources**
-
-Jin shared valuable documentation resources including the ElizaOS book on HackMD and a GitHub resource from githubnext/agentics regarding workflow documentation. Stan submitted documentation for review alongside plugin PRs for Telegram and Discord.
-
-### Token Migration Clarification
-
-Nancy asked about token migration eligibility, specifically whether buying ai16z now would qualify for the 120X migration after 30 days. Omid Sa clarified that purchasing after the November 11 snapshot means ineligibility for migration.
+Agent Joshua provided market analysis noting that inference markets are not highly profitable based on observations from models offered on their platform and OpenRouter over the past year, providing strategic context for development priorities.
 
 ## Key Questions & Answers
 
-**Q: How should I format the model parameter when calling agent API endpoints?**  
-A: Use provider prefix format like openai/gpt-4o-mini, anthropic/claude-sonnet-4.5, or google/gemini-2.5-flash (answered by cjft)
+**Q: For deploying in Elizacloud via containers should I use Pglite or PostgresSQL?**  
+A: Either will work (answered by cjft)
 
-**Q: What version of ElizaOS are you using?**  
-A: Version 1.7.0 (answered by DigitalDiva)
+**Q: Can I migrate my old ai16z tokens purchased before November 2025? I'm getting 0 eligible tokens.**  
+A: User was directed to migration support channels; issue unresolved in main discussion (answered by Hexx 🌐)
 
-**Q: Does that mean I can keep this version?**  
-A: You could try cloning the odi-17 branch which should work with plugin-discord 1.3.3, but still testing (answered by Odilitime)
+**Q: If I have been holding ai16z on Bithumb since before November, will the exchange automatically migrate it to elizaOS?**  
+A: Conflicting answers - FoRever_BIG said yes, jessy initially said no but later agreed to check (answered by FoRever_BIG, jessy)
 
-**Q: Why does the agent need admin privileges?**  
-A: DigitalDiva gave admin permissions when the bot wouldn't respond or see server ID and usernames (answered by DigitalDiva)
+**Q: What is the Bazaar protocol shown in the GitHub commit?**  
+A: Bazaar is the decentralized marketplace application running on Jeju, the appstore for agents (answered by sb)
 
-**Q: If I buy ai16z now and migrate after 30 days, will I get 120X?**  
-A: If you buy after the snapshot (November 11) you can't migrate (answered by Omid Sa)
+## Unanswered Critical Questions
 
-**Q: Do we have a team or workspace on hackmd?**  
-A: Yes (answered by jin, sharing https://hackmd.io/@elizaos/book)
-
-**Q: So each problematic connector would need its own gateway?**  
-A: Direction is simple event pumps, and we'll need more than one daemon instance per service due to scale (answered by Odilitime)
-
-**Q: Why hasn't the ElizaOS contract address been posted across all official X accounts?**  
-A: The team will get on it (answered by shaw)
-
-**Q: Is the Babylon that a16z invested in by ElizaOS?**  
-A: Nope (answered by degenwtf)
+- When is elizaOS token going to get some usecase as utility within the ecosystem, why is it not being used for payments? (asked by stoikol)
+- Can I use Eliza for X without paying for X API ($200/month)? (asked by Discostu)
+- Does the Bithumb/Coinone delisting mean elizaOS will be listed after ai16z delisting in February? (asked by KARA)
+- Are these guys (KamiyoAI) using the elizaos plugin? (asked by elizafan222)
 
 ## Community Help & Collaboration
 
-**Odilitime → DigitalDiva**  
-Context: "No server ID found 10" error with ElizaOS 1.7.0 and Discord bot  
-Resolution: Diagnosed serverId to messageServerId migration issue, created fix branch (odi-17) on GitHub, suggested downgrading to 1.6.5 or waiting for fixes
+**Migration Support**  
+Hexx 🌐 actively assisted multiple users with migration issues, directing XXI_Rapax to verify in entry channel and access migration support channels when they couldn't post in migration questions. Hexx also protected the community by identifying and reporting scammers (GUIDE BASE, guidebt) attempting to contact users about migration.
 
-**shaw → DigitalDiva**  
-Context: Discord bot not responding or seeing server IDs  
-Resolution: Suggested creating minimal hello world script with discord.js to isolate permission issues, recommended checking Discord dev portal permissions and logging env vars
+**Technical Guidance**  
+- cjft helped Omid Sa resolve uncertainty about database choice for ElizaCloud container deployment, confirming either Pglite or PostgreSQL would work
+- sb provided clarity to elizafan222 about the Bazaar protocol, explaining it as a decentralized marketplace on Jeju
+- sb directed aicodeflow (AI/full-stack developer seeking collaboration) to the developer channel to contribute to the open source project
 
-**Casino → DigitalDiva**  
-Context: Discord bot permission problems  
-Resolution: Suggested limiting scope/permissions and incrementally working back to desired features
-
-**cjft → ElizaBAO**  
-Context: "Model not found" error when building elizaoscloud agents into website with agent IDs and API endpoints  
-Resolution: Provided correct model parameter format using provider prefix (e.g., openai/gpt-4o-mini, anthropic/claude-sonnet-4.5, google/gemini-2.5-flash)
-
-**Odilitime → Stan ⚡**  
-Context: Stan working on Discord connector implementation  
-Resolution: Recommended reviewing Jeju cloud branch with Shaw's preferred Discord bridge implementation at elizaOS/eliza-cloud-v2/tree/jeju/apps/discord-gateway
-
-**jin → Stan ⚡**  
-Context: Stan asking about HackMD team workspace availability  
-Resolution: Confirmed existence and shared link to https://hackmd.io/@elizaos/book
-
-**Omid Sa → nancy**  
-Context: Confusion about token migration eligibility and timing  
-Resolution: Clarified that buying after November 11 snapshot means ineligible for migration
-
-**Kenk → S_ling Clement**  
-Context: Looking to connect with person responsible for liquidity management  
-Resolution: Directed to connect with specific user for partnership discussion
+**LP Token Migration**  
+FoRever_BIG assisted Dabel with LP token migration issues showing "max amount reached" errors, directing them to ticket and migration question channels for specialized support.
 
 ## Action Items
 
 ### Technical
 
-- **Rush out release with 1.7.0 fix from PR #6333** - Mentioned by Odilitime
-- **Test Discord fix with various Discord branches and cut new Discord release** - Mentioned by Odilitime
-- **Complete serverId to messageServerId migration across ElizaOS codebase** - Mentioned by Odilitime
-- **Test and merge odi-17 branch fixes for bootstrap plugin compatibility with plugin-discord 1.3.3** - Mentioned by Odilitime
-- **Review Telegram plugin PR #22** - Mentioned by Stan ⚡
-- **Review Discord plugin PR #41** - Mentioned by Stan ⚡
-- **Implement cloud fixes for TOCTOU race conditions using deduct-before, reconcile-after approach** - Mentioned by Stan ⚡
-- **Optimize runtime initialization** - Mentioned by Stan ⚡
-- **Plan scaling architecture for event pumps with consideration for voice vs text priority/bandwidth requirements** - Mentioned by Odilitime
+- **Resolve migration eligibility issues for pre-November ai16z token holders** (Mentioned by: XXI_Rapax)
+- **Integrate daily/weekly/monthly insights from agentic workflows into last mile applications (agents, webhooks, apps)** (Mentioned by: jin)
+- **Investigate KamiyoAI project's use of ElizaOS plugin** (Mentioned by: elizafan222)
 
 ### Documentation
 
-- **Review agentics workflow documentation for updating docs at github.com/githubnext/agentics** - Mentioned by jin
-- **Review documentation at https://hackmd.io/@0PzDTGXqRg6nOCDoEwaN-A/SyDNAAIVWe** - Mentioned by Stan ⚡
-- **Refresh linktree to point to CoinGecko for token information** - Mentioned by Kenk
-- **Improve discoverability of ElizaOS contract address on official channels** - Mentioned by Broccolex, shaw, degenwtf
+- **Clarify token utility roadmap and use cases within the elizaOS ecosystem** (Mentioned by: stoikol)
+- **Provide clear guidance on LP token migration process and "max amount reached" errors** (Mentioned by: Dabel)
+- **Clarify automatic migration process for exchange holders (Bithumb/Coinone)** (Mentioned by: KARA)
+- **Fix docs website that is currently down at elizacloud.ai/docs** (Mentioned by: Amir)
 
-### Feature
+### Feature Development
 
-- **Explore Polymarket-based agent plugins following Predict post mention** - Mentioned by meltingsnow
+- **Develop Eliza Phone App that lets users give Eliza access to their data for LLM training and earning reputation points** (Mentioned by: DorianD)
+- **Build context graph leveraging Eliza's strong data foundation** (Mentioned by: jin)
+- **Create agents that pay people IOUs to collect their data for specific activities** (Mentioned by: DorianD)
+- **Develop cheap solution for mocap suits to capture movement data for AI training** (Mentioned by: DorianD)
+- **Implement inertial motion capture suits as uniforms for professions like McDonald's workers to capture training data** (Mentioned by: DorianD)
+- **Develop alternative to expensive X API for Eliza X integration** (Mentioned by: Discostu)
+
+---
+
+*Summary compiled from discussions across #💬-discussion, #💬-coders, and #core-devs channels on January 8, 2026*
