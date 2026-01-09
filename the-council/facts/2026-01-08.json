@@ -1,0 +1,261 @@
+{
+  "briefing_date": "2026-01-07",
+  "overall_summary": "ElizaOS v1.7.0 Discord bot integrations were failing with \"No server ID found\" errors due to incomplete `serverId` \u2192 `messageServerId` migration, prompting an urgent fix path (PR #6333 / odi-17 branch) and guidance to temporarily downgrade to v1.6.5. In parallel, core-dev discussions advanced connector scaling architecture (event pumps), cloud reliability work (TOCTOU mitigation), and documentation/community issues (model naming format, contract address discoverability).",
+  "key_facts": [
+    "DigitalDiva reported persistent \"No server ID found 10\" errors when using ElizaOS v1.7.0 with Discord bot integration.",
+    "Odilitime attributed the Discord integration failure to incomplete migration from `serverId` to `messageServerId` and created a fix branch named \"odi-17\".",
+    "PR #6333 (odilitime) updates plugin-bootstrap (and a minor plugin-sql schema/doc reference) to use `messageServerId` instead of `serverId` to address compatibility issues with plugin-discord v1.3.3.",
+    "Stan reported working on cloud fixes for TOCTOU race conditions using a \"deduct-before, reconcile-after\" approach and also on runtime initialization optimizations.",
+    "cjft advised that the ElizaOS cloud agent API `model` parameter should use provider prefixes such as `openai/gpt-4o-mini`, `anthropic/claude-sonnet-4.5`, or `google/gemini-2.5-flash` to avoid \"Model not found\" errors.",
+    "Community members requested improved visibility of the official ElizaOS contract address (CA) on X/Twitter, and the team stated they would address it.",
+    "Omid Sa stated that purchases after the November 11 snapshot are not eligible for token migration.",
+    "PR #6339 (standujar) changes plugin-sql behavior to skip enabling the pgcrypto extension when using PGLite.",
+    "Issue #6310 proposes reducing the default chat box height to one line with dynamic growth as users type."
+  ],
+  "open_questions": [
+    "Do you see your agent in Discord?"
+  ],
+  "tags": {
+    "themes": [
+      "bug-fix",
+      "release",
+      "plugins",
+      "integrations",
+      "documentation"
+    ],
+    "sentiment": {
+      "overall": "mixed",
+      "context": [
+        "technical",
+        "economic"
+      ]
+    },
+    "story_type": [
+      "maintenance"
+    ],
+    "derived": [
+      "development",
+      "community",
+      "feedback",
+      "strategy",
+      "market"
+    ],
+    "priority": [
+      "time-sensitive",
+      "high-attention"
+    ],
+    "manual": []
+  },
+  "categories": {
+    "twitter_news_highlights": [],
+    "github_updates": {
+      "new_issues_prs": [
+        {
+          "item_type": "pull_request",
+          "title": "fix: plugin-bootstrap (+ sql minor) actions/providers for serverId => messageServerId change",
+          "number": 6333,
+          "url": "https://github.com/elizaOS/eliza/pull/6333",
+          "status": "merged",
+          "author": "odilitime",
+          "significance": "Fixes bootstrap/plugin compatibility for the `serverId` \u2192 `messageServerId` rename impacting Discord integrations."
+        },
+        {
+          "item_type": "pull_request",
+          "title": "PR #6339: skip pgcrypto extension when using PGLite",
+          "number": 6339,
+          "url": "https://github.com/elizaOS/eliza/pull/6339",
+          "status": "open",
+          "author": "standujar",
+          "significance": "Prevents plugin-sql errors in PGLite environments where pgcrypto is unavailable."
+        },
+        {
+          "item_type": "issue",
+          "title": "Chat Box UI Improvement - Dynamic Sizing",
+          "number": 6310,
+          "url": "https://github.com/elizaOS/eliza/issues/6310",
+          "status": "open",
+          "author": "borisudovicic",
+          "significance": "UI proposal to reduce default chat input size and expand dynamically while typing."
+        },
+        {
+          "item_type": "pull_request",
+          "title": "Initiated work to transition from sendMessage to handleMessage (unified API alignment)",
+          "number": 41,
+          "url": "https://github.com/elizaos-plugins/plugin-discord/pull/41",
+          "status": "open",
+          "author": "standujar",
+          "significance": "Aligns Discord plugin with ElizaOS unified messaging API by adopting handleMessage."
+        },
+        {
+          "item_type": "issue",
+          "title": "Publishing failure preventing release of version v1.3.4",
+          "number": 40,
+          "url": "https://github.com/elizaos-plugins/plugin-discord/issues/40",
+          "status": "open",
+          "author": "unknown",
+          "significance": "Release blocker for the Discord plugin publishing pipeline."
+        },
+        {
+          "item_type": "issue",
+          "title": "Telegram plugin crash when processing certain images (TypeError)",
+          "number": 23,
+          "url": "https://github.com/elizaos-plugins/plugin-telegram/issues/23",
+          "status": "open",
+          "author": "unknown",
+          "significance": "Identified crash condition in plugin-telegram when handling photos, prioritized for investigation."
+        }
+      ],
+      "overall_focus": [
+        {
+          "claim": "GitHub work emphasized stabilizing plugins (bootstrap/sql/Discord), aligning clients and plugins on a unified messaging API, and addressing reliability/performance issues (SQL stability fixes, investigation into plugin-discord publishing failures).",
+          "source": [
+            "github/summaries/week/2026-01-04.md",
+            "ai-news/elizaos/json/2026-01-07.json"
+          ]
+        }
+      ]
+    },
+    "discord_updates": [
+      {
+        "channel": "#\ud83d\udcac-discussion",
+        "summary": "Users reported Discord bot failures on ElizaOS v1.7.0 with \"No server ID found\" errors; Odilitime identified an incomplete `serverId` \u2192 `messageServerId` migration and provided a fix branch (odi-17) plus downgrade guidance to v1.6.5. Community also pressed for clearer contract address visibility on official X/Twitter, with linktree refresh plans to point to CoinGecko.",
+        "key_participants": [
+          "DigitalDiva",
+          "Odilitime",
+          "shaw",
+          "Casino",
+          "Kenk",
+          "Omid Sa"
+        ],
+        "source": [
+          "ai-news/elizaos/discord/md/2026-01-07.md",
+          "ai-news/elizaos/discord/json/2026-01-07.json"
+        ]
+      },
+      {
+        "channel": "#\ud83d\udcac-coders",
+        "summary": "A developer integrating elizaoscloud agents reported \"Model not found\" errors; cjft provided the required provider-prefixed `model` format (e.g., openai/..., anthropic/..., google/...), and ElizaBAO confirmed it resolved the issue. Jin shared GitHub agentics workflow documentation as a docs reference.",
+        "key_participants": [
+          "ElizaBAO",
+          "cjft",
+          "jin"
+        ],
+        "source": [
+          "ai-news/elizaos/discord/md/2026-01-07.md",
+          "ai-news/elizaos/discord/json/2026-01-07.json"
+        ]
+      },
+      {
+        "channel": "#core-devs",
+        "summary": "Core-devs discussed urgent fixes for v1.7.0 (PR #6333) and the need to test Discord compatibility across branches before cutting a new Discord release. Architecture discussion focused on connector scaling via simple event pumps with multiple daemon instances per service, and differentiating voice vs text throughput/priority needs; Stan also reported TOCTOU mitigation work and runtime init optimizations and requested review of plugin PRs and HackMD docs.",
+        "key_participants": [
+          "Odilitime",
+          "Stan",
+          "jin"
+        ],
+        "source": [
+          "ai-news/elizaos/discord/md/2026-01-07.md",
+          "ai-news/elizaos/discord/json/2026-01-07.json"
+        ]
+      }
+    ],
+    "user_feedback": [
+      {
+        "feedback_summary": "Users reported that the official ElizaOS contract address is difficult to find on X/Twitter and requested improved discoverability (e.g., pinned post or clearer website placement).",
+        "source": [
+          "ai-news/elizaos/discord/md/2026-01-07.md",
+          "ai-news/elizaos/json/2026-01-07.json"
+        ],
+        "sentiment": "mixed"
+      },
+      {
+        "feedback_summary": "Developers integrating cloud agents encountered confusion over the `model` parameter and needed explicit documentation that `model` values must include provider prefixes (provider/model-name).",
+        "source": [
+          "ai-news/elizaos/discord/md/2026-01-07.md",
+          "ai-news/elizaos/json/2026-01-07.json"
+        ],
+        "sentiment": "neutral"
+      },
+      {
+        "feedback_summary": "Discord bot users on v1.7.0 experienced a breaking integration issue tied to a field rename (`serverId` \u2192 `messageServerId`) and requested a working version/fix path.",
+        "source": [
+          "ai-news/elizaos/discord/md/2026-01-06.md",
+          "ai-news/elizaos/discord/md/2026-01-07.md"
+        ],
+        "sentiment": "negative"
+      }
+    ],
+    "strategic_insights": [
+      {
+        "theme": "Field-rename migrations are impacting plugin ecosystem compatibility",
+        "insight": "The `serverId` \u2192 `messageServerId` rename created user-visible breakage across core + bootstrap + plugin-discord combinations, requiring emergency patching (PR #6333) and temporary downgrade guidance. Coordinated versioning and migration documentation appear necessary to reduce repeated integration failures.",
+        "implications_or_questions": [
+          "Should core releases that include schema/field migrations ship with a compatibility matrix across maintained plugin versions?",
+          "Do docs need a dedicated migration guide covering common connector breakpoints (Discord/Telegram)?"
+        ]
+      },
+      {
+        "theme": "Connector scaling direction converging on event pumps",
+        "insight": "Core-dev discussion aligned around simple event pumps with multiple daemon instances per service and differentiated requirements for voice vs text connections. This direction ties directly to the Discord gateway work (Jeju branch reference) and ongoing cloud reliability efforts.",
+        "implications_or_questions": [
+          "What baseline SLOs/throughput targets are required to size daemon counts per connector?",
+          "Should voice traffic be isolated into separate prioritized pumps by default?"
+        ]
+      }
+    ],
+    "market_analysis": [
+      {
+        "observation": "Token migration questions persisted; Omid Sa stated purchases after the November 11 snapshot are not eligible for migration.",
+        "source": [
+          "ai-news/elizaos/discord/md/2026-01-07.md",
+          "ai-news/elizaos/discord/md/2026-01-06.md"
+        ],
+        "relevance": "Clear eligibility rules reduce confusion but require prominent communication to prevent repeated support load."
+      },
+      {
+        "observation": "Community requested easier discovery of the official contract address (CA) on X/Twitter; linktree refresh was mentioned to point to CoinGecko.",
+        "source": [
+          "ai-news/elizaos/discord/md/2026-01-07.md",
+          "ai-news/elizaos/json/2026-01-07.json"
+        ],
+        "relevance": "Visibility of authoritative token information affects user trust and reduces risk of misinformation/scams."
+      }
+    ]
+  },
+  "_metadata": {
+    "model": "openai/gpt-5.2",
+    "extracted_at": "2026-01-08T08:55:06.200590Z",
+    "prompt_tokens": 33007,
+    "completion_tokens": 3450,
+    "total_tokens": 36457,
+    "processing_seconds": 64.99,
+    "status": "success",
+    "facts_by_category": {
+      "twitter_news_highlights": 0,
+      "github_updates": 6,
+      "discord_updates": 3,
+      "user_feedback": 3,
+      "strategic_insights": 2,
+      "market_analysis": 2,
+      "key_facts": 9,
+      "open_questions": 1
+    },
+    "total_facts": 26,
+    "media_enriched_at": "2026-01-08T10:13:42.737334Z",
+    "source_images_count": 9,
+    "source_videos_count": 0,
+    "poster_count": 0
+  },
+  "images": [
+    "https://cdn.elizaos.news/elizaos-media/screenshot_2026-01-06_at_4-28-45_pm_74425714.png",
+    "https://cdn.elizaos.news/elizaos-media/agentics_e2a30a8f.jpg",
+    "https://cdn.elizaos.news/elizaos-media/22_df803f0d.jpg",
+    "https://cdn.elizaos.news/elizaos-media/41_b6de2c4f.jpg",
+    "https://cdn.elizaos.news/elizaos-media/screenshot_2026-01-06_at_5-16-54_pm_a21ac9df.png",
+    "https://cdn.elizaos.news/elizaos-media/img_2990_b56f0838.jpg",
+    "https://opengraph.githubassets.com/1/elizaOS/eliza/pull/6333",
+    "https://opengraph.githubassets.com/1/elizaOS/eliza/pull/6339",
+    "https://opengraph.githubassets.com/1/elizaOS/eliza/issues/6310"
+  ],
+  "videos": []
+}
