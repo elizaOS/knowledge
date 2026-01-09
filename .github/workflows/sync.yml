@@ -93,11 +93,10 @@ jobs:
           rm -rf temp-ai-news
 
           # Update daily.json and daily.md from latest dated files
+          # Note: json/ already contains CDN URLs (json-cdn/ is deprecated)
           LATEST_JSON=$(ls -t ai-news/elizaos/json/????-??-??.json 2>/dev/null | head -1)
-          LATEST_JSON_CDN=$(ls -t ai-news/elizaos/json-cdn/????-??-??.json 2>/dev/null | head -1)
           LATEST_MD=$(ls -t ai-news/elizaos/md/????-??-??.md 2>/dev/null | head -1)
           [ -f "$LATEST_JSON" ] && cp "$LATEST_JSON" ai-news/elizaos/json/daily.json
-          [ -f "$LATEST_JSON_CDN" ] && cp "$LATEST_JSON_CDN" ai-news/elizaos/json-cdn/daily.json
           [ -f "$LATEST_MD" ] && cp "$LATEST_MD" ai-news/elizaos/md/daily.md
 
       # Step 6: Sync Clanktank Episodes

@@ -84,16 +84,17 @@ jobs:
           BRIEFING_DATE=$(python3 -c "import json; print(json.load(open('${{ steps.check-facts.outputs.facts_file }}')).get('briefing_date', '${{ steps.date.outputs.date }}'))")
           echo "Briefing date: $BRIEFING_DATE"
 
-          # Enrich json-cdn source file if it exists (skip existing upstream URLs)
-          if [ -f "ai-news/elizaos/json-cdn/${BRIEFING_DATE}.json" ]; then
+          # Enrich json source file if it exists (skip existing upstream URLs)
+          # Note: json/ already contains CDN URLs (json-cdn/ is deprecated)
+          if [ -f "ai-news/elizaos/json/${BRIEFING_DATE}.json" ]; then
             python scripts/etl/enrich-facts-media.py --source \
-              -f "ai-news/elizaos/json-cdn/${BRIEFING_DATE}.json" \
+              -f "ai-news/elizaos/json/${BRIEFING_DATE}.json" \
               -m "media/daily/${BRIEFING_DATE}/manifest.json" \
               --cdn-base "https://cdn.elizaos.news/media/daily/${BRIEFING_DATE}" \
               --skip-existing \
               -v || echo "Source enrichment skipped"
           else
-            echo "No json-cdn file found for ${BRIEFING_DATE}"
+            echo "No json file found for ${BRIEFING_DATE}"
           fi
         continue-on-error: true
 
@@ -134,7 +135,7 @@ jobs:
           # Stage generated media and enriched files
           git add media/ || true
           git add the-council/facts/*.json || true
-          git add ai-news/elizaos/json-cdn/*.json || true
+          git add ai-news/elizaos/json/*.json || true
 
           if ! git diff --staged --quiet; then
             git commit -m "Automated: Generate posters for ${{ steps.date.outputs.date }}"
