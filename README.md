@@ -137,13 +137,13 @@ Retrospectives output to `the-council/retros/` and `the-council/summaries/`.
 
 1.  **External Data Ingestion (`.github/workflows/sync.yml`)**: (Runs at 08:00 UTC)
     *   This workflow runs daily to synchronize data from external repositories and sources. Scheduled after upstream `M3-org/ai-news` CDN upload (~07:30 UTC) to ensure fresh data.
-    *   Sources include: documentation from `elizaOS/eliza` and `madjin/daily-silk`, GitHub activity logs from `elizaos/elizaos.github.io`, AI news from `M3-org/ai-news` (including CDN-enriched `json-cdn/`), and episode data from `m3-org/clanktank` and `m3-org/the-council`.
+    *   Sources include: documentation from `elizaOS/eliza` and `madjin/daily-silk`, GitHub activity logs from `elizaos/elizaos.github.io`, AI news from `M3-org/ai-news`, and episode data from `m3-org/clanktank` and `m3-org/the-council`.
     *   Raw synced data is stored in directories like `docs/`, `daily-silk/`, `github/`, `ai-news/`, `clanktank/episodes/`, and `the-council/episodes/`.
 
 2.  **Daily Context Aggregation (`.github/workflows/aggregate-daily-sources.yml`)**: (Runs at 08:30 UTC)
     *   This workflow runs `scripts/aggregate-sources.py` daily after sync completes.
     *   Consolidates data from synced external sources (e.g., `ai-news/`, `github/summaries/`) and internal structured data into a comprehensive daily JSON file: `the-council/aggregated/YYYY-MM-DD.json`.
-    *   Prefers CDN-enriched JSON from `ai-news/elizaos/json-cdn/` when available (includes poster/meme URLs).
+    *   Uses `ai-news/elizaos/json/` which contains CDN URLs for media.
     *   A permalink `the-council/aggregated/daily.json` is created, pointing to the latest daily aggregated file.
 
 3.  **Daily Fact Extraction (`.github/workflows/extract_daily_facts.yml`)**: (Runs at 08:45 UTC)
@@ -165,7 +165,7 @@ Retrospectives output to `the-council/retros/` and `the-council/summaries/`.
 
 6.  **Poster Generation (`.github/workflows/generate-posters.yml`)**: (Runs at 10:00 UTC)
     *   This workflow generates visual poster content using `scripts/posters/illustrate.py`.
-    *   **Checks upstream first**: If `ai-news/elizaos/json-cdn/` already has poster URLs, generation is skipped to avoid duplicate work.
+    *   **Checks upstream first**: If `ai-news/elizaos/json/` already has poster URLs, generation is skipped to avoid duplicate work.
     *   When generating locally, creates illustrations with ElizaOS branding and uploads to Bunny CDN.
     *   Enriches facts with media URLs (respects existing upstream values).
 
