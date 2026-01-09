@@ -43,27 +43,24 @@ TOPIC_STYLES = {
 }
 
 
-def get_as_list(obj: dict, singular: str, plural: str) -> list:
+def get_as_list(obj: dict, key: str) -> list:
     """
-    Get field as list, handling both scalar and array forms.
+    Get field as list, handling both scalar and array values.
 
     Supports the ai-news format where:
-    - Single items use singular key: {"image": "url"}
-    - Multiple items use plural key: {"images": ["url1", "url2"]}
+    - Single items are scalar: {"images": "url"}
+    - Multiple items are array: {"images": ["url1", "url2"]}
     - Empty fields are omitted entirely
 
     Examples:
-        get_as_list({"image": "url"}, "image", "images") → ["url"]
-        get_as_list({"images": ["a", "b"]}, "image", "images") → ["a", "b"]
-        get_as_list({}, "image", "images") → []
+        get_as_list({"images": "url"}, "images") → ["url"]
+        get_as_list({"images": ["a", "b"]}, "images") → ["a", "b"]
+        get_as_list({}, "images") → []
     """
-    if plural in obj:
-        val = obj[plural]
-        return val if isinstance(val, list) else [val] if val else []
-    elif singular in obj:
-        val = obj[singular]
-        return [val] if val else []
-    return []
+    val = obj.get(key)
+    if val is None:
+        return []
+    return val if isinstance(val, list) else [val]
 
 # Default CDN base for generated media
 DEFAULT_CDN_BASE = "https://cdn.elizaos.news/media/generated"
@@ -181,12 +178,12 @@ def analyze_media_gaps(data: dict) -> dict:
             summary = extract_summary(text)
 
             # Check images (just for stats) - handles both scalar and array
-            images = get_as_list(item, "image", "images")
+            images = get_as_list(item, "images")
             if images:
                 result["stats"]["items_with_images"] += 1
 
             # Check for posters - handles scalar, array, and missing
-            posters = get_as_list(item, "poster", "posters")
+            posters = get_as_list(item, "posters")
             if posters:
                 result["stats"]["items_with_posters"] += 1
             else:
@@ -201,7 +198,7 @@ def analyze_media_gaps(data: dict) -> dict:
                 })
 
             # Check for memes - handles scalar, array, and missing
-            memes = get_as_list(item, "meme", "memes")
+            memes = get_as_list(item, "memes")
             if memes:
                 result["stats"]["items_with_memes"] += 1
             else:
@@ -367,16 +364,15 @@ def fill_missing_media(
                 else:
                     content = data["categories"][cat_idx]["content"][item_idx]
                     # Check existing posters using helper
-                    existing = get_as_list(content, "poster", "posters")
+                    existing = get_as_list(content, "posters")
                     if not existing:
-                        # No existing posters - use singular key
-                        content["poster"] = poster_url
+                        # No existing posters - use scalar
+                        content["posters"] = poster_url
                     elif len(existing) == 1:
-                        # One existing - convert to plural array
+                        # One existing scalar - convert to array
                         content["posters"] = existing + [poster_url]
-                        content.pop("poster", None)
                     else:
-                        # Already plural - append
+                        # Already array - append
                         content["posters"].append(poster_url)
 
                 stats["posters_generated"] += 1

@@ -48,27 +48,24 @@ logger = logging.getLogger(__name__)
 DEFAULT_CDN_BASE = "https://cdn.elizaos.news/posters"
 
 
-def get_as_list(obj: dict, singular: str, plural: str) -> list:
+def get_as_list(obj: dict, key: str) -> list:
     """
-    Get field as list, handling both scalar and array forms.
+    Get field as list, handling both scalar and array values.
 
     Supports the ai-news format where:
-    - Single items use singular key: {"image": "url"}
-    - Multiple items use plural key: {"images": ["url1", "url2"]}
+    - Single items are scalar: {"images": "url"}
+    - Multiple items are array: {"images": ["url1", "url2"]}
     - Empty fields are omitted entirely
 
     Examples:
-        get_as_list({"image": "url"}, "image", "images") → ["url"]
-        get_as_list({"images": ["a", "b"]}, "image", "images") → ["a", "b"]
-        get_as_list({}, "image", "images") → []
+        get_as_list({"images": "url"}, "images") → ["url"]
+        get_as_list({"images": ["a", "b"]}, "images") → ["a", "b"]
+        get_as_list({}, "images") → []
     """
-    if plural in obj:
-        val = obj[plural]
-        return val if isinstance(val, list) else [val] if val else []
-    elif singular in obj:
-        val = obj[singular]
-        return [val] if val else []
-    return []
+    val = obj.get(key)
+    if val is None:
+        return []
+    return val if isinstance(val, list) else [val]
 
 
 # Topic → poster category mapping (for --source mode)
@@ -157,10 +154,10 @@ def extract_source_media(aggregated_path: Path) -> tuple[list[str], list[str]]:
                     continue
 
                 # Extract images (handles both scalar and array formats)
-                images.extend(get_as_list(item, "image", "images"))
+                images.extend(get_as_list(item, "images"))
 
                 # Extract videos (handles both scalar and array formats)
-                videos.extend(get_as_list(item, "video", "videos"))
+                videos.extend(get_as_list(item, "videos"))
 
     # Validate and deduplicate
     images = deduplicate_urls([u for u in images if validate_url(u)])

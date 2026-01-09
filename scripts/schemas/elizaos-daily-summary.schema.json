@@ -2,7 +2,7 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "$id": "https://elizaos.github.io/knowledge/scripts/schemas/elizaos-daily-summary.schema.json",
   "title": "ElizaOS Daily Summary",
-  "description": "Daily aggregated summary of ElizaOS ecosystem activity. Supports both singular (scalar) and plural (array) forms for media fields.",
+  "description": "Daily aggregated summary of ElizaOS ecosystem activity. Fields use plural key names with scalar (single item) or array (multiple items) values. Empty fields are omitted.",
   "type": "object",
   "required": ["type", "title", "categories"],
   "properties": {
@@ -22,12 +22,12 @@
     "poster": {
       "type": "string",
       "format": "uri",
-      "description": "Overall poster image URL (optional, from upstream or generated)"
+      "description": "Overall poster image URL"
     },
     "icon_sheet": {
       "type": "string",
       "format": "uri",
-      "description": "Combined icon sheet URL (optional)"
+      "description": "Combined icon sheet URL"
     },
     "categories": {
       "type": "array",
@@ -38,7 +38,7 @@
     },
     "_metadata": {
       "type": "object",
-      "description": "Processing metadata (optional)",
+      "description": "Processing metadata",
       "properties": {
         "generated_at": { "type": "string", "format": "date-time" },
         "source": { "type": "string" },
@@ -72,7 +72,7 @@
         "poster": {
           "type": "string",
           "format": "uri",
-          "description": "Category-specific poster URL (optional)"
+          "description": "Category-specific poster URL"
         },
         "content": {
           "type": "array",
@@ -90,71 +90,37 @@
           "type": "string",
           "description": "Markdown-formatted content"
         },
-        "source": {
-          "type": "string",
-          "format": "uri",
-          "description": "Single source URL (Discord, GitHub, etc.)"
-        },
         "sources": {
-          "type": "array",
-          "description": "Multiple source URLs (Discord, GitHub, etc.)",
-          "items": {
-            "type": "string",
-            "format": "uri"
-          }
-        },
-        "image": {
-          "type": "string",
-          "format": "uri",
-          "description": "Single image URL"
+          "$ref": "#/definitions/scalarOrArray",
+          "description": "Source URL(s) - scalar for one, array for multiple"
         },
         "images": {
-          "type": "array",
-          "description": "Multiple image URLs",
-          "items": {
-            "type": "string",
-            "format": "uri"
-          }
-        },
-        "video": {
-          "type": "string",
-          "format": "uri",
-          "description": "Single video URL"
+          "$ref": "#/definitions/scalarOrArray",
+          "description": "Image URL(s) - scalar for one, array for multiple"
         },
         "videos": {
-          "type": "array",
-          "description": "Multiple video URLs",
-          "items": {
-            "type": "string",
-            "format": "uri"
-          }
-        },
-        "meme": {
-          "$ref": "#/definitions/meme",
-          "description": "Single generated meme"
+          "$ref": "#/definitions/scalarOrArray",
+          "description": "Video URL(s) - scalar for one, array for multiple"
         },
         "memes": {
-          "type": "array",
-          "description": "Multiple generated memes",
-          "items": {
-            "$ref": "#/definitions/meme"
-          }
-        },
-        "poster": {
-          "type": "string",
-          "format": "uri",
-          "description": "Single generated poster URL"
+          "oneOf": [
+            { "$ref": "#/definitions/meme" },
+            { "type": "array", "items": { "$ref": "#/definitions/meme" } }
+          ],
+          "description": "Generated meme(s) - scalar for one, array for multiple"
         },
         "posters": {
-          "type": "array",
-          "description": "Multiple generated poster URLs",
-          "items": {
-            "type": "string",
-            "format": "uri"
-          }
+          "$ref": "#/definitions/scalarOrArray",
+          "description": "Generated poster URL(s) - scalar for one, array for multiple"
         }
       },
       "additionalProperties": false
+    },
+    "scalarOrArray": {
+      "oneOf": [
+        { "type": "string", "format": "uri" },
+        { "type": "array", "items": { "type": "string", "format": "uri" } }
+      ]
     },
     "meme": {
       "type": "object",
