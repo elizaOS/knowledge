@@ -1,31 +1,11 @@
 #!/usr/bin/env python3
 """
-Enrich facts.json or source json-cdn files with media URLs.
+Enrich facts or source JSON files with media URLs.
 
 Two modes:
 1. Facts mode (default): Enrich facts.json with images/videos from aggregated data
    and poster URLs from manifest.
-2. Source mode (--source): Enrich json-cdn files with poster URLs based on topic field.
-
-Usage:
-  # Facts mode: Enrich facts.json
-  python scripts/etl/enrich-facts-media.py \\
-    -f the-council/facts/2026-01-06.json \\
-    -a the-council/aggregated/2026-01-06.json \\
-    -m media/2026-01-06/manifest.json \\
-    -v
-
-  # Source mode: Enrich json-cdn file with poster URLs
-  python scripts/etl/enrich-facts-media.py --source \\
-    -f ai-news/elizaos/json-cdn/2026-01-03.json \\
-    -m media/daily/2026-01-03/manifest.json \\
-    --cdn-base "https://cdn.elizaos.news/media/daily/2026-01-03" \\
-    -v
-
-  # Dry run (either mode)
-  python scripts/etl/enrich-facts-media.py \\
-    -f the-council/facts/2026-01-06.json \\
-    --dry-run -v
+2. Source mode (--source): Enrich source files with poster URLs based on topic field.
 """
 
 import argparse
@@ -69,7 +49,6 @@ def get_as_list(obj: dict, key: str) -> list:
 
 
 # Topic → poster category mapping (for --source mode)
-# Maps json-cdn category topics to poster filenames
 TOPIC_TO_POSTER = {
     # GitHub-related topics
     "github_summary": "github_updates",
@@ -293,13 +272,10 @@ def enrich_source_file(
     skip_existing: bool = False,
 ) -> bool:
     """
-    Enrich json-cdn source file with poster URLs based on topic field.
-
-    This mode enriches the upstream source file (ai-news json-cdn output)
-    by adding poster URLs to each category based on the topic field mapping.
+    Enrich source file with poster URLs based on topic field.
 
     Args:
-        source_path: Path to json-cdn source file
+        source_path: Path to source JSON file
         manifest_path: Path to poster manifest
         cdn_base: CDN base URL for constructing poster URLs
         dry_run: If True, show changes without writing
@@ -518,14 +494,12 @@ def main():
     parser.add_argument(
         "--source",
         action="store_true",
-        help="Enrich source file (json-cdn) instead of facts file. "
-             "Adds poster URLs to categories based on topic field.",
+        help="Enrich source file instead of facts file",
     )
     parser.add_argument(
         "--skip-existing",
         action="store_true",
-        help="Skip fields that already have valid URLs (preserve upstream values). "
-             "Useful when upstream json-cdn already has poster/meme URLs.",
+        help="Skip fields that already have valid URLs",
     )
 
     args = parser.parse_args()
@@ -565,7 +539,7 @@ def main():
     if not cdn_base and facts_date:
         cdn_base = f"{DEFAULT_CDN_BASE}/{facts_date}"
 
-    # Handle --source mode (json-cdn enrichment) vs default (facts enrichment)
+    # Handle --source mode vs default (facts enrichment)
     if args.source:
         if not manifest_path:
             logger.error("--source mode requires -m/--manifest to be provided or auto-detected")

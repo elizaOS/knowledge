@@ -1,16 +1,16 @@
 #!/usr/bin/env python3
 """
-Fill missing posters/memes in json-cdn files using local generation pipeline.
+Fill missing posters/memes in ai-news JSON files using local generation pipeline.
 
 Detects content items missing media and queues them for generation.
 Works with both cleaned JSON (empty arrays omitted) and uncleaned JSON.
 
 Usage:
     # Analyze what's missing (dry run)
-    python scripts/etl/fill-missing-media.py -f ai-news/elizaos/json-cdn/2026-01-06.json --dry-run
+    python scripts/etl/fill-missing-media.py -f ai-news/elizaos/json/2026-01-06.json --dry-run
 
     # Generate missing posters
-    python scripts/etl/fill-missing-media.py -f ai-news/elizaos/json-cdn/2026-01-06.json --generate
+    python scripts/etl/fill-missing-media.py -f ai-news/elizaos/json/2026-01-06.json --generate
 
     # Generate and save enriched output
     python scripts/etl/fill-missing-media.py -f input.json -o the-council/enriched/2026-01-06.json --generate
@@ -112,7 +112,7 @@ def infer_topic_from_title(title: str) -> str:
 
 def analyze_media_gaps(data: dict) -> dict:
     """
-    Analyze json-cdn data for missing media.
+    Analyze ai-news JSON data for missing media.
 
     Works with both:
     - Cleaned JSON (empty arrays omitted)
@@ -388,7 +388,7 @@ def fill_missing_media(
 
 def main():
     parser = argparse.ArgumentParser(
-        description="Fill missing posters/memes in json-cdn files",
+        description="Fill missing posters/memes in ai-news JSON files",
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog=__doc__,
     )
@@ -397,7 +397,7 @@ def main():
         "-f", "--file",
         type=Path,
         required=True,
-        help="Input json-cdn file",
+        help="Input JSON file",
     )
     parser.add_argument(
         "-o", "--output",
