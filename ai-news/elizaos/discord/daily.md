@@ -1,94 +1,131 @@
-# elizaOS Discord - 2026-01-08
+# elizaOS Discord - 2026-01-09
 
 ## Overall Discussion Highlights
 
-### Token Migration & Exchange Listings
+### Platform Architecture & Development
 
-The community faced significant concerns regarding the ai16z to elizaOS token migration process. Multiple users reported eligibility verification issues, particularly with LP tokens showing "max amount reached" errors. A major development emerged with the confirmed delisting of ai16z/elizaOS from Korean exchanges (Bithumb, Coinone, Korbit) scheduled for February 2026. DAXA cited lack of transparency in rebranding/token swap procedures as the primary reason. Questions arose about whether exchanges would automatically migrate tokens for pre-November holders, receiving conflicting responses from community helpers.
+**Eliza 2.0 Major Redesign Proposal**
 
-### Token Utility & Ecosystem Strategy
+Shaw proposed a significant architectural overhaul for Eliza 2.0, eliminating the current API, server, CLI, and projects structure. The new design would feature a Claude-friendly documented runtime with consistent abstractions across TypeScript, Rust, and Python, including FFI plugin interoperability between languages. Shaw indicated they already have a working port on a branch, suggesting this is an active development effort rather than just a proposal.
 
-A critical discussion emerged around elizaOS token utility within the ecosystem. Community member stoikol raised pointed questions about why the token isn't being used for payments or gas fees, questioning the fundamental need for a token without clear utility. No definitive answers were provided by team members regarding the token's utility roadmap, highlighting a documentation gap that needs addressing.
+**Plugin Interoperability Initiative**
 
-### Technical Development & Infrastructure
+Jin initiated a cross-channel collaboration to convert ElizaOS plugins into skills, aiming to achieve interoperability between ElizaOS and other agent tools. The focus targets popular plugins including Discord and blockchain integrations. R0am volunteered to collaborate, sharing their technical approach: structuring skills as folders containing .md instructions and deterministic scripts in any language. A key technical challenge identified was getting Claude to use skills implicitly rather than explicitly, which R0am claims to have solved using hooks.
 
-**Jeju Layer2 & Bazaar Protocol**: Development activity was observed on the Kamiyo protocol via GitHub commits. The Bazaar protocol was clarified as a decentralized marketplace application running on Jeju, described as "the appstore for agents." This represents a key infrastructure component connecting Eliza's ecosystem.
+**Multi-Step Skill Workflows**
 
-**Data Foundation & Context Graphs**: Jin emphasized the platform's strong data foundation for building context graphs, noting that Foundation Capital's article on context graphs aligns with Eliza's capabilities. The agentic workflows generate high-quality daily, weekly, and monthly insights, though integration into last-mile applications (agents, webhooks, apps) remains a gap.
+Agent Joshua described challenges with building effective workflows for chaining skills together. Their example workflow involved: specialized skill collecting user information → PDF skill filling out forms → filesystem skill storing files with summarization → PDF skill displaying results. R0am referenced a successful implementation of linked subagents from the ClaudeCode subreddit as a potential solution.
 
-**Deployment Configurations**: Technical questions arose about ElizaCloud container deployments, specifically database choices between Pglite and PostgreSQL (both confirmed as viable options).
+### Cloud Infrastructure & Services
 
-### AI Agent Development & Data Collection
+**Eliza Cloud Status and Updates**
 
-An innovative discussion emerged around data collection strategies for AI training. DorianD proposed several forward-thinking concepts:
+ElizaBAO reported operational failures with the elizacloud app creator feature. Cjft confirmed the feature is functional but noted it's an early-stage implementation. Later discussion revealed the cloud platform received updates including a new billing page for credit top-ups, indicating active development of the hosted infrastructure. Stan mentioned ongoing cloud cleanups and optimizations.
 
-- **Eliza Phone App**: Users could share data in exchange for reputation points for LLM training
-- **Agent-Paid Data Collection**: Agents could pay IOUs for user-generated data (e.g., "fishingcoin" for fly-fishing footage)
-- **Motion Capture Data**: Inertial motion capture suits for various professions (McDonald's workers, hairdressers, battlefield applications) where workers earn royalties when AI/androids use their captured movement data
-- **Babylon Game Experiment**: Mentioned as an ongoing data collection initiative
+**Solana 8004 Standard Integration**
 
-### Market Dynamics
+Kenk announced an upcoming Twitter Space scheduled for January 13th at 7pm UTC with Solana Foundation, PayAI, and Quantu to discuss the 8004 standard and its integration with Eliza Cloud. Jin highlighted significant academic interest in this standard, noting Stanford cryptographer Dan Boneh's involvement, suggesting important cryptographic implications for the protocol.
 
-Agent Joshua provided market analysis noting that inference markets are not highly profitable based on observations from models offered on their platform and OpenRouter over the past year, providing strategic context for development priorities.
+### AI Agent Applications & Use Cases
+
+**Mental Health Monitoring Integration**
+
+DorianD shared information about the "Dopa One" AI algorithm by Behavidence, which monitors brain dopamine levels through mobile phone and wearable device interactions to detect mental health fluctuations related to ADHD, depression, and anxiety. He proposed integrating this capability into a future ElizaOS Phone app, noting that AI agents could monitor users' mental health while they interact with the app. DorianD observed that 5 years of LLM progress and improved smartwatch technology could make dopamine monitoring more feasible now.
+
+**Computer Vision Classification Agents**
+
+DorianD proposed a specific AI agent application for image-based classification. Jin provided a technical starting point using the DeepFace library (serengil/deepface on GitHub) for implementing computer vision-based classification agents.
+
+### Technical Exploration
+
+**Advanced AI Model Testing**
+
+R0am explored Minimax M2's "interleaved thinking" approach for long-running tasks and reported a successful VPS deployment running Claude Code with Kimi K2 accessible via Happy on iOS.
+
+### Community & Events
+
+**Jeju Platform Context**
+
+DorianD explained that Jeju is a Korean island typically used for testing new technology before Korea-wide rollout, providing context for the platform naming.
 
 ## Key Questions & Answers
 
-**Q: For deploying in Elizacloud via containers should I use Pglite or PostgresSQL?**  
-A: Either will work (answered by cjft)
+**Q: Is the elizacloud app creator functioning?**
+- Asked by: ElizaBAO
+- Answered by: cjft
+- Answer: Yes, it's working but it's an early feature
 
-**Q: Can I migrate my old ai16z tokens purchased before November 2025? I'm getting 0 eligible tokens.**  
-A: User was directed to migration support channels; issue unresolved in main discussion (answered by Hexx 🌐)
+**Q: Why is the platform named JEJU?**
+- Asked by: Skullcross
+- Answered by: DorianD
+- Answer: Jeju is a Korean island where they usually use for running new stuff before they roll out the tech in the rest of Korea
 
-**Q: If I have been holding ai16z on Bithumb since before November, will the exchange automatically migrate it to elizaOS?**  
-A: Conflicting answers - FoRever_BIG said yes, jessy initially said no but later agreed to check (answered by FoRever_BIG, jessy)
+**Q: What does it take to convert elizaos plugins into skills and make them interoperable?**
+- Asked by: jin
+- Answered by: R0am | tip.md
+- Answer: It's a folder with .md instructions and tools in scripts (whatever language) to make them deterministic. The real challenge is getting Claude to use skills without saying explicitly, but there's a solution using hooks
 
-**Q: What is the Bazaar protocol shown in the GitHub commit?**  
-A: Bazaar is the decentralized marketplace application running on Jeju, the appstore for agents (answered by sb)
+**Q: How do you build effective workflows to ensure skills can be called back and forth?**
+- Asked by: Agent Joshua ₱ | TEE
+- Answered by: R0am | tip.md
+- Answer: Reference to a successful implementation of linked subagents from Reddit ClaudeCode community
 
-## Unanswered Critical Questions
+### Unanswered Questions
 
-- When is elizaOS token going to get some usecase as utility within the ecosystem, why is it not being used for payments? (asked by stoikol)
-- Can I use Eliza for X without paying for X API ($200/month)? (asked by Discostu)
-- Does the Bithumb/Coinone delisting mean elizaOS will be listed after ai16z delisting in February? (asked by KARA)
-- Are these guys (KamiyoAI) using the elizaos plugin? (asked by elizafan222)
+- **How do I set Discord Timer/Interval Settings for my elizaos agents in discord?** (asked by DigitalDiva)
+- **Do you need Twitter API to use Eliza to run a Twitter agent?** (asked by Psyxh)
+- **Has anyone played coding with minimax m2 here?** (asked by R0am | tip.md)
 
 ## Community Help & Collaboration
 
-**Migration Support**  
-Hexx 🌐 actively assisted multiple users with migration issues, directing XXI_Rapax to verify in entry channel and access migration support channels when they couldn't post in migration questions. Hexx also protected the community by identifying and reporting scammers (GUIDE BASE, guidebt) attempting to contact users about migration.
+**ElizaCloud Troubleshooting**
+- Helper: cjft
+- Helpee: ElizaBAO
+- Context: ElizaBAO experiencing operation failures with elizacloud app creator
+- Resolution: Confirmed feature is working but noted it's an early feature, suggested retry
 
-**Technical Guidance**  
-- cjft helped Omid Sa resolve uncertainty about database choice for ElizaCloud container deployment, confirming either Pglite or PostgreSQL would work
-- sb provided clarity to elizafan222 about the Bazaar protocol, explaining it as a decentralized marketplace on Jeju
-- sb directed aicodeflow (AI/full-stack developer seeking collaboration) to the developer channel to contribute to the open source project
+**Plugin Interoperability Collaboration**
+- Helper: R0am | tip.md
+- Helpee: jin
+- Context: Converting elizaos plugins into skills for interoperability
+- Resolution: Volunteered to collaborate and shared technical approach using folders with .md instructions and deterministic scripts
 
-**LP Token Migration**  
-FoRever_BIG assisted Dabel with LP token migration issues showing "max amount reached" errors, directing them to ticket and migration question channels for specialized support.
+**Workflow Development Guidance**
+- Helper: R0am | tip.md
+- Helpee: Agent Joshua ₱ | TEE
+- Context: Building workflows for chaining skills together
+- Resolution: Provided reference to successful subagent linking implementation from Reddit ClaudeCode community
+
+**AI Agent Development Support**
+- Helper: jin
+- Helpee: DorianD
+- Context: Looking for technical approach to build AI agent for image classification
+- Resolution: Provided GitHub repository link to DeepFace library as starting point
+
+**Platform Context Explanation**
+- Helper: DorianD
+- Helpee: Skullcross
+- Context: Question about JEJU platform naming origin
+- Resolution: Explained that Jeju is a Korean island used for testing new technology before Korea-wide rollout
 
 ## Action Items
 
 ### Technical
 
-- **Resolve migration eligibility issues for pre-November ai16z token holders** (Mentioned by: XXI_Rapax)
-- **Integrate daily/weekly/monthly insights from agentic workflows into last mile applications (agents, webhooks, apps)** (Mentioned by: jin)
-- **Investigate KamiyoAI project's use of ElizaOS plugin** (Mentioned by: elizafan222)
+- **Collaborate on experiment converting elizaos plugins (Discord + blockchain) into skills for interoperability testing** - Mentioned by: jin
+- **Implement hooks solution for getting Claude to use skills implicitly** - Mentioned by: R0am | tip.md
+- **Complete cloud cleanups and optimizations** - Mentioned by: Stan ⚡
+- **Investigate and resolve elizacloud app creator operational failures** - Mentioned by: ElizaBAO
+- **Evaluate Minimax M2's interleaved thinking approach for long-running tasks** - Mentioned by: R0am | tip.md
+
+### Feature
+
+- **Develop Eliza 2.0 with TS/Rust/Python support, FFI plugin interop, no API/server/CLI/projects, Claude-friendly runtime** - Mentioned by: shaw
+- **Integrate Dopa One AI algorithm (mental health monitoring via mobile interaction patterns) into future ElizaOS Phone app to monitor users' dopamine levels and mental well-being** - Mentioned by: DorianD
+- **Implement AI agent for image-based classification using DeepFace library** - Mentioned by: DorianD
 
 ### Documentation
 
-- **Clarify token utility roadmap and use cases within the elizaOS ecosystem** (Mentioned by: stoikol)
-- **Provide clear guidance on LP token migration process and "max amount reached" errors** (Mentioned by: Dabel)
-- **Clarify automatic migration process for exchange holders (Bithumb/Coinone)** (Mentioned by: KARA)
-- **Fix docs website that is currently down at elizacloud.ai/docs** (Mentioned by: Amir)
-
-### Feature Development
-
-- **Develop Eliza Phone App that lets users give Eliza access to their data for LLM training and earning reputation points** (Mentioned by: DorianD)
-- **Build context graph leveraging Eliza's strong data foundation** (Mentioned by: jin)
-- **Create agents that pay people IOUs to collect their data for specific activities** (Mentioned by: DorianD)
-- **Develop cheap solution for mocap suits to capture movement data for AI training** (Mentioned by: DorianD)
-- **Implement inertial motion capture suits as uniforms for professions like McDonald's workers to capture training data** (Mentioned by: DorianD)
-- **Develop alternative to expensive X API for Eliza X integration** (Mentioned by: Discostu)
-
----
-
-*Summary compiled from discussions across #💬-discussion, #💬-coders, and #core-devs channels on January 8, 2026*
+- **Twitter Space event scheduled for January 13th at 7pm UTC with Solana Foundation, PayAI, and Quantu to discuss 8004 and Eliza Cloud utilization** - Mentioned by: Kenk
+- **Publish blog post on elizaos leaderboard updates as part 2 of the meritverse article** - Mentioned by: jin
+- **Document Twitter API requirements for running Twitter agents with Eliza** - Mentioned by: Psyxh

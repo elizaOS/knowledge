@@ -1,30 +1,38 @@
-# ElizaOS Update - December 24, 2025
+# ElizaOS Update - December 29, 2025
 
-## Discord Community
+## Community Highlights
 
-### Community Discussions
-- Community celebrated Christmas with warm wishes despite market challenges
-- Core team member clarified that some Eliza Cloud revenue will be used for token buybacks
-- Team emphasized focus on "building the pieces that create sustained demand"
-- Team explained that "usage of the products drives usage of the token"
+- Shaw (@shawmakesmagic) and the official ElizaOS account returned to X (formerly Twitter)
+- Shaw hosted a Twitter Space with over 5,000 listeners
+- Community excitement led to a price increase for the ElizaOS token
+- ElizaOS token migration from AI16Z is complete and available across multiple chains (Solana, Base, Ethereum, BSC)
+- DegenAI token holders (1M+ tokens) can access autotrader feature to copy trade with AI system
 
-### Development Updates
-- Updates to plugin-starknet were pushed
-- New "plugin-wrapped" for end-of-year activities released on GitHub
-- Monorepo documentation being updated
-- Team building a pure Bun frontend with Elysia workers that builds faster than Next.js
-- Eliza Cloud features discussed, particularly file uploads for agent knowledge repositories
-- File uploads limited to 50MB with markdown as recommended format
-- Custom model hosting expected to be ready the following week
+## Development Progress
 
-## GitHub Activity
+### ElizaOS Core
+- Documentation coverage increased from ~60% to ~95%
+- Work on TypeScript patterns (decorators, dependency injection)
+- Discord plugin enhancements for audio and messaging
+- Consideration of bringing back SQLite support as a first-class feature
 
-### Recent Issues
-- Issue #6284: Monorepo documentation needs fixing
-- Issue #6283: Problems with spacing in numbered items
-- Issue #6282: Conversation duplication bug between agents
-- Issue #6281: Request for agent chats to display most recent conversation automatically
+### ElizaOS Cloud
+- Now in open beta with light support ahead of full launch
+- Integration work with various tools including DaVinci Resolve via MCP server
 
-### Repository Activity
-- 4 new issues opened
-- 2 contributors active on the project during December 24-25, 2025
+## GitHub Activity (Dec 29-30, 2025)
+- 4 new pull requests (all merged)
+- 4 new issues created
+- 6 active contributors
+
+### Merged Pull Requests
+- Standardized message server route naming
+- Added comprehensive documentation to plugin-dummy-services module
+- Replaced execa and child_process with Bun.spawn and bun-exec utilities
+- Fixed documentation inconsistencies and added missing test flags
+- Enabled hot reload for backend development
+
+### New Issues
+- UX improvement: Auto-open conversation when clicking on agent
+- Support for streaming Chain of Thought (CoT) reasoning
+- Implementation of world-class TypeScript patterns (Decorators, DI, advanced type system)
