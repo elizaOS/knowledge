@@ -2,130 +2,96 @@
 
 ## Overall Discussion Highlights
 
-### Platform Architecture & Development
+### Platform Development & Infrastructure
 
-**Eliza 2.0 Major Redesign Proposal**
+**Eliza Cloud Evolution**: The Eliza Cloud platform showed signs of active development with new billing pages enabling credit top-ups. ElizaBAO initially reported operational failures with the app creator feature, but cjft confirmed it's functional though still in early stages. The platform continues to evolve as a core infrastructure component for the ElizaOS ecosystem.
 
-Shaw proposed a significant architectural overhaul for Eliza 2.0, eliminating the current API, server, CLI, and projects structure. The new design would feature a Claude-friendly documented runtime with consistent abstractions across TypeScript, Rust, and Python, including FFI plugin interoperability between languages. Shaw indicated they already have a working port on a branch, suggesting this is an active development effort rather than just a proposal.
+**Eliza 2.0 Radical Redesign**: Shaw proposed a significant architectural overhaul for Eliza 2.0, featuring multi-language support (TypeScript, Rust, Python) with FFI plugin interoperability. The vision eliminates traditional API, server, CLI, and project structures in favor of an extremely Claude-friendly documented runtime with unified abstractions across all three languages. Shaw confirmed having already ported the implementation with a branch available for review.
 
-**Plugin Interoperability Initiative**
+**Cloud Infrastructure**: Stan announced delays in cloud cleanup work due to medical issues, indicating ongoing optimization efforts for the platform's backend infrastructure.
 
-Jin initiated a cross-channel collaboration to convert ElizaOS plugins into skills, aiming to achieve interoperability between ElizaOS and other agent tools. The focus targets popular plugins including Discord and blockchain integrations. R0am volunteered to collaborate, sharing their technical approach: structuring skills as folders containing .md instructions and deterministic scripts in any language. A key technical challenge identified was getting Claude to use skills implicitly rather than explicitly, which R0am claims to have solved using hooks.
+### Skills & Plugin Interoperability
 
-**Multi-Step Skill Workflows**
+**Cross-Platform Skills Initiative**: Jin initiated a major collaboration effort to convert ElizaOS plugins into skills for testing interoperability across different agent tools, focusing on Discord and blockchain integrations. This aims to establish cross-platform compatibility standards.
 
-Agent Joshua described challenges with building effective workflows for chaining skills together. Their example workflow involved: specialized skill collecting user information → PDF skill filling out forms → filesystem skill storing files with summarization → PDF skill displaying results. R0am referenced a successful implementation of linked subagents from the ClaudeCode subreddit as a potential solution.
+**Skills Architecture**: R0am outlined a technical approach where skills are organized as folders containing .md instruction files and deterministic scripts in any language. The key technical challenge identified was enabling Claude to use skills implicitly rather than explicitly, which R0am claims to have solved using hooks.
 
-### Cloud Infrastructure & Services
+**Workflow Complexity**: Agent Joshua highlighted the complexity of chaining skills together, providing a concrete example workflow: specialized skill → PDF manipulation → filesystem storage → display. The community acknowledged this as a difficult problem requiring further exploration.
 
-**Eliza Cloud Status and Updates**
+### AI & Mental Health Integration
 
-ElizaBAO reported operational failures with the elizacloud app creator feature. Cjft confirmed the feature is functional but noted it's an early-stage implementation. Later discussion revealed the cloud platform received updates including a new billing page for credit top-ups, indicating active development of the hosted infrastructure. Stan mentioned ongoing cloud cleanups and optimizations.
+**Dopamine Monitoring Proposal**: DorianD proposed integrating the "Dopa One" AI algorithm by Behavidence into a future ElizaOS Phone app. This technology monitors brain dopamine levels through mobile phone and wearable device interactions to detect mental health fluctuations (ADHD, Depression, Anxiety). DorianD noted that 5 years of LLM progress and improved smartwatch technology could make this more feasible than when the company went dormant during COVID.
 
-**Solana 8004 Standard Integration**
+**AI Image Analysis**: DorianD also suggested implementing AI agents for image analysis use cases, with Jin providing the deepface library from GitHub as a technical starting point.
 
-Kenk announced an upcoming Twitter Space scheduled for January 13th at 7pm UTC with Solana Foundation, PayAI, and Quantu to discuss the 8004 standard and its integration with Eliza Cloud. Jin highlighted significant academic interest in this standard, noting Stanford cryptographer Dan Boneh's involvement, suggesting important cryptographic implications for the protocol.
+### Technical Experiments
 
-### AI Agent Applications & Use Cases
+**MiniMax M2 Integration**: R0am explored using MiniMax M2's Anthropic-compatible endpoint with Claude Code, sharing an "interleaved thinking" approach for long-running tasks. They successfully deployed a VPS running Claude Code with Kimi K2, accessible via Happy on iOS.
 
-**Mental Health Monitoring Integration**
+### Community Events & Announcements
 
-DorianD shared information about the "Dopa One" AI algorithm by Behavidence, which monitors brain dopamine levels through mobile phone and wearable device interactions to detect mental health fluctuations related to ADHD, depression, and anxiety. He proposed integrating this capability into a future ElizaOS Phone app, noting that AI agents could monitor users' mental health while they interact with the app. DorianD observed that 5 years of LLM progress and improved smartwatch technology could make dopamine monitoring more feasible now.
+**Solana Foundation Twitter Space**: Kenk announced an upcoming Twitter Space scheduled for Tuesday, January 13th at 7pm UTC featuring Solana Foundation, PayAI, and Quantu. The event will deep-dive into protocol 8004 and its integration with Eliza Cloud. Jin added credibility by noting that Dan Boneh, a renowned Stanford cryptographer, mentioned 8004.
 
-**Computer Vision Classification Agents**
+**Leaderboard Updates**: Jin teased upcoming enhancements to the elizaos leaderboard as part 2 of the meritverse initiative.
 
-DorianD proposed a specific AI agent application for image-based classification. Jin provided a technical starting point using the DeepFace library (serengil/deepface on GitHub) for implementing computer vision-based classification agents.
-
-### Technical Exploration
-
-**Advanced AI Model Testing**
-
-R0am explored Minimax M2's "interleaved thinking" approach for long-running tasks and reported a successful VPS deployment running Claude Code with Kimi K2 accessible via Happy on iOS.
-
-### Community & Events
-
-**Jeju Platform Context**
-
-DorianD explained that Jeju is a Korean island typically used for testing new technology before Korea-wide rollout, providing context for the platform naming.
+**JEJU Platform Context**: DorianD explained that Jeju is a Korean island traditionally used for testing new technology before nationwide rollout, providing context for platform naming.
 
 ## Key Questions & Answers
 
-**Q: Is the elizacloud app creator functioning?**
-- Asked by: ElizaBAO
-- Answered by: cjft
-- Answer: Yes, it's working but it's an early feature
+**Q: Why is the platform named JEJU?**  
+A: Jeju is a Korean island where they usually use for running new stuff before they roll out the tech in the rest of Korea (answered by DorianD)
 
-**Q: Why is the platform named JEJU?**
-- Asked by: Skullcross
-- Answered by: DorianD
-- Answer: Jeju is a Korean island where they usually use for running new stuff before they roll out the tech in the rest of Korea
+**Q: Is the elizacloud app creator functioning?**  
+A: Yes, it's working but it's an early feature (answered by cjft)
 
-**Q: What does it take to convert elizaos plugins into skills and make them interoperable?**
-- Asked by: jin
-- Answered by: R0am | tip.md
-- Answer: It's a folder with .md instructions and tools in scripts (whatever language) to make them deterministic. The real challenge is getting Claude to use skills without saying explicitly, but there's a solution using hooks
+**Q: What's the structure for skills implementation?**  
+A: Folder with .md instructions and tools in scripts (any language) to make them deterministic (answered by R0am)
 
-**Q: How do you build effective workflows to ensure skills can be called back and forth?**
-- Asked by: Agent Joshua ₱ | TEE
-- Answered by: R0am | tip.md
-- Answer: Reference to a successful implementation of linked subagents from Reddit ClaudeCode community
+**Q: What's the real challenge with skills?**  
+A: Getting Claude to use skills without explicit instruction, solved using hooks (answered by R0am)
+
+**Q: How to build effective workflows for chaining skills?**  
+A: Acknowledged as difficult; example workflow shared: specialized skill → PDF manipulation → filesystem storage → display (partially answered by Agent Joshua)
 
 ### Unanswered Questions
 
-- **How do I set Discord Timer/Interval Settings for my elizaos agents in discord?** (asked by DigitalDiva)
-- **Do you need Twitter API to use Eliza to run a Twitter agent?** (asked by Psyxh)
-- **Has anyone played coding with minimax m2 here?** (asked by R0am | tip.md)
+- How do I set Discord Timer/Interval Settings for my elizaos agents in discord? (asked by DigitalDiva)
+- Do you need Twitter API to use Eliza to run a Twitter agent? (asked by Psyxh)
+- Can I top up credit into the cloud now with the billing pages? (asked by ElizaBAO)
 
 ## Community Help & Collaboration
 
-**ElizaCloud Troubleshooting**
-- Helper: cjft
-- Helpee: ElizaBAO
-- Context: ElizaBAO experiencing operation failures with elizacloud app creator
-- Resolution: Confirmed feature is working but noted it's an early feature, suggested retry
+**Skills Development Collaboration**: Jin's call for collaboration on converting ElizaOS plugins to skills received immediate response from R0am, who volunteered and shared their technical approach using folders with .md instructions and deterministic scripts. Stan also confirmed doing similar work.
 
-**Plugin Interoperability Collaboration**
-- Helper: R0am | tip.md
-- Helpee: jin
-- Context: Converting elizaos plugins into skills for interoperability
-- Resolution: Volunteered to collaborate and shared technical approach using folders with .md instructions and deterministic scripts
+**Platform Naming Clarification**: DorianD helped Skullcross understand the JEJU platform naming origin, explaining Jeju's role as a Korean technology testing ground and providing pronunciation guidance.
 
-**Workflow Development Guidance**
-- Helper: R0am | tip.md
-- Helpee: Agent Joshua ₱ | TEE
-- Context: Building workflows for chaining skills together
-- Resolution: Provided reference to successful subagent linking implementation from Reddit ClaudeCode community
+**Cloud Platform Support**: cjft assisted ElizaBAO with elizacloud app creator issues, confirming functionality and suggesting retry while acknowledging the early-stage nature of the feature.
 
-**AI Agent Development Support**
-- Helper: jin
-- Helpee: DorianD
-- Context: Looking for technical approach to build AI agent for image classification
-- Resolution: Provided GitHub repository link to DeepFace library as starting point
+**AI Implementation Guidance**: Jin provided DorianD with a technical starting point for AI image analysis implementation by sharing the deepface library GitHub repository.
 
-**Platform Context Explanation**
-- Helper: DorianD
-- Helpee: Skullcross
-- Context: Question about JEJU platform naming origin
-- Resolution: Explained that Jeju is a Korean island used for testing new technology before Korea-wide rollout
+**Workflow Complexity Discussion**: Agent Joshua shared insights with jin and R0am about skill workflow complexity, providing concrete examples from their skill factory implementation. R0am reciprocated by providing a Reddit reference about successfully linking subagents.
 
 ## Action Items
 
 ### Technical
 
-- **Collaborate on experiment converting elizaos plugins (Discord + blockchain) into skills for interoperability testing** - Mentioned by: jin
-- **Implement hooks solution for getting Claude to use skills implicitly** - Mentioned by: R0am | tip.md
-- **Complete cloud cleanups and optimizations** - Mentioned by: Stan ⚡
-- **Investigate and resolve elizacloud app creator operational failures** - Mentioned by: ElizaBAO
-- **Evaluate Minimax M2's interleaved thinking approach for long-running tasks** - Mentioned by: R0am | tip.md
+- Experiment converting elizaos plugins (Discord + blockchain) into skills for interoperability testing (mentioned by jin)
+- Implement skills as folders with .md instructions and deterministic scripts (mentioned by R0am)
+- Develop hooks solution to enable Claude to use skills implicitly (mentioned by R0am)
+- Complete cloud cleanups and optimizations (mentioned by Stan)
+- Review and merge shaw's Eliza port branch (mentioned by shaw)
+- Solve effective workflow patterns for chaining skills back and forth (mentioned by Agent Joshua)
+- Investigate and resolve elizacloud app creator operation failures for stability (mentioned by ElizaBAO)
 
 ### Feature
 
-- **Develop Eliza 2.0 with TS/Rust/Python support, FFI plugin interop, no API/server/CLI/projects, Claude-friendly runtime** - Mentioned by: shaw
-- **Integrate Dopa One AI algorithm (mental health monitoring via mobile interaction patterns) into future ElizaOS Phone app to monitor users' dopamine levels and mental well-being** - Mentioned by: DorianD
-- **Implement AI agent for image-based classification using DeepFace library** - Mentioned by: DorianD
+- Integrate Dopa One AI algorithm (mental health monitoring via mobile interaction patterns) into future ElizaOS Phone app to monitor users' dopamine levels and mental well-being (mentioned by DorianD)
+- Build Eliza 2.0 with TS, Rust, Python support and FFI plugin interop, eliminating API/server/CLI/projects (mentioned by shaw)
+- Implement AI agent for image analysis use cases using deepface or similar libraries (mentioned by DorianD)
 
 ### Documentation
 
-- **Twitter Space event scheduled for January 13th at 7pm UTC with Solana Foundation, PayAI, and Quantu to discuss 8004 and Eliza Cloud utilization** - Mentioned by: Kenk
-- **Publish blog post on elizaos leaderboard updates as part 2 of the meritverse article** - Mentioned by: jin
-- **Document Twitter API requirements for running Twitter agents with Eliza** - Mentioned by: Psyxh
+- Answer question about Discord Timer/Interval Settings configuration for ElizaOS agents (mentioned by DigitalDiva)
+- Document Twitter API requirements for running Twitter agents with Eliza (mentioned by Psyxh)
+- Create extremely Claude-friendly documentation for Eliza 2.0 runtime with examples for common use cases (mentioned by shaw)
+- Publish blog post about elizaos leaderboard updates (part 2 of meritverse) (mentioned by jin)
