@@ -1,0 +1,307 @@
+{
+  "briefing_date": "2026-01-08",
+  "overall_summary": "Discussion centered on the confirmed February/March 2026 Korean exchange delistings tied to the AI16Z\u2192ElizaOS rebrand/swap transparency, alongside ongoing token migration eligibility/LP errors and unanswered questions about token utility. In parallel, engineering activity focused on resolving ElizaOS v1.7.0 Discord/serverId compatibility issues and improving core/client transports and plugin-sql security/serverless support.",
+  "key_facts": [
+    "Bithumb, Coinone, and Korbit announced termination of trading support for AI16Z and ElizaOS, with trading ending on 2026-02-12 and deposits/withdrawals ending on 2026-03-12, citing DAXA concerns about transparency and disclosure around the rebranding/token swap process.",
+    "Users reported AI16Z\u2192ElizaOS migration problems including LP-related \"max amount reached\" errors and cases where wallets showed 0 eligible tokens, and helpers redirected users to migration support/ticket channels.",
+    "Community members stated that AI16Z purchases made after the 2025-11-11 snapshot are not eligible for migration.",
+    "For ElizaCloud container deployments, community guidance stated that either PGlite or PostgreSQL can be used.",
+    "A recurring ElizaOS v1.7.0 Discord integration failure produced \"No server ID found\" errors attributed to the serverId\u2192messageServerId migration and incompatibility with plugin-discord v1.3.3, with mitigation advice to downgrade to core v1.6.5 or test a fix branch.",
+    "PR #6333 (odilitime) was merged into elizaos/eliza on 2026-01-07 to update plugin-bootstrap (and a plugin-sql schema comment) for the serverId\u2192messageServerId change.",
+    "PR #6300 (standujar) was merged into elizaos/eliza on 2026-01-05 introducing unified client hooks (useElizaChat) supporting HTTP/SSE/WebSocket transports and aligning server transport parameters.",
+    "PR #6343 (standujar) was opened on 2026-01-08 to add Neon serverless support and improve RLS security in plugin-sql, including switching RLS context setting to parameterized set_config calls and renaming withEntityContext to withIsolationContext.",
+    "Discord guidance for resolving ElizaOS Cloud agent API \"Model not found\" errors stated that the model parameter must include a provider prefix (e.g., openai/gpt-4o-mini).",
+    "Bazaar was described in Discord as a decentralized marketplace application running on Jeju, characterized as an \"appstore for agents.\""
+  ],
+  "open_questions": [
+    "When is elizaOS token going to get some usecase as utility within the ecosystem, why is it not being used for payments?",
+    "Can I use Eliza for X without paying for X API ($200/month)?",
+    "Does the Bithumb/Coinone delisting mean elizaOS will be listed after ai16z delisting in February?",
+    "Are these guys (KamiyoAI) using the elizaos plugin?",
+    "Does the KamiyoAI project make sense?"
+  ],
+  "tags": {
+    "themes": [
+      "token-migration",
+      "trading",
+      "bug-fix",
+      "plugins",
+      "documentation"
+    ],
+    "sentiment": {
+      "overall": "mixed",
+      "context": [
+        "economic",
+        "technical",
+        "social"
+      ]
+    },
+    "story_type": [
+      "announcement"
+    ],
+    "derived": [
+      "development",
+      "community",
+      "feedback",
+      "strategy",
+      "market"
+    ],
+    "priority": [
+      "high-attention"
+    ],
+    "manual": []
+  },
+  "categories": {
+    "twitter_news_highlights": [],
+    "github_updates": {
+      "new_issues_prs": [
+        {
+          "item_type": "pull_request",
+          "title": "feat(plugin-sql): add Neon serverless support & improve RLS security",
+          "number": 6343,
+          "url": "https://github.com/elizaos/eliza/pull/6343",
+          "status": "open",
+          "author": "standujar",
+          "significance": "Adds Neon serverless DB support and hardens RLS context setting with parameterized queries; includes API rename to withIsolationContext."
+        },
+        {
+          "item_type": "pull_request",
+          "title": "fix: plugin-bootstrap (+ sql minor) actions/providers for serverId => messageServerId change",
+          "number": 6333,
+          "url": "https://github.com/elizaos/eliza/pull/6333",
+          "status": "merged",
+          "author": "odilitime",
+          "significance": "Aligns plugin-bootstrap with serverId\u2192messageServerId migration to address reported Discord compatibility issues."
+        },
+        {
+          "item_type": "pull_request",
+          "title": "feat: unified hooks with multi-transport support (HTTP/SSE/WebSocket)",
+          "number": 6300,
+          "url": "https://github.com/elizaos/eliza/pull/6300",
+          "status": "merged",
+          "author": "standujar",
+          "significance": "Introduces useElizaChat and transport alignment across client/server, with tests and a fix for double/triple message processing."
+        },
+        {
+          "item_type": "issue",
+          "title": "P1 publishing failure preventing plugin-discord v1.3.4 release",
+          "number": 40,
+          "url": "https://github.com/elizaos-plugins/plugin-discord/issues/40",
+          "status": "open",
+          "author": "unknown",
+          "significance": "Blocks shipping a new Discord plugin release."
+        },
+        {
+          "item_type": "issue",
+          "title": "Telegram plugin crashes when processing certain images (TypeError on photos)",
+          "number": 23,
+          "url": "https://github.com/elizaos-plugins/plugin-telegram/issues/23",
+          "status": "open",
+          "author": "unknown",
+          "significance": "Identifies a crash condition in plugin-telegram image handling."
+        },
+        {
+          "item_type": "pull_request",
+          "title": "feat(plugin-sql): add CachedDatabaseAdapter with LRU caching and serverless optimization",
+          "number": 6329,
+          "url": "https://github.com/elizaos/eliza/pull/6329",
+          "status": "draft",
+          "author": "0xbbjoker",
+          "significance": "Proposes a caching layer for DB adapter reads plus runtime embedding-dimension caching to reduce repeated calls; marked DO NOT MERGE."
+        },
+        {
+          "item_type": "pull_request",
+          "title": "fix(plugin-sql): use sql.raw() for SET LOCAL to avoid parameterization errors",
+          "number": 6316,
+          "url": "https://github.com/elizaos/eliza/pull/6316",
+          "status": "merged",
+          "author": "0xbbjoker",
+          "significance": "Fixes SQL execution failures when data isolation is enabled due to SET LOCAL parameterization."
+        },
+        {
+          "item_type": "issue",
+          "title": "Create guide for agent memory configuration",
+          "number": 82,
+          "url": "https://github.com/elizaos/docs/issues/82",
+          "status": "open",
+          "author": "unknown",
+          "significance": "Documentation gap raised from community discussion (agent memory)."
+        }
+      ],
+      "overall_focus": [
+        {
+          "claim": "GitHub activity emphasized platform stability and DX: fixing plugin-sql crashes, aligning Discord/plugin APIs, expanding docs coverage, and unifying client transports via useElizaChat.",
+          "source": [
+            "github/summaries/week/2026-01-04.md",
+            "github/summaries/month/2026-01-01.md"
+          ]
+        }
+      ]
+    },
+    "discord_updates": [
+      {
+        "channel": "#\ud83d\udcac-discussion",
+        "summary": "Users discussed AI16Z\u2192ElizaOS migration failures (including LP \"max amount reached\"), conflicting guidance about whether exchanges auto-migrate balances, and the confirmed Korean exchange delistings tied to rebrand/swap transparency concerns. Token utility questions (payments/gas) remained unanswered, and scammer outreach around migration required moderation.",
+        "key_participants": [
+          "Hexx \ud83c\udf10",
+          "FoRever_BIG",
+          "jessy",
+          "sb",
+          "stoikol"
+        ],
+        "source": [
+          "ai-news/elizaos/discord/md/2026-01-08.md",
+          "ai-news/elizaos/discord/json/2026-01-08.json",
+          "ai-news/elizaos/json/2026-01-08.json"
+        ]
+      },
+      {
+        "channel": "#\ud83d\udcac-coders",
+        "summary": "Technical discussion covered Eliza\u2019s data foundation and context graphs, Jeju/Bazaar positioning, and deployment options (PGlite vs PostgreSQL). Multiple data-collection proposals were shared (phone app for user-contributed training data; IOU-based incentive mechanisms; motion-capture data capture).",
+        "key_participants": [
+          "jin",
+          "cjft",
+          "DorianD",
+          "Discostu"
+        ],
+        "source": [
+          "ai-news/elizaos/discord/md/2026-01-08.md",
+          "ai-news/elizaos/discord/json/2026-01-08.json"
+        ]
+      },
+      {
+        "channel": "#core-devs",
+        "summary": "Core-devs discussed integrating high-quality daily/weekly/monthly agentic workflow insights into last-mile applications (agents, webhooks, apps) and noted that inference markets have not been highly profitable based on platform/OpenRouter observations.",
+        "key_participants": [
+          "jin",
+          "Agent Joshua"
+        ],
+        "source": [
+          "ai-news/elizaos/discord/md/2026-01-08.md",
+          "ai-news/elizaos/discord/json/2026-01-08.json"
+        ]
+      },
+      {
+        "channel": "#core-devs (prior-day context)",
+        "summary": "Engineering triage focused on ElizaOS v1.7.0 Discord breakage from serverId\u2192messageServerId migration, with recommendations to downgrade to v1.6.5 or use a fix branch while testing compatibility with plugin-discord v1.3.3.",
+        "key_participants": [
+          "Odilitime",
+          "Stan \u26a1",
+          "shaw"
+        ],
+        "source": [
+          "ai-news/elizaos/discord/md/2026-01-07.md",
+          "ai-news/elizaos/discord/md/2026-01-06.md"
+        ]
+      }
+    ],
+    "user_feedback": [
+      {
+        "feedback_summary": "Users asked for a clear, documented ElizaOS token utility roadmap (payments/gas/other in-ecosystem uses).",
+        "source": [
+          "ai-news/elizaos/discord/md/2026-01-08.md",
+          "ai-news/elizaos/json/2026-01-08.json"
+        ],
+        "sentiment": "negative"
+      },
+      {
+        "feedback_summary": "Multiple migration UX issues were reported (0 eligible tokens; LP migration \"max amount reached\"), with requests for clearer guidance and resolution paths.",
+        "source": [
+          "ai-news/elizaos/discord/md/2026-01-08.md",
+          "ai-news/elizaos/discord/json/2026-01-08.json"
+        ],
+        "sentiment": "negative"
+      },
+      {
+        "feedback_summary": "ElizaCloud documentation was reported as down (elizacloud.ai/docs).",
+        "source": [
+          "ai-news/elizaos/discord/md/2026-01-08.md",
+          "ai-news/elizaos/discord/json/2026-01-08.json",
+          "ai-news/elizaos/json/2026-01-08.json"
+        ],
+        "sentiment": "negative"
+      },
+      {
+        "feedback_summary": "Users asked for an alternative to the $200/month X API requirement for X integration or a scraping approach through Eliza.",
+        "source": [
+          "ai-news/elizaos/discord/md/2026-01-08.md",
+          "ai-news/elizaos/discord/md/2026-01-07.md",
+          "ai-news/elizaos/discord/json/2026-01-08.json"
+        ],
+        "sentiment": "neutral"
+      },
+      {
+        "feedback_summary": "Community members requested improved discoverability of the official contract address across official channels (e.g., X/Twitter accounts and linktree).",
+        "source": [
+          "ai-news/elizaos/discord/md/2026-01-07.md",
+          "ai-news/elizaos/discord/md/2026-01-06.md"
+        ],
+        "sentiment": "neutral"
+      }
+    ],
+    "strategic_insights": [
+      {
+        "theme": "Korean exchange delisting drives urgent communications requirements",
+        "insight": "Korean exchanges scheduled the removal of AI16Z/ElizaOS trading and later deposits/withdrawals while citing rebrand/swap transparency, and Discord users expressed confusion about auto-migration on exchanges. A single authoritative migration and exchange-handling statement could reduce conflicting community guidance.",
+        "implications_or_questions": [
+          "Is there an official exchange-by-exchange migration policy statement that can be published and pinned?",
+          "What disclosure artifacts (timeline, snapshot rules, swap mechanics) can be made explicit to address transparency concerns?"
+        ]
+      },
+      {
+        "theme": "Versioning and compatibility management between core and plugins",
+        "insight": "Discord integration failures tied to the serverId\u2192messageServerId migration, plus the need to test plugin-discord compatibility across branches, show that core/plugin release coordination affects user-facing reliability. Merged fixes (e.g., #6333) and pending release blockers in plugin-discord reinforce the need for clear compatibility matrices and release automation health.",
+        "implications_or_questions": [
+          "Should releases include a published compatibility table (core version \u2194 plugin versions)?",
+          "Is the plugin-discord publishing pipeline issue (#40) the highest operational blocker for Discord stability?"
+        ]
+      },
+      {
+        "theme": "Data products need last-mile integration surfaces",
+        "insight": "Core-dev discussion emphasized that agentic workflows already generate high-quality daily/weekly/monthly insights, but delivery into agents/webhooks/apps remains a gap. Prioritizing integration endpoints and reference apps could convert internal insights into user-visible value.",
+        "implications_or_questions": [
+          "Which integration surface (webhooks vs in-product UI vs agent API) is the fastest path to shipping these insights?"
+        ]
+      }
+    ],
+    "market_analysis": [
+      {
+        "observation": "Korean exchanges scheduled delisting dates for AI16Z/ElizaOS with stated transparency/disclosure concerns around rebranding/token swap.",
+        "source": [
+          "ai-news/elizaos/json/2026-01-08.json",
+          "ai-news/elizaos/md/2026-01-08.md",
+          "ai-news/elizaos/discord/md/2026-01-08.md"
+        ],
+        "relevance": "Direct impact on trading venues and user ability to deposit/withdraw in the Korean market during the specified timelines."
+      },
+      {
+        "observation": "Agent Joshua stated that inference markets have not been highly profitable based on observations from models offered on their platform and OpenRouter over the past year.",
+        "source": [
+          "ai-news/elizaos/discord/md/2026-01-08.md",
+          "ai-news/elizaos/discord/json/2026-01-08.json"
+        ],
+        "relevance": "Informs prioritization decisions for revenue models and product strategy around inference marketplaces."
+      }
+    ]
+  },
+  "_metadata": {
+    "model": "openai/gpt-5.2",
+    "extracted_at": "2026-01-12T22:49:43.574401Z",
+    "prompt_tokens": 32707,
+    "completion_tokens": 4237,
+    "total_tokens": 36944,
+    "processing_seconds": 62.87,
+    "status": "success",
+    "facts_by_category": {
+      "twitter_news_highlights": 0,
+      "github_updates": 8,
+      "discord_updates": 4,
+      "user_feedback": 5,
+      "strategic_insights": 3,
+      "market_analysis": 2,
+      "key_facts": 10,
+      "open_questions": 5
+    },
+    "total_facts": 37
+  }
+}
