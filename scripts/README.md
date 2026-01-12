@@ -6,13 +6,18 @@ This directory contains various scripts for automating tasks related to content 
 
 ```
 scripts/
+├── sync-source.sh            # Manual sync for individual data sources
 ├── etl/                      # Data processing pipeline scripts
 │   ├── aggregate-sources.py  # Aggregates content from diverse sources
 │   ├── extract-facts.py      # Extracts key facts using LLM
+│   ├── extract-entities.py   # Extracts entities (tokens, projects, users)
+│   ├── enrich-facts-media.py # Enriches facts with media/poster URLs
 │   ├── generate-council-context.py  # Generates strategic council briefings
 │   ├── generate-monthly-retro.py    # Monthly retrospective episodes
 │   ├── generate-quarterly-summary.py # Quarterly/annual summaries
-│   └── generate-rss.py       # Generates RSS feeds
+│   ├── generate-rss.py       # Generates RSS feeds
+│   ├── backfill-facts.sh     # Backfill missing facts data
+│   └── backfill-council.sh   # Backfill missing council briefings
 ├── integrations/
 │   ├── discord/              # Discord integration scripts
 │   │   ├── webhook.py        # Facts briefing to Discord
@@ -22,8 +27,10 @@ scripts/
 │       ├── create.py         # Creates/manages HackMD notes
 │       └── update.py         # Updates HackMD with LLM content
 ├── posters/                  # Visual content generation
-│   ├── posters-enhanced.sh   # Markdown to PNG poster converter
-│   └── run-poster-generation.sh # Batch poster generation
+│   ├── illustrate.py         # Main poster/illustration generator
+│   ├── create-entity-icons.py # Generate icons for entities
+│   ├── validate-illustrations.py # Validate generated illustrations
+│   └── character-reference.py # Character reference sheet generation
 ├── prompts/                  # LLM prompt templates
 │   ├── config/               # Strategic configuration
 │   │   └── north-star.txt    # Mission and strategic context
@@ -137,6 +144,71 @@ python scripts/etl/generate-rss.py
 
 ---
 
+### `backfill-facts.sh`
+
+**Purpose**: Backfills missing facts data for a date range.
+
+**Usage**:
+```bash
+# Default range
+./scripts/etl/backfill-facts.sh 2026-01-09 2026-01-12
+
+# Force overwrite existing files
+FORCE=1 ./scripts/etl/backfill-facts.sh 2026-01-09 2026-01-12
+```
+
+**Environment Variables**:
+- `OPENROUTER_API_KEY`: Required
+- `FORCE=1`: Optional, overwrite existing files
+
+---
+
+### `backfill-council.sh`
+
+**Purpose**: Backfills missing council briefings for a date range.
+
+**Usage**:
+```bash
+./scripts/etl/backfill-council.sh 2026-01-09 2026-01-12
+
+# Force overwrite
+FORCE=1 ./scripts/etl/backfill-council.sh 2026-01-09 2026-01-12
+```
+
+---
+
+### `enrich-facts-media.py`
+
+**Purpose**: Enriches facts or source JSON files with media URLs from posters and upstream sources.
+
+**Usage**:
+```bash
+# Enrich facts with poster URLs
+python scripts/etl/enrich-facts-media.py -f the-council/facts/YYYY-MM-DD.json -m media/YYYY-MM-DD/manifest.json
+
+# Enrich source files
+python scripts/etl/enrich-facts-media.py --source -f ai-news/elizaos/json/YYYY-MM-DD.json -m media/daily/YYYY-MM-DD/manifest.json
+```
+
+---
+
+## Utility Scripts
+
+### `sync-source.sh`
+
+**Purpose**: Manually sync individual data sources without running the full workflow.
+
+**Usage**:
+```bash
+./scripts/sync-source.sh daily-silk    # Sync daily-silk only
+./scripts/sync-source.sh ai-news       # Sync ai-news only
+./scripts/sync-source.sh github        # Sync github only
+./scripts/sync-source.sh docs          # Sync docs only
+./scripts/sync-source.sh all           # Sync all sources
+```
+
+---
+
 ## Integration Scripts
 
 ### Discord (`integrations/discord/`)
@@ -204,29 +276,49 @@ python scripts/integrations/hackmd/update.py [-d YYYY-MM-DD] [-j] [-v]
 
 ## Poster Scripts (`posters/`)
 
-### `posters-enhanced.sh`
+### `illustrate.py`
 
-**Purpose**: Converts Markdown files to styled PNG posters with ElizaOS branding.
+**Purpose**: Main illustration generator using LLM-powered scene descriptions and image generation.
 
 **Features**:
-- ElizaOS branded styling with gradient headers
-- Multiple fallback rendering engines (wkhtmltoimage, Chromium, ImageMagick)
-- Improved typography and spacing
+- Generates illustrations from facts data
+- Multiple style presets (editorial, cinematic_anime, tarot, etc.)
+- Character-aware with reference sheets
+- Icon sheet generation
 
 **Usage**:
 ```bash
-./scripts/posters/posters-enhanced.sh input.md output.png
+# Single illustration
+python scripts/posters/illustrate.py -f the-council/facts/YYYY-MM-DD.json
+
+# Batch mode with icons
+python scripts/posters/illustrate.py --batch -f the-council/facts/YYYY-MM-DD.json --with-icons
+```
+
+**Environment Variables**:
+- `OPENROUTER_API_KEY`: Required for LLM and image generation
+
+---
+
+### `create-entity-icons.py`
+
+**Purpose**: Generates icons for entities (tokens, projects, users) extracted from facts.
+
+**Usage**:
+```bash
+python scripts/posters/create-entity-icons.py -i -t project  # Interactive mode
+python scripts/posters/create-entity-icons.py --batch project --limit 4
 ```
 
 ---
 
-### `run-poster-generation.sh`
+### `validate-illustrations.py`
 
-**Purpose**: Batch generates posters from multiple source directories.
+**Purpose**: Validates generated illustrations and provides feedback.
 
 **Usage**:
 ```bash
-./scripts/posters/run-poster-generation.sh
+python scripts/posters/validate-illustrations.py media/daily/YYYY-MM-DD/
 ```
 
 ---
@@ -269,4 +361,4 @@ Contains deprecated scripts kept for reference. These are no longer part of the 
 - Python 3.x
 - `requests` library
 - `discord.py` library (for Discord integrations)
-- System tools: `pandoc`, `wkhtmltoimage`, `chromium` (for poster generation)
+- `pillow` library (for image processing in posters)
