@@ -165,9 +165,16 @@ def create_facts_feed(items: list[dict]) -> str:
         except ValueError:
             pass
 
-        # Add image enclosure if available (CDN poster URL)
-        images = facts.get("images", {})
-        poster_url = images.get("overall")
+        # Add image enclosure if available
+        poster_url = None
+        images = facts.get("images")
+        if isinstance(images, dict):
+            poster_url = images.get("overall")
+        elif isinstance(images, str):
+            poster_url = images
+        elif isinstance(images, list) and images:
+            poster_url = images[0]
+
         if poster_url:
             enclosure = SubElement(item, "enclosure")
             enclosure.set("url", poster_url)

@@ -8,6 +8,7 @@
 #
 # Environment:
 #   OPENROUTER_API_KEY=your_key (required)
+#   FORCE=1 (optional) - Overwrite existing files
 #
 # Each date takes ~30-60 seconds depending on API response time.
 
@@ -63,8 +64,8 @@ for DATE in "${DATES[@]}"; do
         continue
     fi
 
-    # Check if output already exists
-    if [ -f "$OUTPUT_JSON" ]; then
+    # Check if output already exists (skip unless FORCE=1)
+    if [ -f "$OUTPUT_JSON" ] && [ "$FORCE" != "1" ]; then
         echo "SKIP (already exists)"
         SKIPPED=$((SKIPPED + 1))
         continue
