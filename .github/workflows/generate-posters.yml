@@ -110,6 +110,10 @@ jobs:
             -v || echo "Enrichment skipped (missing files)"
         continue-on-error: true
 
+      - name: Generate RSS feeds
+        run: python scripts/etl/generate-rss.py
+        continue-on-error: true
+
       - name: Cleanup old media (keep last 7 days)
         run: |
           # Find and remove media directories older than 7 days
@@ -132,10 +136,11 @@ jobs:
           git config --global user.name 'GitHub Actions Bot'
           git config --global user.email 'actions@github.com'
 
-          # Stage generated media and enriched files
+          # Stage generated media, enriched files, and RSS feeds
           git add media/ || true
           git add the-council/facts/*.json || true
           git add ai-news/elizaos/json/*.json || true
+          git add rss/ || true
 
           if ! git diff --staged --quiet; then
             git commit -m "Automated: Generate posters for ${{ steps.date.outputs.date }}"
