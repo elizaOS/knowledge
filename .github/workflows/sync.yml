@@ -136,6 +136,7 @@ jobs:
           commit_author: "github-actions[bot] <github-actions[bot]@users.noreply.github.com>"
 
       - name: Alert on failure
+        if: failure()
         uses: ./.github/actions/alert-failure
         with:
           webhook-url: ${{ secrets.ALERT_WEBHOOK_URL }}
