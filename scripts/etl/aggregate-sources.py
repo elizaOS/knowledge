@@ -10,7 +10,7 @@ import argparse
 import json
 import logging
 import subprocess
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from functools import lru_cache
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Union # For type hinting
@@ -279,7 +279,7 @@ def main():
             total_chars += len(v)
 
     final_context["_metadata"] = {
-        "generated_at": datetime.utcnow().isoformat() + "Z",
+        "generated_at": datetime.now(timezone.utc).isoformat() + "Z",
         "target_date": target_date_str,
         "source_repo": get_repo_info(),  # Fork-friendly: derived from gh api
         "sources_successful": len(sources_with_content),

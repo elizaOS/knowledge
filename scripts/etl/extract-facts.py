@@ -9,7 +9,7 @@ import argparse
 import json
 import logging
 from pathlib import Path
-from datetime import datetime
+from datetime import datetime, timezone
 import os
 import sys
 import re # For date parsing from filename
@@ -268,7 +268,7 @@ def backfill_tags_for_file(file_path: Path, dry_run: bool = False, force: bool =
         # Update _metadata to note backfill
         if "_metadata" not in data:
             data["_metadata"] = {}
-        data["_metadata"]["tags_backfilled_at"] = datetime.utcnow().isoformat() + "Z"
+        data["_metadata"]["tags_backfilled_at"] = datetime.now(timezone.utc).isoformat() + "Z"
 
         # Write back
         with open(file_path, 'w', encoding='utf-8') as f:
@@ -584,9 +584,9 @@ def main():
     llm_output_data = None
     llm_metadata = {
         "model": LLM_MODEL,
-        "extracted_at": datetime.utcnow().isoformat() + "Z",
+        "extracted_at": datetime.now(timezone.utc).isoformat() + "Z",
     }
-    extraction_start_time = datetime.utcnow()
+    extraction_start_time = datetime.now(timezone.utc)
     try:
         response = requests.post(OPENROUTER_API_ENDPOINT, headers=headers, json=llm_payload, timeout=300)
         response.raise_for_status()
@@ -633,7 +633,7 @@ def main():
         logging.error(f"Error processing LLM response: {e_gen}")
 
     # Calculate processing duration
-    llm_metadata["processing_seconds"] = round((datetime.utcnow() - extraction_start_time).total_seconds(), 2)
+    llm_metadata["processing_seconds"] = round((datetime.now(timezone.utc) - extraction_start_time).total_seconds(), 2)
 
     if not llm_output_data:
         logging.warning("No valid categorized briefing was extracted. The output JSON file might be incomplete or empty.")

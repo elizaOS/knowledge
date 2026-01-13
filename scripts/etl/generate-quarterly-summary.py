@@ -10,7 +10,7 @@ import json
 import requests
 import argparse
 from pathlib import Path
-from datetime import datetime
+from datetime import datetime, timezone
 from collections import defaultdict
 import logging
 
@@ -258,7 +258,7 @@ def main():
         sys.exit(1)
 
     summary["_metadata"] = {
-        "generated_at": datetime.utcnow().isoformat() + "Z",
+        "generated_at": datetime.now(timezone.utc).isoformat() + "Z",
         "model": MODEL,
         "retros_analyzed": len(retros),
         "months_covered": patterns["months_covered"],

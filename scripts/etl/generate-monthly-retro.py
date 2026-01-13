@@ -13,7 +13,7 @@ import json
 import requests
 import argparse
 from pathlib import Path
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from calendar import monthrange
 from collections import defaultdict
 import logging
@@ -380,7 +380,7 @@ def main():
 
     # Add metadata
     episode["_metadata"] = {
-        "generated_at": datetime.utcnow().isoformat() + "Z",
+        "generated_at": datetime.now(timezone.utc).isoformat() + "Z",
         "model": MODEL,
         "facts_analyzed": len(facts),
         "briefings_analyzed": len(briefings),

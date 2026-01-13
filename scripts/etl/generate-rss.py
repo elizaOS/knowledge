@@ -7,7 +7,7 @@ Output: rss/feed.xml (facts), rss/council.xml (council + retros)
 import json
 import logging
 import re
-from datetime import datetime
+from datetime import datetime, timezone
 from pathlib import Path
 from xml.etree.ElementTree import Element, SubElement, tostring
 from xml.dom import minidom
@@ -61,7 +61,7 @@ def create_rss_channel(title: str, description: str, feed_url: str, image_url: s
     SubElement(channel, "link").text = SITE_URL
     SubElement(channel, "description").text = description
     SubElement(channel, "language").text = "en-us"
-    SubElement(channel, "lastBuildDate").text = datetime.utcnow().strftime("%a, %d %b %Y %H:%M:%S +0000")
+    SubElement(channel, "lastBuildDate").text = datetime.now(timezone.utc).strftime("%a, %d %b %Y %H:%M:%S +0000")
 
     # Self link
     atom_link = SubElement(channel, "{http://www.w3.org/2005/Atom}link")

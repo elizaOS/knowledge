@@ -2,7 +2,7 @@
 """Optimized Discord Facts Briefing Bot"""
 import json, sys, os, argparse, discord, requests, asyncio
 from discord import Embed
-from datetime import datetime
+from datetime import datetime, timezone
 from dataclasses import dataclass
 from typing import Dict, List, Optional, Tuple
 
@@ -122,7 +122,7 @@ class EmbedFactory:
         
         embed = Embed(title=f"📊 Eliza Daily – {briefing_date}", 
                      description=f"{overall_summary}\n\n📚 [{link_text}]({full_github_link})", # Updated link and text
-                     color=config.colors["default"], timestamp=datetime.utcnow())
+                     color=config.colors["default"], timestamp=datetime.now(timezone.utc))
         embed.set_author(name="Eliza Daily", url=config.hackmd_url) # Author link can remain or change if needed
         embed.set_thumbnail(url="https://m3-org.github.io/avatars/eliza/thumb-bust_eliza.png")
         return embed

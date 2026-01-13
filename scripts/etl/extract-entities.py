@@ -26,7 +26,7 @@ import json
 import argparse
 import logging
 from pathlib import Path
-from datetime import datetime
+from datetime import datetime, timezone
 from difflib import SequenceMatcher
 from concurrent.futures import ThreadPoolExecutor, as_completed
 import requests
@@ -584,7 +584,7 @@ def main():
         output = {
             "entities": deduped,
             "_metadata": {
-                "classified_at": datetime.utcnow().isoformat() + "Z",
+                "classified_at": datetime.now(timezone.utc).isoformat() + "Z",
                 "classify_input_tokens": usage["input_tokens"],
                 "classify_output_tokens": usage["output_tokens"],
             }
@@ -628,7 +628,7 @@ def main():
         output = {
             "entities": entities,
             "_metadata": {
-                "reclassified_at": datetime.utcnow().isoformat() + "Z",
+                "reclassified_at": datetime.now(timezone.utc).isoformat() + "Z",
                 "classify_input_tokens": usage["input_tokens"],
                 "classify_output_tokens": usage["output_tokens"],
             }
@@ -670,7 +670,7 @@ def main():
             "entities": filtered,
             "_metadata": data.get("_metadata", {})
         }
-        output["_metadata"]["filtered_at"] = datetime.utcnow().isoformat() + "Z"
+        output["_metadata"]["filtered_at"] = datetime.now(timezone.utc).isoformat() + "Z"
 
         out_path = args.output or args.input
         out_path.write_text(json.dumps(output, indent=2, ensure_ascii=False))
@@ -697,7 +697,7 @@ def main():
         output = {
             "entities": normalized,
             "_metadata": {
-                "normalized_at": datetime.utcnow().isoformat() + "Z",
+                "normalized_at": datetime.now(timezone.utc).isoformat() + "Z",
                 "source": str(args.input),
                 "schema_version": 2,
                 "input_tokens": usage["input_tokens"],
@@ -760,7 +760,7 @@ def main():
                         (out_dir / f.name).write_text(json.dumps({
                             "source": f.name,
                             "entities": extraction.get("entities", []),
-                            "_metadata": {"extracted_at": datetime.utcnow().isoformat() + "Z"}
+                            "_metadata": {"extracted_at": datetime.now(timezone.utc).isoformat() + "Z"}
                         }, indent=2, ensure_ascii=True))
     else:
         # Sequential processing
@@ -776,7 +776,7 @@ def main():
                     (out_dir / f.name).write_text(json.dumps({
                         "source": f.name,
                         "entities": extraction.get("entities", []),
-                        "_metadata": {"extracted_at": datetime.utcnow().isoformat() + "Z"}
+                        "_metadata": {"extracted_at": datetime.now(timezone.utc).isoformat() + "Z"}
                     }, indent=2, ensure_ascii=True))
 
     merged = merge_entities(all_extractions)
@@ -795,7 +795,7 @@ def main():
     output = {
         "entities": merged,
         "_metadata": {
-            "extracted_at": datetime.utcnow().isoformat() + "Z",
+            "extracted_at": datetime.now(timezone.utc).isoformat() + "Z",
             "files_processed": len(files),
             "normalized": args.normalize,
             "schema_version": 2,

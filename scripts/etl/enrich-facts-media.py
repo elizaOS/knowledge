@@ -12,7 +12,7 @@ import argparse
 import json
 import logging
 import sys
-from datetime import datetime
+from datetime import datetime, timezone
 from pathlib import Path
 from urllib.parse import urlparse
 
@@ -255,7 +255,7 @@ def merge_media_into_facts(
     # Update metadata
     if "_metadata" not in facts:
         facts["_metadata"] = {}
-    facts["_metadata"]["media_enriched_at"] = datetime.utcnow().isoformat() + "Z"
+    facts["_metadata"]["media_enriched_at"] = datetime.now(timezone.utc).isoformat() + "Z"
     facts["_metadata"]["source_images_count"] = len(source_images)
     facts["_metadata"]["source_videos_count"] = len(source_videos)
     facts["_metadata"]["poster_count"] = len(posters)
