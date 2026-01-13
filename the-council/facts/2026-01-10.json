@@ -1,16 +1,15 @@
 {
-  "briefing_date": "2026-01-09",
-  "overall_summary": "Core developers discussed a major Eliza 2.0 runtime redesign (removing API/server/CLI/projects) alongside a parallel initiative to convert plugins into interoperable \u201cskills.\u201d In the broader community, token migration and exchange delisting concerns persisted while cloud/app-creator stability, plugin fixes, and new database/auth improvements progressed on GitHub.",
+  "briefing_date": "2026-01-10",
+  "overall_summary": "The community is shifting focus toward the Eliza 2.0 overhaul and new interoperability standards, while managing significant friction regarding the ai16z token migration and upcoming Korean exchange delistings.",
   "key_facts": [
-    "Shaw proposed an Eliza 2.0 architecture that removes the current API, server, CLI, and projects structure in favor of a documented, Claude-friendly runtime with consistent abstractions across TypeScript, Rust, and Python, including FFI plugin interoperability.",
-    "Jin initiated an experiment to convert ElizaOS plugins into \u201cskills\u201d to test interoperability with other agent tools, focusing on Discord and blockchain plugins.",
-    "R0am described a skills format as a folder containing .md instructions plus deterministic scripts (any language) and stated the main challenge is getting Claude to use skills implicitly, addressed via hooks.",
-    "Kenk announced a Twitter Space scheduled for 2026-01-13 at 19:00 UTC with Solana Foundation, PayAI, and Quantu to discuss the 8004 standard and its use in Eliza Cloud.",
-    "ElizaBAO reported \u201coperation failed\u201d errors in the ElizaCloud app creator, and cjft said the app creator is working but is an early-stage feature.",
-    "On 2026-01-08, the community discussed confirmed delisting of ai16z/elizaOS from Korean exchanges (Bithumb, Coinone, Korbit) scheduled for February 2026, with DAXA citing lack of transparency in rebranding/token swap procedures.",
-    "PR #6333 (odilitime) was merged into elizaos/eliza on 2026-01-07 to address serverId => messageServerId migration compatibility issues affecting ElizaOS v1.7.0 with plugin-discord v1.3.3.",
-    "PR #6293 (wtfsayo) was merged into elizaos/eliza on 2026-01-09 to enable comprehensive hot reload for backend development.",
-    "A v2.0.0 branch PR (#6351, lalalune) was opened on 2026-01-09 describing removal of app/server/CLI \u201cnon-essentials\u201d and focusing on runtime (Rust/TypeScript) with critical plugins ported."
+    "Shaw proposed Eliza 2.0, a redesign eliminating the current API, server, CLI, and projects structure in favor of a multi-language runtime.",
+    "Bithumb, Coinone, and Korbit are scheduled to delist ai16z/elizaOS in February 2026 due to transparency issues in rebranding.",
+    "The 8004 standard integration will be discussed in a Twitter Space on January 13th at 7pm UTC with the Solana Foundation.",
+    "ElizaOS version 1.7.0 was identified as having critical 'No server ID found' errors related to bootstrap plugin compatibility.",
+    "A unified useElizaChat hook was introduced in the core repository to standardize client-side communication protocols.",
+    "The plugin-twitter repository implemented OAuth2 PKCE authentication for improved security.",
+    "PR #6333 was merged to complete the migration from serverId to messageServerId across bootstrap actions and providers.",
+    "The documentation coverage for ElizaOS in the docs repository was reported to reach approximately 95%."
   ],
   "open_questions": [
     "How do I set Discord Timer/Interval Settings for my elizaos agents in discord?",
@@ -24,20 +23,21 @@
   "tags": {
     "themes": [
       "ai-agents",
-      "plugins",
-      "bug-fix",
       "token-migration",
+      "developer-experience",
+      "performance",
       "infrastructure"
     ],
     "sentiment": {
       "overall": "mixed",
       "context": [
         "technical",
-        "economic"
+        "economic",
+        "social"
       ]
     },
     "story_type": [
-      "maintenance"
+      "progress"
     ],
     "derived": [
       "social",
@@ -55,12 +55,11 @@
   "categories": {
     "twitter_news_highlights": [
       {
-        "claim": "A Twitter Space is scheduled for 2026-01-13 19:00 UTC with Solana Foundation, PayAI, and Quantu to discuss the 8004 standard and how it will be used by Eliza Cloud.",
+        "claim": "Upcoming Twitter Space on Jan 13th with Solana Foundation to discuss 8004 standard.",
         "source": [
-          "ai-news/elizaos/discord/md/2026-01-09.md",
           "ai-news/elizaos/json/2026-01-09.json"
         ],
-        "sentiment": "neutral"
+        "sentiment": "positive"
       }
     ],
     "github_updates": {
@@ -72,57 +71,30 @@
           "url": "https://github.com/elizaos/eliza/pull/6351",
           "status": "open",
           "author": "lalalune",
-          "significance": "Large v2.0.0 working branch proposing removal of app/server/CLI and focusing on runtime and critical plugin ports."
+          "significance": "A major architectural overhaul branch for Eliza 2.0 focusing on a core runtime in Rust and TypeScript."
         },
         {
           "item_type": "pull_request",
-          "title": "fix: plugin-bootstrap (+ sql minor) actions/providers for serverId => messageServerId change",
-          "number": 6333,
-          "url": "https://github.com/elizaos/eliza/pull/6333",
-          "status": "merged",
-          "author": "odilitime",
-          "significance": "Merged fix for v1.7.0 compatibility issues affecting Discord integration due to serverId/messageServerId migration."
-        },
-        {
-          "item_type": "pull_request",
-          "title": "fix: Enable hot reload for backend development",
-          "number": 6293,
-          "url": "https://github.com/elizaos/eliza/pull/6293",
-          "status": "merged",
-          "author": "wtfsayo",
-          "significance": "Improves developer workflow by rebuilding and restarting backend services automatically on TypeScript changes."
-        },
-        {
-          "item_type": "pull_request",
-          "title": "feat: unified hooks with multi-transport support (HTTP/SSE/WebSocket)",
+          "title": "unified hooks with multi-transport support",
           "number": 6300,
           "url": "https://github.com/elizaos/eliza/pull/6300",
           "status": "merged",
           "author": "standujar",
-          "significance": "Introduces useElizaChat and aligns server/client transport handling across HTTP, SSE, and WebSocket."
+          "significance": "Introduced useElizaChat to unify interfaces for HTTP, SSE, and WebSocket."
         },
         {
-          "item_type": "issue",
-          "title": "A critical P1 issue was opened to investigate a publishing failure preventing the Discord plugin release v1.3.4",
-          "number": 40,
-          "url": "https://github.com/elizaos-plugins/plugin-discord/issues/40",
-          "status": "open",
-          "author": "unknown",
-          "significance": "Release pipeline blocker for plugin-discord."
-        },
-        {
-          "item_type": "issue",
-          "title": "Telegram plugin crash when processing images uploaded as photos (TypeError)",
-          "number": 23,
-          "url": "https://github.com/elizaos-plugins/plugin-telegram/issues/23",
-          "status": "open",
-          "author": "unknown",
-          "significance": "Runtime crash scenario requiring investigation in plugin-telegram."
+          "item_type": "pull_request",
+          "title": "fix: plugin-bootstrap actions/providers for serverId => messageServerId change",
+          "number": 6333,
+          "url": "https://github.com/elizaos/eliza/pull/6333",
+          "status": "merged",
+          "author": "odilitime",
+          "significance": "Urgent fix for Discord plugin compatibility issues in version 1.7.0."
         }
       ],
       "overall_focus": [
         {
-          "claim": "GitHub activity emphasized platform stability (SQL plugin crash/connection fixes), developer experience improvements (unified hooks; hot reload), and a large documentation expansion in elizaos/docs (coverage reported from ~60% to ~95%).",
+          "claim": "Development is centered on stabilizing the core plugin-sql, expanding documentation coverage, and transitioning to a unified Message API.",
           "source": [
             "github/summaries/week/2026-01-04.md"
           ]
@@ -131,166 +103,89 @@
     },
     "discord_updates": [
       {
-        "channel": "#\ud83d\udcac-discussion",
-        "summary": "Discussion was mostly non-technical, with notable items including a proposal to integrate Behavidence\u2019s Dopa One (dopamine/mental-health monitoring via phone/wearable interactions) into a future ElizaOS Phone app and an announcement of the 2026-01-13 Twitter Space on 8004/Eliza Cloud.",
-        "key_participants": [
-          "DorianD",
-          "Kenk",
-          "DigitalDiva"
-        ],
-        "source": [
-          "ai-news/elizaos/discord/json/2026-01-09.json",
-          "ai-news/elizaos/discord/md/2026-01-09.md"
-        ]
-      },
-      {
-        "channel": "#\ud83d\udcac-coders",
-        "summary": "Developers discussed ElizaCloud app-creator failures (reported by one user, confirmed working as an early feature by cjft), cloud billing page updates, an unanswered question about Twitter API requirements for Twitter agents, and an AI image-classification agent starting point using the DeepFace library.",
-        "key_participants": [
-          "jin",
-          "cjft",
-          "ElizaBAO",
-          "DorianD",
-          "Psyxh"
-        ],
-        "source": [
-          "ai-news/elizaos/discord/json/2026-01-09.json",
-          "ai-news/elizaos/discord/md/2026-01-09.md"
-        ]
-      },
-      {
         "channel": "#core-devs",
-        "summary": "Core-dev discussion centered on two initiatives: (1) converting plugins into interoperable skills (folders with .md instructions + deterministic scripts) including a hooks-based approach for implicit skill use; and (2) Shaw\u2019s Eliza 2.0 redesign removing API/server/CLI/projects in favor of a multi-language runtime with FFI plugin interop.",
+        "summary": "Shaw presented the Eliza 2.0 vision involving FFI plugin interoperability and a Claude-friendly runtime. Discussions also covered converting plugins to 'skills' using markdown folders.",
         "key_participants": [
           "shaw",
           "jin",
-          "R0am | tip.md",
-          "Agent Joshua \u20b1 | TEE",
-          "Stan \u26a1"
+          "R0am"
         ],
         "source": [
-          "ai-news/elizaos/discord/json/2026-01-09.json",
           "ai-news/elizaos/discord/md/2026-01-09.md"
         ]
       },
       {
-        "channel": "#(multi-channel, 2026-01-08)",
-        "summary": "Community discussed ai16z\u2192elizaOS migration issues (eligibility verification errors including LP \u201cmax amount reached\u201d), and confirmed exchange delistings in Korea (Bithumb/Coinone/Korbit) scheduled for February 2026; token utility questions were raised without definitive team responses.",
+        "channel": "#discussion",
+        "summary": "Heavy focus on the ai16z to elizaOS token migration failures and the impact of the impending delisting from Korean exchanges. DorianD proposed mental health monitoring agents named Dopa One.",
         "key_participants": [
-          "Hexx \ud83c\udf10",
-          "stoikol",
-          "FoRever_BIG",
-          "jessy"
+          "DorianD",
+          "Hexx"
         ],
         "source": [
           "ai-news/elizaos/discord/md/2026-01-08.md"
-        ]
-      },
-      {
-        "channel": "#(multi-channel, 2026-01-07)",
-        "summary": "Developers triaged ElizaOS v1.7.0 compatibility issues causing Discord server ID errors, pointed users to downgrade to 1.6.5 or use a fix branch, and clarified model parameter formatting requiring provider prefixes (e.g., openai/, anthropic/, google/).",
-        "key_participants": [
-          "Odilitime",
-          "cjft",
-          "shaw",
-          "DigitalDiva",
-          "Stan \u26a1"
-        ],
-        "source": [
-          "ai-news/elizaos/discord/md/2026-01-07.md"
         ]
       }
     ],
     "user_feedback": [
       {
-        "feedback_summary": "Users reported token migration problems including eligibility showing 0 tokens and LP migration errors (\u201cmax amount reached\u201d).",
+        "feedback_summary": "Users are reporting significant difficulty with LP token migration results showing 'max amount reached' errors.",
         "source": [
           "ai-news/elizaos/discord/md/2026-01-08.md"
         ],
         "sentiment": "negative"
       },
       {
-        "feedback_summary": "A community member asked why the elizaOS token is not used for payments/gas fees and requested a token utility roadmap; no definitive answer was provided in the discussion.",
-        "source": [
-          "ai-news/elizaos/discord/md/2026-01-08.md"
-        ],
-        "sentiment": "mixed"
-      },
-      {
-        "feedback_summary": "ElizaCloud app-creator failures were reported by a user, while another developer stated the feature is working but early-stage.",
-        "source": [
-          "ai-news/elizaos/discord/md/2026-01-09.md"
-        ],
-        "sentiment": "mixed"
-      },
-      {
-        "feedback_summary": "Community members said it was difficult to find the official ElizaOS contract address on official X/Twitter accounts; the team committed to posting it and updating the linktree.",
+        "feedback_summary": "The need for better contract address (CA) discoverability was raised as users cannot find it within 10 seconds on official sites.",
         "source": [
           "ai-news/elizaos/discord/md/2026-01-07.md"
         ],
-        "sentiment": "negative"
-      },
-      {
-        "feedback_summary": "A user reported the docs site at elizacloud.ai/docs was down and requested a fix.",
-        "source": [
-          "ai-news/elizaos/discord/md/2026-01-08.md"
-        ],
-        "sentiment": "negative"
+        "sentiment": "neutral"
       }
     ],
     "strategic_insights": [
       {
-        "theme": "Convergence on a runtime-first, tool-interoperable agent ecosystem",
-        "insight": "Discussion of Eliza 2.0 removing API/server/CLI/projects aligns with the concurrent push to standardize capabilities as \u201cskills\u201d that can interoperate across agent tools, which may shift priority from product surfaces to runtime abstractions and compatibility layers.",
+        "theme": "Cross-Platform Skill Standards",
+        "insight": "The push to convert Eliza plugins into markdown-based 'skills' indicates a shift toward LLM-native interoperability where agents can use tools implicitly via hooks.",
         "implications_or_questions": [
-          "Should Eliza 2.0 define a formal skills/spec format to ensure interoperability beyond internal conventions?",
-          "What migration path (from current plugin architecture) will minimize breakage for existing integrations (e.g., Discord, blockchain)?"
+          "Will this standard be adopted by other agent frameworks beyond elizaOS?"
         ]
       },
       {
-        "theme": "Operational reliability and DX are active levers for adoption",
-        "insight": "GitHub work emphasized hot reload, unified client hooks across transports, SQL stability, and documentation expansion, while Discord discussions surfaced user friction around cloud app creation and integration configuration.",
+        "theme": "Utility Token Crisis",
+        "insight": "The community is questioning the lack of explicit token utility (payments/gas), which may contribute to exchange delisting pressures if not clarified.",
         "implications_or_questions": [
-          "Which user-reported cloud failures can be turned into reproducible test cases or monitoring alerts?",
-          "Are docs and integration examples kept synchronized with breaking field migrations like serverId => messageServerId?"
+          "Can a roadmap for native token utility be published to satisfy transparency requirements?"
         ]
       }
     ],
     "market_analysis": [
       {
-        "observation": "Korean exchanges (Bithumb, Coinone, Korbit) scheduled delisting of ai16z/elizaOS for February 2026, citing lack of transparency in rebranding/token swap procedures.",
+        "observation": "Analysis from Agent Joshua suggests that pure inference markets on platform aggregators like OpenRouter have not been highly profitable over the last year.",
         "source": [
           "ai-news/elizaos/discord/md/2026-01-08.md"
         ],
-        "relevance": "Exchange delistings and stated rationale may affect liquidity access and increase pressure for clearer token migration communications."
-      },
-      {
-        "observation": "A community member stated that inference markets are not highly profitable based on observations from models offered on their platform and OpenRouter over the past year.",
-        "source": [
-          "ai-news/elizaos/discord/md/2026-01-08.md"
-        ],
-        "relevance": "May inform prioritization of revenue models and product focus beyond inference-market assumptions."
+        "relevance": "Influences the project's strategy to focus on agentic value-add (like data collection/skills) over just reselling model access."
       }
     ]
   },
   "_metadata": {
-    "model": "openai/gpt-5.2",
-    "extracted_at": "2026-01-12T22:50:47.536804Z",
-    "prompt_tokens": 33591,
-    "completion_tokens": 3593,
-    "total_tokens": 37184,
-    "processing_seconds": 54.12,
+    "model": "google/gemini-3-flash-preview",
+    "extracted_at": "2026-01-13T16:52:38.654500+00:00Z",
+    "prompt_tokens": 38027,
+    "completion_tokens": 1847,
+    "total_tokens": 39874,
+    "processing_seconds": 13.81,
     "status": "success",
     "facts_by_category": {
       "twitter_news_highlights": 1,
-      "github_updates": 6,
-      "discord_updates": 5,
-      "user_feedback": 5,
+      "github_updates": 3,
+      "discord_updates": 2,
+      "user_feedback": 2,
       "strategic_insights": 2,
-      "market_analysis": 2,
-      "key_facts": 9,
+      "market_analysis": 1,
+      "key_facts": 8,
       "open_questions": 7
     },
-    "total_facts": 37
+    "total_facts": 26
   }
 }
