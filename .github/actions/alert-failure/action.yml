@@ -1,0 +1,25 @@
+name: 'Alert on Failure'
+description: 'Sends a Discord webhook alert when a workflow fails'
+
+inputs:
+  webhook-url:
+    description: 'Discord webhook URL (pass secrets.ALERT_WEBHOOK_URL)'
+    required: true
+  workflow-name:
+    description: 'Name of the workflow for the alert message'
+    required: true
+  mention-user:
+    description: 'Discord user ID to mention (without <@ >)'
+    required: false
+    default: '213767993153290250'
+
+runs:
+  using: composite
+  steps:
+    - name: Send failure alert
+      if: failure()
+      shell: bash
+      run: |
+        curl -X POST "${{ inputs.webhook-url }}" \
+          -H "Content-Type: application/json" \
+          -d "{\"content\": \"<@${{ inputs.mention-user }}> ⚠️ **${{ inputs.workflow-name }}** failed: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}\"}"

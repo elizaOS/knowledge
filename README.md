@@ -120,10 +120,10 @@ The pipeline runs after upstream `M3-org/ai-news` completes its daily processing
 |------|----------|-------------|
 | **08:00** | `sync.yml` | Pull fresh data from ai-news (after upstream CDN upload) |
 | **08:30** | `aggregate-daily-sources.yml` | Consolidate all sources into daily JSON |
-| **08:45** | `extract_daily_facts.yml` | Extract key facts using LLM + generate RSS |
-| **09:00** | `generate-council-briefing.yml` | Generate strategic council briefing + RSS |
+| **08:45** | `extract_daily_facts.yml` | Extract key facts using LLM |
+| **09:00** | `generate-council-briefing.yml` | Generate strategic council briefing |
 | **09:30** | `update_hackmd_notes.yml` | Update HackMD documentation |
-| **10:00** | `generate-posters.yml` | Generate visual content (skips if upstream has posters) |
+| **10:00** | `generate-posters.yml` | Generate visual content, enrich facts, generate RSS feeds |
 | **10:30** | `daily_discord_briefing.yml` | Send daily briefing to Discord |
 
 ### Periodic Retrospectives (`.github/workflows/retro.yml`)
@@ -141,26 +141,26 @@ Retrospectives output to `the-council/retros/` and `the-council/summaries/`.
     *   Raw synced data is stored in directories like `docs/`, `daily-silk/`, `github/`, `ai-news/`, `clanktank/episodes/`, and `the-council/episodes/`.
 
 2.  **Daily Context Aggregation (`.github/workflows/aggregate-daily-sources.yml`)**: (Runs at 08:30 UTC)
-    *   This workflow runs `scripts/aggregate-sources.py` daily after sync completes.
+    *   This workflow runs `scripts/etl/aggregate-sources.py` daily after sync completes.
     *   Consolidates data from synced external sources (e.g., `ai-news/`, `github/summaries/`) and internal structured data into a comprehensive daily JSON file: `the-council/aggregated/YYYY-MM-DD.json`.
     *   Uses `ai-news/elizaos/json/` which contains CDN URLs for media.
     *   A permalink `the-council/aggregated/daily.json` is created, pointing to the latest daily aggregated file.
 
 3.  **Daily Fact Extraction (`.github/workflows/extract_daily_facts.yml`)**: (Runs at 08:45 UTC)
-    *   This workflow runs `scripts/extract-facts.py` daily after aggregation.
+    *   This workflow runs `scripts/etl/extract-facts.py` daily after aggregation.
     *   Uses an LLM with a specialized prompt to distill significant information from the aggregated data.
     *   Outputs are structured JSON facts to `the-council/facts/YYYY-MM-DD.json` and a Markdown version to `hackmd/facts/YYYY-MM-DD.md`.
-    *   Generates RSS feeds and creates permalink `the-council/facts/daily.json`.
+    *   Creates permalink `the-council/facts/daily.json`.
 
 4.  **Council Briefing Generation (`.github/workflows/generate-council-briefing.yml`)**: (Runs at 09:00 UTC)
-    *   Triggered daily after fact extraction, this workflow runs `scripts/generate_council_context.py`.
-    *   This script takes `the-council/aggregated/daily.json` as input and uses an LLM (via OpenRouter) with strategic prompts (e.g., `scripts/prompts/strategy/north-star.txt`) to produce a high-level strategic briefing.
+    *   Triggered daily after fact extraction, this workflow runs `scripts/etl/generate-council-context.py`.
+    *   This script takes `the-council/aggregated/daily.json` as input and uses an LLM (via OpenRouter) with strategic prompts (e.g., `scripts/prompts/config/north-star.txt`) to produce a high-level strategic briefing.
     *   The output is saved as `the-council/council_briefing/YYYY-MM-DD.json`, with a permalink `the-council/council_briefing/daily.json`.
 
 5.  **HackMD Note Generation & Backup (`.github/workflows/update_hackmd_notes.yml`)**: (Runs at 09:30 UTC)
     *   This workflow runs daily to manage topical insights on HackMD.
-    *   It first executes `scripts/create-hackmd.py` which ensures HackMD notes exist for prompts and updates `book.json`.
-    *   Then, it runs `scripts/update-hackmd.py` which uses `the-council/aggregated/daily.json` as context to generate content for each prompt, update HackMD notes, and save local backups.
+    *   It first executes `scripts/integrations/hackmd/create.py` which ensures HackMD notes exist for prompts and updates `book.json`.
+    *   Then, it runs `scripts/integrations/hackmd/update.py` which uses `the-council/aggregated/daily.json` as context to generate content for each prompt, update HackMD notes, and save local backups.
     *   Changes to `book.json`, `hackmd/**/*.md`, and `hackmd/**/*.json` are committed.
 
 6.  **Poster Generation (`.github/workflows/generate-posters.yml`)**: (Runs at 10:00 UTC)
@@ -170,7 +170,7 @@ Retrospectives output to `the-council/retros/` and `the-council/summaries/`.
     *   Enriches facts with media URLs (respects existing upstream values).
 
 7.  **Daily Discord Briefing (`.github/workflows/daily_discord_briefing.yml`)**: (Runs at 10:30 UTC)
-    *   This workflow runs `scripts/webhook.py` daily after all data processing and poster generation are complete.
+    *   This workflow runs `scripts/integrations/discord/webhook.py` daily after all data processing and poster generation are complete.
     *   Uses poster URLs from facts (either upstream CDN or locally generated).
     *   Includes automatic poster cleanup and sends formatted briefings with LLM-generated summaries.
     *   Integrates rich Discord embeds with poster images.
@@ -230,23 +230,23 @@ Each major directory contains comprehensive documentation. Click the links below
 A complete system for generating character-driven visual content:
 
 ```
-┌─────────────┐     ┌─────────────┐     ┌─────────────┐
-│  ANALYZE    │ ──▶ │  GENERATE   │ ──▶ │ ILLUSTRATE  │
-│  analyze.py │     │ generate.py │     │illustrate.py│
-│             │     │             │     │             │
-│ Images →    │     │ Manifest →  │     │ Ref sheet + │
-│ manifest    │     │ ref sheet   │     │ story →     │
-│             │     │             │     │ illustration│
-└─────────────┘     └─────────────┘     └─────────────┘
+┌──────────────────┐     ┌──────────────────┐     ┌─────────────┐
+│     ANALYZE      │ ──▶ │     GENERATE     │ ──▶ │ ILLUSTRATE  │
+│ character-       │     │ character-       │     │illustrate.py│
+│ analyze.py       │     │ reference.py     │     │             │
+│                  │     │                  │     │ Ref sheet + │
+│ Images →         │     │ Manifest →       │     │ story →     │
+│ manifest         │     │ ref sheet        │     │ illustration│
+└──────────────────┘     └──────────────────┘     └─────────────┘
 ```
 
 | Script | Purpose | Example |
 |--------|---------|---------|
-| `analyze.py` | Analyze character images → `manifest.json` | `python scripts/posters/analyze.py eliza` |
-| `generate.py` | Create reference sheets from manifest | `python scripts/posters/generate.py eliza cyberpunk` |
-| `illustrate.py` | Generate story illustrations with characters | `python scripts/posters/illustrate.py eliza "presenting at conference"` |
-| `vision.py` | General-purpose image analysis (Unix-style) | `python scripts/posters/vision.py image.png -p "describe"` |
-| `generate-ai-image.py` | Daily AI news poster generation | Automated via workflow |
+| `character-analyze.py` | Analyze character images → `manifest.json` | `python scripts/posters/character-analyze.py eliza` |
+| `character-reference.py` | Create reference sheets from manifest | `python scripts/posters/character-reference.py eliza cyberpunk` |
+| `illustrate.py` | Generate illustrations from facts data | `python scripts/posters/illustrate.py -f the-council/facts/YYYY-MM-DD.json` |
+| `create-entity-icons.py` | Generate icons for entities (tokens, projects) | `python scripts/posters/create-entity-icons.py --batch project --limit 4` |
+| `validate-illustrations.py` | Validate generated illustrations | `python scripts/posters/validate-illustrations.py media/daily/YYYY-MM-DD/` |
 
 **Available Characters**: eliza, marc, peepo, spartan, shaw
 
@@ -384,13 +384,18 @@ Episodes from the [m3-org/clanktank](https://github.com/m3-org/clanktank) reposi
 Episodes from the [m3-org/the-council](https://github.com/m3-org/the-council) repository. Contains JSON files with strategic discussions and analysis from the council. This data is synced daily as part of the automated pipeline, providing ongoing strategic insights and community discussions.
 
 ### Scripts & Prompts
-The `scripts/` directory contains Python scripts used for automating content generation and updates.
-- `scripts/prompts/`: Contains prompt templates categorized into subdirectories (`comms`, `dev`, `strategy`). These templates are used by `scripts/update-hackmd.py` along with daily context data to generate content for specific HackMD notes.
-- `scripts/create-hackmd.py`: Creates new HackMD notes for prompts found in `scripts/prompts/` that are not already listed in `book.json`. It populates `book.json` with the note ID and an "overwrite" update strategy.
-- `scripts/update-hackmd.py`: Reads the latest daily context data, generates content for each prompt (defined in `book.json`) using an LLM (via OpenRouter). It updates the corresponding HackMD note by overwriting its title (with the current date) and its entire content (placing the prompt details from the local file in `<details>` tags, followed by the LLM-generated text). It also updates the main Book Index note on HackMD and saves local backups.
+The `scripts/` directory contains Python scripts organized by function:
+- `scripts/etl/`: Data processing pipeline (aggregate, extract, generate)
+- `scripts/integrations/`: External service integrations (Discord, HackMD)
+- `scripts/posters/`: Visual content generation
+- `scripts/prompts/`: LLM prompt templates categorized into subdirectories (`comms`, `dev`, `strategy`)
+
+Key scripts:
+- `scripts/integrations/hackmd/create.py`: Creates new HackMD notes for prompts found in `scripts/prompts/` that are not already listed in `book.json`. It populates `book.json` with the note ID and an "overwrite" update strategy.
+- `scripts/integrations/hackmd/update.py`: Reads the latest daily context data, generates content for each prompt (defined in `book.json`) using an LLM (via OpenRouter). It updates the corresponding HackMD note and saves local backups.
 
 ### HackMD Backups
-The `hackmd/` directory stores local backups of the content generated by `scripts/update-hackmd.py`. The structure mirrors the `scripts/prompts/` categories, with each prompt having its own subdirectory containing dated markdown files (e.g., `hackmd/comms/discord-announcement/2025-05-05.md`) and optionally JSON files.
+The `hackmd/` directory stores local backups of the content generated by `scripts/integrations/hackmd/update.py`. The structure mirrors the `scripts/prompts/` categories, with each prompt having its own subdirectory containing dated markdown files (e.g., `hackmd/comms/discord-announcement/2025-05-05.md`) and optionally JSON files.
 
 ### Packages
 Documentation from the [ElizaOS package ecosystem](https://eliza.how/packages), which includes a collection of adapters, clients, and plugins that extend the functionality of the ElizaOS platform. This directory contains detailed information about each package's features, configuration, and integration methods.
@@ -430,15 +435,15 @@ This repository uses GitHub Actions to automatically update content from various
 4. Test the action to ensure it correctly updates the repository
 
 #### Update HackMD Notes (`update_hackmd_notes.yml`)
-This workflow runs weekly on Fridays at 18:00 UTC and can be triggered manually. It executes the following steps:
+This workflow runs daily at 09:30 UTC and can be triggered manually. It executes the following steps:
 1.  **Install Dependencies**: Sets up Python, Node.js, and installs necessary packages (`requests`, `@hackmd/hackmd-cli`).
-2.  **Create Notes**: Runs `scripts/create-hackmd.py` to check for new prompt files in `scripts/prompts/` and creates corresponding notes on HackMD if they don't exist in `book.json`. Requires `HMD_API_ACCESS_TOKEN` secret.
-3.  **Update Notes**: Runs `scripts/update-hackmd.py` to generate content using the latest daily data and prompts, then updates the HackMD notes and the main book index. Requires `HMD_API_ACCESS_TOKEN` and `OPENROUTER_API_KEY` secrets.
+2.  **Create Notes**: Runs `scripts/integrations/hackmd/create.py` to check for new prompt files in `scripts/prompts/` and creates corresponding notes on HackMD if they don't exist in `book.json`. Requires `HMD_API_ACCESS_TOKEN` secret.
+3.  **Update Notes**: Runs `scripts/integrations/hackmd/update.py` to generate content using the latest daily data and prompts, then updates the HackMD notes and the main book index. Requires `HMD_API_ACCESS_TOKEN` and `OPENROUTER_API_KEY` secrets.
 4.  **Commit Changes**: Commits any modifications to `book.json` and the generated markdown files in the `hackmd/` directory back to the repository.
 
 ---
 
-## Strategic Context (December 2025)
+## Strategic Context (January 2026)
 
 ### North Star
 

@@ -37,18 +37,21 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  monthly:
+  generate-monthly:
     if: github.event_name == 'workflow_dispatch' && inputs.type == 'monthly' || github.event_name == 'schedule' && github.event.schedule == '0 3 1 * *'
     runs-on: ubuntu-latest
     permissions:
       contents: write
     steps:
       - uses: actions/checkout@v4
-      - run: git pull --rebase origin main || true
-      - uses: actions/setup-python@v5
         with:
-          python-version: '3.x'
-      - run: pip install requests
+          fetch-depth: 0
+      - run: git pull --rebase origin main || true
+      - name: Setup Python environment
+        uses: ./.github/actions/setup-python-env
+        with:
+          python-version: '3.12'
+          packages: 'requests'
 
       - name: Generate Monthly Retrospective
         env:
@@ -67,24 +70,26 @@ jobs:
           commit_user_email: "github-actions[bot]@users.noreply.github.com"
 
       - name: Alert on failure
-        if: failure()
-        run: |
-          curl -X POST "${{ secrets.ALERT_WEBHOOK_URL }}" \
-            -H "Content-Type: application/json" \
-            -d '{"content": "<@213767993153290250> ⚠️ **Monthly Retro** failed: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"}'
+        uses: ./.github/actions/alert-failure
+        with:
+          webhook-url: ${{ secrets.ALERT_WEBHOOK_URL }}
+          workflow-name: 'Monthly Retro'
 
-  quarterly:
+  generate-quarterly:
     if: github.event_name == 'workflow_dispatch' && inputs.type == 'quarterly' || github.event_name == 'schedule' && github.event.schedule == '0 4 1 1,4,7,10 *'
     runs-on: ubuntu-latest
     permissions:
       contents: write
     steps:
       - uses: actions/checkout@v4
-      - run: git pull --rebase origin main || true
-      - uses: actions/setup-python@v5
         with:
-          python-version: '3.x'
-      - run: pip install requests
+          fetch-depth: 0
+      - run: git pull --rebase origin main || true
+      - name: Setup Python environment
+        uses: ./.github/actions/setup-python-env
+        with:
+          python-version: '3.12'
+          packages: 'requests'
 
       - name: Generate Quarterly Summary
         env:
@@ -103,24 +108,26 @@ jobs:
           commit_user_email: "github-actions[bot]@users.noreply.github.com"
 
       - name: Alert on failure
-        if: failure()
-        run: |
-          curl -X POST "${{ secrets.ALERT_WEBHOOK_URL }}" \
-            -H "Content-Type: application/json" \
-            -d '{"content": "<@213767993153290250> ⚠️ **Quarterly Summary** failed: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"}'
+        uses: ./.github/actions/alert-failure
+        with:
+          webhook-url: ${{ secrets.ALERT_WEBHOOK_URL }}
+          workflow-name: 'Quarterly Summary'
 
-  annual:
+  generate-annual:
     if: github.event_name == 'workflow_dispatch' && inputs.type == 'annual' || github.event_name == 'schedule' && github.event.schedule == '0 5 2 1 *'
     runs-on: ubuntu-latest
     permissions:
       contents: write
     steps:
       - uses: actions/checkout@v4
-      - run: git pull --rebase origin main || true
-      - uses: actions/setup-python@v5
         with:
-          python-version: '3.x'
-      - run: pip install requests
+          fetch-depth: 0
+      - run: git pull --rebase origin main || true
+      - name: Setup Python environment
+        uses: ./.github/actions/setup-python-env
+        with:
+          python-version: '3.12'
+          packages: 'requests'
 
       - name: Generate Annual Summary
         env:
@@ -138,8 +145,7 @@ jobs:
           commit_user_email: "github-actions[bot]@users.noreply.github.com"
 
       - name: Alert on failure
-        if: failure()
-        run: |
-          curl -X POST "${{ secrets.ALERT_WEBHOOK_URL }}" \
-            -H "Content-Type: application/json" \
-            -d '{"content": "<@213767993153290250> ⚠️ **Annual Summary** failed: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"}'
+        uses: ./.github/actions/alert-failure
+        with:
+          webhook-url: ${{ secrets.ALERT_WEBHOOK_URL }}
+          workflow-name: 'Annual Summary'

@@ -11,7 +11,7 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  update_notes:
+  update-notes:
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -21,22 +21,19 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
+      - name: Setup Python environment
+        uses: ./.github/actions/setup-python-env
         with:
-          python-version: '3.10'
+          python-version: '3.12'
+          packages: 'requests'
 
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '22'
 
-      - name: Install dependencies (Python & CLI)
-        run: |
-          # Install Python deps
-          python -m pip install --upgrade pip
-          pip install requests
-          npm install -g @hackmd/hackmd-cli
+      - name: Install HackMD CLI
+        run: npm install -g @hackmd/hackmd-cli
 
       - name: Create new notes if needed
         id: create_notes

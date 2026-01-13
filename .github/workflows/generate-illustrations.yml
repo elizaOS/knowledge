@@ -59,13 +59,11 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
+      - name: Setup Python environment
+        uses: ./.github/actions/setup-python-env
         with:
-          python-version: '3.11'
-
-      - name: Install dependencies
-        run: pip install requests pillow
+          python-version: '3.12'
+          packages: 'requests pillow'
 
       - name: Determine facts file
         id: facts
@@ -142,25 +140,13 @@ jobs:
 
       - name: Commit changes
         if: inputs.dry_run == 'false' && steps.generate.outputs.generated == 'true'
-        working-directory: ${{ github.workspace }}
-        run: |
-          git config --global user.name 'GitHub Actions Bot'
-          git config --global user.email 'actions@github.com'
-
-          git add "${{ steps.facts.outputs.output_dir_rel }}/" || true
-
-          if [ "${{ inputs.update_facts }}" = "true" ]; then
-            git add "the-council/facts/${{ steps.facts.outputs.facts_date }}.json" || true
-          fi
-
-          if ! git diff --staged --quiet; then
-            git commit -m "Automated: Generate illustrations for ${{ steps.facts.outputs.facts_date }}"
-            git pull --rebase origin main
-            git push
-            echo "Changes committed and pushed"
-          else
-            echo "No changes to commit"
-          fi
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "Automated: Generate illustrations for ${{ steps.facts.outputs.facts_date }}"
+          file_pattern: "${{ steps.facts.outputs.output_dir_rel }}/ the-council/facts/${{ steps.facts.outputs.facts_date }}.json"
+          commit_user_name: "github-actions[bot]"
+          commit_user_email: "github-actions[bot]@users.noreply.github.com"
+          commit_author: "github-actions[bot] <github-actions[bot]@users.noreply.github.com>"
 
       - name: Summary
         run: |
