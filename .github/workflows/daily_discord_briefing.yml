@@ -7,21 +7,17 @@ on:
   workflow_dispatch: # Allows manual triggering
 
 jobs:
-  send_daily_briefing:
+  send-daily-briefing:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
+      - name: Setup Python environment
+        uses: ./.github/actions/setup-python-env
         with:
-          python-version: '3.x'
-
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install discord.py requests
+          python-version: '3.12'
+          packages: 'discord.py requests'
 
       - name: Send Briefing to Discord
         env:

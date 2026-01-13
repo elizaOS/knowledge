@@ -126,26 +126,18 @@ jobs:
           rm -rf temp-the-council
 
       # Step 8: Commit and push changes
-      - name: Commit and push if changes
-        run: |
-          git config --local user.email "action@github.com"
-          git config --local user.name "GitHub Action"
-
-          git add docs/ github/ daily-silk/ ai-news/ clanktank/ the-council/
-
-          # Check if there are any changes
-          if git diff --staged --quiet; then
-            echo "No changes to commit"
-          else
-            git commit -m "Daily Knowledge Sync: $(date +%Y-%m-%d)"
-            git push "https://${{ secrets.GH_PAT }}@github.com/${{ github.repository }}.git"
-          fi
+      - name: Commit and push changes
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "Daily Knowledge Sync: $(date +%Y-%m-%d)"
+          file_pattern: "docs/ github/ daily-silk/ ai-news/ clanktank/ the-council/"
+          commit_user_name: "github-actions[bot]"
+          commit_user_email: "github-actions[bot]@users.noreply.github.com"
+          commit_author: "github-actions[bot] <github-actions[bot]@users.noreply.github.com>"
 
       - name: Alert on failure
         if: failure()
-        run: |
-          curl -X POST "${{ secrets.ALERT_WEBHOOK_URL }}" \
-            -H "Content-Type: application/json" \
-            -d '{
-              "content": "<@213767993153290250> ⚠️ **Sync Knowledge Sources** failed: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
-            }'
+        uses: ./.github/actions/alert-failure
+        with:
+          webhook-url: ${{ secrets.ALERT_WEBHOOK_URL }}
+          workflow-name: 'Sync Knowledge Sources'

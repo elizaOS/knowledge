@@ -19,17 +19,17 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Pull latest changes
         run: git pull --rebase origin main || true
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
+      - name: Setup Python environment
+        uses: ./.github/actions/setup-python-env
         with:
-          python-version: '3.x' # Use a recent Python version
-
-      - name: Set execute permission for script
-        run: chmod +x scripts/etl/aggregate-sources.py
+          python-version: '3.12'
+          packages: 'requests'
 
       - name: Generate Daily Context Map
         id: generate_map
@@ -42,18 +42,9 @@ jobs:
 
       - name: Commit updated files
         uses: stefanzweifel/git-auto-commit-action@v5
-        with:
-          commit_message: "Automated: Generate context map for $(date +%Y-%m-%d) to aggregated/"
-          file_pattern: "the-council/aggregated/*.json"
-          commit_user_name: "github-actions[bot]"
-          commit_user_email: "github-actions[bot]@users.noreply.github.com"
-          commit_author: "github-actions[bot] <github-actions[bot]@users.noreply.github.com>"
-
       - name: Alert on failure
         if: failure()
-        run: |
-          curl -X POST "${{ secrets.ALERT_WEBHOOK_URL }}" \
-            -H "Content-Type: application/json" \
-            -d '{
-              "content": "<@213767993153290250> ⚠️ **Aggregate Daily Sources** failed: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
-            }'
+        uses: ./.github/actions/alert-failure
+        with:
+          webhook-url: ${{ secrets.ALERT_WEBHOOK_URL }}
+          workflow-name: 'Aggregate Daily Sources'

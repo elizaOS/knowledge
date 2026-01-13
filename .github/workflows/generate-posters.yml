@@ -22,14 +22,11 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
+      - name: Setup Python environment
+        uses: ./.github/actions/setup-python-env
         with:
           python-version: '3.12'
-
-      - name: Install Python dependencies
-        run: |
-          pip install requests pillow
+          packages: 'requests pillow'
 
       - name: Get today's date
         id: date
@@ -132,20 +129,10 @@ jobs:
           done
 
       - name: Commit and Push
-        run: |
-          git config --global user.name 'GitHub Actions Bot'
-          git config --global user.email 'actions@github.com'
-
-          # Stage generated media, enriched files, and RSS feeds
-          git add media/ || true
-          git add the-council/facts/*.json || true
-          git add ai-news/elizaos/json/*.json || true
-          git add rss/ || true
-
-          if ! git diff --staged --quiet; then
-            git commit -m "Automated: Generate posters for ${{ steps.date.outputs.date }}"
-            git pull --rebase origin main
-            git push
-          else
-            echo "No changes to commit."
-          fi
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "Automated: Generate posters for ${{ steps.date.outputs.date }}"
+          file_pattern: "media/ the-council/facts/*.json ai-news/elizaos/json/*.json rss/"
+          commit_user_name: "github-actions[bot]"
+          commit_user_email: "github-actions[bot]@users.noreply.github.com"
+          commit_author: "github-actions[bot] <github-actions[bot]@users.noreply.github.com>"

@@ -1,82 +1,196 @@
 # GitHub Actions Workflows
 
-This directory contains GitHub Actions workflows used to automate various tasks for the `knowledge` repository.
+This directory contains GitHub Actions workflows for automating the elizaOS knowledge aggregation pipeline.
 
-## Workflow Overview
+## Daily Pipeline Schedule (UTC)
 
-This directory contains GitHub Actions workflows to automate various aspects of knowledge aggregation, processing, and synchronization for the elizaOS project.
+The pipeline runs after upstream `M3-org/ai-news` completes its daily processing (~07:30 UTC):
 
-### 1. `sync.yml`
+| Time | Workflow | Description |
+|------|----------|-------------|
+| **08:00** | `sync.yml` | Sync external data sources |
+| **08:30** | `aggregate-daily-sources.yml` | Aggregate all sources into daily JSON |
+| **08:45** | `extract_daily_facts.yml` | Extract facts using LLM |
+| **09:00** | `generate-council-briefing.yml` | Generate strategic council briefing |
+| **09:30** | `update_hackmd_notes.yml` | Update HackMD documentation |
+| **10:00** | `generate-posters.yml` | Generate visual content, enrich facts, generate RSS |
+| **10:30** | `daily_discord_briefing.yml` | Send briefing to Discord |
 
-*   **Name**: `Sync External Data Sources`
-*   **Trigger**: Daily at 01:00 UTC and on `workflow_dispatch` (manual trigger).
-*   **Purpose**: Synchronizes data from various external repositories and sources into the current repository. This includes:
-    *   Documentation from `elizaOS/eliza` (v2-develop branch) into `docs/core` and `docs/rest`.
-    *   Documentation from `madjin/daily-silk` into `daily-silk/docs`.
-    *   GitHub activity logs from `elizaos/elizaos.github.io` into `github/activity_logs`.
-    *   AI news content (`elizaos/` and `hyperfy/` folders) from the `gh-pages` branch of `M3-org/ai-news` into the local `ai-news/` directory.
-*   **Key Actions**: Uses `actions/checkout` and `rsync` for file synchronization. Includes `continue-on-error: true` for individual sync steps to enhance robustness.
+### Periodic Retrospectives (`retro.yml`)
+- **Monthly** (1st of each month @ 03:00 UTC) - Council retrospective episode
+- **Quarterly** (1st of Jan/Apr/Jul/Oct @ 04:00 UTC) - Strategic summary
+- **Annual** (Jan 2nd @ 05:00 UTC) - Year-in-review summary
 
-### 2. `aggregate-daily-sources.yml` (Formerly `generate_daily_context.yml`)
+---
 
-*   **Name**: `Aggregate Daily Sources`
-*   **Trigger**: Daily at 01:30 UTC and on `workflow_dispatch`.
-*   **Purpose**: Generates a comprehensive daily aggregated JSON context file.
-*   **Key Actions**:
-    *   Sets up Python.
-    *   Ensures `scripts/aggregate-sources.py` is executable.
-    *   Runs `scripts/aggregate-sources.py` to collect data from various local paths (populated by `sync.yml` and other processes) and saves it to `the-council/aggregated/YYYY-MM-DD.json`.
-    *   Creates a permalink `the-council/aggregated/daily.json` pointing to the latest daily file.
-    *   Commits and pushes the generated JSON file and its permalink.
+## Workflow Details
 
-### 3. `generate-council-briefing.yml` (Formerly `generate_council_context.yml`)
+### 1. `sync.yml` - Sync Knowledge Sources
 
-*   **Name**: `Generate Council Briefing`
-*   **Trigger**: Daily at 02:00 UTC and on `workflow_dispatch`.
-*   **Purpose**: Takes the aggregated daily context and generates a specialized briefing JSON output tailored for council review, using an LLM for synthesis.
-*   **Key Actions**:
-    *   Sets up Python.
-    *   Ensures `scripts/aggregate-sources.py` and `scripts/generate_council_context.py` are executable.
-    *   Runs `scripts/aggregate-sources.py` (as input for the council script, ensuring it has the latest aggregated data available if run independently or if there are intermediate changes).
-    *   Runs `scripts/generate_council_context.py`, which takes the output of `aggregate-sources.py` (e.g., `the-council/aggregated/YYYY-MM-DD.json`) and a strategic prompt, processes it with an LLM (via `OpenRouter API`), and saves the result to `the-council/council_briefing/YYYY-MM-DD.json`.
-    *   Creates a permalink `the-council/council_briefing/daily.json`.
-    *   Commits and pushes the generated council briefing and its permalink.
+**Trigger**: Daily at 08:00 UTC, manual dispatch
 
-### 4. `update_hackmd_notes.yml`
+Synchronizes data from external repositories:
+- **ElizaOS Docs**: `elizaOS/eliza` (develop branch) → `docs/`
+- **Daily Silk**: `madjin/daily-silk` → `daily-silk/`
+- **GitHub Activity**: `elizaos/elizaos.github.io` (_data branch) → `github/`
+- **AI News**: `M3-org/ai-news` (gh-pages branch) → `ai-news/`
+- **Clanktank Episodes**: `m3-org/clanktank` → `clanktank/episodes/`
+- **Council Episodes**: `m3-org/the-council` → `the-council/episodes/`
 
-*   **Name**: `Update HackMD Notes`
-*   **Trigger**: Daily at 02:30 UTC and on `workflow_dispatch`.
-*   **Purpose**: Updates HackMD notes based on various configurations in `book.json`. This includes processing LLM prompts for some notes and syncing content from local source directories for others. It also generates local backups of LLM-generated content and updates `book.json` if new notes are created by helper scripts.
-*   **Key Actions**:
-    *   Sets up Python and Node.js.
-    *   Installs dependencies (e.g., `requests` for Python, `@hackmd/hackmd-cli` globally).
-    *   Ensures `scripts/update-hackmd.py` (and potentially `scripts/create-hackmd.py`) are executable.
-    *   Optionally runs `scripts/create-hackmd.py` to initialize new notes in `book.json` if needed (this step seems to primarily check existing mappings).
-    *   Runs `scripts/update-hackmd.py`:
-        *   **LLM Prompt Processing**: For notes configured with prompts (typically found in `scripts/prompts/`), it processes these with an LLM, updates the corresponding HackMD note via API, and saves the generated content locally as `.md` and structured `.json` files in the `hackmd/[category]/[prompt_name]/` directory structure.
-        *   **Direct Content Syncing**: For notes in `book.json` (including those under `CUSTOM_HEADER_LINKS`) that have a `source_directory` specified (e.g., `github/summaries/day/` or `ai-news/elizaos/md/`), the script reads the latest/relevant markdown file directly from that local `source_directory` and updates the content of the corresponding HackMD note via API using the title specified in `book.json` (e.g., `hackmd_note_title`). These source files are *not* copied into the `hackmd/` Git directory by this script.
-        *   **Book Index Update**: Updates the main HackMD book index note (`__BOOK_INDEX__` in `book.json`) with links to all managed notes.
-    *   Commits and pushes changes to `book.json` (if modified by `create-hackmd.py`) and any files created or changed within the `hackmd/**/*.md` and `hackmd/**/*.json` paths (primarily the local backups of LLM-generated content).
-    *   Includes `permissions: contents: write` to allow committing back to the repository.
+### 2. `aggregate-daily-sources.yml` - Aggregate Daily Sources
 
-### 5. `extract_daily_facts.yml`
+**Trigger**: Daily at 08:30 UTC, manual dispatch
 
-*   **Name**: `Extract Daily Facts and Convert to Markdown`
-*   **Trigger**: Daily at 01:15 UTC (after aggregation, before council briefing) and on `workflow_dispatch`.
-*   **Purpose**: Runs fact extraction on aggregated data, outputting both JSON and Markdown. This includes processing user feedback in a way that prepares it for sentiment analysis. Creates permalinks.
-*   **Key Actions**:
-    *   Sets up Python.
-    *   Installs dependencies.
-    *   Gets yesterday's date.
-    *   Runs `scripts/extract-facts.py` with inputs for aggregated data and outputs for JSON facts and Markdown facts.
-    *   Creates `the-council/facts/daily.json` permalink.
-    *   Commits `the-council/facts/*.json`, `hackmd/facts/*.md`, and `the-council/facts/daily.json`.
+Runs `scripts/etl/aggregate-sources.py` to consolidate all synced data into a single JSON file at `the-council/aggregated/YYYY-MM-DD.json`. Creates `daily.json` permalink.
 
-### 6. `daily_discord_briefing.yml`
+### 3. `extract_daily_facts.yml` - Extract Daily Facts
 
-*   **Name**: `Daily Discord Facts Briefing`
-*   **Trigger**: Daily at 02:35 UTC and on `workflow_dispatch`.
-*   **Purpose**: Sends the daily facts briefing (from `the-council/facts/YYYY-MM-DD.json`) to a specified Discord channel using the `scripts/webhook.py` script. The briefing includes a visual representation of user sentiment.
-*   **Key Actions**:
-    *   Sets up Python.
-    *   Installs `discord.py` and `
+**Trigger**: Daily at 08:45 UTC, manual dispatch
+
+Runs `scripts/etl/extract-facts.py` with LLM processing to extract key insights from aggregated data. Outputs:
+- `the-council/facts/YYYY-MM-DD.json`
+- `hackmd/facts/YYYY-MM-DD.md`
+- `the-council/facts/daily.json` (permalink)
+
+### 4. `generate-council-briefing.yml` - Generate Council Briefing
+
+**Trigger**: Daily at 09:00 UTC, manual dispatch
+
+Runs `scripts/etl/generate-council-context.py` to create strategic council briefings using LLM. Also generates RSS feeds. Outputs:
+- `the-council/council_briefing/YYYY-MM-DD.json`
+- `the-council/council_briefing/daily.json` (permalink)
+- `rss/feed.xml` and `rss/council.xml`
+
+### 5. `update_hackmd_notes.yml` - Update HackMD Notes
+
+**Trigger**: Daily at 09:30 UTC, manual dispatch
+
+Updates HackMD collaborative documentation:
+- Runs `scripts/integrations/hackmd/create.py` to initialize new notes
+- Runs `scripts/integrations/hackmd/update.py` to generate content using LLM
+- Syncs content from source directories as configured in `book.json`
+- Creates local backups in `hackmd/` directory
+
+### 6. `generate-posters.yml` - Generate Content Posters
+
+**Trigger**: Daily at 10:00 UTC, manual dispatch
+
+Generates visual content using `scripts/posters/illustrate.py`:
+- Creates illustrations from facts data with ElizaOS branding
+- Uploads to Bunny CDN (if credentials available)
+- Enriches facts and source files with media URLs
+- Generates RSS feeds
+- Cleans up media older than 7 days
+
+### 7. `daily_discord_briefing.yml` - Daily Discord Facts Briefing
+
+**Trigger**: Daily at 10:30 UTC, manual dispatch
+
+Sends the daily facts briefing to Discord using `scripts/integrations/discord/webhook.py` with LLM-powered summarization and poster images.
+
+### 8. `retro.yml` - Council Retrospectives
+
+**Trigger**: Scheduled (monthly/quarterly/annual), manual dispatch
+
+Generates retrospective content:
+- **Monthly**: `scripts/etl/generate-monthly-retro.py`
+- **Quarterly/Annual**: `scripts/etl/generate-quarterly-summary.py`
+
+Outputs to `the-council/retros/` and `the-council/episodes/`.
+
+### 9. `generate-illustrations.yml` - Generate Illustrations (Manual)
+
+**Trigger**: Manual dispatch only
+
+On-demand illustration generation with full configuration:
+- Custom date selection
+- Dry-run mode
+- CDN upload toggle
+- Facts enrichment toggle
+- Icon sheet generation
+
+### 10. `knowledge-gh-pages.yml` - Deploy to GitHub Pages
+
+**Trigger**: Push to main branch, manual dispatch
+
+Deploys repository content to GitHub Pages:
+- Stages content from all data directories
+- Filters posters to last 7 days (size optimization)
+- Generates directory listing
+- Uploads artifact and deploys
+
+---
+
+## Shared Components
+
+### Composite Actions
+
+Located in `.github/actions/`:
+
+#### `setup-python-env`
+Standardized Python environment setup:
+```yaml
+- uses: ./.github/actions/setup-python-env
+  with:
+    python-version: '3.12'  # default
+    packages: 'requests'     # space-separated list
+```
+
+#### `alert-failure`
+Standardized failure alerting to Discord:
+```yaml
+- uses: ./.github/actions/alert-failure
+  with:
+    webhook-url: ${{ secrets.ALERT_WEBHOOK_URL }}
+    workflow-name: 'Workflow Name'
+```
+
+### Concurrency Control
+
+Most ETL workflows use the same concurrency group to prevent simultaneous writes:
+```yaml
+concurrency:
+  group: knowledge-repo-writes
+  cancel-in-progress: false
+```
+
+---
+
+## Environment Variables
+
+| Secret | Used By | Purpose |
+|--------|---------|---------|
+| `OPENROUTER_API_KEY` | Most ETL workflows | LLM API access |
+| `DISCORD_BOT_TOKEN` | daily_discord_briefing | Discord posting |
+| `HMD_API_ACCESS_TOKEN` | update_hackmd_notes | HackMD API |
+| `ALERT_WEBHOOK_URL` | All workflows | Failure alerts |
+| `GH_PAT` | sync | Enhanced Git authentication |
+| `BUNNY_STORAGE_PASSWORD` | generate-posters | CDN upload |
+| `BUNNY_STORAGE_ZONE` | generate-posters | CDN configuration |
+
+---
+
+## Troubleshooting
+
+### Common Issues
+
+1. **Workflow fails at aggregation**: Check if sync.yml completed successfully
+2. **Missing facts file**: Ensure extract_daily_facts ran after aggregation
+3. **Discord posting fails**: Verify bot token and channel permissions
+4. **CDN upload fails**: Check Bunny credentials and storage zone
+
+### Manual Triggers
+
+All workflows support `workflow_dispatch` for manual triggering via GitHub UI or CLI:
+```bash
+gh workflow run sync.yml
+gh workflow run extract_daily_facts.yml
+```
+
+### Backfilling Data
+
+Use the backfill scripts for missing data:
+```bash
+OPENROUTER_API_KEY=key ./scripts/etl/backfill-facts.sh 2026-01-09 2026-01-12
+OPENROUTER_API_KEY=key ./scripts/etl/backfill-council.sh 2026-01-09 2026-01-12
+```

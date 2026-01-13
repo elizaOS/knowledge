@@ -25,21 +25,29 @@ jobs:
       - name: Pull latest changes
         run: git pull --rebase origin main || true
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
+      - name: Setup Python environment
+        uses: ./.github/actions/setup-python-env
         with:
-          python-version: '3.x'
+          python-version: '3.12'
+          packages: 'requests'
 
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install requests
-
-      - name: Aggregate Sources for Today
+      - name: Get aggregated data file
         id: aggregate_step
         run: |
-          python scripts/etl/aggregate-sources.py
-          echo "aggregated_json_file=the-council/aggregated/$(date +%Y-%m-%d).json" >> $GITHUB_OUTPUT
+          TODAY=$(date +%Y-%m-%d)
+          DAILY_FILE="the-council/aggregated/${TODAY}.json"
+          PERMALINK="the-council/aggregated/daily.json"
+
+          if [ -f "$DAILY_FILE" ]; then
+            echo "aggregated_json_file=$DAILY_FILE" >> $GITHUB_OUTPUT
+          elif [ -f "$PERMALINK" ]; then
+            echo "Using daily.json permalink as fallback"
+            echo "aggregated_json_file=$PERMALINK" >> $GITHUB_OUTPUT
+          else
+            echo "No aggregated file found, running aggregation..."
+            python scripts/etl/aggregate-sources.py
+            echo "aggregated_json_file=$DAILY_FILE" >> $GITHUB_OUTPUT
+          fi
 
       - name: Generate Fact Briefing from Aggregated Data
         id: fact_gen_step
@@ -75,18 +83,9 @@ jobs:
 
       - name: Commit updated files
         uses: stefanzweifel/git-auto-commit-action@v5
-        with:
-          commit_message: "Automated: Update daily fact briefing for $(date +%Y-%m-%d)"
-          file_pattern: "the-council/facts/*.json hackmd/facts/*.md"
-          commit_user_name: "github-actions[bot]"
-          commit_user_email: "github-actions[bot]@users.noreply.github.com"
-          commit_author: "github-actions[bot] <github-actions[bot]@users.noreply.github.com>"
-
       - name: Alert on failure
         if: failure()
-        run: |
-          curl -X POST "${{ secrets.ALERT_WEBHOOK_URL }}" \
-            -H "Content-Type: application/json" \
-            -d '{
-              "content": "<@213767993153290250> ⚠️ **Extract Daily Facts** failed: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
-            }'
+        uses: ./.github/actions/alert-failure
+        with:
+          webhook-url: ${{ secrets.ALERT_WEBHOOK_URL }}
+          workflow-name: 'Extract Daily Facts'
