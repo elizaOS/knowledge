@@ -9,7 +9,7 @@ from pathlib import Path
 from datetime import datetime
 
 # --- Configuration ---
-MODEL = "openai/gpt-5.2"
+MODEL = "google/gemini-3-flash-preview"
 API_KEY = os.environ.get("OPENROUTER_API_KEY", "")
 OPENROUTER_API_ENDPOINT = "https://openrouter.ai/api/v1/chat/completions"
 
@@ -304,9 +304,9 @@ def main():
     # Metadata for observability
     council_metadata = {
         "model": MODEL,
-        "generated_at": datetime.utcnow().isoformat() + "Z",
+        "generated_at": datetime.now(datetime.UTC).isoformat().replace('+00:00', 'Z'),
     }
-    generation_start_time = datetime.utcnow()
+    generation_start_time = datetime.now(datetime.UTC)
 
     try:
         response = requests.post(OPENROUTER_API_ENDPOINT, headers=headers, json=payload, timeout=180)
@@ -377,7 +377,7 @@ def main():
 
         # Add success metadata with deliberation stats
         council_metadata["status"] = "success"
-        council_metadata["processing_seconds"] = round((datetime.utcnow() - generation_start_time).total_seconds(), 2)
+        council_metadata["processing_seconds"] = round((datetime.now(datetime.UTC) - generation_start_time).total_seconds(), 2)
         council_metadata["key_points_count"] = len(council_context_json.get("key_points", []))
         total_questions = sum(
             len(point.get("deliberation_items", []))
@@ -390,7 +390,7 @@ def main():
         print(f"Error calling OpenRouter API for V2: {e}", file=sys.stderr)
         council_metadata["status"] = "error"
         council_metadata["error"] = f"API Request Failed: {e}"
-        council_metadata["processing_seconds"] = round((datetime.utcnow() - generation_start_time).total_seconds(), 2)
+        council_metadata["processing_seconds"] = round((datetime.now(datetime.UTC) - generation_start_time).total_seconds(), 2)
         error_output_json = {"date": date_str, "monthly_goal": MONTHLY_GOAL, "daily_focus_theme": f"Error V2: API Request Failed ({e})", "key_strategic_points": [], "_metadata": council_metadata}
         error_output_md = f"# Council Briefing (V2): {date_str}\n\nError: API Request Failed ({e})"
     except (json.JSONDecodeError, ValueError, KeyError, IndexError) as e:
@@ -399,14 +399,14 @@ def main():
              print(f"LLM Response Data (V2): {response.text[:500]}...", file=sys.stderr)
         council_metadata["status"] = "error"
         council_metadata["error"] = f"Invalid LLM Response: {e}"
-        council_metadata["processing_seconds"] = round((datetime.utcnow() - generation_start_time).total_seconds(), 2)
+        council_metadata["processing_seconds"] = round((datetime.now(datetime.UTC) - generation_start_time).total_seconds(), 2)
         error_output_json = {"date": date_str, "monthly_goal": MONTHLY_GOAL, "daily_focus_theme": f"Error V2: Invalid LLM Response ({e})", "key_strategic_points": [], "_metadata": council_metadata}
         error_output_md = f"# Council Briefing (V2): {date_str}\n\nError: Invalid LLM Response ({e})"
     except Exception as e:
          print(f"An unexpected error occurred during V2 generation: {e}", file=sys.stderr)
          council_metadata["status"] = "error"
          council_metadata["error"] = f"Unexpected error: {e}"
-         council_metadata["processing_seconds"] = round((datetime.utcnow() - generation_start_time).total_seconds(), 2)
+         council_metadata["processing_seconds"] = round((datetime.now(datetime.UTC) - generation_start_time).total_seconds(), 2)
          error_output_json = {"date": date_str, "monthly_goal": MONTHLY_GOAL, "daily_focus_theme": f"Error V2: Unexpected error ({e})", "key_strategic_points": [], "_metadata": council_metadata}
          error_output_md = f"# Council Briefing (V2): {date_str}\n\nError: Unexpected error ({e})"
     finally:
