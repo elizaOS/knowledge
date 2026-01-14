@@ -2,82 +2,31 @@
   "date": "2026-01-10",
   "meeting_context": "# North Star & Strategic Context\n\nThis file combines the overall project mission (North Star) and summaries of key strategic documents for use in AI prompts, particularly for the AI Agent Council context generation.\n\n**Last Updated:** December 2025\n\n---\n\n**North Star:**\nTo build the most reliable, developer-friendly open-source AI agent framework and cloud platform\u2014enabling builders worldwide to deploy autonomous agents that work seamlessly across chains and platforms. We create infrastructure where agents and humans collaborate, forming the foundation for a decentralized AI economy that accelerates the path toward beneficial AGI.\n\n---\n\n**Core Principles:**\n1. **Execution Excellence** - Reliability and seamless UX over feature quantity\n2. **Developer First** - Great DX attracts builders; builders create ecosystem value\n3. **Open & Composable** - Multi-agent systems that interoperate across platforms\n4. **Trust Through Shipping** - Build community confidence through consistent delivery\n\n---\n\n**Current Product Focus (Dec 2025):**\n- **ElizaOS Framework** (v1.6.x) - The core TypeScript toolkit for building persistent, interoperable agents\n- **ElizaOS Cloud** - Managed deployment platform with integrated storage and cross-chain capabilities\n- **Flagship Agents** - Reference implementations (Eli5, Otaku) demonstrating platform capabilities\n- **Cross-Chain Infrastructure** - Native support for multi-chain agent operations via Jeju/x402\n\n---\n\n**ElizaOS Mission Summary:**\nElizaOS is an open-source \"operating system for AI agents\" aimed at decentralizing AI development. Built on three pillars: 1) The Eliza Framework (TypeScript toolkit for persistent agents), 2) AI-Enhanced Governance (building toward autonomous DAOs), and 3) Eliza Labs (R&D driving cloud, cross-chain, and multi-agent capabilities). The native token coordinates the ecosystem. The vision is an intelligent internet built on open protocols and collaboration.\n\n---\n\n**Taming Information Summary:**\nAddresses the challenge of information scattered across platforms (Discord, GitHub, X). Uses AI agents as \"bridges\" to collect, wrangle (summarize/tag), and distribute information in various formats (JSON, MD, RSS, dashboards, council episodes). Treats documentation as a first-class citizen to empower AI assistants and streamline community operations. \n",
   "monthly_goal": "December 2025: Execution excellence\u2014complete token migration with high success rate, launch ElizaOS Cloud, stabilize flagship agents, and build developer trust through reliability and clear documentation.",
-  "daily_focus": "Primary pressure-point: preserve developer trust via Cloud + framework reliability while containing token-migration reputational fallout, without letting the Eliza 2.0 redesign and interoperability ambitions fragment execution.",
+  "daily_focus": "The focus shifted toward long-term survivability: architecting the 'Eliza 2.0' radical redesign while managing a critical regulatory delisting crisis on Korean exchanges.",
   "key_points": [
     {
-      "topic": "Eliza Cloud Reliability & DX: From Early Feature to Trusted Platform",
-      "summary": "Cloud surfaced user-facing failures (app creator \u201coperation failed\u201d) alongside signs of maturation (billing top-ups, ongoing cleanups), while core DX improved via backend hot reload and clearer model-provider parameter formats\u2014yet support/documentation gaps persist.",
+      "topic": "Architecture Evolution: Eliza 2.0 Redesign",
+      "summary": "Shaw has proposed and already begun porting a radical overhaul that replaces traditional APIs and servers with a multi-language, Claude-friendly runtime. This aims to maximize framework reliability and composability through unified abstractions in TypeScript, Rust, and Python.",
       "deliberation_items": [
         {
           "question_id": "q1",
-          "text": "What reliability threshold must Eliza Cloud meet before we publicly position it as \u201claunch-ready\u201d rather than \u201cearly access\u201d?",
+          "text": "Does eliminating traditional API, Server, and CLI structures improve the 'Developer First' core principle or create excessive friction for existing builders?",
           "context": [
-            "ElizaBAO: \u201coperation failed\u201d with elizacloud app creator; cjft: \u201cit\u2019s working but it\u2019s an early feature\u201d (Discord 2026-01-09, #\ud83d\udcac-coders)",
-            "Stan: \u201congoing cloud cleanups and optimizations\u201d (Discord 2026-01-09)"
+            "Shaw: 'The vision eliminates traditional API, server, CLI, and project structures in favor of an extremely Claude-friendly documented runtime.'",
+            "Shaw confirmed having already ported the implementation with a branch available for review."
           ],
           "multiple_choice_answers": {
             "answer_1": {
-              "text": "Gate on SLOs: define and hit baseline uptime/error-budget targets + reproducible onboarding success before any launch messaging.",
-              "implication": "Strengthens \u201cExecution Excellence\u201d credibility but slows growth/marketing beats."
+              "text": "Full commitment to the 2.0 redesign.",
+              "implication": "Prioritizes future-proofing and AI-native DX at the cost of potential breaking changes for v1.x legacy users."
             },
             "answer_2": {
-              "text": "Soft-launch now: keep \u201cearly access\u201d framing, ship weekly fixes, and recruit power users to harden reliability in production.",
-              "implication": "Accelerates feedback loops but risks compounding public trust damage if failures remain visible."
+              "text": "Hybrid approach maintaining legacy endpoints.",
+              "implication": "Reduces migration friction but risks technical debt and bloat within the new unified runtime architecture."
             },
             "answer_3": {
-              "text": "Split the surface: publicly launch only the stable path (deploy/run/billing) while keeping app creator behind an explicit beta flag.",
-              "implication": "Preserves momentum while isolating fragile components and reducing support load."
-            },
-            "answer_4": {
-              "text": "Other / More discussion needed / None of the above.",
-              "implication": null
-            }
-          }
-        },
-        {
-          "question_id": "q2",
-          "text": "How should we prioritize \u201clast-mile\u201d fixes: product UX polish vs. operational debugging vs. documentation closure?",
-          "context": [
-            "New UI/UX issues created: agent status visibility, signup prompt clickability, redirect back to previous chat (Daily dev summary 2026-01-09)",
-            "Unanswered user questions: Discord timer/interval settings; Twitter API requirements (Discord 2026-01-09)"
-          ],
-          "multiple_choice_answers": {
-            "answer_1": {
-              "text": "Ops-first: treat any \u201coperation failed\u201d / deployment blockers as P0 until resolved; postpone UX polish.",
-              "implication": "Maximizes platform reliability but may keep onboarding friction high for new builders."
-            },
-            "answer_2": {
-              "text": "Docs-first: close the highest-frequency unanswered questions and broken docs surfaces to reduce support churn.",
-              "implication": "Improves builder self-serve and trust, but may not address underlying runtime defects fast enough."
-            },
-            "answer_3": {
-              "text": "Balanced sprint: enforce a fixed capacity split (e.g., 50% ops, 30% UX, 20% docs) with weekly review.",
-              "implication": "Reduces whiplash and preserves momentum across priorities, at the cost of slower single-thread breakthroughs."
-            },
-            "answer_4": {
-              "text": "Other / More discussion needed / None of the above.",
-              "implication": null
-            }
-          }
-        },
-        {
-          "question_id": "q3",
-          "text": "Do we standardize and prominently document the \u201cprovider/model\u201d naming convention as part of Cloud\u2019s contract of reliability?",
-          "context": [
-            "cjft: model must use provider prefixes like \u201copenai/gpt-4o-mini\u201d, \u201canthropic/claude-sonnet-4.5\u201d, \u201cgoogle/gemini-2.5-flash\u201d to avoid \u201cModel not found\u201d (Discord 2026-01-07)"
-          ],
-          "multiple_choice_answers": {
-            "answer_1": {
-              "text": "Yes\u2014treat it as a stable public API contract with validation + friendly error messages + docs front-and-center.",
-              "implication": "Reduces integration failures and support load; increases perceived platform maturity."
-            },
-            "answer_2": {
-              "text": "Hide it\u2014auto-infer providers from model names and maintain an internal mapping layer for compatibility.",
-              "implication": "Improves UX but increases backend complexity and potential ambiguity in model routing."
-            },
-            "answer_3": {
-              "text": "Hybrid\u2014keep explicit prefixes but add a guided UI selector and CLI linting to prevent misconfiguration.",
-              "implication": "Preserves clarity while reducing developer footguns, aligning with \u201cDeveloper First.\u201d"
+              "text": "Staged rollout focusing on Rust/Python FFI first.",
+              "implication": "Verifies performance gains from multi-language support before dismantling the existing CLI/API infrastructure."
             },
             "answer_4": {
               "text": "Other / More discussion needed / None of the above.",
@@ -88,163 +37,28 @@
       ]
     },
     {
-      "topic": "Eliza 2.0: Architectural Reset vs. Execution Excellence",
-      "summary": "A major redesign is in motion: a Claude-friendly runtime with consistent abstractions across TypeScript/Rust/Python and FFI plugin interop, explicitly removing API/server/CLI/projects\u2014high upside for composability and long-term scalability, but high risk of fragmenting near-term stability work.",
+      "topic": "Token Utility and Regional Regulatory Pressure",
+      "summary": "The coordinated delisting from Korean exchanges (Bithumb, Korbit, Coinone) due to 'transparency concerns' highlights a critical need for clearly defined token utility and public communication strategies. Community members are increasingly questioning framework integration for the native token.",
       "deliberation_items": [
         {
-          "question_id": "q1",
-          "text": "Should the Council bless Eliza 2.0 as the primary trajectory now, or enforce a staged approach that protects v1.x reliability commitments?",
-          "context": [
-            "shaw: \u201cEliza 2.0\u2026 eliminates the current API, server, CLI, and projects\u2026 TS, Rust, Python\u2026 FFI plugin interoperability\u2026 already have a working port on a branch\u201d (Discord 2026-01-09, #core-devs)",
-            "v1.7.0 issues: bootstrap/Discord compatibility and serverId\u2192messageServerId migration fallout (Discord 2026-01-07)"
-          ],
-          "multiple_choice_answers": {
-            "answer_1": {
-              "text": "Full pivot: prioritize Eliza 2.0 and freeze major v1.x work except critical fixes.",
-              "implication": "Maximizes long-term platform coherence but risks near-term trust erosion if v1 users feel abandoned."
-            },
-            "answer_2": {
-              "text": "Parallel tracks: dedicate a strike team to v1 stability/Cloud while a separate team advances 2.0 behind a strict compatibility plan.",
-              "implication": "Reduces risk but requires disciplined staffing and clear governance to avoid duplicated effort."
-            },
-            "answer_3": {
-              "text": "Stage gate 2.0: require a formal RFC, migration plan, and \u201cminimum parity\u201d checklist before allocating substantial capacity.",
-              "implication": "Prevents strategic thrash and aligns with execution excellence, but slows experimentation velocity."
-            },
-            "answer_4": {
-              "text": "Other / More discussion needed / None of the above.",
-              "implication": null
-            }
-          }
-        },
-        {
           "question_id": "q2",
-          "text": "What is the non-negotiable \u201cdeveloper-first\u201d deliverable for Eliza 2.0: runtime docs, plugin parity, or interop across languages?",
+          "text": "How should the Council address the 'transparency' critique from DAXA while simultaneously integrating utility into the framework?",
           "context": [
-            "shaw: \u201cClaude-friendly documented runtime\u2026 same abstractions across three languages with examples for common use cases\u201d (Discord 2026-01-09)",
-            "Current ecosystem pressure: Discord plugin release blockers and compatibility issues (weekly summary Jan 4\u201310, 2026; Discord 2026-01-07)"
+            "Korbit announced delisting citing lack of transparency in the token migration process and failure to disclose material information.",
+            "stoikol raised questions about the lack of defined utility specifically questioning why it's not used for gas or payments."
           ],
           "multiple_choice_answers": {
             "answer_1": {
-              "text": "Docs and examples first: ship the Claude-friendly runtime documentation as the flagship artifact, even with limited plugin parity.",
-              "implication": "Optimizes for adoption and contributor onboarding, but may disappoint teams needing production connectors."
+              "text": "Immediate publication of a Comprehensive Token Utility Whitepaper.",
+              "implication": "Restores trust with exchanges and clear utility paths but limits flexibility for future lab R&D."
             },
             "answer_2": {
-              "text": "Plugin parity first: ensure core connectors (Discord, SQL, chain) are stable and portable before expanding language coverage.",
-              "implication": "Protects reliability and reference implementations, but slows the cross-language vision."
+              "text": "Integrate x402 micropayments as a core utility requirement.",
+              "implication": "Directly links token usage to agent actions, addressing 'utility' concerns via technical implementation."
             },
             "answer_3": {
-              "text": "Interop first: deliver FFI plugin boundaries and a working TS\u2194Rust\u2194Python plugin demo to prove composability.",
-              "implication": "Establishes a durable ecosystem standard, but risks being too abstract for most developers initially."
-            },
-            "answer_4": {
-              "text": "Other / More discussion needed / None of the above.",
-              "implication": null
-            }
-          }
-        },
-        {
-          "question_id": "q3",
-          "text": "How do we prevent a repeat of v1.7.0-style migration breakage as we reshape core abstractions for 2.0?",
-          "context": [
-            "Odilitime: serverId\u2192messageServerId migration caused \u201cNo server ID found 10\u201d issues; advised downgrades and fix branches (Discord 2026-01-07)",
-            "PR #6333: \u201cfix\u2026 serverId => messageServerId change\u201d to restore compatibility (Discord 2026-01-07)"
-          ],
-          "multiple_choice_answers": {
-            "answer_1": {
-              "text": "Strict compatibility policy: versioned schemas, automated migration tests, and \u201cno silent rename\u201d rules.",
-              "implication": "Increases engineering overhead but materially improves reliability and developer confidence."
-            },
-            "answer_2": {
-              "text": "Fast iteration policy: accept breaking changes early; communicate aggressively; provide downgrade paths only.",
-              "implication": "Speeds innovation but risks ecosystem fragmentation and churn among integrators."
-            },
-            "answer_3": {
-              "text": "Compatibility middleware: add adapters/shims in runtime so old and new plugin contracts can co-exist during transition.",
-              "implication": "Reduces breakage while migrating, but can create long-lived complexity if not sunset aggressively."
-            },
-            "answer_4": {
-              "text": "Other / More discussion needed / None of the above.",
-              "implication": null
-            }
-          }
-        }
-      ]
-    },
-    {
-      "topic": "Ecosystem Trust: Token Migration Fallout, Exchange Delistings, and Utility Narrative",
-      "summary": "Community trust is under strain from migration eligibility errors, LP \u201cmax amount reached\u201d confusion, and confirmed Korean exchange delistings attributed to rebrand/swap transparency; simultaneously, questions about token utility remain unanswered\u2014creating a strategic communications and product-narrative risk.",
-      "deliberation_items": [
-        {
-          "question_id": "q1",
-          "text": "What is our immediate trust-repair posture for token migration and exchange delisting concerns: operational clarity, public accountability, or incentive alignment?",
-          "context": [
-            "Korean exchanges (Bithumb, Coinone, Korbit) delisting scheduled Feb 2026; DAXA cited \u201clack of transparency in rebranding/token swap procedures\u201d (Discord 2026-01-08)",
-            "Users reporting eligibility issues (0 eligible tokens; LP \u201cmax amount reached\u201d errors) (Discord 2026-01-08)"
-          ],
-          "multiple_choice_answers": {
-            "answer_1": {
-              "text": "Operational clarity first: publish a single canonical migration playbook + FAQs + timelines, and staff support until backlog is cleared.",
-              "implication": "Most directly reduces confusion and scams, restoring baseline trust through execution."
-            },
-            "answer_2": {
-              "text": "Public accountability: issue a post-mortem on swap/rebrand process and a corrective plan addressing DAXA\u2019s transparency critique.",
-              "implication": "Signals maturity and governance readiness, but may elevate scrutiny and legal/compliance sensitivity."
-            },
-            "answer_3": {
-              "text": "Incentive alignment: offer targeted remediation (fee rebates/credits) for impacted cohorts to restore goodwill quickly.",
-              "implication": "Buys goodwill fast but can set precedent and attract opportunistic claims if verification is weak."
-            },
-            "answer_4": {
-              "text": "Other / More discussion needed / None of the above.",
-              "implication": null
-            }
-          }
-        },
-        {
-          "question_id": "q2",
-          "text": "How should we answer the strategic critique: \u201cwhy does the token exist if it isn\u2019t used for payments or gas in the ecosystem\u201d?",
-          "context": [
-            "stoikol: \u201cwhy the token isn't being used for payments or gas fees\u2026 fundamental need for a token without clear utility\u201d (Discord 2026-01-08)"
-          ],
-          "multiple_choice_answers": {
-            "answer_1": {
-              "text": "Utility roadmap commitment: define near-term primitives (Cloud credits, marketplace fees, staking for agent reputation) with dates and owners.",
-              "implication": "Transforms skepticism into an execution checklist, but creates deadlines the org must meet."
-            },
-            "answer_2": {
-              "text": "Governance-first framing: position the token primarily for ecosystem coordination (grants, curation, security) rather than payment rails.",
-              "implication": "Clarifies purpose but may disappoint users expecting transactional utility and immediate demand drivers."
-            },
-            "answer_3": {
-              "text": "De-emphasize token: focus messaging on open-source framework value; treat token as optional peripheral until product-market fit is proven.",
-              "implication": "Protects developer-first credibility, but reduces leverage of token-led ecosystem growth narratives."
-            },
-            "answer_4": {
-              "text": "Other / More discussion needed / None of the above.",
-              "implication": null
-            }
-          }
-        },
-        {
-          "question_id": "q3",
-          "text": "Do we centralize \u201ctruth sources\u201d (contract address, migration status, exchange guidance) into a single council-governed portal to reduce misinformation?",
-          "context": [
-            "Community: contract address hard to find; team to post CA across official X accounts and refresh linktree (Discord 2026-01-07)",
-            "Conflicting answers about whether exchanges auto-migrate holdings (Discord 2026-01-08)"
-          ],
-          "multiple_choice_answers": {
-            "answer_1": {
-              "text": "Yes\u2014one canonical portal (status page + FAQ + signed announcements) referenced by all accounts and bots.",
-              "implication": "Reduces confusion/scams and aligns with \u201cTrust Through Shipping,\u201d at the cost of process discipline."
-            },
-            "answer_2": {
-              "text": "Partial\u2014keep portal minimal, but empower Discord helpers with templated responses and pinned messages per channel.",
-              "implication": "Faster to deploy but may allow drift across channels and languages over time."
-            },
-            "answer_3": {
-              "text": "No\u2014distribute information across platforms (X, Discord, GitHub) and rely on community amplification.",
-              "implication": "Lowest overhead but highest risk of inconsistent guidance and reputational damage."
+              "text": "Decentralized governance focus for Korean market recovery.",
+              "implication": "Uses the DAO structure to prove transparency to regulatory bodies, though this may slow down rapid execution."
             },
             "answer_4": {
               "text": "Other / More discussion needed / None of the above.",
@@ -256,14 +70,14 @@
     }
   ],
   "_metadata": {
-    "model": "openai/gpt-5.2",
-    "generated_at": "2026-01-12T22:54:07.761383Z",
-    "prompt_tokens": 29761,
-    "completion_tokens": 3903,
-    "total_tokens": 33664,
+    "model": "google/gemini-3-flash-preview",
+    "generated_at": "2026-01-14T07:08:17.948005Z",
+    "prompt_tokens": 45429,
+    "completion_tokens": 1400,
+    "total_tokens": 46829,
     "status": "success",
-    "processing_seconds": 83.08,
-    "key_points_count": 3,
-    "total_deliberation_questions": 9
+    "processing_seconds": 9.44,
+    "key_points_count": 2,
+    "total_deliberation_questions": 2
   }
 }

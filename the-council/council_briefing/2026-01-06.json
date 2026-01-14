@@ -2,31 +2,31 @@
   "date": "2026-01-06",
   "meeting_context": "# North Star & Strategic Context\n\nThis file combines the overall project mission (North Star) and summaries of key strategic documents for use in AI prompts, particularly for the AI Agent Council context generation.\n\n**Last Updated:** December 2025\n\n---\n\n**North Star:**\nTo build the most reliable, developer-friendly open-source AI agent framework and cloud platform\u2014enabling builders worldwide to deploy autonomous agents that work seamlessly across chains and platforms. We create infrastructure where agents and humans collaborate, forming the foundation for a decentralized AI economy that accelerates the path toward beneficial AGI.\n\n---\n\n**Core Principles:**\n1. **Execution Excellence** - Reliability and seamless UX over feature quantity\n2. **Developer First** - Great DX attracts builders; builders create ecosystem value\n3. **Open & Composable** - Multi-agent systems that interoperate across platforms\n4. **Trust Through Shipping** - Build community confidence through consistent delivery\n\n---\n\n**Current Product Focus (Dec 2025):**\n- **ElizaOS Framework** (v1.6.x) - The core TypeScript toolkit for building persistent, interoperable agents\n- **ElizaOS Cloud** - Managed deployment platform with integrated storage and cross-chain capabilities\n- **Flagship Agents** - Reference implementations (Eli5, Otaku) demonstrating platform capabilities\n- **Cross-Chain Infrastructure** - Native support for multi-chain agent operations via Jeju/x402\n\n---\n\n**ElizaOS Mission Summary:**\nElizaOS is an open-source \"operating system for AI agents\" aimed at decentralizing AI development. Built on three pillars: 1) The Eliza Framework (TypeScript toolkit for persistent agents), 2) AI-Enhanced Governance (building toward autonomous DAOs), and 3) Eliza Labs (R&D driving cloud, cross-chain, and multi-agent capabilities). The native token coordinates the ecosystem. The vision is an intelligent internet built on open protocols and collaboration.\n\n---\n\n**Taming Information Summary:**\nAddresses the challenge of information scattered across platforms (Discord, GitHub, X). Uses AI agents as \"bridges\" to collect, wrangle (summarize/tag), and distribute information in various formats (JSON, MD, RSS, dashboards, council episodes). Treats documentation as a first-class citizen to empower AI assistants and streamline community operations. \n",
   "monthly_goal": "December 2025: Execution excellence\u2014complete token migration with high success rate, launch ElizaOS Cloud, stabilize flagship agents, and build developer trust through reliability and clear documentation.",
-  "daily_focus": "Council attention is pulled toward execution excellence under load: critical reliability fixes and release hygiene (build memory blowups, plugin publishing/versioning gaps, and database isolation bugs) are becoming the gating factors for Cloud readiness and developer trust.",
+  "daily_focus": "Transitioning the framework architecture toward modular 'skills' while addressing critical memory consumption bottlenecks in the build pipeline.",
   "key_points": [
     {
-      "topic": "Reliability & Release Hygiene (Builds, Plugins, Data Isolation)",
-      "summary": "Multiple signals indicate developer trust risks from operational instability: Turbo builds reportedly consuming extreme memory, Discord plugin publishing/versioning irregularities, and a critical SQL data isolation bug requiring a robust fix with tests.",
+      "topic": "Modular Architecture: Plugins to Skills",
+      "summary": "To improve composability and DX, the team is proposing a strategic pivot to convert all existing plugins into modular 'skills'.",
       "deliberation_items": [
         {
           "question_id": "q1",
-          "text": "Do we declare a short-term reliability freeze (stability sprint) that blocks new features until build memory, plugin publishing/versioning, and data isolation paths meet a defined SLO?",
+          "text": "How deeply should the framework decouple reasoning models from embedding and execution handlers?",
           "context": [
-            "Discord 2026-01-04: \"Turbo build tool experiencing high memory usage issues (21GB+).\"",
-            "Discord 2026-01-03: \"Issues were reported with Discord plugin versioning... failed publishing of v1.3.4 and the jump from v1.3.3 to v1.3.5.\""
+            "Jin proposed a strategic shift to convert all plugins into skills for better composability.",
+            "aicodeflow suggested rethink plugins as 'skills' rather than just integrations."
           ],
           "multiple_choice_answers": {
             "answer_1": {
-              "text": "Yes\u2014impose a 1\u20132 week reliability freeze with explicit exit criteria (memory ceiling, publish pipeline checks, regression tests).",
-              "implication": "Maximizes trust-through-shipping and Cloud readiness, but delays roadmap features and community-visible expansion."
+              "text": "Complete decoupling of all primitives.",
+              "implication": "Maximizes flexibility but may introduce integration overhead for new developers."
             },
             "answer_2": {
-              "text": "Partial\u2014freeze only the affected surfaces (build tooling + plugin release pipeline), allow core UX/Cloud work to continue.",
-              "implication": "Balances momentum with stability, but risks continued perception that \u201cquality is optional\u201d if issues persist elsewhere."
+              "text": "Standardized skill wrappers for plugins.",
+              "implication": "Preserves current ease-of-use while providing a roadmap for future modularity."
             },
             "answer_3": {
-              "text": "No\u2014keep feature velocity; address reliability opportunistically as issues arise.",
-              "implication": "Maintains headline progress but increases probability of compounding outages and developer churn."
+              "text": "Model-specific skill optimizations.",
+              "implication": "Prioritizes execution speed but risks vendor lock-in for certain agent types."
             },
             "answer_4": {
               "text": "Other / More discussion needed / None of the above.",
@@ -36,48 +36,23 @@
         },
         {
           "question_id": "q2",
-          "text": "What should be the canonical mechanism to prevent plugin versioning/publishing gaps (e.g., v1.3.4 failure) from reaching users?",
+          "text": "Should the Council mandate a fallback embedding model for all cross-plugin operations?",
           "context": [
-            "Discord 2026-01-03 (YogaFlame): \"Investigate Discord plugin versioning issues (v1.3.3 to v1.3.5) | Fix failed publishing of v1.3.4.\""
+            "Stan noted Anthropic plugin needs OpenAI key for TEXT_EMBEDDING handler fallback.",
+            "Andrei Mitrea documented MCP integration requiring OpenAI even when only using Anthropic."
           ],
           "multiple_choice_answers": {
             "answer_1": {
-              "text": "Centralized release automation (CI-managed publish) with semver enforcement and immutable release notes per plugin.",
-              "implication": "Creates repeatable shipping discipline aligned with execution excellence, but requires upfront CI/platform investment."
+              "text": "Mandate OpenAI/standard fallbacks.",
+              "implication": "Ensures reliability across the framework at the cost of external dependencies."
             },
             "answer_2": {
-              "text": "Registry-side policy: only allow versions that pass automated install+smoke tests before being indexed as \u201cstable.\u201d",
-              "implication": "Shifts quality gates closer to users\u2019 entry point, improving reliability without fully controlling plugin repos."
+              "text": "Implement local-first embedding defaults.",
+              "implication": "Aligns with the vision of local autonomy but increases user system requirements."
             },
             "answer_3": {
-              "text": "Light-touch process: document best practices and rely on maintainers to follow them.",
-              "implication": "Low overhead, but historically insufficient to prevent gaps and breaks in a fast-moving ecosystem."
-            },
-            "answer_4": {
-              "text": "Other / More discussion needed / None of the above.",
-              "implication": null
-            }
-          }
-        },
-        {
-          "question_id": "q3",
-          "text": "How aggressively do we standardize and require the new logging format/linter across core, Cloud containers, and first-party plugins?",
-          "context": [
-            "Discord 2026-01-03 (Stan \u26a1): \"implemented significant improvements to the logging system through PR #6263... new linter... warns developers when logs are in the wrong format.\"",
-            "GitHub Monthly Summary: PR #6263 \"optimize provider handling in MultiStep\" merged 2026-01-03."
-          ],
-          "multiple_choice_answers": {
-            "answer_1": {
-              "text": "Mandatory immediately for all first-party repos (core + Cloud + plugins); block merges on violations.",
-              "implication": "Fastest path to observability and supportability, but may slow contributor throughput short-term."
-            },
-            "answer_2": {
-              "text": "Mandatory in core/Cloud now; phased rollout for plugins with migration tooling and warnings first.",
-              "implication": "Protects the most critical surfaces while avoiding ecosystem shock from sudden breaking enforcement."
-            },
-            "answer_3": {
-              "text": "Optional guidance only; prioritize feature development and rely on best-effort adoption.",
-              "implication": "Minimizes friction now but increases long-term debugging cost and undermines \u201creliable framework\u201d positioning."
+              "text": "Dynamic provider negotiation.",
+              "implication": "Agents negotiate capabilities at runtime, increasing architectural complexity."
             },
             "answer_4": {
               "text": "Other / More discussion needed / None of the above.",
@@ -88,163 +63,28 @@
       ]
     },
     {
-      "topic": "Public Agent Ecosystem Roadmap vs. Execution Excellence",
-      "summary": "The GitHub signal is strong on product definition (public agent discovery, forking, and guest gating), but the Council must ensure this roadmap does not outrun reliability, Cloud launch readiness, and the \u201cdeveloper-first\u201d trust contract.",
+      "topic": "Operational Infrastructure Scarcity",
+      "summary": "Critical performance bottlenecks, specifically excessive memory usage (21GB+) during builds, are threatening local development efficiency.",
       "deliberation_items": [
         {
-          "question_id": "q1",
-          "text": "Should the Council prioritize public agent discovery/forking as the next major growth lever, or defer until Cloud + stability metrics are green?",
-          "context": [
-            "GitHub Monthly Summary: roadmap issues opened for \"public agent discovery platform\" (#6302) and \"fork and customize existing agents\" (#6305)."
-          ],
-          "multiple_choice_answers": {
-            "answer_1": {
-              "text": "Prioritize now\u2014public agents become the flagship funnel into Cloud and the ecosystem.",
-              "implication": "Accelerates adoption and showcases composability, but increases surface area during a stability-sensitive window."
-            },
-            "answer_2": {
-              "text": "Sequence it\u2014ship Cloud/stability gates first, then release public agent ecosystem features in a controlled wave.",
-              "implication": "Aligns with execution excellence and reduces churn risk, but slows perceived product expansion."
-            },
-            "answer_3": {
-              "text": "Deprioritize\u2014focus on framework DX and plugin maturity; let public ecosystem emerge later from community.",
-              "implication": "Strengthens foundations, but may miss a market window where \u201cagent marketplaces\u201d define mindshare."
-            },
-            "answer_4": {
-              "text": "Other / More discussion needed / None of the above.",
-              "implication": null
-            }
-          }
-        },
-        {
-          "question_id": "q2",
-          "text": "What is the Council\u2019s decision on anonymous (unauthenticated) public-agent chat limits and gating UX to optimize conversion without degrading first impressions?",
-          "context": [
-            "GitHub issue #6312: \"Limit messages for non-signed up user to ~2-3\" (borisudovicic).",
-            "GitHub issue #6313: \"Separate public agent states\" describing unauthenticated vs authenticated vs owner intent (borisudovicic)."
-          ],
-          "multiple_choice_answers": {
-            "answer_1": {
-              "text": "Hard gate at 2\u20133 messages with a clean overlay prompting signup; keep UI minimal for visitors.",
-              "implication": "Maximizes conversion clarity and cost control, but risks feeling restrictive if value isn\u2019t demonstrated quickly."
-            },
-            "answer_2": {
-              "text": "Soft gate: allow more messages but degrade features (no memory, no tools) until signup.",
-              "implication": "Improves \u201cwow\u201d factor while managing abuse, but adds complexity and potential confusion in UX states."
-            },
-            "answer_3": {
-              "text": "No gate: allow substantial free use and rely on later upsells (credits/features) for conversion.",
-              "implication": "Best first impression, but can create runaway costs and attract low-intent traffic that harms service quality."
-            },
-            "answer_4": {
-              "text": "Other / More discussion needed / None of the above.",
-              "implication": null
-            }
-          }
-        },
-        {
           "question_id": "q3",
-          "text": "How do we answer the recurring community skepticism that ElizaOS is \u201cjust a wrapper,\u201d using flagship experiences and documentation as proof of differentiated value?",
+          "text": "What is the acceptable resource ceiling for the elizaOS build environment?",
           "context": [
-            "Discord 2026-01-03: \"Some skepticism was expressed about ElizaOS's capabilities beyond being a wrapper for AI models.\"",
-            "Discord 2026-01-03 Action Item: \"Create clearer examples of ElizaOS capabilities... demonstrate value (Mentioned by i3).\""
+            "Odilitime identifying severe memory issues with turbo builds (21GB to 27GB+).",
+            "Madjin reported issue #6332 regarding memory consumption impacting developer experience."
           ],
           "multiple_choice_answers": {
             "answer_1": {
-              "text": "Ship 2\u20133 end-to-end reference agents (Cloud-deployed) that demonstrate persistence, tool-use, and cross-platform interoperability with metrics.",
-              "implication": "Most persuasive evidence aligned with trust-through-shipping, but requires coordinated engineering + DX + docs."
+              "text": "Aggressive optimization for 16GB RAM limits.",
+              "implication": "Ensures the framework remains accessible to individual builders on consumer hardware."
             },
             "answer_2": {
-              "text": "Focus on docs first: a \u201cWhy ElizaOS\u201d page + technical deep dives (memory, plugins, multi-agent) before building more demos.",
-              "implication": "Fast, developer-friendly clarity, but may not convince skeptics without lived product experiences."
+              "text": "Cloud-first build specialization.",
+              "implication": "Moves heavy lifting to elizaOS Cloud, incentivizing managed deployment."
             },
             "answer_3": {
-              "text": "Position as the best composable wrapper and embrace it; optimize for integrations and plugin breadth.",
-              "implication": "Clear narrative and ecosystem pull, but risks diluting the \u201coperating system\u201d ambition and autonomy trajectory."
-            },
-            "answer_4": {
-              "text": "Other / More discussion needed / None of the above.",
-              "implication": null
-            }
-          }
-        }
-      ]
-    },
-    {
-      "topic": "Scope Discipline: High-Frequency Solana Trading Demands vs. Platform Mission",
-      "summary": "Discord discussions surfaced an extreme-performance trading requirement set (ms GRPC ingestion, preshot payload systems, live X/Twitter token detection) that could distract from the monthly directive unless treated as an R&D track with strict boundaries.",
-      "deliberation_items": [
-        {
-          "question_id": "q1",
-          "text": "Do we formally treat ultra-low-latency Solana trading as out-of-scope for core ElizaOS (and instead enable it via specialized community plugins), or do we invest in first-party infrastructure?",
-          "context": [
-            "Discord 2026-01-04 (Chucknorris): \"Need for GRPC ingesters with millisecond precision\" and \"Standard reaction-time agents would be too slow.\"",
-            "Discord 2026-01-04: \"Jupiter or SDK implementations introduce ~4 second delays (too slow).\""
-          ],
-          "multiple_choice_answers": {
-            "answer_1": {
-              "text": "Out-of-scope for core: document constraints and provide extension points; encourage specialized external implementations.",
-              "implication": "Protects execution excellence and broad developer UX, while still supporting power users through composability."
-            },
-            "answer_2": {
-              "text": "Selective investment: build a first-party \u201clow-latency ingestion\u201d reference module as an optional advanced package.",
-              "implication": "Creates a credible flagship for cross-chain/high-performance agents, but increases maintenance burden and risk."
-            },
-            "answer_3": {
-              "text": "Full commitment: prioritize first-party Solana HFT-grade stack (GRPC ingest, preshot, bundlers) as a flagship.",
-              "implication": "Could capture a high-visibility niche, but likely derails Cloud/stability priorities and narrows appeal."
-            },
-            "answer_4": {
-              "text": "Other / More discussion needed / None of the above.",
-              "implication": null
-            }
-          }
-        },
-        {
-          "question_id": "q2",
-          "text": "If we support trading-adjacent use cases, what is the Council-approved \u201cminimum viable truth\u201d we can promise developers without misleading performance expectations?",
-          "context": [
-            "Discord 2026-01-04: \"Token creation monitoring requires live Twitter feeds and automated bundlers.\"",
-            "Discord 2026-01-04: \"Implement GRPC ingester for processing DEX transactions\" listed as an action item."
-          ],
-          "multiple_choice_answers": {
-            "answer_1": {
-              "text": "Promise only event-driven automation at human/seconds-level latency; clearly warn that HFT is not supported.",
-              "implication": "Preserves trust through accurate claims, but may disappoint a subset of speculative builders."
-            },
-            "answer_2": {
-              "text": "Promise \u201cnear-real-time\u201d with defined targets (e.g., sub-second ingest) for specific supported chains/providers.",
-              "implication": "Sharper value proposition, but requires engineering and ongoing monitoring to keep targets truthful."
-            },
-            "answer_3": {
-              "text": "Avoid latency promises; provide flexible architecture and let builders benchmark and choose tradeoffs.",
-              "implication": "Safest legally/operationally, but can read as evasive and reduce adoption for performance-sensitive apps."
-            },
-            "answer_4": {
-              "text": "Other / More discussion needed / None of the above.",
-              "implication": null
-            }
-          }
-        },
-        {
-          "question_id": "q3",
-          "text": "How should we route ongoing work like DegenAI and the Eliza knowledge data pipelines to strengthen the mission (Cloud + DX + reliability) rather than fragment attention?",
-          "context": [
-            "Discord 2026-01-04: \"Odlitime is continuing development work on DegenAI.\"",
-            "Discord 2026-01-04: \"Jin is working on these [Eliza knowledge] pipelines and will soon begin documentation and presentation phases.\""
-          ],
-          "multiple_choice_answers": {
-            "answer_1": {
-              "text": "Fold both into a unified \u201cFlagship Reliability + Docs\u201d program with clear deliverables tied to Cloud onboarding.",
-              "implication": "Turns side projects into trust-building artifacts, strengthening developer-first outcomes."
-            },
-            "answer_2": {
-              "text": "Keep them as separate labs tracks with explicit timeboxes and monthly demos; no impact on core priorities.",
-              "implication": "Maintains innovation while protecting execution excellence, but risks weaker integration into product narrative."
-            },
-            "answer_3": {
-              "text": "Pause or deprioritize non-core tracks until Cloud launch and stability milestones are met.",
-              "implication": "Maximizes focus for near-term shipping, but may reduce community excitement and R&D momentum."
+              "text": "Modularized package builds.",
+              "implication": "Reduces build load but complicates monorepo dependency management."
             },
             "answer_4": {
               "text": "Other / More discussion needed / None of the above.",
@@ -256,14 +96,14 @@
     }
   ],
   "_metadata": {
-    "model": "openai/gpt-5.2",
-    "generated_at": "2026-01-06T02:32:46.559357Z",
-    "prompt_tokens": 13215,
-    "completion_tokens": 3864,
-    "total_tokens": 17079,
+    "model": "google/gemini-3-flash-preview",
+    "generated_at": "2026-01-14T07:07:11.689137Z",
+    "prompt_tokens": 51018,
+    "completion_tokens": 1462,
+    "total_tokens": 52480,
     "status": "success",
-    "processing_seconds": 87.56,
-    "key_points_count": 3,
-    "total_deliberation_questions": 9
+    "processing_seconds": 9.56,
+    "key_points_count": 2,
+    "total_deliberation_questions": 3
   }
 }

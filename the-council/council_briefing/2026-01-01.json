@@ -2,81 +2,31 @@
   "date": "2026-01-01",
   "meeting_context": "# North Star & Strategic Context\n\nThis file combines the overall project mission (North Star) and summaries of key strategic documents for use in AI prompts, particularly for the AI Agent Council context generation.\n\n**Last Updated:** December 2025\n\n---\n\n**North Star:**\nTo build the most reliable, developer-friendly open-source AI agent framework and cloud platform\u2014enabling builders worldwide to deploy autonomous agents that work seamlessly across chains and platforms. We create infrastructure where agents and humans collaborate, forming the foundation for a decentralized AI economy that accelerates the path toward beneficial AGI.\n\n---\n\n**Core Principles:**\n1. **Execution Excellence** - Reliability and seamless UX over feature quantity\n2. **Developer First** - Great DX attracts builders; builders create ecosystem value\n3. **Open & Composable** - Multi-agent systems that interoperate across platforms\n4. **Trust Through Shipping** - Build community confidence through consistent delivery\n\n---\n\n**Current Product Focus (Dec 2025):**\n- **ElizaOS Framework** (v1.6.x) - The core TypeScript toolkit for building persistent, interoperable agents\n- **ElizaOS Cloud** - Managed deployment platform with integrated storage and cross-chain capabilities\n- **Flagship Agents** - Reference implementations (Eli5, Otaku) demonstrating platform capabilities\n- **Cross-Chain Infrastructure** - Native support for multi-chain agent operations via Jeju/x402\n\n---\n\n**ElizaOS Mission Summary:**\nElizaOS is an open-source \"operating system for AI agents\" aimed at decentralizing AI development. Built on three pillars: 1) The Eliza Framework (TypeScript toolkit for persistent agents), 2) AI-Enhanced Governance (building toward autonomous DAOs), and 3) Eliza Labs (R&D driving cloud, cross-chain, and multi-agent capabilities). The native token coordinates the ecosystem. The vision is an intelligent internet built on open protocols and collaboration.\n\n---\n\n**Taming Information Summary:**\nAddresses the challenge of information scattered across platforms (Discord, GitHub, X). Uses AI agents as \"bridges\" to collect, wrangle (summarize/tag), and distribute information in various formats (JSON, MD, RSS, dashboards, council episodes). Treats documentation as a first-class citizen to empower AI assistants and streamline community operations. \n",
   "monthly_goal": "December 2025: Execution excellence\u2014complete token migration with high success rate, launch ElizaOS Cloud, stabilize flagship agents, and build developer trust through reliability and clear documentation.",
-  "daily_focus": "Operational momentum is concentrated on launch sequencing (Cloud/Babylon \u2192 Jeju public readiness) while trust risks accumulate from migration UX friction, a broken OAuth3 demo login, and a brief lull in visible GitHub shipping.",
+  "daily_focus": "The Council must pivot from internal framework stabilization to the deployment of resilient cloud-native infrastructure on 'Jeju' to transition the ecosystem toward a public-facing decentralized AI economy.",
   "key_points": [
     {
-      "topic": "Cloud/Babylon Launch Sequencing & Jeju Infrastructure Readiness",
-      "summary": "Core signals indicate a push to have infrastructure \u201cdone and tested\u201d on Jeju before going public, but the Jeju OAuth3 testnet\u2019s demo login is currently failing\u2014an execution-excellence risk if this becomes a first-impression surface during Cloud/Babylon launch.",
+      "topic": "Jeju Infrastructure & Decentralization Timeline",
+      "summary": "The migration of service infrastructure to the Jeju platform is a prerequisite for the public launch of Cloud and Babylon products, signaling a shift from centralized hosting (AWS) to self-owned physical data centers.",
       "deliberation_items": [
         {
           "question_id": "q1",
-          "text": "What is the Council\u2019s preferred launch order to maximize developer trust: Cloud first, Babylon first, or a synchronized dual launch with Jeju readiness gates?",
+          "text": "How aggressively should the Council prioritize the transition from AWS to self-owned data center infrastructure?",
           "context": [
-            "Shaw (core-devs/partners): migrating infrastructure to run on \u201cjeju\u201d in preparation for going public after launching \u201ccloud\u201d and \u201cbabylon\u201d products."
+            "Shaw: Initially launching on AWS with plans to transition to self-owned permissionless infrastructure in data centers by year-end.",
+            "Shaw: Infrastructure is being migrated to run on jeju so it's 'already all done and tested' when ready to go public."
           ],
           "multiple_choice_answers": {
             "answer_1": {
-              "text": "Cloud-first, Babylon follows after stability SLOs are met; Jeju public positioning comes last.",
-              "implication": "Maximizes DX and reliability narrative, but delays the broader ecosystem/token story tied to Babylon/Jeju."
+              "text": "Phased Hybrid Migration",
+              "implication": "Ensures stability on AWS while gradually stress-testing the Jeju physical layer to mitigate downtime risks."
             },
             "answer_2": {
-              "text": "Babylon-first to anchor ecosystem incentives; Cloud rolls out as the execution layer immediately after.",
-              "implication": "Optimizes incentive flywheel, but increases reputational risk if developer UX is not already smooth."
+              "text": "Accelerated Sovereign Transition",
+              "implication": "Prioritizes total decentralization and cost reduction from cloud providers but risks early operational instability."
             },
             "answer_3": {
-              "text": "Dual launch (Cloud + Babylon) with explicit Jeju readiness gates and a single coordinated public milestone.",
-              "implication": "Creates a powerful \u201cplatform moment,\u201d but requires unusually high operational coordination and zero-tolerance for demo failures."
-            },
-            "answer_4": {
-              "text": "Other / More discussion needed / None of the above.",
-              "implication": null
-            }
-          }
-        },
-        {
-          "question_id": "q2",
-          "text": "How should we treat the failing OAuth3 demo login: block external promotion until fixed, ship with limitations and a banner, or replace with a simplified auth demo?",
-          "context": [
-            "Shaw (core-devs): shared OAuth3 testnet site \u201coauth3.testnet.jejunetwork.org\u201d\u2026 routed through an on-chain registry to an IPFS asset.",
-            "Odilitime (core-devs): \u201cDoes the demo login work\u2026? It doesn\u2019t work, but otherwise looks good.\u201d"
-          ],
-          "multiple_choice_answers": {
-            "answer_1": {
-              "text": "Hard gate: no public amplification until demo login works end-to-end.",
-              "implication": "Protects trust-through-shipping, but may slow momentum and partner excitement."
-            },
-            "answer_2": {
-              "text": "Soft ship: keep it live with a prominent limitation banner and a public ETA for the fix.",
-              "implication": "Preserves velocity while managing expectations, but still risks \u201cpaper-cut\u201d first impressions."
-            },
-            "answer_3": {
-              "text": "Swap demo: replace login with a minimal, deterministic auth flow (or read-only showcase) until OAuth3 is stable.",
-              "implication": "Reduces risk immediately while preserving narrative, but may create rework and confusion about \u201creal\u201d readiness."
-            },
-            "answer_4": {
-              "text": "Other / More discussion needed / None of the above.",
-              "implication": null
-            }
-          }
-        },
-        {
-          "question_id": "q3",
-          "text": "What infrastructure posture best serves execution excellence in 2026: remain on AWS through launch, hybridize early, or accelerate toward self-owned permissionless racks?",
-          "context": [
-            "Shaw (Dec 30): \u201cinitially launch on AWS with a goal to transition to self-owned permissionless infrastructure\u2026 by year-end.\u201d"
-          ],
-          "multiple_choice_answers": {
-            "answer_1": {
-              "text": "AWS-first through launch + first 90 days, then transition with measured SLOs.",
-              "implication": "Prioritizes reliability and ops simplicity during the trust-building window."
-            },
-            "answer_2": {
-              "text": "Hybrid early: core control-plane on AWS, selective workloads on Jeju/self-owned infra ASAP.",
-              "implication": "Demonstrates decentralization cred without betting the launch on new ops complexity."
-            },
-            "answer_3": {
-              "text": "Accelerate self-owned racks before/at launch to signal permissionless intent strongly.",
-              "implication": "Maximizes narrative alignment, but increases outage risk and operational burden during the most visible period."
+              "text": "AWS-Primary Optimization",
+              "implication": "Delays the physical data center rollout to focus exclusively on software reliability and rapid user scaling."
             },
             "answer_4": {
               "text": "Other / More discussion needed / None of the above.",
@@ -87,80 +37,28 @@
       ]
     },
     {
-      "topic": "Token Migration Reliability, Wallet Friction, and Gated Access Operations",
-      "summary": "Migration urgency remains high (ends February) and community demand is strong, but recurring wallet-transfer/connectivity issues plus unclear token utility messaging threaten the \u201creliable, developer-friendly\u201d trust contract if not operationally systematized.",
+      "topic": "Token Migration & Economic Trust",
+      "summary": "As the migration from AI16Z to ElizaOS concludes in February, the Council must ensure token utility and documentation meet the needs of a wider investor base to sustain current positive sentiment.",
       "deliberation_items": [
         {
           "question_id": "q1",
-          "text": "What is the Council\u2019s minimum acceptable migration success standard: prioritize reducing user confusion, reducing wallet friction, or accelerating deadline-driven completion?",
+          "text": "How should the Council address the current documentation gap regarding tokenomics and inter-token relationships (DegenAI/Ruby)?",
           "context": [
-            "Discord (Dec 31): \u201cmigration ends in February.\u201d",
-            "Multiple users asking migration/contract/bridge questions; some unanswered in chat analysis."
+            "Kenk: Acknowledged the need for improved website accessibility regarding token information.",
+            "DorianD: Suggestions to enhance documentation explaining ElizaOS's role as the first appcoin on Jeju."
           ],
           "multiple_choice_answers": {
             "answer_1": {
-              "text": "Confusion-first: consolidate canonical migration docs/FAQ, pin contract addresses, and reduce contradictory answers.",
-              "implication": "Improves trust and reduces support load, but may delay feature work short-term."
+              "text": "Comprehensive Ecosystem Unified Portal",
+              "implication": "Clarifies the utility of all sub-tokens, potentially stabilizing cross-token volatility through transparent information."
             },
             "answer_2": {
-              "text": "Friction-first: prioritize wallet/connect fixes and step-by-step flows over new messaging content.",
-              "implication": "Directly increases completion rate, but may leave narrative gaps around utility and ecosystem structure."
+              "text": "Selective Disclosure focused on ElizaOS",
+              "implication": "Concentrates community attention on the core protocol token but leaves secondary projects to independent discovery."
             },
             "answer_3": {
-              "text": "Deadline-first: focus on throughput (support staffing + automation) to finish migration on schedule, accept some UX debt.",
-              "implication": "Protects timeline optics, but risks long-term reputational damage and developer churn."
-            },
-            "answer_4": {
-              "text": "Other / More discussion needed / None of the above.",
-              "implication": null
-            }
-          }
-        },
-        {
-          "question_id": "q2",
-          "text": "How should we operationalize wallet support given recurring MetaMask/Phantom issues: official wallet guidance, tooling changes, or outsourced support playbooks?",
-          "context": [
-            "Kenk (Dec 31): suggested importing MetaMask EOA into Phantom due to MetaMask issues.",
-            "InvB/jasyn_bjorn (Dec 31): Phantom wallet connection issues on desktop troubleshooting."
-          ],
-          "multiple_choice_answers": {
-            "answer_1": {
-              "text": "Publish an official \u201csupported wallets & known issues\u201d matrix with recommended paths (MetaMask \u2192 Phantom EOA import, etc.).",
-              "implication": "Reduces repeated questions and increases completion rate, strengthening execution excellence."
-            },
-            "answer_2": {
-              "text": "Invest in tooling/UX: build or integrate a guided migration checker that detects wallet state and offers fixes.",
-              "implication": "Higher engineering cost, but creates a scalable trust asset and reduces human support dependency."
-            },
-            "answer_3": {
-              "text": "Scale support ops: standardized scripts + volunteer/mod training + ticket routing; minimal product changes.",
-              "implication": "Fast to deploy, but may not reduce underlying friction and could burn out community helpers."
-            },
-            "answer_4": {
-              "text": "Other / More discussion needed / None of the above.",
-              "implication": null
-            }
-          }
-        },
-        {
-          "question_id": "q3",
-          "text": "What is the Council\u2019s policy on token-gated programs (Spartan group, 1M-token autotrader access) during migration: expand gating, pause gating, or keep but clarify aggressively?",
-          "context": [
-            "Dec 30: multiple users asked to join Spartan group; Kenk: verify holding in #verify-wallet.",
-            "Dec 29/31: DegenAI autotrader access for holders of 1M+ tokens; ecosystem token relationship questions persist."
-          ],
-          "multiple_choice_answers": {
-            "answer_1": {
-              "text": "Expand gating: use access tiers to drive ecosystem engagement and reward committed holders.",
-              "implication": "May strengthen token narrative, but increases fairness/complexity scrutiny during migration."
-            },
-            "answer_2": {
-              "text": "Pause gating until migration stabilizes and docs are unambiguous.",
-              "implication": "Reduces confusion and support burden, but may slow community growth dynamics and partner excitement."
-            },
-            "answer_3": {
-              "text": "Keep gating but clarify: publish a single canonical page explaining tiers, verification, benefits, and risks/limits.",
-              "implication": "Preserves incentives while aligning with \u201cdeveloper-first\u201d clarity and operational trust."
+              "text": "Dynamic Infographic/AI-Bridge Documentation",
+              "implication": "Utilizes agent technology to explain complex Jeju appcoin dynamics in real-time, aligning with our 'Taming Information' strategy."
             },
             "answer_4": {
               "text": "Other / More discussion needed / None of the above.",
@@ -171,77 +69,28 @@
       ]
     },
     {
-      "topic": "Trust Through Shipping: Cadence, Release Automation, and Information-Taming Signals",
-      "summary": "While late-December delivered meaningful stability and plugin improvements, the Jan 1 GitHub signal is near-silent and release/versioning friction is emerging\u2014counterbalanced by promising \u201ctaming information\u201d work (Jin\u2019s activity-to-art pipeline) that could strengthen narrative and documentation velocity if productized.",
+      "topic": "Autonomous Trade & DegenAI Integration",
+      "summary": "The development of DegenAI as a flagship autonomous trading agent creates a high-stakes test case for the framework's reliability and its ability to handle cross-chain financial operations.",
       "deliberation_items": [
         {
           "question_id": "q1",
-          "text": "How should the Council respond to the visible dip in core repo activity: treat as normal holiday variance, or institute a launch-critical shipping cadence with explicit weekly deliverables?",
+          "text": "What level of risk oversight is required for the autonomous trading engine powered by the ElizaOS framework?",
           "context": [
-            "GitHub daily summary (Dec 31\u2013Jan 1): \u201cminimal activity\u2026 no new pull requests created or merged\u2026 2 active contributors.\u201d"
+            "Omid Sa: DegenAI being developed to do profitable trades for those with 1M tokens using Chainlink and Cambrian.",
+            "Odilitime: Plans to showcase DegenAI trading wins on social media platforms."
           ],
           "multiple_choice_answers": {
             "answer_1": {
-              "text": "Accept variance: no policy change; focus on upcoming launch milestones rather than daily optics.",
-              "implication": "Avoids process overhead, but risks perception of stalled execution during a sensitive trust window."
+              "text": "Conservative Gated Beta",
+              "implication": "Protects the framework's reputation by limiting exposure to high-volume holders until the logic is triple-audited."
             },
             "answer_2": {
-              "text": "Institute a short-term \u201claunch cadence\u201d mandate: weekly targets, ship notes, and visible status dashboards.",
-              "implication": "Improves trust-through-shipping and coordination, but requires disciplined PM/eng bandwidth."
+              "text": "Aggressive Public Marketing of 'Wins'",
+              "implication": "Drives massive adoption and token demand but increases scrutiny from regulatory bodies and potential for backlash on losses."
             },
             "answer_3": {
-              "text": "Rebalance resourcing: temporarily shift effort from side initiatives to core Cloud/migration reliability work.",
-              "implication": "Maximizes execution excellence, but may reduce exploratory innovation and contributor enthusiasm."
-            },
-            "answer_4": {
-              "text": "Other / More discussion needed / None of the above.",
-              "implication": null
-            }
-          }
-        },
-        {
-          "question_id": "q2",
-          "text": "What release process best supports Developer First: keep manual version bumps per plugin PR, adopt monorepo-style automated releases, or enforce fewer, bundled releases?",
-          "context": [
-            "Stan (Dec 30): \u201cShould I pump the version for every plugin PR\u2026 we should have a CI\u2026 like release please or something like that.\u201d"
-          ],
-          "multiple_choice_answers": {
-            "answer_1": {
-              "text": "Automate releases (release-please/changesets) across plugins with consistent semantic versioning.",
-              "implication": "Reduces maintainer burden and improves DX predictability, strengthening ecosystem trust."
-            },
-            "answer_2": {
-              "text": "Keep manual bumps but formalize rules (when to bump, who approves) and add CI checks.",
-              "implication": "Lower tooling complexity, but still leaves room for human error and inconsistency."
-            },
-            "answer_3": {
-              "text": "Bundle releases on a fixed cadence (e.g., weekly) to reduce churn and coordination overhead.",
-              "implication": "Improves stability perception, but slows delivery of urgent fixes and can frustrate contributors."
-            },
-            "answer_4": {
-              "text": "Other / More discussion needed / None of the above.",
-              "implication": null
-            }
-          }
-        },
-        {
-          "question_id": "q3",
-          "text": "Do we elevate Jin\u2019s \u201cactivity-to-newspaper art\u201d pipeline into an official Information-Taming surface for Cloud/Framework (dashboards, release notes, council briefs), or keep it experimental?",
-          "context": [
-            "Jin (Dec 31 coders): \u201cimage pipeline\u2026 generates art based on summarized activities from Discord and GitHub\u2026 seasonal variance\u2026 newspaper-style images.\u201d"
-          ],
-          "multiple_choice_answers": {
-            "answer_1": {
-              "text": "Productize now: integrate into official comms (weekly recaps, release notes, Cloud changelog visuals).",
-              "implication": "Strengthens narrative and community trust signals, but requires editorial control and reliability guarantees."
-            },
-            "answer_2": {
-              "text": "Keep experimental: treat as optional community artifact until core launch stability is achieved.",
-              "implication": "Avoids distraction, but may miss a leverage point for \u201ctrust through shipping\u201d and community delight."
-            },
-            "answer_3": {
-              "text": "Hybrid: formalize the data pipeline (structured summaries) but keep image generation as a non-critical add-on.",
-              "implication": "Advances Information-Taming reliability while limiting risk from generative output quality/consistency."
+              "text": "Framework-Only Decentralized Deployment",
+              "implication": "Shifts liability to builders by providing the tools for trading without assuming operational control of the trader agents."
             },
             "answer_4": {
               "text": "Other / More discussion needed / None of the above.",
@@ -253,14 +102,14 @@
     }
   ],
   "_metadata": {
-    "model": "openai/gpt-5.2",
-    "generated_at": "2026-01-01T02:39:42.963609Z",
-    "prompt_tokens": 14323,
-    "completion_tokens": 3796,
-    "total_tokens": 18119,
+    "model": "google/gemini-3-flash-preview",
+    "generated_at": "2026-01-14T07:05:40.135209Z",
+    "prompt_tokens": 38146,
+    "completion_tokens": 1689,
+    "total_tokens": 39835,
     "status": "success",
-    "processing_seconds": 51.41,
+    "processing_seconds": 12.1,
     "key_points_count": 3,
-    "total_deliberation_questions": 9
+    "total_deliberation_questions": 3
   }
 }
