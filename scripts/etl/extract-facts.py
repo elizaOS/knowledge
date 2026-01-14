@@ -566,7 +566,16 @@ def main():
     
     # Reverted: Removed source_key_legend creation and prompt modification logic
     # as per user decision to remove source_keys from LLM output requirement.
-    final_llm_prompt = prompt_template.format(input_json_string=aggregated_data_json_string)
+
+    # Validate target date is available before calling LLM
+    if not target_date_str:
+        logging.error("Cannot extract facts without a target date. Provide -d/--date or use a filename with YYYY-MM-DD pattern.")
+        sys.exit(1)
+
+    final_llm_prompt = prompt_template.format(
+        target_date=target_date_str,
+        input_json_string=aggregated_data_json_string
+    )
 
     logging.info(f"Sending context from '{args.input_file.name}' to LLM for fact extraction...")
     llm_payload = {
@@ -621,7 +630,14 @@ def main():
                    "overall_summary" in parsed_content and \
                    "categories" in parsed_content and isinstance(parsed_content["categories"], dict):
                     llm_output_data = parsed_content
-                    logging.info(f"Successfully parsed categorized fact briefing from LLM response for date: {parsed_content.get('briefing_date')}")
+
+                    # Validate and correct briefing_date if LLM inferred wrong date from content
+                    extracted_date = parsed_content.get('briefing_date')
+                    if extracted_date != target_date_str:
+                        logging.warning(f"LLM extracted wrong date '{extracted_date}', correcting to target date '{target_date_str}'")
+                        llm_output_data['briefing_date'] = target_date_str
+
+                    logging.info(f"Successfully parsed categorized fact briefing from LLM response for date: {llm_output_data.get('briefing_date')}")
                 else:
                     logging.error(f"LLM response content is not in the expected categorized format. Content: {content_str[:500]}...")
             except json.JSONDecodeError as e_json:
@@ -638,7 +654,7 @@ def main():
     if not llm_output_data:
         logging.warning("No valid categorized briefing was extracted. The output JSON file might be incomplete or empty.")
         llm_output_data = {
-            "briefing_date": target_date_str or "unknown",
+            "briefing_date": target_date_str,
             "overall_summary": "Error: Failed to generate briefing due to LLM or parsing issues.",
             "categories": {}
         }
