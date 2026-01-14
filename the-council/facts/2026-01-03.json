@@ -1,31 +1,30 @@
 {
-  "briefing_date": "2026-01-02",
-  "overall_summary": "Activity centered on UX and access-control changes for public agents (message limits, public agent UI states, improved summaries) alongside continued community friction around AI16z\u2192ElizaOS token migration and wallet compatibility. Core-dev discussion referenced ongoing PR review work (streaming-related) and plugin development (plugin-github updates and a new plugin-git).",
+  "briefing_date": "2026-01-03",
+  "overall_summary": "Development has shifted towards core performance optimizations, including a major refactor of the message service and infrastructure migration to the Jeju network. Concurrently, the community is managing a complex token migration while expanding the framework through experimental projects like roseOS.",
   "key_facts": [
-    "In elizaOS/eliza, PR #6301 (\"chore(license): update year to 2026\") was merged, updating the LICENSE year to 2026.",
-    "Between Jan 2\u20133, 2026, elizaOS/eliza recorded 14 new issues, 1 new pull request (merged), and 4 active contributors.",
-    "GitHub issues #6311\u2013#6315 were opened by borisudovicic, including proposals to improve chat summaries, limit unauthenticated messages to ~2\u20133, separate public agent states, show chat number on public agent cards, and change free credits from $5 to $1.",
-    "The elizaOS Discord on 2026-01-02 logged 108 messages from 30 users.",
-    "In the core-devs channel, Stan confirmed that singleShot should support parameters to prevent action problems.",
-    "Odilitime stated they were working on updates to plugin-github and creating a plugin-git.",
-    "In the discussion channel, multiple users reported AI16z token migration/wallet issues, including tokens not showing after transfer to Phantom wallets.",
-    "In the partners channel, DorianD shared the GitHub project VersusControl/ai-infrastructure-agent and proposed developing an AI-driven cost-reduction and migration agent for moving workloads off AWS."
+    "Odilitime is updating plugin-github and creating a new plugin-git repository.",
+    "PR #6286 implemented streaming functionality with confirmed testing success.",
+    "The license year for the elizaos/eliza repository was updated to 2026 in PR #6301.",
+    "Initial free credits for new users were reduced from $5 to $1.",
+    "PR #6316 was submitted to fix parameterization issues in the plugin-sql component using sql.raw().",
+    "Stan introduced a logging linter in the eliza/config package to validate format compliance.",
+    "DDR5 memory prices increased from $400 to $1200 between September 2025 and January 2026.",
+    "The elizaos/eliza repository received 16 new issues between January 2 and January 4, 2026."
   ],
   "open_questions": [
-    "What will happen to Ai16z tokens bought after snapshot? Can they be migrated?",
-    "When is the migration deadline?",
-    "Why elizaos migrated?",
-    "Anyone have an idea if it'd be possible to import an entire codebase as an agent to eliza?",
-    "Can I use plugins that were not added to the cloud from the docs?",
-    "Could Jeju use AI infrastructure agents to create a cost reduction and migration tool from AWS?"
+    "What will happen to Ai16z tokens bought after the snapshot and can they be migrated?",
+    "When is the specific migration deadline for the tokens?",
+    "Is it possible to import an entire codebase as an agent to Eliza through GitHub?",
+    "Can 'knowledge & lore' sections be added to the JSON character format manually as in previous versions?",
+    "Is there a way to get the agent to tweet polls automatically?"
   ],
   "tags": {
     "themes": [
+      "performance",
+      "infrastructure",
       "token-migration",
       "ux-improvement",
-      "ai-agents",
-      "plugins",
-      "maintenance"
+      "plugins"
     ],
     "sentiment": {
       "overall": "mixed",
@@ -38,6 +37,7 @@
       "maintenance"
     ],
     "derived": [
+      "social",
       "development",
       "community",
       "feedback",
@@ -50,115 +50,90 @@
     "manual": []
   },
   "categories": {
-    "twitter_news_highlights": [],
+    "twitter_news_highlights": [
+      {
+        "claim": "ElizaOS ranked among the top 5 Solana runners over a 24-hour period.",
+        "source": [
+          "ai-news/elizaos/json/2026-01-02.json"
+        ],
+        "sentiment": "positive"
+      },
+      {
+        "claim": "Hyperscape agents are training combat autonomously with zero human input via ElizaOS.",
+        "source": [
+          "ai-news/elizaos/json/2026-01-02.json"
+        ],
+        "sentiment": "positive"
+      }
+    ],
     "github_updates": {
       "new_issues_prs": [
         {
-          "item_type": "issue",
-          "title": "Change free credits from $5 to $1",
-          "number": 6315,
-          "url": "https://github.com/elizaOS/eliza/issues/6315",
+          "item_type": "pull_request",
+          "title": "fix(plugin-sql): use sql.raw() for SET LOCAL to avoid parameterization",
+          "number": 6316,
+          "url": "https://github.com/elizaOS/eliza/pull/6316",
           "status": "open",
-          "author": "borisudovicic",
-          "significance": "Token/credit policy proposal affecting onboarding and costs."
-        },
-        {
-          "item_type": "issue",
-          "title": "Public agent cards should have chat number",
-          "number": 6314,
-          "url": "https://github.com/elizaOS/eliza/issues/6314",
-          "status": "open",
-          "author": "borisudovicic",
-          "significance": "Requested UX change to display engagement metric on public agents."
-        },
-        {
-          "item_type": "issue",
-          "title": "Separate public agent states",
-          "number": 6313,
-          "url": "https://github.com/elizaOS/eliza/issues/6313",
-          "status": "open",
-          "author": "borisudovicic",
-          "significance": "Defines distinct UX for unauthenticated visitors vs authenticated users vs owners."
-        },
-        {
-          "item_type": "issue",
-          "title": "Limit messages for non-signed up user to ~2-3",
-          "number": 6312,
-          "url": "https://github.com/elizaOS/eliza/issues/6312",
-          "status": "open",
-          "author": "borisudovicic",
-          "significance": "Proposes gating public-agent usage for unauthenticated users."
-        },
-        {
-          "item_type": "issue",
-          "title": "Chat summaries don't really make much sense. Can we improve",
-          "number": 6311,
-          "url": "https://github.com/elizaOS/eliza/issues/6311",
-          "status": "open",
-          "author": "borisudovicic",
-          "significance": "Quality issue on summaries in the chat experience."
+          "author": "0xbbjoker",
+          "significance": "Critical fix for PostgreSQL syntax errors when data isolation is enabled."
         },
         {
           "item_type": "pull_request",
-          "title": "chore(license): update year to 2026",
-          "number": 6301,
-          "url": "https://github.com/elizaOS/eliza/pull/6301",
+          "title": "refactor(default-message-service): optimize provider handling in MultiStep",
+          "number": 6263,
+          "url": "https://github.com/elizaOS/eliza/pull/6263",
           "status": "merged",
-          "author": "rejected-l",
-          "significance": "Routine annual license maintenance update."
+          "author": "standujar",
+          "significance": "Significant performance refactor resulting in faster execution for multi-step agent actions."
+        },
+        {
+          "item_type": "issue",
+          "title": "Connect wallet action should lead directly to wallet options",
+          "number": 6317,
+          "url": "https://github.com/elizaOS/eliza/issues/6317",
+          "status": "open",
+          "author": "borisudovicic",
+          "significance": "UI/UX streamlining of the onboarding process."
         }
       ],
       "overall_focus": [
         {
-          "claim": "GitHub activity emphasized public-agent UX and onboarding gates (unauthenticated message limits, public agent state separation, engagement display on agent cards) plus a routine license-year update.",
+          "claim": "The project is currently focused on internal execution optimizations, cleaning up a backlog of UI issues, and securing the foundation for a v2.0.0 release.",
           "source": [
-            "ai-news/elizaos/json/2026-01-02.json",
-            "ai-news/elizaos/md/2026-01-02.md"
+            "github/summaries/week/2026-01-04.md",
+            "github/summaries/month/2026-01-01.md"
           ]
         }
       ]
     },
     "discord_updates": [
       {
-        "channel": "#\ud83d\udcac-discussion",
-        "summary": "Conversation included token migration questions and wallet issues (reports of tokens not showing after transfers to Phantom), plus a brief redirection of an NFT smart contract question to the coders channel and mention of external hardware/plugin integration.",
-        "key_participants": [
-          "Pete",
-          "satsbased",
-          "Kenk",
-          "The Light"
-        ],
-        "source": [
-          "ai-news/elizaos/discord/json/2026-01-02.json"
-        ]
-      },
-      {
-        "channel": "#\ud83d\udcac-coders",
-        "summary": "Community discussed contributing and plugins; an unanswered question asked whether an entire GitHub codebase could be imported as an agent, and Odilitime shared the plugin-github repo while noting ongoing updates and work on a new plugin-git.",
-        "key_participants": [
-          "Ilum",
-          "Odilitime"
-        ],
-        "source": [
-          "ai-news/elizaos/discord/json/2026-01-02.json"
-        ]
-      },
-      {
-        "channel": "#\ud83e\udd47-partners",
-        "summary": "DorianD proposed an AI 'cost reduction and migration agent' to analyze AWS usage and migrate workloads to cheaper alternatives, referencing the VersusControl/ai-infrastructure-agent project.",
-        "key_participants": [
-          "DorianD"
-        ],
-        "source": [
-          "ai-news/elizaos/discord/json/2026-01-02.json"
-        ]
-      },
-      {
         "channel": "#core-devs",
-        "summary": "Stan referenced ongoing PR review work (including PR #6286) and confirmed the need for parameter support in singleShot to prevent action problems.",
+        "summary": "Focus on clearing the PR review queue and addressing a technical gap where singleShot functionality lacks parameter support.",
         "key_participants": [
           "Stan \u26a1",
           "Odilitime"
+        ],
+        "source": [
+          "ai-news/elizaos/discord/json/2026-01-02.json"
+        ]
+      },
+      {
+        "channel": "#coders",
+        "summary": "Discussion on multi-model implementation using OpenRouter and deployment strategies for custom plugins in cloud containers.",
+        "key_participants": [
+          "Omid Sa",
+          "Stan \u26a1"
+        ],
+        "source": [
+          "ai-news/elizaos/discord/md/2026-01-02.md"
+        ]
+      },
+      {
+        "channel": "#partners",
+        "summary": "Strategic exploration of 'Eliza DWS Transform,' an AI-powered agent to automate migration and cost reduction from AWS to the Jeju network.",
+        "key_participants": [
+          "DorianD"
         ],
         "source": [
           "ai-news/elizaos/discord/json/2026-01-02.json"
@@ -167,80 +142,64 @@
     ],
     "user_feedback": [
       {
-        "feedback_summary": "Users reported AI16z token migration difficulties, including tokens not appearing after transfers to Phantom and requests for WalletConnect/Tangem support and clearer migration instructions.",
+        "feedback_summary": "Users reported zero balances and compatibility issues when trying to migrate tokens using Tangem wallets.",
         "source": [
-          "ai-news/elizaos/discord/json/2026-01-02.json"
+          "ai-news/elizaos/md/2026-01-02.md"
         ],
         "sentiment": "negative"
       },
       {
-        "feedback_summary": "A set of GitHub issues proposed onboarding and monetization-related UX changes for public agents (unauthenticated message limits, reduced free credits, clearer public agent states, and more informative chat summaries).",
+        "feedback_summary": "Request for better audio-to-text conversion that captures emotional context, pace, and tempo rather than just literal transcription.",
         "source": [
-          "ai-news/elizaos/json/2026-01-02.json",
-          "ai-news/elizaos/md/2026-01-02.md"
+          "ai-news/elizaos/discord/md/2026-01-01.md"
         ],
         "sentiment": "neutral"
       }
     ],
     "strategic_insights": [
       {
-        "theme": "Public-agent onboarding funnel and usage gating",
-        "insight": "Multiple GitHub issues propose differentiating public-agent UX by authentication/ownership state and introducing tight limits for unauthenticated usage, alongside reduced free credits and improved chat summaries.",
+        "theme": "Autonomous Infrastructure Migration",
+        "insight": "There is a significant opportunity to disrupt the SMB hosting market by using agents to autonomously manage technology stacks and server administration.",
         "implications_or_questions": [
-          "What is the target conversion flow for public agents (trial length, gating triggers, and signup prompts)?",
-          "Do credit changes ($5\u2192$1) align with planned token/Cloud economics and acquisition strategy?"
+          "How will traditional hosting companies react to decentralized infrastructure networks?"
         ]
       },
       {
-        "theme": "Ecosystem expansion via developer plugins",
-        "insight": "Discord coders and daily summaries reference ongoing work on plugin-github and creation of plugin-git, indicating continued investment in repository-aware tooling for agents and developer workflows.",
+        "theme": "Autonomy as an Engineering Problem",
+        "insight": "The introduction of roseOS suggests a shift toward modular, accountability-layered agent frameworks that prioritize traceability over black-box autonomy.",
         "implications_or_questions": [
-          "Should plugin-git be prioritized to support broader SCM workflows beyond GitHub?"
-        ]
-      },
-      {
-        "theme": "AI-driven cloud cost reduction as a potential product line",
-        "insight": "Partners channel discussion proposed an AI infrastructure agent to analyze AWS usage and support migrations to lower-cost alternatives, positioning 'migration/cost optimization agents' as a potential SMB-oriented offering.",
-        "implications_or_questions": [
-          "Is this aligned with Jeju/Cloud/Babylon near-term roadmap, and what data access model would be required to operate safely?"
+          "Should ElizaOS adopt explicit agency boundaries as a core standard?"
         ]
       }
     ],
     "market_analysis": [
       {
-        "observation": "Discord discussion included token-related questions about AI16z migration and informal comparisons between DegenAI and ElizaOS tokens.",
+        "observation": "DDR5 memory prices tripled from $400 to $1200, affecting procurement for infrastructure expansion.",
         "source": [
-          "ai-news/elizaos/discord/json/2026-01-02.json"
+          "ai-news/elizaos/discord/md/2026-01-01.md"
         ],
-        "relevance": "Token migration friction can impact community trust and participation; token comparisons can influence narrative and adoption."
-      },
-      {
-        "observation": "On 2025-12-31, a market-focused discussion referenced economic cycle theories and Raoul Pal's debt monetization hypothesis (liquidity increases, lower rates, or USD devaluation).",
-        "source": [
-          "ai-news/elizaos/discord/md/2025-12-31.md"
-        ],
-        "relevance": "Macro narratives were discussed in-community and may shape expectations around risk-on assets and token markets."
+        "relevance": "Directly impacts the cost-effectiveness and scalability of the decentralized hosting vision."
       }
     ]
   },
   "_metadata": {
-    "model": "openai/gpt-5.2",
-    "extracted_at": "2026-01-03T02:20:13.769653Z",
-    "prompt_tokens": 16719,
-    "completion_tokens": 3093,
-    "total_tokens": 19812,
-    "processing_seconds": 39.25,
+    "model": "google/gemini-3-flash-preview",
+    "extracted_at": "2026-01-14T06:57:05.203167+00:00Z",
+    "prompt_tokens": 49507,
+    "completion_tokens": 1888,
+    "total_tokens": 51395,
+    "processing_seconds": 12.41,
     "status": "success",
     "facts_by_category": {
-      "twitter_news_highlights": 0,
-      "github_updates": 6,
-      "discord_updates": 4,
+      "twitter_news_highlights": 2,
+      "github_updates": 3,
+      "discord_updates": 3,
       "user_feedback": 2,
-      "strategic_insights": 3,
-      "market_analysis": 2,
+      "strategic_insights": 2,
+      "market_analysis": 1,
       "key_facts": 8,
-      "open_questions": 6
+      "open_questions": 5
     },
-    "total_facts": 31
+    "total_facts": 26
   }
 }

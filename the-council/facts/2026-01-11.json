@@ -1,29 +1,28 @@
 {
   "briefing_date": "2026-01-11",
-  "overall_summary": "The ElizaOS ecosystem is advancing toward a decentralized future with the announcement of the Jeju layer and Eliza 2.0, while simultaneously navigating a regulatory crisis in the Korean market. Technical progress in multi-language support (Rust, Python) and LLM-free agent architectures is accompanied by community debates regarding tokenomics and migration transparency.",
+  "overall_summary": "The ecosystem is currently transitioning toward Eliza 2.0 and the Jeju Layer 2 launch, focusing on multi-language support and LLM-free agent architectures. While technical progress in gaming automation and cloud infrastructure is robust, the project faces significant headwinds from Korean exchange delistings and community debate over token utility.",
   "key_facts": [
-    "Jeju, a new ecosystem layer focusing on agent activity and utility, is targeted for launch in H2 2026.",
-    "ElizaOS has been delisted from major Korean exchanges including Bithumb, Coinone, and Korbit due to transparency issues.",
-    "Shaw demonstrated Eliza agent implementations in Rust and Python using fewer than 50 lines of code.",
-    "A working branch for Eliza V2.0.0 (PR #6351) was opened, featuring a multi-language runtime and removal of non-essential CLI components.",
-    "ElizaCloud weather data API integration is enabled and the first cloud payment transactions have been completed.",
-    "Eliza development this week increased documentation coverage from 60% to approximately 95%.",
-    "DAXA terminated exchange support for ai16z/elizaOS citing deficiencies in the migration process disclosure.",
-    "A novel WoW anti-detection technique was developed using pixel encoding of game API calls decoded at 200 screenshots per second."
+    "Korbit exchange announced trading termination for ai16z and elizaOS tokens effective February 12, 2026.",
+    "Jeju Layer 2 launch is targeted for H2 2026 with gas fees denominated in $elizaOS tokens.",
+    "Eliza 2.0 is proposed as a multi-language runtime supporting TypeScript, Rust, and Python with FFI plugin interoperability.",
+    "Shaw demonstrated LLM-free agents running a Game of Life simulation with 40 simultaneous agents using in-memory state parsing.",
+    "The Hyperscape project implemented MMO agents for RuneScape and Roblox with anti-detection pixel-encoding for World of Warcraft.",
+    "PR #6355 was introduced to add the plugin-blockrun for x402 micropayments on the Base chain.",
+    "ElizaCloud enabled weather data API integration and processed its first cloud payment transactions.",
+    "GitHub development activity on January 10 was exclusively concentrated on the elizaos.github.io repository."
   ],
   "open_questions": [
-    "How can I set Discord Timer/Interval Settings for my elizaos agents in discord?",
+    "How do I set Discord Timer/Interval Settings for my elizaos agents in discord?",
     "Do you need Twitter API to use Eliza to run a Twitter agent?",
     "Is Eliza Cloud to the point where the agent can deal with Claude Code and occasionally check in on rolling out projects?",
-    "Why should anyone buy the token issued by this team beyond its use for gas fees?",
-    "Can existing enterprise customers be convinced to switch to decentralized infrastructure given CIO resistance to AI code replacement?"
+    "I'm building an agent but it rails off the prompts in character.ts and keeps reintroducing itself instead of progressing through to action or following a 5 phase flow from engage to execute - is there a solution?"
   ],
   "tags": {
     "themes": [
       "infrastructure",
-      "tokenomics",
       "ai-agents",
-      "developer-experience",
+      "tokenomics",
+      "plugins",
       "market-activity"
     ],
     "sentiment": {
@@ -31,7 +30,7 @@
       "context": [
         "technical",
         "economic",
-        "governance"
+        "social"
       ]
     },
     "story_type": [
@@ -46,29 +45,38 @@
       "market"
     ],
     "priority": [
-      "high-attention"
+      "routine"
     ],
     "manual": []
   },
   "categories": {
     "twitter_news_highlights": [
       {
-        "claim": "Solana Foundation, PayAI, and Quantu will host a Twitter Space on Jan 13th to discuss protocol 8004 and Eliza Cloud.",
+        "claim": "Solana Foundation, PayAI, and Quantu are scheduled for a Twitter Space on January 13th to discuss protocol 8004 and Eliza Cloud.",
         "source": [
           "ai-news/elizaos/discord/md/2026-01-09.md"
         ],
         "sentiment": "positive"
       },
       {
-        "claim": "Community concerns raised about the reputational impact of multiple token deployments and 'rugs' linked to core contributors on X.",
+        "claim": "Community members reported hearing that A16z invested in ElizaOS.",
         "source": [
           "ai-news/elizaos/json/2026-01-10.json"
         ],
-        "sentiment": "negative"
+        "sentiment": "positive"
       }
     ],
     "github_updates": {
       "new_issues_prs": [
+        {
+          "item_type": "pull_request",
+          "title": "feat: add plugin-blockrun for x402 micropayments",
+          "number": 6355,
+          "url": "https://github.com/elizaos/eliza/pull/6355",
+          "status": "open",
+          "author": "1bcMax",
+          "significance": "Enables pay-per-request AI calls without API keys via USDC on Base chain."
+        },
         {
           "item_type": "pull_request",
           "title": "V2.0.0",
@@ -76,110 +84,102 @@
           "url": "https://github.com/elizaos/eliza/pull/6351",
           "status": "open",
           "author": "lalalune",
-          "significance": "A radical redesign of the Eliza runtime focusing on Rust and TypeScript while stripping non-essential overhead."
+          "significance": "Massive structural overhaul focusing on Rust and TypeScript runtimes, removing non-essential CLI/server components."
         },
         {
           "item_type": "pull_request",
-          "title": "unified hooks with multi-transport support (HTTP/SSE/WebSocket)",
-          "number": 6300,
-          "url": "https://github.com/elizaos/eliza/pull/6300",
-          "status": "merged",
-          "author": "standujar",
-          "significance": "Simplifies client-side development by providing a consistent interface for all communication protocols."
-        },
-        {
-          "item_type": "issue",
-          "title": "Telegram plugin crashes when processing certain images",
-          "number": 23,
-          "url": "https://github.com/elizaos-plugins/plugin-telegram/issues/23",
+          "title": "docs: core documentation guides",
+          "number": 6356,
+          "url": "https://github.com/elizaos/eliza/pull/6356",
           "status": "open",
-          "author": "GarrickBrown",
-          "significance": "A critical TypeError causing plugin instability during media processing."
+          "author": "wtfsayo",
+          "significance": "Expands documentation coverage to clarify core architectural guides."
         }
       ],
       "overall_focus": [
         {
-          "claim": "Strengthening platform foundations through critical bug resolution in core services (SQL plugin) and a monumental documentation overhaul achieving ~95% coverage.",
+          "claim": "Infrastructure stability and database optimization through critical dependency updates and the implementation of UPSERT patterns to improve runtime initialization.",
           "source": [
-            "github/summaries/week/2026-01-04.md"
+            "github/summaries/day/2026-01-11.md"
           ]
         }
       ]
     },
     "discord_updates": [
       {
-        "channel": "#core-devs",
-        "summary": "Demonstration of LLM-free agent architectures using state parsing for Game of Life simulations and MMO gaming integration (Hyperscape).",
+        "channel": "#discussion",
+        "summary": "Focus on the launch of Jeju layer and branding debates regarding 'Eliza Open Systems.' Significant concerns were raised about token price pressure due to contributor minting without active gas utility.",
         "key_participants": [
-          "shaw",
-          "Stan \u26a1"
+          "stoikol",
+          "gby",
+          "DorianD"
         ],
         "source": [
-          "ai-news/elizaos/discord/md/2026-01-10.md"
+          "ai-news/elizaos/discord/json/2026-01-10.json"
         ]
       },
       {
-        "channel": "#discussion",
-        "summary": "Debates over token utility and daily minting pressure for contributors, alongside a proposal to rebrand 'Operating System' to 'Open Systems'.",
+        "channel": "#core-devs",
+        "summary": "Showcasing of Rust implementations and LLM-free architectures. Stan and Shaw collaborated on MMO automation techniques, including evading bot detection in WoW using pixel encoding.",
         "key_participants": [
-          "DorianD",
-          "gby",
-          "ElizaBAO"
+          "shaw",
+          "Stan \u26a1",
+          "R0am"
         ],
         "source": [
-          "ai-news/elizaos/discord/md/2026-01-10.md"
+          "ai-news/elizaos/discord/json/2026-01-10.json"
         ]
       }
     ],
     "user_feedback": [
       {
-        "feedback_summary": "Users report agents are failing to progress through defined 5-phase execution flows, instead continuously reintroducing themselves.",
-        "source": [
-          "ai-news/elizaos/discord/json/2026-01-10.json"
-        ],
-        "sentiment": "negative"
-      },
-      {
-        "feedback_summary": "Community frustration regarding the lack of clear documentation for token use cases beyond the rewards system.",
+        "feedback_summary": "Users reported technical issues migrating old ai16z tokens, with some showing eligible balances of zero despite holding tokens.",
         "source": [
           "ai-news/elizaos/discord/md/2026-01-08.md"
         ],
         "sentiment": "negative"
+      },
+      {
+        "feedback_summary": "Strong desire for a cost calculator that factors in reputational damage and revenue loss from downtime, rather than just raw server costs.",
+        "source": [
+          "ai-news/elizaos/discord/md/2026-01-10.md"
+        ],
+        "sentiment": "neutral"
       }
     ],
     "strategic_insights": [
       {
-        "theme": "Cost Calculation Framework",
-        "insight": "Strategic move to differentiate decentralized infrastructure from AWS by factoring in the high cost of downtime and reputational damage to public companies.",
+        "theme": "Enterprise Adoption Barriers",
+        "insight": "Large organization CIOs are resistant to AI-agent driven code replacement due to risk aversion and system complexity.",
         "implications_or_questions": [
-          "Can this calculator effectively convince risk-averse enterprise CIOs?"
+          "Should ElizaOS pivot targeting to startups and mid-market rather than large enterprises?"
         ]
       },
       {
-        "theme": "Context Graphs as Opportunity",
-        "insight": "Identification of context graphs as a major opportunity for ElizaOS to capture value in the 'sovereign web' architecture.",
+        "theme": "Data as Trillion-Dollar Asset",
+        "insight": "The cumulative insights from daily agentic workflows represent a significant data foundation for context graphs.",
         "implications_or_questions": [
-          "Does the current data infrastructure support last-mile application integration for these graphs?"
+          "How can the project effectively incentivize users to contribute interaction data for model training safely?"
         ]
       }
     ],
     "market_analysis": [
       {
-        "observation": "Withdrawals from Korean exchanges for $elizaOS will conclude on March 12, 2026, marking a full exit from that regulatory jurisdiction.",
+        "observation": "Coordinated delisting of ecosystem tokens by major Korean exchanges (DAXA members) due to transparency concerns.",
         "source": [
           "ai-news/elizaos/discord/md/2026-01-08.md"
         ],
-        "relevance": "Significant loss of liquidity and regional adoption potential due to past migration transparency issues."
+        "relevance": "Critically impacts liquidity and project reputation in the Asian market."
       }
     ]
   },
   "_metadata": {
     "model": "google/gemini-3-flash-preview",
-    "extracted_at": "2026-01-13T16:54:14.040672+00:00Z",
-    "prompt_tokens": 380541,
-    "completion_tokens": 1862,
-    "total_tokens": 382403,
-    "processing_seconds": 14.97,
+    "extracted_at": "2026-01-14T06:59:27.924137+00:00Z",
+    "prompt_tokens": 383903,
+    "completion_tokens": 1869,
+    "total_tokens": 385772,
+    "processing_seconds": 14.53,
     "status": "success",
     "facts_by_category": {
       "twitter_news_highlights": 2,
@@ -189,8 +189,8 @@
       "strategic_insights": 2,
       "market_analysis": 1,
       "key_facts": 8,
-      "open_questions": 5
+      "open_questions": 4
     },
-    "total_facts": 25
+    "total_facts": 24
   }
 }

@@ -1,43 +1,40 @@
 {
   "briefing_date": "2026-01-10",
-  "overall_summary": "The community is shifting focus toward the Eliza 2.0 overhaul and new interoperability standards, while managing significant friction regarding the ai16z token migration and upcoming Korean exchange delistings.",
+  "overall_summary": "The ElizaOS ecosystem is undergoing a major architectural shift with the proposal of Eliza 2.0 while facing a regulatory crisis in South Korea as exchanges delist tokens. Development focus remains on cross-platform skill interoperability, cloud infrastructure billing, and the introduction of an MMORPG-style character progression system for the leaderboard.",
   "key_facts": [
-    "Shaw proposed Eliza 2.0, a redesign eliminating the current API, server, CLI, and projects structure in favor of a multi-language runtime.",
-    "Bithumb, Coinone, and Korbit are scheduled to delist ai16z/elizaOS in February 2026 due to transparency issues in rebranding.",
-    "The 8004 standard integration will be discussed in a Twitter Space on January 13th at 7pm UTC with the Solana Foundation.",
-    "ElizaOS version 1.7.0 was identified as having critical 'No server ID found' errors related to bootstrap plugin compatibility.",
-    "A unified useElizaChat hook was introduced in the core repository to standardize client-side communication protocols.",
-    "The plugin-twitter repository implemented OAuth2 PKCE authentication for improved security.",
-    "PR #6333 was merged to complete the migration from serverId to messageServerId across bootstrap actions and providers.",
-    "The documentation coverage for ElizaOS in the docs repository was reported to reach approximately 95%."
+    "Shaw proposed Eliza 2.0 featuring multi-language support (TypeScript, Rust, Python) and FFI plugin interoperability.",
+    "Korean exchanges Bithumb, Coinone, and Korbit announced the delisting of AI16Z/ElizaOS tokens for February 2026.",
+    "PR #6333 was merged to resolve 'No server ID found' errors by migrating from serverId to messageServerId.",
+    "The leaderboard API was updated with an MMORPG-style character progression system inspired by Ragnarok Online in PR #193.",
+    "A Twitter Space with Solana Foundation, PayAI, and Quantu is scheduled for January 13th at 7pm UTC.",
+    "DAXA coordinated the delisting of ElizaOS tokens citing lack of transparency in the token migration process.",
+    "Eliza Cloud launched new billing pages enabling credit top-ups for users.",
+    "The 'Dopa One' algorithm by Behavidence was proposed for integration into a future ElizaOS Phone app for mental health monitoring."
   ],
   "open_questions": [
     "How do I set Discord Timer/Interval Settings for my elizaos agents in discord?",
     "Do you need Twitter API to use Eliza to run a Twitter agent?",
-    "Has anyone played coding with minimax m2 here?",
-    "When is elizaOS token going to get some usecase as utility within the ecosystem, why is it not being used for payments?",
-    "Can I use Eliza for X without paying for X API ($200/month)?",
-    "Does the Bithumb/Coinone delisting mean elizaOS will be listed after ai16z delisting in February?",
-    "Are these guys (KamiyoAI) using the elizaos plugin?"
+    "Can I top up credit into the cloud now with the billing pages?",
+    "Has anyone successfully linked subagents for skills?"
   ],
   "tags": {
     "themes": [
-      "ai-agents",
+      "infrastructure",
       "token-migration",
+      "ai-agents",
       "developer-experience",
-      "performance",
-      "infrastructure"
+      "market-activity"
     ],
     "sentiment": {
       "overall": "mixed",
       "context": [
-        "technical",
         "economic",
+        "technical",
         "social"
       ]
     },
     "story_type": [
-      "progress"
+      "analysis"
     ],
     "derived": [
       "social",
@@ -48,18 +45,17 @@
       "market"
     ],
     "priority": [
-      "high-attention"
+      "routine"
     ],
     "manual": []
   },
   "categories": {
     "twitter_news_highlights": [
       {
-        "claim": "Upcoming Twitter Space on Jan 13th with Solana Foundation to discuss 8004 standard.",
+        "claim": "Upcoming Twitter Space on January 13th featuring Solana Foundation and PayAI to discuss protocol 8004.",
         "source": [
-          "ai-news/elizaos/json/2026-01-09.json"
-        ],
-        "sentiment": "positive"
+          "ai-news/elizaos/discord/json/2026-01-09.json"
+        ]
       }
     ],
     "github_updates": {
@@ -71,30 +67,21 @@
           "url": "https://github.com/elizaos/eliza/pull/6351",
           "status": "open",
           "author": "lalalune",
-          "significance": "A major architectural overhaul branch for Eliza 2.0 focusing on a core runtime in Rust and TypeScript."
+          "significance": "Major architectural overhaul removing non-essential components for a multi-language runtime focus."
         },
         {
           "item_type": "pull_request",
-          "title": "unified hooks with multi-transport support",
-          "number": 6300,
-          "url": "https://github.com/elizaos/eliza/pull/6300",
+          "title": "MMORPG-style character system to leaderboard API",
+          "number": 193,
+          "url": "https://github.com/elizaos/elizaos.github.io/pull/193",
           "status": "merged",
-          "author": "standujar",
-          "significance": "Introduced useElizaChat to unify interfaces for HTTP, SSE, and WebSocket."
-        },
-        {
-          "item_type": "pull_request",
-          "title": "fix: plugin-bootstrap actions/providers for serverId => messageServerId change",
-          "number": 6333,
-          "url": "https://github.com/elizaos/eliza/pull/6333",
-          "status": "merged",
-          "author": "odilitime",
-          "significance": "Urgent fix for Discord plugin compatibility issues in version 1.7.0."
+          "author": "madjin",
+          "significance": "Transforms focus areas into rich objects with detailed metrics for the ecosystem leaderboard."
         }
       ],
       "overall_focus": [
         {
-          "claim": "Development is centered on stabilizing the core plugin-sql, expanding documentation coverage, and transitioning to a unified Message API.",
+          "claim": "The focus shifted towards optimizing database performance via Neon serverless support and implementing Row-Level Security (RLS) for data isolation.",
           "source": [
             "github/summaries/week/2026-01-04.md"
           ]
@@ -104,7 +91,7 @@
     "discord_updates": [
       {
         "channel": "#core-devs",
-        "summary": "Shaw presented the Eliza 2.0 vision involving FFI plugin interoperability and a Claude-friendly runtime. Discussions also covered converting plugins to 'skills' using markdown folders.",
+        "summary": "Discussions focused on Eliza 2.0 redesign and an experiment to convert plugins into deterministic 'skills' for cross-platform compatibility.",
         "key_participants": [
           "shaw",
           "jin",
@@ -116,26 +103,26 @@
       },
       {
         "channel": "#discussion",
-        "summary": "Heavy focus on the ai16z to elizaOS token migration failures and the impact of the impending delisting from Korean exchanges. DorianD proposed mental health monitoring agents named Dopa One.",
+        "summary": "Contextualized the name 'JEJU' as a tech testing ground in Korea and explored AI applications for monitoring dopamine levels.",
         "key_participants": [
           "DorianD",
-          "Hexx"
+          "Kenk"
         ],
         "source": [
-          "ai-news/elizaos/discord/md/2026-01-08.md"
+          "ai-news/elizaos/discord/json/2026-01-09.json"
         ]
       }
     ],
     "user_feedback": [
       {
-        "feedback_summary": "Users are reporting significant difficulty with LP token migration results showing 'max amount reached' errors.",
+        "feedback_summary": "Users reported migration support issues for tokens purchased before November 2025 showing zero eligibility.",
         "source": [
           "ai-news/elizaos/discord/md/2026-01-08.md"
         ],
         "sentiment": "negative"
       },
       {
-        "feedback_summary": "The need for better contract address (CA) discoverability was raised as users cannot find it within 10 seconds on official sites.",
+        "feedback_summary": "Community confusion regarding the lack of defined utility for the elizaOS token beyond rewards.",
         "source": [
           "ai-news/elizaos/discord/md/2026-01-07.md"
         ],
@@ -144,48 +131,56 @@
     ],
     "strategic_insights": [
       {
-        "theme": "Cross-Platform Skill Standards",
-        "insight": "The push to convert Eliza plugins into markdown-based 'skills' indicates a shift toward LLM-native interoperability where agents can use tools implicitly via hooks.",
+        "theme": "Regulated Market Exit",
+        "insight": "The coordination of Korean exchanges to delist project tokens due to migration transparency suggests a growing regulatory intolerance for undocumented protocol changes.",
         "implications_or_questions": [
-          "Will this standard be adopted by other agent frameworks beyond elizaOS?"
+          "Will the project seek new CEX listings to preserve liquidity?",
+          "How can the project improve transparency to satisfy DAXA standards?"
         ]
       },
       {
-        "theme": "Utility Token Crisis",
-        "insight": "The community is questioning the lack of explicit token utility (payments/gas), which may contribute to exchange delisting pressures if not clarified.",
+        "theme": "Architectural Convergence",
+        "insight": "Eliza 2.0's shift to a multi-language documented runtime aligns the project with 'Claude-friendly' developer workflows, potentially lowering the barrier for AI-native developers.",
         "implications_or_questions": [
-          "Can a roadmap for native token utility be published to satisfy transparency requirements?"
+          "Does removing the CLI/API hinder traditional integration methods?"
         ]
       }
     ],
     "market_analysis": [
       {
-        "observation": "Analysis from Agent Joshua suggests that pure inference markets on platform aggregators like OpenRouter have not been highly profitable over the last year.",
+        "observation": "Korbit, Bithumb, and Coinone delisting ElizaOS tokens effective February 2026.",
         "source": [
           "ai-news/elizaos/discord/md/2026-01-08.md"
         ],
-        "relevance": "Influences the project's strategy to focus on agentic value-add (like data collection/skills) over just reselling model access."
+        "relevance": "Significant loss of liquidity and access to the Korean retail market."
+      },
+      {
+        "observation": "Inference market remains unprofitable according to community feedback from OpenRouter usage.",
+        "source": [
+          "ai-news/elizaos/discord/md/2026-01-07.md"
+        ],
+        "relevance": "Supports the strategic move toward data foundations and context graphs rather than pure inference."
       }
     ]
   },
   "_metadata": {
     "model": "google/gemini-3-flash-preview",
-    "extracted_at": "2026-01-13T16:52:38.654500+00:00Z",
-    "prompt_tokens": 38027,
-    "completion_tokens": 1847,
-    "total_tokens": 39874,
-    "processing_seconds": 13.81,
+    "extracted_at": "2026-01-14T06:59:09.667236+00:00Z",
+    "prompt_tokens": 49126,
+    "completion_tokens": 1709,
+    "total_tokens": 50835,
+    "processing_seconds": 13.18,
     "status": "success",
     "facts_by_category": {
       "twitter_news_highlights": 1,
-      "github_updates": 3,
+      "github_updates": 2,
       "discord_updates": 2,
       "user_feedback": 2,
       "strategic_insights": 2,
-      "market_analysis": 1,
+      "market_analysis": 2,
       "key_facts": 8,
-      "open_questions": 7
+      "open_questions": 4
     },
-    "total_facts": 26
+    "total_facts": 23
   }
 }

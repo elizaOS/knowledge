@@ -1,40 +1,41 @@
 {
-  "briefing_date": "2026-01-01",
-  "overall_summary": "Discussion centered on agentic game development (a RuneScape fork aiming for a \u201cZelda with agents\u201d experience) and required features for Hyperscape tooling, alongside recurring community questions about token migration, token contract details, and token utility/integration with cloud services.",
+  "briefing_date": "2026-01-02",
+  "overall_summary": "Development has shifted significantly toward established strategic roadmaps for public agent ecosystems and gaming integrations, while persistent token migration issues for Tangem wallet users require community management attention.",
   "key_facts": [
-    "Shaw discussed forking a RuneScape project to build a \u201cZelda-like experience with agents.\u201d",
-    "Shaw said VCs had reached out expressing interest in the RuneScape-inspired game concept.",
-    "Shaw stated the Hyperscape \u201casset forge\u201d needs quest generation, NPC setup, and world viewing/tweaking capabilities before shipping.",
-    "Borko answered a roadmap question by linking to https://github.com/elizaOS/roadmap.",
-    "The Light directed a user asking about a Discord plugin compatible with the current ElizaOS version to the #\ud83e\udd16-bot-commands channel.",
-    "In the #\ud83d\udcac-coders channel, Kenk asked whether Eliza could be used to manage and schedule Farcaster posts, and no answer was captured in the provided summaries.",
-    "The elizaos/eliza GitHub activity summary for Jan 1\u20132, 2026 reported 0 new pull requests, 0 new issues, and 0 active contributors during that period.",
-    "A humorous video shared in the core-devs channel was later posted on Twitter by Shaw with a caption about the effort required to make something feel simple."
+    "PR #6301 was submitted by rejected-l to update the project license year to 2026.",
+    "The core development team proposed adding quest generation and NPC setup capabilities to the asset forge in hyperscape.",
+    "Tokens purchased after the migration snapshot currently lack a defined path for migration to ElizaOS.",
+    "DDR5 memory prices increased from $400 in September to $1200 as of January 2026.",
+    "Eliza Cloud initiated a token buyback program following reported positive performance.",
+    "A new unified useElizaChat hook was introduced to standardize client interactions across HTTP, SSE, and WebSocket transports.",
+    "User borisudovicic submitted Issue #6315 proposing a reduction in new user free credits from $5 to $1.",
+    "Shaw shared progress on the Jeju backend, including an OAuth3 testnet site routing to IPFS assets."
   ],
   "open_questions": [
-    "Where do I find the token contract for \"elizaOS\"?",
-    "When is the deadline for manually swapping ai16z tokens (held for a long time) in my personal wallet to elizaos tokens?",
-    "I saw someone asked in X why ElisaOS token is not integrated into cloud? Can someone explain what does that means?",
-    "Could eliza be used to help manage and schedule farcaster posts?"
+    "What will happen to Ai16z tokens bought after snapshot? Can they be migrated?",
+    "When is the deadline for manually swapping ai16z tokens to elizaos tokens?",
+    "Could eliza be used to help manage and schedule farcaster posts?",
+    "Anyone have an idea if it'd be possible to import an entire codebase as an agent to eliza?",
+    "Can I use plugins that were not added to the cloud from the docs?"
   ],
   "tags": {
     "themes": [
       "ai-agents",
       "token-migration",
-      "integrations",
+      "ux-improvement",
       "infrastructure",
       "documentation"
     ],
     "sentiment": {
       "overall": "mixed",
       "context": [
-        "economic",
         "technical",
+        "economic",
         "social"
       ]
     },
     "story_type": [
-      "analysis"
+      "progress"
     ],
     "derived": [
       "social",
@@ -52,262 +53,162 @@
   "categories": {
     "twitter_news_highlights": [
       {
-        "claim": "A humorous video shared in the core-devs channel was later posted on Twitter by Shaw with a caption about the development effort required to get the \u201cfeeling right.\u201d",
+        "claim": "Eliza Cloud is performing well and has initiated a buyback program using revenue as a deflationary mechanism.",
         "source": [
-          "ai-news/elizaos/json/2026-01-01.json",
-          "ai-news/elizaos/discord/md/2026-01-01.md"
+          "ai-news/elizaos/json/2026-01-01.json"
         ],
-        "sentiment": "neutral"
+        "sentiment": "positive"
       },
       {
-        "claim": "Community members attributed a token price pump to Shaw returning to X (formerly Twitter).",
+        "claim": "Shaw discussed the lore of ElizaOS and its influence on AI success stories across Solana, Base, and BSC in a recent interview.",
         "source": [
-          "ai-news/elizaos/discord/md/2025-12-30.md"
+          "ai-news/elizaos/md/2026-01-01.md"
         ],
-        "sentiment": "neutral"
+        "sentiment": "positive"
       }
     ],
     "github_updates": {
       "new_issues_prs": [
         {
           "item_type": "pull_request",
-          "title": "Critical fix to ensure streaming LLM calls are properly logged to the database",
-          "number": 6296,
-          "url": "https://github.com/elizaos/eliza/pull/6296",
+          "title": "unified hooks with multi-transport support (HTTP/SSE/WebSocket)",
+          "number": 6300,
+          "url": "https://github.com/elizaos/eliza/pull/6300",
           "status": "merged",
-          "author": "unknown",
-          "significance": "Logging reliability for streaming model interactions"
-        },
-        {
-          "item_type": "pull_request",
-          "title": "Modernize CLI toolchain to use Bun-native processes",
-          "number": 6289,
-          "url": "https://github.com/elizaos/eliza/pull/6289",
-          "status": "merged",
-          "author": "unknown",
-          "significance": "Developer experience and performance improvements in tooling"
-        },
-        {
-          "item_type": "pull_request",
-          "title": "Standardize internal server communication routes",
-          "number": 6285,
-          "url": "https://github.com/elizaos/eliza/pull/6285",
-          "status": "merged",
-          "author": "unknown",
-          "significance": "Reliability improvements for server messaging/routes"
+          "author": "standujar",
+          "significance": "Simplifies client-side development by providing a single interface for all communication protocols."
         },
         {
           "item_type": "issue",
-          "title": "Add core support for Chain-of-Thought (CoT) reasoning",
-          "number": 6294,
-          "url": "https://github.com/elizaos/eliza/issues/6294",
+          "title": "Add an agent discovery module to the landing page and dashboard",
+          "number": 6302,
+          "url": "https://github.com/elizaos/eliza/issues/6302",
           "status": "open",
-          "author": "unknown",
-          "significance": "Forward-looking agent architecture capability discussion"
-        },
-        {
-          "item_type": "issue",
-          "title": "Refactor the internal messaging system / messaging API redesign",
-          "number": 6298,
-          "url": "https://github.com/elizaos/eliza/issues/6298",
-          "status": "open",
-          "author": "unknown",
-          "significance": "Addresses reliability risks like double-processing messages"
+          "author": "borisudovicic",
+          "significance": "Core component of the new strategic focus on a public agent ecosystem."
         },
         {
           "item_type": "pull_request",
-          "title": "Fix image descriptions and introduce caching for audio and image handlers (OpenAI plugin)",
-          "number": 23,
-          "url": "https://github.com/elizaos-plugins/plugin-openai/pull/23",
+          "title": "v2.0.0 working branch",
+          "number": 6351,
+          "url": "https://github.com/elizaos/eliza/pull/6351",
           "status": "open",
-          "author": "unknown",
-          "significance": "Media handling reliability and performance improvements"
-        },
-        {
-          "item_type": "pull_request",
-          "title": "Implement OAuth2 PKCE authentication flow (Twitter plugin)",
-          "number": 46,
-          "url": "https://github.com/elizaos-plugins/plugin-twitter/pull/46",
-          "status": "open",
-          "author": "unknown",
-          "significance": "Security enhancement for authentication"
-        },
-        {
-          "item_type": "pull_request",
-          "title": "Add community-created plugin-coinrailz to registry",
-          "number": 245,
-          "url": "https://github.com/elizaos-plugins/registry/pull/245",
-          "status": "open",
-          "author": "unknown",
-          "significance": "Expands plugin ecosystem"
-        },
-        {
-          "item_type": "pull_request",
-          "title": "Begin updating project documentation (elizaos/docs)",
-          "number": 81,
-          "url": "https://github.com/elizaos/docs/pull/81",
-          "status": "open",
-          "author": "unknown",
-          "significance": "Documentation refresh and onboarding improvements"
-        },
-        {
-          "item_type": "issue",
-          "title": "User migration issue discussion (unsupported wallet) referenced across repos",
-          "number": 6211,
-          "url": "https://github.com/elizaos/docs/issues/6211",
-          "status": "open",
-          "author": "unknown",
-          "significance": "Cross-repo support and troubleshooting for migration blockers"
+          "author": "lalalune",
+          "significance": "Massive structural overhaul focusing on Rust and TypeScript runtimes while removing non-essentials."
         }
       ],
       "overall_focus": [
         {
-          "claim": "For Jan 1\u20132, 2026 the elizaos/eliza repository summary reported no new PRs, no new issues, and no active contributors.",
+          "claim": "Development is focused on platform stability, extensive documentation expansion for the REST API and CLI, and a UI cleanup to resolve a backlog of agent management issues.",
           "source": [
-            "ai-news/elizaos/json/2026-01-01.json"
+            "github/summaries/week/2026-01-04.md"
           ]
         },
         {
-          "claim": "The latest weekly summary emphasized core stability/performance work, chat UX bug fixes, and plugin security/capability upgrades (notably Twitter auth and OpenAI media handling).",
+          "claim": "Strategic planning for January 2026 centers on defining the next generation of public agents, including forking, knowledge transfer, and discovery modules.",
           "source": [
-            "github/summaries/week/2025-12-28.md"
+            "github/summaries/month/2026-01-01.md"
           ]
         }
       ]
     },
     "discord_updates": [
       {
-        "channel": "#\ud83d\udcac-discussion",
-        "summary": "Conversation was dominated by New Year greetings plus repeated questions about token contract details and migration from AI16Z to ElizaOS; a roadmap question was answered with the GitHub roadmap link, and a Discord plugin question was redirected to #\ud83e\udd16-bot-commands.",
+        "channel": "#core-devs",
+        "summary": "Strategic shift towards building quality gaming experiences within hyperscape, specifically Zelda-like and RuneScape-inspired agent-integrated games.",
         "key_participants": [
-          "Borko",
-          "The Light",
-          "chomppp"
+          "shaw",
+          "Odilitime",
+          "Stan"
         ],
         "source": [
-          "ai-news/elizaos/discord/md/2026-01-01.md",
-          "ai-news/elizaos/discord/json/2026-01-01.json"
-        ]
-      },
-      {
-        "channel": "#\ud83d\udcac-coders",
-        "summary": "A new member joined referencing Shaw; Kenk asked whether Eliza can be used to manage and schedule Farcaster posts, with no answer captured in the provided segment.",
-        "key_participants": [
-          "mongrlz",
-          "Kenk"
-        ],
-        "source": [
-          "ai-news/elizaos/discord/json/2026-01-01.json",
           "ai-news/elizaos/discord/md/2026-01-01.md"
         ]
       },
       {
-        "channel": "#core-devs",
-        "summary": "Core-dev discussion focused on an agentic game concept: forking a RuneScape project into a Zelda-like experience where Eliza agents (and Spartan) populate towns and generate quests; Shaw listed missing Hyperscape asset-forge features (quest generation, NPC setup, and world viewing/tweaking).",
+        "channel": "#\ud83e\udd47-partners",
+        "summary": "Proposal for 'Eliza DWS Transform', an agent-based infrastructure tool to migrate SMB hosting from AWS to the Jeju network to reduce costs.",
         "key_participants": [
-          "Shaw",
-          "Odilitime"
+          "DorianD"
         ],
         "source": [
-          "ai-news/elizaos/discord/md/2026-01-01.md",
           "ai-news/elizaos/discord/json/2026-01-01.json"
+        ]
+      },
+      {
+        "channel": "#\ud83d\udcac-discussion",
+        "summary": "Community sentiment is high for the new year, though technical friction persists regarding token migration and wallet compatibility.",
+        "key_participants": [
+          "Hexx",
+          "Omid Sa",
+          "The Light"
+        ],
+        "source": [
+          "ai-news/elizaos/discord/md/2026-01-01.md"
         ]
       }
     ],
     "user_feedback": [
       {
-        "feedback_summary": "Users asked for clearer token contract and token migration information (timeline/process) and these questions were not fully answered in the captured summaries.",
+        "feedback_summary": "Users are reporting critical compatibility issues with Tangem wallets during AI16Z to ElizaOS migration, specifically zero balance errors.",
         "source": [
-          "ai-news/elizaos/discord/json/2026-01-01.json",
-          "ai-news/elizaos/discord/md/2026-01-01.md"
+          "ai-news/elizaos/discord/md/2025-12-31.md"
         ],
-        "sentiment": "neutral"
+        "sentiment": "negative"
       },
       {
-        "feedback_summary": "A documentation need was raised to explain what \u201ctoken integration with cloud services\u201d means.",
+        "feedback_summary": "Requests for improved chat summary quality and more meaningful summaries for agents to help better manage conversation context.",
         "source": [
-          "ai-news/elizaos/discord/md/2026-01-01.md",
-          "ai-news/elizaos/discord/json/2026-01-01.json"
-        ],
-        "sentiment": "neutral"
-      },
-      {
-        "feedback_summary": "Feature request to explore using Eliza for managing and scheduling Farcaster posts.",
-        "source": [
-          "ai-news/elizaos/discord/json/2026-01-01.json",
-          "ai-news/elizaos/discord/md/2026-01-01.md"
-        ],
-        "sentiment": "neutral"
-      },
-      {
-        "feedback_summary": "Request to improve website accessibility for token information and to create a dedicated token page (addresses, exchanges, tracking links).",
-        "source": [
-          "ai-news/elizaos/discord/md/2025-12-30.md"
+          "github/summaries/day/2026-01-02.md"
         ],
         "sentiment": "neutral"
       }
     ],
     "strategic_insights": [
       {
-        "theme": "Agentic gaming as a narrative for product visibility and fundraising",
-        "insight": "Core-dev discussions prioritized a \u201cZelda with agents\u201d concept built from a RuneScape fork, including quest generation and AI-driven NPC towns; Shaw also referenced inbound VC interest in the concept.",
+        "theme": "Agent-Centric Game Economy",
+        "insight": "The move to integrate agents into Zelda-style metaverses suggests a strategy to move beyond simple chatbots toward persistent, interactive virtual entities as a primary utility.",
         "implications_or_questions": [
-          "Should the team define a minimal playable demo scope (agent NPCs + quest generation) to align internal work and external conversations?",
-          "How should Hyperscape tooling requirements (asset forge features) be sequenced to support a game prototype?"
+          "Should development resources be further diverted from core API to gaming integrations?",
+          "How will NPC agents be monetized within these environments?"
         ]
       },
       {
-        "theme": "Token migration and token utility documentation gaps",
-        "insight": "Multiple users asked unanswered questions about token contract location, swap deadlines, and what it means for the token to be \u201cintegrated into cloud,\u201d while community members simultaneously requested clearer token pages and documentation.",
+        "theme": "Cloud Infrastructure Independence",
+        "insight": "The development of Jeju's self-owned infrastructure and the proposed AWS migration agent indicate a long-term goal of total service decentralization to avoid high hosting and API costs.",
         "implications_or_questions": [
-          "What single canonical page should be published for contract addresses, swap steps, deadlines, and token utility?",
-          "Who owns responding to recurring migration/utility questions in Discord to reduce repetition?"
+          "Does the triple price increase in hardware impact the timeline for self-owned physical racks?"
         ]
       }
     ],
     "market_analysis": [
       {
-        "observation": "Community members discussed potential token buyback programs (strategic vs programmatic) and made predictions about a potential Coinbase listing and new all-time highs.",
+        "observation": "Significant chip market volatility: DDR5 memory prices have tripled in four months.",
         "source": [
-          "ai-news/elizaos/json/2026-01-01.json",
-          "ai-news/elizaos/md/2026-01-01.md"
+          "ai-news/elizaos/discord/md/2026-01-01.md"
         ],
-        "relevance": "Highlights retail expectations and recurring token-economics topics that may require official clarification."
-      },
-      {
-        "observation": "The ElizaOS token was reported in Discord to have increased by approximately 120% following Shaw\u2019s return to X.",
-        "source": [
-          "ai-news/elizaos/discord/md/2025-12-30.md"
-        ],
-        "relevance": "Shows sensitivity of token price discourse to founder social activity, which may influence communications planning."
-      },
-      {
-        "observation": "Discord discussions referenced macro cycle theories including capital rotation and debt monetization narratives (e.g., Raoul Pal hypothesis).",
-        "source": [
-          "ai-news/elizaos/discord/md/2025-12-31.md"
-        ],
-        "relevance": "Represents community-driven framing for risk-on sentiment and token holding behavior."
+        "relevance": "Directly impacts the cost-efficiency of deploying decentralized AI infrastructure for the Jeju network."
       }
     ]
   },
   "_metadata": {
-    "model": "openai/gpt-5.2",
-    "extracted_at": "2026-01-02T02:23:20.022237Z",
-    "prompt_tokens": 14750,
-    "completion_tokens": 4257,
-    "total_tokens": 19007,
-    "processing_seconds": 78.52,
+    "model": "google/gemini-3-flash-preview",
+    "extracted_at": "2026-01-14T06:56:46.774863+00:00Z",
+    "prompt_tokens": 49585,
+    "completion_tokens": 2010,
+    "total_tokens": 51595,
+    "processing_seconds": 13.35,
     "status": "success",
     "facts_by_category": {
       "twitter_news_highlights": 2,
-      "github_updates": 10,
+      "github_updates": 3,
       "discord_updates": 3,
-      "user_feedback": 4,
+      "user_feedback": 2,
       "strategic_insights": 2,
-      "market_analysis": 3,
+      "market_analysis": 1,
       "key_facts": 8,
-      "open_questions": 4
+      "open_questions": 5
     },
-    "total_facts": 36
+    "total_facts": 26
   }
 }

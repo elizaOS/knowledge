@@ -1,28 +1,31 @@
 {
-  "briefing_date": "2026-01-04",
-  "overall_summary": "Community discussions focused on agent architecture (multi-model setups, RoseOS framework) and operational bottlenecks (Turbo build memory usage, plugin versioning). In parallel, GitHub activity emphasized platform reliability/UX fixes and ongoing plugin security/performance work (notably Twitter OAuth2 PKCE and improved OpenAI media handling).",
+  "briefing_date": "2026-01-06",
+  "overall_summary": "The ElizaOS ecosystem is transitioning into a stabilization phase, characterized by extensive documentation expansion and critical infrastructure fixes for SQL and MCP integrations. While core development progresses with ERC-8004 finalization, significant technical debt remains regarding build-time memory consumption and Discord server-detection bugs.",
   "key_facts": [
-    "A new framework called RoseOS, built on top of ElizaOS, was shared with a focus on explicit agency boundaries, constraint-aware reasoning, and accountability layers.",
-    "Stan implemented logging system improvements via PR #6263, including a linter in the eliza/config package to warn about incorrect log formats.",
-    "A Discord plugin publishing/versioning issue was reported: v1.3.4 failed to publish and the version jumped from v1.3.3 to v1.3.5.",
-    "Turbo builds were reported as using 21GB+ of memory.",
-    "Jin is working on Eliza knowledge data pipelines and planned documentation and a presentation/show-and-tell.",
-    "Odlitime is continuing development work on DegenAI.",
-    "Work began to implement OAuth2 PKCE authentication for the Twitter plugin in elizaos-plugins/plugin-twitter.",
-    "A fix was merged to ensure streaming LLM calls are reliably logged to the database in elizaos/eliza (PR #6296)."
+    "Documentation coverage for the ElizaOS project was increased from 60% to approximately 95% on January 5",
+    "PR #6300 introduced a unified useElizaChat hook supporting HTTP, SSE, and WebSocket protocols",
+    "The Discord plugin versions v1.3.4 and v1.3.6 failed to publish due to TypeScript and dependency errors",
+    "Stan identified optimization opportunities for monorepo latency and committed to submitting multiple PRs",
+    "The SQL plugin was updated to use sql.raw() for SET LOCAL commands to resolve parameterization failures",
+    "Borko performed a security rotation of Anthropic API keys and distributed new credentials via direct message",
+    "Kenk shared the finalized ERC-8004 contract specifications in the MarcoMetaMask/ERCs repository",
+    "Users reported that Turbo build processes are inconsistently consuming between 21GB and 27GB of memory"
   ],
   "open_questions": [
-    "Will the DegenAI main account on X (Twitter) be unbanned?",
-    "How should knowledge and lore sections be added to JSON configurations to improve agent memory/recall?",
-    "How can the \"Model not found\" error be resolved when using agent ID and API endpoints?"
+    "Can we share links here? I built something and want feedback",
+    "Who can I reach out to regarding Proposal (Funding proposal)?",
+    "Will Babylon have 3D graphics and visual representation of Eliza and agents fighting?",
+    "When are you planning on implementing application building so agents can use what I build?",
+    "Is elizacloud v2 coming?",
+    "Is the GitHub up to date for automated X account setup?"
   ],
   "tags": {
     "themes": [
-      "ai-agents",
-      "plugins",
+      "developer-experience",
+      "documentation",
+      "infrastructure",
       "performance",
-      "security",
-      "ux-improvement"
+      "bug-fix"
     ],
     "sentiment": {
       "overall": "mixed",
@@ -43,258 +46,155 @@
       "market"
     ],
     "priority": [
-      "high-attention"
+      "time-sensitive"
     ],
     "manual": []
   },
   "categories": {
     "twitter_news_highlights": [
       {
-        "claim": "A question was raised about whether the DegenAI main X (Twitter) account might be unbanned.",
+        "claim": "Shaw returned to Twitter, a development highlighted in a community deep-dive video by Seppmos.",
         "source": [
-          "ai-news/elizaos/discord/md/2026-01-04.md"
+          "ai-news/elizaos/json/2026-01-05.json"
         ],
-        "sentiment": "neutral"
-      },
-      {
-        "claim": "A Solana trading discussion stated that token creation monitoring requires live Twitter feeds and automated bundlers.",
-        "source": [
-          "ai-news/elizaos/discord/md/2026-01-04.md"
-        ],
-        "sentiment": "neutral"
-      },
-      {
-        "claim": "Work started on implementing OAuth2 PKCE authentication for the Twitter plugin.",
-        "source": [
-          "github/summaries/week/2025-12-28.md"
-        ],
-        "sentiment": "neutral"
+        "sentiment": "positive"
       }
     ],
     "github_updates": {
       "new_issues_prs": [
         {
           "item_type": "pull_request",
-          "title": "fix(plugin-sql): use sql.raw() for SET LOCAL to avoid parameterization\u2026",
-          "number": 6316,
-          "url": "https://github.com/elizaos/eliza/pull/6316",
-          "status": "open",
-          "author": "0xbbjoker",
-          "significance": "Fixes PostgreSQL SET LOCAL behavior under data isolation; adds unit and integration tests."
-        },
-        {
-          "item_type": "pull_request",
-          "title": "refactor(default-message-service): optimize provider handling in MultiStep",
-          "number": 6263,
-          "url": "https://github.com/elizaos/eliza/pull/6263",
+          "title": "unified hooks with multi-transport support",
+          "number": 6300,
+          "url": "https://github.com/elizaOS/eliza/pull/6300",
           "status": "merged",
           "author": "standujar",
-          "significance": "Parallelizes provider execution in multi-step runs and is referenced in Discord as a logging-related improvement."
-        },
-        {
-          "item_type": "pull_request",
-          "title": "Work started on OAuth2 PKCE authentication flow",
-          "number": 46,
-          "url": "https://github.com/elizaos-plugins/plugin-twitter/pull/46",
-          "status": "open",
-          "author": "vbkotecha",
-          "significance": "Introduces more secure authentication (OAuth2 PKCE) and simplifies configuration."
-        },
-        {
-          "item_type": "pull_request",
-          "title": "Fix image descriptions and add caching for audio/image handlers",
-          "number": 23,
-          "url": "https://github.com/elizaos-plugins/plugin-openai/pull/23",
-          "status": "open",
-          "author": "unknown",
-          "significance": "Improves OpenAI plugin media handling with caching and image description fixes."
-        },
-        {
-          "item_type": "pull_request",
-          "title": "Add community plugin `plugin-coinrailz` to registry",
-          "number": 245,
-          "url": "https://github.com/elizaos-plugins/registry/pull/245",
-          "status": "open",
-          "author": "unknown",
-          "significance": "Expands plugin ecosystem via community contribution."
-        },
-        {
-          "item_type": "pull_request",
-          "title": "Begin updating project documentation",
-          "number": 81,
-          "url": "https://github.com/elizaos/docs/pull/81",
-          "status": "open",
-          "author": "unknown",
-          "significance": "Ongoing documentation updates to improve onboarding and clarity."
+          "significance": "Simplifies client-side development by merging HTTP, SSE, and WebSocket interactions."
         },
         {
           "item_type": "issue",
-          "title": "Create a public agent discovery platform (roadmap)",
-          "number": 6302,
-          "url": "https://github.com/elizaos/eliza/issues/6302",
+          "title": "Performance Concerns (Memory Consumption)",
+          "number": 6332,
+          "url": "https://github.com/elizaOS/eliza/issues/6332",
           "status": "open",
-          "author": "unknown",
-          "significance": "Defines roadmap work for public discovery and browsing of agents."
+          "author": "madjin",
+          "significance": "Identifies critical infrastructure bottleneck where Turbo consumes 21GB+ RAM."
         },
         {
           "item_type": "issue",
-          "title": "Allow users to fork and customize existing agents (roadmap)",
-          "number": 6305,
-          "url": "https://github.com/elizaos/eliza/issues/6305",
+          "title": "Critical Publishing Failure Investigation",
+          "number": 40,
+          "url": "https://github.com/elizaos-plugins/plugin-discord/issues/40",
           "status": "open",
-          "author": "unknown",
-          "significance": "Defines roadmap work for agent forking and customization."
-        },
-        {
-          "item_type": "issue",
-          "title": "Adjust message limits for guest users (roadmap)",
-          "number": 6312,
-          "url": "https://github.com/elizaos/eliza/issues/6312",
-          "status": "open",
-          "author": "unknown",
-          "significance": "Proposes limiting messages for unauthenticated users interacting with public agents."
-        },
-        {
-          "item_type": "issue",
-          "title": "Change free credits from $5 to $1 (roadmap)",
-          "number": 6315,
-          "url": "https://github.com/elizaos/eliza/issues/6315",
-          "status": "open",
-          "author": "unknown",
-          "significance": "Proposes changing initial credit offering as part of growth strategy."
+          "author": "madjin",
+          "significance": "Prevents the release of new Discord plugin versions."
         }
       ],
       "overall_focus": [
         {
-          "claim": "Weekly work emphasized stability and UX: ensuring streaming LLM calls are logged to the database, modernizing CLI tooling, standardizing server routes, and fixing chat duplication/recency issues plus adding chat renaming.",
+          "claim": "Development focus shifted toward backend stability, primarily through SQL plugin fixes and optimizing runtime initialization via parallelization.",
           "source": [
-            "github/summaries/week/2025-12-28.md"
-          ]
-        },
-        {
-          "claim": "Monthly planning emphasized a roadmap for a public agent ecosystem (discovery, forking, knowledge sharing) alongside performance improvements and multiple UX/growth-strategy issues (guest limits and credits).",
-          "source": [
-            "github/summaries/month/2026-01-01.md"
+            "github/summaries/week/2026-01-04.md"
           ]
         }
       ]
     },
     "discord_updates": [
       {
-        "channel": "overall",
-        "summary": "Discussion included RoseOS (a framework on ElizaOS), multi-model agent setups using Openrouter/provider configuration, guidance to deploy agents with custom plugins via cloud containers using the ElizaOS CLI, and reports of Discord plugin versioning/publishing problems. Users also raised requests around improving agent memory configuration (knowledge/lore sections) and a Twitter poll creation capability.",
+        "channel": "#discussion",
+        "summary": "Community members debated the philosophy of the agent economy, contrasting ElizaOS's open-source ethos against closed-loop systems like Virtuals.",
         "key_participants": [
-          "Stan \u26a1",
           "Omid Sa",
-          "YogaFlame",
-          "Kenk"
-        ],
-        "source": [
-          "ai-news/elizaos/discord/md/2026-01-03.md"
-        ]
-      },
-      {
-        "channel": "overall",
-        "summary": "Updates included continued DegenAI development, progress on Eliza knowledge data pipelines with upcoming documentation/presentation, and Polymarket Phase 2 repository updates. Technical trading discussion described Solana MEV-style requirements (millisecond GRPC ingest, payload preshotting, and live Twitter feeds for token-creation monitoring), and an issue was raised about Turbo build memory usage exceeding 21GB.",
-        "key_participants": [
-          "Odlitime",
-          "Jin",
-          "Chucknorris",
-          "Omid Sa"
+          "Nancy"
         ],
         "source": [
           "ai-news/elizaos/discord/md/2026-01-04.md"
+        ]
+      },
+      {
+        "channel": "#coders",
+        "summary": "Technical deep dive into MCP server integration; revealed that Anthropic models require an OpenAI API key (even invalid) for text embedding fallbacks.",
+        "key_participants": [
+          "Andrei Mitrea",
+          "Stan \u26a1"
+        ],
+        "source": [
+          "ai-news/elizaos/discord/md/2026-01-05.md"
+        ]
+      },
+      {
+        "channel": "#core-devs",
+        "summary": "Focus on security maintenance through API key rotation and standardizing ERCs for the ecosystem.",
+        "key_participants": [
+          "Borko",
+          "Kenk"
+        ],
+        "source": [
+          "ai-news/elizaos/discord/json/2026-01-05.json"
         ]
       }
     ],
     "user_feedback": [
       {
-        "feedback_summary": "Some participants expressed skepticism about ElizaOS being more than a wrapper for AI models, prompting discussion about clarifying its value proposition with concrete examples.",
+        "feedback_summary": "Users expressed significant confusion regarding the relationship between the ELIZA token, ElizaOS, and the AI16Z migration.",
         "source": [
-          "ai-news/elizaos/discord/md/2026-01-03.md"
-        ],
-        "sentiment": "mixed"
-      },
-      {
-        "feedback_summary": "Turbo build memory consumption was reported as exceeding 21GB, prompting an action item to investigate build-time resource usage.",
-        "source": [
-          "ai-news/elizaos/discord/md/2026-01-04.md"
+          "ai-news/elizaos/discord/md/2026-01-05.md"
         ],
         "sentiment": "negative"
       },
       {
-        "feedback_summary": "A Discord plugin publishing/versioning issue was reported (v1.3.4 failed publishing; jump from v1.3.3 to v1.3.5).",
+        "feedback_summary": "Developers are struggling with 'Destructive migration blocked' errors when restarting the ElizaOS service.",
         "source": [
-          "ai-news/elizaos/discord/md/2026-01-03.md"
-        ],
-        "sentiment": "negative"
-      },
-      {
-        "feedback_summary": "A feature request was raised to enable agents to create and post Twitter polls.",
-        "source": [
-          "ai-news/elizaos/discord/md/2026-01-03.md"
+          "ai-news/elizaos/discord/json/2026-01-05.json"
         ],
         "sentiment": "neutral"
       }
     ],
     "strategic_insights": [
       {
-        "theme": "High-frequency Solana trading exceeds standard agent reaction-time assumptions",
-        "insight": "The Solana trading discussion specified requirements like millisecond GRPC ingest and payload preshotting, and stated that common SDK/Jupiter paths introduce multi-second delays. This frames profitable on-chain trading as an infrastructure problem rather than a generic agent behavior problem.",
+        "theme": "Plugin-to-Skill Architecture Shift",
+        "insight": "The proposed conversion of plugins to 'skills' represents a move toward atomic, composable agent capabilities rather than monolithic integrations.",
         "implications_or_questions": [
-          "Should ElizaOS prioritize standardized low-latency ingestion primitives (e.g., GRPC ingester templates) for trading-oriented agents?"
+          "Will this break existing character configurations?",
+          "How will this impact the current plugin registry?"
         ]
       },
       {
-        "theme": "Public-agent product strategy is increasingly defined in GitHub planning artifacts",
-        "insight": "GitHub summaries describe a January roadmap centered on public agent discovery, forking, and knowledge sharing, alongside UX refinements and guest/credit gating proposals. This concentrates product direction around a public agent ecosystem and conversion flow.",
+        "theme": "Infrastructure Limitations for Trading",
+        "insight": "Current agent response times (4-second delays) make ElizaOS agents non-competitive in high-frequency Solana trading without GRPC ingesters.",
         "implications_or_questions": [
-          "How should Discord-facing messaging and documentation align with the public agent ecosystem roadmap?"
-        ]
-      },
-      {
-        "theme": "Operational reliability signals from community reports",
-        "insight": "Reports of Turbo builds using 21GB+ memory and Discord plugin versioning/publishing anomalies point to build/deployment friction and release management issues impacting developers and maintainers.",
-        "implications_or_questions": [
-          "Do we need release automation and versioning safeguards for plugins to prevent skipped/failed publishes?"
+          "Is ElizaOS intended to support HFT, or should it remain focused on long-form social interaction?"
         ]
       }
     ],
     "market_analysis": [
       {
-        "observation": "Discord discussion included token price movement and trading chatter, and a Solana trading thread focused on low-latency requirements (GRPC ingesters, preshotting, and live Twitter feeds for token creation monitoring).",
+        "observation": "Babylon AI prediction game launch is approaching, representing the first major 'Social Prediction' utility for ElizaOS agents.",
         "source": [
-          "ai-news/elizaos/discord/md/2026-01-04.md"
+          "ai-news/elizaos/md/2026-01-05.md"
         ],
-        "relevance": "Highlights user interest in trading-oriented agent use cases and the infrastructure required to support them."
-      },
-      {
-        "observation": "Polymarket Phase 2 updates were mentioned, with potential upcoming changes to the ElizaOS Polymarket plugin.",
-        "source": [
-          "ai-news/elizaos/discord/md/2026-01-04.md"
-        ],
-        "relevance": "Signals continued work on prediction-market integrations that may drive agent utility in market-facing workflows."
+        "relevance": "Validates the project's utility beyond chat-based autonomy."
       }
     ]
   },
   "_metadata": {
-    "model": "openai/gpt-5.2",
-    "extracted_at": "2026-01-06T02:23:16.482908Z",
-    "prompt_tokens": 15012,
-    "completion_tokens": 4542,
-    "total_tokens": 19554,
-    "processing_seconds": 106.63,
+    "model": "google/gemini-3-flash-preview",
+    "extracted_at": "2026-01-14T06:57:57.699629+00:00Z",
+    "prompt_tokens": 55940,
+    "completion_tokens": 1804,
+    "total_tokens": 57744,
+    "processing_seconds": 12.97,
     "status": "success",
     "facts_by_category": {
-      "twitter_news_highlights": 3,
-      "github_updates": 10,
-      "discord_updates": 2,
-      "user_feedback": 4,
-      "strategic_insights": 3,
-      "market_analysis": 2,
+      "twitter_news_highlights": 1,
+      "github_updates": 3,
+      "discord_updates": 3,
+      "user_feedback": 2,
+      "strategic_insights": 2,
+      "market_analysis": 1,
       "key_facts": 8,
-      "open_questions": 3
+      "open_questions": 6
     },
-    "total_facts": 35
+    "total_facts": 26
   }
 }
