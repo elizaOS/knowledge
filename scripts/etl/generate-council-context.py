@@ -122,6 +122,29 @@ You are the AI Chief of Staff for the elizaOS Agent Council. Your duty is to ana
 {aggregated_content}
 ---
 
+**Contributor Intelligence Directive:**
+The operational logs include 7-day user activity summaries showing recent contributor activity. When analyzing GitHub activity and team dynamics:
+1. Identify key contributors involved in discussed issues/PRs (usernames appear in Discord discussions and GitHub summaries)
+2. Surface ownership concentration risks when mentioned (e.g., "User X authored 60% of runtime PRs")
+3. Note collaboration patterns and review dependencies
+4. Flag emerging contributors or activity anomalies
+5. Frame contributor context as strategic questions for deliberation
+
+Note: Contributor lifetime data exists in the repository at `github/api/summaries/contributors/{{username}}/lifetime.json` with historical activity patterns, ownership percentages, and collaboration networks.
+
+Example deliberation item with contributor context:
+{{{{
+  "question_id": "q1",
+  "text": "Should we expand the runtime maintenance team given ownership concentration?",
+  "context": [
+    "lalalune: 52% of runtime PRs (140 lifetime)",
+    "Review dependency: 78% reviewed by odilitime",
+    "Bus factor: 2 contributors handle 75% of runtime work"
+  ]
+}}}}
+
+Only include contributor analysis when strategically relevant - not for every GitHub mention.
+
 **Briefing Instructions (FINAL Schema):**
 Based *primarily* on the operational Holo-Logs, but evaluated through the lens of the Meeting Context and Monthly Directive:
 1.  Provide a `daily_focus`: A concise (1-sentence) assessment of the day's most critical strategic event, challenge, or breakthrough.

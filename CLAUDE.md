@@ -112,6 +112,33 @@ npm install  # Only needed for Discord.js dependency
 - **HackMD Notes**: Collaborative documentation
 - **RSS Feeds**: Syndication feeds for facts and briefings
 
+### Contributor Context Integration
+The system surfaces contributor intelligence naturally in council briefings without brittle preprocessing:
+
+**Data Location**:
+- Contributor lifetime statistics: `github/api/summaries/contributors/{username}/lifetime.json`
+- Each file contains ownership percentages, contribution domains, review networks, and activity patterns
+- Synced daily from external repository (1,517 contributor profiles as of Jan 2026)
+
+**How It Works**:
+1. **7-Day Activity Summaries**: `aggregate-sources.py` includes recent contributor activity (1,500+ user summaries)
+2. **Natural Discovery**: Contributors mentioned in Discord discussions or GitHub activity are automatically contextualized
+3. **LLM-Guided Analysis**: Prompts in `extract-facts.py` and `generate-council-context.py` direct the LLM to:
+   - Identify key contributors in operational discussions
+   - Surface ownership concentration risks (bus factor analysis)
+   - Note collaboration patterns and review dependencies
+   - Flag emerging contributors or activity anomalies
+
+**Design Philosophy**:
+- **Progressive Disclosure**: Contributor data exists in structured files; LLMs with tool-calling can access on-demand
+- **Avoid Preprocessing**: No regex parsing of AI-generated markdown; rely on natural mentions in operational logs
+- **Robust & Scalable**: Works with any number of contributors without brittle text parsing
+
+**Example Output**: Council briefings naturally include context like:
+- "lalalune: Author of v2.0.0 branch with 900k+ additions (PR #6351)"
+- "Review dependency: 78% reviewed by odilitime"
+- "Bus factor: 2 contributors handle 75% of runtime work"
+
 ## Key Scripts Behavior
 
 ### ETL Scripts (`scripts/etl/`)
