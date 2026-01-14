@@ -3,79 +3,85 @@
   "title": "Daily Report - 2026-01-03",
   "categories": [
     {
-      "title": "ElizaOS: An Open-Source AI Agent Framework",
+      "title": "ElizaOS Development Updates and Community Discussions - January 3-4, 2026",
       "content": [
         {
-          "text": "ElizaOS is an open-source framework for building autonomous AI agents. According to discussions in the Discord channels, it's described as 'the Linux of autonomous AI agents' - providing a foundation for developers to build various types of AI agents with different capabilities.",
+          "text": "Community members discussed ElizaOS capabilities and framework value. A skeptical user questioned the practical applications and substance of ElizaOS, asking why they should use it over custom tooling. Community members explained that ElizaOS is an open source AI agent framework that provides databases, embeddings, model abstraction, APIs, composable tool concepts, centralized logging, and infrastructure to make development easier. The framework allows users to create AI agents with specific data, multiple AI models simultaneously, and plugins for third-party platforms like Twitter, Discord, and Telegram, as well as real-world tool connections. Users emphasized that ElizaOS is a toolbox and framework, not a finished product, designed to save developers time from implementing everything from scratch. The framework had 190 plugins at one point bringing extensive functionality.",
+          "sources": [
+            "https://discord.com/channels/1253563208833433701/1300025221834739744"
+          ],
+          "images": [
+            "https://cdn.discordapp.com/attachments/1300025221834739744/1457033626926710980/image.png?ex=695a87cf&is=6959364f&hm=2a1e4485a83a984955ee1ad34de78968e27b9d084296b2146df90ff406cffd5f&"
+          ],
+          "videos": []
+        },
+        {
+          "text": "RoseOS introduced itself as an experimental agent framework built on top of ElizaOS, focused on designing autonomous systems with explicit agency boundaries, constraint-aware reasoning, and accountability layers. The project explores how AI agents can reason and act within defined policy constraints, make decisions instead of executing static instructions, adapt behavior while preserving traceability and responsibility, and operate as composable, modular software primitives. RoseOS treats autonomy as an engineering problem emphasizing control surfaces, decision limits, and predictable behavior in autonomous execution environments. The framework is described as agent-first software built with guardrails, focusing on decision quality, execution discipline, and trust.",
           "sources": [
             "https://discord.com/channels/1253563208833433701/1300025221834739744",
             "https://discord.com/channels/1253563208833433701/1253563209462448241"
           ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "Core developers made significant improvements to ElizaOS logging and provider handling. Stan introduced next-level logging capabilities and a linter for logs in the eliza/config package that warns if logs are in the wrong format. He also optimized provider handling in multi-step mode through a pull request that affects internal execution order, making providers execute faster while still returning all results. The team is working on bootstrap optimizations for providers. Jin reported significant work going into Eliza knowledge data pipelines with documentation, presentation, and demonstration phases coming soon.",
+          "sources": [
+            "https://discord.com/channels/1253563208833433701/1377726087789940836"
+          ],
           "images": [
-            "https://elizalabs.mintlify.app/mintlify-assets/_next/image?url=%2F_mintlify%2Fapi%2Fog%3Fdivision%3DGETTING%2BSTARTED%26title%3DOverview%26description%3DBuild%2Bautonomous%2BAI%2Bagents%2Bwith%2Bthe%2Bmost%2Bpopular%2Bagentic%2Bframework%26logoLight%3Dhttps%253A%252F%252Fmintcdn.com%252Felizalabs%252FbbIJsUzCDybj9a-t%252Flogo%252Flight.png%253Ffit%253Dmax%2526auto%253Dformat%2526n%253DbbIJsUzCDybj9a-t%2526q%253D85%2526s%253Def25ef0a7ad0c2985928651085d3a8e2%26logoDark%3Dhttps%253A%252F%252Fmintcdn.com%252Felizalabs%252FbbIJsUzCDybj9a-t%252Flogo%252Fdark.png%253Ffit%253Dmax%2526auto%253Dformat%2526n%253DbbIJsUzCDybj9a-t%2526q%253D85%2526s%253Dd696503a5eeb5ccddf46a3e2cdce0190%26primaryColor%3D%25230B35F1%26lightColor%3D%25230B35F1%26darkColor%3D%25230B35F1%26backgroundLight%3D%2523ffffff%26backgroundDark%3D%2523090a10&w=1200&q=100"
+            "https://cdn.discordapp.com/attachments/1377726087789940836/1456922351416512554/Screenshot_2026-01-03_at_12.08.56_PM.png?ex=695ac8ec&is=6959776c&hm=75d3d8e4d1feecfab74247f879aefeb96bb8c3dda5077ddd2925adaa72ad71cf&",
+            "https://opengraph.githubassets.com/b256c14fb6848c82be7f437203c23214f4efa4ff39583d2b879b9ad8226fe942/elizaOS/eliza/pull/6263"
           ],
           "videos": []
         },
         {
-          "text": "The framework provides developers with tools to create AI agents that can make decisions, reason, and execute tasks. It offers features like databases, embeddings, model abstraction, APIs, and composable tool concepts. According to one developer, ElizaOS is 'a toolbox to make your life easier' rather than a finished product.",
+          "text": "Developers discussed technical implementation details and deployment options. Users asked about implementing multiple AI models in one agent, such as using Anthropic for calculating tasks and forecasting while using OpenAI for reasoning tasks. Odilitime confirmed this is possible with custom code using useModel with the provider option. For agents with plugins not yet added to cloud, developers recommended deploying outside of cloud using containers. ElizaOS CLI provides a command to deploy in one command, with containers and logs visible directly from the cloud dashboard. A developer shared integration documentation for connecting AI agents to websites and other platforms with API keys.",
           "sources": [
             "https://discord.com/channels/1253563208833433701/1300025221834739744"
           ],
-          "images": [],
+          "images": [
+            "https://repository-images.githubusercontent.com/826170402/117e591c-58d6-4740-a218-1c9e6ccac2e0"
+          ],
           "videos": []
         },
         {
-          "text": "One project built on ElizaOS is roseOS, described as 'an experimental agent framework focused on designing autonomous systems with explicit agency boundaries, constraint-aware reasoning, and accountability layers.' It explores how AI agents can reason within defined constraints, make decisions instead of just executing instructions, and adapt behavior while maintaining traceability.",
+          "text": "Community members discussed trading bot capabilities and limitations. A developer explained that on Solana, without a GRPC ingester processing each transaction on each DEX to extract bundle block 0, dev buy, and reputation dev with millisecond precision and full payload preshot, it is impossible to make a profit. Even for an agent with reaction time, it would be too long. The developer shared screenshots of their working system but stated they would not give it away due to the insane amount of work involved. They emphasized the need for custom code, live Twitter feeds for token creation, and automated bundlers for fund transfers.",
           "sources": [
             "https://discord.com/channels/1253563208833433701/1300025221834739744"
           ],
-          "images": [],
+          "images": [
+            "https://cdn.discordapp.com/attachments/1300025221834739744/1457165183356108943/Capture_decran_2025-12-15_114707.png?ex=695c53d4&is=695b0254&hm=b8185713adeca975b09d5d1f054cf7aba0584218814655da8295065f6808a78a&",
+            "https://cdn.discordapp.com/attachments/1300025221834739744/1457167549782294711/Capture_decran_2025-12-01_020204.png?ex=695c5608&is=695b0488&hm=e0482833bdc44e28cd0c15c345f8cd49a4f7e51f2adccd2b6dcb4582cfd6f5ce&",
+            "https://cdn.discordapp.com/attachments/1300025221834739744/1457167550151655610/Capture_decran_2025-12-01_020235.png?ex=695c5608&is=695b0488&hm=7171b4bfc65a5fa01e1a1112c7a9447dc2d1bf46f5c785fe0c7febdfd992c078&",
+            "https://cdn.discordapp.com/attachments/1300025221834739744/1457167550566629386/Capture_decran_2025-12-04_223746.png?ex=695c5608&is=695b0488&hm=b18ec54731c1e80c12c769562bf13ebb5ce9bc9410ccd12ee501ad9cf528e4a7&",
+            "https://cdn.discordapp.com/attachments/1300025221834739744/1457167551284117635/Capture_decran_2025-12-04_225842.png?ex=695c5609&is=695b0489&hm=268afa259ffbf57098e3b97e845e7309ae5c5a5eac1d8ca168b4d2a860151cef&"
+          ],
           "videos": []
         },
         {
-          "text": "The ElizaOS ecosystem includes a cloud platform where developers can deploy their agents in containers. The platform provides logging capabilities, which have recently been improved with a new linter for logs that warns developers if their logs are in the wrong format.",
+          "text": "Community discussions covered various topics including Hyperscape development, ElizaOS price movements, and project updates. Users inquired about a Hyperscape channel, learning there is a developer Discord currently only for developers working on the project. Shaw was noted interacting with Sterling on Twitter. DegenAI continues to be updated with Odilitime working on development. A user asked about discussions with Twitter to unban the DegenAI main account. Community members shared optimism about ElizaOS reaching higher price targets, with some hoping for drops to accumulate more tokens.",
+          "sources": [
+            "https://discord.com/channels/1253563208833433701/1253563209462448241"
+          ],
+          "images": [
+            "https://pbs.twimg.com/media/G9weDNaasAcpdCj.jpg:large",
+            "https://pbs.twimg.com/amplify_video_thumb/1993744265105588225/img/sySiJmYRjdcV8qwh.jpg:large",
+            "https://pbs.twimg.com/media/G9w9qxAasAE3r2x.jpg:large"
+          ],
+          "videos": [
+            "https://cdn.discordapp.com/attachments/1253563209462448241/1457224445474115869/snaptik_7590462424902290696_v2.mp4?ex=695be245&is=695a90c5&hm=fa023e16fe682c83f1b6ae8d1a33b69f2166f14e9a7dc463e18d4ac40f979996&"
+          ]
+        },
+        {
+          "text": "Technical issues and solutions were discussed. A developer reported that the Discord plugin version 1.3.4 failed to publish and is now at version 1.3.5, while working to ensure their agent functions properly on Discord before installing other plugins. Another developer asked about adding knowledge and lore sections to the new JSON format like in previous versions. The core development team suggested an Eliza-owned crash course on agentic AI as a lead funnel for cloud services.",
           "sources": [
             "https://discord.com/channels/1253563208833433701/1300025221834739744",
             "https://discord.com/channels/1253563208833433701/1377726087789940836"
           ],
           "images": [
-            "https://cdn.discordapp.com/attachments/1377726087789940836/1456922351416512554/Screenshot_2026-01-03_at_12.08.56_PM.png?ex=695ac8ec&is=6959776c&hm=75d3d8e4d1feecfab74247f879aefeb96bb8c3dda5077ddd2925adaa72ad71cf&"
-          ],
-          "videos": []
-        },
-        {
-          "text": "Developers can use multiple AI models within a single agent. For example, one user asked about implementing both Anthropic and OpenAI models in one agent, determining which model to use for specific tasks like calculation, forecasting, and reasoning.",
-          "sources": [
-            "https://discord.com/channels/1253563208833433701/1300025221834739744"
-          ],
-          "images": [],
-          "videos": []
-        },
-        {
-          "text": "There are some skeptical voices in the community questioning the value and longevity of ElizaOS. One user expressed concern that it might become outdated as 'AI agents become closer to classical ML POMDP agents.' However, supporters emphasize that the team is continuously working to improve the framework.",
-          "sources": [
-            "https://discord.com/channels/1253563208833433701/1300025221834739744"
-          ],
-          "images": [],
-          "videos": []
-        },
-        {
-          "text": "ElizaOS appears to be gaining traction in the market. According to a tweet shared in the Discord, ElizaOS was listed among the 'TOP 5 SOLANA RUNNERS OVER THE LAST 24 HOURS (MINIMUM $5M MCAP)'. Community members are optimistic about its future growth, with some speculating about potential price increases.",
-          "sources": [
-            "https://discord.com/channels/1253563208833433701/1253563209462448241"
-          ],
-          "images": [
-            "https://pbs.twimg.com/media/G9weDNaasAcpdCj.jpg:large"
-          ],
-          "videos": []
-        },
-        {
-          "text": "ElizaOS is also being used in gaming contexts. A tweet shared in the Discord mentioned that 'Agents in Hyperscape can now train combat autonomously, with zero human input' powered by ElizaOS.",
-          "sources": [
-            "https://discord.com/channels/1253563208833433701/1253563209462448241"
-          ],
-          "images": [
-            "https://pbs.twimg.com/amplify_video_thumb/1993744265105588225/img/sySiJmYRjdcV8qwh.jpg:large"
+            "https://cdn.discordapp.com/attachments/1300025221834739744/1457058578450874439/discord.png?ex=695a9f0b&is=69594d8b&hm=0e974180eb23656309d9e8e7abd339613211cf91f74acfaf4ff3f8a45e99feeb&",
+            "https://opengraph.githubassets.com/3a22d4c914717f8749dd5cdd7eaf1498cd383518d950ab6ec78fd94f5e241b47/aishwaryanr/awesome-generative-ai-guide"
           ],
           "videos": []
         }
@@ -83,17 +89,65 @@
       "topic": "discordrawdata"
     },
     {
-      "title": "Recent GitHub Issues for elizaOS/eliza",
+      "title": "ElizaOS User Interface Issues and Feature Requests",
       "content": [
         {
-          "text": "Two recent issues have been reported in the elizaOS/eliza GitHub repository:\n\n1. Issue #6318: Scroll should work on whole page - This issue, reported by user borisudovicic, suggests that scrolling functionality should be implemented across the entire page rather than being limited to certain sections.\n\n2. Issue #6317: Connect wallet should ideally go straight to wallet options - Also reported by borisudovicic, this issue recommends improving the wallet connection flow by taking users directly to wallet options instead of requiring additional steps.",
+          "text": "User borisudovicic has reported multiple UI/UX issues and feature requests for the ElizaOS Eliza project. The scrolling functionality is currently limited and should be extended to work on the whole page instead of being restricted to specific sections.",
           "sources": [
-            "https://github.com/elizaOS/eliza/issues/6318",
+            "https://github.com/elizaOS/eliza/issues/6318"
+          ],
+          "images": [
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/issues/6318"
+          ],
+          "videos": []
+        },
+        {
+          "text": "The wallet connection flow needs improvement. Currently, the connect wallet feature should ideally navigate users directly to wallet options rather than requiring additional steps.",
+          "sources": [
             "https://github.com/elizaOS/eliza/issues/6317"
           ],
           "images": [
-            "https://opengraph.githubassets.com/1/elizaOS/eliza/issues/6318",
             "https://opengraph.githubassets.com/1/elizaOS/eliza/issues/6317"
+          ],
+          "videos": []
+        },
+        {
+          "text": "There is a refresh issue with conversation deletion. When a user deletes a conversation, the page needs to be manually refreshed for the conversation to actually show as deleted, indicating a lack of real-time UI updates.",
+          "sources": [
+            "https://github.com/elizaOS/eliza/issues/6322"
+          ],
+          "images": [
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/issues/6322"
+          ],
+          "videos": []
+        },
+        {
+          "text": "A feature request has been made for agent following functionality, which would allow users to follow specific agents within the platform.",
+          "sources": [
+            "https://github.com/elizaOS/eliza/issues/6321"
+          ],
+          "images": [
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/issues/6321"
+          ],
+          "videos": []
+        },
+        {
+          "text": "A terminology change has been requested to change the word Chat to Talk throughout the interface for better user experience and consistency.",
+          "sources": [
+            "https://github.com/elizaOS/eliza/issues/6320"
+          ],
+          "images": [
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/issues/6320"
+          ],
+          "videos": []
+        },
+        {
+          "text": "The agent sorting feature is currently not functioning properly, preventing users from organizing agents according to their preferences.",
+          "sources": [
+            "https://github.com/elizaOS/eliza/issues/6319"
+          ],
+          "images": [
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/issues/6319"
           ],
           "videos": []
         }
@@ -101,12 +155,13 @@
       "topic": "issue"
     },
     {
-      "title": "elizaos/eliza GitHub Activity (Jan 3-4, 2026)",
+      "title": "elizaos/eliza Repository Activity Summary",
       "content": [
         {
-          "text": "Between January 3-4, 2026, the elizaos/eliza repository showed moderate activity with 1 new pull request (which was merged), 2 new issues opened, and contributions from 4 active developers during this period.",
+          "text": "Between January 3rd and January 5th, 2026, the elizaos/eliza repository showed moderate development activity. On January 3-4, there was 1 new pull request which was successfully merged, 2 new issues were opened, and 4 contributors were active. The following day, January 4-5, activity shifted with no new pull requests or merges, but issue reporting increased to 4 new issues, while active contributors decreased slightly to 3. Overall, the two-day period saw 1 merged PR, 6 new issues total, and sustained contributor engagement.",
           "sources": [
-            "text: From 2026-01-03 to 2026-01-04, elizaos/eliza had 1 new PRs (1 merged), 2 new issues, and 4 active contributors."
+            1,
+            2
           ],
           "images": [],
           "videos": []
@@ -115,11 +170,28 @@
       "topic": "github_summary"
     },
     {
-      "title": "PR #6316: Fix for SQL Plugin's SET LOCAL Parameterization",
+      "title": "ElizaOS Project Development Summary - January 3-4, 2026",
       "content": [
         {
-          "text": "GitHub pull request #6316 addresses an issue in the SQL plugin where SET LOCAL commands were being incorrectly parameterized. The fix implements the use of sql.raw() for SET LOCAL commands to avoid parameterization issues. This change was submitted by GitHub user 0xbbjoker to the elizaOS/eliza repository.",
-          "sources": "https://github.com/elizaOS/eliza/pull/6316",
+          "text": "Over January 3-4, 2026, the ElizaOS project made progress on core service optimization while identifying multiple UI/UX and functionality issues requiring attention. On January 3rd, development focused on optimizing the default-message-service in elizaos/eliza to improve provider handling in MultiStep mode for faster internal execution without changing functionality. A pull request was opened to fix a parameterization problem in the plugin-sql component using sql.raw() for SET LOCAL operations. New issues were identified regarding user experience, including the need for the Connect wallet action to lead directly to wallet options and extending scrolling functionality to the entire page for better navigation. On January 4th, no new code was contributed or merged, but the team focused on documenting improvement areas. Several new issues were opened concerning agent interaction, UI/UX consistency, and conversation management, including problems with agent sorting functionality, the inability to easily re-find agents after closing chats (suggesting a need for bookmarking features), a request to change Chat terminology to Talk for consistency, and a bug requiring page refresh for deleted conversations to disappear visually.",
+          "sources": [
+            "https://elizaos.github.io/api/summaries/overall/day/2026-01-03.json",
+            "https://elizaos.github.io/api/summaries/overall/day/2026-01-04.json"
+          ],
+          "images": [],
+          "videos": []
+        }
+      ],
+      "topic": "github_other"
+    },
+    {
+      "title": "Pull Request #6316: SQL Plugin Fix for SET LOCAL Parameterization",
+      "content": [
+        {
+          "text": "Pull Request #6316 submitted by 0xbbjoker addresses a fix in the SQL plugin for the elizaOS/eliza project. The fix modifies the plugin to use sql.raw() for SET LOCAL commands to avoid parameterization issues. This change ensures that SET LOCAL statements are executed correctly without being treated as parameterized queries, which could cause errors or unexpected behavior in SQL operations.",
+          "sources": [
+            "https://github.com/elizaOS/eliza/pull/6316"
+          ],
           "images": [
             "https://opengraph.githubassets.com/1/elizaOS/eliza/pull/6316"
           ],
@@ -129,10 +201,10 @@
       "topic": "pull_request"
     },
     {
-      "title": "Refactoring Default Message Service: Optimizing Provider Handling in MultiStep",
+      "title": "Refactor: Optimize Provider Handling in MultiStep",
       "content": [
         {
-          "text": "A pull request (#6263) was submitted to the elizaOS/eliza repository to refactor the default message service. The refactoring specifically focused on optimizing provider handling in the MultiStep component. This change aims to improve the efficiency and performance of how providers are managed within the MultiStep implementation.",
+          "text": "A refactoring effort has been completed to optimize provider handling in the MultiStep component of the default-message-service. This work was submitted as Pull Request #6263 to the elizaOS/eliza repository on GitHub.",
           "sources": [
             "https://github.com/elizaOS/eliza/pull/6263"
           ],
@@ -141,20 +213,6 @@
         }
       ],
       "topic": "completed_items"
-    },
-    {
-      "title": "Top Contributors for elizaOS/eliza",
-      "content": [
-        {
-          "text": "The provided source only mentions 'Top contributors for elizaOS/eliza' without providing any specific details about who these contributors are or what contributions they have made to the elizaOS/eliza project. Without additional information, it's not possible to provide a detailed summary of the top contributors, their contributions, or their impact on the project.",
-          "sources": [
-            "text: Top contributors for elizaOS/eliza"
-          ],
-          "images": [],
-          "videos": []
-        }
-      ],
-      "topic": "contributors"
     }
   ],
   "date": 1767398400
