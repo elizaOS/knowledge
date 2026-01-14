@@ -1,130 +1,103 @@
-# elizaOS Discord - 2026-01-12
+# elizaOS Discord - 2026-01-13
 
 ## Overall Discussion Highlights
 
-### ElizaOS Tokenomics and Future Utility
+### Strategic Development Priorities
 
-The community engaged in extensive discussion about ElizaOS token value and utility. **DorianD** provided comprehensive analysis explaining that token value depends on the Jeju network becoming operational, where ElizaOS will serve as gas fees for AI agents. The adoption pathway outlined includes: (1) Jeju network launch, (2) developers building agents that consume elizaos for gas, and (3) integration of advertising networks to subsidize users. DorianD compared this model to Ethereum's growth, noting that Ethereum succeeded because developers used ERC-20 templates to launch projects, creating organic demand.
+The core development team made a **critical strategic decision** to deprioritize v2.0.0 work entirely and focus exclusively on cloud improvements. Borko provided clear direction to concentrate all development efforts on cloud infrastructure rather than the v2.0.0 branch, representing a significant shift in project priorities.
 
-Community sentiment reflected concerns about price decline and lack of major exchange listings (Coinbase, Binance). DorianD argued against VC-backed pump models, stating serious investors would only enter if they believe ElizaOS becomes the dominant decentralized AI agent network with sufficient demand from ICOs or advertising revenue.
+Stan outlined current development work spanning multiple areas:
+- Monorepo improvements and architecture refinement
+- Test architecture review on cloud (specifically Joker's PR)
+- Plugin-sql migration simplification investigation
+- Top-up credit idempotency fixes on cloud
+- Creating comprehensive plans for cloud and monorepo improvements
 
-### ElizaCloud App Creator Development
+### Technical Infrastructure Issues
 
-Significant technical discussion centered on debugging ElizaCloud's new "app creator" feature, currently in early testing phase. **DorianD** extensively tested the feature and reported multiple critical issues:
+**GitHub Workflow Authentication Problem**: Odilitime encountered persistent issues with the claude-review.yml workflow file, receiving 401 Unauthorized errors during OIDC token exchange. The error indicates workflow file validation failures, suggesting the file content doesn't match the repository's default branch version, even after implementing a new key.
 
-- **Build system failures**: Operations timing out at 300s without proper error catching
-- **Logging problems**: Console logs showing minimal useful information with empty run_command outputs
-- **Git integration issues**: Commits managed automatically at end of state executions, but manual git commands through AI agent causing state corruption
-- **Sandbox limitations**: 5 sandbox sessions per hour limit causing issues when users restart builds
-- **File visibility bugs**: Files tab intermittently showing/hiding files
-- **Context awareness**: AI agent not consistently accessing full codebase context
+**Twitter Spaces Audio Issues**: The community reported ongoing technical problems with Twitter Spaces, with audio disconnection issues persisting for approximately 3 months. Community members identified workarounds: desktop versions are buggy while mobile (particularly iOS) works more reliably for hosting spaces.
 
-**cjft** explained the architecture: agents have file read/write, check_build, and bash tools. Commits auto-trigger after file update batches, with GitHub auto-deploying via Vercel CI. The system uses whitelisted commands to prevent users from breaking repositories. The target audience is non-technical users ("tiktokers"), requiring guardrails.
+### Knowledge Management & Plugin Development
 
-Solutions discussed include adding a stop button for runaway agents, implementing better logging toggles, adding proper git tools instead of relying on bash, implementing product manager-style requirements gathering, and adding console CLI access for direct commands.
+**Knowledge Upload Process**: 0xbbjoker provided comprehensive instructions for uploading knowledge to the Eliza OS monorepo:
+1. Link the CLI package: `cd packages/cli && bun link && cd ../project-starter`
+2. Add `@elizaos/plugin-knowledge` to the plugins list in `eliza/packages/project-starter/src/character.ts`
+3. Create docs directory in `eliza/packages/project-starter` and add documentation
+4. Run with debug logging: `LOG_LEVEL=debug elizaos start`
 
-### Infrastructure and CI/CD Issues
+**Global Facts Management**: ballofrain successfully implemented a custom solution for global facts management by modifying plugin-bootstrap to search facts without roomId constraints and adding a POST route for creating new memories. This approach involved working directly with plugin-bootstrap rather than creating a custom provider.
 
-The core development team addressed a critical infrastructure issue: an expired `ANTHROPIC_API_KEY` in GitHub Actions causing CI job failures for Claude code analysis in the monorepo. **Stan** identified the issue and **Borko** resolved it by creating a separate key for CI/CD. The fix was applied to the monorepo but not to elizaos-plugins organization due to permission limitations.
+### Community Projects & Partnerships
 
-**Odilitime** investigated whether elizaos-plugins needed the update but determined no Claude code review workflow existed in that repository, making the key update unnecessary.
+**ElizaBAO Clarification**: Multiple community members sought verification about ElizaBAO, a community-created agent that became a Polymarket affiliate. Odilitime and sb clarified that ElizaBAO is a community member's project, not an official ElizaOS product, and that no agents were created by the official team. This highlighted the need for better documentation distinguishing official vs community-created agents.
 
-### OAuth Relay Infrastructure Planning
+**Comput3 Partnership**: Odilitime confirmed that Comput3 ($COM) is partnered with ElizaOS and they collaborate on certain projects, describing Comput3 as "dope."
 
-A significant planning discussion involved **Vivek's** proposal for hosting an OAuth relay for plugin-twitter. The relay would be hosted at twitter-broker.elizaos.ai, use PostgreSQL, and handle OAuth callbacks. **Shaw** confirmed that cloud infrastructure already has APIs for this functionality, with the cloud acting as the callback endpoint. The team agreed to host the broker service, with Vivek providing code for audit. This appears to be a temporary solution, as Shaw mentioned oauth3 in "jeju" as the future implementation.
+### Research & Innovation
 
-### Performance Optimization Discussions
+**Recursive Language Models**: DorianD shared an academic paper on Recursive Language Models (RLMs), presenting a novel inference strategy that allows LLMs to process prompts beyond their context windows by treating long prompts as external environments and recursively calling themselves on prompt snippets. The approach reportedly handles inputs up to two orders of magnitude beyond model context windows.
 
-**cjft** suggested exploring Rust runtime for serverless functions in Eliza 2.0 for performance optimization. **Shaw** clarified that runtime overhead is minimal compared to API, network, and database latency, noting that Bun already provides Rust-level performance. Shaw also mentioned having workerd with Bun in "jeju" and considered submitting a PR to Cloudflare, which **Odilitime** encouraged.
+### Community Initiatives
 
-### Dynamic Facts API Challenge
-
-**ballofrain** sought help adding dynamic facts to agents without restarting, trying multiple approaches: knowledge files (not loading), Sessions API (creates messages not facts), and Memory API (POST endpoint doesn't exist). **Odilitime** suggested adding plugin-knowledge to agent plugins, but ballofrain encountered module resolution errors, leaving this issue partially unresolved.
+**News Show Rebranding**: Jin solicited community input for naming a news show to replace the placeholder "AI News." Community suggestions included: Breaking Bits, Walter Street, News Wif Hat, AI News Network, Cron Job, Context Crunch, Slopline, Boomberg, and Choomberg.
 
 ## Key Questions & Answers
 
-**Q: Is the app creator in elizacloud still buggy?** (asked by DorianD)  
-**A:** It's a new feature introduced for teams to test, no concentrated marketing yet. Building in production. (answered by Kenk)
+**Q: Is Comput3 or $COM partnered with ElizaOS?**  
+A: Yes, Comput3 is partnered and they work together on some things (answered by Odilitime)
 
-**Q: What are these "apps" supposed to be for? Can they interface with agents?** (asked by DorianD)  
-**A:** Should work yes, but the "app kit" isn't finished and guardrails will be added. Apps are meant for making money, not just X posting. (answered by cjft)
+**Q: Is ElizaBAO a real Polymarket affiliate?**  
+A: Yes, see confirmation on their Twitter (answered by ElizaBAO)
 
-**Q: How do I save my work? I don't see a save button.** (asked by DorianD)  
-**A:** Agent doesn't have ability to save from user request yet. It's done automatically after batch of file updates, each is a commit. Save !== deploy. (answered by cjft)
+**Q: Is ElizaBAO an official in-house agent?**  
+A: No, it's a community member's project. No agents were created by the official TEAM (answered by sb and Odilitime)
 
-**Q: Can I access the console to type commands?** (asked by DorianD)  
-**A:** Not currently available, but good idea. Agent has file read, write, check build, bash tools. Could implement sandbox CLI access. (answered by cjft)
+**Q: How do you upload knowledge to the monorepo?**  
+A: Complete process involves: linking CLI package, adding @elizaos/plugin-knowledge to plugins list in character.ts, creating docs directory in project-starter package, and running with LOG_LEVEL=debug elizaos start (answered by 0xbbjoker)
 
-**Q: Should users ever have to type git commit commands?** (asked by cjft)  
-**A:** No, target users are non-technical (tiktokers), so proper git tools should be added to AI agent instead. (answered by cjft)
-
-**Q: Did you renew the ANTHROPIC_API_KEY from Github actions?** (asked by Stan ⚡)  
-**A:** Borko created a separate key for CI/CD to fix the issue. (answered by Borko)
-
-**Q: Can the OIDC transfer from cloud?** (asked by Odilitime)  
-**A:** Yes, the cloud becomes the callback. (answered by shaw)
-
-**Q: Should i make a PR to cloudflare?** (asked by shaw)  
-**A:** Odilitime encouraged seeing what initial review says. (answered by Odilitime)
-
-**Q: Waiting for team to do what?** (asked by Biazs)  
-**A:** Maybe to pump the price or more listings on big exchanges like coinbase and binance spot. (answered by Mo 1990)
+**Q: Do you read facts from custom provider?**  
+A: No, modified plugin-bootstrap directly, not a custom provider (answered by ballofrain)
 
 ## Community Help & Collaboration
 
-**Kenk** helped **DorianD** understand the app creator feature status, explaining it's a new feature for team testing, not yet marketed, and requested error messages be shared in channel instead of Twitter replies or DMs.
+**Knowledge Upload Guidance**: 0xbbjoker provided comprehensive step-by-step instructions to the community for uploading knowledge to the Eliza OS monorepo, including CLI linking, plugin configuration, directory setup, and debug execution.
 
-**cjft** extensively assisted **DorianD** with multiple app creator issues:
-- Clarified apps should interface with agents but app kit isn't finished, with guardrails coming
-- Explained commits are managed automatically at end of state executions, can restore from history tab
-- Identified that manual commits through AI not designed yet, history/state borked, recommended starting fresh app
+**Partnership Clarification**: Odilitime helped shadowforceone by confirming Comput3's partnership status and collaboration with ElizaOS.
 
-**Borko** helped **Stan ⚡** resolve the expired ANTHROPIC_API_KEY causing CI job failures by creating a separate API key for CI/CD.
+**Agent Legitimacy Verification**: sb and Odilitime assisted anon and 8Obito_Uchiha8 by clarifying that ElizaBAO is a community project, not an official team creation, helping prevent confusion about project relationships.
 
-**shaw** helped **cjft** understand performance optimization, clarifying that runtime overhead is minimal and latency comes from APIs, network, and DB rather than runtime choice.
+**Twitter Spaces Troubleshooting**: cjft and sedano.npc helped Alexei resolve Twitter Spaces audio disconnection issues by suggesting mobile platforms (particularly iOS) work more reliably than desktop versions.
 
-**shaw** helped **Odilitime** understand OAuth relay hosting and OIDC transfer capabilities, confirming cloud can act as callback endpoint and APIs already exist.
+**Development Prioritization**: Borko provided clear strategic direction to Stan regarding development priorities, instructing to deprioritize v2.0.0 completely and focus on cloud improvements.
 
-**Odilitime** helped **shaw** overcome hesitation about submitting PR to Cloudflare, encouraging submission to see initial review feedback.
+**Issue Troubleshooting**: Stan attempted to help 0xbbjoker diagnose an unspecified technical issue by requesting retry attempts and investigating recent changes.
 
-**Odilitime** attempted to help **ballofrain** add facts dynamically to agents, suggesting adding plugin-knowledge to agent's plugins (partial resolution, ballofrain encountered module errors).
-
-**Odilitime** helped **AlphaDev** with migration issues by directing them to the correct support channel.
+**Implementation Approach Confirmation**: 0xbbjoker confirmed ballofrain's approach of modifying plugin-bootstrap directly for facts management implementation.
 
 ## Action Items
 
 ### Technical
 
-- Update ANTHROPIC_API_KEY secret in elizaos-plugins organization if needed (mentioned by Stan ⚡)
-- Submit PR to Cloudflare for workerd with Bun integration (mentioned by shaw)
-- Host OAuth relay for plugin-twitter at twitter-broker.elizaos.ai (mentioned by Odilitime)
-- Audit code for twitter-broker OAuth relay when Vivek provides it (mentioned by Odilitime)
-- Set up PostgreSQL for twitter-broker OAuth relay (mentioned by Odilitime)
-- Launch Jeju network for AI agents to use elizaos as gas fees (mentioned by DorianD)
-- Develop AI agents that consume elizaos tokens on the network (mentioned by DorianD)
-- Integrate advertising networks into agents/apps to subsidize users (mentioned by DorianD)
-- Fix build timeouts after 300s and improve error catching (mentioned by DorianD)
-- Fix serverside caching issue on app side after deployment (mentioned by DorianD)
-- Fix file visibility issue where Files tab intermittently shows/hides files (mentioned by DorianD)
-- Improve agent context awareness to parse entire repo like Cursor does (mentioned by DorianD)
-- Fix sandbox session limit issues (5 per hour) when users restart builds (mentioned by DorianD)
-- Implement better reporting structure and prioritize production errors (mentioned by cjft)
-- Fix plugin-knowledge module resolution error preventing installation (mentioned by ballofrain)
-- Implement POST endpoint for Memory API to add memories dynamically (mentioned by ballofrain)
+- **Fix claude-review.yml workflow file** - Resolve OIDC token exchange failing with 401 Unauthorized due to workflow validation failure (Mentioned by: Odilitime)
 
-### Feature
+- **Implement real improvements for the monorepo** - General monorepo architecture and functionality enhancements (Mentioned by: Stan ⚡)
 
-- Listings on major exchanges like Coinbase and Binance spot (mentioned by Mo 1990)
-- Add stop button to manually halt agent execution when it runs off in weird directions (mentioned by DorianD)
-- Implement toggle for better logging in console with more useful output (mentioned by DorianD)
-- Add proper git tools to AI agent instead of relying on bash commands (mentioned by cjft)
-- Implement console CLI access for users to type commands directly (ls -la, etc) in sandbox (mentioned by cjft)
-- Make assistant act more like product manager doing requirements gathering rather than just VP engineering/dev (mentioned by DorianD)
-- Allow users to pick or provide methodologies (like Claude code workflows) for LLM to implement and guide users through (mentioned by DorianD)
-- Make templates more varied instead of all using same sandbox template starter (mentioned by cjft)
-- Add ability for agent to save from user request (mentioned by cjft)
-- Consider open sourcing ElizaCloud platform for community contributions with bounties (mentioned by cjft)
+- **Simplify plugin-sql migrations** - Investigate and implement simplification of plugin-sql migration processes (Mentioned by: Stan ⚡)
+
+- **Create clearer plan for cloud X monorepo improvements** - Develop comprehensive plan for meaningful cloud and plugin-sql improvements (Mentioned by: Stan ⚡)
+
+- **Focus on cloud improvements** - Deprioritize v2.0.0 completely and concentrate exclusively on improving everything for cloud (Mentioned by: Borko)
+
+- **Update plugin-bootstrap for global facts** - Modify to search global facts with no roomId and add POST route for creating new memories (Mentioned by: ballofrain)
 
 ### Documentation
 
-- Document how to properly add dynamic facts to agents via API (mentioned by ballofrain)
+- **Document knowledge upload process** - Create documentation for monorepo knowledge upload including CLI linking, plugin configuration, and docs directory setup (Mentioned by: 0xbbjoker)
+
+- **Clarify official vs community-created agents** - Prevent confusion about ElizaBAO and similar projects by clearly documenting which agents are official vs community-created (Mentioned by: anon, Odilitime)
+
+### Feature
+
+- **News show rebranding** - Select new name from community suggestions to replace "AI News" placeholder (Mentioned by: jin)
