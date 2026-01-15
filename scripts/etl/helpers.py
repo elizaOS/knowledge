@@ -28,6 +28,7 @@ from datetime import datetime, timedelta, timezone
 from calendar import monthrange
 from collections import defaultdict, Counter
 from typing import Optional
+from string import Template
 
 # Load environment variables from .env if available (for local testing)
 try:
@@ -713,8 +714,9 @@ def generate_llm_analysis(profiles: dict, network_stats: dict, month_name: str, 
         logging.error("Help analysis prompt template not found")
         return None
 
-    # Interpolate variables into prompt
-    prompt = prompt_template.format(
+    # Interpolate variables into prompt using Template (safe for JSON in template)
+    template = Template(prompt_template)
+    prompt = template.substitute(
         north_star=north_star,
         month_name=month_name,
         profiles_json=json.dumps(simplified_profiles, indent=2)[:15000],
