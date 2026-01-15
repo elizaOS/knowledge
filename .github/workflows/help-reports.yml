@@ -1,0 +1,113 @@
+name: Monthly Help Reports
+
+on:
+  schedule:
+    # 2nd of each month at 04:00 UTC (after monthly retro)
+    - cron: '0 4 2 * *'
+  workflow_dispatch:
+    inputs:
+      month:
+        description: 'Month (1-12, empty = previous month)'
+        required: false
+        type: string
+      year:
+        description: 'Year (YYYY, empty = auto)'
+        required: false
+        type: string
+      backfill:
+        description: 'Backfill mode (process all historical months)'
+        required: false
+        type: boolean
+        default: false
+
+concurrency:
+  group: knowledge-repo-writes
+  cancel-in-progress: false
+
+jobs:
+  generate-help-report:
+    if: github.event_name == 'workflow_dispatch' && inputs.backfill != true || github.event_name == 'schedule'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - run: git pull --rebase origin main || true
+
+      - name: Setup Python environment
+        uses: ./.github/actions/setup-python-env
+        with:
+          python-version: '3.12'
+          packages: 'requests networkx'
+
+      - name: Extract Help Interactions
+        run: |
+          ARGS=""
+          [ -n "${{ inputs.year }}" ] && ARGS="$ARGS -y ${{ inputs.year }}"
+          [ -n "${{ inputs.month }}" ] && ARGS="$ARGS -m ${{ inputs.month }}"
+          python scripts/etl/helpers.py extract $ARGS
+
+      - name: Generate Monthly Help Report
+        env:
+          OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
+        run: |
+          ARGS=""
+          [ -n "${{ inputs.year }}" ] && ARGS="$ARGS -y ${{ inputs.year }}"
+          [ -n "${{ inputs.month }}" ] && ARGS="$ARGS -m ${{ inputs.month }}"
+          python scripts/etl/helpers.py analyze $ARGS
+
+      - uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "Automated: Generate monthly help report"
+          file_pattern: "the-council/help-reports/*.json hackmd/helpers/*.md"
+          commit_user_name: "github-actions[bot]"
+          commit_user_email: "github-actions[bot]@users.noreply.github.com"
+
+      - name: Alert on failure
+        if: failure()
+        uses: ./.github/actions/alert-failure
+        with:
+          webhook-url: ${{ secrets.ALERT_WEBHOOK_URL }}
+          workflow-name: 'Monthly Help Report'
+
+  backfill-historical:
+    if: github.event_name == 'workflow_dispatch' && inputs.backfill == true
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - run: git pull --rebase origin main || true
+
+      - name: Setup Python environment
+        uses: ./.github/actions/setup-python-env
+        with:
+          python-version: '3.12'
+          packages: 'requests networkx'
+
+      - name: Backfill All Historical Months
+        env:
+          OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
+        run: |
+          # Process all months from 2025-01 through previous month
+          python scripts/etl/helpers.py backfill
+
+      - uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "Automated: Backfill historical help reports"
+          file_pattern: "the-council/help-reports/*.json hackmd/helpers/*.md"
+          commit_user_name: "github-actions[bot]"
+          commit_user_email: "github-actions[bot]@users.noreply.github.com"
+
+      - name: Alert on failure
+        if: failure()
+        uses: ./.github/actions/alert-failure
+        with:
+          webhook-url: ${{ secrets.ALERT_WEBHOOK_URL }}
+          workflow-name: 'Help Reports Backfill'

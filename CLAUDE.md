@@ -56,6 +56,11 @@ python scripts/etl/generate-quarterly-summary.py -y 2025 -q 4
 # Generate RSS feeds
 python scripts/etl/generate-rss.py
 
+# Help-reports ETL pipeline (unified script with subcommands)
+python scripts/etl/helpers.py extract -y 2025 -m 12  # Extract interactions
+python scripts/etl/helpers.py analyze -y 2025 -m 12  # Generate reports
+python scripts/etl/helpers.py backfill                # Backfill historical
+
 # Create new HackMD notes for prompts
 python scripts/integrations/hackmd/create.py [-b BOOK_PERMALINK] [-i LOCAL_DIR_PATH]
 
@@ -197,6 +202,7 @@ The `scripts/prompts/` directory contains LLM interaction templates:
 - Check error handling for API calls
 - Maintain backward compatibility with existing JSON structures
 - Follow the established naming conventions (kebab-case for files)
+- **Script Independence Pattern**: Scripts intentionally duplicate some utility code (date handling, LLM calls) to maintain operational isolation. This is a feature, not a bug - it prevents coupling and simplifies debugging in production. Changes to one script cannot break others. When you see duplicated functions across scripts, this is by design for the daily batch pipeline architecture.
 
 ### When Adding New Data Sources
 1. Update sync workflows in `.github/workflows/sync.yml`
