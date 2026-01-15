@@ -1,60 +1,88 @@
-# ElizaOS Daily Report - January 11, 2026
+# Daily Report - January 9, 2026
 
-## Platform Expansion and Capabilities
+## Community Engagement
 
-Shaw demonstrated significant progress expanding Eliza's capabilities beyond crypto applications. Demonstrations showed Eliza functioning as a bot, reinforcement learning agent, in-game NPC, and opponent. Eliza was shown managing Claude Code instances autonomously, handling task management without conversation management. Agents were demonstrated successfully performing in-game tasks such as chopping wood.
+### Social Interactions
+- Community members engaged in morning greetings and personal conversations
+- Users discussed topics including hairline recession, shaving heads, and everyday life anecdotes
+- One user shared excitement about playing Runescape again
+- Philosophical discussions took place covering influence, consequences, societal issues, trust, action and reaction, and power dynamics
 
-## Contributor Leaderboard System
+### Mental Health Technology Discussion
+- Community members discussed Behavidence and their AI algorithm Dopa One
+- Shared information about technology that monitors and detects fluctuations in brain dopamine levels using mobile phones and wearable devices
+- Technology provides digital behavior similarity scores for ADHD, Depression, and Anxiety
+- Community suggested integrating mental health monitoring into future ElizaOS Phone applications
+- Research papers and app links were shared for reference
 
-Jin announced new features for the contributor leaderboard system. A beta feature for lifetime summarization was added to provide full history context when the AI council reviews contributor names and progress. The feature is now available in the API. Improvements to the Jedai council system were announced, with plans to resume operations with enhanced functionality.
+## Events and Announcements
 
-## Avatar Generation
+### Twitter Space Event
+- Announced upcoming Twitter Space scheduled for Tuesday January 13th at 7pm UTC
+- Event to be hosted with Solana Foundation, PayAI, and Quantu
+- Focus on deep diving into 8004 and discussing utilization by Eliza Cloud
+- Community members encouraged to set reminders
 
-AI-generated avatars were created for team members including Stan, sam, Neodotneo, 0xbbjoker, Agent Joshua, and Odilitime. A low poly mode was discovered for the avatar generation system.
+## Technical Development
 
-## Repository Updates - elizaos.github.io
+### Plugin Development
+- Developer sought collaboration for converting ElizaOS plugins into skills for interoperability with ElizaOS and other agent tools
+- Plan involves testing with popular plugins like Discord and blockchain plugins
+- Skill structure consists of folder with markdown instructions and tools in scripts for deterministic behavior
+- Developer shared experience building skill factory for specialized workflows involving PDF manipulation and filesystem operations
+- Discussed challenges with getting Claude to use skills without explicit instruction, with solutions involving hooks
 
-GitHub Actions dependencies were updated:
-- actions/configure-pages upgraded from v4 to v5
-- actions/checkout upgraded from v4 to v6
-- actions/upload-pages-artifact upgraded from v3 to v4
+### ElizaCloud Platform
+- Users confirmed ElizaCloud app creator functionality working as early feature
+- Some users experienced operation failures
+- Questions raised about billing pages and credit top-up capabilities
+- Developer shared GitHub repository for deepface, a lightweight face recognition and facial attribute analysis library for Python
 
-Core dependencies were upgraded:
-- drizzle-orm updated from version 0.41.0 to 0.45.1
-- lucide-react updated
+### Core Development Activities
+- Discussion centered on MiniMax M2 and its interleaved thinking approach for long-running tasks
+- Developer shared documentation about agent generalization and rethinking alignment
+- Team discussed converting ElizaOS plugins into skills with focus on making them Claude-friendly and deterministic
+- Developer successfully set up VPS running Claude code with Kimi K2 and access via Happy on iOS
 
-Multiple issues were closed including deployment testing documentation, rate limit mitigation efforts, and summary format extension proposals.
+### Eliza 2.0 Plans
+- Shaw announced plans for Eliza 2.0 in TypeScript, Rust, and Python with FFI plugin interop between languages
+- New version will have no API, no server, no CLI, and no projects
+- Will feature extremely Claude-friendly documented runtime with same abstractions in 3 languages
+- Will include examples for common use cases
+- Shaw confirmed having already ported it with branch available
 
-## Repository Updates - eliza
+### Leaderboard Updates
+- Developer announced exciting updates coming to ElizaOS leaderboard
+- Mentioned writing blog post as follow-up to The Meritverse article about digital threads and net credentials
 
-### Performance Optimization
+## ElizaOS Repository Progress
 
-Runtime initialization was optimized through:
-- Addition of missing checks
-- Removal of redundant lookups
-- Exploration of parallelization for independent operations
+### Plugin Enhancements
+- plugin-twitter repository implemented OAuth2 PKCE authentication for enhanced security
+- Added backward compatibility for 3-legged login and approve Twitter/X authentication
+- plugin-sql package gained Neon serverless database support
+- Improved Row-Level Security (RLS) including fix for pgcrypto extension installation with PGLite
+- Integrated withEntityContext() into RLS tests
+- Added ENABLE_DATA_ISOLATION=true to continuous integration
+- Enabled comprehensive hot reload functionality for backend development
 
-Database queries were improved by:
-- Implementing UPSERT patterns using onConflictDoNothing()
-- Optimizing getEntitiesByIds() to prevent cartesian products
+### Pull Requests Opened
+- elizaos-plugins/registry: PR to add @zane-archer/plugin-aimo-router to registry
+- elizaos/eliza: V2.0.0 PR for new major version release
+- elizaos/eliza: PR to optimize build task inputs in turbo.json
+- elizaos/elizaos.github.io: PR to add MMORPG-style character system to leaderboard API
 
-### UI/UX Improvements
+### Issues Created - User Interface
+- Refining input fields for personality traits and topics of interest by removing '+' button
+- Enhancing visibility and clarity of public/private agent statuses in dashboard
+- Making 'Sign up for free' prompt in agent messages a clickable hyperlink
+- Redirecting users back to previous agent chat session after login/signup
 
-- Display box sizes were standardized
-- Intermittent web search functionality problems were resolved
-- Mobile agent builder updated to default agent names with capital letters
-- Textual content updated for agent edit and agent builder interfaces
-
-### New Development
-
-Two new pull requests were initiated:
-- Core documentation guides
-- Plugin-blockrun for x402 micropayment support
-
-## Community Discussions
-
-DearDaniel led discussions on decentralized systems, emphasizing the value of AI systems that don't depend on centralized data centers. The conversation addressed the evolution of crypto from a political movement focused on technological change.
-
-Jin shared interest in developing a local-first alternative to Claude Code usable across Discord, Telegram, web, and CLI platforms. A link to clawdbot, an open-source personal AI assistant project, was shared.
-
-Community members discussed X platform updates, with news that X will launch built-in price tracking for crypto tokens and stocks directly from the timeline.
+### Issues Created - MMORPG Character System
+- Implementing full Orders and Evolution class tree with progression paths
+- Allowing users to choose evolution path at tier thresholds
+- Tracking class evolution history for rich profile lore display
+- Adding unique visual identity system for each Order
+- Allowing class respec with history preservation for lore purposes
+- Making character class thresholds configurable via config/example.json
+- Extending grouped organization/repository format to day, week, and month summaries
