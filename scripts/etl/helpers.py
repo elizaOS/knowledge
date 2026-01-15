@@ -262,6 +262,11 @@ def parse_help_section(summary: str, channel_name: str, channel_id: str, date_st
         if not helper or not helpee:
             continue
 
+        # Skip if context contains "| Resolution:" - already handled by full pattern
+        # (The no-resolution regex captures everything to EOL, including resolution text)
+        if "| resolution:" in context.lower():
+            continue
+
         # Skip if already matched by full pattern
         if any(i["helper"] == helper and
                i["helpee"] == helpee and
@@ -555,12 +560,6 @@ def generate_contributor_profiles(interactions: list[dict]) -> dict:
         total_resolved = data["resolution_quality"]["successful"] + data["resolution_quality"]["partial"]
         quality_rate = total_resolved / data["total_helps"] if data["total_helps"] > 0 else 0
 
-        impact_score = (
-            data["weighted_helps"] * 5.0 +
-            unique_helpees * 2.0 +
-            quality_rate * 3.0
-        )
-
         final_profiles[username] = {
             "total_helps": data["total_helps"],
             "weighted_helps": round(data["weighted_helps"], 2),
@@ -573,7 +572,6 @@ def generate_contributor_profiles(interactions: list[dict]) -> dict:
                 "unanswered": data["resolution_quality"]["unanswered"],
                 "quality_rate": round(quality_rate, 3)
             },
-            "impact_score": round(impact_score, 2),
             "examples": data["examples"]
         }
 
@@ -701,7 +699,7 @@ def load_help_analysis_prompt() -> str:
 
 def generate_llm_analysis(profiles: dict, network_stats: dict, month_name: str, north_star: str) -> Optional[dict]:
     """Generate multi-perspective analysis using LLM with council member personas."""
-    top_profiles = dict(sorted(profiles.items(), key=lambda x: x[1]["impact_score"], reverse=True)[:20])
+    top_profiles = dict(sorted(profiles.items(), key=lambda x: x[1]["weighted_helps"], reverse=True)[:20])
 
     simplified_profiles = {
         username: {k: v for k, v in data.items() if k != "examples"}
@@ -757,10 +755,11 @@ def generate_llm_analysis(profiles: dict, network_stats: dict, month_name: str, 
 
         result = json.loads(content.strip())
 
-        if not isinstance(result, dict) or "perspectives" not in result or "consensus_ranking" not in result:
-            logging.error("Invalid LLM response structure")
+        if not isinstance(result, dict):
+            logging.error("Invalid LLM response - expected dict")
             return None
 
+        logging.info(f"LLM analysis keys: {list(result.keys())}")
         return result
 
     except Exception as e:
@@ -772,7 +771,7 @@ def generate_markdown_report(report_data: dict) -> str:
     """Generate human-readable markdown report."""
     lines = []
 
-    lines.append(f"# Help Contributors Report: {report_data['month']}")
+    lines.append(f"# Help Analysis Report: {report_data['month']}")
     lines.append(f"\n**Report Period**: {report_data['date_range']['start']} to {report_data['date_range']['end']}")
     lines.append(f"**Generated**: {report_data['_metadata']['generated_at']}")
     lines.append("")
@@ -790,35 +789,76 @@ def generate_markdown_report(report_data: dict) -> str:
         lines.append(f"- **{channel_data['channel']}**: {channel_data['helps']} interactions")
     lines.append("")
 
-    if "consensus_ranking" in report_data and report_data["consensus_ranking"]:
-        lines.append("## Top Contributors")
+    # Problem Patterns
+    if "problem_patterns" in report_data:
+        lines.append("## Problem Patterns")
+        patterns = report_data["problem_patterns"]
+        if isinstance(patterns, list):
+            for pattern in patterns:
+                cat = pattern.get("category", "Unknown")
+                count = pattern.get("count", "?")
+                lines.append(f"\n### {cat} ({count} occurrences)")
+                if pattern.get("examples"):
+                    lines.append("Examples: " + ", ".join(pattern["examples"][:3]))
+                if pattern.get("upstream_signal"):
+                    lines.append(f"\n*Signal*: {pattern['upstream_signal']}")
         lines.append("")
-        for contributor in report_data["consensus_ranking"][:10]:
-            lines.append(f"### {contributor['rank']}. {contributor['username']}")
-            lines.append(f"**Impact Score**: {contributor['impact_score']}")
-            lines.append(f"\n{contributor['rationale']}")
-            if "highlight_contribution" in contributor:
-                lines.append(f"\n*Highlight*: {contributor['highlight_contribution']}")
+
+    # Documentation Gaps
+    if "documentation_gaps" in report_data:
+        lines.append("## Documentation Gaps")
+        for gap in report_data["documentation_gaps"]:
+            topic = gap.get("topic", "Unknown")
+            lines.append(f"\n### {topic}")
+            if gap.get("signal"):
+                lines.append(gap["signal"])
+            if gap.get("suggested_action"):
+                lines.append(f"\n*Action*: {gap['suggested_action']}")
+        lines.append("")
+
+    # Expertise Map
+    if "expertise_map" in report_data:
+        lines.append("## Expertise Map")
+        for area, helpers in report_data["expertise_map"].items():
+            if helpers:
+                lines.append(f"- **{area}**: {', '.join(helpers[:5])}")
+        lines.append("")
+
+    # AI Learning Notes
+    if "ai_learning_notes" in report_data:
+        lines.append("## AI Learning Notes")
+        notes = report_data["ai_learning_notes"]
+        if isinstance(notes, dict):
+            for key, value in notes.items():
+                if key == "channel_culture" and isinstance(value, dict):
+                    lines.append(f"- **{key}**:")
+                    for channel, culture in value.items():
+                        lines.append(f"  - *{channel}*: {culture}")
+                else:
+                    lines.append(f"- **{key}**: {value}")
+        lines.append("")
+
+    # Helper Highlights
+    if "helper_highlights" in report_data and report_data["helper_highlights"]:
+        lines.append("## Helper Highlights")
+        for highlight in report_data["helper_highlights"]:
+            helper = highlight.get("helper", "Unknown")
+            quality = highlight.get("quality", "")
+            example = highlight.get("example", "")
+            lines.append(f"\n### {helper}")
+            lines.append(f"**{quality}**")
+            if example:
+                lines.append(f"\n_{example}_")
+        lines.append("")
+
+    # Council Commentary
+    if "council_commentary" in report_data:
+        lines.append("## Council Commentary")
+        lines.append("")
+        for member, comment in report_data["council_commentary"].items():
+            lines.append(f"### {member}")
+            lines.append(comment)
             lines.append("")
-
-    if "perspectives" in report_data:
-        lines.append("## Council Perspectives")
-        lines.append("")
-
-        for member, perspective in report_data["perspectives"].items():
-            lines.append(f"### {member.upper()}")
-            lines.append(f"**Top picks**: {', '.join(perspective.get('top_contributors', [])[:5])}")
-            lines.append(f"\n**Observations**: {perspective.get('observations', '')}")
-            lines.append(f"\n**Recommendations**: {perspective.get('recommendations', '')}")
-            lines.append("")
-
-    if "network_insights" in report_data:
-        insights = report_data["network_insights"]
-        lines.append("## Network Insights")
-        lines.append(f"- **Most central helpers**: {', '.join(insights.get('most_central_helpers', [])[:5])}")
-        if insights.get("emerging_helpers"):
-            lines.append(f"- **Emerging helpers**: {', '.join(insights['emerging_helpers'][:5])}")
-        lines.append("")
 
     return "\n".join(lines)
 
@@ -897,18 +937,12 @@ def cmd_analyze(args):
     }
 
     if llm_analysis:
-        report_data["perspectives"] = llm_analysis.get("perspectives", {})
-        report_data["consensus_ranking"] = llm_analysis.get("consensus_ranking", [])
-
-        top_helpers = [c["username"] for c in llm_analysis.get("consensus_ranking", [])[:10]]
-        report_data["network_insights"] = {
-            "most_central_helpers": sorted(
-                [n["id"] for n in network_data["nodes"] if n["centrality"] > 0.01],
-                key=lambda x: next(n["centrality"] for n in network_data["nodes"] if n["id"] == x),
-                reverse=True
-            )[:10],
-            "emerging_helpers": [h for h in top_helpers if profiles.get(h, {}).get("total_helps", 0) < 20]
-        }
+        # Add all LLM analysis sections to report
+        for key in ["problem_patterns", "expertise_map", "resolution_patterns",
+                   "documentation_gaps", "ai_learning_notes", "helper_highlights",
+                   "council_commentary"]:
+            if key in llm_analysis:
+                report_data[key] = llm_analysis[key]
 
     # Write outputs
     REPORTS_DIR.mkdir(parents=True, exist_ok=True)
@@ -939,17 +973,21 @@ def cmd_analyze(args):
 
     # Print summary
     print(f"\n{'='*60}")
-    print(f"Monthly Help Report: {month_name}")
+    print(f"Monthly Help Analysis: {month_name}")
     print(f"{'='*60}")
     print(f"\nInteractions analyzed: {len(interactions)}")
     print(f"Contributors: {len(profiles)}")
     print(f"Network nodes: {network_data['statistics']['total_nodes']}")
     print(f"Network edges: {network_data['statistics']['total_edges']}")
 
-    if llm_analysis and "consensus_ranking" in llm_analysis:
-        print(f"\nTop 5 Contributors:")
-        for contributor in llm_analysis["consensus_ranking"][:5]:
-            print(f"  {contributor['rank']}. {contributor['username']} (score: {contributor['impact_score']})")
+    # Show top helpers by weighted_helps
+    top_helpers = sorted(profiles.items(), key=lambda x: x[1]["weighted_helps"], reverse=True)[:5]
+    print(f"\nTop 5 by weighted helps:")
+    for i, (username, data) in enumerate(top_helpers, 1):
+        print(f"  {i}. {username} ({data['weighted_helps']} weighted helps)")
+
+    if llm_analysis:
+        print(f"\nLLM analysis sections: {', '.join(llm_analysis.keys())}")
 
     print(f"\nOutputs:")
     print(f"  Report: {report_file}")
