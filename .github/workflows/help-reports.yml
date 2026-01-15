@@ -48,7 +48,7 @@ jobs:
           ARGS=""
           [ -n "${{ inputs.year }}" ] && ARGS="$ARGS -y ${{ inputs.year }}"
           [ -n "${{ inputs.month }}" ] && ARGS="$ARGS -m ${{ inputs.month }}"
-          python scripts/etl/extract-help-interactions.py $ARGS
+          python scripts/etl/helpers.py extract $ARGS
 
       - name: Generate Monthly Help Report
         env:
@@ -57,12 +57,12 @@ jobs:
           ARGS=""
           [ -n "${{ inputs.year }}" ] && ARGS="$ARGS -y ${{ inputs.year }}"
           [ -n "${{ inputs.month }}" ] && ARGS="$ARGS -m ${{ inputs.month }}"
-          python scripts/etl/generate-monthly-help-report.py $ARGS
+          python scripts/etl/helpers.py analyze $ARGS
 
       - uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: "Automated: Generate monthly help report"
-          file_pattern: "the-council/help-reports/*.json hackmd/help-reports/*.md"
+          file_pattern: "the-council/help-reports/*.json hackmd/helpers/*.md"
           commit_user_name: "github-actions[bot]"
           commit_user_email: "github-actions[bot]@users.noreply.github.com"
 
@@ -96,12 +96,12 @@ jobs:
           OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
         run: |
           # Process all months from 2025-01 through previous month
-          python scripts/etl/backfill-help-reports.py
+          python scripts/etl/helpers.py backfill
 
       - uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: "Automated: Backfill historical help reports"
-          file_pattern: "the-council/help-reports/*.json hackmd/help-reports/*.md"
+          file_pattern: "the-council/help-reports/*.json hackmd/helpers/*.md"
           commit_user_name: "github-actions[bot]"
           commit_user_email: "github-actions[bot]@users.noreply.github.com"
 

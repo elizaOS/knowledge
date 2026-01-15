@@ -16,8 +16,10 @@ scripts/
 │   ├── generate-monthly-retro.py    # Monthly retrospective episodes
 │   ├── generate-quarterly-summary.py # Quarterly/annual summaries
 │   ├── generate-rss.py       # Generates RSS feeds
-│   ├── backfill-facts.sh     # Backfill missing facts data
-│   └── backfill-council.sh   # Backfill missing council briefings
+│   ├── helpers.py            # Unified help-reports ETL (extract, analyze, backfill)
+│   └── backfill/             # Backfill scripts for historical data
+│       ├── backfill-facts.sh
+│       └── backfill-council.sh
 ├── integrations/
 │   ├── discord/              # Discord integration scripts
 │   │   ├── webhook.py        # Facts briefing to Discord
@@ -144,17 +146,17 @@ python scripts/etl/generate-rss.py
 
 ---
 
-### `backfill-facts.sh`
+### `backfill/backfill-facts.sh`
 
 **Purpose**: Backfills missing facts data for a date range.
 
 **Usage**:
 ```bash
 # Default range
-./scripts/etl/backfill-facts.sh 2026-01-09 2026-01-12
+./scripts/etl/backfill/backfill-facts.sh 2026-01-09 2026-01-12
 
 # Force overwrite existing files
-FORCE=1 ./scripts/etl/backfill-facts.sh 2026-01-09 2026-01-12
+FORCE=1 ./scripts/etl/backfill/backfill-facts.sh 2026-01-09 2026-01-12
 ```
 
 **Environment Variables**:
@@ -163,17 +165,104 @@ FORCE=1 ./scripts/etl/backfill-facts.sh 2026-01-09 2026-01-12
 
 ---
 
-### `backfill-council.sh`
+### `backfill/backfill-council.sh`
 
 **Purpose**: Backfills missing council briefings for a date range.
 
 **Usage**:
 ```bash
-./scripts/etl/backfill-council.sh 2026-01-09 2026-01-12
+./scripts/etl/backfill/backfill-council.sh 2026-01-09 2026-01-12
 
 # Force overwrite
-FORCE=1 ./scripts/etl/backfill-council.sh 2026-01-09 2026-01-12
+FORCE=1 ./scripts/etl/backfill/backfill-council.sh 2026-01-09 2026-01-12
 ```
+
+---
+
+### `helpers.py`
+
+**Purpose**: Unified ETL pipeline for help-reports feature with three subcommands: extract, analyze, backfill.
+
+**Commands**:
+
+#### `helpers.py extract`
+Extracts help interactions from Discord JSON files with weighted scoring.
+
+**Weighting System**:
+- **Channel weights**: Public channels (discussion, coders) = 1.0, semi-private (partners) = 0.7, private (core-devs) = 0.5
+- **Temporal weights**: Activity after North Star transition (Dec 2025) weighted higher
+- **Helpee modifiers**: Individual assistance weighted higher than generic group help
+
+**Usage**:
+```bash
+# Extract for specific month
+python scripts/etl/helpers.py extract -y 2025 -m 12
+
+# Extract for previous month (default)
+python scripts/etl/helpers.py extract
+
+# Dry run
+python scripts/etl/helpers.py extract --dry-run -y 2025 -m 12
+```
+
+**Output**: `media/data/helpers/YYYY-MM-interactions.json`
+
+#### `helpers.py analyze`
+Generates comprehensive monthly reports with profiles, network analysis, and multi-perspective LLM analysis.
+
+**Details**:
+Analyzes extracted help interactions to produce:
+- Individual contributor profiles with impact scores
+- Network visualization data (nodes, edges, centrality measures)
+- Multi-perspective analysis from council members (aimarc, aishaw, spartan, peepo)
+- Consensus ranking with recognition recommendations
+
+**Usage**:
+```bash
+# Generate for specific month
+python scripts/etl/helpers.py analyze -y 2025 -m 12
+
+# Generate for previous month (default)
+python scripts/etl/helpers.py analyze
+
+# Skip LLM analysis (faster, for testing)
+python scripts/etl/helpers.py analyze --skip-llm -y 2025 -m 12
+```
+
+**Output**:
+- `the-council/help-reports/YYYY-MM-report.json` - Main report with contributor profiles and LLM analysis
+- `media/data/helpers/YYYY-MM-network.json` - Network visualization data
+- `hackmd/helpers/YYYY-MM.md` - Markdown report
+
+**Environment Variables**:
+- `OPENROUTER_API_KEY`: Required for LLM council perspectives
+
+**Prompt Template**:
+- LLM analysis prompt: `scripts/prompts/extraction/help-analysis.txt`
+
+#### `helpers.py backfill`
+Backfills help reports for all historical months with Discord data.
+
+**Details**:
+Detects all months with Discord JSON data and processes them by running the extraction and analysis pipeline sequentially. Useful for initial data population or regenerating historical analyses.
+
+**Usage**:
+```bash
+# Backfill all available months
+python scripts/etl/helpers.py backfill
+
+# Backfill specific date range
+python scripts/etl/helpers.py backfill --start 2025-01 --end 2025-12
+
+# Force reprocess already-processed months
+python scripts/etl/helpers.py backfill --force
+
+# Limit number of months
+python scripts/etl/helpers.py backfill --limit 3
+```
+
+**Environment Variables**:
+- `OPENROUTER_API_KEY`: Required for LLM analysis step
 
 ---
 
