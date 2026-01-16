@@ -6,22 +6,22 @@ Uses reference-sheet-{character}.png from each character folder to maintain cons
 
 Usage:
   # Basic - character + prompt
-  python scripts/posters/illustrate.py eliza "celebrating a product launch"
+  python scripts/posters/illustrate.py -c eliza -p "celebrating a product launch"
 
   # With art style
-  python scripts/posters/illustrate.py eliza "presenting at conference" -s editorial
+  python scripts/posters/illustrate.py -c eliza -p "presenting at conference" -s editorial
 
-  # Multiple characters
-  python scripts/posters/illustrate.py eliza marc "discussing code on whiteboard"
+  # Multiple characters (comma-separated)
+  python scripts/posters/illustrate.py -c eliza,marc -p "discussing code on whiteboard"
 
   # From facts file (generates prompt from summary)
-  python scripts/posters/illustrate.py eliza -f the-council/facts/2025-12-14.json
+  python scripts/posters/illustrate.py -c eliza -f the-council/facts/2025-12-14.json
 
   # Interactive mode - analyze facts and pick from multiple ideas
   python scripts/posters/illustrate.py -f the-council/facts/2025-12-14.json -i
 
   # Custom output
-  python scripts/posters/illustrate.py eliza "happy moment" -o celebration.png
+  python scripts/posters/illustrate.py -c eliza -p "happy moment" -o celebration.png
 
   # List available styles
   python scripts/posters/illustrate.py --list-styles
@@ -1359,9 +1359,12 @@ def main():
     )
 
     parser.add_argument(
-        "args",
-        nargs="*",
-        help="Character name(s) followed by scene description"
+        "-c", "--characters",
+        help="Character name(s), comma-separated (e.g., 'peepo' or 'eliza,marc')"
+    )
+    parser.add_argument(
+        "-p", "--prompt",
+        help="Scene description/prompt"
     )
     parser.add_argument(
         "-s", "--style",
@@ -1453,40 +1456,29 @@ def main():
         output_path = Path(args.output) if args.output else None
         return batch_mode(facts_path, dry_run=args.dry_run, with_icons=args.with_icons, output_dir=output_path)
 
-    # Validate args
-    if not args.args:
-        parser.error("Provide at least one character and a scene description")
-
     # API key check
     if not OPENROUTER_API_KEY and not args.dry_run:
         logging.error("OPENROUTER_API_KEY not set")
         return 1
 
     try:
-        # Parse positional args: characters then scene
-        # Last quoted arg or last arg is the scene
+        # Parse characters from -c flag
         characters = []
-        scene = None
+        scene = args.prompt
 
-        for arg in args.args:
-            char_dir = CHARACTERS_DIR / arg
-            if char_dir.exists():
-                characters.append(arg)
-            else:
-                # Not a character - must be the scene
-                scene = arg
-                break
-
-        # If we found characters but no scene in args, remaining args are scene
-        remaining_idx = len(characters)
-        if remaining_idx < len(args.args):
-            scene = " ".join(args.args[remaining_idx:])
+        if args.characters:
+            characters = [c.strip() for c in args.characters.split(",")]
+            # Validate characters exist
+            for char in characters:
+                char_dir = CHARACTERS_DIR / char
+                if not char_dir.exists():
+                    parser.error(f"Character '{char}' not found. Use --list-characters to see available.")
 
         if not characters:
-            parser.error("No valid characters found. Use --list-characters to see available.")
+            parser.error("No characters specified. Use -c/--characters (e.g., -c peepo or -c eliza,marc)")
 
         if not scene and not args.facts:
-            parser.error("Provide a scene description or use -f with a facts file")
+            parser.error("Provide a scene with -p/--prompt or use -f with a facts file")
 
         logging.info(f"Characters: {characters}")
 
