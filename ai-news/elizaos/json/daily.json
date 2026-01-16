@@ -1,92 +1,251 @@
 {
   "type": "elizaosDailySummary",
-  "title": "Daily Report - 2026-01-10",
+  "title": "Daily Report - 2026-01-06",
   "categories": [
     {
-      "title": "ElizaOS Development Updates and Technical Discussions - January 10, 2026",
+      "title": "ElizaOS Development Updates and Technical Discussions - January 6-7, 2026",
       "content": [
         {
-          "text": "Community members expressed concerns about the ElizaOS token economics. Users noted that the token is currently only being used for gas fees, with additional tokens being minted daily for contributors, creating downward price pressure. Questions were raised about the value proposition of the token, with some members unable to understand why anyone should buy it based on available information. One user mentioned that the token appears to only be used for gas fees rather than having broader utility.",
-          "sources": "https://discord.com/channels/1253563208833433701/1253563209462448241"
+          "text": "Technical Development and Bug Fixes: The core development team worked on critical fixes for ElizaOS version 1.7.0, particularly addressing issues with the Discord plugin and bootstrap actions/providers related to serverId handling. Odilitime created a fix branch (odi-17) and submitted PR 6333 to address user reports of Discord integration problems. The team identified that version 1.7.0 had missed some compatibility issues with plugin-discord 1.3.3, requiring additional testing with various Discord branches. A user reported persistent errors with the Discord plugin not detecting server IDs, usernames, or server ownership despite correct permissions and intents. The recommended temporary solution was to use core version 1.6.5 until fixes were merged.",
+          "sources": [
+            "https://discord.com/channels/1253563208833433701/1253563209462448241",
+            "https://discord.com/channels/1253563208833433701/1300025221834739744",
+            "https://discord.com/channels/1253563208833433701/1377726087789940836"
+          ],
+          "images": [
+            "https://cdn.discordapp.com/attachments/1253563209462448241/1458256023931322388/Screenshot_2026-01-06_at_4.28.45_PM.png?ex=695fa301&is=695e5181&hm=e72ce5cae5165775d235190524271a639900e41c8b9b2f95f4d88ab6bf60e9ab&",
+            "https://opengraph.githubassets.com/360af4f909d2669f24c7bf5f502b088a4e295046a783d64477921a78017eb95c/elizaOS/eliza/pull/6333"
+          ],
+          "videos": []
         },
         {
-          "text": "Positive news emerged about ElizaOS development. Community members reported hearing that A16z invested in ElizaOS, and that the ElizaOS cloud app will launch next week. Users shared experiences with the ElizaOS cloud agents, noting daily updates and new plugin functionality. Weather data was enabled in the cloud platform. One user made their first cloud payment to ElizaOS cloud.",
+          "text": "New Contributor Onboarding: A blockchain and AI engineer (aicodeflow.dev) joined the community expressing interest in contributing to ElizaOS, particularly in areas of agent autonomy with constraints, onchain execution layers with guardrails, practical agent templates for prediction markets, and observability tooling. The contributor highlighted experience building systems where AI agents propose actions but execution is gated by policy layers and risk limits. Odilitime, the lead developer on the Spartan project, engaged with the new contributor and suggested starting by reading the code and working on specific plugins. The team pointed to the elizaos-plugins GitHub organization as a resource for finding plugins to contribute to.",
+          "sources": [
+            "https://discord.com/channels/1253563208833433701/1253563209462448241"
+          ],
+          "images": [
+            "https://opengraph.githubassets.com/c0ed8896e0def6141c890339b009e3c23b8fac037cdb962d30c82279301ed0b4/elizaOS/spartan"
+          ],
+          "videos": []
+        },
+        {
+          "text": "Database Migration Issues: A developer encountered destructive migration errors when running elizaos start a second time, with the system blocking changes that would drop columns in the database. The error message indicated that ELIZA_ALLOW_DESTRUCTIVE_MIGRATIONS needed to be set to true. Community helper stackweaver explained this happens because ElizaOS detects destructive database migrations and provided the solution to explicitly allow migrations by setting the environment variable. For production environments, the recommendation was to review migrations carefully or use non-destructive schema change strategies. Omid Sa suggested using the elizaos dev command instead of elizaos start for continuous monitoring during development.",
+          "sources": [
+            "https://discord.com/channels/1253563208833433701/1300025221834739744"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "Cloud Architecture and Performance Optimization: Stan shared progress on multiple performance improvements for the monorepo and cloud infrastructure. He prepared an RFC document exploring hybrid architecture with persistent workers to address TOCTOU race conditions using a deduct-before, reconcile-after approach. The team discussed scaling considerations for event pumps, noting that voice connections would need higher priority and bandwidth compared to text. Odilitime recommended reviewing the Jeju cloud branch which contains Shaw's preferred implementation of the Discord bridge. Stan submitted pull requests for unified messaging API implementations in both Telegram and Discord plugins.",
+          "sources": [
+            "https://discord.com/channels/1253563208833433701/1377726087789940836"
+          ],
+          "images": [
+            "https://opengraph.githubassets.com/a05945963fd9632a4fd4fbaacfe3f37caa9ac2c002ce736b26f4ff43f76a5b74/elizaos-plugins/plugin-telegram/pull/22",
+            "https://opengraph.githubassets.com/13c1126df2a7723365ad4fc6b26134ccf08a796e25ae81f9b27196fe55a0d6c0/elizaos-plugins/plugin-discord/pull/41"
+          ],
+          "videos": []
+        },
+        {
+          "text": "Community Discussions and Ecosystem Updates: The team discussed making contract addresses more accessible, with suggestions to add them to pinned tweets or the website. Kenk challenged the idea by noting that top projects typically do not put contract addresses in bios or pinned tweets, instead pointing to websites with token info. The team confirmed they would update the linktree to point to CoinGecko for easier access. Shaw confirmed the team would post contract addresses across official accounts. There were discussions about DegenAI updates, with confirmation that a new version was yet to be shipped. A community member shared that HackMD loves having ElizaOS builders on their platform. Jin shared GitHub's agentic workflows documentation as a resource for the team.",
           "sources": [
             "https://discord.com/channels/1253563208833433701/1253563209462448241",
             "https://discord.com/channels/1253563208833433701/1300025221834739744"
           ],
-          "images": "https://cdn.elizaos.news/elizaos-media/capture_e5566c05.png"
-        },
-        {
-          "text": "A comprehensive analysis of ElizaOS was shared highlighting the project's architecture for the sovereign web. The analysis covered the design philosophy for Jeju, which will launch focusing on utility, adoption, and agent activity. Gas fees will be denominated in ElizaOS tokens, with support for additional tokens. The target launch is H2 2026, potentially sooner. The analysis emphasized ElizaOS as an open system versus closed source proprietary alternatives. Discussion occurred about branding, with suggestions to use 'Open Systems' terminology to highlight the difference from proprietary solutions, similar to the OSI (Open Systems Interconnection) stack.",
-          "sources": [
-            "https://discord.com/channels/1253563208833433701/1253563209462448241",
-            "https://discord.com/channels/1253563208833433701/1301363808421543988"
+          "images": [
+            "https://opengraph.githubassets.com/991ed075f030457bcb1993f53388667b64cd0e1990efaffe3d82f162fa3bb93a/githubnext/agentics"
           ],
-          "images": "https://cdn.elizaos.news/elizaos-media/embed-image-1459503248015884288_b6604ea6.jpg"
+          "videos": []
         },
         {
-          "text": "Concerns were raised about tokens being launched by Shaw. Multiple community members questioned what they called 'rugs' being launched, including utility and creator pump tokens. Users expressed that this behavior could be problematic for anyone affiliated with him and questioned whether automated bots were running amok. Some speculated these might be experimental tokens.",
-          "sources": "https://discord.com/channels/1253563208833433701/1253563209462448241"
-        },
-        {
-          "text": "Shaw shared significant technical achievements with Eliza in multiple programming languages. He demonstrated chat functionality with an Eliza agent in Rust in 50 lines of code, and similarly in Python in 50 lines of code. The implementations were praised by developers for being impressively concise. Shaw also mentioned having a cool Eliza coder agent rolled out.",
-          "sources": "https://discord.com/channels/1253563208833433701/1377726087789940836",
+          "text": "Technical Insights and Tools: Odilitime shared findings from a Cursor call, noting that using your own Claude API key in Cursor does not provide the Cursor-optimized version of Claude where they implement tricks to improve output. The team discussed model configuration for API endpoints, recommending using provider prefixes like openai/gpt-4o-mini, anthropic/claude-sonnet-4.5, or google/gemini-2.5-flash when calling agent APIs. A developer shared their x402 protocol library integrated with ElizaOS for micropayments on Solana. The team also discussed incorrect information about EigenLayer appearing in LLM outputs, traced back to an error on the Eigen website.",
+          "sources": [
+            "https://discord.com/channels/1253563208833433701/1377726087789940836",
+            "https://discord.com/channels/1253563208833433701/1300025221834739744"
+          ],
           "images": [
-            "https://cdn.elizaos.news/elizaos-media/embed-image-1459430229658570763_981de865.jpg",
-            "https://cdn.elizaos.news/elizaos-media/embed-image-1459430264731336970_3eeef39f.jpg"
-          ]
-        },
-        {
-          "text": "Shaw demonstrated LLM-free Eliza agents running simulations. He showed a Game of Life simulation with Eliza agents and Tamagotchi implementations, both running without LLMs using only in-memory databases and state parsing. The simulation ran 40 agents simultaneously. He also created an agent playing adventure games. These demonstrations showed the versatility of the Eliza framework beyond traditional LLM-based implementations.",
-          "sources": "https://discord.com/channels/1253563208833433701/1377726087789940836",
-          "images": [
-            "https://cdn.elizaos.news/elizaos-media/image_6bdaece5.webp",
-            "https://cdn.elizaos.news/elizaos-media/screenshot_from_2026-01-10_09-01-02_e0cd8038.webp",
-            "https://cdn.elizaos.news/elizaos-media/screenshot_from_2026-01-10_08-56-57_955a56a1.png"
-          ]
-        },
-        {
-          "text": "Developers discussed building game bots and MMO agents powered by Eliza. One developer mentioned building game bots powered by Eliza decisions. Shaw revealed the Hyperscape project, an MMORPG for humans and agents powered by ElizaOS, with agents already playing Runescape MMO. Roblox support was also added. Another developer shared they are working on World of Warcraft agents using a Lua addon that encodes game API into pixels, then decodes 200 screenshots per second to avoid detection. The team is actively developing agents for various gaming platforms.",
-          "sources": "https://discord.com/channels/1253563208833433701/1377726087789940836",
-          "images": [
-            "https://cdn.elizaos.news/elizaos-media/screenshot_from_2026-01-10_09-06-08_56d49f04.webp",
-            "https://cdn.elizaos.news/elizaos-media/image_3c05f64e.png"
-          ]
-        },
-        {
-          "text": "Developers discussed creative AI agent applications. Ideas included a dating app using AI to detect characteristics, a 'CheaterFace' relationship advisor app that analyzes photos to predict cheating likelihood, and leveraging viral growth through friend networks. Discussion also covered AI wearables like Nirva AI jewelry for journaling and emotion tracking. One developer asked about using Eliza Cloud with Claude Code for automated project development.",
-          "sources": "https://discord.com/channels/1253563208833433701/1300025221834739744",
-          "images": "https://cdn.elizaos.news/elizaos-media/embed-thumbnail-1459479186325635094_00f20ad5.png"
-        },
-        {
-          "text": "Technical discussions covered enterprise adoption challenges and cost comparisons. Developers noted that AWS will always be cheaper than decentralized solutions, but argued that cost calculations should factor in revenue loss from downtime and reputational damage. They discussed using multipliers based on public company revenue and AWS spending data. However, they concluded that convincing existing large enterprises would be difficult, especially as CIOs would not allow AI agents to rip and replace code.",
-          "sources": "https://discord.com/channels/1253563208833433701/1301363808421543988",
-          "images": [
-            "https://cdn.elizaos.news/elizaos-media/img_1979_b1a7a2ee.jpg",
-            "https://cdn.elizaos.news/elizaos-media/img_1980_f6a22363.jpg"
-          ]
-        },
-        {
-          "text": "A developer shared a tip for using Claude Opus 4.5 effectively: asking Claude to make state machine diagrams of existing components causes it to map out all paths rather than being lazy, and helps verify if it is doing things correctly at a systems level.",
-          "sources": "https://discord.com/channels/1253563208833433701/1377726087789940836",
-          "images": "https://cdn.elizaos.news/elizaos-media/embed-image-1459607975994855557_d90d8f41.jpg"
+            "https://cdn.discordapp.com/attachments/1377726087789940836/1458268156681523201/Screenshot_2026-01-06_at_5.16.54_PM.png?ex=695fae4d&is=695e5ccd&hm=cad3fc64b92d6580b25b123f0998657347ae0c93eb90a41b78954dca20bc1b39&",
+            "https://cdn.discordapp.com/attachments/1300025221834739744/1458003169216037006/Screenshot_2026-01-06_at_2.42.57_PM.png?ex=695eb783&is=695d6603&hm=0fc8d555903d73f4317939f32f48a1608a35296496ef73f7a81d6b01042eacbb&"
+          ],
+          "videos": []
         }
       ],
       "topic": "discordrawdata"
     },
     {
-      "title": "Development Activity Summary for January 10, 2026",
-      "content": {
-        "text": "On January 10, 2026, development activity was concentrated exclusively on the elizaos.github.io repository, with no activity recorded in the eliza repository. The primary focus was on enhancing the leaderboard API with significant new features. Developers implemented an MMORPG-style character progression system inspired by Ragnarok Online, which represents a major architectural change to how user progression is tracked and displayed. Additionally, focus areas were transformed from simple data points into rich objects that include detailed scores and percentages, providing more granular insights into user performance. These changes required modifications across multiple parts of the codebase, including files in src/lib, src/app, cli, drizzle, and public directories.",
-        "sources": "https://elizaos.github.io/api/summaries/overall/day/2026-01-10.json",
-        "memes": {
-          "url": "https://cdn.elizaos.news/imgflip/ah1mto.jpg",
-          "summary": "Leaderboard adds Ragnarok progression system."
+      "title": "ElizaOS GitHub Issues Summary",
+      "content": [
+        {
+          "text": "Issue #6332 reports a performance problem where Turbo build is consuming excessive memory, reaching over 21GB. This issue was reported by madjin and needs investigation to optimize memory usage during the build process.",
+          "sources": [
+            "https://github.com/elizaOS/eliza/issues/6332"
+          ],
+          "images": [
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/issues/6332"
+          ],
+          "videos": []
+        },
+        {
+          "text": "Issue #6331 identifies a bug where a 'Model not found' error occurs when using agent ID with API endpoints. This issue was reported by madjin and affects API functionality when attempting to reference agents by their ID.",
+          "sources": [
+            "https://github.com/elizaOS/eliza/issues/6331"
+          ],
+          "images": [
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/issues/6331"
+          ],
+          "videos": []
+        },
+        {
+          "text": "Issue #6310 proposes a UI improvement to reduce the default size of the chat box to one line, with dynamic size adjustment as text expands to multiple lines. This enhancement was suggested by borisudovicic to improve the user interface experience.",
+          "sources": [
+            "https://github.com/elizaOS/eliza/issues/6310"
+          ],
+          "images": [
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/issues/6310"
+          ],
+          "videos": []
         }
-      },
-      "topic": "miscellaneous"
+      ],
+      "topic": "issue"
+    },
+    {
+      "title": "ElizaOS Progress Summary: January 6-7, 2026",
+      "content": [
+        {
+          "text": "On January 6-7, 2026, ElizaOS made significant progress in plugin stability, UI/UX improvements, and agent management, while addressing critical bugs across multiple repositories. The project saw extensive work on the core Eliza agent, Discord plugin, Telegram plugin, and SQL plugin, with numerous issues resolved and new optimization efforts initiated.",
+          "sources": [
+            "https://elizaos.github.io/api/summaries/overall/day/2026-01-06.json",
+            "https://elizaos.github.io/api/summaries/overall/day/2026-01-07.json"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "CRITICAL ISSUES REQUIRING ATTENTION: The plugin-discord publishing failure remains the most urgent issue, affecting versions v1.3.4 and v1.3.6. Investigation revealed potential TypeScript compatibility issues with elizaos/config and elizaos dependencies. This deployment blocker requires immediate resolution to restore normal plugin publishing functionality.",
+          "sources": [
+            "https://elizaos.github.io/api/summaries/overall/day/2026-01-06.json",
+            "https://elizaos.github.io/api/summaries/overall/day/2026-01-07.json"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "PLUGIN STABILITY AND BUG FIXES: Major fixes were implemented for plugin-bootstrap and plugin-sql to address the serverId to messageServerId change, resolving issues for version 1.7.0 users. The plugin-sql was updated to skip the pgcrypto extension for PGLite, resolving database extension compatibility issues. A critical bug in the Telegram plugin was identified where image processing crashes with a TypeError when images are uploaded as photos.",
+          "sources": [
+            "https://elizaos.github.io/api/summaries/overall/day/2026-01-06.json",
+            "https://elizaos.github.io/api/summaries/overall/day/2026-01-07.json"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "UI/UX AND AGENT MANAGEMENT IMPROVEMENTS: Extensive improvements were made to the user interface and agent management system. Issues resolved include agent creation username requirements, blank name field handling, avatar display in chat menus, agent response positioning, dynamic chat box sizing, improved chat summaries, scrolling functionality, agent sorting, conversation deletion refresh requirements, and agent following functionality. Authentication improvements included JWT implementation and streamlined wallet connection processes.",
+          "sources": [
+            "https://elizaos.github.io/api/summaries/overall/day/2026-01-07.json"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "AGENT ACCESS AND CREDIT MANAGEMENT: Several enhancements were made to control agent access and resource usage. The system now limits messages for non-signed-up users, separates public agent states, and adjusts free credit amounts. Knowledge transfer capabilities for public agents were enhanced, improving the overall agent ecosystem.",
+          "sources": [
+            "https://elizaos.github.io/api/summaries/overall/day/2026-01-07.json"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "PERFORMANCE OPTIMIZATION INITIATIVES: New optimization efforts were launched to improve system performance. Issues created include runtime initialization optimization, implementation of UPSERT patterns for database queries, provider batching for composeState, parallelization for message processing, and fixing a TOCTOU race condition in credit deduction for streaming endpoints. A performance concern was raised regarding the Turbo build tool consuming excessive memory (21GB+), impacting developer experience and CI stability.",
+          "sources": [
+            "https://elizaos.github.io/api/summaries/overall/day/2026-01-06.json",
+            "https://elizaos.github.io/api/summaries/overall/day/2026-01-07.json"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "DISCORD PLUGIN UPDATES: The Discord plugin saw improvements in extensibility, with confirmation that slash commands can now be added by developers as needed. A pull request was submitted to address the use of handleMessage instead of sendMessage for the ElizaOS unified API, improving consistency across the platform.",
+          "sources": [
+            "https://elizaos.github.io/api/summaries/overall/day/2026-01-07.json"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "DOCUMENTATION AND ERROR REPORTING: A new documentation issue was created for agent memory configuration, specifically addressing difficulties users face with knowledge and lore sections. Users reported Model not found errors when using agent IDs with API endpoints, requiring investigation and resolution.",
+          "sources": [
+            "https://elizaos.github.io/api/summaries/overall/day/2026-01-06.json"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "FEATURE REQUESTS: A proposal was submitted for an Apps promotion feature, indicating ongoing community engagement and feature development planning.",
+          "sources": [
+            "https://elizaos.github.io/api/summaries/overall/day/2026-01-07.json"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "CONTRIBUTOR RECOGNITION: Contributor odilitime provided detailed updates and analysis on the plugin-discord publishing failure, including specific TypeScript errors and dependency versions, and confirmed the extensibility of slash commands in elizaos/eliza. This detailed analysis proved crucial for debugging the critical publishing issue.",
+          "sources": [
+            "https://elizaos.github.io/api/summaries/overall/day/2026-01-07.json"
+          ],
+          "images": [],
+          "videos": []
+        }
+      ],
+      "topic": "github_other"
+    },
+    {
+      "title": "elizaos/eliza Repository Activity Summary",
+      "content": [
+        {
+          "text": "The elizaos/eliza repository showed increased activity over a two-day period. From January 6 to January 7, 2026, the repository had no new pull requests and no merges, with 2 new issues opened and 2 active contributors. Activity picked up significantly from January 7 to January 8, 2026, with 2 new pull requests submitted (1 of which was merged), 7 new issues opened, and 7 active contributors participating in the project.",
+          "sources": [
+            "From 2026-01-06 to 2026-01-07, elizaos/eliza had 0 new PRs (0 merged), 2 new issues, and 2 active contributors.",
+            "From 2026-01-07 to 2026-01-08, elizaos/eliza had 2 new PRs (1 merged), 7 new issues, and 7 active contributors."
+          ],
+          "images": [],
+          "videos": []
+        }
+      ],
+      "topic": "github_summary"
+    },
+    {
+      "title": "Recent Bug Fixes in ElizaOS Plugins",
+      "content": [
+        {
+          "text": "Two pull requests have been submitted to fix issues in the ElizaOS project. PR #6333 by odilitime addresses a bug in the plugin-bootstrap and SQL plugins related to actions and providers, specifically updating references from serverId to messageServerId. PR #6339 by standujar fixes an issue in the plugin-sql where the pgcrypto extension is now skipped when using PGLite.",
+          "sources": [
+            "https://github.com/elizaOS/eliza/pull/6333",
+            "https://github.com/elizaOS/eliza/pull/6339"
+          ],
+          "images": [
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/pull/6333",
+            "https://opengraph.githubassets.com/1/elizaOS/eliza/pull/6339"
+          ],
+          "videos": []
+        }
+      ],
+      "topic": "pull_request"
+    },
+    {
+      "title": "Plugin Bootstrap and SQL Minor Bug Fix",
+      "content": [
+        {
+          "text": "A bug fix was implemented in the plugin-bootstrap and SQL minor components to update actions and providers. The change addresses a renaming from 'serverId' to 'messageServerId' throughout the affected code. This fix was submitted as Pull Request #6333 to the elizaOS/eliza repository.",
+          "sources": [
+            "https://github.com/elizaOS/eliza/pull/6333"
+          ],
+          "images": [],
+          "videos": []
+        }
+      ],
+      "topic": "completed_items"
     }
   ],
-  "date": 1768003200
+  "date": 1767657600
 }
