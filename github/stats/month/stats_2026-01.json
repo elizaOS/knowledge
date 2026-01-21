@@ -5,7 +5,7 @@
     "intervalType": "month"
   },
   "repository": "elizaos/eliza",
-  "overview": "From 2026-01-01 to 2026-02-01, elizaos/eliza had 22 new PRs (15 merged), 42 new issues, and 20 active contributors.",
+  "overview": "From 2026-01-01 to 2026-02-01, elizaos/eliza had 32 new PRs (19 merged), 48 new issues, and 25 active contributors.",
   "topIssues": [
     {
       "id": "I_kwDOMT5cIs7jNLxv",
@@ -15,9 +15,9 @@
       "repository": "elizaos/eliza",
       "body": "\nVersion: 1.7.1\nError: UPDATE_CONTACT fails with \"Entity not found\"\nCause: ensureConnection() is not called before saving facts\nLogs: afterSplice values + \"No ownership data found for world\"\nProposed fix: // V reflection.ts před UPDATE_CONTACT\nawait runtime.ensureConnection({\n  entityId, roomId, userName, name, worldId, source\n});\n",
       "createdAt": "2026-01-14T07:10:02Z",
-      "closedAt": null,
-      "state": "OPEN",
-      "commentCount": 1
+      "closedAt": "2026-01-17T06:31:52Z",
+      "state": "CLOSED",
+      "commentCount": 2
     },
     {
       "id": "I_kwDOMT5cIs7Ki_w6",
@@ -78,8 +78,20 @@
       "repository": "elizaos/eliza",
       "createdAt": "2026-01-09T17:06:10Z",
       "mergedAt": null,
-      "additions": 1024758,
-      "deletions": 295922
+      "additions": 1492015,
+      "deletions": 296165
+    },
+    {
+      "id": "PR_kwDOMT5cIs680DbX",
+      "title": "fix(v2.0.0): Python example testing & fixes",
+      "author": "odilitime",
+      "number": 6358,
+      "body": "- Add Python quickstart documentation (docs/python-quickstart.md)\r\n- Fix chat example to include inmemorydb plugin for database support\r\n- Add dotenv loading to chat example for .env file support\r\n- Fix inmemorydb plugin to use proper Plugin class instead of dict\r\n- Fix inmemorydb adapter to accept params dict in get_memories()\r\n- Fix inmemorydb adapter to handle Pydantic models in create_memory/update_memory\r\n- Fix character provider to use getattr for optional attributes\r\n- Add get_available_actions() method to AgentRuntime\r\n- Add get_entity() alias method to AgentRuntime\r\n- Update get_memories() to accept keyword arguments\r\n\r\nThe Python port had issues because:\r\nPlugin export - was a dict instead of Plugin object\r\nMethod signatures - expected dicts but got Pydantic models\r\nNo type enforcement - Python doesn't catch these at compile time\r\nThe Rust type system prevents these bugs automatically. The Python fixes we made bring it to parity with the working Rust implementation.\r\n\r\n# Risks\r\n\r\nMedium\r\n\r\n# Background\r\n\r\n## What does this PR do?\r\n\r\nFix examples/chat/python\r\n\r\n## What kind of change is this?\r\n\r\nBug fixes (non-breaking change which fixes an issue)\r\n\r\n## Why are we doing this? Any context or related work?\r\nReview\r\n\r\n# Documentation changes needed?\r\n\r\nmaybe\r\n\r\n\n<!-- CURSOR_SUMMARY -->\n---\n\n> [!NOTE]\n> Introduces true streaming and stabilizes Python runtime/plugins, plus major example and training additions.\n> \n> - Adds streaming text APIs: new `ModelType.TEXT_*_STREAM`, `AgentRuntime.use_model_stream()`/`register_streaming_model()`, and `DefaultMessageService.handle_message_stream()` with `StreamingMessageResult`\n> - OpenAI plugin implements streaming handlers; core exports updated to include streaming types\n> - Fixes `plugin-inmemorydb`: converted to proper `Plugin`, adapter now accepts `params`/kwargs, handles Pydantic models (camelCase keys), and corrects pagination/filters\n> - Hardens character provider to safely access optional fields via `getattr`\n> - AgentRuntime enhancements: `get_available_actions()`, `get_entity()` alias, `get_memories()` kwargs support\n> - A2A FastAPI server uses true token-by-token SSE streaming and includes `inmemorydb`; requirements updated\n> - Chat example loads `.env` and includes `inmemorydb` plugin\n> - ART Tic‑Tac‑Toe: adds heuristic agent, refines config (`opponent`, `ai_player`), winner/draw handling, and CLI updates\n> - New Atropos TextWorld package: environment/agents, trajectory + tokenizer tooling, offline data generation, BaseEnv factory, and CLI; README expanded\n> - Core Python README and example docs updated for setup and usage\n> \n> <sup>Written by [Cursor Bugbot](https://cursor.com/dashboard?tab=bugbot) for commit 21f8c31fc22b7778f998d85c754ee82a0a8e2253. This will update automatically on new commits. Configure [here](https://cursor.com/dashboard?tab=bugbot).</sup>\n<!-- /CURSOR_SUMMARY -->\n\n\r\n\r\n<!-- greptile_comment -->\r\n\r\n<h2>Greptile Overview</h2>\r\n\r\n### Greptile Summary\r\n\r\nThis PR fixes the Python chat example and inmemorydb plugin to work together, adds Python quickstart documentation, and improves Character attribute handling. The changes include:\r\n\r\n**Key Improvements:**\r\n- Adds comprehensive Python quickstart documentation with examples\r\n- Fixes inmemorydb plugin to use proper Plugin class instead of dict\r\n- Enhances inmemorydb adapter to handle Pydantic models in create_memory/update_memory\r\n- Updates character provider to safely access optional attributes with getattr()\r\n- Adds dotenv support to chat example for .env file loading\r\n- Adds useful helper methods to AgentRuntime (get_available_actions, get_entity alias)\r\n- Enhances get_memories() to accept keyword arguments\r\n\r\n**Critical Issues Found:**\r\n1. **Bug in adapter.py line 329**: The update_memory() method references the wrong variable name (`memory` instead of `memory_dict`), which will cause AttributeError when processing Pydantic models\r\n2. **Bug in character.py lines 70-73**: Inconsistent attribute access - uses getattr() in function body but direct access in return data dict, causing AttributeError for optional attributes\r\n3. **Missing dependency in chat.py**: Imports python-dotenv but it's not in requirements.txt\r\n4. **Incomplete documentation**: Quickstart guide doesn't include inmemorydb plugin installation that the chat example now requires\r\n\r\n**Impact:**\r\nThe bugs in adapter.py and character.py are critical and will cause runtime errors. The missing dependencies will prevent users from running the example successfully.\r\n\r\n### Confidence Score: 1/5\r\n\r\n- This PR contains critical bugs that will cause runtime failures and prevent the chat example from working\r\n- Score reflects two critical logic errors (wrong variable reference in adapter.py:329 and inconsistent attribute access in character.py:70-73) plus missing dependencies that will cause import errors. These issues will break the example for users and cause AttributeErrors at runtime.\r\n- Pay close attention to plugins/plugin-inmemorydb/python/elizaos_plugin_inmemorydb/adapter.py (line 329 bug), packages/python/elizaos/bootstrap/providers/character.py (lines 70-73 inconsistency), and examples/chat/python/chat.py (missing python-dotenv dependency)\r\n\r\n<h3>Important Files Changed</h3>\r\n\r\n\r\n\r\nFile Analysis\r\n\r\n\r\n\r\n| Filename | Score | Overview |\r\n|----------|-------|----------|\r\n| docs/python-quickstart.md | 3/5 | New documentation file added. Missing plugin-inmemorydb installation instruction that the chat example now requires. |\r\n| examples/chat/python/chat.py | 2/5 | Added dotenv and inmemorydb support. Missing python-dotenv dependency in requirements, which will cause import errors. |\r\n| packages/python/elizaos/bootstrap/providers/character.py | 2/5 | Fixed to use getattr for optional character attributes. Critical bug: return data dict directly accesses attributes without getattr, causing AttributeError. |\r\n| plugins/plugin-inmemorydb/python/elizaos_plugin_inmemorydb/adapter.py | 1/5 | Enhanced get_memories(), create_memory(), and update_memory() to handle Pydantic models. Critical bug in update_memory line 329: uses wrong variable name. |\r\n\r\n</details>\r\n\r\n\r\n\r\n<h3>Sequence Diagram</h3>\r\n\r\n```mermaid\r\nsequenceDiagram\r\n    participant User\r\n    participant chat.py\r\n    participant dotenv\r\n    participant AgentRuntime\r\n    participant OpenAIPlugin\r\n    participant InMemoryDBPlugin\r\n    participant InMemoryAdapter\r\n    participant CharacterProvider\r\n\r\n    User->>chat.py: Run python chat.py\r\n    chat.py->>dotenv: load_dotenv(env_path)\r\n    dotenv-->>chat.py: Load .env from repo root\r\n    \r\n    chat.py->>AgentRuntime: Create with character and plugins\r\n    AgentRuntime->>OpenAIPlugin: Initialize OpenAI plugin\r\n    AgentRuntime->>InMemoryDBPlugin: Initialize InMemoryDB plugin\r\n    InMemoryDBPlugin->>InMemoryAdapter: create_database_adapter(agent_id)\r\n    InMemoryAdapter-->>InMemoryDBPlugin: Return adapter instance\r\n    InMemoryDBPlugin->>AgentRuntime: register_database_adapter(adapter)\r\n    \r\n    AgentRuntime->>CharacterProvider: get_character_context()\r\n    CharacterProvider->>CharacterProvider: Use getattr() for optional attributes\r\n    CharacterProvider-->>AgentRuntime: Return character context\r\n    \r\n    AgentRuntime-->>chat.py: Runtime initialized\r\n    \r\n    User->>chat.py: Type message\r\n    chat.py->>AgentRuntime: handle_message(runtime, memory)\r\n    AgentRuntime->>InMemoryAdapter: get_memories(params)\r\n    InMemoryAdapter-->>AgentRuntime: Return memories\r\n    AgentRuntime->>OpenAIPlugin: Generate response\r\n    OpenAIPlugin-->>AgentRuntime: Return response\r\n    AgentRuntime->>InMemoryAdapter: create_memory(memory_dict)\r\n    InMemoryAdapter-->>AgentRuntime: Memory stored\r\n    AgentRuntime-->>chat.py: Return result\r\n    chat.py-->>User: Display response\r\n```\r\n\r\n<!-- greptile_other_comments_section -->\r\n\r\n<!-- /greptile_comment -->\n\n<!-- This is an auto-generated comment: release notes by coderabbit.ai -->\n## Summary by CodeRabbit\n\n* **New Features**\n  * In-memory database plugin for agent memory.\n  * Token-by-token streaming for chat responses and streaming endpoints.\n  * Atropos data-generation, trajectory tooling, and TextWorld agent integrations.\n  * New Tic‑Tac‑Toe AI/player options and interactive configuration.\n\n* **Documentation**\n  * Expanded developer setup, examples, runnable chat walkthroughs, and new Atropos CLI flags.\n\n* **Other**\n  * Updated Python packaging/requirements and repository-root .env loading for examples.\n\n<sub>✏️ Tip: You can customize this high-level summary in your review settings.</sub>\n<!-- end of auto-generated comment: release notes by coderabbit.ai -->",
+      "repository": "elizaos/eliza",
+      "createdAt": "2026-01-13T00:34:32Z",
+      "mergedAt": null,
+      "additions": 17483,
+      "deletions": 8280
     },
     {
       "id": "PR_kwDOMT5cIs670Y6I",
@@ -106,35 +118,23 @@
       "deletions": 236
     },
     {
-      "id": "PR_kwDOMT5cIs69N1vf",
-      "title": "refactor(plugin-sql): extract domain stores from BaseDrizzleAdapter",
-      "author": "standujar",
-      "number": 6366,
-      "body": "Refactors `BaseDrizzleAdapter` (~3,900 lines) into composable domain stores. This improves maintainability, testability, and separation of concerns without changing the public API.\r\n\r\n## Changes\r\n\r\n### New Domain Stores (`src/stores/`)\r\n\r\n| Store | Responsibility | Methods |\r\n|-------|----------------|---------|\r\n| `AgentStore` | Agent CRUD operations | get, getAll, create, update, delete, count |\r\n| `MemoryStore` | Memory & embeddings | get, getById, getByIds, create, update, delete, search, count |\r\n| `RoomStore` | Room management | getByIds, getByWorld, create, update, delete |\r\n| `ParticipantStore` | Room participants | getRoomsForEntity, add, remove, getForRoom, isParticipant, userState |\r\n| `EntityStore` | Entity management | getByIds, getForRoom, create, update, delete, getByNames, searchByName |\r\n| `ComponentStore` | ECS components | get, getAll, create, update, delete |\r\n| `RelationshipStore` | Entity relationships | create, update, get, getAll |\r\n| `CacheStore` | Key-value cache | get, set, delete |\r\n| `WorldStore` | World management | create, get, getAll, update, delete |\r\n| `TaskStore` | Task management | create, getByParams, getByName, get, update, delete |\r\n| `LogStore` | Logging & summaries | create, getMany, getAgentRunSummaries, delete |\r\n| `MessagingStore` | Servers, channels, messages | createServer, getServers, createChannel, getChannels, createMessage, getMessages, participants |\r\n\r\n### Architecture\r\n\r\n```\r\nBaseDrizzleAdapter\r\n    │\r\n    ├── initStores()  ───────────────────────────────┐\r\n    │                                                │\r\n    │   ┌─────────────────────────────────────────┐  │\r\n    │   │           StoreContext                  │◄─┘\r\n    │   │  • getDb()                              │\r\n    │   │  • withRetry()                          │\r\n    │   │  • withIsolationContext()               │\r\n    │   │  • agentId                              │\r\n    │   │  • getEmbeddingDimension()              │\r\n    │   └─────────────────────────────────────────┘\r\n    │                   │\r\n    │         ┌─────────┴─────────┐\r\n    │         ▼                   ▼\r\n    │   ┌──────────┐       ┌──────────┐\r\n    │   │  Store1  │  ...  │  StoreN  │\r\n    │   └──────────┘       └──────────┘\r\n    │\r\n    └── Public methods delegate to stores\r\n```\r\n\r\n### Key Design Decisions\r\n\r\n1. **Shared Context**: All stores receive a `StoreContext` with database access, retry logic, and RLS isolation\r\n\r\n2. **No API Changes**: All public methods remain identical - only internal implementation refactored\r\n\r\n## Impact\r\n\r\n- **Lines reduced**: `base.ts` from ~3,900 to ~1,350 lines (~65% reduction)\r\n- **Files added**: 13 new files in `src/stores/`\r\n- **Public API**: No changes\r\n- **Tests**: All 160 unit + all integration tests pass (PGLite + PostgreSQL)\r\n\r\n## Testing\r\n\r\n```bash\r\n# Unit tests\r\nbun run test:unit        # 160 pass\r\n\r\n# Integration tests (PGLite)\r\nbun run test:integration # All pass\r\n\r\n# Integration tests (PostgreSQL)\r\nbun run test:integration:postgres # All pass (including RLS tests)\r\n```\r\n\r\n## Migration\r\n\r\nNo migration needed - this is a pure refactoring with no public API changes.\n\n<!-- greptile_comment -->\n\n<h3>Greptile Summary</h3>\n\n\n- Refactors monolithic `BaseDrizzleAdapter` class (~3,900 lines) into 11 focused domain stores in `packages/plugin-sql/src/stores/` to improve maintainability and testability while preserving the exact same public API\n- Introduces `StoreContext` pattern that provides shared database access, retry logic, and Row Level Security isolation to all domain stores, maintaining consistency across the codebase\n- Implements comprehensive CRUD operations across stores for agents, memories, rooms, participants, entities, components, relationships, caching, worlds, tasks, and logging\n\n<h3>Important Files Changed</h3>\n\n\n| Filename | Overview |\n|----------|----------|\n| packages/plugin-sql/src/base.ts | Refactored from ~3,900 to ~1,350 lines by extracting domain logic into stores and adding delegation methods |\n| packages/plugin-sql/src/stores/memory.store.ts | New store handling memory CRUD, vector embeddings, and similarity search operations |\n| packages/plugin-sql/src/stores/entity.store.ts | New store for entity management including component aggregation and name-based searching |\n| packages/plugin-sql/src/stores/log.store.ts | New store with complex agent run summaries and JSON sanitization for logging operations |\n\n<h3>Confidence score: 4/5</h3>\n\n\n- This is a well-executed refactoring with comprehensive testing and minimal risk due to preserved public API\n- Score lowered due to minor issues: unused parameter in TaskStore.getAll(), missing agent ID filter in TaskStore.delete(), and complex field mapping logic in RelationshipStore that could be simplified\n- No files require special attention - the refactoring successfully maintains API compatibility while improving code organization\n\n<h3>Sequence Diagram</h3>\n\n```mermaid\nsequenceDiagram\n    participant Client as \"Client\"\n    participant Adapter as \"BaseDrizzleAdapter\"\n    participant StoreContext as \"StoreContext\"\n    participant MemoryStore as \"MemoryStore\"\n    participant Manager as \"ConnectionManager\"\n    participant DB as \"Database\"\n\n    Note over Client,DB: Memory Search Flow (Primary Happy Path)\n\n    Client->>Adapter: searchMemoriesByEmbedding(embedding, params)\n    \n    Adapter->>Adapter: withDatabase(() => operation())\n    \n    Adapter->>MemoryStore: searchByEmbedding(embedding, params)\n    \n    MemoryStore->>StoreContext: withRetry(() => operation())\n    \n    StoreContext->>MemoryStore: Execute operation\n    \n    MemoryStore->>StoreContext: getDb()\n    StoreContext->>MemoryStore: Return database instance\n    \n    MemoryStore->>DB: Execute cosine distance query with conditions\n    DB-->>MemoryStore: Return matching memories with similarity scores\n    \n    MemoryStore->>MemoryStore: Transform results to Memory objects\n    MemoryStore-->>StoreContext: Return transformed memories\n    StoreContext-->>Adapter: Return memories\n    Adapter-->>Client: Return Memory[]\n\n    Note over Client,DB: Memory Creation Flow\n\n    Client->>Adapter: createMemory(memory, tableName)\n    \n    Adapter->>Adapter: withDatabase(() => operation())\n    \n    Adapter->>MemoryStore: create(memory, tableName)\n    \n    MemoryStore->>StoreContext: withIsolationContext(entityId, callback)\n    \n    StoreContext->>Manager: withIsolationContext(entityId, callback)\n    Manager->>DB: Set RLS context for entity\n    Manager->>MemoryStore: Execute callback with transaction\n    \n    MemoryStore->>DB: Insert memory record\n    MemoryStore->>MemoryStore: upsertEmbedding(tx, memoryId, embedding)\n    MemoryStore->>DB: Insert/Update embedding record\n    \n    DB-->>MemoryStore: Return inserted memory ID\n    MemoryStore-->>StoreContext: Return memory ID\n    StoreContext-->>Adapter: Return memory ID\n    Adapter-->>Client: Return UUID\n\n    Note over Client,DB: Agent Operations Flow\n\n    Client->>Adapter: getAgent(agentId)\n    \n    Adapter->>Adapter: withDatabase(() => operation())\n    \n    Adapter->>AgentStore: get(agentId)\n    \n    AgentStore->>StoreContext: withRetry(() => operation())\n    \n    AgentStore->>StoreContext: getDb()\n    StoreContext->>AgentStore: Return database instance\n    \n    AgentStore->>DB: SELECT from agents WHERE id = agentId\n    DB-->>AgentStore: Return agent record\n    \n    AgentStore->>AgentStore: Transform to Agent object\n    AgentStore-->>Adapter: Return Agent\n    Adapter-->>Client: Return Agent\n```\n\n<!-- greptile_other_comments_section -->\n\n<details><summary><h3>Context used (3)</h3></summary>\n\n- Context from `dashboard` - CLAUDE.md ([source](https://app.greptile.com/review/custom-context?memory=8ef4c9a3-e221-4aef-8556-8c9b88bf6bbb))\n- Context from `dashboard` - .cursorrules ([source](https://app.greptile.com/review/custom-context?memory=00074882-001f-44b1-89c4-859ed3656db9))\n- Context from `dashboard` - AGENTS.md ([source](https://app.greptile.com/review/custom-context?memory=51febe90-8918-4f18-be1f-d43bb68d696c))\n</details>\n\n\n<!-- /greptile_comment -->",
+      "id": "PR_kwDOMT5cIs6xVNKQ",
+      "title": "feat: Framework for adjusting prompts to best fix model contexts",
+      "author": "odilitime",
+      "number": 6113,
+      "body": "# Risks\r\n\r\nLow, new feature, uses some memory but I put configurable limit on it\r\n\r\n# Background\r\n\r\n## What does this PR do?\r\n\r\nIt add a dynamic prompt execution system\r\n\r\n## What kind of change is this?\r\n\r\nFeatures (non-breaking change which adds functionality)\r\n\r\n## Why are we doing this? Any context or related work?\r\n\r\nPeople may use models with lower context and get hallucination, this helps detect when the context is blown out.\r\n\r\n# Documentation changes needed?\r\n\r\nMy changes require a change to the project documentation.\n\n<!-- CURSOR_SUMMARY -->\n---\n\n> [!NOTE]\n> Introduces a schema-based dynamic prompt executor with validation/retries/metrics and replaces ad-hoc prompting in message flows, plus supporting types/utils and test updates.\n> \n> - **Core Runtime**:\n>   - Add `runtime.dynamicPromptExecFromState(...)` for schema-driven prompt execution (XML/JSON parsing, UUID validation codes, retries, Handlebars state injection, token estimations).\n>   - Track execution metrics via `modelSchemaMetrics` and `modelMetrics` with optional LRU eviction (`DYNAMIC_PROMPT_MAX_ENTRIES`) and retry policy (`VALIDATION_LEVEL`).\n>   - Expose metrics getters/clearers; helper methods for cache/keys; minor logging adjustments.\n> - **Message Service**:\n>   - Replace manual `useModel` + XML parsing with `dynamicPromptExecFromState` in:\n>     - `shouldRespond` evaluation (small model).\n>     - Single-shot handler (requires `thought`, `actions`).\n>     - Multi-step decision loop and final summary.\n>   - Improve error logging and minor flow tweaks.\n> - **Types/Utils**:\n>   - Export `SchemaRow` and `State` from `types`; extend `IAgentRuntime` with `dynamicPromptExecFromState`.\n>   - Export `upgradeDoubleToTriple` and `composeRandomUser` from `utils`.\n> - **Tests/Test Utils**:\n>   - Update `message-service` tests to mock `dynamicPromptExecFromState` responses.\n>   - Add mock implementation in test runtime; minor logger formatting changes.\n> \n> <sup>Written by [Cursor Bugbot](https://cursor.com/dashboard?tab=bugbot) for commit 5905b5f9ab86dd7b7d727d92060575f42a8fc707. This will update automatically on new commits. Configure [here](https://cursor.com/dashboard?tab=bugbot).</sup>\n<!-- /CURSOR_SUMMARY -->",
       "repository": "elizaos/eliza",
-      "createdAt": "2026-01-14T18:18:05Z",
+      "createdAt": "2025-11-04T05:53:02Z",
       "mergedAt": null,
-      "additions": 3151,
-      "deletions": 2988
-    },
-    {
-      "id": "PR_kwDOMT5cIs67Avaq",
-      "title": "feat: unified hooks with multi-transport support (HTTP/SSE/WebSocket)",
-      "author": "standujar",
-      "number": 6300,
-      "body": "This PR introduces unified client hooks with multi-transport support and aligns transport naming between `api-client` and `server` packages.\r\n\r\n### Key Changes\r\n\r\n**Client Hooks (packages/client)**\r\n- New `useElizaChat` hook - unified interface for all transport types (websocket, sse, http)\r\n- New `useEliza` hook - simplified hook combining chat, agents, and server state\r\n- Transport-specific hooks: `useSocketChat`, `useSSEChat`, `useHTTPChat`\r\n- Lifecycle callbacks for custom side effects (onMessageAdded, onMessageUpdated, onError)\r\n\r\n**Server Transport Alignment (packages/server)**\r\n- Renamed `mode` → `transport` parameter across messaging endpoints\r\n- Transport types: `\"http\"` (sync), `\"sse\"` (streaming), `\"websocket\"` (async via Socket.IO)\r\n- Legacy `mode` parameter still supported for backward compatibility (deprecated)\r\n- Fixed double/triple message processing by separating DB persistence from bus emission\r\n\r\n**API Client (packages/api-client)**\r\n- Added `TransportType` export aligned with server\r\n- Updated session service to use transport types\r\n\r\n**Tests**\r\n- Integration tests for all 3 transports (http, sse, websocket)\r\n- Unit tests for response handlers and transport validation\r\n- Tests for new client hooks (useHTTPChat, useSSEChat)\r\n\r\n**Test Exemple**\r\n![IMG_0035](https://github.com/user-attachments/assets/9748f7f1-5763-4a67-ac52-7f981a22ed82)\r\n\r\n## Test plan\r\n\r\n- [x] Run server unit tests: `bun test packages/server/src/__tests__/unit/api/`\r\n- [x] Run client hook tests\n\n<!-- greptile_comment -->\n\n<h3>Greptile Summary</h3>\n\n\n- Unifies client-side chat hooks providing a single interface for all transport types (websocket, sse, http) with lifecycle callbacks for custom side effects\n- Renames `mode` parameter to `transport` across messaging endpoints with backward compatibility mapping (sync→http, stream→sse) via `LEGACY_MODE_MAP`  \n- Fixes critical double/triple message processing issue by moving message bus emission to `onWebSocketTransport` callback for websocket transport only\n\n<h3>Important Files Changed</h3>\n\n\n| Filename | Overview |\n|----------|----------|\n| packages/client/src/hooks/use-eliza-chat.ts | New unified hook supporting websocket, sse, and http transports with lifecycle callbacks and consistent interface |\n| packages/server/src/api/messaging/sessions.ts | Updated to use transport parameter, added onWebSocketTransport callback to emit to message bus, fixing double message processing |\n| packages/server/src/api/shared/validation.ts | Added validateTransport with legacy mode mapping support (sync→http, stream→sse) for backward compatibility |\n| packages/server/src/api/shared/constants.ts | Defined TransportType with LEGACY_MODE_MAP for backward compatibility mapping |\n\n<h3>Confidence score: 5/5</h3>\n\n\n- This PR is safe to merge with excellent backward compatibility and thorough test coverage\n- The refactoring maintains full backward compatibility through legacy mode mapping, includes comprehensive unit and integration tests for all transport types, follows consistent naming conventions, and properly fixes the double message processing issue\n- No files require special attention\n\n<h3>Sequence Diagram</h3>\n\n```mermaid\nsequenceDiagram\n    participant User as User\n    participant Client as Client App\n    participant Router as Sessions Router\n    participant ElizaOS as ElizaOS\n    participant Agent as Agent Runtime\n    participant Database as Database\n    participant MessageBus as Message Bus\n\n    User->>Client: \"Send message\"\n    Client->>Router: \"POST /api/messaging/sessions/{sessionId}/messages\"\n    Router->>Database: \"Create message record\"\n    Database-->>Router: \"Message created\"\n    Router->>ElizaOS: \"handleMessage(agentId, messageMemory)\"\n    ElizaOS->>Agent: \"Process message\"\n    Agent->>Agent: \"Generate response\"\n    Agent-->>ElizaOS: \"Response content\"\n    ElizaOS-->>Router: \"Processing result\"\n    Router->>MessageBus: \"Emit new_message event\"\n    Router-->>Client: \"HTTP response with userMessage\"\n    MessageBus->>Agent: \"Process for agent response\"\n    Agent->>Agent: \"Generate agent reply\"\n    Agent-->>Client: \"Agent response via WebSocket\"\n    Client-->>User: \"Display conversation\"\n```\n\n<!-- greptile_other_comments_section -->\n\n<details><summary><h3>Context used (3)</h3></summary>\n\n- Context from `dashboard` - CLAUDE.md ([source](https://app.greptile.com/review/custom-context?memory=8ef4c9a3-e221-4aef-8556-8c9b88bf6bbb))\n- Context from `dashboard` - .cursorrules ([source](https://app.greptile.com/review/custom-context?memory=00074882-001f-44b1-89c4-859ed3656db9))\n- Context from `dashboard` - AGENTS.md ([source](https://app.greptile.com/review/custom-context?memory=51febe90-8918-4f18-be1f-d43bb68d696c))\n</details>\n\n\n<!-- /greptile_comment -->",
-      "repository": "elizaos/eliza",
-      "createdAt": "2025-12-30T18:53:17Z",
-      "mergedAt": "2026-01-05T08:58:04Z",
-      "additions": 3009,
-      "deletions": 529
+      "additions": 3464,
+      "deletions": 329
     }
   ],
   "codeChanges": {
-    "additions": 14233,
-    "deletions": 3647,
-    "files": 134,
-    "commitCount": 235
+    "additions": 18948,
+    "deletions": 7087,
+    "files": 170,
+    "commitCount": 323
   },
   "completedItems": [
     {
@@ -428,6 +428,15 @@
       ]
     },
     {
+      "title": "chore: Optimize build task inputs in turbo.json",
+      "prNumber": 6349,
+      "type": "other",
+      "body": "Add explicit inputs to build task for cache optimization\r\n\r\n# Risks\r\n\r\nLow\r\n\r\n# Background\r\n\r\n## What does this PR do?\r\n\r\nMake turbo rebuild less\r\n\r\n## What kind of change is this?\r\n\r\nImprovements (misc. changes to existing features)\r\n\r\n## ",
+      "files": [
+        "turbo.json"
+      ]
+    },
+    {
       "title": "feat(core): support EMBEDDING_DIMENSION setting to skip API call",
       "prNumber": 6357,
       "type": "feature",
@@ -436,28 +445,116 @@
         "packages/core/src/__tests__/runtime.test.ts",
         "packages/core/src/runtime.ts"
       ]
+    },
+    {
+      "title": "fix: prevent infinite rebuild loop in dev-watch mode",
+      "prNumber": 6361,
+      "type": "bugfix",
+      "body": "## Summary\n- Fixed infinite rebuild loop in `bun run dev` caused by `generate-version.ts` writing to `src/version.ts` on every build\n- The watcher was detecting these changes and triggering rebuilds endlessly\n\n## Changes\n- **scripts/dev-wat",
+      "files": [
+        "packages/cli/src/scripts/generate-version.ts",
+        "scripts/dev-watch.js"
+      ]
+    },
+    {
+      "title": "fix(cli): prevent shell environment variable leakage into agent secrets",
+      "prNumber": 6360,
+      "type": "bugfix",
+      "body": "## Summary\n\nFixes shell environment variable leakage into ElizaOS plugin loading decisions and agent secrets.\n\n**Problem:** `dotenv.config()` does NOT override existing `process.env` values by default. This means shell environment variables",
+      "files": [
+        "packages/cli/src/__tests__/plugin-env-filter.test.ts",
+        "packages/cli/src/commands/start/index.ts",
+        "packages/cli/src/utils/plugin-env-filter.ts",
+        "packages/core/src/__tests__/env-precedence.test.ts",
+        "packages/core/src/__tests__/secrets-filtering.test.ts",
+        "packages/core/src/__tests__/utils/environment.test.ts",
+        "packages/core/src/secrets.ts",
+        "packages/core/src/utils/environment.ts"
+      ]
+    },
+    {
+      "title": "refactor(plugin-sql): extract domain stores from BaseDrizzleAdapter",
+      "prNumber": 6366,
+      "type": "refactor",
+      "body": "Refactors `BaseDrizzleAdapter` (~3,900 lines) into composable domain stores. This improves maintainability, testability, and separation of concerns without changing the public API.\r\n\r\n## Changes\r\n\r\n### New Domain Stores (`src/stores/`)\r\n\r\n|",
+      "files": [
+        "bun.lock",
+        "packages/plugin-sql/src/base.ts",
+        "packages/plugin-sql/src/neon/adapter.ts",
+        "packages/plugin-sql/src/pg/adapter.ts",
+        "packages/plugin-sql/src/pglite/adapter.ts",
+        "packages/plugin-sql/src/stores/agent.store.ts",
+        "packages/plugin-sql/src/stores/cache.store.ts",
+        "packages/plugin-sql/src/stores/component.store.ts",
+        "packages/plugin-sql/src/stores/entity.store.ts",
+        "packages/plugin-sql/src/stores/index.ts",
+        "packages/plugin-sql/src/stores/log.store.ts",
+        "packages/plugin-sql/src/stores/memory.store.ts",
+        "packages/plugin-sql/src/stores/messaging.store.ts",
+        "packages/plugin-sql/src/stores/participant.store.ts",
+        "packages/plugin-sql/src/stores/relationship.store.ts",
+        "packages/plugin-sql/src/stores/room.store.ts",
+        "packages/plugin-sql/src/stores/task.store.ts",
+        "packages/plugin-sql/src/stores/types.ts",
+        "packages/plugin-sql/src/stores/world.store.ts",
+        "packages/plugin-sql/src/utils.ts",
+        "packages/plugin-sql/tsconfig.build.json",
+        "packages/plugin-sql/tsconfig.build.node.json",
+        "packages/plugin-sql/src/__tests__/integration/utils.test.ts",
+        "packages/plugin-sql/src/__tests__/unit/utils.test.ts",
+        "packages/plugin-sql/src/index.ts",
+        "packages/plugin-sql/src/schema/channel.ts",
+        "packages/plugin-sql/src/schema/entity.ts",
+        "packages/plugin-sql/src/schema/memory.ts",
+        "packages/plugin-sql/src/schema/message.ts",
+        "packages/plugin-sql/src/schema/messageServer.ts",
+        "packages/plugin-sql/src/schema/relationship.ts",
+        "packages/plugin-sql/src/schema/room.ts",
+        "packages/plugin-sql/src/schema/tasks.ts",
+        "packages/plugin-sql/src/schema/world.ts"
+      ]
     }
   ],
   "topContributors": [
     {
+      "username": "YuriNachos",
+      "avatarUrl": "https://avatars.githubusercontent.com/u/19365375?u=35202bfa8350f028db180527a789e8dcb7576d42&v=4",
+      "totalScore": 249.18435236903713,
+      "prScore": 248.98435236903714,
+      "issueScore": 0,
+      "reviewScore": 0,
+      "commentScore": 0.2,
+      "summary": "YuriNachos: Focused on enhancing system stability and core functionality within the elizaos/eliza repository, contributing over 400 lines of code across 10 open pull requests. Their work addressed critical infrastructure needs, such as validating directory paths to prevent errors (#6379), ensuring proper authentication by loading environment variables in agent commands (#6374, #6376), and improving event emission logic in the server (#6378). Additionally, they introduced new capabilities to the core runtime with the unregisterAction method (#6372, #6375) and improved the reliability of entity connections within the bootstrap plugin (#6370, #6371). This month’s efforts were primarily dedicated to bug fixes and feature enhancements aimed at improving the robustness of the CLI and core agent runtime."
+    },
+    {
       "username": "standujar",
       "avatarUrl": "https://avatars.githubusercontent.com/u/16385918?u=718bdcd1585be8447bdfffb8c11ce249baa7532d&v=4",
-      "totalScore": 239.5162580507739,
+      "totalScore": 244.5162580507739,
       "prScore": 176.74025805077392,
       "issueScore": 0,
-      "reviewScore": 61.5,
+      "reviewScore": 66.5,
       "commentScore": 1.2759999999999998,
       "summary": "standujar: Focused on strengthening the database infrastructure and security within the elizaos/eliza repository, most notably by implementing Neon serverless support and enhancing Row Level Security (RLS) schemas in PR #6343. They demonstrated a significant commitment to system reliability by contributing over 7,700 lines of test code to isolate RLS contexts (PR #6330) and addressing compatibility issues for PGLite (PR #6339). Beyond these merged improvements, they worked on optimizing runtime initialization through parallelization and provided technical feedback via 11 total reviews and comments. Their primary focus this month was on bug fixes and extensive test coverage, particularly within the SQL plugin architecture."
     },
     {
       "username": "0xbbjoker",
       "avatarUrl": "https://avatars.githubusercontent.com/u/54844437?u=90fe1762420de6ad493a1c1582f1f70c0d87d8e2&v=4",
-      "totalScore": 197.05223999227877,
+      "totalScore": 202.05223999227877,
       "prScore": 173.55223999227877,
       "issueScore": 0,
-      "reviewScore": 23.5,
+      "reviewScore": 28.5,
       "commentScore": 0,
       "summary": "0xbbjoker: Focused on enhancing database reliability and performance within the elizaos/eliza repository, notably resolving a critical SQL parameterization issue in the SQL plugin via PR #6316 (+278/-1 lines). They further contributed to system scalability by proposing a new LRU caching layer for the database adapter in PR #6329 and maintained high code quality through two peer reviews. Their work involved extensive modifications across 378 files, demonstrating a significant commitment to bug fixes and testing infrastructure. Overall, their primary focus this month was on stabilizing and optimizing core database plugins and backend configurations."
+    },
+    {
+      "username": "greptile-apps",
+      "avatarUrl": "https://avatars.githubusercontent.com/in/867647?v=4",
+      "totalScore": 199.638,
+      "prScore": 0,
+      "issueScore": 0,
+      "reviewScore": 198,
+      "commentScore": 1.638,
+      "summary": "greptile-apps: Focused exclusively on providing feedback and guidance through 14 code reviews and 4 pull request comments this month. Despite having no direct code changes or merged pull requests, they maintained a consistent presence in the review process to support team contributions. Their primary impact was centered on collaborative oversight and technical discussion within the pull request workflow."
     },
     {
       "username": "wtfsayo",
@@ -470,34 +567,34 @@
       "summary": "wtfsayo: Focused on enhancing infrastructure stability and database reliability, notably delivering a significant overhaul to the SQL plugin in elizaos/eliza (#6323) that introduced critical pool configurations and error handling. They also modernized the project's CI/CD pipeline by upgrading Claude workflows to Opus 4.5 and enabling automated bot triggers (#6324, #6328). Across 45 commits, they managed extensive modifications to nearly 400 files, demonstrating a high-impact focus on bug fixes and configuration management. Their primary contributions centered on improving system resilience through robust database integration and automated workflow optimizations."
     },
     {
-      "username": "greptile-apps",
-      "avatarUrl": "https://avatars.githubusercontent.com/in/867647?v=4",
-      "totalScore": 167.938,
-      "prScore": 0,
-      "issueScore": 0,
-      "reviewScore": 166.5,
-      "commentScore": 1.438,
-      "summary": "greptile-apps: Focused exclusively on providing feedback and guidance through 14 code reviews and 4 pull request comments this month. Despite having no direct code changes or merged pull requests, they maintained a consistent presence in the review process to support team contributions. Their primary impact was centered on collaborative oversight and technical discussion within the pull request workflow."
+      "username": "madjin",
+      "avatarUrl": "https://avatars.githubusercontent.com/u/32600939?u=cdcf89f44c7a50906c7a80d889efa85023af2049&v=4",
+      "totalScore": 151.00872110009533,
+      "prScore": 126.03072110009532,
+      "issueScore": 24,
+      "reviewScore": 0,
+      "commentScore": 0.978,
+      "summary": "madjin: Focused on expanding the functionality and user experience of the project's web presence, most notably by implementing a comprehensive MMORPG-style character system for the leaderboard API in elizaos/elizaos.github.io #193. This substantial contribution involved over 2,800 lines of code and established a foundation for complex features like class evolution and visual identity systems, which they further detailed through 11 new feature requests and bug reports. Beyond these gamification enhancements, they improved site accessibility by adding an XSL stylesheet for browser-rendered RSS feeds in #188 and identified critical performance bottlenecks regarding memory consumption in the build process. Their work this month primarily centered on feature development and configuration, significantly advancing the project's interactive and data-driven capabilities."
     },
     {
       "username": "odilitime",
       "avatarUrl": "https://avatars.githubusercontent.com/u/16395496?u=c9bac48e632aae594a0d85aaf9e9c9c69b674d8b&v=4",
-      "totalScore": 129.13983143172504,
+      "totalScore": 129.67983143172503,
       "prScore": 127.72383143172503,
       "issueScore": 0,
       "reviewScore": 0,
-      "commentScore": 1.416,
+      "commentScore": 1.956,
       "summary": "odilitime: Focused on enhancing core plugin functionality and build system efficiency, notably merging a substantial update to the bootstrap plugin and SQL actions in elizaos/eliza (#6333) that involved over 6,900 lines of code changes. They also addressed infrastructure performance by optimizing build task inputs in turbo.json (#6349) and triaged a regression in Discord slash commands (elizaos-plugins/plugin-discord#15). Their work this month demonstrates a strong emphasis on system stability and configuration, with a primary focus on bug fixes and architectural improvements across code and test files."
     },
     {
-      "username": "madjin",
-      "avatarUrl": "https://avatars.githubusercontent.com/u/32600939?u=cdcf89f44c7a50906c7a80d889efa85023af2049&v=4",
-      "totalScore": 102.50445676214966,
-      "prScore": 80.30445676214967,
-      "issueScore": 22,
+      "username": "borisudovicic",
+      "avatarUrl": "https://avatars.githubusercontent.com/u/31806472?u=8935f4d43fd7e4eb9bf5ff92d54d4d2f8ac8a786&v=4",
+      "totalScore": 64,
+      "prScore": 0,
+      "issueScore": 64,
       "reviewScore": 0,
-      "commentScore": 0.2,
-      "summary": "madjin: Focused on expanding the functionality and user experience of the project's web presence, most notably by implementing a comprehensive MMORPG-style character system for the leaderboard API in elizaos/elizaos.github.io #193. This substantial contribution involved over 2,800 lines of code and established a foundation for complex features like class evolution and visual identity systems, which they further detailed through 11 new feature requests and bug reports. Beyond these gamification enhancements, they improved site accessibility by adding an XSL stylesheet for browser-rendered RSS feeds in #188 and identified critical performance bottlenecks regarding memory consumption in the build process. Their work this month primarily centered on feature development and configuration, significantly advancing the project's interactive and data-driven capabilities."
+      "commentScore": 0,
+      "summary": "borisudovicic: Focused on refining the user experience and product logic for the Eliza platform, driving the resolution of 18 issues related to agent discovery, chat interface usability, and credit management. They played a key role in defining the \"SDK-first Hooks Mode\" (#5966) and \"Core Hooks\" (#5928) architecture while overseeing critical UI/UX polish, such as optimizing chat box dynamics (#6310) and improving the agent creation workflow (#6306, #6307). Their contributions centered on streamlining the onboarding process for non-signed-up users (#6312, #6353) and enhancing the public agent ecosystem through better state separation and knowledge transfer (#6313, #6303). Overall, their activity focused on product management and quality assurance to ensure a cohesive and scalable agent-building experience."
     },
     {
       "username": "1bcMax",
@@ -510,16 +607,6 @@
       "summary": "1bcMax: Focused on expanding payment capabilities within the ecosystem by initiating the implementation of the plugin-blockrun for x402 micropayments in elizaos/eliza (#6355). This substantial feature addition involved over 1,000 lines of new code across 11 files, demonstrating a significant investment in building out financial infrastructure. The work shows a comprehensive approach to development, with a balanced focus on core feature logic, testing, and configuration."
     },
     {
-      "username": "borisudovicic",
-      "avatarUrl": "https://avatars.githubusercontent.com/u/31806472?u=8935f4d43fd7e4eb9bf5ff92d54d4d2f8ac8a786&v=4",
-      "totalScore": 58,
-      "prScore": 0,
-      "issueScore": 58,
-      "reviewScore": 0,
-      "commentScore": 0,
-      "summary": "borisudovicic: Focused on refining the user experience and product logic for the Eliza platform, driving the resolution of 18 issues related to agent discovery, chat interface usability, and credit management. They played a key role in defining the \"SDK-first Hooks Mode\" (#5966) and \"Core Hooks\" (#5928) architecture while overseeing critical UI/UX polish, such as optimizing chat box dynamics (#6310) and improving the agent creation workflow (#6306, #6307). Their contributions centered on streamlining the onboarding process for non-signed-up users (#6312, #6353) and enhancing the public agent ecosystem through better state separation and knowledge transfer (#6313, #6303). Overall, their activity focused on product management and quality assurance to ensure a cohesive and scalable agent-building experience."
-    },
-    {
       "username": "revlentless",
       "avatarUrl": "https://avatars.githubusercontent.com/u/215957173?v=4",
       "totalScore": 43.5437738965761,
@@ -527,7 +614,7 @@
       "issueScore": 0,
       "reviewScore": 0,
       "commentScore": 0,
-      "summary": null
+      "summary": "revlentless: Focused on a major architectural expansion by initiating the implementation of a WebAssembly agent runtime for the v2.0.0 release of elizaos/eliza (#6363). This significant undertaking involved modifying 99 files with over 5,100 lines of code, demonstrating a high level of effort directed toward core feature development and system infrastructure. Their work this month was characterized by a heavy emphasis on feature engineering and comprehensive testing to support this new runtime environment."
     },
     {
       "username": "lalalune",
@@ -560,6 +647,16 @@
       "summary": "linear: Focused on architectural improvements and system stability by identifying and documenting critical technical enhancements across the elizaos/eliza repository. They prioritized core infrastructure by proposing solutions for JWT authentication (#6327), message processing parallelization (#6337), and runtime initialization optimization (#6334). Their contributions also addressed immediate reliability issues, including a fix for double processing in the Messaging API (#6298) and resolving a race condition in credit deduction (#6338). Overall, their focus remained on high-level system design, database query patterns, and backend security."
     },
     {
+      "username": "ChristopherTrimboli",
+      "avatarUrl": "https://avatars.githubusercontent.com/u/27584221?u=0d816ce1dcdea8f925aba18bb710153d4a87a719&v=4",
+      "totalScore": 15,
+      "prScore": 0,
+      "issueScore": 0,
+      "reviewScore": 15,
+      "commentScore": 0,
+      "summary": "ChristopherTrimboli: Focused on quality assurance and peer collaboration this month, contributing through the review and approval of two pull requests. Their involvement centered on providing oversight and validation for team contributions rather than direct code implementation. This activity reflects a focus on maintaining project standards through the code review process."
+    },
+    {
       "username": "takasaki404",
       "avatarUrl": "https://avatars.githubusercontent.com/u/193405421?u=8b79613f736e04d6e10ebe37042851efa758768d&v=4",
       "totalScore": 14.346573590279972,
@@ -580,14 +677,14 @@
       "summary": "kamiyo-ai: Focused on expanding the ecosystem by initiating the integration of a new plugin into the registry. This effort is centered on the submission of PR #246 in elizaos-plugins/registry to add the @kamiyo/eliza plugin. Their primary focus this month has been on plugin registration and ecosystem contribution."
     },
     {
-      "username": "ChristopherTrimboli",
-      "avatarUrl": "https://avatars.githubusercontent.com/u/27584221?u=0d816ce1dcdea8f925aba18bb710153d4a87a719&v=4",
-      "totalScore": 10,
+      "username": "shuhaib112",
+      "avatarUrl": "https://avatars.githubusercontent.com/u/211030292?v=4",
+      "totalScore": 9,
       "prScore": 0,
       "issueScore": 0,
-      "reviewScore": 10,
+      "reviewScore": 9,
       "commentScore": 0,
-      "summary": "ChristopherTrimboli: Focused on quality assurance and peer collaboration this month, contributing through the review and approval of two pull requests. Their involvement centered on providing oversight and validation for team contributions rather than direct code implementation. This activity reflects a focus on maintaining project standards through the code review process."
+      "summary": null
     },
     {
       "username": "thewoweffect",
@@ -597,7 +694,7 @@
       "issueScore": 2.1,
       "reviewScore": 0,
       "commentScore": 0.2,
-      "summary": null
+      "summary": "thewoweffect: Focused on identifying and documenting system errors within the elizaos/eliza repository, specifically reporting a failure in the reflection evaluator. They successfully triaged and closed issue #6364 regarding the \"Entity not found\" error during update operations. Their activity this month was centered on issue reporting and troubleshooting within the core framework."
     },
     {
       "username": "tdnupe3",
@@ -607,7 +704,7 @@
       "issueScore": 2,
       "reviewScore": 0,
       "commentScore": 0,
-      "summary": null
+      "summary": "tdnupe3: Focused on expanding the ecosystem's financial capabilities by proposing a comprehensive implementation guide for AI agent payments. They initiated a strategic discussion in elizaos/eliza (#6365) regarding the integration of Circle and Coinbase APIs to facilitate automated transactions. Their primary focus this month was on architectural planning and documentation for payment infrastructure."
     },
     {
       "username": "samarth30",
@@ -620,6 +717,36 @@
       "summary": "samarth30: Focused on project expansion by proposing a new \"Apps promotion\" feature for the elizaos/eliza repository. This contribution involved identifying a growth opportunity and documenting the requirement in issue #6341. Their primary focus this month was on feature ideation and initial project planning."
     },
     {
+      "username": "metatev",
+      "avatarUrl": "https://avatars.githubusercontent.com/u/26566294?u=a0604d1f9f7a7936e350643ffccaef1f2a808fad&v=4",
+      "totalScore": 2,
+      "prScore": 0,
+      "issueScore": 2,
+      "reviewScore": 0,
+      "commentScore": 0,
+      "summary": "metatev: Focused on long-term project capabilities by proposing a strategic enhancement for smart contract deployment. They initiated a discussion on future infrastructure needs within the elizaos/eliza repository by opening issue #6367. Their primary focus this month was on architectural planning and expanding the platform's functional scope."
+    },
+    {
+      "username": "Zenobow",
+      "avatarUrl": "https://avatars.githubusercontent.com/u/255418143?v=4",
+      "totalScore": 2,
+      "prScore": 0,
+      "issueScore": 2,
+      "reviewScore": 0,
+      "commentScore": 0,
+      "summary": "Zenobow: Focused on identifying and documenting system inconsistencies within the elizaos/eliza repository. They reported a technical regression regarding eligibility mismatches and snapshot bugs related to Tangem Hardware (#6369). Their primary focus this month was on issue identification and troubleshooting hardware-related migration bugs."
+    },
+    {
+      "username": "Xayaan",
+      "avatarUrl": "https://avatars.githubusercontent.com/u/5237930?u=7840b286463bde982c8af8f389e61e26a01328cb&v=4",
+      "totalScore": 2,
+      "prScore": 0,
+      "issueScore": 2,
+      "reviewScore": 0,
+      "commentScore": 0,
+      "summary": "Xayaan: Focused on identifying and documenting database-related edge cases within the elizaos/eliza repository. They contributed by reporting a specific technical issue regarding SQL error handling for zero-vector fallbacks (#6380). Their activity this month was centered on issue identification and system stability reporting."
+    },
+    {
       "username": "GarrickBrown",
       "avatarUrl": "https://avatars.githubusercontent.com/u/41980127?u=605528eb2347d8e0368ae5b08e6fdbdbfb5c293b&v=4",
       "totalScore": 2,
@@ -628,11 +755,21 @@
       "reviewScore": 0,
       "commentScore": 0,
       "summary": "GarrickBrown: Focused on identifying and reporting stability issues within the Telegram plugin ecosystem. They documented a critical TypeError occurring during image processing, opening issue #23 in elizaos-plugins/plugin-telegram to facilitate a fix for the crashing bug. Their primary focus this month was on bug reporting and improving the reliability of plugin-based image handling."
+    },
+    {
+      "username": "BinaryBluePeach",
+      "avatarUrl": "https://avatars.githubusercontent.com/u/192237769?v=4",
+      "totalScore": 2,
+      "prScore": 0,
+      "issueScore": 2,
+      "reviewScore": 0,
+      "commentScore": 0,
+      "summary": "BinaryBluePeach: Focused on identifying and reporting integration issues within the Discord plugin ecosystem. They documented a critical runtime error regarding undefined message functions in elizaos-plugins/plugin-discord (#43), providing essential feedback for troubleshooting the plugin's communication layer. Their activity this month was centered on bug reporting and system stability within the Discord integration."
     }
   ],
-  "newPRs": 22,
-  "mergedPRs": 15,
-  "newIssues": 42,
-  "closedIssues": 32,
-  "activeContributors": 20
+  "newPRs": 32,
+  "mergedPRs": 19,
+  "newIssues": 48,
+  "closedIssues": 36,
+  "activeContributors": 25
 }

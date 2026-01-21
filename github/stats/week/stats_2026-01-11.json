@@ -5,7 +5,7 @@
     "intervalType": "week"
   },
   "repository": "elizaos/eliza",
-  "overview": "From 2026-01-11 to 2026-01-18, elizaos/eliza had 9 new PRs (3 merged), 2 new issues, and 11 active contributors.",
+  "overview": "From 2026-01-11 to 2026-01-18, elizaos/eliza had 19 new PRs (6 merged), 7 new issues, and 16 active contributors.",
   "topIssues": [
     {
       "id": "I_kwDOMT5cIs7jNLxv",
@@ -15,9 +15,9 @@
       "repository": "elizaos/eliza",
       "body": "\nVersion: 1.7.1\nError: UPDATE_CONTACT fails with \"Entity not found\"\nCause: ensureConnection() is not called before saving facts\nLogs: afterSplice values + \"No ownership data found for world\"\nProposed fix: // V reflection.ts před UPDATE_CONTACT\nawait runtime.ensureConnection({\n  entityId, roomId, userName, name, worldId, source\n});\n",
       "createdAt": "2026-01-14T07:10:02Z",
-      "closedAt": null,
-      "state": "OPEN",
-      "commentCount": 1
+      "closedAt": "2026-01-17T06:31:52Z",
+      "state": "CLOSED",
+      "commentCount": 2
     },
     {
       "id": "I_kwDOMT5cIs7gwUMG",
@@ -70,6 +70,18 @@
   ],
   "topPRs": [
     {
+      "id": "PR_kwDOMT5cIs680DbX",
+      "title": "fix(v2.0.0): Python example testing & fixes",
+      "author": "odilitime",
+      "number": 6358,
+      "body": "- Add Python quickstart documentation (docs/python-quickstart.md)\r\n- Fix chat example to include inmemorydb plugin for database support\r\n- Add dotenv loading to chat example for .env file support\r\n- Fix inmemorydb plugin to use proper Plugin class instead of dict\r\n- Fix inmemorydb adapter to accept params dict in get_memories()\r\n- Fix inmemorydb adapter to handle Pydantic models in create_memory/update_memory\r\n- Fix character provider to use getattr for optional attributes\r\n- Add get_available_actions() method to AgentRuntime\r\n- Add get_entity() alias method to AgentRuntime\r\n- Update get_memories() to accept keyword arguments\r\n\r\nThe Python port had issues because:\r\nPlugin export - was a dict instead of Plugin object\r\nMethod signatures - expected dicts but got Pydantic models\r\nNo type enforcement - Python doesn't catch these at compile time\r\nThe Rust type system prevents these bugs automatically. The Python fixes we made bring it to parity with the working Rust implementation.\r\n\r\n# Risks\r\n\r\nMedium\r\n\r\n# Background\r\n\r\n## What does this PR do?\r\n\r\nFix examples/chat/python\r\n\r\n## What kind of change is this?\r\n\r\nBug fixes (non-breaking change which fixes an issue)\r\n\r\n## Why are we doing this? Any context or related work?\r\nReview\r\n\r\n# Documentation changes needed?\r\n\r\nmaybe\r\n\r\n\n<!-- CURSOR_SUMMARY -->\n---\n\n> [!NOTE]\n> Introduces true streaming and stabilizes Python runtime/plugins, plus major example and training additions.\n> \n> - Adds streaming text APIs: new `ModelType.TEXT_*_STREAM`, `AgentRuntime.use_model_stream()`/`register_streaming_model()`, and `DefaultMessageService.handle_message_stream()` with `StreamingMessageResult`\n> - OpenAI plugin implements streaming handlers; core exports updated to include streaming types\n> - Fixes `plugin-inmemorydb`: converted to proper `Plugin`, adapter now accepts `params`/kwargs, handles Pydantic models (camelCase keys), and corrects pagination/filters\n> - Hardens character provider to safely access optional fields via `getattr`\n> - AgentRuntime enhancements: `get_available_actions()`, `get_entity()` alias, `get_memories()` kwargs support\n> - A2A FastAPI server uses true token-by-token SSE streaming and includes `inmemorydb`; requirements updated\n> - Chat example loads `.env` and includes `inmemorydb` plugin\n> - ART Tic‑Tac‑Toe: adds heuristic agent, refines config (`opponent`, `ai_player`), winner/draw handling, and CLI updates\n> - New Atropos TextWorld package: environment/agents, trajectory + tokenizer tooling, offline data generation, BaseEnv factory, and CLI; README expanded\n> - Core Python README and example docs updated for setup and usage\n> \n> <sup>Written by [Cursor Bugbot](https://cursor.com/dashboard?tab=bugbot) for commit 21f8c31fc22b7778f998d85c754ee82a0a8e2253. This will update automatically on new commits. Configure [here](https://cursor.com/dashboard?tab=bugbot).</sup>\n<!-- /CURSOR_SUMMARY -->\n\n\r\n\r\n<!-- greptile_comment -->\r\n\r\n<h2>Greptile Overview</h2>\r\n\r\n### Greptile Summary\r\n\r\nThis PR fixes the Python chat example and inmemorydb plugin to work together, adds Python quickstart documentation, and improves Character attribute handling. The changes include:\r\n\r\n**Key Improvements:**\r\n- Adds comprehensive Python quickstart documentation with examples\r\n- Fixes inmemorydb plugin to use proper Plugin class instead of dict\r\n- Enhances inmemorydb adapter to handle Pydantic models in create_memory/update_memory\r\n- Updates character provider to safely access optional attributes with getattr()\r\n- Adds dotenv support to chat example for .env file loading\r\n- Adds useful helper methods to AgentRuntime (get_available_actions, get_entity alias)\r\n- Enhances get_memories() to accept keyword arguments\r\n\r\n**Critical Issues Found:**\r\n1. **Bug in adapter.py line 329**: The update_memory() method references the wrong variable name (`memory` instead of `memory_dict`), which will cause AttributeError when processing Pydantic models\r\n2. **Bug in character.py lines 70-73**: Inconsistent attribute access - uses getattr() in function body but direct access in return data dict, causing AttributeError for optional attributes\r\n3. **Missing dependency in chat.py**: Imports python-dotenv but it's not in requirements.txt\r\n4. **Incomplete documentation**: Quickstart guide doesn't include inmemorydb plugin installation that the chat example now requires\r\n\r\n**Impact:**\r\nThe bugs in adapter.py and character.py are critical and will cause runtime errors. The missing dependencies will prevent users from running the example successfully.\r\n\r\n### Confidence Score: 1/5\r\n\r\n- This PR contains critical bugs that will cause runtime failures and prevent the chat example from working\r\n- Score reflects two critical logic errors (wrong variable reference in adapter.py:329 and inconsistent attribute access in character.py:70-73) plus missing dependencies that will cause import errors. These issues will break the example for users and cause AttributeErrors at runtime.\r\n- Pay close attention to plugins/plugin-inmemorydb/python/elizaos_plugin_inmemorydb/adapter.py (line 329 bug), packages/python/elizaos/bootstrap/providers/character.py (lines 70-73 inconsistency), and examples/chat/python/chat.py (missing python-dotenv dependency)\r\n\r\n<h3>Important Files Changed</h3>\r\n\r\n\r\n\r\nFile Analysis\r\n\r\n\r\n\r\n| Filename | Score | Overview |\r\n|----------|-------|----------|\r\n| docs/python-quickstart.md | 3/5 | New documentation file added. Missing plugin-inmemorydb installation instruction that the chat example now requires. |\r\n| examples/chat/python/chat.py | 2/5 | Added dotenv and inmemorydb support. Missing python-dotenv dependency in requirements, which will cause import errors. |\r\n| packages/python/elizaos/bootstrap/providers/character.py | 2/5 | Fixed to use getattr for optional character attributes. Critical bug: return data dict directly accesses attributes without getattr, causing AttributeError. |\r\n| plugins/plugin-inmemorydb/python/elizaos_plugin_inmemorydb/adapter.py | 1/5 | Enhanced get_memories(), create_memory(), and update_memory() to handle Pydantic models. Critical bug in update_memory line 329: uses wrong variable name. |\r\n\r\n</details>\r\n\r\n\r\n\r\n<h3>Sequence Diagram</h3>\r\n\r\n```mermaid\r\nsequenceDiagram\r\n    participant User\r\n    participant chat.py\r\n    participant dotenv\r\n    participant AgentRuntime\r\n    participant OpenAIPlugin\r\n    participant InMemoryDBPlugin\r\n    participant InMemoryAdapter\r\n    participant CharacterProvider\r\n\r\n    User->>chat.py: Run python chat.py\r\n    chat.py->>dotenv: load_dotenv(env_path)\r\n    dotenv-->>chat.py: Load .env from repo root\r\n    \r\n    chat.py->>AgentRuntime: Create with character and plugins\r\n    AgentRuntime->>OpenAIPlugin: Initialize OpenAI plugin\r\n    AgentRuntime->>InMemoryDBPlugin: Initialize InMemoryDB plugin\r\n    InMemoryDBPlugin->>InMemoryAdapter: create_database_adapter(agent_id)\r\n    InMemoryAdapter-->>InMemoryDBPlugin: Return adapter instance\r\n    InMemoryDBPlugin->>AgentRuntime: register_database_adapter(adapter)\r\n    \r\n    AgentRuntime->>CharacterProvider: get_character_context()\r\n    CharacterProvider->>CharacterProvider: Use getattr() for optional attributes\r\n    CharacterProvider-->>AgentRuntime: Return character context\r\n    \r\n    AgentRuntime-->>chat.py: Runtime initialized\r\n    \r\n    User->>chat.py: Type message\r\n    chat.py->>AgentRuntime: handle_message(runtime, memory)\r\n    AgentRuntime->>InMemoryAdapter: get_memories(params)\r\n    InMemoryAdapter-->>AgentRuntime: Return memories\r\n    AgentRuntime->>OpenAIPlugin: Generate response\r\n    OpenAIPlugin-->>AgentRuntime: Return response\r\n    AgentRuntime->>InMemoryAdapter: create_memory(memory_dict)\r\n    InMemoryAdapter-->>AgentRuntime: Memory stored\r\n    AgentRuntime-->>chat.py: Return result\r\n    chat.py-->>User: Display response\r\n```\r\n\r\n<!-- greptile_other_comments_section -->\r\n\r\n<!-- /greptile_comment -->\n\n<!-- This is an auto-generated comment: release notes by coderabbit.ai -->\n## Summary by CodeRabbit\n\n* **New Features**\n  * In-memory database plugin for agent memory.\n  * Token-by-token streaming for chat responses and streaming endpoints.\n  * Atropos data-generation, trajectory tooling, and TextWorld agent integrations.\n  * New Tic‑Tac‑Toe AI/player options and interactive configuration.\n\n* **Documentation**\n  * Expanded developer setup, examples, runnable chat walkthroughs, and new Atropos CLI flags.\n\n* **Other**\n  * Updated Python packaging/requirements and repository-root .env loading for examples.\n\n<sub>✏️ Tip: You can customize this high-level summary in your review settings.</sub>\n<!-- end of auto-generated comment: release notes by coderabbit.ai -->",
+      "repository": "elizaos/eliza",
+      "createdAt": "2026-01-13T00:34:32Z",
+      "mergedAt": null,
+      "additions": 17483,
+      "deletions": 8280
+    },
+    {
       "id": "PR_kwDOMT5cIs69CGSx",
       "title": "feat(v2.0.0): wasm agent runtime",
       "author": "revlentless",
@@ -89,21 +101,9 @@
       "body": "Refactors `BaseDrizzleAdapter` (~3,900 lines) into composable domain stores. This improves maintainability, testability, and separation of concerns without changing the public API.\r\n\r\n## Changes\r\n\r\n### New Domain Stores (`src/stores/`)\r\n\r\n| Store | Responsibility | Methods |\r\n|-------|----------------|---------|\r\n| `AgentStore` | Agent CRUD operations | get, getAll, create, update, delete, count |\r\n| `MemoryStore` | Memory & embeddings | get, getById, getByIds, create, update, delete, search, count |\r\n| `RoomStore` | Room management | getByIds, getByWorld, create, update, delete |\r\n| `ParticipantStore` | Room participants | getRoomsForEntity, add, remove, getForRoom, isParticipant, userState |\r\n| `EntityStore` | Entity management | getByIds, getForRoom, create, update, delete, getByNames, searchByName |\r\n| `ComponentStore` | ECS components | get, getAll, create, update, delete |\r\n| `RelationshipStore` | Entity relationships | create, update, get, getAll |\r\n| `CacheStore` | Key-value cache | get, set, delete |\r\n| `WorldStore` | World management | create, get, getAll, update, delete |\r\n| `TaskStore` | Task management | create, getByParams, getByName, get, update, delete |\r\n| `LogStore` | Logging & summaries | create, getMany, getAgentRunSummaries, delete |\r\n| `MessagingStore` | Servers, channels, messages | createServer, getServers, createChannel, getChannels, createMessage, getMessages, participants |\r\n\r\n### Architecture\r\n\r\n```\r\nBaseDrizzleAdapter\r\n    │\r\n    ├── initStores()  ───────────────────────────────┐\r\n    │                                                │\r\n    │   ┌─────────────────────────────────────────┐  │\r\n    │   │           StoreContext                  │◄─┘\r\n    │   │  • getDb()                              │\r\n    │   │  • withRetry()                          │\r\n    │   │  • withIsolationContext()               │\r\n    │   │  • agentId                              │\r\n    │   │  • getEmbeddingDimension()              │\r\n    │   └─────────────────────────────────────────┘\r\n    │                   │\r\n    │         ┌─────────┴─────────┐\r\n    │         ▼                   ▼\r\n    │   ┌──────────┐       ┌──────────┐\r\n    │   │  Store1  │  ...  │  StoreN  │\r\n    │   └──────────┘       └──────────┘\r\n    │\r\n    └── Public methods delegate to stores\r\n```\r\n\r\n### Key Design Decisions\r\n\r\n1. **Shared Context**: All stores receive a `StoreContext` with database access, retry logic, and RLS isolation\r\n\r\n2. **No API Changes**: All public methods remain identical - only internal implementation refactored\r\n\r\n## Impact\r\n\r\n- **Lines reduced**: `base.ts` from ~3,900 to ~1,350 lines (~65% reduction)\r\n- **Files added**: 13 new files in `src/stores/`\r\n- **Public API**: No changes\r\n- **Tests**: All 160 unit + all integration tests pass (PGLite + PostgreSQL)\r\n\r\n## Testing\r\n\r\n```bash\r\n# Unit tests\r\nbun run test:unit        # 160 pass\r\n\r\n# Integration tests (PGLite)\r\nbun run test:integration # All pass\r\n\r\n# Integration tests (PostgreSQL)\r\nbun run test:integration:postgres # All pass (including RLS tests)\r\n```\r\n\r\n## Migration\r\n\r\nNo migration needed - this is a pure refactoring with no public API changes.\n\n<!-- greptile_comment -->\n\n<h3>Greptile Summary</h3>\n\n\n- Refactors monolithic `BaseDrizzleAdapter` class (~3,900 lines) into 11 focused domain stores in `packages/plugin-sql/src/stores/` to improve maintainability and testability while preserving the exact same public API\n- Introduces `StoreContext` pattern that provides shared database access, retry logic, and Row Level Security isolation to all domain stores, maintaining consistency across the codebase\n- Implements comprehensive CRUD operations across stores for agents, memories, rooms, participants, entities, components, relationships, caching, worlds, tasks, and logging\n\n<h3>Important Files Changed</h3>\n\n\n| Filename | Overview |\n|----------|----------|\n| packages/plugin-sql/src/base.ts | Refactored from ~3,900 to ~1,350 lines by extracting domain logic into stores and adding delegation methods |\n| packages/plugin-sql/src/stores/memory.store.ts | New store handling memory CRUD, vector embeddings, and similarity search operations |\n| packages/plugin-sql/src/stores/entity.store.ts | New store for entity management including component aggregation and name-based searching |\n| packages/plugin-sql/src/stores/log.store.ts | New store with complex agent run summaries and JSON sanitization for logging operations |\n\n<h3>Confidence score: 4/5</h3>\n\n\n- This is a well-executed refactoring with comprehensive testing and minimal risk due to preserved public API\n- Score lowered due to minor issues: unused parameter in TaskStore.getAll(), missing agent ID filter in TaskStore.delete(), and complex field mapping logic in RelationshipStore that could be simplified\n- No files require special attention - the refactoring successfully maintains API compatibility while improving code organization\n\n<h3>Sequence Diagram</h3>\n\n```mermaid\nsequenceDiagram\n    participant Client as \"Client\"\n    participant Adapter as \"BaseDrizzleAdapter\"\n    participant StoreContext as \"StoreContext\"\n    participant MemoryStore as \"MemoryStore\"\n    participant Manager as \"ConnectionManager\"\n    participant DB as \"Database\"\n\n    Note over Client,DB: Memory Search Flow (Primary Happy Path)\n\n    Client->>Adapter: searchMemoriesByEmbedding(embedding, params)\n    \n    Adapter->>Adapter: withDatabase(() => operation())\n    \n    Adapter->>MemoryStore: searchByEmbedding(embedding, params)\n    \n    MemoryStore->>StoreContext: withRetry(() => operation())\n    \n    StoreContext->>MemoryStore: Execute operation\n    \n    MemoryStore->>StoreContext: getDb()\n    StoreContext->>MemoryStore: Return database instance\n    \n    MemoryStore->>DB: Execute cosine distance query with conditions\n    DB-->>MemoryStore: Return matching memories with similarity scores\n    \n    MemoryStore->>MemoryStore: Transform results to Memory objects\n    MemoryStore-->>StoreContext: Return transformed memories\n    StoreContext-->>Adapter: Return memories\n    Adapter-->>Client: Return Memory[]\n\n    Note over Client,DB: Memory Creation Flow\n\n    Client->>Adapter: createMemory(memory, tableName)\n    \n    Adapter->>Adapter: withDatabase(() => operation())\n    \n    Adapter->>MemoryStore: create(memory, tableName)\n    \n    MemoryStore->>StoreContext: withIsolationContext(entityId, callback)\n    \n    StoreContext->>Manager: withIsolationContext(entityId, callback)\n    Manager->>DB: Set RLS context for entity\n    Manager->>MemoryStore: Execute callback with transaction\n    \n    MemoryStore->>DB: Insert memory record\n    MemoryStore->>MemoryStore: upsertEmbedding(tx, memoryId, embedding)\n    MemoryStore->>DB: Insert/Update embedding record\n    \n    DB-->>MemoryStore: Return inserted memory ID\n    MemoryStore-->>StoreContext: Return memory ID\n    StoreContext-->>Adapter: Return memory ID\n    Adapter-->>Client: Return UUID\n\n    Note over Client,DB: Agent Operations Flow\n\n    Client->>Adapter: getAgent(agentId)\n    \n    Adapter->>Adapter: withDatabase(() => operation())\n    \n    Adapter->>AgentStore: get(agentId)\n    \n    AgentStore->>StoreContext: withRetry(() => operation())\n    \n    AgentStore->>StoreContext: getDb()\n    StoreContext->>AgentStore: Return database instance\n    \n    AgentStore->>DB: SELECT from agents WHERE id = agentId\n    DB-->>AgentStore: Return agent record\n    \n    AgentStore->>AgentStore: Transform to Agent object\n    AgentStore-->>Adapter: Return Agent\n    Adapter-->>Client: Return Agent\n```\n\n<!-- greptile_other_comments_section -->\n\n<details><summary><h3>Context used (3)</h3></summary>\n\n- Context from `dashboard` - CLAUDE.md ([source](https://app.greptile.com/review/custom-context?memory=8ef4c9a3-e221-4aef-8556-8c9b88bf6bbb))\n- Context from `dashboard` - .cursorrules ([source](https://app.greptile.com/review/custom-context?memory=00074882-001f-44b1-89c4-859ed3656db9))\n- Context from `dashboard` - AGENTS.md ([source](https://app.greptile.com/review/custom-context?memory=51febe90-8918-4f18-be1f-d43bb68d696c))\n</details>\n\n\n<!-- /greptile_comment -->",
       "repository": "elizaos/eliza",
       "createdAt": "2026-01-14T18:18:05Z",
-      "mergedAt": null,
-      "additions": 3151,
-      "deletions": 2988
-    },
-    {
-      "id": "PR_kwDOMT5cIs680DbX",
-      "title": "fix(v2.0.0): Python example testing & fixes",
-      "author": "odilitime",
-      "number": 6358,
-      "body": "- Add Python quickstart documentation (docs/python-quickstart.md)\r\n- Fix chat example to include inmemorydb plugin for database support\r\n- Add dotenv loading to chat example for .env file support\r\n- Fix inmemorydb plugin to use proper Plugin class instead of dict\r\n- Fix inmemorydb adapter to accept params dict in get_memories()\r\n- Fix inmemorydb adapter to handle Pydantic models in create_memory/update_memory\r\n- Fix character provider to use getattr for optional attributes\r\n- Add get_available_actions() method to AgentRuntime\r\n- Add get_entity() alias method to AgentRuntime\r\n- Update get_memories() to accept keyword arguments\r\n\r\nThe Python port had issues because:\r\nPlugin export - was a dict instead of Plugin object\r\nMethod signatures - expected dicts but got Pydantic models\r\nNo type enforcement - Python doesn't catch these at compile time\r\nThe Rust type system prevents these bugs automatically. The Python fixes we made bring it to parity with the working Rust implementation.\r\n\r\n# Risks\r\n\r\nMedium\r\n\r\n# Background\r\n\r\n## What does this PR do?\r\n\r\nFix examples/chat/python\r\n\r\n## What kind of change is this?\r\n\r\nBug fixes (non-breaking change which fixes an issue)\r\n\r\n## Why are we doing this? Any context or related work?\r\nReview\r\n\r\n# Documentation changes needed?\r\n\r\nmaybe\r\n\r\n\n<!-- CURSOR_SUMMARY -->\n---\n\n> [!NOTE]\n> Introduces true streaming and stabilizes Python runtime/plugins, plus major example and training additions.\n> \n> - Adds streaming text APIs: new `ModelType.TEXT_*_STREAM`, `AgentRuntime.use_model_stream()`/`register_streaming_model()`, and `DefaultMessageService.handle_message_stream()` with `StreamingMessageResult`\n> - OpenAI plugin implements streaming handlers; core exports updated to include streaming types\n> - Fixes `plugin-inmemorydb`: converted to proper `Plugin`, adapter now accepts `params`/kwargs, handles Pydantic models (camelCase keys), and corrects pagination/filters\n> - Hardens character provider to safely access optional fields via `getattr`\n> - AgentRuntime enhancements: `get_available_actions()`, `get_entity()` alias, `get_memories()` kwargs support\n> - A2A FastAPI server uses true token-by-token SSE streaming and includes `inmemorydb`; requirements updated\n> - Chat example loads `.env` and includes `inmemorydb` plugin\n> - ART Tic‑Tac‑Toe: adds heuristic agent, refines config (`opponent`, `ai_player`), winner/draw handling, and CLI updates\n> - New Atropos TextWorld package: environment/agents, trajectory + tokenizer tooling, offline data generation, BaseEnv factory, and CLI; README expanded\n> - Core Python README and example docs updated for setup and usage\n> \n> <sup>Written by [Cursor Bugbot](https://cursor.com/dashboard?tab=bugbot) for commit 21f8c31fc22b7778f998d85c754ee82a0a8e2253. This will update automatically on new commits. Configure [here](https://cursor.com/dashboard?tab=bugbot).</sup>\n<!-- /CURSOR_SUMMARY -->\n\n\r\n\r\n<!-- greptile_comment -->\r\n\r\n<h2>Greptile Overview</h2>\r\n\r\n### Greptile Summary\r\n\r\nThis PR fixes the Python chat example and inmemorydb plugin to work together, adds Python quickstart documentation, and improves Character attribute handling. The changes include:\r\n\r\n**Key Improvements:**\r\n- Adds comprehensive Python quickstart documentation with examples\r\n- Fixes inmemorydb plugin to use proper Plugin class instead of dict\r\n- Enhances inmemorydb adapter to handle Pydantic models in create_memory/update_memory\r\n- Updates character provider to safely access optional attributes with getattr()\r\n- Adds dotenv support to chat example for .env file loading\r\n- Adds useful helper methods to AgentRuntime (get_available_actions, get_entity alias)\r\n- Enhances get_memories() to accept keyword arguments\r\n\r\n**Critical Issues Found:**\r\n1. **Bug in adapter.py line 329**: The update_memory() method references the wrong variable name (`memory` instead of `memory_dict`), which will cause AttributeError when processing Pydantic models\r\n2. **Bug in character.py lines 70-73**: Inconsistent attribute access - uses getattr() in function body but direct access in return data dict, causing AttributeError for optional attributes\r\n3. **Missing dependency in chat.py**: Imports python-dotenv but it's not in requirements.txt\r\n4. **Incomplete documentation**: Quickstart guide doesn't include inmemorydb plugin installation that the chat example now requires\r\n\r\n**Impact:**\r\nThe bugs in adapter.py and character.py are critical and will cause runtime errors. The missing dependencies will prevent users from running the example successfully.\r\n\r\n### Confidence Score: 1/5\r\n\r\n- This PR contains critical bugs that will cause runtime failures and prevent the chat example from working\r\n- Score reflects two critical logic errors (wrong variable reference in adapter.py:329 and inconsistent attribute access in character.py:70-73) plus missing dependencies that will cause import errors. These issues will break the example for users and cause AttributeErrors at runtime.\r\n- Pay close attention to plugins/plugin-inmemorydb/python/elizaos_plugin_inmemorydb/adapter.py (line 329 bug), packages/python/elizaos/bootstrap/providers/character.py (lines 70-73 inconsistency), and examples/chat/python/chat.py (missing python-dotenv dependency)\r\n\r\n<h3>Important Files Changed</h3>\r\n\r\n\r\n\r\nFile Analysis\r\n\r\n\r\n\r\n| Filename | Score | Overview |\r\n|----------|-------|----------|\r\n| docs/python-quickstart.md | 3/5 | New documentation file added. Missing plugin-inmemorydb installation instruction that the chat example now requires. |\r\n| examples/chat/python/chat.py | 2/5 | Added dotenv and inmemorydb support. Missing python-dotenv dependency in requirements, which will cause import errors. |\r\n| packages/python/elizaos/bootstrap/providers/character.py | 2/5 | Fixed to use getattr for optional character attributes. Critical bug: return data dict directly accesses attributes without getattr, causing AttributeError. |\r\n| plugins/plugin-inmemorydb/python/elizaos_plugin_inmemorydb/adapter.py | 1/5 | Enhanced get_memories(), create_memory(), and update_memory() to handle Pydantic models. Critical bug in update_memory line 329: uses wrong variable name. |\r\n\r\n</details>\r\n\r\n\r\n\r\n<h3>Sequence Diagram</h3>\r\n\r\n```mermaid\r\nsequenceDiagram\r\n    participant User\r\n    participant chat.py\r\n    participant dotenv\r\n    participant AgentRuntime\r\n    participant OpenAIPlugin\r\n    participant InMemoryDBPlugin\r\n    participant InMemoryAdapter\r\n    participant CharacterProvider\r\n\r\n    User->>chat.py: Run python chat.py\r\n    chat.py->>dotenv: load_dotenv(env_path)\r\n    dotenv-->>chat.py: Load .env from repo root\r\n    \r\n    chat.py->>AgentRuntime: Create with character and plugins\r\n    AgentRuntime->>OpenAIPlugin: Initialize OpenAI plugin\r\n    AgentRuntime->>InMemoryDBPlugin: Initialize InMemoryDB plugin\r\n    InMemoryDBPlugin->>InMemoryAdapter: create_database_adapter(agent_id)\r\n    InMemoryAdapter-->>InMemoryDBPlugin: Return adapter instance\r\n    InMemoryDBPlugin->>AgentRuntime: register_database_adapter(adapter)\r\n    \r\n    AgentRuntime->>CharacterProvider: get_character_context()\r\n    CharacterProvider->>CharacterProvider: Use getattr() for optional attributes\r\n    CharacterProvider-->>AgentRuntime: Return character context\r\n    \r\n    AgentRuntime-->>chat.py: Runtime initialized\r\n    \r\n    User->>chat.py: Type message\r\n    chat.py->>AgentRuntime: handle_message(runtime, memory)\r\n    AgentRuntime->>InMemoryAdapter: get_memories(params)\r\n    InMemoryAdapter-->>AgentRuntime: Return memories\r\n    AgentRuntime->>OpenAIPlugin: Generate response\r\n    OpenAIPlugin-->>AgentRuntime: Return response\r\n    AgentRuntime->>InMemoryAdapter: create_memory(memory_dict)\r\n    InMemoryAdapter-->>AgentRuntime: Memory stored\r\n    AgentRuntime-->>chat.py: Return result\r\n    chat.py-->>User: Display response\r\n```\r\n\r\n<!-- greptile_other_comments_section -->\r\n\r\n<!-- /greptile_comment -->\n\n<!-- This is an auto-generated comment: release notes by coderabbit.ai -->\n## Summary by CodeRabbit\n\n* **New Features**\n  * In-memory database plugin for agent memory.\n  * Token-by-token streaming for chat responses and streaming endpoints.\n  * Atropos data-generation, trajectory tooling, and TextWorld agent integrations.\n  * New Tic‑Tac‑Toe AI/player options and interactive configuration.\n\n* **Documentation**\n  * Expanded developer setup, examples, runnable chat walkthroughs, and new Atropos CLI flags.\n\n* **Other**\n  * Updated Python packaging/requirements and repository-root .env loading for examples.\n\n<sub>✏️ Tip: You can customize this high-level summary in your review settings.</sub>\n<!-- end of auto-generated comment: release notes by coderabbit.ai -->",
-      "repository": "elizaos/eliza",
-      "createdAt": "2026-01-13T00:34:32Z",
-      "mergedAt": null,
-      "additions": 2650,
-      "deletions": 532
+      "mergedAt": "2026-01-16T17:22:26Z",
+      "additions": 3205,
+      "deletions": 3002
     },
     {
       "id": "PR_kwDOMT5cIs66pZDH",
@@ -125,16 +125,16 @@
       "body": "## Summary\n\nFixes shell environment variable leakage into ElizaOS plugin loading decisions and agent secrets.\n\n**Problem:** `dotenv.config()` does NOT override existing `process.env` values by default. This means shell environment variables (from `.zshrc`/`.bashrc`) leak into plugin loading:\n\n```\nUser shell has: ANTHROPIC_API_KEY, OPENAI_API_KEY\nProject .env has: OPENROUTER_API_KEY\n\nExpected plugins: openrouter, bootstrap\nActual plugins: anthropic, openai, openrouter, bootstrap (LEAKED!)\n```\n\n**Solution:**\n- Scan installed plugins for declared env vars via `package.json` `agentConfig.pluginParameters`\n- Set global filter so only declared vars are captured into agent secrets\n- Load `.env` files with proper precedence (closest file wins)\n\n## Changes\n\n- **`packages/cli/src/utils/plugin-env-filter.ts`** - New utility to scan plugins for env var declarations\n- **`packages/core/src/secrets.ts`** - Add `setAllowedEnvVars()` filter to restrict captured vars\n- **`packages/core/src/utils/environment.ts`** - Add `loadEnvFilesWithPrecedence()` for proper hierarchy\n- **`packages/cli/src/commands/start/index.ts`** - Integrate filter before character loading\n\n## Test plan\n\n- [x] Unit tests for plugin env var scanning (`plugin-env-filter.test.ts`)\n- [x] Unit tests for secrets filtering (`secrets-filtering.test.ts`)\n- [x] Unit tests for env precedence loading (`env-precedence.test.ts`)\n- [ ] Manual test with shell env vars vs project .env\n- [ ] Test in monorepo context\n\n## Notes\n\n- 40 tests passing\n- Backwards compatible (null filter = existing behavior)\n- Core env vars (POSTGRES_URL, LOG_LEVEL, etc.) always allowed\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)\n\n<!-- CURSOR_SUMMARY -->\n---\n\n> [!NOTE]\n> Strengthens environment handling to block shell var leakage and honor project .env precedence.\n> \n> - Adds `utils/plugin-env-filter.ts` to scan installed plugins' `agentConfig.pluginParameters`, assemble `allowedVars`, filter env maps, detect shell-only vars, and warn on missing declarations\n> - Integrates scanning in `cli start`: calls `scanPluginsForEnvDeclarations`, sets global `setAllowedEnvVars`, and loads `.env` files via `loadEnvFilesWithPrecedence` (monorepo-aware)\n> - Updates core `secrets.ts`: introduces `setAllowedEnvVars`/`getAllowedEnvVars`, filters `process.env` when merging into `character.settings.secrets`, optimizes `hasCharacterSecrets`\n> - Enhances core env utils: memoized `detectEnvironment`, `resetEnvironmentCache`, `loadEnvFile({ override })`, `findAllEnvFiles`, and `loadEnvFilesWithPrecedence` (closest wins, optional boundary)\n> - Adds comprehensive tests covering plugin scanning/filtering, .env precedence, and secrets filtering\n> \n> <sup>Written by [Cursor Bugbot](https://cursor.com/dashboard?tab=bugbot) for commit 23693e47517cf535cd1aba510d3b1337c1e549c4. This will update automatically on new commits. Configure [here](https://cursor.com/dashboard?tab=bugbot).</sup>\n<!-- /CURSOR_SUMMARY -->\n\n<!-- greptile_comment -->\n\n<h2>Greptile Overview</h2>\n\n### Greptile Summary\n\nThis PR implements a robust solution to prevent shell environment variable leakage into ElizaOS agent secrets by introducing plugin-based environment variable filtering.\n\n## Key Changes\n\n- **Plugin Environment Scanning**: New `plugin-env-filter.ts` utility scans installed plugins' `package.json` files for declared environment variables via `agentConfig.pluginParameters`\n- **Global Filter in Secrets Module**: Added `setAllowedEnvVars()` to restrict which environment variables are captured into agent secrets\n- **Environment File Precedence**: New `loadEnvFilesWithPrecedence()` ensures closest `.env` file wins, respecting monorepo boundaries\n- **Integration in Start Command**: Filter is applied before character loading, preventing shell vars from leaking into plugin selection\n\n## Architecture\n\nThe solution follows a clear flow: scan plugins → set filter → load env files → filter on capture. Core environment variables (e.g., `POSTGRES_URL`, `LOG_LEVEL`) are always allowed. The filter is null by default for backward compatibility.\n\n## Issues Found\n\n- Line 72 in `plugin-env-filter.ts` already correctly checks for null declarations before accessing length\n- Line 19 in `secrets.ts` uses underscore variable as TypeScript idiom for unused loop variable (valid pattern)\n- Consider caching regex compilation in `detectShellOnlyVars` for performance\n- `CORE_ALLOWED_VARS` hardcoded in CLI could be centralized in core package\n\n## Testing\n\n40 tests passing across 3 new test files with comprehensive coverage of filtering, precedence, and integration scenarios.\n\n### Confidence Score: 4/5\n\n- This PR is safe to merge with minor considerations\n- The implementation is well-tested with 40 passing tests, addresses a real security concern (shell env leakage), and maintains backward compatibility. Code quality is high with proper error handling and optimization. Minor issues include hardcoded core vars list and potential for regex caching, but these don't affect functionality.\n- Pay close attention to `packages/cli/src/utils/plugin-env-filter.ts` for the regex caching optimization and consider centralizing `CORE_ALLOWED_VARS`\n\n<h3>Important Files Changed</h3>\n\n\n\nFile Analysis\n\n\n\n| Filename | Score | Overview |\n|----------|-------|----------|\n| packages/cli/src/utils/plugin-env-filter.ts | 4/5 | added plugin environment variable scanning utility with deduplication and filtering logic |\n| packages/core/src/secrets.ts | 4/5 | refactored to add environment variable filtering capability with global allowed vars set |\n| packages/core/src/utils/environment.ts | 4/5 | added `.env` file precedence loading with boundary directory support |\n| packages/cli/src/commands/start/index.ts | 4/5 | integrated plugin env scanning and filtering before character loading to prevent shell leakage |\n\n</details>\n\n\n\n<h3>Sequence Diagram</h3>\n\n```mermaid\nsequenceDiagram\n    participant CLI as CLI Start Command\n    participant Scanner as Plugin Scanner\n    participant Core as Core (secrets.ts)\n    participant Env as Environment Loader\n    participant Agent as Agent/Character\n\n    CLI->>Scanner: scanPluginsForEnvDeclarations(cwd)\n    Scanner->>Scanner: Scan node_modules for plugins\n    Scanner->>Scanner: Read package.json files\n    Scanner->>Scanner: Extract pluginParameters\n    Scanner-->>CLI: allowedVars Set + plugin info\n    \n    CLI->>Core: setAllowedEnvVars(allowedVars)\n    Note over Core: Global filter set\n    \n    CLI->>Env: loadEnvFilesWithPrecedence(cwd)\n    Env->>Env: findAllEnvFiles (parent dirs)\n    Env->>Env: Load files (farthest to closest)\n    Env-->>CLI: Loaded env files\n    Note over CLI: process.env populated\n    \n    CLI->>Agent: Load character/agent\n    Agent->>Core: setDefaultSecretsFromEnv(character)\n    Core->>Core: Filter process.env by allowedVars\n    Core->>Agent: Merge filtered vars into secrets\n    Note over Agent: Only declared vars captured\n```\n\n<!-- greptile_other_comments_section -->\n\n<!-- /greptile_comment -->",
       "repository": "elizaos/eliza",
       "createdAt": "2026-01-13T14:23:17Z",
-      "mergedAt": null,
+      "mergedAt": "2026-01-15T15:10:57Z",
       "additions": 1343,
       "deletions": 395
     }
   ],
   "codeChanges": {
-    "additions": 3400,
-    "deletions": 2073,
-    "files": 55,
-    "commitCount": 109
+    "additions": 8068,
+    "deletions": 5513,
+    "files": 93,
+    "commitCount": 189
   },
   "completedItems": [
     {
@@ -233,36 +233,114 @@
         "packages/core/src/__tests__/runtime.test.ts",
         "packages/core/src/runtime.ts"
       ]
+    },
+    {
+      "title": "fix: prevent infinite rebuild loop in dev-watch mode",
+      "prNumber": 6361,
+      "type": "bugfix",
+      "body": "## Summary\n- Fixed infinite rebuild loop in `bun run dev` caused by `generate-version.ts` writing to `src/version.ts` on every build\n- The watcher was detecting these changes and triggering rebuilds endlessly\n\n## Changes\n- **scripts/dev-wat",
+      "files": [
+        "packages/cli/src/scripts/generate-version.ts",
+        "scripts/dev-watch.js"
+      ]
+    },
+    {
+      "title": "fix(cli): prevent shell environment variable leakage into agent secrets",
+      "prNumber": 6360,
+      "type": "bugfix",
+      "body": "## Summary\n\nFixes shell environment variable leakage into ElizaOS plugin loading decisions and agent secrets.\n\n**Problem:** `dotenv.config()` does NOT override existing `process.env` values by default. This means shell environment variables",
+      "files": [
+        "packages/cli/src/__tests__/plugin-env-filter.test.ts",
+        "packages/cli/src/commands/start/index.ts",
+        "packages/cli/src/utils/plugin-env-filter.ts",
+        "packages/core/src/__tests__/env-precedence.test.ts",
+        "packages/core/src/__tests__/secrets-filtering.test.ts",
+        "packages/core/src/__tests__/utils/environment.test.ts",
+        "packages/core/src/secrets.ts",
+        "packages/core/src/utils/environment.ts"
+      ]
+    },
+    {
+      "title": "refactor(plugin-sql): extract domain stores from BaseDrizzleAdapter",
+      "prNumber": 6366,
+      "type": "refactor",
+      "body": "Refactors `BaseDrizzleAdapter` (~3,900 lines) into composable domain stores. This improves maintainability, testability, and separation of concerns without changing the public API.\r\n\r\n## Changes\r\n\r\n### New Domain Stores (`src/stores/`)\r\n\r\n|",
+      "files": [
+        "bun.lock",
+        "packages/plugin-sql/src/base.ts",
+        "packages/plugin-sql/src/neon/adapter.ts",
+        "packages/plugin-sql/src/pg/adapter.ts",
+        "packages/plugin-sql/src/pglite/adapter.ts",
+        "packages/plugin-sql/src/stores/agent.store.ts",
+        "packages/plugin-sql/src/stores/cache.store.ts",
+        "packages/plugin-sql/src/stores/component.store.ts",
+        "packages/plugin-sql/src/stores/entity.store.ts",
+        "packages/plugin-sql/src/stores/index.ts",
+        "packages/plugin-sql/src/stores/log.store.ts",
+        "packages/plugin-sql/src/stores/memory.store.ts",
+        "packages/plugin-sql/src/stores/messaging.store.ts",
+        "packages/plugin-sql/src/stores/participant.store.ts",
+        "packages/plugin-sql/src/stores/relationship.store.ts",
+        "packages/plugin-sql/src/stores/room.store.ts",
+        "packages/plugin-sql/src/stores/task.store.ts",
+        "packages/plugin-sql/src/stores/types.ts",
+        "packages/plugin-sql/src/stores/world.store.ts",
+        "packages/plugin-sql/src/utils.ts",
+        "packages/plugin-sql/tsconfig.build.json",
+        "packages/plugin-sql/tsconfig.build.node.json",
+        "packages/plugin-sql/src/__tests__/integration/utils.test.ts",
+        "packages/plugin-sql/src/__tests__/unit/utils.test.ts",
+        "packages/plugin-sql/src/index.ts",
+        "packages/plugin-sql/src/schema/channel.ts",
+        "packages/plugin-sql/src/schema/entity.ts",
+        "packages/plugin-sql/src/schema/memory.ts",
+        "packages/plugin-sql/src/schema/message.ts",
+        "packages/plugin-sql/src/schema/messageServer.ts",
+        "packages/plugin-sql/src/schema/relationship.ts",
+        "packages/plugin-sql/src/schema/room.ts",
+        "packages/plugin-sql/src/schema/tasks.ts",
+        "packages/plugin-sql/src/schema/world.ts"
+      ]
     }
   ],
   "topContributors": [
     {
+      "username": "YuriNachos",
+      "avatarUrl": "https://avatars.githubusercontent.com/u/19365375?u=35202bfa8350f028db180527a789e8dcb7576d42&v=4",
+      "totalScore": 249.18435236903713,
+      "prScore": 248.98435236903714,
+      "issueScore": 0,
+      "reviewScore": 0,
+      "commentScore": 0.2,
+      "summary": null
+    },
+    {
       "username": "0xbbjoker",
       "avatarUrl": "https://avatars.githubusercontent.com/u/54844437?u=90fe1762420de6ad493a1c1582f1f70c0d87d8e2&v=4",
-      "totalScore": 145.21654602889447,
+      "totalScore": 150.21654602889447,
       "prScore": 131.71654602889447,
       "issueScore": 0,
-      "reviewScore": 13.5,
+      "reviewScore": 18.5,
       "commentScore": 0,
       "summary": null
     },
     {
       "username": "greptile-apps",
       "avatarUrl": "https://avatars.githubusercontent.com/in/867647?v=4",
-      "totalScore": 108.838,
+      "totalScore": 127.038,
       "prScore": 0,
       "issueScore": 0,
-      "reviewScore": 108,
-      "commentScore": 0.838,
+      "reviewScore": 126,
+      "commentScore": 1.038,
       "summary": null
     },
     {
       "username": "standujar",
       "avatarUrl": "https://avatars.githubusercontent.com/u/16385918?u=718bdcd1585be8447bdfffb8c11ce249baa7532d&v=4",
-      "totalScore": 106.64272153297529,
+      "totalScore": 111.64272153297529,
       "prScore": 58.74272153297528,
       "issueScore": 0,
-      "reviewScore": 47.5,
+      "reviewScore": 52.5,
       "commentScore": 0.4,
       "summary": null
     },
@@ -279,11 +357,21 @@
     {
       "username": "odilitime",
       "avatarUrl": "https://avatars.githubusercontent.com/u/16395496?u=c9bac48e632aae594a0d85aaf9e9c9c69b674d8b&v=4",
-      "totalScore": 59.7912118090102,
+      "totalScore": 59.9912118090102,
       "prScore": 59.1532118090102,
       "issueScore": 0,
       "reviewScore": 0,
-      "commentScore": 0.6379999999999999,
+      "commentScore": 0.838,
+      "summary": null
+    },
+    {
+      "username": "madjin",
+      "avatarUrl": "https://avatars.githubusercontent.com/u/32600939?u=cdcf89f44c7a50906c7a80d889efa85023af2049&v=4",
+      "totalScore": 48.50426433794567,
+      "prScore": 45.726264337945665,
+      "issueScore": 2,
+      "reviewScore": 0,
+      "commentScore": 0.7779999999999999,
       "summary": null
     },
     {
@@ -307,6 +395,16 @@
       "summary": null
     },
     {
+      "username": "borisudovicic",
+      "avatarUrl": "https://avatars.githubusercontent.com/u/31806472?u=8935f4d43fd7e4eb9bf5ff92d54d4d2f8ac8a786&v=4",
+      "totalScore": 4,
+      "prScore": 0,
+      "issueScore": 4,
+      "reviewScore": 0,
+      "commentScore": 0,
+      "summary": null
+    },
+    {
       "username": "thewoweffect",
       "avatarUrl": "https://avatars.githubusercontent.com/u/113222443?u=cb21d15b0ce815d0f68167f2eca236aad6c64598&v=4",
       "totalScore": 2.3000000000000003,
@@ -325,11 +423,51 @@
       "reviewScore": 0,
       "commentScore": 0,
       "summary": null
+    },
+    {
+      "username": "metatev",
+      "avatarUrl": "https://avatars.githubusercontent.com/u/26566294?u=a0604d1f9f7a7936e350643ffccaef1f2a808fad&v=4",
+      "totalScore": 2,
+      "prScore": 0,
+      "issueScore": 2,
+      "reviewScore": 0,
+      "commentScore": 0,
+      "summary": null
+    },
+    {
+      "username": "Zenobow",
+      "avatarUrl": "https://avatars.githubusercontent.com/u/255418143?v=4",
+      "totalScore": 2,
+      "prScore": 0,
+      "issueScore": 2,
+      "reviewScore": 0,
+      "commentScore": 0,
+      "summary": null
+    },
+    {
+      "username": "Xayaan",
+      "avatarUrl": "https://avatars.githubusercontent.com/u/5237930?u=7840b286463bde982c8af8f389e61e26a01328cb&v=4",
+      "totalScore": 2,
+      "prScore": 0,
+      "issueScore": 2,
+      "reviewScore": 0,
+      "commentScore": 0,
+      "summary": null
+    },
+    {
+      "username": "BinaryBluePeach",
+      "avatarUrl": "https://avatars.githubusercontent.com/u/192237769?v=4",
+      "totalScore": 2,
+      "prScore": 0,
+      "issueScore": 2,
+      "reviewScore": 0,
+      "commentScore": 0,
+      "summary": null
     }
   ],
-  "newPRs": 9,
-  "mergedPRs": 3,
-  "newIssues": 2,
-  "closedIssues": 11,
-  "activeContributors": 11
+  "newPRs": 19,
+  "mergedPRs": 6,
+  "newIssues": 7,
+  "closedIssues": 14,
+  "activeContributors": 16
 }
