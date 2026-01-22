@@ -26,7 +26,7 @@ The system follows a daily automated pipeline (scheduled via GitHub Actions):
   - `scripts/posters/` - Visual content generation
   - `scripts/prompts/` - LLM prompt templates
   - `scripts/archive/` - Deprecated scripts (kept for reference)
-- `the-council/` - Processed daily data (aggregated/, council_briefing/, facts/, retros/, summaries/)
+- `the-council/` - Processed daily data (aggregated/, council_briefing/, facts/, highlights/, retros/, summaries/)
 - `hackmd/` - Local backups of generated content
 - `ai-news/`, `daily-silk/`, `github/`, `docs/` - Raw data sources
 - `.github/workflows/` - Automation workflows
@@ -55,6 +55,9 @@ python scripts/etl/generate-quarterly-summary.py -y 2025 -q 4
 
 # Generate RSS feeds
 python scripts/etl/generate-rss.py
+
+# Generate daily editorial highlights from ai-news
+python scripts/etl/generate-daily-highlights.py [--date YYYY-MM-DD] [--dry-run]
 
 # Help-reports ETL pipeline (unified script with subcommands)
 python scripts/etl/helpers.py extract -y 2025 -m 12  # Extract interactions
@@ -107,8 +110,9 @@ npm install  # Only needed for Discord.js dependency
 1. Raw data aggregated to `the-council/aggregated/YYYY-MM-DD.json`
 2. Facts extracted to `the-council/facts/YYYY-MM-DD.json`
 3. Strategic briefing generated to `the-council/council_briefing/YYYY-MM-DD.json`
-4. Content published to HackMD and Discord
-5. RSS feeds generated to `rss/feed.xml` and `rss/council.xml`
+4. Editorial highlights curated to `the-council/highlights/YYYY-MM-DD.json` (2-3 top stories)
+5. Content published to HackMD and Discord
+6. RSS feeds generated to `rss/feed.xml` and `rss/council.xml`
 
 ### Output Formats
 - **JSON**: Structured data for API consumption
@@ -150,6 +154,7 @@ The system surfaces contributor intelligence naturally in council briefings with
 - **`aggregate-sources.py`**: Reads diverse data sources, creates daily JSON files
 - **`extract-facts.py`**: LLM-powered fact extraction with categorization
 - **`generate-council-context.py`**: Strategic analysis using North Star alignment
+- **`generate-daily-highlights.py`**: Editorial curation of 2-3 highlights from ai-news Full Stories with character voices (see `scripts/etl/README-highlights.md`)
 - **`generate-monthly-retro.py`**: Monthly "State of ElizaOS" council episodes
 - **`generate-quarterly-summary.py`**: Quarterly/annual pattern analysis
 - **`generate-rss.py`**: RSS feed generation
