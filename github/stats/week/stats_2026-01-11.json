@@ -77,7 +77,7 @@
       "body": "- Add Python quickstart documentation (docs/python-quickstart.md)\r\n- Fix chat example to include inmemorydb plugin for database support\r\n- Add dotenv loading to chat example for .env file support\r\n- Fix inmemorydb plugin to use proper Plugin class instead of dict\r\n- Fix inmemorydb adapter to accept params dict in get_memories()\r\n- Fix inmemorydb adapter to handle Pydantic models in create_memory/update_memory\r\n- Fix character provider to use getattr for optional attributes\r\n- Add get_available_actions() method to AgentRuntime\r\n- Add get_entity() alias method to AgentRuntime\r\n- Update get_memories() to accept keyword arguments\r\n\r\nThe Python port had issues because:\r\nPlugin export - was a dict instead of Plugin object\r\nMethod signatures - expected dicts but got Pydantic models\r\nNo type enforcement - Python doesn't catch these at compile time\r\nThe Rust type system prevents these bugs automatically. The Python fixes we made bring it to parity with the working Rust implementation.\r\n\r\n# Risks\r\n\r\nMedium\r\n\r\n# Background\r\n\r\n## What does this PR do?\r\n\r\nFix examples/chat/python\r\n\r\n## What kind of change is this?\r\n\r\nBug fixes (non-breaking change which fixes an issue)\r\n\r\n## Why are we doing this? Any context or related work?\r\nReview\r\n\r\n# Documentation changes needed?\r\n\r\nmaybe\r\n\r\n\n<!-- CURSOR_SUMMARY -->\n---\n\n> [!NOTE]\n> Introduces true streaming and stabilizes Python runtime/plugins, plus major example and training additions.\n> \n> - Adds streaming text APIs: new `ModelType.TEXT_*_STREAM`, `AgentRuntime.use_model_stream()`/`register_streaming_model()`, and `DefaultMessageService.handle_message_stream()` with `StreamingMessageResult`\n> - OpenAI plugin implements streaming handlers; core exports updated to include streaming types\n> - Fixes `plugin-inmemorydb`: converted to proper `Plugin`, adapter now accepts `params`/kwargs, handles Pydantic models (camelCase keys), and corrects pagination/filters\n> - Hardens character provider to safely access optional fields via `getattr`\n> - AgentRuntime enhancements: `get_available_actions()`, `get_entity()` alias, `get_memories()` kwargs support\n> - A2A FastAPI server uses true token-by-token SSE streaming and includes `inmemorydb`; requirements updated\n> - Chat example loads `.env` and includes `inmemorydb` plugin\n> - ART Tic‑Tac‑Toe: adds heuristic agent, refines config (`opponent`, `ai_player`), winner/draw handling, and CLI updates\n> - New Atropos TextWorld package: environment/agents, trajectory + tokenizer tooling, offline data generation, BaseEnv factory, and CLI; README expanded\n> - Core Python README and example docs updated for setup and usage\n> \n> <sup>Written by [Cursor Bugbot](https://cursor.com/dashboard?tab=bugbot) for commit 21f8c31fc22b7778f998d85c754ee82a0a8e2253. This will update automatically on new commits. Configure [here](https://cursor.com/dashboard?tab=bugbot).</sup>\n<!-- /CURSOR_SUMMARY -->\n\n\r\n\r\n<!-- greptile_comment -->\r\n\r\n<h2>Greptile Overview</h2>\r\n\r\n### Greptile Summary\r\n\r\nThis PR fixes the Python chat example and inmemorydb plugin to work together, adds Python quickstart documentation, and improves Character attribute handling. The changes include:\r\n\r\n**Key Improvements:**\r\n- Adds comprehensive Python quickstart documentation with examples\r\n- Fixes inmemorydb plugin to use proper Plugin class instead of dict\r\n- Enhances inmemorydb adapter to handle Pydantic models in create_memory/update_memory\r\n- Updates character provider to safely access optional attributes with getattr()\r\n- Adds dotenv support to chat example for .env file loading\r\n- Adds useful helper methods to AgentRuntime (get_available_actions, get_entity alias)\r\n- Enhances get_memories() to accept keyword arguments\r\n\r\n**Critical Issues Found:**\r\n1. **Bug in adapter.py line 329**: The update_memory() method references the wrong variable name (`memory` instead of `memory_dict`), which will cause AttributeError when processing Pydantic models\r\n2. **Bug in character.py lines 70-73**: Inconsistent attribute access - uses getattr() in function body but direct access in return data dict, causing AttributeError for optional attributes\r\n3. **Missing dependency in chat.py**: Imports python-dotenv but it's not in requirements.txt\r\n4. **Incomplete documentation**: Quickstart guide doesn't include inmemorydb plugin installation that the chat example now requires\r\n\r\n**Impact:**\r\nThe bugs in adapter.py and character.py are critical and will cause runtime errors. The missing dependencies will prevent users from running the example successfully.\r\n\r\n### Confidence Score: 1/5\r\n\r\n- This PR contains critical bugs that will cause runtime failures and prevent the chat example from working\r\n- Score reflects two critical logic errors (wrong variable reference in adapter.py:329 and inconsistent attribute access in character.py:70-73) plus missing dependencies that will cause import errors. These issues will break the example for users and cause AttributeErrors at runtime.\r\n- Pay close attention to plugins/plugin-inmemorydb/python/elizaos_plugin_inmemorydb/adapter.py (line 329 bug), packages/python/elizaos/bootstrap/providers/character.py (lines 70-73 inconsistency), and examples/chat/python/chat.py (missing python-dotenv dependency)\r\n\r\n<h3>Important Files Changed</h3>\r\n\r\n\r\n\r\nFile Analysis\r\n\r\n\r\n\r\n| Filename | Score | Overview |\r\n|----------|-------|----------|\r\n| docs/python-quickstart.md | 3/5 | New documentation file added. Missing plugin-inmemorydb installation instruction that the chat example now requires. |\r\n| examples/chat/python/chat.py | 2/5 | Added dotenv and inmemorydb support. Missing python-dotenv dependency in requirements, which will cause import errors. |\r\n| packages/python/elizaos/bootstrap/providers/character.py | 2/5 | Fixed to use getattr for optional character attributes. Critical bug: return data dict directly accesses attributes without getattr, causing AttributeError. |\r\n| plugins/plugin-inmemorydb/python/elizaos_plugin_inmemorydb/adapter.py | 1/5 | Enhanced get_memories(), create_memory(), and update_memory() to handle Pydantic models. Critical bug in update_memory line 329: uses wrong variable name. |\r\n\r\n</details>\r\n\r\n\r\n\r\n<h3>Sequence Diagram</h3>\r\n\r\n```mermaid\r\nsequenceDiagram\r\n    participant User\r\n    participant chat.py\r\n    participant dotenv\r\n    participant AgentRuntime\r\n    participant OpenAIPlugin\r\n    participant InMemoryDBPlugin\r\n    participant InMemoryAdapter\r\n    participant CharacterProvider\r\n\r\n    User->>chat.py: Run python chat.py\r\n    chat.py->>dotenv: load_dotenv(env_path)\r\n    dotenv-->>chat.py: Load .env from repo root\r\n    \r\n    chat.py->>AgentRuntime: Create with character and plugins\r\n    AgentRuntime->>OpenAIPlugin: Initialize OpenAI plugin\r\n    AgentRuntime->>InMemoryDBPlugin: Initialize InMemoryDB plugin\r\n    InMemoryDBPlugin->>InMemoryAdapter: create_database_adapter(agent_id)\r\n    InMemoryAdapter-->>InMemoryDBPlugin: Return adapter instance\r\n    InMemoryDBPlugin->>AgentRuntime: register_database_adapter(adapter)\r\n    \r\n    AgentRuntime->>CharacterProvider: get_character_context()\r\n    CharacterProvider->>CharacterProvider: Use getattr() for optional attributes\r\n    CharacterProvider-->>AgentRuntime: Return character context\r\n    \r\n    AgentRuntime-->>chat.py: Runtime initialized\r\n    \r\n    User->>chat.py: Type message\r\n    chat.py->>AgentRuntime: handle_message(runtime, memory)\r\n    AgentRuntime->>InMemoryAdapter: get_memories(params)\r\n    InMemoryAdapter-->>AgentRuntime: Return memories\r\n    AgentRuntime->>OpenAIPlugin: Generate response\r\n    OpenAIPlugin-->>AgentRuntime: Return response\r\n    AgentRuntime->>InMemoryAdapter: create_memory(memory_dict)\r\n    InMemoryAdapter-->>AgentRuntime: Memory stored\r\n    AgentRuntime-->>chat.py: Return result\r\n    chat.py-->>User: Display response\r\n```\r\n\r\n<!-- greptile_other_comments_section -->\r\n\r\n<!-- /greptile_comment -->\n\n<!-- This is an auto-generated comment: release notes by coderabbit.ai -->\n## Summary by CodeRabbit\n\n* **New Features**\n  * In-memory database plugin for agent memory.\n  * Token-by-token streaming for chat responses and streaming endpoints.\n  * Atropos data-generation, trajectory tooling, and TextWorld agent integrations.\n  * New Tic‑Tac‑Toe AI/player options and interactive configuration.\n\n* **Documentation**\n  * Expanded developer setup, examples, runnable chat walkthroughs, and new Atropos CLI flags.\n\n* **Other**\n  * Updated Python packaging/requirements and repository-root .env loading for examples.\n\n<sub>✏️ Tip: You can customize this high-level summary in your review settings.</sub>\n<!-- end of auto-generated comment: release notes by coderabbit.ai -->",
       "repository": "elizaos/eliza",
       "createdAt": "2026-01-13T00:34:32Z",
-      "mergedAt": null,
+      "mergedAt": "2026-01-22T01:20:54Z",
       "additions": 17483,
       "deletions": 8280
     },
@@ -134,7 +134,7 @@
     "additions": 8068,
     "deletions": 5513,
     "files": 93,
-    "commitCount": 189
+    "commitCount": 198
   },
   "completedItems": [
     {
@@ -312,17 +312,27 @@
       "issueScore": 0,
       "reviewScore": 0,
       "commentScore": 0.2,
-      "summary": null
+      "summary": "YuriNachos: Focused on enhancing system stability and developer experience within the elizaos/eliza repository, contributing over 400 lines of code across 10 open pull requests. Key efforts included addressing critical CLI and server-side bugs, such as validating directory paths (#6379), ensuring proper .env file loading for authentication (#6374, #6376), and improving event emission logic (#6378). Their work primarily centered on bug fixes and core runtime enhancements, including the addition of an unregisterAction method (#6372, #6375) and documentation for environment variables (#6377)."
     },
     {
       "username": "0xbbjoker",
       "avatarUrl": "https://avatars.githubusercontent.com/u/54844437?u=90fe1762420de6ad493a1c1582f1f70c0d87d8e2&v=4",
-      "totalScore": 150.21654602889447,
-      "prScore": 131.71654602889447,
+      "totalScore": 194.3157188721635,
+      "prScore": 175.8157188721635,
       "issueScore": 0,
       "reviewScore": 18.5,
       "commentScore": 0,
-      "summary": null
+      "summary": "0xbbjoker: Focused on enhancing system stability and developer experience within the elizaos/eliza repository, notably resolving a critical infinite rebuild loop in dev-watch mode (#6361) and preventing shell environment variable leakage in the CLI (#6360). Their technical impact was substantial, involving over 10,000 lines of code changes across 209 files and providing four peer reviews to maintain code quality. This week’s efforts were primarily dedicated to bugfix work and expanding test coverage to ensure long-term reliability of the core infrastructure."
+    },
+    {
+      "username": "standujar",
+      "avatarUrl": "https://avatars.githubusercontent.com/u/16385918?u=718bdcd1585be8447bdfffb8c11ce249baa7532d&v=4",
+      "totalScore": 143.72624857530687,
+      "prScore": 90.82624857530686,
+      "issueScore": 0,
+      "reviewScore": 52.5,
+      "commentScore": 0.4,
+      "summary": "standujar: Focused on enhancing core infrastructure and UI consistency, most notably executing a massive architectural refactor in elizaos/eliza (#6366) to extract domain stores from the SQL plugin, which involved modifying over 200 files. They also improved the documentation site's interface by ensuring markdown renders correctly in profile summary cards (#202) and maintained high code quality through 11 detailed peer reviews. Their work this week primarily centered on large-scale refactoring and critical bugfixes to improve system modularity and data presentation."
     },
     {
       "username": "greptile-apps",
@@ -332,17 +342,17 @@
       "issueScore": 0,
       "reviewScore": 126,
       "commentScore": 1.038,
-      "summary": null
+      "summary": "greptile-apps: Focused exclusively on providing high-volume technical feedback and peer guidance, contributing 28 reviews and 7 pull request comments across the codebase. Despite no direct code changes or merged pull requests this week, their significant review activity indicates a primary focus on maintaining code quality and supporting the development workflow of other contributors."
     },
     {
-      "username": "standujar",
-      "avatarUrl": "https://avatars.githubusercontent.com/u/16385918?u=718bdcd1585be8447bdfffb8c11ce249baa7532d&v=4",
-      "totalScore": 111.64272153297529,
-      "prScore": 58.74272153297528,
+      "username": "odilitime",
+      "avatarUrl": "https://avatars.githubusercontent.com/u/16395496?u=c9bac48e632aae594a0d85aaf9e9c9c69b674d8b&v=4",
+      "totalScore": 75.9912118090102,
+      "prScore": 75.1532118090102,
       "issueScore": 0,
-      "reviewScore": 52.5,
-      "commentScore": 0.4,
-      "summary": null
+      "reviewScore": 0,
+      "commentScore": 0.838,
+      "summary": "odilitime: Focused on stabilizing the v2.0.0 release by executing a massive overhaul of Python example testing and fixes in elizaos/eliza (#6358), a high-impact effort involving over 4,000 files and significant code restructuring. They also contributed to the discord plugin ecosystem by initiating voice utility improvements and providing seven targeted code reviews to maintain project quality. Their work this week was primarily centered on large-scale bugfixes and configuration management to ensure cross-language compatibility and system reliability."
     },
     {
       "username": "1bcMax",
@@ -352,17 +362,7 @@
       "issueScore": 0,
       "reviewScore": 0,
       "commentScore": 0.33999999999999997,
-      "summary": null
-    },
-    {
-      "username": "odilitime",
-      "avatarUrl": "https://avatars.githubusercontent.com/u/16395496?u=c9bac48e632aae594a0d85aaf9e9c9c69b674d8b&v=4",
-      "totalScore": 59.9912118090102,
-      "prScore": 59.1532118090102,
-      "issueScore": 0,
-      "reviewScore": 0,
-      "commentScore": 0.838,
-      "summary": null
+      "summary": "1bcMax: Focused on expanding payment capabilities by introducing the blockrun plugin for x402 micropayments, submitting two key pull requests across the elizaos/eliza (#6355) and elizaos-plugins/registry (#248) repositories. This work involved a substantial addition of over 1,000 lines of new code, configuration, and tests to integrate the new functionality into the ecosystem. Their primary focus this week was on feature development and infrastructure setup for decentralized payment processing."
     },
     {
       "username": "madjin",
@@ -372,7 +372,7 @@
       "issueScore": 2,
       "reviewScore": 0,
       "commentScore": 0.7779999999999999,
-      "summary": null
+      "summary": "madjin: Focused on enhancing the developer experience by delivering a substantial overhaul of the API documentation and user interface in elizaos/elizaos.github.io (#213), which involved modifying over 50 files and nearly 7,000 lines of code. They demonstrated strong project oversight by closing three critical issues related to rate-limiting mitigation (#73), deployment documentation (#69), and summary formatting (#200) while actively managing 19 pull request comments. Their primary focus this week was on configuration and bugfix work to improve the stability and usability of the project's documentation infrastructure."
     },
     {
       "username": "revlentless",
@@ -382,7 +382,7 @@
       "issueScore": 0,
       "reviewScore": 0,
       "commentScore": 0,
-      "summary": null
+      "summary": "revlentless: Focused on a significant architectural expansion by initiating the implementation of a WASM agent runtime in elizaos/eliza (#6363). This high-impact effort involved substantial code changes across 99 files (+5,111/-417 lines), demonstrating a deep dive into the core infrastructure for the v2.0.0 release. Their work this week centered primarily on feature development and comprehensive testing to support this new runtime environment."
     },
     {
       "username": "wtfsayo",
@@ -392,7 +392,17 @@
       "issueScore": 0,
       "reviewScore": 0,
       "commentScore": 0.2,
-      "summary": null
+      "summary": "wtfsayo: Focused on a comprehensive overhaul of the project's core documentation, contributing over 5,200 lines of new content across 74 files. This effort is centered on the development of extensive core documentation guides currently tracked in elizaos/eliza (#6356). Their work this week was exclusively dedicated to improving developer resources and documentation infrastructure."
+    },
+    {
+      "username": "thewoweffect",
+      "avatarUrl": "https://avatars.githubusercontent.com/u/113222443?u=cb21d15b0ce815d0f68167f2eca236aad6c64598&v=4",
+      "totalScore": 4.4,
+      "prScore": 0,
+      "issueScore": 4.2,
+      "reviewScore": 0,
+      "commentScore": 0.2,
+      "summary": "thewoweffect: Focused on troubleshooting system reliability by identifying and reporting a failure in the reflection evaluator within elizaos/eliza (#6364). They actively engaged in the resolution process through issue comments, leading to the successful closure of the reported \"Entity not found\" error. Their primary focus this week was on bug reporting and technical coordination to improve the stability of the evaluation framework."
     },
     {
       "username": "borisudovicic",
@@ -402,17 +412,27 @@
       "issueScore": 4,
       "reviewScore": 0,
       "commentScore": 0,
-      "summary": null
+      "summary": "borisudovicic: Focused on refining the user experience and interface of the agent builder and dashboard, driving the resolution of 10 issues including UI consistency (#6344, #6350) and mobile optimization (#6346). They played a key role in product polish by identifying and closing several copy and navigation improvements (#6347, #6348, #6354) while also flagging functional gaps in web search and prompt limits (#6345, #6381). Their primary focus this week was on quality assurance and product management for the ElizaOS web applications."
     },
     {
-      "username": "thewoweffect",
-      "avatarUrl": "https://avatars.githubusercontent.com/u/113222443?u=cb21d15b0ce815d0f68167f2eca236aad6c64598&v=4",
-      "totalScore": 2.3000000000000003,
+      "username": "Xayaan",
+      "avatarUrl": "https://avatars.githubusercontent.com/u/5237930?u=7840b286463bde982c8af8f389e61e26a01328cb&v=4",
+      "totalScore": 4,
+      "prScore": 0,
+      "issueScore": 4,
+      "reviewScore": 0,
+      "commentScore": 0,
+      "summary": "Xayaan: Focused on identifying database reliability issues by reporting a SQL error regarding zero-vector fallbacks in elizaos/eliza (#6380). This contribution highlights a focus on diagnosing potential data processing failures within the system's vector storage."
+    },
+    {
+      "username": "Zenobow",
+      "avatarUrl": "https://avatars.githubusercontent.com/u/255418143?v=4",
+      "totalScore": 2.1,
       "prScore": 0,
       "issueScore": 2.1,
       "reviewScore": 0,
-      "commentScore": 0.2,
-      "summary": null
+      "commentScore": 0,
+      "summary": "Zenobow: Focused on identifying and documenting system inconsistencies by reporting a migration-related eligibility mismatch and snapshot bug in elizaos/eliza (#6369). This contribution highlights a focus on maintaining data integrity and addressing technical debt within the Tangem Hardware integration. Their primary area of impact this week was in issue identification and system stability."
     },
     {
       "username": "tdnupe3",
@@ -422,7 +442,7 @@
       "issueScore": 2,
       "reviewScore": 0,
       "commentScore": 0,
-      "summary": null
+      "summary": "tdnupe3: Focused on expanding the platform's financial capabilities by proposing a comprehensive implementation guide for AI agent payments using Circle and Coinbase APIs. This contribution, documented in issue #6365, outlines a strategic path for integrating secure payment processing into the ecosystem. Their primary focus this week was on architectural planning and documentation for financial API integrations."
     },
     {
       "username": "metatev",
@@ -432,27 +452,7 @@
       "issueScore": 2,
       "reviewScore": 0,
       "commentScore": 0,
-      "summary": null
-    },
-    {
-      "username": "Zenobow",
-      "avatarUrl": "https://avatars.githubusercontent.com/u/255418143?v=4",
-      "totalScore": 2,
-      "prScore": 0,
-      "issueScore": 2,
-      "reviewScore": 0,
-      "commentScore": 0,
-      "summary": null
-    },
-    {
-      "username": "Xayaan",
-      "avatarUrl": "https://avatars.githubusercontent.com/u/5237930?u=7840b286463bde982c8af8f389e61e26a01328cb&v=4",
-      "totalScore": 2,
-      "prScore": 0,
-      "issueScore": 2,
-      "reviewScore": 0,
-      "commentScore": 0,
-      "summary": null
+      "summary": "metatev: Focused on long-term architectural planning by proposing a new capability for the deployment of smart contracts. They initiated this strategic direction through the creation of issue #6367 in the elizaos/eliza repository. Their primary focus this week was on expanding the framework's future utility within the blockchain ecosystem."
     },
     {
       "username": "BinaryBluePeach",
@@ -462,7 +462,7 @@
       "issueScore": 2,
       "reviewScore": 0,
       "commentScore": 0,
-      "summary": null
+      "summary": "BinaryBluePeach: Focused on identifying and documenting integration issues within the Discord plugin ecosystem. They reported a critical runtime error regarding undefined message functions in elizaos-plugins/plugin-discord (#43), highlighting a potential regression in the Discord client's communication layer. Their activity this week was centered on troubleshooting and reporting bugs related to plugin stability."
     }
   ],
   "newPRs": 19,
