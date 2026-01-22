@@ -559,7 +559,7 @@ def generate_illustration_ideas(facts_path: Path, facts_date: datetime = None) -
     # Always add overall summary as first option
     if facts.get("overall_summary"):
         # Rotate overall style by day
-        overall_styles = ["editorial", "cinematic_anime", "tarot"]
+        overall_styles = ["editorial", "cinematic_anime"]
         overall_style = overall_styles[day_of_year % len(overall_styles)]
 
         ideas.append({
