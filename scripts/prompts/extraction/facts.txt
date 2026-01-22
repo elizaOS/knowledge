@@ -10,19 +10,27 @@ The input will be a JSON object containing aggregated data from various sources 
 ```
 
 **Contributor Context:**
-The aggregated input includes 7-day user activity summaries with recent contributor activity. When extracting facts about GitHub activity, note if contributor patterns are strategically relevant (e.g., ownership concentration, review dependencies, domain expertise). Contributor lifetime data is also available in the repository at `github/api/summaries/contributors/{username}/lifetime.json` if deeper historical context is needed.
+The aggregated input includes 7-day user activity summaries with recent contributor activity. When extracting facts about GitHub activity, note if contributor patterns are strategically relevant (e.g., ownership concentration, review dependencies, domain expertise). Contributor lifetime data is also available in the repository at `github/api/summaries/contributors/{{username}}/lifetime.json` if deeper historical context is needed.
 
 **Task:**
 1.  Carefully analyze the entire `input_json_string` provided above.
 2.  Use **{target_date}** as the `briefing_date` in your output (YYYY-MM-DD format). Do NOT infer the date from content - use the target date specified above.
 3.  Write a 1-2 sentence `overall_summary` of the day's most critical intelligence or themes.
-4.  Extract 5-10 `key_facts` - objective statements directly supported by the input. Each fact must:
+4.  Extract 5-10 `key_facts` - objective, actionable statements directly supported by the input. Each fact must:
     - Be traceable to sourced items elsewhere in the briefing
+    - Focus on decisions made, changes shipped, or actions taken (not just status updates)
+    - Prioritize developments that require response or awareness
     - Avoid sentiment words (not: "unfortunately", "excitingly", "problematically")
     - Avoid interpretation (not: "this suggests", "this indicates", "likely because")
     - Be verifiable against the source data
-    - Good example: "PR #6216 was opened by lalalune on December 14"
-    - Bad example: "An important PR was opened that will significantly improve the platform"
+    - Good examples:
+      * "PR #6216 implementing token migration was merged by lalalune on December 14"
+      * "Community voted to delay v2 release pending security audit completion"
+      * "Discord users reported authentication failures in #help-desk channel"
+    - Bad examples:
+      * "An important PR was opened that will significantly improve the platform"
+      * "Development continued on various features"
+      * "Team had productive discussions about the roadmap"
     Do not introduce facts that don't appear in sourced sections.
 5.  Extract `open_questions` - questions explicitly asked in the input that received no answer. Include only:
     - Direct questions from Discord/GitHub discussions with no response
