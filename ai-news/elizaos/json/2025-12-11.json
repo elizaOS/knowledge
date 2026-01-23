@@ -1,0 +1,129 @@
+{
+  "type": "elizaosDailySummary",
+  "title": "Daily Report - 2025-12-11",
+  "categories": [
+    {
+      "title": "ElizaOS Development Updates and Community Discussions - December 11-12, 2025",
+      "content": [
+        {
+          "text": "Migration Issues and Token Concerns: Community members raised significant concerns about the ai16z to ELIZA migration process. Users reported that the migration contract address shows only 122 million ai16z tokens while the original supply was 1.1 billion, leading to questions about why old tokens were not burned. Korean holders on Bithumb exchange expressed frustration about being unable to migrate tokens purchased after November 11th snapshot. Team member jasyn_bjorn clarified that anyone holding ai16z before November 11th either onchain or on a centralized exchange will be able to migrate, and they are working on a solution with Bithumb. The team stated that all approximately 300 million ai16z from migrated user tokens are accounted for. Some community members questioned whether the team sold swapped ai16z tokens on the market rather than burning them, contributing to price decline.",
+          "sources": [
+            "https://discord.com/channels/1253563208833433701/1253563209462448241"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "Price Action and Market Sentiment: The ELIZA token price continued declining, reaching 30 percent of its post-migration high. Community members expressed concern about continuous daily price drops without consolidation. Some users noted unusual selling patterns with large wallets appearing to execute time-weighted average price (TWAP) selling strategies. A community betting market was proposed where users could wager ELIZA tokens on whether the price would be above or below 0.01 dollars at New Year's Eve UTC time. User DorianD bet 1000 ELIZA tokens on above 0.01 dollars, while Omid Sa bet 3000 ELIZA tokens on the same outcome. The betting proposal included a time-weighted decay multiplier formula to account for when bets were placed.",
+          "sources": [
+            "https://discord.com/channels/1253563208833433701/1253563209462448241"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "Technical Development Progress: Core developer Stan reported spending significant time fixing broken types, tests, and missing try-catch blocks after Shaw's cleanup work on the monorepo. All builds are now functioning properly. Stan fixed log retrieval over WebSocket on the client side, which had been falling back to HTTP since the pino removal. A major pull request was prepared for merging to enable release of version 1.7.0. The team is working on cloud-side streaming functionality and aligning with updated test architecture. Developer jin fixed data pipelines for the elizaOS knowledge repository and added RSS feeds and MCP server support. The team updated React again due to two new vulnerabilities discovered in React Server Components, separate from the critical CVE from the previous week.",
+          "sources": [
+            "https://discord.com/channels/1253563208833433701/1377726087789940836"
+          ],
+          "images": [
+            "https://cdn.discordapp.com/attachments/1377726087789940836/1448476855836475433/10.png?ex=693cb831&is=693b66b1&hm=dead2ff93aa8855282fcb0634e601b89c23f69b03b791b5213844f8d8f5108bf&"
+          ],
+          "videos": []
+        },
+        {
+          "text": "Database and Performance Issues: Developer Odilitime reported that providers are experiencing significant slowdowns when using pglite, with operations taking up to 900 milliseconds compared to normally under 10 milliseconds on the same hardware. The issue appears related to either excessive data accumulation in data collection or too much parallel processing causing IO contention. Users were advised to try using PostgreSQL instead of pglite, as opening multiple browser windows with pglite can cause crashes. The team provided guidance on configuring PostgreSQL connections through environment variables.",
+          "sources": [
+            "https://discord.com/channels/1253563208833433701/1300025221834739744"
+          ],
+          "images": [
+            "https://cdn.discordapp.com/attachments/1300025221834739744/1448725122914582781/image.png?ex=693c4de9&is=693afc69&hm=da056dfd81f54487c8f66244e8fa2aa5f17db6efcc05d3ce1c3debdda0c67370&"
+          ],
+          "videos": []
+        },
+        {
+          "text": "Sapience Hackathon and Prediction Markets: The Sapience x elizaOS hackathon launched with a 10,000 dollar prize from Arbitrum DAO, running until January 3rd 2026. Participants can build and deploy prediction market agents using the elizaOS framework. A workshop was scheduled for 4pm UTC to provide a live quickstart guide. The Sapience team is available in a dedicated Discord channel to assist participants. Live markets are now available on the Sapience platform. Community member Kenk suggested setting up the betting market proposal on the Sapience hackathon platform.",
+          "sources": [
+            "https://discord.com/channels/1253563208833433701/1253563209462448241"
+          ],
+          "images": [
+            "https://cdn.discordapp.com/attachments/1253563209462448241/1448984254456529000/CleanShot_2025-12-12_at_10.25.552x.png?ex=693de7ff&is=693c967f&hm=ade1a03b574739b3b357b0c988aa89724b533bbc4236d2ed32972b23db427a01&"
+          ],
+          "videos": []
+        },
+        {
+          "text": "Plugin Development and Integration: Users reported issues with Twitter plugin consuming 50 requests per call when tweeting. The latest ElizaOS version fixes SQL errors that users were experiencing with plugin-twitter. A developer mentioned having a working client-twitter version using login and password without requiring API access. Questions arose about integrating DeepSeek API keys, with guidance provided to use the OpenAI plugin by replacing the endpoint URL. The team clarified that x402 payment acceptance is still being rolled out across plugin routes and an x402 client has not yet been created. Users asked about enabling web3 and x402 capabilities, with confirmation that Para wallet plugin integration is still in development.",
+          "sources": [
+            "https://discord.com/channels/1253563208833433701/1300025221834739744"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "New User Onboarding and Documentation: A first-time terminal user successfully progressed through the elizaOS setup process, documenting their journey from installing Bun to creating their first project. The user encountered initial issues with command not found errors but resolved them by adding Bun to their PATH environment variable. They successfully navigated through project creation and database configuration. The community provided support and encouragement throughout the process. Developer Stan invited users to provide feedback on the onboarding experience. The user expressed interest in building a Polymarket agent to analyze betting markets and identify opportunities based on handle versus ticket count discrepancies.",
+          "sources": [
+            "https://discord.com/channels/1253563208833433701/1300025221834739744"
+          ],
+          "images": [
+            "https://cdn.discordapp.com/attachments/1300025221834739744/1449115338775068894/IMG_9397.png?ex=693db954&is=693c67d4&hm=06cf21b8e0608c75715574ca9e5e8e9e2b5f3fd60ab76035762d283100a5a4b1&",
+            "https://cdn.discordapp.com/attachments/1300025221834739744/1449133859261251715/image.png?ex=693dca93&is=693c7913&hm=256a43722c2222e568f7d421a20938657276416cc6b1442c3d2c969e81741bd5&",
+            "https://cdn.discordapp.com/attachments/1300025221834739744/1449141776492527809/Screenshot_2025-12-12_at_3.51.54_PM.png?ex=693dd1f3&is=693c8073&hm=1d4b17142b416dbb3951eb23171874dd5cebec78bf169c4b4c4dee364f5deb82&"
+          ],
+          "videos": []
+        },
+        {
+          "text": "Infrastructure and Security Updates: The elizaos.ai website was patched to Next.js version 16.0.10. Developer jin set up alerts to notify when GitHub workflows fail and fixed the knowledge repository automation. A request was made to edit GitHub Discord webhooks to reduce noise by showing only commits, pull requests, and main events rather than every CI event. Developer jin expressed interest in forming a two-week sprint team to develop security agents, potentially integrating with x402 payment system. The team is seeking additional members with infosec experience for this initiative.",
+          "sources": [
+            "https://discord.com/channels/1253563208833433701/1377726087789940836"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "Ecosystem Developments: Coinbase announced that every Solana token will be instantly available to trade for 100 million users, positioning Solana as the new standard. Bhutan is launching the world's first sovereign-backed gold token on Solana. Cursor AI released a new feature allowing developers to design directly in their codebase by selecting elements, modifying them visually, and having Cursor write the code. President Trump is reportedly considering eliminating taxes on gambling winnings. Shaw's creator coin SHAWMAKESMAGIC increased 100 percent in value. The Babylon game repository moved to a new location under BabylonSocial organization on GitHub.",
+          "sources": [
+            "https://discord.com/channels/1253563208833433701/1253563209462448241",
+            "https://discord.com/channels/1253563208833433701/1377726087789940836"
+          ],
+          "images": [
+            "https://pbs.twimg.com/media/G75zWSBWYAACAgi.jpg:large",
+            "https://pbs.twimg.com/media/G78AQD_XgAEhoa0.jpg:large"
+          ],
+          "videos": []
+        }
+      ],
+      "topic": "discordrawdata"
+    },
+    {
+      "title": "ElizaOS Development Updates: December 11-12, 2025",
+      "content": [
+        {
+          "text": "On December 11, 2025, ElizaOS made significant improvements to core stability and expanded its plugin ecosystem. A comprehensive fix was implemented to resolve TypeScript build errors across multiple packages including api-client, client, core, plugin-bootstrap, plugin-dummy-services, plugin-sql, server, and cli. This ensures improved type consistency, correct compilation, and better code maintainability across the elizaos/eliza repository.",
+          "sources": [
+            "https://elizaos.github.io/api/summaries/overall/day/2025-12-11.json"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "Two new plugins were added to the elizaos-plugins/registry on December 11, 2025. The @pyboom/plugin-moralis-v2 plugin provides Moralis DeFi functionalities for ElizaOS agents, while the @tonyflam/plugin-openchat plugin enables OpenChat communication capabilities for ElizaOS agents, expanding the project's Web3 and communication features.",
+          "sources": [
+            "https://elizaos.github.io/api/summaries/overall/day/2025-12-11.json"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "On December 12, 2025, the ElizaOS project closed an issue related to the affiliate system for cloud mini-apps that had been open since November 26, 2025. Additionally, two new pull requests were opened in the elizaos/eliza repository, indicating ongoing development work.",
+          "sources": [
+            "https://elizaos.github.io/api/summaries/overall/day/2025-12-12.json"
+          ],
+          "images": [],
+          "videos": []
+        }
+      ],
+      "topic": "github_other"
+    }
+  ],
+  "date": 1765411200
+}

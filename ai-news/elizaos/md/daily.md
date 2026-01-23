@@ -1,61 +1,66 @@
-# ElizaOS Development Report - January 12, 2026
+# ElizaOS Development Report - January 7-8, 2026
 
-## Performance Improvements
+## Technical Development and Bug Fixes
 
-- Runtime initialization optimized with up to 40% faster performance
-- Cold start times reduced by 30% through atomic upserts and parallelized operations
-- Warm start times improved by 40%
-- Embedding API call eliminated during agent initialization, saving approximately 500ms
-- New EMBEDDING_DIMENSION configuration setting added to control embedding dimensions
-- Optimizations affected plugin-sql, server, and core packages
+- Core developer Odilitime shared a branch with fixes for bootstrap actions and providers, addressing issues with plugin-discord 1.3.3
+- Pull request created to fix plugin-bootstrap actions and providers for serverId compatibility with version 1.7.0
+- Bug fix implemented in plugin-bootstrap and SQL components to update actions and providers, addressing renaming from serverId to messageServerId
+- Plugin-sql module enhanced with Neon serverless support and improved Row-Level Security (RLS)
+- Pgcrypto extension now skipped for PGLite to resolve database extension issues
+- Developers implemented unified messaging API for Telegram and Discord plugins
+- Discord plugin slash command functionality confirmed as extensible, allowing developers to add commands as needed
 
-## ElizaCloud App Creator Testing
+## Repository Activity
 
-- Extensive testing conducted on the ElizaCloud app creator feature
-- Team tested building apps that interface with X API and agents
-- Development team acknowledged issues as expected for new feature in team testing phase
-- Automatic save management implemented at end of state executions
-- Git commits configured to occur after batches of file updates
-- Development underway for stop button for agents
-- Console CLI access for direct command input in progress
-- Git tool support being added
-- Guardrails being developed for the app kit
+- 2 new pull requests submitted between January 7-8, 2026
+- 1 pull request successfully merged
+- 7 new issues opened
+- 7 active contributors working on the project
+- PR #6333 by odilitime merged, fixing plugin-bootstrap and SQL plugins
+- PR #6339 by standujar submitted, fixing plugin-sql pgcrypto extension issue with PGLite
 
-## Infrastructure and Core Development
+## UI/UX Improvements
 
-- ANTHROPIC_API_KEY in GitHub Actions replaced with dedicated CI/CD key
-- Separate key created to avoid using personal API keys for continuous integration
-- OAuth3 APIs integrated in cloud branch
-- Twitter OAuth relay infrastructure planned with PostgreSQL backend
-- ElizaOS subdomain (twitter-broker.elizaos.ai) designated for OAuth relay service
-- VERCEL_OIDC_TOKEN authentication implemented
-- Code audit process established for twitter-broker repository
+- Unique usernames implemented for agents
+- Blank agent name fields now handled properly
+- Agent avatars removed in chat menus
+- Agent responses now start from the top
+- Dynamic chat box sizing implemented (Issue #6310)
+- Chat summaries improved
+- Scrolling issues fixed
+- Agent sorting functionality enhanced
+- Message limits implemented for non-signed-up users
+- Public agent states separated
+- Free credit amounts adjusted
+- Wallet connection processes streamlined
+- JWT authentication and user management implemented
 
-## Plugin Development
+## Infrastructure and Deployment
 
-- Plugin-knowledge solution provided for dynamically adding facts to agents
-- @blockrun/elizaos-plugin added to elizaos-plugins/registry for x402 micropayments functionality
-- Google GenAI plugin issue identified regarding outdated model listings
+- Developers confirmed both Pglite and PostgreSQL work for ElizaCloud container deployments
+- Database query patterns optimized using UPSERT
+- Runtime initialization optimization work in progress, focusing on parallelization and atomic upserts
 
-## Repository Updates
+## Ecosystem Expansion
 
-- Markdown rendering fixed in profile summary card (elizaos/elizaos.github.io)
-- Multiple dependency updates completed:
-  - zod: 3.25.76 to 4.3.5
-  - tailwind-merge: 2.6.0 to 3.4.0
-  - @types/node: 22.19.5 to 25.0.6
-  - react-markdown: 9.1.0 to 10.1.0
-  - eslint-config-next: 15.1.4 to 16.1.1
-  - p-retry: 6.2.1 to 7.1.1
-  - lint-staged: 15.5.2 to 16.2.7
-  - @types/minimatch: 5.1.2 to 6.0.0
-  - recharts: 2.15.4 to 3.6.0
-  - task-master-ai: 0.40.1 to 0.41.0
-- Unslop Apps issue closed in elizaos/eliza repository
+- Kamiyo project launched using ElizaOS plugins for autonomous agent payments with escrow-protected payments and on-chain dispute resolution
+- @kamiyo/eliza plugin added to the registry
+- BountyBoard project shared as a decentralized platform for Web3 community activities using Eliza
 
-## Community Engagement
+## Jeju Layer 2 Development
 
-- Token value proposition clarified for Jeju network integration
-- Gas fee utility explained for when developers build agents on the network
-- Technical discussions held on app creator functionality and deployment
-- Testing feedback collected from community members
+- Jeju described as a decentralized Layer 2 focused on powering AI applications and connecting ElizaOS ecosystem components
+- Bazaar described as a decentralized marketplace application running on Jeju, functioning as an app store for agents
+- Shaw shared the Jeju cloud branch containing Discord bridge implementation
+- Plans discussed for hybrid architecture with persistent workers and gateway patterns for different connectors
+
+## Data Collection and Context Graphs
+
+- Jin shared article about context graphs as AI's trillion-dollar opportunity
+- Team discussed integration of daily, weekly, and monthly insights from agentic workflows into last-mile applications
+- Community proposed data collection through mobile apps for LLM training in exchange for reputation points
+
+## Token and Exchange Updates
+
+- Korean exchanges (Bithumb, Coinone, and Korbit) announced termination of trading support for ai16z/ElizaOS
+- Team confirmed exchanges supporting migration would handle 1:6 swap ratio automatically for eligible holders
