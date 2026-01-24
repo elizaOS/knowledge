@@ -1,0 +1,677 @@
+{
+  "type": "elizaosWeeklySummary",
+  "title": "Weekly Report - 2026-01-17 to 2026-01-23",
+  "categories": [
+    {
+      "title": "ElizaOS Community Discussions - January 17, 2026",
+      "content": [
+        {
+          "text": "Community members discussed holder rewards and token economics in the discussion channel. A user asked if holders can earn more coins, with responses suggesting this depends on active rewards or staking programs. There was debate about integrating holder rewards when new agents are created, with one member arguing there is no reason for agent creators to reward holders. The conversation also touched on prediction markets, with disagreement about their future potential. One user believes AI prediction markets will be a game changer, while another argued prediction markets only surface information early and are overhyped, citing experience running forecast markets on ICOs in 2017. Questions were raised about token migration, specifically what happens to coins if someone does not migrate to Eliza. A user also praised the AI documentation tool, claiming they made more progress in six hours using it than in two months without it.",
+          "sources": "https://discord.com/channels/1253563208833433701/1253563209462448241",
+          "images": [
+            "https://cdn.elizaos.news/elizaos-media/embed-thumbnail-1462049190912856206_b87826d6.png",
+            "https://cdn.elizaos.news/elizaos-media/embed-image-1462190907305496799_77ed85ce.jpg"
+          ],
+          "videos": "https://cdn.elizaos.news/elizaos-media/embed-video-1462049190912856206_027a356d.mp4",
+          "memes": {
+            "url": "https://cdn.elizaos.news/imgflip/ahnsnd.jpg",
+            "summary": "More progress in six hours than two months."
+          }
+        },
+        {
+          "text": "In the coders channel, new users joined to explore ElizaOS. A developer asked about the difference between building an ElizaOS project with plugin-agentkit versus building a CDP AgentKit project with Eliza integration. Technical discussions focused on Polymarket integration challenges, particularly around wallet address mismatches between Builder addresses and exported private keys. It was clarified that Polymarket uses proxy wallets, specifically 1/1 Safe multisig contracts controlled by signer addresses. Developers encountered Cloudflare 403 blocks when calling the CLOB API from serverless functions and discussed solutions involving Web Unblocker and proxy settings. Certificate errors and runtime restrictions in Supabase Edge Functions were identified as major obstacles. One experienced developer recommended avoiding Supabase and Oxylab combinations, suggesting instead to install a private SQL database and use dedicated servers with private nodes. Advanced technical work was shared involving training systems with one million known tokens to generate databases and identify alpha opportunities. Discussion also covered the need for Rust plugins to handle real-time DEX operations across multiple exchanges, as TypeScript was found to crash systematically under such loads. NATS Jetstream was recommended over Redis stream for propagating data in Eliza due to speed requirements.",
+          "sources": "https://discord.com/channels/1253563208833433701/1300025221834739744",
+          "images": [
+            "https://cdn.elizaos.news/elizaos-media/embed-thumbnail-1462094958046744712_a66b70f5.jpg",
+            "https://cdn.elizaos.news/elizaos-media/img_3072_bfb38842.jpg"
+          ],
+          "videos": "https://cdn.elizaos.news/elizaos-media/20260117-2344-07-9346326_55f0d454.mp4",
+          "memes": {
+            "url": "https://cdn.elizaos.news/imgflip/ahnsnq.jpg",
+            "summary": "Polymarket uses 1/1 multisig proxies."
+          }
+        },
+        {
+          "text": "In the partners channel, community members acknowledged good work reminding people that ai16z is now ElizaOS on the main X account, and noted the CoinGecko link was added to Linktree. There was concern expressed about the token chart performance. Technical discussions focused on the Jeju network launch and its capabilities. Shaw successfully made Eliza run on ICP. A member expressed eagerness for the network to launch so they could test ideas requiring real autonomous agents that are provably provisioned in secure containers with registration capabilities. The vision includes agents running independently for various gaming and gambling applications. Questions were raised about whether the Jeju network would allow users to pay an ElizaOS fee to provision vanilla agents on platforms like ICP or enclaves, with agents able to use the network for requesting inference and RAG. An example use case was proposed where an agent could answer questions like sports game results and post answers to the network as an oracle rather than replying to individuals.",
+          "sources": "https://discord.com/channels/1253563208833433701/1301363808421543988",
+          "memes": {
+            "url": "https://cdn.elizaos.news/imgflip/ahnso7.jpg",
+            "summary": "Eliza runs on ICP."
+          },
+          "posters": "https://cdn.elizaos.news/posters/1768698125166-clbtvf.png"
+        }
+      ],
+      "topic": "discordrawdata"
+    },
+    {
+      "title": "ElizaOS Development Summary - January 17, 2026",
+      "content": [
+        {
+          "text": "On January 17, 2026, ElizaOS made significant progress in core runtime enhancements and dependency updates. The development team added an unregisterAction method to improve flexibility in managing agent actions and implemented crucial bug fixes across authentication, event emission, and plugin stability.",
+          "sources": "https://elizaos.github.io/api/summaries/overall/day/2026-01-17.json",
+          "memes": {
+            "url": "https://cdn.elizaos.news/imgflip/ahnspt.jpg",
+            "summary": "Event dated January 17, 2026."
+          },
+          "posters": "https://cdn.elizaos.news/posters/1768698161323-y4vx6.png"
+        },
+        {
+          "text": "URGENT ATTENTION REQUIRED: Two critical issues need immediate discussion. Issue #6380 reports that the USE_OPENAI_EMBEDDING setting is not being respected, causing SQL errors due to a dimension mismatch between embedding output and database adapter configuration. Issue #6381 requests removal of the 500-character limit in the first application prompt. Additionally, a Discord integration error (this.runtime.elizaOS.sendMessage is undefined) is blocked pending a pull request in the plugin-discord repository combined with @elizaos/cli version 1.7.1.",
+          "sources": "https://elizaos.github.io/api/summaries/overall/day/2026-01-17.json",
+          "memes": {
+            "url": "https://cdn.elizaos.news/imgflip/ahnss0.jpg",
+            "summary": "elizaOS.sendMessage is undefined."
+          },
+          "posters": "https://cdn.elizaos.news/posters/1768698203103-lnkpbe.png"
+        },
+        {
+          "text": "COMPLETED WORK - Core Runtime and Stability: The core runtime now includes an unregisterAction method for better action management. Authentication improvements ensure .env files are loaded correctly in agent commands, and directory paths are validated in CLI operations. Plugin stability was enhanced by ensuring entity connections before saving facts in plugin-bootstrap and correctly emitting the MESSAGE_SENT event after sending to the central server.",
+          "sources": "https://elizaos.github.io/api/summaries/overall/day/2026-01-17.json",
+          "memes": {
+            "url": "https://cdn.elizaos.news/imgflip/ahnstf.jpg",
+            "summary": "Saving facts in plugin-bootstrap."
+          },
+          "posters": "https://cdn.elizaos.news/posters/1768698240217-5l0mgn.png"
+        },
+        {
+          "text": "COMPLETED WORK - Dependency Updates: Multiple core dependencies were updated to their latest versions, including zod to 4.3.5, tailwind-merge to 3.4.0, react-markdown to 10.1.0, and p-retry to 7.1.1. Development dependencies were also upgraded, including @types/node to 25.0.6, lint-staged to 16.2.7, @types/minimatch to 6.0.0, and prettier to 3.8.0.",
+          "sources": "https://elizaos.github.io/api/summaries/overall/day/2026-01-17.json",
+          "memes": {
+            "url": "https://cdn.elizaos.news/imgflip/ahnsv6.jpg",
+            "summary": "@types/node to 25.0.6."
+          }
+        },
+        {
+          "text": "WORK IN PROGRESS: Ten new pull requests were submitted to the elizaos/eliza repository, including fixes for CLI directory path validation, MESSAGE_SENT event emission, .env file loading for authentication, action callback handling in multi-step mode, and entity connection issues in the reflection evaluator. Documentation for environment variables was also added.",
+          "sources": "https://elizaos.github.io/api/summaries/overall/day/2026-01-17.json",
+          "memes": {
+            "url": "https://cdn.elizaos.news/imgflip/ahnsw7.jpg",
+            "summary": "Ten new pull requests submitted."
+          },
+          "posters": "https://cdn.elizaos.news/posters/1768698299528-e3jp4f.jpg"
+        },
+        {
+          "text": "ISSUE TRIAGE: Two new issues were opened regarding embedding/database configuration discrepancy and prompt character limits. One issue was closed after clarification that the 'Entity not found' behavior in the Reflection Evaluator is intended design and not a bug.",
+          "sources": "https://elizaos.github.io/api/summaries/overall/day/2026-01-17.json",
+          "memes": {
+            "url": "https://cdn.elizaos.news/imgflip/ahnsx3.jpg",
+            "summary": "'Entity not found' is intended design."
+          },
+          "posters": "https://cdn.elizaos.news/posters/1768698329107-9hwd4h.png"
+        }
+      ],
+      "topic": "miscellaneous"
+    },
+    {
+      "title": "ElizaOS Community Updates and Development Progress - January 18-19, 2026",
+      "content": [
+        {
+          "text": "Community sentiment showed mixed reactions to token price performance. Multiple users expressed concerns about the declining chart and project viability, with discussions about team finances and layoffs. Shaw mentioned having to fire a Facebook hire to afford Claude API costs. Some community members debated investment versus gambling perspectives, with discussions about holding through downturns and diversification strategies. A user noted that if elizatown reaches 10M market cap, ElizaOS could target 100M+. The Quantitative Easing cycle starting in December was discussed as a potential positive catalyst for crypto markets in coming months.",
+          "sources": [
+            "https://discord.com/channels/1253563208833433701/1253563209462448241"
+          ],
+          "images": [
+            "https://media.tenor.com/5BM-8D4TuXgAAAAe/its-all-just-a-game-guy-tang.png",
+            "https://media.tenor.com/0rB_bymchOUAAAAe/until-the-very-end-fiona-frills.png",
+            "https://pbs.twimg.com/media/G_DbQSqXkAArVME.jpg:large",
+            "https://media.tenor.com/vRSws0ulr9IAAAAe/fogo-more.png",
+            "https://pbs.twimg.com/media/G-_Jt8yW8AA3gzt.jpg:large",
+            "https://media.tenor.com/Ye1DoxkCQyYAAAAe/cryptkeeper-you-know-what-they-say.png",
+            "https://media.tenor.com/mrMNiFAFKwcAAAAe/jerome-martin-you-me.png"
+          ],
+          "videos": [
+            "https://media.tenor.com/5BM-8D4TuXgAAAPo/its-all-just-a-game-guy-tang.mp4",
+            "https://media.tenor.com/0rB_bymchOUAAAPo/until-the-very-end-fiona-frills.mp4",
+            "https://media.tenor.com/vRSws0ulr9IAAAPo/fogo-more.mp4",
+            "https://media.tenor.com/Ye1DoxkCQyYAAAPo/cryptkeeper-you-know-what-they-say.mp4"
+          ]
+        },
+        {
+          "text": "Development activity continued with several key updates. Version 1.7.2 was released featuring intelligent streaming retry with continuation and multi-step enhancements, along with fixes to prevent infinite rebuild loops in dev-watch mode. Jin proposed improvements to documentation for agentic use cases, sharing guides from kapa.ai on optimizing technical documentation for LLMs. The team discussed having Claude read these guides to improve each documentation page. Jin also announced plans to bring back jintern with improved data pipelines, MCP integration, and better models, directing developers to use the elizaOS/knowledge repository for building agents that serve the Eliza ecosystem.",
+          "sources": [
+            "https://discord.com/channels/1253563208833433701/1377726087789940836",
+            "https://discord.com/channels/1253563208833433701/1300025221834739744"
+          ],
+          "images": [
+            "https://cdn.discordapp.com/attachments/1377726087789940836/1462314797512130612/image.png?ex=696e6708&is=696d1588&hm=037b5c0d525bbf8a32c9dcf883b2e324e6ae54de2e130660393ad131339bd8a7&",
+            "https://opengraph.githubassets.com/0792149e0b03e427e8c33754f81edc920eb52365cec1680fe497ad579c99b3cc/elizaOS/eliza/releases/tag/v1.7.2",
+            "https://pbs.twimg.com/media/G_D2LgqXMAAD_k4.jpg:large",
+            "https://opengraph.githubassets.com/423964bcde146b5ae6a740eeefd62a638c7681114d1c17f5b97e652c9d396528/elizaOS/knowledge",
+            "https://cdn.discordapp.com/attachments/1377726087789940836/1462926434023768245/Screenshot_2026-01-19_at_1.46.56_PM.png?ex=696ff7e9&is=696ea669&hm=da81f5dbf8202ec55e18321d4a72a9a41bf458ff0618d30362261d2de103b78a&",
+            "https://opengraph.githubassets.com/9779a0e70db8b5584bd9763e3460905e4a0ed9dcb7d49297882869ea2a72da25/elizaOS/eliza/pull/6286",
+            "https://cdn.discordapp.com/attachments/1377726087789940836/1462927108644016423/Screenshot_2026-01-19_at_1.49.21_PM.png?ex=696ff88a&is=696ea70a&hm=790da115226927138dbb4e7a89e5b8da29884d92e508276e868ddd861e5c4b20&"
+          ],
+          "videos": []
+        },
+        {
+          "text": "Community moderation and tooling discussions took place around AI-powered Telegram moderation. A developer shared their Eliza-based Telegram mod that automatically deletes spam and scam content with escalating timeout penalties (60, 120, 240 seconds). The system was described as highly effective after one year of active learning and refinement, keeping channels clean with minimal false positives. The developer offered to deploy the mod for free to other community groups. Separately, developers discussed building community management features within apps and websites rather than just traditional platforms.",
+          "sources": [
+            "https://discord.com/channels/1253563208833433701/1300025221834739744"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "Developer inquiries included questions about game development collaboration, Discord plugin compatibility with ElizaCloud, and requests for a Rust port of the framework. Multiple developers expressed interest in contributing to projects and offered their skills in AI, web development, and full stack development. There were also discussions about youtoy project endorsement and its relationship to ElizaOS.",
+          "sources": [
+            "https://discord.com/channels/1253563208833433701/1300025221834739744",
+            "https://discord.com/channels/1253563208833433701/1253563209462448241"
+          ],
+          "images": [],
+          "videos": []
+        }
+      ],
+      "topic": "discordrawdata"
+    },
+    {
+      "title": "ElizaOS Project Activity Summary: January 18-19, 2026",
+      "content": [
+        {
+          "text": "On January 19, 2026, the ElizaOS project focused on critical stability improvements and routine maintenance. No activity was recorded for January 18, 2026.",
+          "sources": [
+            "https://elizaos.github.io/api/summaries/overall/day/2026-01-19.json",
+            "https://elizaos.github.io/api/summaries/overall/day/2026-01-18.json"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "Core Stability and Performance: The elizaos/eliza repository received important updates including build process optimization through enhanced cache utilization in turbo.json to reduce rebuild times (PR #6349). A critical TOCTOU race condition in credit deduction for streaming API endpoints was resolved by implementing a deduct-before, reconcile-after pattern (issue #6338).",
+          "sources": [
+            "https://elizaos.github.io/api/summaries/overall/day/2026-01-19.json"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "Dependency Updates: The elizaos/elizaos.github.io repository saw extensive dependency updates with nine pull requests to bump various packages including dotenv (PR #224), next (PR #223), better-sqlite3 (PR #222), eslint-config-next (PR #221), @commander-js/extra-typings (PR #220), @faker-js/faker (PR #219), ora (PR #218), date-fns (PR #217), and tailwindcss (PR #216).",
+          "sources": [
+            "https://elizaos.github.io/api/summaries/overall/day/2026-01-19.json"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "Issue Triage: A new dashboard usability bug was reported in elizaos/eliza (issue #6382) where clicking outside an input box does not return the user to the original window when attempting to create an item again. The previously mentioned TOCTOU race condition issue (#6338) was successfully closed after resolution.",
+          "sources": [
+            "https://elizaos.github.io/api/summaries/overall/day/2026-01-19.json"
+          ],
+          "images": [],
+          "videos": []
+        }
+      ],
+      "topic": "github_other"
+    },
+    {
+      "title": "ElizaOS Development Updates and Community Discussion - January 19, 2026",
+      "content": [
+        {
+          "text": "Community members engaged in extensive discussion about cryptocurrency investment philosophy and market sentiment. Users debated the difference between investing and gambling in crypto, with some arguing that holding positions longer than a year constitutes investing while shorter timeframes are gambling. The conversation touched on emotional responses to price drops, with experienced members emphasizing the importance of thick skin and diversification. Discussion included the upcoming Quantitative Easing cycle that started in December after years of contraction, which is expected to provide tailwinds for crypto markets in the coming months. The Russell index hitting all-time highs was cited as a positive indicator for what may come to crypto microcaps.",
+          "sources": "https://discord.com/channels/1253563208833433701/1253563209462448241",
+          "images": [
+            "https://cdn.elizaos.news/elizaos-media/embed-thumbnail-1462900706645246063_ff8e2d28.png",
+            "https://cdn.elizaos.news/elizaos-media/embed-image-1462910818462073076_49e10a7a.jpg"
+          ],
+          "videos": "https://cdn.elizaos.news/elizaos-media/embed-video-1462900706645246063_bd8f74ab.mp4",
+          "memes": {
+            "url": "https://cdn.elizaos.news/imgflip/ahtfzd.jpg",
+            "summary": "Upcoming QE started December."
+          }
+        },
+        {
+          "text": "ElizaOS released version 1.7.2 with significant improvements. The release includes intelligent streaming retry with continuation and multi-step enhancements, inspired by Anthropic's partial response recovery. A fix was implemented to prevent infinite rebuild loops in dev-watch mode. The update focuses on improving the reliability and stability of the framework.",
+          "sources": "https://discord.com/channels/1253563208833433701/1300025221834739744",
+          "images": "https://cdn.elizaos.news/elizaos-media/embed-thumbnail-1462912710005227755_3efe6b2a.jpg",
+          "memes": {
+            "url": "https://cdn.elizaos.news/imgflip/ahtfzo.jpg",
+            "summary": "Infinite rebuild loops existed."
+          }
+        },
+        {
+          "text": "Developers discussed AI-powered community moderation solutions. One developer shared their experience with an Eliza-based Telegram moderator that automatically deletes spam and scam messages with exponential timeout penalties. The system has been refined over a year of active learning and monitoring, with the developer reporting it effectively maintains clean channels with minimal false positives. The moderation bot uses educational timeouts starting at 60 seconds for first offenses, doubling with each subsequent violation rather than permanent bans.",
+          "sources": "https://discord.com/channels/1253563208833433701/1300025221834739744",
+          "memes": {
+            "url": "https://cdn.elizaos.news/imgflip/ahtg00.jpg",
+            "summary": "Eliza-based Telegram spam moderator."
+          },
+          "posters": "https://cdn.elizaos.news/posters/1768870544655-dpa8zk.png"
+        },
+        {
+          "text": "A developer announced plans to rebuild jintern, an AI intern project, leveraging improved data pipelines, MCP integration, and better language models. The developer shared that builders creating agents to serve the Eliza ecosystem should utilize the elizaOS knowledge repository on GitHub, which contains ecosystem news, GitHub updates, discussion summaries, and other useful data for knowledge and RAG systems.",
+          "sources": "https://discord.com/channels/1253563208833433701/1300025221834739744",
+          "images": [
+            "https://cdn.elizaos.news/elizaos-media/embed-image-1462957256206454896_57b6def4.jpg",
+            "https://cdn.elizaos.news/elizaos-media/knowledge_22a7aed5.jpg"
+          ],
+          "memes": {
+            "url": "https://cdn.elizaos.news/imgflip/ahtg1n.jpg",
+            "summary": "AI intern project named jintern."
+          }
+        },
+        {
+          "text": "Core developers reviewed pull request 6286 which implements intelligent streaming retry logic and multi-step workflow enhancements. Technical discussions focused on code structure concerns, with developers suggesting that certain functions should be refactored to handle multiple entities rather than single instances. The team conducted detailed code review examining runtime file implementations.",
+          "sources": "https://discord.com/channels/1253563208833433701/1377726087789940836",
+          "images": [
+            "https://cdn.elizaos.news/elizaos-media/screenshot_2026-01-19_at_1-46-56_pm_4412871e.png",
+            "https://cdn.elizaos.news/elizaos-media/6286_ae86bf5e.jpg",
+            "https://cdn.elizaos.news/elizaos-media/screenshot_2026-01-19_at_1-49-21_pm_41385b83.png"
+          ],
+          "memes": {
+            "url": "https://cdn.elizaos.news/imgflip/ahtg23.jpg",
+            "summary": "Intelligent streaming retry logic."
+          }
+        }
+      ],
+      "topic": "discordrawdata"
+    },
+    {
+      "title": "ElizaOS Project Update - January 19, 2026",
+      "content": [
+        {
+          "text": "On January 19, 2026, the ElizaOS project concentrated on critical stability improvements and routine maintenance across its repositories. The day's work included resolving a significant race condition, optimizing build processes, and updating multiple dependencies.",
+          "sources": "https://elizaos.github.io/api/summaries/overall/day/2026-01-19.json",
+          "memes": {
+            "url": "https://cdn.elizaos.news/imgflip/ahtg2f.jpg",
+            "summary": "ElizaOS updated in 2026."
+          },
+          "posters": "https://cdn.elizaos.news/posters/1768870604877-yqhbjd.png"
+        },
+        {
+          "text": "Completed Work: The core stability and performance improvements included two major achievements in the elizaos/eliza repository. First, the build process was optimized through enhancements to turbo.json, improving cache utilization and reducing rebuild times (PR #6349). Second, a critical TOCTOU (Time-of-Check-Time-of-Use) race condition in credit deduction for streaming API endpoints was resolved by implementing a 'deduct-before, reconcile-after' pattern (Issue #6338).",
+          "sources": "https://elizaos.github.io/api/summaries/overall/day/2026-01-19.json",
+          "memes": {
+            "url": "https://cdn.elizaos.news/imgflip/ahtg46.jpg",
+            "summary": "Credit deduction had TOCTOU race."
+          }
+        },
+        {
+          "text": "Work in Progress: The elizaos/elizaos.github.io repository saw extensive dependency updates with nine pull requests submitted to bump various packages. These updates included dotenv (PR #224), next (PR #223), better-sqlite3 (PR #222), eslint-config-next (PR #221), @commander-js/extra-typings (PR #220), @faker-js/faker (PR #219), ora (PR #218), date-fns (PR #217), and tailwindcss (PR #216).",
+          "sources": "https://elizaos.github.io/api/summaries/overall/day/2026-01-19.json",
+          "memes": {
+            "url": "https://cdn.elizaos.news/imgflip/ahtg64.jpg",
+            "summary": "Nine PRs for nine packages."
+          },
+          "posters": "https://cdn.elizaos.news/posters/1768870687072-2uxi13.jpg"
+        },
+        {
+          "text": "Issue Triage: One new issue was reported in the elizaos/eliza repository regarding a dashboard usability bug where clicking outside an input box does not return the user to the original window when attempting to create an item again (Issue #6382). This represents an area requiring future attention. The previously mentioned TOCTOU race condition issue (#6338) was successfully closed after resolution.",
+          "sources": "https://elizaos.github.io/api/summaries/overall/day/2026-01-19.json",
+          "memes": {
+            "url": "https://cdn.elizaos.news/imgflip/ahtg7h.jpg",
+            "summary": "Clicking outside skips original window."
+          },
+          "posters": "https://cdn.elizaos.news/posters/1768870719627-09d509.png"
+        }
+      ],
+      "topic": "miscellaneous"
+    },
+    {
+      "title": "ElizaOS Token Utility and Communication Concerns - January 20, 2026",
+      "content": [
+        {
+          "text": "Community members expressed significant concerns about the lack of clear tokenomics and utility for the elizaOS token. Multiple users questioned what actual use cases exist for the token beyond paying gas fees in the planned Jeju network. The sentiment was that the token has become essentially a memecoin with no clear mechanism for price appreciation. Users noted that even after reviewing the team's roadmap, they cannot see how the token connects to the project's vision. The migration from ai16z to elizaOS did not appear to change anything fundamental about the token's utility.",
+          "sources": "https://discord.com/channels/1253563208833433701/1253563209462448241",
+          "memes": {
+            "url": "https://cdn.elizaos.news/imgflip/ahwuot.jpg",
+            "summary": "Migration changed nothing fundamental."
+          },
+          "posters": "https://cdn.elizaos.news/posters/1768957168675-bu4aef.jpg"
+        },
+        {
+          "text": "Discussion revealed that the only verified use case for the elizaOS token is paying gas fees in the Jeju network, which is still far from launch (expected in latter half of 2026). Community members expressed frustration that there is no cohesive strategy connecting the token to the project's development. The Jeju network documentation shows 60+ onchain actions requiring gas fees, but the timeline for implementation remains unclear. Users noted that without clear tokenomics, investors are essentially investing with their eyes closed.",
+          "sources": "https://discord.com/channels/1253563208833433701/1253563209462448241",
+          "images": "https://cdn.elizaos.news/elizaos-media/jeju_42102813.jpg",
+          "memes": {
+            "url": "https://cdn.elizaos.news/imgflip/ahwuq3.jpg",
+            "summary": "Token's only use: 2026 gas fees."
+          }
+        },
+        {
+          "text": "Partners and community members voiced strong concerns about communication failures and lack of token utility clarity. The token has dropped 70% twice in recent weeks with zero demand. Users emphasized that the number one priority should be establishing a clear reason to buy or hold elizaOS tokens. The complaint was that the team operates in a black box without providing consistent roadmap communication regarding token direction. Multiple members noted that everyday people ask about token utility and roadmap, indicating a fundamental messaging problem.",
+          "sources": "https://discord.com/channels/1253563208833433701/1301363808421543988",
+          "memes": {
+            "url": "https://cdn.elizaos.news/imgflip/ahwuqa.jpg",
+            "summary": "Token dropped 70% twice recently."
+          },
+          "posters": "https://cdn.elizaos.news/posters/1768957199125-edgww.jpg"
+        },
+        {
+          "text": "Team members acknowledged communication issues and discussed potential solutions. The suggestion was made to create a research blog at research.elizaos.ai with posts about ongoing work, such as experiments with Eliza agent towns, the Rust version of ElizaOS, and thoughts on decentralized LLM coordination. This would position core developers as thought leaders in the space beyond just coding. The team also discussed creating better visual explanations of the project roadmap showing the progression from framework to ElizaCloud to Jeju network.",
+          "sources": "https://discord.com/channels/1253563208833433701/1301363808421543988",
+          "images": "https://cdn.elizaos.news/elizaos-media/abs2gsl1pirwssevfuwwdk6zqsnuzsfl4khxjecrd8wrp5p0xy_d6cf66b2.png",
+          "memes": {
+            "url": "https://cdn.elizaos.news/imgflip/ahwurs.jpg",
+            "summary": "Experiments with Eliza agent towns."
+          }
+        },
+        {
+          "text": "Discussion highlighted that the team needs to better communicate the vision connecting cryptocurrency networks to AI agents. Users noted that Bitcoin and Ethereum succeeded because they created public utility networks that transcend corporations and governments. The elizaOS project needs to articulate a similar vision for decentralized AI agent infrastructure. The suggestion was made that buybacks from ElizaCloud could be a turning point, but currently the token is just another memecoin. Team members acknowledged they are working on token economy details but are constrained by what they can announce publicly.",
+          "sources": [
+            "https://discord.com/channels/1253563208833433701/1253563209462448241",
+            "https://discord.com/channels/1253563208833433701/1301363808421543988"
+          ],
+          "memes": {
+            "url": "https://cdn.elizaos.news/imgflip/ahwus2.jpg",
+            "summary": "Token is just another memecoin."
+          }
+        },
+        {
+          "text": "Core developers worked on improving documentation, specifically adding comprehensive CLI coverage. The team confirmed that CLI reference documentation exists at docs.elizaos.ai/cli-reference/overview. Discussion also covered technical aspects like creating NPM repositories programmatically, with confirmation that Claude MCP can assist and that npm publish creates repositories automatically.",
+          "sources": "https://discord.com/channels/1253563208833433701/1377726087789940836",
+          "images": "https://cdn.elizaos.news/elizaos-media/embed-thumbnail-1463257729647771689_e52d6e50.jpg",
+          "memes": {
+            "url": "https://cdn.elizaos.news/imgflip/ahwutb.jpg",
+            "summary": "CLI docs already exist."
+          }
+        }
+      ],
+      "topic": "discordrawdata"
+    },
+    {
+      "title": "ElizaOS Project Updates - January 20, 2026",
+      "content": {
+        "text": "On January 20, 2026, the ElizaOS project made significant progress with both bug fixes and new feature development. A critical SQL error was successfully resolved where the database adapter was hardcoded to use a dim_1536 column, which caused errors when creating entities and failed to respect the USE_OPENAI_EMBEDDING configuration. This embedding dimension issue has been fixed and closed. Additionally, a new pull request was opened to introduce a dynamic execution engine for version 2.0.0, with a focus on testing context handling. This feature is currently in progress as part of the ongoing development work.",
+        "sources": "https://elizaos.github.io/api/summaries/overall/day/2026-01-20.json",
+        "memes": {
+          "url": "https://cdn.elizaos.news/imgflip/ahwutm.jpg",
+          "summary": "January 20, 2026 progress report."
+        },
+        "posters": "https://cdn.elizaos.news/posters/1768957273083-dvif6.jpg"
+      },
+      "topic": "miscellaneous"
+    },
+    {
+      "title": "ElizaOS Development Updates and Community Discussion - January 21, 2026",
+      "content": [
+        {
+          "text": "Shaw announced upcoming launches for ElizaOS in the next few weeks, including Eliza Cloud Apps and Monetization for AI app development, Babylon (an AI trading and prediction game with self-improving agents), Hyperscape (a browser-based MMO created by AI with AI agents playing), and an OTC Trading Desk for token listing. ElizaOS holders will receive free access and exposure to airdrops from all incubated projects. Community members discussed token distribution, with clarification that Babylon will have its own token while Jeju is using the elizaOS token. Questions arose about whether holding tokens on centralized exchanges would qualify for airdrops, with recommendations to hold in personal wallets for qualification.",
+          "sources": [
+            "https://discord.com/channels/1253563208833433701/1253563209462448241",
+            "https://discord.com/channels/1253563208833433701/1301363808421543988"
+          ],
+          "images": "https://cdn.elizaos.news/elizaos-media/embed-image-1463418975785324576_c081a29d.jpg",
+          "memes": {
+            "url": "https://cdn.elizaos.news/imgflip/ai0ewn.jpg",
+            "summary": "AI creates MMO played by AIs."
+          }
+        },
+        {
+          "text": "Technical discussions in the coders channel covered several topics. A developer successfully built a support agent named Hank that responded to its first support request for a scientific research tool, and is planning to build additional agents for marketing and sales including automated LinkedIn and email campaigns. Issues with the Discord plugin were discussed, with version 1.7.2 of elizaos and version 1.3.7 of plugin-discord confirmed as working. A user struggled with PostgreSQL database configuration after initially using PGLite, receiving guidance to migrate to latest versions and drop the database for a fresh instance. The community also discussed integrating the Polymarket plugin into ElizaCloud agents and using Remotion for video generation with AI agents.",
+          "sources": "https://discord.com/channels/1253563208833433701/1300025221834739744",
+          "images": [
+            "https://cdn.elizaos.news/elizaos-media/embed-image-1463333920681758824_d27a0c41.jpg",
+            "https://cdn.elizaos.news/elizaos-media/plugin-polymarket_feda076c.jpg"
+          ],
+          "memes": {
+            "url": "https://cdn.elizaos.news/imgflip/ai0exc.jpg",
+            "summary": "AI agents automate LinkedIn campaigns."
+          }
+        },
+        {
+          "text": "Core developers identified potential data storage issues, with concerns about storing too much information. There was a question about obtaining an X API key for the project. A link to async.app was shared among the core development team.",
+          "sources": "https://discord.com/channels/1253563208833433701/1377726087789940836",
+          "images": "https://cdn.elizaos.news/elizaos-media/screenshot_2026-01-20_at_6-20-24_pm_68425fc7.png",
+          "memes": {
+            "url": "https://cdn.elizaos.news/imgflip/ai0exn.jpg",
+            "summary": "Concerns about storing too much info."
+          }
+        },
+        {
+          "text": "Community sentiment showed mixed reactions, with some users expressing frustration about token price performance and comparing it unfavorably to AI16Z. However, there was also enthusiasm about February developments and upcoming features. A developer expressed interest in building without requiring API or database access due to costs, creating an Eliza and n8n inspired system. Another developer sought partnerships for a crypto project with capital ready.",
+          "sources": "https://discord.com/channels/1253563208833433701/1253563209462448241",
+          "videos": [
+            "https://cdn.elizaos.news/elizaos-media/embed-video-1463630866575265873_6f756e1a.mp4",
+            "https://cdn.elizaos.news/elizaos-media/embed-video-1463631637895188514_8ecb4298.mp4"
+          ],
+          "memes": {
+            "url": "https://cdn.elizaos.news/imgflip/ai0ey2.jpg",
+            "summary": "Crypto project has capital, seeks partners."
+          },
+          "posters": "https://cdn.elizaos.news/posters/1769043443687-zcpu5w.png"
+        }
+      ],
+      "topic": "discordrawdata"
+    },
+    {
+      "title": "ElizaOS Project Progress - January 21, 2026",
+      "content": [
+        {
+          "text": "On January 21, 2026, the ElizaOS project made significant progress across multiple areas including user experience enhancements, developer tooling improvements, and release preparations.",
+          "sources": "https://elizaos.github.io/api/summaries/overall/day/2026-01-21.json",
+          "memes": {
+            "url": "https://cdn.elizaos.news/imgflip/ai0ezo.jpg",
+            "summary": "Progress made January 21, 2026."
+          },
+          "posters": "https://cdn.elizaos.news/posters/1769043477839-fug8rf.png"
+        },
+        {
+          "text": "Frontend Enhancements: The team implemented markdown rendering for the profile summary card using react-markdown and remark-gfm in the elizaos.github.io repository. This replaced plain text display with richer content formatting capabilities.",
+          "sources": "https://elizaos.github.io/api/summaries/overall/day/2026-01-21.json",
+          "memes": {
+            "url": "https://cdn.elizaos.news/imgflip/ai0f21.jpg",
+            "summary": "Replaced plain text with markdown."
+          },
+          "posters": "https://cdn.elizaos.news/posters/1769043528537-izgwq.png"
+        },
+        {
+          "text": "Plugin Development and Quality Improvements: Major updates were made to the Telegram plugin including implementation of structured logging with standardized log formats, addition of ESLint with structured logging rules, and a new lint:check script for continuous integration. TypeScript errors were resolved for compatibility with @elizaos/core version 1.7.x, including removal of deprecated serverId from ensureConnection calls, casting serverId to UUID type, and fixing custom event payload typing. The messaging API was also refactored to implement a unified approach with elizaOS support.",
+          "sources": "https://elizaos.github.io/api/summaries/overall/day/2026-01-21.json",
+          "memes": {
+            "url": "https://cdn.elizaos.news/imgflip/ai0f47.jpg",
+            "summary": "ESLint with structured logging rules."
+          },
+          "posters": "https://cdn.elizaos.news/posters/1769043569692-mjhuk.png"
+        },
+        {
+          "text": "Release Preparation: A new release was prepared for the Discord plugin, bumping the version from 1.3.6 to 1.3.7. This included upgrading the @elizaos/core dependency and refreshing the bun.lock file.",
+          "sources": "https://elizaos.github.io/api/summaries/overall/day/2026-01-21.json",
+          "memes": {
+            "url": "https://cdn.elizaos.news/imgflip/ai0f5z.jpg",
+            "summary": "Version bumped 1.3.6 to 1.3.7."
+          }
+        },
+        {
+          "text": "Issue Management: A new issue was opened to remove the timer in the app builder and implement a manual refresh request window. Two issues related to agent discovery were closed: one focused on adding an agent discovery module to the landing page and dashboard, and another established the public agent link format.",
+          "sources": "https://elizaos.github.io/api/summaries/overall/day/2026-01-21.json",
+          "memes": {
+            "url": "https://cdn.elizaos.news/imgflip/ai0f7a.jpg",
+            "summary": "Public agent link format established."
+          },
+          "posters": "https://cdn.elizaos.news/posters/1769043627971-j6rsx.jpg"
+        }
+      ],
+      "topic": "miscellaneous"
+    },
+    {
+      "title": "ElizaOS Community Discussion - January 22, 2026",
+      "content": [
+        {
+          "text": "Community members expressed frustration with the project's direction and token management. Users criticized the team for launching multiple tokens without focusing on core infrastructure development. One member stated the team is spreading themselves thin over numerous coins not directly tied to the platform, while the founder's behavior on social media was described as erratic. Concerns were raised about the token approaching zero value and the project's financial sustainability.",
+          "sources": "https://discord.com/channels/1253563208833433701/1253563209462448241"
+        },
+        {
+          "text": "A new contributor introduced themselves in the discussion channel, mentioning they have a coding background and are working on adding an RLM plugin for Eliza v2. They acknowledged the challenge but expressed enthusiasm about learning through the contribution process. The community welcomed the new member.",
+          "sources": "https://discord.com/channels/1253563208833433701/1253563209462448241"
+        },
+        {
+          "text": "Token migration issues were discussed extensively. Multiple users reported problems with the migration process, particularly those who had transferred tokens between wallets. Support staff helped users through the migration process, directing them to create tickets and use the migration support channel. One user successfully completed migration after receiving assistance.",
+          "sources": "https://discord.com/channels/1253563208833433701/1253563209462448241"
+        },
+        {
+          "text": "ElizaBAO announced a video creator competition inviting community members to produce short-form videos explaining AI agents, prediction markets, and the ElizaBAO ecosystem. The competition aims to engage content creators with clear challenges and bounties.",
+          "sources": "https://discord.com/channels/1253563208833433701/1253563209462448241",
+          "images": "https://cdn.elizaos.news/elizaos-media/embed-image-1463836331242426432_00aa084c.jpg"
+        },
+        {
+          "text": "Community members shared positive sentiment about ElizaOS evolution and technology. One user posted that ElizaOS is the most undervalued token in crypto with 10x technology, emphasizing that real AI builders in the space are already established. Shaw posted a tweet reaffirming commitment to the project, stating that while the ticker is not the most memetic, the team ships good tech and products that make money.",
+          "sources": "https://discord.com/channels/1253563208833433701/1253563209462448241",
+          "images": "https://cdn.elizaos.news/elizaos-media/embed-image-1463842070077767806_4e3bb0f5.jpg"
+        },
+        {
+          "text": "News emerged about a collaboration between Grimes and Shaw, the founder of ElizaOS. This was shared as a significant development for the project, generating excitement in the community.",
+          "sources": "https://discord.com/channels/1253563208833433701/1253563209462448241",
+          "images": "https://cdn.elizaos.news/elizaos-media/embed-image-1463987917717504010_29b7b0ee.jpg"
+        },
+        {
+          "text": "Technical discussions in the coders channel focused on database migration issues. A user experienced problems with PostgreSQL migrations, receiving errors about creating schemas. After trying multiple solutions including Aiven cloud database, they successfully resolved the issue by switching to Neon database. The support team provided guidance on using pgvector and proper database configuration.",
+          "sources": "https://discord.com/channels/1253563208833433701/1300025221834739744"
+        },
+        {
+          "text": "Discord integration issues were reported after updating to version 1.7.2. Users encountered errors with the recent messages provider, specifically related to invalid private field access for conversation length. The development team acknowledged the issue and began investigating.",
+          "sources": "https://discord.com/channels/1253563208833433701/1300025221834739744"
+        },
+        {
+          "text": "Developers discussed distributed computing possibilities for AI inference. Topics included using AirLLM to run 70B models on 4GB GPUs, implementing zero-knowledge proofs to prevent cheating in distributed networks, and exploring ways to utilize consumer devices like iPhones for processing during idle time. The conversation touched on creating ad hoc clusters of devices with redundant compute and validation systems.",
+          "sources": "https://discord.com/channels/1253563208833433701/1300025221834739744",
+          "images": "https://cdn.elizaos.news/elizaos-media/embed-image-1463876064366432321_aaaf6b41.jpg"
+        },
+        {
+          "text": "A creative use case for AI agents was shared involving a bot that analyzed broken McDonald's ice cream machine data to predict economic trends and political events. The bot reportedly made 200,000 dollars in Polymarket profits by correlating machine breakdowns with understaffing, cost-cutting, and economic downturns. It also predicted political events based on machine repair patterns near the White House.",
+          "sources": "https://discord.com/channels/1253563208833433701/1300025221834739744",
+          "images": "https://cdn.elizaos.news/elizaos-media/embed-thumbnail-1463931220600819866_619f383b.jpg",
+          "videos": "https://api.fxtwitter.com/2/go?url=https%3A%2F%2Fvideo.twimg.com%2Famplify_video%2F2013998213447999488%2Fvid%2Favc1%2F3026x1440%2F-oAlOxXm8oKNYVML.mp4%3Ftag%3D21"
+        },
+        {
+          "text": "Discussion about blockchain adoption trends compared BNB Chain and Ethereum. One member noted that despite Roblox having hundreds of millions of users and making billions in revenue, the platform is still losing money. This led to observations about Roblox functioning as a jobs program and concerns about child labor dynamics in the platform's creator economy.",
+          "sources": [
+            "https://discord.com/channels/1253563208833433701/1300025221834739744",
+            "https://discord.com/channels/1253563208833433701/1301363808421543988"
+          ],
+          "images": "https://cdn.elizaos.news/elizaos-media/embed-thumbnail-1463944690238886110_9075b26c.jpg"
+        },
+        {
+          "text": "A Silicon Valley robot meetup highlighted the need for more human data about real-world manipulation. One attendee mentioned finding a solution through a popular VR game with 100,000 players, adding contests like making sandwiches as fast as possible while wearing headsets to collect training data for robotics.",
+          "sources": "https://discord.com/channels/1253563208833433701/1300025221834739744",
+          "images": "https://cdn.elizaos.news/elizaos-media/embed-image-1464029645438718094_d1d8cdb3.jpg"
+        },
+        {
+          "text": "Core developers had an intense discussion about token launch practices and creator responsibilities. Shaw emphasized strict rules for developers launching tokens: never sell tokens, burn them before selling if necessary, use 30 percent of fees for buybacks during dips, and maintain clear value propositions. One developer who bundled 75 percent of token supply was strongly criticized for poor tokenomics. Shaw stressed that the entire meta revolves around earning creator fees rather than selling tokens, warning that any dev sell would cause bots to dump and kill the token immediately.",
+          "sources": "https://discord.com/channels/1253563208833433701/1377726087789940836",
+          "images": "https://cdn.elizaos.news/elizaos-media/embed-thumbnail-1463996789295284254_ec7068a1.png"
+        },
+        {
+          "text": "A developer was instructed to burn 70 percent of their token supply after launching with problematic tokenomics. The team provided guidance on using Sol Incinerator to burn tokens and exporting private keys from Bags wallet to Phantom for the burning process. Shaw reported making 80,000 dollars in fees during the week from a token someone else launched, demonstrating the fee-based model's effectiveness.",
+          "sources": "https://discord.com/channels/1253563208833433701/1377726087789940836"
+        },
+        {
+          "text": "Developers expressed frustration about lack of coordination on token launches. One core developer complained about not receiving heads-up notifications from other team members launching tokens, creating coordination issues within the development team.",
+          "sources": "https://discord.com/channels/1253563208833433701/1377726087789940836"
+        }
+      ],
+      "topic": "discordrawdata"
+    },
+    {
+      "title": "ElizaOS Project Progress - January 22, 2026: API Reliability and V2.0.0 Compatibility",
+      "content": [
+        {
+          "text": "On January 22, 2026, the ElizaOS project achieved significant improvements in API reliability and V2.0.0 compatibility by resolving critical issues affecting data access across multiple repositories. The team fixed problems with API index generation, contributor profile exports, and overall summary generation that were causing 404 errors in production.",
+          "sources": "https://elizaos.github.io/api/summaries/overall/day/2026-01-22.json"
+        },
+        {
+          "text": "Two urgent API issues were identified and resolved. First, the API index and 1,433 contributor profiles were not being exported due to a missing SITE_URL in the run-pipelines workflow. This was fixed by adding dynamic SITE_URL detection. Second, overall summary API endpoints returned 404 errors for dates with no repository activity. The system was modified to always generate summaries, providing a 'No activity recorded' message for inactive days, ensuring consistent API behavior and distinguishing between pipeline failures and days without activity.",
+          "sources": "https://elizaos.github.io/api/summaries/overall/day/2026-01-22.json"
+        },
+        {
+          "text": "A pipeline ordering issue was identified and corrected that caused contributor summaries to consistently appear as null in exported stats files. The fix ensures that contributor summaries are re-exported after their generation, providing accurate data in the stats_*.json files.",
+          "sources": "https://elizaos.github.io/api/summaries/overall/day/2026-01-22.json"
+        },
+        {
+          "text": "Python example and plugin enhancements were completed, including the addition of Python quickstart documentation. The chat example was fixed to include the inmemorydb plugin for database support and dotenv loading. The inmemorydb plugin was corrected to use proper Plugin implementation.",
+          "sources": "https://elizaos.github.io/api/summaries/overall/day/2026-01-22.json"
+        },
+        {
+          "text": "Work progressed on V2.0.0 compatibility with pull requests opened to fix the avatar example and ElevenLabs plugin, as well as to address A2A example, protobuf compatibility, and runtime errors. A new pull request was also submitted to add a Cerebras Plugin to the registry.",
+          "sources": "https://elizaos.github.io/api/summaries/overall/day/2026-01-22.json"
+        },
+        {
+          "text": "Multiple issues were closed across repositories, including agent message processing and state management issues, migration eligibility discrepancies, and the API export and contributor profile resolution issues. Contributor madjin was recognized for providing detailed comments and fixes for critical API index and overall summary generation issues.",
+          "sources": "https://elizaos.github.io/api/summaries/overall/day/2026-01-22.json"
+        }
+      ],
+      "topic": "miscellaneous"
+    },
+    {
+      "title": "ElizaOS Community Updates - January 23, 2026",
+      "content": [
+        {
+          "text": "Community members expressed frustration over a controversial token launch called GOLD, which was announced as the official Hyperscape token. The launch faced significant criticism due to poor execution, with shaw acknowledging he messed up the liquidity pool and the supply was damaged. The token was described as a gold presale for Hyperscape, not the main token which would have fixed tokenomics. Community members criticized the team for launching multiple tokens simultaneously, comparing it to repeating mistakes from 2025. Some members called it another pump and dump scheme, with accusations of insider trading and farming. The launch included a 40% dev wallet and lacked official announcements initially, leading to speculation and confusion.",
+          "sources": [
+            "https://discord.com/channels/1253563208833433701/1253563209462448241",
+            "https://discord.com/channels/1253563208833433701/1301363808421543988"
+          ],
+          "images": "https://cdn.elizaos.news/elizaos-media/opengraph-image-m75hzs-f33d24f02bd25c41_47339e1c.jpg",
+          "memes": {
+            "url": "https://cdn.elizaos.news/imgflip/ai7k5i.jpg",
+            "summary": "Repeating mistakes from 2025."
+          }
+        },
+        {
+          "text": "Technical development continued with several updates. A Discord plugin issue was resolved in version 1.3.8, fixing problems with bot functionality in servers and DMs. The plugin had permission issues accessing audit logs and conversation length errors. A new Sportradar ElizaOS Plugin version 0.1 was released, providing access to live NBA data for prediction agents. The plugin is available on GitHub for developers building sports-related prediction agents. ElizaCloud website received updates, with discussions about using different AI models for competition features similar to Polymarket.",
+          "sources": "https://discord.com/channels/1253563208833433701/1300025221834739744",
+          "images": "https://cdn.elizaos.news/elizaos-media/eliza_sportradar_3614e77d.jpg",
+          "memes": {
+            "url": "https://cdn.elizaos.news/imgflip/ai7k6n.jpg",
+            "summary": "Sportradar ElizaOS NBA plugin exists."
+          }
+        },
+        {
+          "text": "CJFT launched an official token and demonstrated hardware integration utility. The token was confirmed as official by team members, with CJFT conducting live streams showing development work on Cloud until DevConnect. Community members expressed optimism about CJFT becoming a creator and praised the constant communication. The token was positioned as having real utility with hardware integration capabilities.",
+          "sources": "https://discord.com/channels/1253563208833433701/1253563209462448241",
+          "images": "https://prod-fastly-us-east-1.video.pscp.tv/Transcoding/v1/live_thumbnail/us-east-1/eyJkIjowfQ/wQ8f5cOfjMG3M7XJiDtTAxFkDMT9Bzws3T--22d2tQXFKbxeYRhQn-EoY8OtAaSrlZlOt6cZdbSlXSlcnV1zJw/latest.jpg?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCIsInZlcnNpb24iOiIyIn0.eyJBbGxvd2VkUHJvdG9jb2xzIjpbInRodW1iIl0sIkJyb2FkY2FzdElkIjoiMW1ueGVOUlBORW5LWCIsIkdyYW50VHlwZSI6InJlYWQiLCJHcmFudGVkQXQiOjE3NjkxOTU3NDIsIkdyYW50ZWRUbyI6InR3LTE0ODkwNzU5OTYzNzIzODk4ODgiLCJTdHJlYW1OYW1lIjoid1E4ZjVjT2ZqTUczTTdYSmlEdFRBeEZrRE1UOUJ6d3MzVC0tMjJkMnRRWEZLYnhlWVJoUW4tRW9ZOE90QWFTcmxabE90NmNaZGJTbFhTbGNuVjF6SnciLCJleHAiOjE3NjkzNjg1NDJ9.tvEirv9--yvwprRItIr7Q9zOgfyuTMKdE41xUQhZdXI&service=proxsee&digest=WLOdAzDmZtSy3WSE8gwhSn0E2Lkk7Sm6L22Mz7EhG5I&ts=884597871",
+          "memes": {
+            "url": "https://cdn.elizaos.news/imgflip/ai7k6v.jpg",
+            "summary": "Token demonstrated hardware integration."
+          }
+        },
+        {
+          "text": "Hyperfy announced the sunsetting of their legacy platform on April 1st, 2026. The original hosted platform at hyperfy.io will go offline as the project transitions to a fully open source model. World NFT holders had already received the HYPER token airdrop, completing the transition away from the NFT-based platform model. The open source repository remains available and actively developed, with community support continuing through Discord. Users can self-host their own Hyperfy instances or use hosting providers like hyperworld.host.",
+          "sources": "https://discord.com/channels/1253563208833433701/1301363808421543988",
+          "memes": {
+            "url": "https://cdn.elizaos.news/imgflip/ai7k7g.jpg",
+            "summary": "Sunset on April Fools' Day."
+          },
+          "posters": "https://cdn.elizaos.news/posters/1769216208060-sn99zz.png"
+        },
+        {
+          "text": "Partners discussed airdrop strategies and tax implications. A proposal was made to avoid direct airdrops to individual wallets due to tax issues, instead suggesting a contract-based system that would buy and burn ElizaOS tokens as airdropped tokens appreciate in value. This approach would provide long-term alignment and avoid immediate tax liabilities. The discussion referenced IRS rulings on airdrops as ordinary income and the need to structure distributions to minimize tax burden while maximizing ecosystem value.",
+          "sources": "https://discord.com/channels/1253563208833433701/1301363808421543988",
+          "memes": {
+            "url": "https://cdn.elizaos.news/imgflip/ai7k90.jpg",
+            "summary": "Burning tokens dodges airdrop taxes."
+          },
+          "posters": "https://cdn.elizaos.news/posters/1769216240096-4nqt4e.png"
+        },
+        {
+          "text": "A comprehensive ElizaOS deep dive video was shared covering the ecosystem comeback, including upcoming project launches, potential airdrops for token holders, and developments in Eliza Town, Hyperscape, and the Eliza Movie. ElizaBAO announced a video creator competition inviting creators to produce short-form videos explaining AI agents, prediction markets, and the ElizaBAO ecosystem.",
+          "sources": [
+            "https://discord.com/channels/1253563208833433701/1253563209462448241",
+            "https://discord.com/channels/1253563208833433701/1377726087789940836"
+          ],
+          "images": [
+            "https://cdn.elizaos.news/elizaos-media/embed-image-1464273997846810707_79f73428.jpg",
+            "https://cdn.elizaos.news/elizaos-media/embed-image-1464278643097210982_00aa084c.jpg"
+          ],
+          "memes": {
+            "url": "https://cdn.elizaos.news/imgflip/ai7ka7.jpg",
+            "summary": "Eliza Movie ecosystem development."
+          }
+        }
+      ],
+      "topic": "discordrawdata"
+    },
+    {
+      "title": "ElizaOS Project Update - January 23, 2026",
+      "content": {
+        "text": "On January 23, 2026, the ElizaOS project made progress across multiple areas while the core eliza repository remained inactive. A critical bug fix was completed for the Discord plugin that resolved proxy method binding issues affecting private fields like conversationLength, ensuring proper runtime functionality. In ongoing work, a new sports integration plugin called plugin-sportradar was added to the registry, expanding the plugin ecosystem. The documentation website also saw improvements with a pull request addressing pipeline consolidation and DRY violations. Additionally, a new issue was reported regarding a discrepancy in the untracked repositories table, which has twice as many columns as the tracked repositories table.",
+        "sources": "https://elizaos.github.io/api/summaries/overall/day/2026-01-23.json",
+        "memes": {
+          "url": "https://cdn.elizaos.news/imgflip/ai7kaj.jpg",
+          "summary": "Untracked table has twice tracked's columns."
+        },
+        "posters": "https://cdn.elizaos.news/posters/1769216285685-owsojk.png"
+      },
+      "topic": "miscellaneous"
+    }
+  ],
+  "date": 1769216297
+}
