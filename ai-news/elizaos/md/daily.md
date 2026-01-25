@@ -1,107 +1,61 @@
-# ElizaOS Daily Report - January 22, 2026
+# ElizaOS Development Report - January 12, 2026
 
-## Community Activity
+## Performance Improvements
 
-### New Contributors
+- Runtime initialization optimized with up to 40% faster performance
+- Cold start times reduced by 30% through atomic upserts and parallelized operations
+- Warm start times improved by 40%
+- Embedding API call eliminated during agent initialization, saving approximately 500ms
+- New EMBEDDING_DIMENSION configuration setting added to control embedding dimensions
+- Optimizations affected plugin-sql, server, and core packages
 
-- A new contributor with a coding background joined the community and is working on adding an RLM plugin for Eliza v2
-- The community welcomed the new member
+## ElizaCloud App Creator Testing
 
-### Token Migration Support
+- Extensive testing conducted on the ElizaCloud app creator feature
+- Team tested building apps that interface with X API and agents
+- Development team acknowledged issues as expected for new feature in team testing phase
+- Automatic save management implemented at end of state executions
+- Git commits configured to occur after batches of file updates
+- Development underway for stop button for agents
+- Console CLI access for direct command input in progress
+- Git tool support being added
+- Guardrails being developed for the app kit
 
-- Support staff assisted multiple users through the token migration process
-- Users were directed to create tickets and use the migration support channel
-- At least one user successfully completed migration after receiving assistance
+## Infrastructure and Core Development
 
-### Community Engagement
+- ANTHROPIC_API_KEY in GitHub Actions replaced with dedicated CI/CD key
+- Separate key created to avoid using personal API keys for continuous integration
+- OAuth3 APIs integrated in cloud branch
+- Twitter OAuth relay infrastructure planned with PostgreSQL backend
+- ElizaOS subdomain (twitter-broker.elizaos.ai) designated for OAuth relay service
+- VERCEL_OIDC_TOKEN authentication implemented
+- Code audit process established for twitter-broker repository
 
-- ElizaBAO announced a video creator competition for short-form videos explaining AI agents, prediction markets, and the ElizaBAO ecosystem
-- Community members shared positive sentiment about ElizaOS technology
-- Shaw posted a tweet reaffirming commitment to the project, emphasizing the team's focus on shipping good tech and products
+## Plugin Development
 
-### Notable Developments
+- Plugin-knowledge solution provided for dynamically adding facts to agents
+- @blockrun/elizaos-plugin added to elizaos-plugins/registry for x402 micropayments functionality
+- Google GenAI plugin issue identified regarding outdated model listings
 
-- News emerged about a collaboration between Grimes and Shaw, the founder of ElizaOS
-- This development generated excitement in the community
+## Repository Updates
 
-## Technical Achievements
+- Markdown rendering fixed in profile summary card (elizaos/elizaos.github.io)
+- Multiple dependency updates completed:
+  - zod: 3.25.76 to 4.3.5
+  - tailwind-merge: 2.6.0 to 3.4.0
+  - @types/node: 22.19.5 to 25.0.6
+  - react-markdown: 9.1.0 to 10.1.0
+  - eslint-config-next: 15.1.4 to 16.1.1
+  - p-retry: 6.2.1 to 7.1.1
+  - lint-staged: 15.5.2 to 16.2.7
+  - @types/minimatch: 5.1.2 to 6.0.0
+  - recharts: 2.15.4 to 3.6.0
+  - task-master-ai: 0.40.1 to 0.41.0
+- Unslop Apps issue closed in elizaos/eliza repository
 
-### Database Migration Resolution
+## Community Engagement
 
-- A user successfully resolved PostgreSQL migration issues by switching to Neon database
-- The support team provided guidance on using pgvector and proper database configuration
-- Issues with creating schemas were resolved through database platform migration
-
-### Discord Integration
-
-- The development team acknowledged and began investigating errors with the recent messages provider in version 1.7.2
-- Issues were related to invalid private field access for conversation length
-
-### Distributed Computing Discussions
-
-- Developers discussed using AirLLM to run 70B models on 4GB GPUs
-- Conversations covered implementing zero-knowledge proofs to prevent cheating in distributed networks
-- Exploration of utilizing consumer devices like iPhones for processing during idle time
-- Discussion of creating ad hoc clusters of devices with redundant compute and validation systems
-
-### AI Agent Use Cases
-
-- A creative use case was shared involving a bot that analyzed broken McDonald's ice cream machine data
-- The bot reportedly made $200,000 in Polymarket profits by correlating machine breakdowns with economic trends
-- The bot predicted political events based on machine repair patterns near the White House
-
-### VR Data Collection for Robotics
-
-- A Silicon Valley robot meetup highlighted a solution for collecting human manipulation data
-- A popular VR game with 100,000 players was used to collect training data for robotics
-- Contests like making sandwiches as fast as possible while wearing headsets were added
-
-## Core Development
-
-### Token Launch Guidelines Established
-
-- Shaw established strict rules for developers launching tokens:
-  - Never sell tokens
-  - Burn tokens before selling if necessary
-  - Use 30 percent of fees for buybacks during dips
-  - Maintain clear value propositions
-- Shaw reported making $80,000 in fees during the week from a token someone else launched
-
-### Token Supply Management
-
-- A developer was instructed to burn 70 percent of their token supply after launching with problematic tokenomics
-- The team provided guidance on using Sol Incinerator to burn tokens
-- Instructions were given for exporting private keys from Bags wallet to Phantom for the burning process
-
-## Project Infrastructure
-
-### API Reliability Improvements
-
-- Fixed API index generation that was causing 404 errors in production
-- Resolved missing SITE_URL in the run-pipelines workflow by adding dynamic SITE_URL detection
-- Modified overall summary API endpoints to always generate summaries, providing 'No activity recorded' message for inactive days
-- Fixed contributor profile exports affecting 1,433 profiles
-
-### Pipeline Fixes
-
-- Corrected pipeline ordering issue that caused contributor summaries to appear as null in exported stats files
-- Contributor summaries are now re-exported after generation for accurate data in stats_*.json files
-
-### Python Enhancements
-
-- Added Python quickstart documentation
-- Fixed chat example to include the inmemorydb plugin for database support and dotenv loading
-- Corrected inmemorydb plugin to use proper Plugin implementation
-
-### V2.0.0 Compatibility Progress
-
-- Opened pull requests to fix the avatar example and ElevenLabs plugin
-- Submitted pull requests to address A2A example, protobuf compatibility, and runtime errors
-- Submitted new pull request to add a Cerebras Plugin to the registry
-
-### Issue Resolution
-
-- Closed multiple issues across repositories including agent message processing and state management issues
-- Resolved migration eligibility discrepancies
-- Fixed API export and contributor profile resolution issues
-- Contributor madjin provided detailed comments and fixes for critical API index and overall summary generation issues
+- Token value proposition clarified for Jeju network integration
+- Gas fee utility explained for when developers build agents on the network
+- Technical discussions held on app creator functionality and deployment
+- Testing feedback collected from community members
