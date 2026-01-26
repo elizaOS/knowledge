@@ -1,61 +1,63 @@
-# ElizaOS Development Report - January 12, 2026
+## ElizaOS Development Updates - January 8-9, 2026
 
-## Performance Improvements
+### Technical Development and Infrastructure
 
-- Runtime initialization optimized with up to 40% faster performance
-- Cold start times reduced by 30% through atomic upserts and parallelized operations
-- Warm start times improved by 40%
-- Embedding API call eliminated during agent initialization, saving approximately 500ms
-- New EMBEDDING_DIMENSION configuration setting added to control embedding dimensions
-- Optimizations affected plugin-sql, server, and core packages
+- Shaw announced Eliza 2.0 plans with TypeScript, Rust, and Python versions featuring FFI plugin interop between languages
+- The new version will have no API, server, CLI, or projects - just a Claude-friendly documented runtime with same abstractions across three languages and examples for common use cases
+- Jin built context graphs from decision traces, leveraging ElizaOS's strong data foundation for AI agents as collaborators
+- Daily, weekly, and monthly insights generated from agentic workflows were integrated into last mile applications
+- Work progressed on converting ElizaOS plugins into skills for interoperability with other agent tools, testing with Discord and blockchain plugins
 
-## ElizaCloud App Creator Testing
+### Plugin Ecosystem Expansion
 
-- Extensive testing conducted on the ElizaCloud app creator feature
-- Team tested building apps that interface with X API and agents
-- Development team acknowledged issues as expected for new feature in team testing phase
-- Automatic save management implemented at end of state executions
-- Git commits configured to occur after batches of file updates
-- Development underway for stop button for agents
-- Console CLI access for direct command input in progress
-- Git tool support being added
-- Guardrails being developed for the app kit
+- Added @kamiyo/eliza plugin and @zane-archer/plugin-aimo-router plugin to the registry
+- Implemented major improvements to plugin-sql module including Neon serverless database support and enhanced Row-Level Security (RLS)
+- Fixed pgcrypto extension installation with PGLite
+- Implemented OAuth2 PKCE authentication in plugin-twitter repository for enhanced security and backward compatibility
+- Strengthened plugin-sql testing by integrating withEntityContext() into RLS tests and adding ENABLE_DATA_ISOLATION=true to CI
 
-## Infrastructure and Core Development
+### Development Workflow Enhancements
 
-- ANTHROPIC_API_KEY in GitHub Actions replaced with dedicated CI/CD key
-- Separate key created to avoid using personal API keys for continuous integration
-- OAuth3 APIs integrated in cloud branch
-- Twitter OAuth relay infrastructure planned with PostgreSQL backend
-- ElizaOS subdomain (twitter-broker.elizaos.ai) designated for OAuth relay service
-- VERCEL_OIDC_TOKEN authentication implemented
-- Code audit process established for twitter-broker repository
+- Fixed critical bug enabling comprehensive hot reload functionality for backend development
+- Optimized build task inputs in turbo.json
+- Developers implemented MiniMax M2 for coding with interleaved thinking for long-running tasks
+- Shared VPS setup running Claude Code with Kimi K2 and access via Happy on iOS
 
-## Plugin Development
+### Jeju Platform
 
-- Plugin-knowledge solution provided for dynamically adding facts to agents
-- @blockrun/elizaos-plugin added to elizaos-plugins/registry for x402 micropayments functionality
-- Google GenAI plugin issue identified regarding outdated model listings
+- Explained Jeju platform as a Layer 2 blockchain that is decentralized and focused on powering AI applications
+- Platform connects everything ElizaOS is building
+- Named after a Korean island used for testing new technology before rolling it out to the rest of Korea
 
-## Repository Updates
+### ElizaCloud
 
-- Markdown rendering fixed in profile summary card (elizaos/elizaos.github.io)
-- Multiple dependency updates completed:
-  - zod: 3.25.76 to 4.3.5
-  - tailwind-merge: 2.6.0 to 3.4.0
-  - @types/node: 22.19.5 to 25.0.6
-  - react-markdown: 9.1.0 to 10.1.0
-  - eslint-config-next: 15.1.4 to 16.1.1
-  - p-retry: 6.2.1 to 7.1.1
-  - lint-staged: 15.5.2 to 16.2.7
-  - @types/minimatch: 5.1.2 to 6.0.0
-  - recharts: 2.15.4 to 3.6.0
-  - task-master-ai: 0.40.1 to 0.41.0
-- Unslop Apps issue closed in elizaos/eliza repository
+- ElizaCloud agents performed well
+- App creator feature is functional
+- Added billing page to allow credit top-ups
+- Confirmed both PGlite and PostgreSQL work for deployment via containers
 
-## Community Engagement
+### Community Events and Partnerships
 
-- Token value proposition clarified for Jeju network integration
-- Gas fee utility explained for when developers build agents on the network
-- Technical discussions held on app creator functionality and deployment
-- Testing feedback collected from community members
+- Scheduled space event with Solana Foundation, PayAI, and Quantu for Tuesday January 13th at 7pm UTC to discuss 8004 protocol and Eliza Cloud utilization
+- Kamiyo AI project launched using ElizaOS plugin for autonomous agent payments with escrow-protected x402 payments and on-chain dispute resolution
+- BountyBoard project using Eliza highlighted as a decentralized platform for Web3 community activities
+
+### Leaderboard and Meritverse Development
+
+- Planned MMORPG-style character system for leaderboard API
+- Created implementation for full Orders and Evolution class tree with progression paths
+- Enabled users to choose evolution paths at tier thresholds
+- Added tracking for class evolution history for profile lore display
+- Implemented unique visual identities for each Order
+- Enabled class respec with history preservation
+- Made character class thresholds configurable
+- Extended grouped organization/repository format to day, week, and month summaries
+- Referenced work on Meritverse concept combining MMORPG lessons for a unified, rewarding, and meritocratic online ecosystem
+
+### Token Migration
+
+- Team members clarified that exchanges supporting migration would handle the swap automatically
+
+### V2.0.0 Release
+
+- Commenced work on V2.0.0 release
