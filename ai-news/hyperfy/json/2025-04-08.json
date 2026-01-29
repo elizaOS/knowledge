@@ -1,151 +1,60 @@
 {
-  "type": "dailySummary",
-  "title": "Daily Report - 2025-04-08",
+  "server": "Hyperfy",
+  "title": "Hyperfy Discord - 2025-04-08",
+  "date": 1744070400,
+  "stats": {
+    "totalMessages": 938,
+    "totalUsers": 43
+  },
   "categories": [
     {
-      "title": "AI Integration and Development in Hyperfy Platform and Fallen Game",
-      "content": [
-        {
-          "text": "The Hyperfy platform and its flagship game, Fallen, are undergoing rapid development with a strong focus on AI integration, user experience, and technical enhancements. AI is being explored as a tool for generating game content, including maps, items, and lore. Developers discussed the feasibility of AI-generated 3D models, mintable NFTs, and in-editor prompting to assist creators. While AI-generated games often face limitations, Hyperfy’s modular app-based architecture is designed to mitigate these issues by isolating functionality into small, manageable components.",
-          "sources": [
-            "https://discord.com/channels/958209073277456457/994775534733115412",
-            "https://discord.com/channels/958209073277456457/958209074045026327"
-          ],
-          "images": [],
-          "videos": []
-        },
-        {
-          "text": "In the context of Fallen, AI is being considered for dynamic item generation, lore creation, and even as a game master to drive narrative and gameplay. Community-driven storytelling is encouraged, with ideas like lore competitions and canonized items. The long-term vision includes AI-assisted development tools embedded directly into the editor, allowing creators to prompt AI for assets or logic generation.",
-          "sources": [
-            "https://discord.com/channels/958209073277456457/958209074045026327"
-          ],
-          "images": [],
-          "videos": []
-        },
-        {
-          "text": "Technical discussions also covered the need for better animation systems, including state machines, blending, and controller overrides. These features are essential for integrating AI-generated animations or behaviors. Developers emphasized the importance of scripting flexibility and preload support for props and emotes, which would benefit AI-assisted workflows.",
-          "sources": [
-            "https://discord.com/channels/958209073277456457/994775534733115412"
-          ],
-          "images": [],
-          "videos": []
-        },
-        {
-          "text": "While AI integration is not yet fully realized, it is a recurring theme in both technical planning and community suggestions. Action items include adding support for AI-assisted prompting in the editor, enabling AI-generated loot and story elements, and exploring AI-driven item minting. These initiatives aim to enhance the creative process without replacing manual development, aligning with Hyperfy’s philosophy of empowering creators.",
-          "sources": [
-            "https://discord.com/channels/958209073277456457/994775534733115412",
-            "https://discord.com/channels/958209073277456457/958209074045026327"
-          ],
-          "images": [],
-          "videos": []
-        }
-      ],
-      "topic": "ai integration"
+      "channelId": "994775534733115412",
+      "channelName": "💻│developers",
+      "summary": "# Analysis of 💻│developers Discord Chat\n\n## 1. Summary\nThe discussion primarily focused on Hyperfy's technical development, with several key themes emerging. The most significant technical conversation revolved around implementing voice chat functionality, which was successfully tested in the \"Fallen\" game. There was extensive debate about animation systems, particularly how to handle player movement animations and the technical challenges of overriding the character controller. Developers discussed the structure of root bones in animations and how they should be disconnected from hips for proper animation retargeting.\n\nAnother major discussion centered on AI integration and \"vibe coding\" (using AI to generate code). Some developers advocated for making AI a first-class citizen in the platform to attract new creators, while others argued for focusing on core engine development first. Ash (lead developer) clarified that while AI integration is valuable, it shouldn't require a full engine pivot.\n\nTechnical implementation details were shared for networked synchronization, animation state machines, and preloading assets. The team also discussed improvements to the loot pool system in Fallen, with suggestions for time-based unlocks or kill-based requirements to encourage player engagement.\n\n## 2. FAQ\nQ: How does the experimental wind shader work in Hyperfy? (asked by Gert-Jan Akerboom) A: It's a boolean custom property on the material (not the mesh). Select the mesh, go to material tab, and add a custom property called \"wind\" at the bottom. It works best for grass, with vertices nearest the root having zero movement and those above having progressively more movement. (answered by ash)\nQ: How do I change the spawnpoint in a world? (asked by vox) A: Use the button in world menu (Escape -> world -> set spawn) or type \"/spawn set\" in chat. (answered by ash)\nQ: How can I speed up animations in Hyperfy? (asked by general hyper) A: Add \"?s=2\" to the animation URL to change speed to 2x, e.g., const src = props.myEmote?.url + `?s=2` (answered by ash)\nQ: How do I implement custom movement animations that override the default character controller? (asked by peezy) A: Create a state machine that listens to key inputs and applies the appropriate animation effect based on movement direction and state. (answered by Saori)\nQ: How can I preload assets like animations to prevent hitching when first played? (asked by Saori) A: Add preload:true to file props in app configuration. (answered by ash)\n\n## 3. Help Interactions\nHelper: ash | Helpee: Gert-Jan Akerboom | Context: Implementing experimental wind shader for meshes | Resolution: Explained that it's a boolean custom material property called \"wind\" that works best for grass, with vertices near the root having zero movement.\nHelper: ash | Helpee: general hyper | Context: Changing animation speed in Hyperfy | Resolution: Showed how to add \"?s=2\" parameter to animation URLs to modify playback speed.\nHelper: Saori | Helpee: general hyper | Context: Implementing custom movement animations | Resolution: Shared code for a state machine that handles different movement states and applies appropriate animations.\nHelper: .hyp shaman | Helpee: peezy | Context: Creating custom animations for Hyperfy | Resolution: Demonstrated how to create animations like tackling by working with the root bone structure.\nHelper: ash | Helpee: TheMattEmpire | Context: Testing voice chat in Fallen | Resolution: Successfully implemented voice chat with emotes while speaking.\n\n## 4. Action Items\nType: Technical | Description: Implement preloading for emotes and other assets to prevent hitching on first play | Mentioned By: Saori\nType: Technical | Description: Add isInAir() method to player controller for better jump animation handling | Mentioned By: Saori\nType: Technical | Description: Implement animation blending to allow actions like reloading while walking | Mentioned By: Saori\nType: Technical | Description: Modify loot pool in Fallen to use flat rewards instead of percentage-based | Mentioned By: ash\nType: Technical | Description: Create time-based or kill-based unlocks for the loot pool to encourage concurrent players | Mentioned By: Saori\nType: Technical | Description: Add API for easier character controller animation overrides | Mentioned By: general hyper\nType: Feature | Description: Add drone camera for streaming gameplay in Fallen | Mentioned By: HowieDuhzit\nType: Feature | Description: Implement vehicle reset functionality for the drone camera | Mentioned By: Agent12\nType: Feature | Description: Create more custom animations (dash, tackle) for player interactions | Mentioned By: .hyp shaman\nType: Documentation | Description: Document proper animation rigging with disconnected root bones | Mentioned By: .hyp shaman",
+      "messageCount": 558,
+      "userCount": 22
     },
     {
-      "title": "Hyperfy Platform and Fallen Game Development Summary",
-      "content": [
-        {
-          "text": "The Hyperfy community has been actively developing and refining both the core platform and the PvP game 'Fallen'. Key technical discussions have focused on animation systems, shader integration, AI-assisted development, and user experience improvements.",
-          "sources": [
-            "https://discord.com/channels/958209073277456457/994775534733115412"
-          ],
-          "images": [],
-          "videos": []
-        },
-        {
-          "text": "A major topic was the integration of an experimental wind shader, which requires a boolean custom property on the material in Blender. It currently supports grass animations but lacks configurable parameters like wind speed or direction. Future updates may include these features.",
-          "sources": [
-            "https://discord.com/channels/958209073277456457/994775534733115412"
-          ],
-          "images": [],
-          "videos": []
-        },
-        {
-          "text": "Voice chat has been internally implemented with spatial audio and emote support. Plans include screen sharing and a global chat toggle. Animation improvements such as masking and idle/talking randomization were also suggested.",
-          "sources": [
-            "https://discord.com/channels/958209073277456457/994775534733115412",
-            "https://discord.com/channels/958209073277456457/958209074045026327"
-          ],
-          "images": [],
-          "videos": []
-        },
-        {
-          "text": "The animation system is being enhanced with better rigging practices, such as separating root bones from hips for improved retargeting. Developers discussed using emote-idle.glb as a base rig, and implementing animation state machines using scripting and preload flags.",
-          "sources": [
-            "https://discord.com/channels/958209073277456457/994775534733115412"
-          ],
-          "images": [],
-          "videos": []
-        },
-        {
-          "text": "Overriding default character controller animations remains a challenge. A workaround using localPlayer.replaceAnimations() was shared, but full support for animation blending, air state detection, and controller state overrides is still in development.",
-          "sources": [
-            "https://discord.com/channels/958209073277456457/994775534733115412"
-          ],
-          "images": [],
-          "videos": []
-        },
-        {
-          "text": "AI integration is a long-term goal. While most AI-generated games require developer intervention to work around limitations, Hyperfy’s modular app model helps mitigate these issues. Future plans include AI-driven item generation, lore creation, and in-editor prompting.",
-          "sources": [
-            "https://discord.com/channels/958209073277456457/994775534733115412",
-            "https://discord.com/channels/958209073277456457/958209074045026327"
-          ],
-          "images": [],
-          "videos": []
-        },
-        {
-          "text": "In the game 'Fallen', loot pool mechanics are being revised to use flat rewards and time- or kill-based unlocks. A second in-game currency for kills is planned, which can be used for skins and items. PvP arena modes and AI enemies were also proposed.",
-          "sources": [
-            "https://discord.com/channels/958209073277456457/994775534733115412",
-            "https://discord.com/channels/958209073277456457/958209074045026327"
-          ],
-          "images": [],
-          "videos": []
-        },
-        {
-          "text": "The platform supports VRM avatars and NFT skins, with wallet integration and Solana NFT compatibility. Signed apps and VRMs can be whitelisted across worlds. NFT-based movement upgrades and kill rewards were also discussed.",
-          "sources": [
-            "https://discord.com/channels/958209073277456457/958209074045026327"
-          ],
-          "images": [],
-          "videos": []
-        },
-        {
-          "text": "User experience and onboarding remain a priority. Suggestions included better templates, documentation, and examples. The Hyperfy Blender add-on was praised for simplifying asset import with collision and snap point features.",
-          "sources": [
-            "https://discord.com/channels/958209073277456457/994775534733115412",
-            "https://discord.com/channels/958209073277456457/958209074045026327"
-          ],
-          "images": [],
-          "videos": []
-        },
-        {
-          "text": "Performance optimizations include a grass particle system supporting 10,000 particles at 60 FPS, with future plans to add flowers and fix UI truncation. VPN-related loading issues were identified and addressed by the community.",
-          "sources": [
-            "https://discord.com/channels/958209073277456457/958209074045026327"
-          ],
-          "images": [],
-          "videos": []
-        },
-        {
-          "text": "A humorous, non-technical chat segment referencing a Twitter post was noted but contained no relevant development content.",
-          "sources": [
-            "https://discord.com/channels/958209073277456457/1031058655581323324"
-          ],
-          "images": [],
-          "videos": []
-        },
-        {
-          "text": "Current SOL token price is $106.91.",
-          "sources": [],
-          "images": [],
-          "videos": []
-        }
-      ],
-      "topic": "Misceleanous"
+      "channelId": "1326789867312775290",
+      "channelName": "🪙│hyper",
+      "summary": "# Discord Chat Analysis for 🪙│hyper Channel\n\n## 1. Summary\nThe chat primarily revolves around HYPER token price fluctuations, with significant volatility observed (dropping to 4.2M market cap with -34.7% and later pumping to 8.2M with +42.3%). Community members express mixed sentiments about the price action, with some showing concern while others remain optimistic about the long-term fundamentals. Several members mention continuing to accumulate during the dip, with one wallet observed purchasing significant amounts (reaching approximately 2% of supply). \n\nA key technical discussion emerged when user \"general hyper\" announced development of free crypto tax reporting software as an alternative to paid services like Koinly. The discussion included technical considerations about API integration with exchanges (Coinbase, Kraken) and blockchain explorers (Etherscan), handling on-chain data, and secure key storage approaches. User \"peezy\" suggested using the CCXT library that standardizes exchange interfaces, though \"general hyper\" noted previous challenges with API changes. The Etherscan API was highlighted as having improved significantly, now supporting multiple chains with better data access without requiring complex RPC calls for internal transactions.\n\n## 2. FAQ\nQ: How are you saying the price means nothing? (asked by eigb) A: The asset you're investing in hasn't stopped shipping and building. The upside on something like this is extremely high. (answered by MUDBONE)\nQ: What will drive Hyperfy's value? (asked by eigb) A: The real game changer is connectivity, that's where the real unmet demand is. (answered by PurpleSack)\nQ: Who is this wallet buying large amounts of HYPER? (asked by jingo) A: Unanswered\n\n## 3. Help Interactions\nHelper: peezy | Helpee: general hyper | Context: Needed standardized interface for exchange APIs for tax software | Resolution: Shared CCXT library (https://github.com/ccxt/ccxt) that provides standardized interfaces for multiple exchanges\nHelper: general hyper | Helpee: peezy | Context: Discussion about Etherscan API capabilities | Resolution: Shared that Etherscan API has improved significantly with multi-chain support and better data access (https://docs.etherscan.io/etherscan-v2)\n\n## 4. Action Items\nTechnical: Develop free crypto tax reporting software as alternative to paid services | Description: Support for Coinbase, Kraken, Phantom, Metamask initially, with potential expansion to other exchanges | Mentioned By: general hyper\nTechnical: Determine secure approach for storing API keys in tax software | Description: Consider read-only access keys on server or native application approach | Mentioned By: general hyper\nTechnical: Implement Etherscan API integration for blockchain data | Description: Leverage improved Etherscan API for transaction data across multiple chains | Mentioned By: general hyper",
+      "messageCount": 92,
+      "userCount": 20
+    },
+    {
+      "channelId": "999870741069692958",
+      "channelName": "🌆│share",
+      "summary": "# Analysis of Discord Chat in \"🌆│share\" Channel\n\n## 1. Summary\nThe chat segment contains a brief discussion about decentralization in Web3 applications. A tweet from 0xmakesy was shared, which appears to reference Privy (a Web3 authentication service). This prompted a conversation about the reliance on centralized services in Web3 applications. User \"ash\" highlighted that their project \"Fallen\" is completely decentralized with no external dependencies. Later, \"Agent12\" inquired about potential EVM (Ethereum Virtual Machine) compatibility for Hyperfy and whether Hyperfy worlds could run on ENS (Ethereum Name Service) websites. \"ash\" confirmed this was possible and referenced that \"peezy\" had already created an EVM mod in hypkg, which peezy enthusiastically confirmed.\n\n## 2. FAQ\nQ: Could we run a hyperfy world on an ENS Name/Website? (asked by Agent12) A: absofrickenlutely you can (answered by ash)\nQ: didn't peezy already do an EVM mod in hypkg? (asked by ash) A: YES (answered by peezy)\n\n## 3. Help Interactions\nHelper: ash | Helpee: Agent12 | Context: Question about running Hyperfy worlds on ENS websites | Resolution: Confirmed it's possible and referenced existing EVM mod by peezy\nHelper: peezy | Helpee: ash | Context: Confirmation about existing EVM mod in hypkg | Resolution: Confirmed with enthusiasm that the mod exists\n\n## 4. Action Items\nTechnical: Explore EVM compatibility for Hyperfy worlds | Description: Investigate implementation of Hyperfy worlds on ENS websites | Mentioned By: Agent12\nFeature: Implement decentralized architecture like \"Fallen\" | Description: Create applications with zero dependencies on external services | Mentioned By: ash",
+      "messageCount": 14,
+      "userCount": 4
+    },
+    {
+      "channelId": "1022421054582423562",
+      "channelName": "🐞│issues",
+      "summary": "# Analysis of Discord Chat in \"🐞│issues\" Channel\n\n## 1. Summary\nThe chat segment documents a user issue where Pearl Hyacinth was experiencing problems viewing V1 worlds on the Hyperfy.io platform. The user reported seeing only black boxes instead of properly loaded worlds on the homepage across multiple browsers and computers. Other users (maximus and ash) confirmed they could access the platform without issues. After troubleshooting, Pearl discovered that the problem was device-specific, as the worlds loaded correctly on their new computer. The issue was likely related to cached data on their other devices. This represents a typical end-user troubleshooting scenario rather than a platform-wide technical issue.\n\n## 2. FAQ\nQ: Am I the only one not seeing any v1 worlds on the home page? (asked by Pearl Hyacinth) A: Works for me, try on mobile on both wifi and 5G to determine if it's a device/network issue (answered by ash)\nQ: Are you signing in to see My Worlds? (asked by maximus) A: Unanswered\n\n## 3. Help Interactions\nHelper: ash | Helpee: Pearl Hyacinth | Context: User couldn't see V1 worlds on Hyperfy homepage, only black boxes | Resolution: Suggested testing on mobile with different connections; user eventually found it worked on their new computer, suggesting a cache issue on other devices\n\n## 4. Action Items\nTechnical: None explicitly mentioned in the conversation",
+      "messageCount": 14,
+      "userCount": 3
+    },
+    {
+      "channelId": "1332430296737644677",
+      "channelName": "🎨│showcase",
+      "summary": "The provided chat transcript is empty, containing only a timestamp [15:40] and a username \"cru\" with no actual message content. There are no technical discussions, decisions, or problem-solving interactions to analyze in this segment.",
+      "messageCount": 1,
+      "userCount": 1
+    },
+    {
+      "channelId": "1031058655581323324",
+      "channelName": "🧊│3d-design",
+      "summary": "The chat segment is extremely brief and contains no technical discussions, decisions, or problem-solving. It consists of only two messages where a user named \"maximus\" shares a link to a Twitter/X thread about \"raptor ladies\" with another user, and \"general hyper\" responds that they should have shared it earlier. There is no technical content to summarize.",
+      "messageCount": 2,
+      "userCount": 2
+    },
+    {
+      "channelId": "1347905902937767997",
+      "channelName": "🔉│community-updates",
+      "summary": "Type: Technical | Description: Test Voice and LiveKit integration | Mentioned By: maximus",
+      "messageCount": 1,
+      "userCount": 1
     }
-  ],
-  "date": 1744070400
+  ]
 }

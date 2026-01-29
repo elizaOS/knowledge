@@ -1,43 +1,61 @@
-# ElizaOS Development Report - January 25, 2026
+# ElizaOS Development Report - January 12, 2026
 
-## Technical Development
+## Performance Improvements
 
-### Eliza Cloud Integration
-- Clarified that agents created within Eliza Cloud can access external MCP servers
-- External MCP servers can be registered through the Eliza Cloud API using POST /api/v1/mcps endpoint
-- Agents can proxy calls to registered MCP endpoints
+- Runtime initialization optimized with up to 40% faster performance
+- Cold start times reduced by 30% through atomic upserts and parallelized operations
+- Warm start times improved by 40%
+- Embedding API call eliminated during agent initialization, saving approximately 500ms
+- New EMBEDDING_DIMENSION configuration setting added to control embedding dimensions
+- Optimizations affected plugin-sql, server, and core packages
 
-### Security
-- Identified and confirmed a scam involving a Create A Ticket bot requesting wallet addresses
+## ElizaCloud App Creator Testing
 
-### Deployment Options
-- Oracle cloud free tier deployment configured with 4 vcpu and 24gb ram
-- Self-hosting options explored using mini PCs
+- Extensive testing conducted on the ElizaCloud app creator feature
+- Team tested building apps that interface with X API and agents
+- Development team acknowledged issues as expected for new feature in team testing phase
+- Automatic save management implemented at end of state executions
+- Git commits configured to occur after batches of file updates
+- Development underway for stop button for agents
+- Console CLI access for direct command input in progress
+- Git tool support being added
+- Guardrails being developed for the app kit
 
-### Memory Management Systems
-- Shared two GitHub repositories for memory solutions:
-  - supermemoryai/supermemory: fast and scalable memory engine and app for the AI era
-  - vectorize-io/hindsight: agent memory implementation that works like human memory
+## Infrastructure and Core Development
 
-## Business Development
+- ANTHROPIC_API_KEY in GitHub Actions replaced with dedicated CI/CD key
+- Separate key created to avoid using personal API keys for continuous integration
+- OAuth3 APIs integrated in cloud branch
+- Twitter OAuth relay infrastructure planned with PostgreSQL backend
+- ElizaOS subdomain (twitter-broker.elizaos.ai) designated for OAuth relay service
+- VERCEL_OIDC_TOKEN authentication implemented
+- Code audit process established for twitter-broker repository
 
-### Hiring and Opportunities
-- ElizaBAO announced developer hiring with creator rewards
-- Polymarket affiliate profit sharing opportunities available
+## Plugin Development
 
-### Partnerships
-- Consultant Vivek engaged in direct communication with team
-- Vivek participating in spaces with Shaw and Odilitime
-- Focus on obtaining enterprise Twitter key
+- Plugin-knowledge solution provided for dynamically adding facts to agents
+- @blockrun/elizaos-plugin added to elizaos-plugins/registry for x402 micropayments functionality
+- Google GenAI plugin issue identified regarding outdated model listings
 
-### Platform Updates
-- Twitter now using shadcn on its web platform
+## Repository Updates
+
+- Markdown rendering fixed in profile summary card (elizaos/elizaos.github.io)
+- Multiple dependency updates completed:
+  - zod: 3.25.76 to 4.3.5
+  - tailwind-merge: 2.6.0 to 3.4.0
+  - @types/node: 22.19.5 to 25.0.6
+  - react-markdown: 9.1.0 to 10.1.0
+  - eslint-config-next: 15.1.4 to 16.1.1
+  - p-retry: 6.2.1 to 7.1.1
+  - lint-staged: 15.5.2 to 16.2.7
+  - @types/minimatch: 5.1.2 to 6.0.0
+  - recharts: 2.15.4 to 3.6.0
+  - task-master-ai: 0.40.1 to 0.41.0
+- Unslop Apps issue closed in elizaos/eliza repository
 
 ## Community Engagement
 
-### Developer Introductions
-- AI and full stack developer from Japan with 8 years of experience joined, offering development services
-
-### Community Activity
-- Work noted from 8004 community members
-- Discussion of STUDIO token development and Shaw's engagement with the developer
+- Token value proposition clarified for Jeju network integration
+- Gas fee utility explained for when developers build agents on the network
+- Technical discussions held on app creator functionality and deployment
+- Testing feedback collected from community members

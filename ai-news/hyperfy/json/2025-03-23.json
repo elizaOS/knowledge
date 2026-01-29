@@ -1,43 +1,67 @@
 {
-  "type": "dailySummary",
-  "title": "Daily Report - 2025-03-23",
+  "server": "Hyperfy",
+  "title": "Hyperfy Discord - 2025-03-23",
+  "date": 1742688000,
+  "stats": {
+    "totalMessages": 299,
+    "totalUsers": 29
+  },
   "categories": [
     {
-      "title": "Hyperfy Development Updates and Technical Discussions",
-      "content": [
-        {
-          "text": "### Technical Discussions & Decisions\n- **Procedural Dungeon Generation**: Proposed system using `.glb` files with predefined spawn points for mobs, loot, and bosses.\n- **Vehicle Physics Update**: New client-side vehicle physics system introduced, with plans for server-side simulation.\n- **Car Customization System**: Modular customization system similar to Roblox proposed and confirmed feasible.\n- **Portals Between Worlds**: Requires disconnecting from one world and connecting to another via WebSockets.\n- **Mob System Development**: Mobs can hold weapons with unique animations and damage, with a general-purpose mob app suggested.\n- **Waypoint System for Racing**: Proposed system to log split times and prevent cheating, currently being implemented.\n- **Hyperfy Documentation**: Suggested using GitHub Pages, with concerns about versioning confusion.\n- **Player Movement & Animation Issues**: Debugging of `control.mouseLeft.down` issue, resolved by enabling cursor locking.",
-          "sources": [
-            "https://discord.com/channels/958209073277456457/994775534733115412"
-          ],
-          "images": [],
-          "videos": []
-        },
-        {
-          "text": "### Lighting Optimization & Project Updates\n- **Lighting Optimization in Hyperfy V1**: Recommended limiting lights to 2-3 or avoiding them entirely for better performance.\n- **Payment System Issue in Playworld**: Reports of payment failures for a goat and a stand, with no resolution discussed.\n- **Git and GitHub Tutorial**: Announced tutorial session covering Git and GitHub, with future sessions on 3D design and optimization.\n- **Project Leadership Change**: Noted that Saori left the server and removed Hyperfy from their X bio.",
-          "sources": [
-            "https://discord.com/channels/958209073277456457/958209074045026327"
-          ],
-          "images": [],
-          "videos": []
-        },
-        {
-          "text": "### Collision Import & Texture Format Support\n- **Collision Import Issue**: Fix available in the development branch, allowing `.glb` models to have collisions enabled.\n- **Texture Format Support**: KTX and Draco textures are not supported due to server-side loading issues; WebP is recommended instead.\n- **Animation Import to Blender**: `.glb` files from a specific site are actually VRM files; proper import steps provided.",
-          "sources": [
-            "https://discord.com/channels/958209073277456457/1031058655581323324"
-          ],
-          "images": [],
-          "videos": []
-        },
-        {
-          "text": "### Market Update\n- **SOL Price**: The current price of SOL is $128.48.",
-          "sources": [],
-          "images": [],
-          "videos": []
-        }
-      ],
-      "topic": "Misceleanous"
+      "channelId": "958209074045026327",
+      "channelName": "⚡│general",
+      "summary": "# Discord Chat Analysis\n\n## 1. Summary\nThe chat segment shows minimal technical discussion in the Hyperfy community. The only technical insight shared was about resource usage for lights in Hyperfy V1, with the recommendation to use few or no lights for optimal performance. Community members mentioned issues with in-world commerce functionality, noting that stands weren't accepting payments. The conversation also revealed that co-founder Saori has left the project, with ash mentioning burnout as the reason. There were announcements about upcoming events including an M3 Demo Day, Poly's Immersive Award show, and tutorial sessions covering Git/GitHub, Architectural 3D design, and Optimization. A content creator (jar0d) expressed interest in creating visually engaging content from the platform, suggesting the community is at a stage where they're building both creator tools and end-user experiences.\n\n## 2. FAQ\nQ: How resource intensive are the Lights in Hyperfy V1? (asked by Paradoxx) A: Use 2-3 at maximum. Best is none. (answered by vox)\nQ: Who is behind this project and is there any roadmap? (asked by Jayzen) A: ash and saori seem to be the founders, but there are regulars working along. (answered by smickelbeard)\nQ: Is Saori no longer co-founder or just taking a break? (asked by Lemur) A: Unanswered\n\n## 3. Help Interactions\nHelper: vox | Helpee: Paradoxx | Context: Question about resource usage of lights in Hyperfy V1 | Resolution: Advised to use maximum 2-3 lights or preferably none for optimal performance\nHelper: smickelbeard | Helpee: Jayzen | Context: Question about project team and roadmap | Resolution: Provided information about founders and directed to a specific channel\n\n## 4. Action Items\nTechnical: None explicitly mentioned in the chat\nDocumentation: None explicitly mentioned in the chat\nFeature: Fix payment functionality for in-world commerce stands | Mentioned By: Agent12 and 0mka",
+      "messageCount": 36,
+      "userCount": 14
+    },
+    {
+      "channelId": "994775534733115412",
+      "channelName": "💻│developers",
+      "summary": "# Discord Chat Analysis for 💻│developers\n\n## 1. Summary\nThe chat primarily focused on vehicle physics, mob systems, and game mechanics development. Ash shared progress on new physics for vehicles with a basic car implementation that's currently client-side but could be simulated server-side in the future. Peezy demonstrated work on server-side mobs with weapon capabilities, discussing implementation challenges with multiple clones causing client crashes. There was discussion about creating reusable mob systems with different behaviors (melee vs. ranged). 0mka and Valiant collaborated on race track components including gates and waypoints for timing and anti-cheat measures. Several developers encountered technical issues with player teleportation, mouse controls, and animation synchronization. Jin discussed documentation improvements and submitted a PR. The conversation also touched on potential portal functionality between worlds, with HypPrivakos suggesting it would require decoupling the web from the server and implementing a system to disconnect/connect between world instances.\n\n## 2. FAQ\nQ: How does player.teleport work? (asked by general hyper) A: Unanswered\nQ: What is the player controller speed? (asked by general hyper) A: smickelbeard shared code showing running is twice as fast as walking (8 vs 4 * mass)\nQ: Is there a reason why PR #64 hasn't been merged? (asked by jin) A: It was on a list of many things to do and needed to merge to dev branch (answered by ash)\nQ: When will elementals be available? (asked by peezy) A: Soon, after completing the new world menu UI (answered by ash)\nQ: When behavior trees? (asked by Shiffty) A: Unanswered\n\n## 3. Help Interactions\nHelper: Valiant | Helpee: general hyper | Context: Looking for Mixamo animations converted for Hyperfy | Resolution: Shared link to hyperfy-animations.vercel.app\nHelper: peezy | Helpee: general hyper | Context: Needed reference for player movement animation overrides | Resolution: Shared rifle script example that implements strafing\nHelper: smickelbeard | Helpee: ash | Context: Issue with mouseLeft.down not working | Resolution: Identified that commenting out onPress handler or break statement fixed the issue\nHelper: general hyper | Helpee: self | Context: Animation synchronization issues | Resolution: Discovered animations needed to be \"running in place\" to work properly\nHelper: jin | Helpee: ash | Context: PR #64 had conflicts | Resolution: Updated the PR to target the dev branch instead\n\n## 4. Action Items\nType: Technical | Description: Implement server-side simulation for vehicle physics | Mentioned By: ash\nType: Technical | Description: Create a general-purpose mob app that supports VRM models with configurable aggro radius and damage | Mentioned By: ash\nType: Technical | Description: Fix client crashes when handling multiple mob clones with raycasting | Mentioned By: peezy\nType: Feature | Description: Implement waypoints/gates system for race tracks with split timing | Mentioned By: Valiant\nType: Feature | Description: Create leaderboard for race tracking | Mentioned By: 0mka\nType: Feature | Description: Develop car customization system similar to Character studio | Mentioned By: TheMattEmpire\nType: Feature | Description: Add portal functionality between different worlds | Mentioned By: ~/drdoge.eth\nType: Technical | Description: Fix player.teleport function | Mentioned By: general hyper\nType: Technical | Description: Fix mouseLeft.down control issue | Mentioned By: smickelbeard\nType: Documentation | Description: Consider versioned documentation using Docusaurus | Mentioned By: jin",
+      "messageCount": 185,
+      "userCount": 16
+    },
+    {
+      "channelId": "1031058655581323324",
+      "channelName": "🧊│3d-design",
+      "summary": "# Discord Chat Analysis for 🧊│3d-design\n\n## 1. Summary\nThe chat primarily focused on technical issues related to 3D model importing and animations in virtual environments. Key discussions included:\n\n- Importing 3D models with collisions into worlds, with ash providing a solution using an app that auto-enables collisions for models\n- Texture support limitations, specifically that KTX/Draco compression isn't yet supported on the server side, with webp recommended as an alternative to KTX\n- A user encountering an error when trying to place models in a world, which was resolved by using the dev branch where support had recently been added\n- A workflow for importing animations from Hyperfy, which required downloading GLBs from a specific site, importing them as VRMs to Blender, and deleting transforms on the hips for proper functionality with player controller movement\n\nThe discussions demonstrated collaborative problem-solving among community members, with specific technical solutions provided for each issue raised.\n\n## 2. FAQ\nQ: Does somebody know how to import collisions or a 3D model with collisions in a world? (asked by MiaHigashikata) A: This app lets you auto-enable collisions for its model. Drop it in the world, click \"Model\" to choose your glb, and toggle collision on etc (answered by ash)\nQ: Is this still the case? We have been having problems with some textures and we have been wondering if it's the ktx texture support (asked by MiaHigashikata) A: Yup no ktx/draco support yet because we haven't solved loading them on the server (answered by ash)\nQ: why do these animations import to blender as a giant iconosphere? (asked by general hyper) A: Self-answered: they download from that site as glb's but are vrms\n\n## 3. Help Interactions\nHelper: ash | Helpee: MiaHigashikata | Context: User couldn't import 3D models with collisions | Resolution: Suggested an app that auto-enables collisions for models\nHelper: ash | Helpee: MiaHigashikata | Context: User had texture problems related to KTX support | Resolution: Confirmed KTX/Draco not supported yet, recommended webp as alternative\nHelper: ash | Helpee: MiaHigashikata | Context: User encountered error when placing model in world | Resolution: Explained support was added in dev branch but not main branch yet\nHelper: general hyper | Helpee: Community | Context: Animations importing as giant iconosphere in Blender | Resolution: Shared workflow to download GLBs from specific site, import as VRMs, and delete hip transforms\n\n## 4. Action Items\nTechnical: Implement KTX/Draco support on server | Description: Solve loading KTX/Draco compressed textures on server | Mentioned By: ash\nTechnical: Merge collision support from dev to main branch | Description: Feature works in dev but not in main branch | Mentioned By: ash\nDocumentation: Document animation import workflow | Description: Process for importing Hyperfy animations into Blender as VRMs | Mentioned By: general hyper\nDocumentation: Document texture format recommendations | Description: Webp as alternative to KTX for textures | Mentioned By: ash",
+      "messageCount": 28,
+      "userCount": 6
+    },
+    {
+      "channelId": "1326789867312775290",
+      "channelName": "🪙│hyper",
+      "summary": "# Discord Chat Analysis for 🪙│hyper Channel\n\n## 1. Summary:\nThis chat segment primarily revolves around concerns about the Hyper token's price decline and questions about project development progress. A significant price dip occurred due to one wallet dumping approximately $10,000 worth of tokens. Community members expressed concern about the token's future, with some questioning the project's direction. Team member \"ash\" provided reassurance about ongoing development efforts, explaining they're working on multiple fronts: attracting content creators, building games internally, developing a Roblox-like platform, and continuing core engine work. The team acknowledged that development takes time and often appears to progress slowly before suddenly accelerating. There was also mention of upcoming roadmap updates and a new channel for community ideas.\n\n## 2. FAQ:\nQ: Why's the market cap so low now? What happened to it? (asked by chckyo) A: Someone gave us a big sale on hyper! One wallet dumped 10k worth. (answered by 0mka)\nQ: Could you briefly introduce the recent progress of the project? (asked by chckyo) A: Nah there's plenty to see all over the server. Or builders calls. (answered by 0mka)\nQ: What does Hyper Token mean to this community? (asked by eigb) A: Unanswered\nQ: What I'm curious about is the actual release and commercialization of real games? (asked by eigb) A: Engines and games take time to finish. Check more channels than hyper to see what's happening. Roadmap updates are underway. (answered by 0mka)\n\n## 3. Help Interactions:\nHelper: 0mka | Helpee: chckyo | Context: Non-native English speaker having trouble following project updates | Resolution: Suggested using auto-translate captions on YouTube videos and provided a specific video link\nHelper: ash | Helpee: eigb | Context: Concerns about project direction and token price | Resolution: Provided explanation of current development efforts across multiple fronts and reassurance about development timeline\n\n## 4. Action Items:\nTechnical: Complete development of fully formed games and experiences | Description: Move beyond single-mode exploration to include competitive features like battles or racing | Mentioned By: eigb\nTechnical: Continue work on Roblox-like platform development | Description: Part of ongoing core development efforts | Mentioned By: ash\nTechnical: Implement marketplace that has been developed but is on hold | Description: Release the already developed marketplace | Mentioned By: eigb\nDocumentation: Update and publish detailed roadmap | Description: Create more detailed short and long-term roadmap to be shared on website and social media | Mentioned By: eigb\nFeature: Implement competitive gameplay features | Description: Add PvP elements like battles or racing that could drive monetization | Mentioned By: eigb",
+      "messageCount": 33,
+      "userCount": 8
+    },
+    {
+      "channelId": "1332108186676891649",
+      "channelName": "🏗│infra",
+      "summary": "# Analysis of 🏗│infra Discord Channel\n\n## 1. Summary\nThe chat segment contains a brief discussion about URL parameters for spatial navigation in Hyperfy worlds. The conversation focuses on the possibility of linking users to specific coordinates within a game or world using URL parameters (like `play.hyperfy.xyz?x=5&y=5&z=5`) as an alternative to the standard `/spawn set` approach. A comparison is made to Decentraland (DCL), which has a similar feature allowing scene coordinates with local plot spawns set by plot owners. The participants suggest that coordinates could be passed as parameters either on the root route or a sub-route, or potentially using a named location that maps to specific coordinates.\n\n## 2. FAQ\nQ: How can I link a user to a certain location in my Hyperfy world? (asked by general hyper) A: You could use URL parameters like play.hyperfy.xyz?x=5&y=5&z=5 as an alternative to /spawn set (answered by general hyper)\n\n## 3. Help Interactions\nHelper: general hyper | Helpee: 0mka | Context: Discussing how to link users to specific coordinates in a Hyperfy world | Resolution: Suggested using URL parameters and compared to DCL's implementation\n\n## 4. Action Items\nFeature: Implement URL parameters for spatial navigation in Hyperfy worlds | Description: Allow linking to specific coordinates via URL parameters (e.g., play.hyperfy.xyz?x=5&y=5&z=5) | Mentioned By: general hyper\nFeature: Consider named locations for coordinates | Description: Implement a system where names can be attached to specific coordinates for easier navigation | Mentioned By: 0mka",
+      "messageCount": 5,
+      "userCount": 2
+    },
+    {
+      "channelId": "1332430296737644677",
+      "channelName": "🎨│showcase",
+      "summary": "# Analysis of 🎨│showcase Channel\n\n## 1. Summary\nThe chat segment in the showcase channel contains minimal technical discussion. User 0mka shared several images, including what appears to be a \"game timer start\" interface element. Agent12 proposed a gameplay feature suggestion about creating ambient healing zones that could serve as gathering points for players before the implementation of \"Citadels,\" conceptualizing them as \"Campsites out in the Dark Forest.\" 0mka responded positively to this suggestion. The conversation lacks detailed technical discussions, problem-solving, or implementation details.\n\n## 2. FAQ\nQ: Would it be possible to create ambient areas that slowly restore health points within a certain range? (asked by Agent12) A: That's a nice idea. (answered by 0mka)\n\n## 3. Help Interactions\nNo significant help interactions were present in this chat segment.\n\n## 4. Action Items\nFeature: Create ambient healing zones that serve as gathering points/campsites before implementing Citadels | Description: Areas that slowly restore health points within a certain range, giving players places to gather | Mentioned By: Agent12",
+      "messageCount": 9,
+      "userCount": 2
+    },
+    {
+      "channelId": "999870741069692958",
+      "channelName": "🌆│share",
+      "summary": "The chat segment is extremely brief, containing only two messages from the same user \"0mka\". The first message shares a link to \"gamedevjs.com/jam/2025/\" which appears to be a game development jam scheduled for 2025. In the second message, 0mka acknowledges another user (referenced by ID 350830819423551488) for finding this information. There are no technical discussions, problem-solving activities, or implementations shared in this limited exchange.",
+      "messageCount": 2,
+      "userCount": 1
+    },
+    {
+      "channelId": "1347905902937767997",
+      "channelName": "🔉│community-updates",
+      "summary": "# Analysis of Discord Chat in \"🔉│community-updates\"\n\n## 1. Summary\nThe chat contains a brief announcement from user 0mka about an ongoing educational series. Session 6 is currently taking place and will focus on Git and GitHub familiarization. The announcement also previews upcoming sessions: a future session on Architectural 3D design with user 838035886260224022, followed by a session on Optimization with user 289697453035225088. No technical discussions, problem-solving, or implementations were shared in this brief announcement message.\n\n## 2. FAQ\nNo questions were asked in this chat segment.\n\n## 3. Help Interactions\nNo help interactions occurred in this chat segment.\n\n## 4. Action Items\nType: Documentation | Description: Update series details after today's Git and GitHub tutorial | Mentioned By: 0mka",
+      "messageCount": 1,
+      "userCount": 1
     }
-  ],
-  "date": 1742688000
+  ]
 }
