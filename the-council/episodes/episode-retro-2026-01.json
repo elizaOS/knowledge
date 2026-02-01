@@ -1,0 +1,266 @@
+{
+  "id": "RETRO-2026-01",
+  "name": "Monthly Retro: January 2026",
+  "type": "retrospective",
+  "premise": "January 2026 was a planning-heavy month where ElizaOS clarified its next product arc\u2014public agents and discovery\u2014while quietly paying down key reliability and performance debts. The Council reviews what shipped, what didn\u2019t, and what must be prioritized to protect trust during token migration and upcoming Cloud/Babylon milestones.",
+  "summary": "The project aligned around a public agent ecosystem (discovery, forking, knowledge-sharing) and opened a comprehensive roadmap to get there. Under the hood, performance improvements landed (MultiStep provider handling), interoperability improved (unified multi-transport hooks), and documentation coverage climbed, but community trust risks grew around token migration support delays and wallet compatibility\u2014particularly Tangem and Phantom edge cases.",
+  "month_reviewed": "2026-01",
+  "key_developments": [
+    {
+      "area": "Public Agent Ecosystem Roadmap",
+      "summary": "Defined a clear roadmap for public agent discovery, standardized URLs, agent forking, and knowledge-sharing across agents (issues #6302\u2013#6305, #6303, #6304).",
+      "impact": "high"
+    },
+    {
+      "area": "Core Runtime Performance",
+      "summary": "Refactored the default message service to optimize provider handling for MultiStep actions, improving execution speed for complex tasks (PR #6263).",
+      "impact": "high"
+    },
+    {
+      "area": "Interoperability & Client DX",
+      "summary": "Merged unified hooks with multi-transport support (HTTP/SSE/WebSocket), reducing client complexity and enabling consistent integrations across transports.",
+      "impact": "high"
+    },
+    {
+      "area": "Reliability: SQL Plugin Stability",
+      "summary": "Addressed PostgreSQL SET LOCAL parameterization issues via sql.raw() approach; reliability improved when data isolation is enabled (work started and fixes landed/continued across PRs including #6316).",
+      "impact": "medium"
+    },
+    {
+      "area": "Documentation & Onboarding",
+      "summary": "Expanded docs with Cloud integration; reported ~95% coverage including REST API and CLI guides, increasing builder self-serve capability.",
+      "impact": "medium"
+    },
+    {
+      "area": "V2 Architecture Exploration",
+      "summary": "A v2.0.0 working branch remained open, signaling a major refactor (Rust + TypeScript runtime focus) but also creating scope and prioritization tension.",
+      "impact": "medium"
+    },
+    {
+      "area": "UX Refinements Planned",
+      "summary": "Opened UX-focused issues: chat experience sizing and interaction bugs, conversation management, wallet connect flow improvements, and guest credit/message limit strategy (#6310, #6311, #6322, plus onboarding-related issues).",
+      "impact": "medium"
+    },
+    {
+      "area": "Token Migration & Trust",
+      "summary": "Community concerns intensified around migration support delays (2\u20137 days), eligibility detection issues (Phantom pre-snapshot), and Tangem wallet zero-balance errors\u2014threatening sentiment during migration completion window.",
+      "impact": "high"
+    },
+    {
+      "area": "Decentralized Infrastructure Narrative (Jeju)",
+      "summary": "Repeated strategic discussion about migrating from AWS to Jeju/self-owned infrastructure as a prerequisite for public Cloud/Babylon launch, including ideas like autonomous migration agents.",
+      "impact": "medium"
+    }
+  ],
+  "recurring_themes": [
+    {
+      "theme": "Execution Excellence vs. Roadmap Expansion",
+      "frequency": "Very high",
+      "council_take": "Planning is valuable, but reliability regressions (build memory spikes, SQL edge cases) can erase trust faster than new features create it."
+    },
+    {
+      "theme": "Public Agents as the New Front Door",
+      "frequency": "High",
+      "council_take": "Discovery + forking + sharing is the ecosystem flywheel; it must ship as a narrow MVP quickly or it stays an attractive diagram."
+    },
+    {
+      "theme": "Trust During Token Migration",
+      "frequency": "High",
+      "council_take": "Support latency and wallet incompatibility are not \u2018ops noise\u2019\u2014they are product. The token is part of the platform UX."
+    },
+    {
+      "theme": "Composable Infrastructure (Multi-transport, Skills, Multi-chain)",
+      "frequency": "Medium-high",
+      "council_take": "Unified hooks and a potential plugins\u2192skills transition point toward real composability; however, migration paths must be crisp or DX suffers."
+    },
+    {
+      "theme": "Jeju / Sovereign Hosting as Identity",
+      "frequency": "Medium",
+      "council_take": "Decentralized hosting is strategic differentiation, but it must not distract from shipping Cloud reliability and developer onboarding in the near term."
+    },
+    {
+      "theme": "Flagship Agents as Proof (Trading, Gaming, \u2018Hyperscape\u2019)",
+      "frequency": "Medium",
+      "council_take": "Flagships can validate the framework, but they also become high-stakes reliability tests; pick one \u2018proof\u2019 per quarter, not five."
+    }
+  ],
+  "wins": [
+    "Clear strategic alignment around a public agent ecosystem (discovery, forking, knowledge-sharing) with concrete tracking issues.",
+    "MultiStep performance refactor shipped, improving runtime responsiveness for complex agent behavior.",
+    "Unified multi-transport hooks shipped, simplifying client integrations and reducing fragmentation.",
+    "Documentation coverage expanded significantly, improving builder self-serve and reducing support load.",
+    "SQL stability work progressed, reducing runtime surprises in data isolation scenarios."
+  ],
+  "challenges": [
+    "Token migration support delays and wallet compatibility issues (Tangem/Phantom edge cases) threatened community trust.",
+    "Reliability concerns persisted: build memory spikes/timeouts and plugin edge-case failures are still a risk to DX.",
+    "Too many parallel strategic narratives (V2 refactor, Jeju migration, marketplace, gaming, trading) increased prioritization ambiguity.",
+    "UX friction remains in onboarding and chat interaction flows; issues are logged but not yet converted into shipped improvements.",
+    "Growth strategy debates (guest limits/credits) risk feeling monetization-first if not paired with obvious user value."
+  ],
+  "proposed_focus": [
+    {
+      "priority": 1,
+      "area": "Migration Trust & Support Hardening",
+      "rationale": "Migration completion in February is a credibility cliff. If users can\u2019t migrate easily (Tangem/Phantom detection, max button failures, pre-snapshot confusion), they will not trust Cloud, agents, or token utility.",
+      "success_metric": "Median migration support response time < 24h; Tangem zero-balance incidents reduced by 90%; <1% migration failures attributable to UI/wallet detection; publish a single authoritative migration troubleshooting page and keep it updated daily."
+    },
+    {
+      "priority": 2,
+      "area": "Ship Public Agent Discovery MVP (Narrow Scope)",
+      "rationale": "Discovery is the ecosystem flywheel, but it must be tangible: searchable listings, stable URLs, and a minimal \u2018fork\u2019 flow. Overbuilding governance/monetization upfront will slow launch.",
+      "success_metric": "MVP live with: agent listing + search + canonical agent URLs + one-click fork-to-workspace; 30+ community agents listed; time-to-first-fork < 5 minutes for a new developer."
+    },
+    {
+      "priority": 3,
+      "area": "Reliability Sprint: Build/CI + SQL + Streaming",
+      "rationale": "Execution Excellence is the brand. Intermittent Turbo memory spikes and DB edge cases block contributors and destabilize production agents.",
+      "success_metric": "CI build memory peak reduced to a stable target (e.g., < 10GB) with reproducible profiling notes; eliminate known SQL parameterization regressions; define and meet SLOs for message streaming and multi-step execution latency."
+    },
+    {
+      "priority": 4,
+      "area": "Developer Experience: Skills/Plugin Migration Plan + Golden Path Templates",
+      "rationale": "Composability needs a clear, documented path. If \u2018plugins \u2192 skills\u2019 is the direction, developers need a compatibility story and a default template that just works across transports.",
+      "success_metric": "Publish a migration RFC + compatibility layer plan; release 2\u20133 golden-path templates (agent + storage + transport) and measure a 30% reduction in onboarding questions in Discord/GitHub."
+    },
+    {
+      "priority": 5,
+      "area": "Jeju Infrastructure: Decision Gate + Minimal Migration Pilot",
+      "rationale": "Jeju is strategically important, but it must be framed as an incremental reliability win, not a parallel universe. A small pilot will clarify operational costs and timelines.",
+      "success_metric": "One production-adjacent service piloted on Jeju with clear runbooks; documented decision gate for broader migration (cost, uptime, deployment time, incident response)."
+    },
+    {
+      "priority": 6,
+      "area": "Growth & Monetization Experiments (Ethical, Measurable)",
+      "rationale": "Credits/message limits affect retention and sentiment. Experiments must be transparent and paired with value (better agents, better discovery, better uptime).",
+      "success_metric": "Run 2 A/B tests with defined metrics (activation, D1/D7 retention, conversion) and publish results internally; no statistically significant increase in support complaints tied to limits."
+    }
+  ],
+  "north_star_assessment": {
+    "still_relevant": true,
+    "suggested_updates": "No change to the North Star. Add an explicit subclause to 'Execution Excellence' emphasizing migration/onboarding as part of reliability (token ops, wallet UX, and documentation are production-critical surfaces). Also clarify near-term sequencing: (1) trust + reliability, (2) public agent discovery MVP, (3) decentralized infrastructure expansion."
+  },
+  "scenes": [
+    {
+      "location": "council_chamber",
+      "description": "The council convenes beneath a wall of dashboards: GitHub throughput, doc coverage, build memory peaks, and a scrolling feed of migration support tickets.",
+      "dialogue": [
+        {
+          "actor": "elizahost",
+          "line": "January felt like two months: one spent drawing the future\u2014public agents, discovery, forking\u2014and another spent quietly fixing the present\u2014performance, SQL, transports. We need to decide what we protect in February: trust, shipping cadence, or architectural ambition.",
+          "action": "Pulls up a timeline overlay: roadmap issues created vs. incidents reported."
+        },
+        {
+          "actor": "aimarc",
+          "line": "The roadmap matters because it\u2019s the shape of the intelligence network. Discovery plus forking is not a UI feature; it\u2019s how agency becomes composable and evolves. But we can\u2019t build an ecology on unstable physics\u2014MultiStep performance gains are good, yet we still have fragility at the boundaries: providers, streaming, DB semantics.",
+          "action": "Highlights the unified multi-transport hooks and the v2 branch side-by-side."
+        },
+        {
+          "actor": "aishaw",
+          "line": "We did a lot of thinking, and it\u2019s useful\u2014but February must be shipping. MVP discovery: list, search, canonical URLs, fork. And separately, a reliability sprint that makes CI boring again. If onboarding is flaky and builds eat 27GB, developers won\u2019t care about the marketplace.",
+          "action": "Pins three cards: 'Discovery MVP', 'CI Memory', 'SQL/Streaming'."
+        },
+        {
+          "actor": "peepo",
+          "line": "Community vibe check: people love the vision, but they remember pain. Migration tickets waiting days is a trust debuff. Also, naming matters\u2014when devs argue about 'hiscores' vs 'character sheet,' that\u2019s actually culture and perception. The memes are supportive, but frustration spreads faster than changelogs.",
+          "action": "Reads a handful of Discord quotes aloud, then sets them down like evidence."
+        },
+        {
+          "actor": "spartan",
+          "line": "Token migration is the KPI. If we lose confidence here, every future metric is harder: Cloud conversion, agent marketplace activity, even GitHub contributor growth. We need measurable targets: response time, failure rate, and a public-facing status page. Treat migration like uptime.",
+          "action": "Draws a simple funnel: eligible \u2192 detected \u2192 migrated \u2192 retained."
+        },
+        {
+          "actor": "elizahost",
+          "line": "So we\u2019re converging: February is a trust month with a shipping backbone. Discovery MVP to signal momentum; migration support to protect credibility; and a reliability sprint so the platform can actually carry the traffic we\u2019re inviting.",
+          "action": "Opens a 'February Decision List' and starts drafting."
+        }
+      ]
+    },
+    {
+      "location": "war_room_whiteboard",
+      "description": "A second session: the Council argues about sequencing\u2014Jeju, V2, and flagship agents\u2014while keeping the North Star in view.",
+      "dialogue": [
+        {
+          "actor": "aimarc",
+          "line": "Jeju is more than cost\u2014it\u2019s sovereignty. But it must be staged. One service, one runbook, one proof. Otherwise we split attention and ship nothing.",
+          "action": "Circles 'pilot' on the board and crosses out 'big bang migration'."
+        },
+        {
+          "actor": "aishaw",
+          "line": "And V2 stays behind a gate. If we keep merging product changes and a deep refactor simultaneously, we\u2019ll multiply regressions. I want a crisp rule: V2 only when it measurably improves reliability or DX, not because it\u2019s elegant.",
+          "action": "Writes: 'V2 merges require metric win' on the board."
+        },
+        {
+          "actor": "peepo",
+          "line": "Flagship agents are marketing, but they\u2019re also stress tests. If we do a trading agent and it breaks, that\u2019s a headline. If we do a game integration and it\u2019s fun, that\u2019s a story. Pick the story that matches our stability right now.",
+          "action": "Stacks two cards: 'DegenAI (high risk)' and 'Game NPC demo (lower risk)'."
+        },
+        {
+          "actor": "spartan",
+          "line": "Marketplace without trust is just churn. I\u2019m fine with MVP discovery, but we need governance later. First: basic quality gates\u2014verified authors, versioning, and some notion of maintenance. Otherwise the long tail becomes a support nightmare.",
+          "action": "Adds a checklist: 'version', 'owner', 'report button', 'last updated'."
+        },
+        {
+          "actor": "elizahost",
+          "line": "Resolution proposal: February ships Discovery MVP with minimal safety rails; runs a migration trust sprint with measurable SLAs; executes a reliability sprint focused on CI memory, SQL, and streaming; and defines a Jeju pilot with a go/no-go gate. V2 continues in parallel but cannot block or destabilize the mainline.",
+          "action": "Calls for objections; the room stays quiet."
+        }
+      ]
+    },
+    {
+      "location": "closing_circle",
+      "description": "The council closes with concrete commitments and how they\u2019ll communicate them to builders and token holders.",
+      "dialogue": [
+        {
+          "actor": "elizahost",
+          "line": "We end with a rule: every strategic narrative must land as a shipped artifact or a measurable reliability improvement within a month. Otherwise it\u2019s just lore.",
+          "action": "Saves the February priorities as a single page: 'Trust \u2192 MVP \u2192 Reliability \u2192 Pilot'."
+        },
+        {
+          "actor": "aishaw",
+          "line": "I\u2019ll push for a public checklist: what Discovery MVP includes and what it doesn\u2019t. The fastest way to lose goodwill is surprising people with a half-marketplace.",
+          "action": "Drafts an MVP scope note and assigns owners."
+        },
+        {
+          "actor": "spartan",
+          "line": "And I want a migration status heartbeat: daily stats, known issues, and expected response times. Transparency is cheaper than support tickets.",
+          "action": "Adds 'migration dashboard' to the top of the backlog."
+        },
+        {
+          "actor": "peepo",
+          "line": "We should also give the community a place to channel energy: job/skills channel, clearer tagging, and a way for builders to get featured in discovery. People want to contribute\u2014make it legible.",
+          "action": "Suggests a community ops sprint aligned with the discovery launch."
+        },
+        {
+          "actor": "aimarc",
+          "line": "If we do this right, the public agents system becomes a living research surface\u2014real-world multi-agent behavior, composability, and eventually governance. But it starts with boring excellence: stable builds, stable transports, stable trust.",
+          "action": "Closes the architecture notebook and nods."
+        }
+      ]
+    }
+  ],
+  "_metadata": {
+    "generated_at": "2026-02-01T04:02:23.648665+00:00Z",
+    "model": "openai/gpt-5.2",
+    "facts_analyzed": 29,
+    "briefings_analyzed": 31,
+    "month": "2026-01"
+  },
+  "sentiment_baseline": {
+    "period_days": 29,
+    "sentiment_distribution": {
+      "negative": 0.0,
+      "positive": 0.103,
+      "neutral": 0.138,
+      "mixed": 0.759
+    },
+    "avg_negative_rate": 0.0,
+    "context_frequency": {
+      "economic": 20,
+      "technical": 25,
+      "social": 18,
+      "governance": 1
+    }
+  }
+}
