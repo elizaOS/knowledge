@@ -1,28 +1,38 @@
-## ElizaOS Development Updates and Community Discussion - January 27, 2026
+## ElizaCloud Account Issues
 
-### Community Support and Product Strategy
+- Users reported duplicate account creation when clicking the 'get started' link in welcome emails
+- One user discovered two accounts assigned to the same email: original account on elizacloud.ai with 27 cents balance and new account on dev.elizacloud.ai with 1 USD balance
+- Core developers Sam and Odilitime provided direct support to resolve the issue
 
-- Community members expressed support for the development team, emphasizing their investment as a bet on Shaw and the team's ability to deliver
-- The team was highlighted as leading AI agent developers with multiple products in development including Babylon, Hyperscape, Cloud, OTC desk, and Eliza Anime
-- Strategy confirmed to reward long-term holders through airdrops when products go viral
+## Babylon Game Production Launch
 
-### Knowledge Plugin Technical Resolution
+- Production version launched for internal testing
+- Core developers granted admin access through babylon.market using ElizaLabs email credentials
+- Admin access enabled bypass of NFT gating to access play.babylon.market
+- Bug discovered where selecting custom profile images resulted in 'Failed to update profile' error
+- Developer tcm390 merged a fix
+- Issue confirmed resolved after testing
 
-- Developers identified and resolved extremely high costs with OpenAI Knowledge plugin (0.03 to 0.04 dollars per query)
-- Issue traced to contextual embeddings being enabled
-- Core developer provided minimal configuration solution using OpenRouter with basic text embedding models
-- Team shared cost data showing 3.1MB PDF book with 517 chunks as reference point for expected embedding costs
+## Token Migration Enforcement
 
-### Strategic Pivot to AI Workflow Builder
+- 90-day migration window deadline enforced
+- Communications began in March with actual migration starting in November
+- Community members and moderators defended the timeline as sufficient with clear advance communication
 
-- Core developers pivoted strategy toward building Eliza as a comprehensive AI assistant application, inspired by Clawdbot's success
-- Shaw published Eliza 2.0.0 to npm under the next tag
-- Team focused on n8n workflow integration as primary approach
-- Set up n8n cloud accounts and began integrating n8n-intelligence and n8n-workflow-builder open source projects
-- Vision established to create AI workflow builder allowing users to connect services like Gmail, Calendar, Notion, and Linear through natural language commands with conditional logic
-- Team identified that 95 percent of users want AI workflow building rather than auto-coding
+## ElizaCloud Dashboard Issue
 
-### Babylon Airdrop Plans
+- User experienced login cycling issues on ElizaCloud dashboard
+- Issue forwarded to cloud team for investigation
 
-- Team confirmed intention to reward long-term ElizaOS holders through Babylon airdrop
-- Community discussed ElizaOS as a community project and its memetic value
+## Major Platform Announcements
+
+- Ethereum officially welcomed ElizaOS
+- Token confirmed as cross-chain beyond original Solana deployment
+- Developer kirstenrpomales launched BuildAMolt, a hosted service for deploying Moltbots on agent-to-agent social platforms like Moltbook
+- BuildAMolt features 2-minute setup on private VPS with no coding required
+- New escrow payment system for connecting human emotional skills with AI agents reached 70% completion
+
+## Market Activity
+
+- ElizaOS market cap dropped to 13M amid broader crypto market downturn
+- Bitcoin fell from 92k to 60k in three weeks
