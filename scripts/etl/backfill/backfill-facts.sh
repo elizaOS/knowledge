@@ -2,9 +2,9 @@
 # Backfill missing facts data for a date range
 #
 # Usage:
-#   ./scripts/etl/backfill-facts.sh                    # Default: 2024-10-15 to 2025-03-31
-#   ./scripts/etl/backfill-facts.sh 2025-01-01         # From date to 2025-03-31
-#   ./scripts/etl/backfill-facts.sh 2025-01-01 2025-01-31  # Custom range
+#   ./scripts/etl/backfill/backfill-facts.sh                    # Default: 2024-10-15 to 2025-03-31
+#   ./scripts/etl/backfill/backfill-facts.sh 2025-01-01         # Single day: 2025-01-01
+#   ./scripts/etl/backfill/backfill-facts.sh 2025-01-01 2025-01-31  # Custom range
 #
 # Environment:
 #   OPENROUTER_API_KEY=your_key (required)
@@ -20,20 +20,41 @@ if [ -z "$OPENROUTER_API_KEY" ]; then
     exit 1
 fi
 
-# Default date range
-START_DATE="${1:-2024-10-15}"
-END_DATE="${2:-2025-03-31}"
+# Date range parsing
+if [ $# -eq 0 ]; then
+    # Default date range
+    START_DATE="2024-10-15"
+    END_DATE="2025-03-31"
+elif [ $# -eq 1 ]; then
+    # Single-arg mode: process exactly one date
+    START_DATE="$1"
+    END_DATE="$1"
+else
+    START_DATE="$1"
+    END_DATE="$2"
+fi
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-REPO_ROOT="$(dirname "$(dirname "$SCRIPT_DIR")")"
+REPO_ROOT="$(dirname "$(dirname "$(dirname "$SCRIPT_DIR")")")"
 cd "$REPO_ROOT"
+
+if [[ "$START_DATE" > "$END_DATE" ]]; then
+    echo "ERROR: start_date ($START_DATE) is after end_date ($END_DATE)"
+    echo "Usage: $0 [start_date] [end_date]"
+    exit 1
+fi
+
+increment_date() {
+    local d="$1"
+    date -I -d "$d + 1 day" 2>/dev/null || date -j -v+1d -f "%Y-%m-%d" "$d" +%Y-%m-%d
+}
 
 # Generate date array
 DATES=()
 current="$START_DATE"
 while [[ "$current" < "$END_DATE" || "$current" == "$END_DATE" ]]; do
     DATES+=("$current")
-    current=$(date -d "$current + 1 day" +%Y-%m-%d)
+    current=$(increment_date "$current")
 done
 
 TOTAL=${#DATES[@]}
