@@ -73,16 +73,59 @@ jobs:
             echo "Input file $INPUT_FILE not found, skipping fact briefing generation."
             exit 1
           fi
-      - name: Create permalink for JSON fact file
+      - name: Check extraction quality
+        id: quality_check
+        run: |
+          DAILY_FACT_JSON="the-council/facts/$(date +%Y-%m-%d).json"
+          if [ -f "$DAILY_FACT_JSON" ] && grep -q '"status": "success"' "$DAILY_FACT_JSON"; then
+            echo "quality=success" >> $GITHUB_OUTPUT
+            echo "Extraction succeeded on first attempt."
+          else
+            echo "quality=error" >> $GITHUB_OUTPUT
+            echo "::warning::Extraction produced error stub. Will retry..."
+          fi
+
+      - name: Retry extraction on failure
+        if: steps.quality_check.outputs.quality == 'error'
+        env:
+          OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
+        run: |
+          echo "Waiting 30s before retry (different HTTP connection)..."
+          sleep 30
+          INPUT_FILE="${{ steps.aggregate_step.outputs.aggregated_json_file }}"
+          OUTPUT_JSON_FILE="the-council/facts/$(date +%Y-%m-%d).json"
+          OUTPUT_MARKDOWN_FILE="hackmd/facts/$(date +%Y-%m-%d).md"
+
+          python scripts/etl/extract-facts.py -i "$INPUT_FILE" -o "$OUTPUT_JSON_FILE" -md "$OUTPUT_MARKDOWN_FILE"
+
+      - name: Create permalink for JSON fact file (quality-gated)
         run: |
           DAILY_FACT_JSON="the-council/facts/$(date +%Y-%m-%d).json"
           PERMALINK_FACT_JSON="the-council/facts/daily.json"
-          if [ -f "$DAILY_FACT_JSON" ]; then
+          if [ -f "$DAILY_FACT_JSON" ] && grep -q '"status": "success"' "$DAILY_FACT_JSON"; then
             cp "$DAILY_FACT_JSON" "$PERMALINK_FACT_JSON"
+            echo "Updated daily.json permalink."
+          else
+            echo "::warning::Extraction status is not 'success' — keeping previous daily.json to protect downstream workflows."
           fi
 
       - name: Commit updated files
         uses: stefanzweifel/git-auto-commit-action@v5
+
+      - name: Alert on data quality issue
+        if: always()
+        run: |
+          DAILY_FACT_JSON="the-council/facts/$(date +%Y-%m-%d).json"
+          if [ -f "$DAILY_FACT_JSON" ] && grep -q '"status": "error"' "$DAILY_FACT_JSON"; then
+            WEBHOOK_URL="${{ secrets.ALERT_WEBHOOK_URL }}"
+            if [ -n "$WEBHOOK_URL" ]; then
+              curl -s -H "Content-Type: application/json" -d "{
+                \"content\": \"⚠️ **Extract Daily Facts**: Extraction for $(date +%Y-%m-%d) produced an error stub after all retries. Manual intervention may be needed.\"
+              }" "$WEBHOOK_URL" || true
+            fi
+            echo "::warning::Facts extraction produced error stub for $(date +%Y-%m-%d)"
+          fi
+
       - name: Alert on failure
         if: failure()
         uses: ./.github/actions/alert-failure
