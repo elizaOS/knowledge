@@ -1,28 +1,183 @@
 {
   "briefing_date": "2026-01-23",
-  "overall_summary": "Error: Failed to generate briefing due to LLM or parsing issues.",
-  "categories": {},
+  "overall_summary": "The project is navigating a dual transition: the technical shift toward Eliza V2.0.0 and a core-devs intervention to standardize token launch ethics following a liquidity crisis. While infrastructure stability is improving via API and database fixes, community frustration remains high regarding fragmented token launches and project focus.",
+  "key_facts": [
+    "Shaw established strict rules for developers launching tokens, including a ban on direct token sales and a requirement to burn excess supply (70%) rather than locking it.",
+    "A developer (cjft) burned 70% of a token supply using sol-incinerator.com following a crisis where 75% was originally bundled by the creator.",
+    "ElizaOS version 1.7.2 was released to resolve PostgreSQL migration failures and Discord plugin compatibility issues.",
+    "The Eliza V2.0.0 architecture foundation was initiated, featuring a new dynamic execution engine prototype and Python bridge.",
+    "A critical security incident was identified where users were asked to send AI16Z tokens to external wallets for migration; support confirmed this as a scam.",
+    "API index generation and 1,433 contributor profile exports were fixed after resolving a missing SITE_URL in the run-pipelines workflow.",
+    "The core message service was refactored in ElizaOS to optimize provider handling, reducing multi-step agent action latency.",
+    "Distributed computation for the Jeju network was proposed, exploring iPhone idle-device utilization and Zero-Knowledge Proof (ZKP) anti-cheating mechanisms."
+  ],
+  "open_questions": [
+    "Has agent scarlett been 'terminated'? Is the project over and the scarlett chan useless now?",
+    "Can I log a ticket somewhere for support on elizacloud errors?",
+    "What about that hyperscape token funded by Shaw's wallet?",
+    "Is the cjft token legit?",
+    "Integration details of the Polymarket plugin into elizacloud agents?",
+    "Availability of X (formerly Twitter) API key for integrations?"
+  ],
+  "tags": {
+    "themes": [
+      "tokenomics",
+      "infrastructure",
+      "security",
+      "developer-experience",
+      "ai-agents"
+    ],
+    "sentiment": {
+      "overall": "mixed",
+      "context": [
+        "economic",
+        "technical",
+        "governance"
+      ]
+    },
+    "story_type": [
+      "debate"
+    ],
+    "derived": [
+      "social",
+      "development",
+      "community",
+      "feedback",
+      "strategy",
+      "market"
+    ],
+    "priority": [
+      "routine"
+    ],
+    "manual": []
+  },
+  "categories": {
+    "twitter_news_highlights": [
+      {
+        "claim": "Shaw reaffirmed commitment to the project, emphasizing a focus on technical shipping over purely memetic tokens.",
+        "source": [
+          "ai-news/elizaos/json/2026-01-22.json"
+        ],
+        "sentiment": "positive"
+      },
+      {
+        "claim": "Collaboration between Grimes and Shaw was reported, generating significant community excitement.",
+        "source": [
+          "ai-news/elizaos/md/2026-01-22.md"
+        ],
+        "sentiment": "positive"
+      }
+    ],
+    "github_updates": {
+      "new_issues_prs": [
+        {
+          "item_type": "pull_request",
+          "title": "V2.0.0: dynamic execution engine",
+          "number": 6384,
+          "url": "https://github.com/elizaos/eliza/pull/6384",
+          "status": "open",
+          "author": "odilitime",
+          "significance": "Introduces schema-driven prompt execution with context validation to prevent LLM truncation."
+        },
+        {
+          "item_type": "pull_request",
+          "title": "wasm agent runtime",
+          "number": 6363,
+          "url": "https://github.com/elizaos/eliza/pull/6363",
+          "status": "open",
+          "author": "revlentless",
+          "significance": "Enables the Rust core to run in browser/Node.js environments via WebAssembly."
+        }
+      ],
+      "overall_focus": [
+        {
+          "claim": "Development is centered on core decoupling for V2.0.0, improving API reliability, and expanding cross-language support via Python and Rust WebAssembly bindings.",
+          "source": [
+            "github/summaries/week/2026-01-18.md"
+          ]
+        }
+      ]
+    },
+    "discord_updates": [
+      {
+        "channel": "#core-devs",
+        "summary": "Focus on a tokenomics crisis involving bundled supply. Shaw mandated a fee-based revenue model (2% creator fees) over direct selling.",
+        "key_participants": [
+          "shaw",
+          "cjft",
+          "sayonara"
+        ],
+        "source": [
+          "ai-news/elizaos/discord/json/2026-01-22.json"
+        ]
+      },
+      {
+        "channel": "#coders",
+        "summary": "Technical troubleshooting for persistent PostgreSQL migration errors and ElizaCloud server exceptions. Neon was identified as a stable database alternative.",
+        "key_participants": [
+          "0xbbjoker",
+          "DigitalDiva"
+        ],
+        "source": [
+          "ai-news/elizaos/discord/md/2026-01-22.md"
+        ]
+      }
+    ],
+    "user_feedback": [
+      {
+        "feedback_summary": "Community frustration regarding 'scatterbrained' decision-making and the proliferation of non-core tokens.",
+        "source": [
+          "ai-news/elizaos/discord/md/2026-01-22.md"
+        ],
+        "sentiment": "negative"
+      },
+      {
+        "feedback_summary": "High value placed on the '10x technology' of the framework despite concerns over token market performance.",
+        "source": [
+          "ai-news/elizaos/json/2026-01-22.json"
+        ],
+        "sentiment": "positive"
+      }
+    ],
+    "strategic_insights": [
+      {
+        "theme": "Developer Governance",
+        "insight": "The project is shifting from an open-contribution model to a more regulated developer standard for token launches to protect ecosystem liquidity.",
+        "implications_or_questions": [
+          "Will these new developer restrictions deter or attract high-quality builders?",
+          "How will the team enforce ethics across decentralized token launches?"
+        ]
+      }
+    ],
+    "market_analysis": [
+      {
+        "observation": "ElizaOS liquidity concerns cited on Solana (110k LP) amid a 70% price decline for associated tokens.",
+        "source": [
+          "ai-news/elizaos/discord/md/2026-01-22.md",
+          "ai-news/elizaos/discord/md/2026-01-20.md"
+        ],
+        "relevance": "Low liquidity and price volatility are creating barriers for institutional investor confidence."
+      }
+    ]
+  },
   "_metadata": {
     "model": "google/gemini-3-flash-preview",
-    "extracted_at": "2026-01-23T08:55:05.233345+00:00Z",
-    "processing_seconds": 6.73,
-    "status": "error",
-    "media_enriched_at": "2026-01-23T10:10:15.575067+00:00Z",
-    "source_images_count": 8,
-    "source_videos_count": 1,
-    "poster_count": 0
-  },
-  "images": [
-    "https://cdn.elizaos.news/elizaos-media/embed-image-1463836331242426432_00aa084c.jpg",
-    "https://cdn.elizaos.news/elizaos-media/embed-image-1463842070077767806_4e3bb0f5.jpg",
-    "https://cdn.elizaos.news/elizaos-media/embed-image-1463987917717504010_29b7b0ee.jpg",
-    "https://cdn.elizaos.news/elizaos-media/embed-image-1463876064366432321_aaaf6b41.jpg",
-    "https://cdn.elizaos.news/elizaos-media/embed-thumbnail-1463931220600819866_619f383b.jpg",
-    "https://cdn.elizaos.news/elizaos-media/embed-thumbnail-1463944690238886110_9075b26c.jpg",
-    "https://cdn.elizaos.news/elizaos-media/embed-image-1464029645438718094_d1d8cdb3.jpg",
-    "https://cdn.elizaos.news/elizaos-media/embed-thumbnail-1463996789295284254_ec7068a1.png"
-  ],
-  "videos": [
-    "https://api.fxtwitter.com/2/go?url=https%3A%2F%2Fvideo.twimg.com%2Famplify_video%2F2013998213447999488%2Fvid%2Favc1%2F3026x1440%2F-oAlOxXm8oKNYVML.mp4%3Ftag%3D21"
-  ]
+    "extracted_at": "2026-02-09T22:21:10.122811+00:00Z",
+    "prompt_tokens": 65740,
+    "completion_tokens": 1699,
+    "total_tokens": 67439,
+    "processing_seconds": 11.9,
+    "status": "success",
+    "facts_by_category": {
+      "twitter_news_highlights": 2,
+      "github_updates": 2,
+      "discord_updates": 2,
+      "user_feedback": 2,
+      "strategic_insights": 1,
+      "market_analysis": 1,
+      "key_facts": 8,
+      "open_questions": 6
+    },
+    "total_facts": 24
+  }
 }

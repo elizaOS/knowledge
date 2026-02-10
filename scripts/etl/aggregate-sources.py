@@ -10,6 +10,7 @@ import argparse
 import json
 import logging
 import subprocess
+import sys
 from datetime import datetime, timedelta, timezone
 from functools import lru_cache
 from pathlib import Path
@@ -38,6 +39,8 @@ SCRIPTS_ROOT = SCRIPT_DIR.parent  # scripts/
 WORKSPACE_ROOT = SCRIPTS_ROOT.parent  # repository root
 OUTPUT_DIR_BASE = WORKSPACE_ROOT / "the-council" / "aggregated"
 LOG_LEVEL = logging.INFO
+MAX_USER_SUMMARIES_BYTES = 200_000  # ~50K tokens; prevents token explosion in downstream LLM calls
+ESTIMATED_TOKENS_WARNING_THRESHOLD = 100_000
 
 AI_NEWS_ELIZAOS_JSON_DIR = WORKSPACE_ROOT / "ai-news/elizaos/json"  # Contains CDN URLs (json-cdn/ is deprecated)
 AI_NEWS_ELIZAOS_MD_DIR = WORKSPACE_ROOT / "ai-news/elizaos/md"
@@ -182,7 +185,30 @@ def extract_user_summaries(ndjson_file: Path, target_date: datetime.date, days_t
         logging.error(f"Error reading user summaries file {ndjson_file}: {e}")
         return None
     logging.info(f"Extracted {len(relevant_lines)} user summaries.")
-    return "\n".join(relevant_lines) if relevant_lines else None
+    if not relevant_lines:
+        return None
+
+    result = "\n".join(relevant_lines)
+
+    # Cap size to prevent token explosion in downstream LLM calls (e.g. 2026-01-15: 984KB -> 392K tokens)
+    if len(result.encode('utf-8')) > MAX_USER_SUMMARIES_BYTES:
+        original_size = len(result.encode('utf-8'))
+        truncated_lines = []
+        current_size = 0
+        for line in relevant_lines:
+            line_size = len(line.encode('utf-8')) + 1  # +1 for newline
+            if current_size + line_size > MAX_USER_SUMMARIES_BYTES:
+                break
+            truncated_lines.append(line)
+            current_size += line_size
+        result = "\n".join(truncated_lines)
+        logging.warning(
+            f"User summaries truncated from {original_size:,} bytes ({len(relevant_lines)} lines) "
+            f"to {len(result.encode('utf-8')):,} bytes ({len(truncated_lines)} lines) "
+            f"[limit: {MAX_USER_SUMMARIES_BYTES:,} bytes]"
+        )
+
+    return result
 
 def get_target_date(date_str_arg: str = None) -> datetime.date:
     if date_str_arg:
@@ -278,6 +304,7 @@ def main():
         elif isinstance(v, str):
             total_chars += len(v)
 
+    estimated_tokens = total_chars // 4
     final_context["_metadata"] = {
         "generated_at": datetime.now(timezone.utc).isoformat() + "Z",
         "target_date": target_date_str,
@@ -287,8 +314,15 @@ def main():
         "source_keys": sources_with_content,
         "failed_keys": sources_with_errors,
         "total_characters": total_chars,
-        "estimated_tokens": total_chars // 4,  # rough estimate for LLM context planning
+        "estimated_tokens": estimated_tokens,  # rough estimate for LLM context planning
     }
+
+    if estimated_tokens > ESTIMATED_TOKENS_WARNING_THRESHOLD:
+        logging.warning(
+            f"Aggregated data estimated at {estimated_tokens:,} tokens "
+            f"(threshold: {ESTIMATED_TOKENS_WARNING_THRESHOLD:,}). "
+            f"Downstream LLM calls may fail or produce truncated output."
+        )
 
     OUTPUT_DIR_BASE.mkdir(parents=True, exist_ok=True)
     output_file = OUTPUT_DIR_BASE / f"{target_date_str}.json"

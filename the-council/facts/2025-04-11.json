@@ -1,34 +1,215 @@
 {
   "briefing_date": "2025-04-11",
-  "overall_summary": "Error: Failed to generate briefing due to LLM or parsing issues.",
-  "categories": {},
+  "overall_summary": "The community has formally structured ElizaDAO into five working groups while technical focus shifted to stabilizing ElizaOS v2 migration and resolving persistent Discord and Twitter plugin vulnerabilities. Significant GitHub activity included merging circular reference fixes and voice model selection improvements to enhance framework reliability.",
+  "key_facts": [
+    "ElizaDAO established five formal working groups: Community/Governance, Dev/Knowledge, Comms/Social, Partnerships/Outreach, and Tokens/Funding.",
+    "PR #4266 was merged to implement a safeReplacer function resolving circular reference errors in JSON serialization.",
+    "PR #4262 replaced text inputs with dropdowns for voice model selection to improve the Agent Settings UI.",
+    "Users identified that adding 'types': ['node'] to tsconfig.json resolves the 'Dynamic require of child_process' and MongoDB adapter errors.",
+    "Twitter plugin autonomous posting was found to require setting TWITTER_ENABLE_POST_GENERATION=true in the .env for v2.",
+    "The SpartanV2 project added the contract address to its account profile and began exploring follower recovery methods.",
+    "A new deployment issue #4269 was reported regarding Discord bots failing to reply when hosted on Google Cloud Run via Docker.",
+    "Auto.fun product launch was confirmed as 'imminent' following a previous delay to April 14th."
+  ],
+  "open_questions": [
+    "How can I fix the issue where plugin-tee generates the same key regardless of parameters?",
+    "Is it true that Grayscale is investing in $ELIZA or is the ticker just wrong?",
+    "May I know why there is a timer in Eliza studio ai that page? Something happen after 4 days later?",
+    "Is mock-eliza not available in the starter of v1?",
+    "How to get Eliza OS v2 beta agent running with character card and vector database in Coolify or VPS?"
+  ],
   "tags": {
     "themes": [
+      "governance",
+      "ai-agents",
+      "plugins",
       "ux-improvement",
       "bug-fix"
     ],
     "sentiment": {
-      "overall": "negative",
+      "overall": "mixed",
       "context": [
+        "governance",
         "technical"
       ]
     },
     "story_type": [
-      "crisis"
+      "progress"
     ],
-    "derived": [],
+    "derived": [
+      "social",
+      "development",
+      "community",
+      "feedback",
+      "strategy",
+      "market"
+    ],
     "priority": [
-      "routine"
+      "high-attention"
     ],
     "manual": []
   },
-  "_metadata": {
-    "tags_backfilled_at": "2025-12-20T23:26:01.360771Z",
-    "source_repo": {
-      "full_name": "elizaOS/knowledge",
-      "owner": "elizaOS",
-      "repo": "knowledge"
+  "categories": {
+    "twitter_news_highlights": [
+      {
+        "claim": "Successful tech founders are noted to have confrontational personalities and a willingness to violate social rules.",
+        "source": [
+          "ai-news/elizaos/json/2025-04-10.json"
+        ],
+        "sentiment": "neutral"
+      },
+      {
+        "claim": "ENS domains are criticized as potential security 'honeypots' for wallet owners.",
+        "source": [
+          "ai-news/elizaos/json/2025-04-10.json"
+        ],
+        "sentiment": "negative"
+      }
+    ],
+    "github_updates": {
+      "new_issues_prs": [
+        {
+          "item_type": "pull_request",
+          "title": "fix: cyclic error",
+          "number": 4266,
+          "url": "https://github.com/elizaOS/eliza/pull/4266",
+          "status": "merged",
+          "author": "tcm390",
+          "significance": "Resolves a critical serialization crash involving circular references."
+        },
+        {
+          "item_type": "pull_request",
+          "title": "feat: message api",
+          "number": 4247,
+          "url": "https://github.com/elizaos/eliza/pull/4247",
+          "status": "merged",
+          "author": "tcm390",
+          "significance": "Introduces a native message API for the platform."
+        },
+        {
+          "item_type": "issue",
+          "title": "Discord bot not replying on Google Cloud Run",
+          "number": 4269,
+          "url": "https://github.com/elizaos/eliza/issues/4269",
+          "status": "open",
+          "author": "jiggyjo11",
+          "significance": "Identifies a critical failure in Docker-based cloud deployments."
+        }
+      ],
+      "overall_focus": [
+        {
+          "claim": "Development is centered on expanding ElizaOS API capabilities for world/room management and refining plugin infrastructure through registry integration.",
+          "source": [
+            "github/summaries/week/2025-05-18.md"
+          ]
+        }
+      ]
     },
-    "sources_migrated": true
+    "discord_updates": [
+      {
+        "channel": "#dao-organization",
+        "summary": "Discussions focused on treasury independence and the creation of a DAO charter to balance autonomy with ElizaLabs alignment.",
+        "key_participants": [
+          "HoneyBadger",
+          "vincentpaul",
+          "yikesawjeez"
+        ],
+        "source": [
+          "ai-news/elizaos/discord/json/2025-04-10.json"
+        ]
+      },
+      {
+        "channel": "#coders",
+        "summary": "Technical troubleshooting regarding version 0.25.9 stability and fixing 'hapi__shot' build errors via TypeScript config changes.",
+        "key_participants": [
+          "notorious_d_e_v",
+          "wookosh",
+          "CSC35"
+        ],
+        "source": [
+          "ai-news/elizaos/discord/md/2025-04-10.md"
+        ]
+      },
+      {
+        "channel": "#partners",
+        "summary": "Debate over the lack of agent-centric discovery mechanisms in the current Model Context Protocol (MCP) ecosystem.",
+        "key_participants": [
+          "DorianD",
+          "hubert",
+          "jin"
+        ],
+        "source": [
+          "ai-news/elizaos/discord/md/2025-04-10.md"
+        ]
+      }
+    ],
+    "user_feedback": [
+      {
+        "feedback_summary": "Users expressed frustration regarding poor documentation and the lack of working examples for Windows/WSL environments.",
+        "source": [
+          "ai-news/elizaos/json/2025-04-10.json"
+        ],
+        "sentiment": "negative"
+      },
+      {
+        "feedback_summary": "Core contributors suggest using 'pnpm' exclusively over npm or bun to avoid recurrent dependency conflicts.",
+        "source": [
+          "ai-news/elizaos/discord/md/2025-04-10.md"
+        ],
+        "sentiment": "neutral"
+      }
+    ],
+    "strategic_insights": [
+      {
+        "theme": "Decentralized Governance Maturation",
+        "insight": "The community consensus shifted toward requiring a separate DAO treasury to ensure true independence from ElizaLabs.",
+        "implications_or_questions": [
+          "How will the DAO manage budget allocations across the five new working groups?"
+        ]
+      },
+      {
+        "theme": "MCP Registry Fragmentation",
+        "insight": "Multiple registries are emerging for MCP servers, but they lack a unified agent-feedback loop, creating a bottleneck for autonomous agent evaluation.",
+        "implications_or_questions": [
+          "Should the DAO prioritize a whitelabel, agent-centric registry protocol?"
+        ]
+      }
+    ],
+    "market_analysis": [
+      {
+        "observation": "Meme coin trading on Pump.fun maintains a high meta for \u2018ChatGPT image-based\u2019 tokens.",
+        "source": [
+          "ai-news/elizaos/json/2025-04-10.json"
+        ],
+        "relevance": "Drives demand for automated social media and trading agents built on ElizaOS."
+      },
+      {
+        "observation": "Launch of Grok 3 and Grok 3 Mini models with transparent reasoning traces.",
+        "source": [
+          "ai-news/elizaos/json/2025-04-10.json"
+        ],
+        "relevance": "Provides high-performance, cost-effective LLM targets for ElizaOS integrations."
+      }
+    ]
+  },
+  "_metadata": {
+    "model": "google/gemini-3-flash-preview",
+    "extracted_at": "2026-02-09T22:26:47.968358+00:00Z",
+    "prompt_tokens": 76697,
+    "completion_tokens": 1993,
+    "total_tokens": 78690,
+    "processing_seconds": 15.74,
+    "status": "success",
+    "facts_by_category": {
+      "twitter_news_highlights": 2,
+      "github_updates": 3,
+      "discord_updates": 3,
+      "user_feedback": 2,
+      "strategic_insights": 2,
+      "market_analysis": 2,
+      "key_facts": 8,
+      "open_questions": 5
+    },
+    "total_facts": 27
   }
 }

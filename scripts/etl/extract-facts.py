@@ -13,6 +13,7 @@ from datetime import datetime, timezone
 import os
 import sys
 import re # For date parsing from filename
+import time
 import requests
 from typing import Optional
 
@@ -22,6 +23,9 @@ NEWS_SHOW_OUTPUT_DIR = Path("the-council") # Default parent for output if -o is 
 OPENROUTER_API_KEY = os.environ.get("OPENROUTER_API_KEY")
 OPENROUTER_API_ENDPOINT = "https://openrouter.ai/api/v1/chat/completions"
 LLM_MODEL = "google/gemini-3-flash-preview" # Large 1M+ context window for big aggregated files
+MAX_ATTEMPTS = 2  # Retry once on failure (2 total attempts)
+RETRY_DELAY_SECONDS = 5
+MIN_COMPLETION_TOKENS = 200  # Below this, response is definitely truncated
 SCRIPTS_DIR = Path(__file__).parent.parent
 WORKSPACE_ROOT = SCRIPTS_DIR.parent  # Repository root
 DEFAULT_FACT_EXTRACTION_PROMPT_FILE = SCRIPTS_DIR / "prompts" / "extraction" / "facts.txt"
@@ -596,69 +600,116 @@ def main():
         "extracted_at": datetime.now(timezone.utc).isoformat() + "Z",
     }
     extraction_start_time = datetime.now(timezone.utc)
-    try:
-        response = requests.post(OPENROUTER_API_ENDPOINT, headers=headers, json=llm_payload, timeout=300)
-        response.raise_for_status()
-        llm_response_data = response.json()
+    content_str = ""  # Initialize so it's available for debug sidecar on failure
 
-        # Capture token usage for cost tracking
-        usage = llm_response_data.get("usage", {})
-        if usage:
-            llm_metadata["prompt_tokens"] = usage.get("prompt_tokens")
-            llm_metadata["completion_tokens"] = usage.get("completion_tokens")
-            llm_metadata["total_tokens"] = usage.get("total_tokens")
-            logging.info(f"LLM Usage - Prompt: {usage.get('prompt_tokens')}, Completion: {usage.get('completion_tokens')}, Total: {usage.get('total_tokens')}")
+    for attempt in range(MAX_ATTEMPTS):
+        attempt_label = f"[attempt {attempt + 1}/{MAX_ATTEMPTS}]"
+        try:
+            response = requests.post(OPENROUTER_API_ENDPOINT, headers=headers, json=llm_payload, timeout=300)
+            response.raise_for_status()
+            llm_response_data = response.json()
 
-        content_str = llm_response_data.get("choices", [{}])[0].get("message", {}).get("content", "")
-        
-        if not content_str.strip():
-            logging.error("LLM returned empty content.")
-        else:
-            # Strip Markdown code fences if present
-            if content_str.startswith("```json"):
-                content_str = content_str[len("```json"):]
-            if content_str.startswith("```"):
-                content_str = content_str[len("```"):]
-            if content_str.endswith("```"):
-                content_str = content_str[:-len("```")]
-            content_str = content_str.strip() # Clean up any surrounding whitespace
+            # Capture token usage for cost tracking
+            usage = llm_response_data.get("usage", {})
+            if usage:
+                llm_metadata["prompt_tokens"] = usage.get("prompt_tokens")
+                llm_metadata["completion_tokens"] = usage.get("completion_tokens")
+                llm_metadata["total_tokens"] = usage.get("total_tokens")
+                logging.info(f"{attempt_label} LLM Usage - Prompt: {usage.get('prompt_tokens')}, Completion: {usage.get('completion_tokens')}, Total: {usage.get('total_tokens')}")
 
-            try:
-                parsed_content = json.loads(content_str)
-                if isinstance(parsed_content, dict) and \
-                   "briefing_date" in parsed_content and \
-                   "overall_summary" in parsed_content and \
-                   "categories" in parsed_content and isinstance(parsed_content["categories"], dict):
-                    llm_output_data = parsed_content
+                # Completion token sanity check — below threshold means truncated response
+                completion_tokens = usage.get("completion_tokens", 0) or 0
+                if completion_tokens < MIN_COMPLETION_TOKENS:
+                    logging.warning(f"{attempt_label} Completion tokens ({completion_tokens}) below minimum threshold ({MIN_COMPLETION_TOKENS}), likely truncated response. Retrying...")
+                    if attempt < MAX_ATTEMPTS - 1:
+                        time.sleep(RETRY_DELAY_SECONDS)
+                        continue
+                    else:
+                        logging.error(f"{attempt_label} Truncated response on final attempt.")
 
-                    # Validate and correct briefing_date if LLM inferred wrong date from content
-                    extracted_date = parsed_content.get('briefing_date')
-                    if extracted_date != target_date_str:
-                        logging.warning(f"LLM extracted wrong date '{extracted_date}', correcting to target date '{target_date_str}'")
-                        llm_output_data['briefing_date'] = target_date_str
+            content_str = llm_response_data.get("choices", [{}])[0].get("message", {}).get("content", "")
 
-                    logging.info(f"Successfully parsed categorized fact briefing from LLM response for date: {llm_output_data.get('briefing_date')}")
-                else:
-                    logging.error(f"LLM response content is not in the expected categorized format. Content: {content_str[:500]}...")
-            except json.JSONDecodeError as e_json:
-                logging.error(f"Failed to parse LLM response content as JSON: {e_json}. Content: {content_str[:500]}...")
+            if not content_str.strip():
+                logging.error(f"{attempt_label} LLM returned empty content.")
+                if attempt < MAX_ATTEMPTS - 1:
+                    time.sleep(RETRY_DELAY_SECONDS)
+                    continue
+            else:
+                # Strip Markdown code fences if present
+                if content_str.startswith("```json"):
+                    content_str = content_str[len("```json"):]
+                if content_str.startswith("```"):
+                    content_str = content_str[len("```"):]
+                if content_str.endswith("```"):
+                    content_str = content_str[:-len("```")]
+                content_str = content_str.strip() # Clean up any surrounding whitespace
 
-    except requests.exceptions.RequestException as e_req:
-        logging.error(f"LLM API request failed: {e_req}")
-    except Exception as e_gen:
-        logging.error(f"Error processing LLM response: {e_gen}")
+                try:
+                    parsed_content = json.loads(content_str)
+                    required_fields = ["briefing_date", "overall_summary", "categories"]
+                    missing_fields = [f for f in required_fields if f not in parsed_content]
+                    categories_valid = isinstance(parsed_content.get("categories"), dict)
+
+                    if isinstance(parsed_content, dict) and not missing_fields and categories_valid:
+                        llm_output_data = parsed_content
+
+                        # Validate and correct briefing_date if LLM inferred wrong date from content
+                        extracted_date = parsed_content.get('briefing_date')
+                        if extracted_date != target_date_str:
+                            logging.warning(f"LLM extracted wrong date '{extracted_date}', correcting to target date '{target_date_str}'")
+                            llm_output_data['briefing_date'] = target_date_str
+
+                        logging.info(f"Successfully parsed categorized fact briefing from LLM response for date: {llm_output_data.get('briefing_date')}")
+                        break  # Success — exit retry loop
+                    else:
+                        if missing_fields:
+                            logging.error(f"{attempt_label} LLM response missing required fields: {missing_fields}. Response preview: {content_str[:1000]}")
+                        if not categories_valid:
+                            logging.error(f"{attempt_label} 'categories' field is not a dict. Type: {type(parsed_content.get('categories'))}. Response preview: {content_str[:1000]}")
+                        if attempt < MAX_ATTEMPTS - 1:
+                            time.sleep(RETRY_DELAY_SECONDS)
+                            continue
+
+                except json.JSONDecodeError as e_json:
+                    logging.error(f"{attempt_label} Failed to parse LLM response as JSON: {e_json}. Response preview: {content_str[:1000]}")
+                    if attempt < MAX_ATTEMPTS - 1:
+                        time.sleep(RETRY_DELAY_SECONDS)
+                        continue
+
+        except requests.exceptions.RequestException as e_req:
+            logging.error(f"{attempt_label} LLM API request failed: {e_req}")
+            if attempt < MAX_ATTEMPTS - 1:
+                time.sleep(RETRY_DELAY_SECONDS)
+                continue
+        except Exception as e_gen:
+            logging.error(f"{attempt_label} Error processing LLM response: {e_gen}")
+            if attempt < MAX_ATTEMPTS - 1:
+                time.sleep(RETRY_DELAY_SECONDS)
+                continue
 
     # Calculate processing duration
     llm_metadata["processing_seconds"] = round((datetime.now(timezone.utc) - extraction_start_time).total_seconds(), 2)
 
     if not llm_output_data:
-        logging.warning("No valid categorized briefing was extracted. The output JSON file might be incomplete or empty.")
+        logging.warning(f"No valid categorized briefing was extracted after {MAX_ATTEMPTS} attempt(s).")
         llm_output_data = {
             "briefing_date": target_date_str,
             "overall_summary": "Error: Failed to generate briefing due to LLM or parsing issues.",
             "categories": {}
         }
         llm_metadata["status"] = "error"
+        llm_metadata["attempts"] = MAX_ATTEMPTS
+
+        # Save raw LLM response to debug sidecar file for post-mortem analysis
+        if content_str:
+            debug_dir = WORKSPACE_ROOT / "the-council" / "facts" / ".debug"
+            try:
+                debug_dir.mkdir(parents=True, exist_ok=True)
+                debug_file = debug_dir / f"{target_date_str}.raw.txt"
+                debug_file.write_text(content_str, encoding='utf-8')
+                logging.info(f"Saved raw LLM response ({len(content_str)} chars) to {debug_file}")
+            except Exception as e_debug:
+                logging.warning(f"Could not save debug sidecar: {e_debug}")
     else:
         llm_metadata["status"] = "success"
         # Count facts extracted per category
