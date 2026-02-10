@@ -1,40 +1,29 @@
-## ElizaOS Development Updates and Community Discussions - February 2026
+## ElizaOS Community Discussions: Market Concerns, Moltbot Competition, and Technical Development
 
-### Core Development Initiatives
+### Financial Runway and Market Position
 
-- Explored PageIndex, a new open-source library using document trees instead of embeddings for RAG systems, achieving 98.7% accuracy on FinanceBench
-- Discussed integrating PageIndex via MCP and building encyclopedia-like tree structures
-- Developed Docker compose workflows for GPU training and deployment
-- Confirmed ElizaOS has had task scheduling capabilities since version 1.x for recurring tasks
+- Shaw confirmed the team has 8 months of runway
+- Community discussed ElizaOS as an open systems network for AI agents, contrasting with centralized alternatives like OpenAI and Anthropic
+- Positioned as a decentralized alternative that doesn't share data with governments
 
-### Technical Implementation Progress
+### Moltbot Competition Analysis
 
-- Discussed using Kimi 2.5 API via OpenRouter as a cost-effective alternative to Opus 4.5
-- Explored integration ideas between OpenClaw and ElizaCloud
-- Proposed L2 network where nodes can donate compute to Eliza for resource-intensive tasks
-- Enabled agents to potentially top up credit accounts directly with x402 payments
+- Community analyzed Moltbot (formerly Clawdbot, now OpenClaw) as a competing AI assistant platform
+- Identified Moltbook as a Reddit-like social network for AI agents
+- DorianD proposed a strategy to deploy ElizaOS agents onto Moltbook to encourage adoption and migration to the Jeju network
+- Community identified competitive advantages: Moltbot users face API fees and Anthropic account bans for non-human usage
+- Distinguished ElizaOS as a multi-agent system versus Moltbot's personal assistant model
+- Community discussed absorbing Moltbot features including mobile device presence and voice interfaces
 
-### Community and Project Status
+### Technical Development Progress
 
-- Team continues building continuously with Shaw becoming more efficient at coding
-- Secured 6-8 months of runway from SAFT funding (dynamic based on revenue and costs)
-- Positioned for long-term growth with focus on transferring building value to token ecosystem
+- Core developers discussed technical improvements for version 2.0
+- Odilitime updated plugin-local-ai for easier embeddings
+- Stan shared progress on a test framework for plugin-n8n
+- Team addressed provider selection issues in one-shot mode on the develop branch
 
-### Token Migration
+### Community Support and Projects
 
-- Confirmed migration deadline as February 3rd
-- Directed users to support channels for migration issues
-- Announced Babylon airdrop for ELIZAOS holders after migration ends, with sign-up and points earning through tasks
-
-### Product Developments
-
-- Built system for auto-generating and publishing news based on organization GitHub and Discord activity
-- Created talk shows for market events and governance
-- Developed game shows for grant proposals and hackathons
-- Integrated features into 24/7 channel with chat interaction, preparing for relaunch
-- Enabled indie developers to fork ElizaOS, add plugins, and deploy in a weekend
-
-### Strategic Positioning
-
-- Discussed competitive advantages of open source AI agents versus traditional corporate solutions
-- Emphasized ElizaOS enables rapid AI agent development compared to traditional approaches requiring large funding and engineering teams
+- Team clarified official support protocols: no friend requests or DMs, only verified tickets
+- Community identified top projects built with ElizaOS: BiomeAI, Tapestry AI, Vail Report, and Vaulter Agents
+- DorianD explained Jeju staking features for service providers including compute and data storage nodes

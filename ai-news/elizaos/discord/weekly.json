@@ -1,17 +1,17 @@
 {
   "type": "discordWeeklySummary",
   "server": "elizaOS",
-  "title": "elizaOS Weekly Summary - 2026-02-02 to 2026-02-08",
-  "weekOf": "2026-02-02",
+  "title": "elizaOS Weekly Summary - 2026-02-03 to 2026-02-09",
+  "weekOf": "2026-02-03",
   "dateRange": {
-    "start": "2026-02-02",
-    "end": "2026-02-08"
+    "start": "2026-02-03",
+    "end": "2026-02-09"
   },
-  "generatedAt": 1770599416,
+  "generatedAt": 1770686373,
   "stats": {
-    "totalMessages": 604,
-    "totalUsers": 206,
-    "averageMessagesPerDay": 86,
+    "totalMessages": 736,
+    "totalUsers": 231,
+    "averageMessagesPerDay": 105,
     "activeDays": 7,
     "peakDay": {
       "date": "2026-02-04",
@@ -21,65 +21,26 @@
   "channelSummary": {
     "1301363808421543988": {
       "name": "🥇-partners",
-      "totalMessages": 19,
+      "totalMessages": 25,
       "daysActive": 5
     },
     "1300025221834739744": {
       "name": "💬-coders",
-      "totalMessages": 139,
+      "totalMessages": 152,
       "daysActive": 7
     },
     "1377726087789940836": {
       "name": "core-devs",
-      "totalMessages": 135,
+      "totalMessages": 129,
       "daysActive": 7
     },
     "1253563209462448241": {
       "name": "💬-discussion",
-      "totalMessages": 311,
+      "totalMessages": 430,
       "daysActive": 7
     }
   },
   "days": [
-    {
-      "server": "elizaOS",
-      "title": "elizaOS Discord - 2026-02-02",
-      "date": 1769990400,
-      "stats": {
-        "totalMessages": 48,
-        "totalUsers": 26
-      },
-      "categories": [
-        {
-          "channelId": "1301363808421543988",
-          "channelName": "🥇-partners",
-          "summary": "# Discord Channel Analysis: 🥇-partners\n\n## 1. Summary\n\nThis chat segment contains minimal technical discussion. The only message is from Krippトメア expressing a concern about potential future restrictions on homebrew API access by companies, which could force developers out of their ecosystems and networks. The user acknowledges uncertainty about whether this scenario will actually occur. No technical implementations, solutions, or decisions were discussed in this brief segment.\n\n## 2. FAQ\n\nNo meaningful questions or answers were present in this chat segment.\n\n## 3. Help Interactions\n\nNo help interactions occurred in this chat segment.\n\n## 4. Action Items\n\nNo action items were identified in this chat segment.",
-          "messageCount": 2,
-          "userCount": 1
-        },
-        {
-          "channelId": "1300025221834739744",
-          "channelName": "💬-coders",
-          "summary": "# Discord Channel Analysis: 💬-coders\n\n## 1. Summary\n\nThe discussion centered on three main topics: agent usability, elizacloud.ai technical issues, and visual generation limitations.\n\n**Agent Installation and Behavior**: DorianD discussed user adoption challenges, noting that high installation effort deterred users. They praised agents that \"relentlessly try to do stuff\" as more desirable than those requiring extensive setup, emphasizing the value of agents that work autonomously and persistently.\n\n**ElizaCloud.ai Login Issue**: yojo reported a critical account access problem where their agent disappeared from the dashboard after using two different email formats for the same Proton account ('x@proton.me' vs 'x@protonmail.com'). They suspected this created duplicate accounts, causing the original agent to become inaccessible.\n\n**Visual Generation Consistency Problem**: yojo identified a significant limitation in elizacloud.ai's image generation system - the inability to maintain visual consistency across multiple generations. When requesting modifications to generated images (e.g., same character in different contexts or removing accessories), the system regenerates entirely new visuals instead of preserving character features. This forces users to spend excessive time on prompt engineering or switch to external graphic AI tools, breaking workflow continuity for storytelling and branding use cases.\n\n**Solution Discussion**: DorianD suggested these visual consistency features should be implemented as apps built by agents or third-party developers, recommending LoRA (Low-Rank Adaptation) models as an existing solution for maintaining visual consistency.\n\nInferX posted a recruitment/portfolio message detailing their experience with autonomous agents, healthcare AI, decision support systems, and conversational AI across various tech stacks.\n\n## 2. FAQ\n\nQ: Is there a way to find my agent that disappeared from elizacloud.ai dashboard after using different email formats? (asked by yojo) A: Unanswered\n\nQ: Can elizacloud.ai reuse the same key visual features when generating follow-up images for storytelling or branding? (asked by yojo) A: DorianD suggested these should be apps built by agents/third-party developers and recommended using LoRA models as a solution\n\n## 3. Help Interactions\n\nHelper: DorianD | Helpee: yojo | Context: Visual generation consistency problem in elizacloud.ai where characters couldn't be reused across different contexts | Resolution: Suggested building this as an app and recommended LoRA models as an existing solution for visual consistency\n\n## 4. Action Items\n\nType: Technical | Description: Investigate and resolve account duplication issue when using different Proton email formats (proton.me vs protonmail.com) causing agent loss | Mentioned By: yojo\n\nType: Feature | Description: Implement visual consistency feature in elizacloud.ai to preserve character/brand elements across multiple image generations for storytelling and branding | Mentioned By: yojo\n\nType: Feature | Description: Enable modification of specific elements in generated images without regenerating entire visual (e.g., removing accessories while keeping character consistent) | Mentioned By: yojo\n\nType: Technical | Description: Develop apps or integrations using LoRA models for maintaining visual consistency in image generation | Mentioned By: DorianD",
-          "messageCount": 10,
-          "userCount": 4
-        },
-        {
-          "channelId": "1377726087789940836",
-          "channelName": "core-devs",
-          "summary": "# Discord Chat Analysis - core-devs Channel\n\n## 1. Summary\n\nThe discussion centered on agent skill invocation reliability issues and potential solutions. Stan shared a Vercel blog post about agents.md outperforming skills in evaluations, while Odilitime introduced the GAP (GitHub Actions Protocol) project. \n\nThe core technical problem identified was that skills weren't being triggered reliably - in 56% of evaluation cases, skills were never invoked even when agents had access to documentation. R0am highlighted this issue and shared a working solution: a UserPromptSubmit hook that forces explicit skill evaluation through a mandatory three-step activation sequence. This approach requires the agent to: 1) Evaluate each skill with YES/NO reasoning, 2) Immediately activate relevant skills using the Skill() tool, and 3) Only proceed with implementation after completing the activation step.\n\nR0am noted this solution makes conversations \"a bit weird but it works\" and compared the approach to similar logic used by Composio and Zapier MCP. Stan confirmed they've implemented this pattern in Eliza Cloud and suggested that better skill descriptions might mitigate the invocation problem, though he wasn't experiencing the same reliability issues. The discussion also touched on whether anyone had tested the GAP project, but this remained unanswered.\n\n## 2. FAQ\n\nQ: Isn't this the same logic as composio or zappier MCP? (asked by R0am | tip.md) A: Not directly answered, but Stan confirmed similar approach being used in Eliza Cloud (answered by Stan ⚡)\n\nQ: Did someone try this gap? (asked by R0am | tip.md) A: Unanswered\n\n## 3. Help Interactions\n\nHelper: R0am | tip.md | Helpee: Community | Context: Skills not being triggered reliably in 56% of eval cases | Resolution: Shared UserPromptSubmit hook with mandatory 3-step skill activation sequence that forces explicit evaluation\n\nHelper: Stan ⚡ | Helpee: Community | Context: Skill invocation reliability issues | Resolution: Suggested better skill descriptions as potential solution and confirmed implementation in Eliza Cloud\n\n## 4. Action Items\n\nType: Technical | Description: Investigate and potentially implement GAP (GitHub Actions Protocol) project | Mentioned By: Odilitime\n\nType: Technical | Description: Improve skill descriptions to enhance reliable skill invocation | Mentioned By: Stan ⚡\n\nType: Technical | Description: Evaluate UserPromptSubmit hook mandatory skill activation sequence for implementation | Mentioned By: R0am | tip.md",
-          "messageCount": 11,
-          "userCount": 5
-        },
-        {
-          "channelId": "1253563209462448241",
-          "channelName": "💬-discussion",
-          "summary": "# Discord Chat Analysis for 💬-discussion\n\n## 1. Summary\n\nThe chat segment shows minimal technical discussion, primarily consisting of support requests and general greetings. The most significant technical mention was GraV inquiring about the Hyperliquid plugin functionality, which they resolved independently by coding their own solution within approximately 35 minutes. \n\nSeveral users encountered issues with AI16Z token migration and exchange. kpat reported purchasing old AI16Z tokens at 2 SOL that depreciated to 0.02 value and sought help with exchange options. Gumball experienced technical difficulties with the official bridge website not detecting their pre-November 2025 tokens. StefanB encountered a \"Max amount reached\" error during migration. All support requests were redirected to dedicated support channels by moderators Odilitime and Borko.\n\naicodeflow posted a developer availability announcement, offering 8 years of AI and automation engineering experience for project collaboration or startup development.\n\nCommunity discussion included mentions of Shaw and Eliza's work on Ethereum Foundation spaces with Austin Griffith, and commentary about Eliza's positioning for AI development on Base with Babylon. The technical depth of these discussions was limited to brief mentions without detailed implementation discussion.\n\n## 2. FAQ\n\nQ: Will anyone please help what I can do to exchange old AI16Z tokens i bought them at 2 sols now worth 0.02? (asked by kpat) A: Redirected to support channels (answered by Odilitime)\n\nQ: Does anyone know if the hyperliquid plug in is working? (asked by GraV) A: Self-resolved by coding own solution (answered by GraV)\n\nQ: I am trying to bridge my ai16z on the official website but it is not detecting my tokens, what do I do? (asked by Gumball) A: Redirected to support channels (answered by Borko)\n\nQ: Any idea where to find migration-solutions from ai16z? Get the message \"Max amount reached\" (asked by StefanB) A: Redirected to support channel (answered by Borko)\n\n## 3. Help Interactions\n\nHelper: Odilitime | Helpee: kpat | Context: Token exchange issue with old AI16Z tokens | Resolution: Directed to support channels for assistance\n\nHelper: Borko | Helpee: Gumball | Context: Bridge website not detecting tokens | Resolution: Directed to appropriate support channels\n\nHelper: Borko | Helpee: StefanB | Context: Migration error \"Max amount reached\" | Resolution: Directed to migration support channel\n\n## 4. Action Items\n\nType: Technical | Description: Investigate Hyperliquid plugin functionality issues | Mentioned By: GraV\n\nType: Technical | Description: Debug bridge website token detection for pre-November 2025 holdings | Mentioned By: Gumball\n\nType: Technical | Description: Resolve \"Max amount reached\" error in migration process | Mentioned By: StefanB",
-          "messageCount": 25,
-          "userCount": 17
-        }
-      ]
-    },
     {
       "server": "elizaOS",
       "title": "elizaOS Discord - 2026-02-03",
@@ -297,6 +258,45 @@
           "summary": "# Discord Channel Analysis: 💬-discussion\n\n## 1. Summary\n\nThis chat segment reveals significant community frustration with the ELIZAOS token project rather than technical discussions. The primary concerns centered around token price decline (reported at $0.0013), lack of communication from the development team, and perceived mismanagement.\n\nKey developments mentioned include: escrow payment implementation for agent rentals (shared by M I A M I), and upcoming delistings from three Korean exchanges scheduled for 3:00 PM KST. The community raised critical questions about staking availability (confirmed unavailable by Arceon), token use-cases, and the status of five products promised months ago that remain undelivered.\n\nCommunity sentiment was predominantly negative, with holders expressing concerns about: continuous daily price drops exceeding 5%, key developers reportedly leaving the team, lack of marketing strategy, and poor community management practices including alleged muting/banning of critical voices. Some members speculated about potential token migration plans for March.\n\nLimited positive signals included mention of upcoming launches, a planned bullish video from \"crypto gains\" investor, and high traffic to ai.com causing website crashes. One developer (bigzee) posted availability for full-stack and AI development work with expertise in React, Node.js, Python, AI/ML frameworks, and various databases.\n\nThe overarching theme was community dissatisfaction with team transparency and accountability, with multiple users questioning the project's viability and requesting concrete updates on product development and token utility.\n\n## 2. FAQ\n\nQ: Is there any places to stake $ELIZAOS? (asked by mbat) A: No at the moment there is no staking (answered by Arceon)\n\nQ: Will team launch any token use-case or product which may use ElizaOS token? (asked by averma) A: Unanswered\n\nQ: What about 5 products this team was about to deliver in few weeks - months gone? (asked by averma) A: Unanswered\n\nQ: Do you even have a marketing team? (asked by gby) A: Unanswered\n\nQ: Why should anyone buy elizaos? (asked by gby) A: Unanswered\n\n## 3. Help Interactions\n\nHelper: Arceon | Helpee: mbat | Context: Question about staking availability for $ELIZAOS tokens | Resolution: Confirmed no staking currently available\n\n## 4. Action Items\n\nType: Feature | Description: Implement staking functionality for $ELIZAOS tokens | Mentioned By: mbat\n\nType: Documentation | Description: Provide updates on token use-cases and utility | Mentioned By: averma\n\nType: Documentation | Description: Deliver status update on 5 promised products | Mentioned By: averma\n\nType: Documentation | Description: Communicate clear value proposition for why to buy elizaos | Mentioned By: gby\n\nType: Technical | Description: Address ai.com website crashes due to high traffic | Mentioned By: The Void",
           "messageCount": 33,
           "userCount": 18
+        }
+      ]
+    },
+    {
+      "server": "elizaOS",
+      "title": "elizaOS Discord - 2026-02-09",
+      "date": 1770595200,
+      "stats": {
+        "totalMessages": 180,
+        "totalUsers": 51
+      },
+      "categories": [
+        {
+          "channelId": "1301363808421543988",
+          "channelName": "🥇-partners",
+          "summary": "# Discord Channel Analysis: 🥇-partners\n\n## 1. Summary\n\nThis chat segment contains minimal technical discussion and primarily consists of link sharing and brief commentary. The conversation touches on three main topics:\n\n**Regime Change Discussion**: Krippトメア acknowledges a previous story about regime and world-order change use cases, noting these represent a \"different beast\" in terms of complexity or implementation challenges.\n\n**Marketing and Organic Growth**: DorianD shares a LinkedIn post about OpenClaw/MoltBot AI, emphasizing the need for \"organic\" promotional content. This suggests a focus on authentic community-driven marketing rather than forced promotional efforts. DorianD also mentions billionaires having houses in New Zealand, though the context connecting this to the technical discussion is unclear.\n\n**Eliza Attention Generation**: Broccolex shares a Twitter/X post from @joemccann, suggesting it could generate attention for Eliza (likely referring to an AI project or framework). This indicates ongoing efforts to increase visibility and adoption.\n\n**Additional Link**: Kenk shares a Twitter/X post from @owocki without additional context.\n\nThe segment lacks substantive technical implementation details, code discussions, or problem-solving activities. It appears to be a partners channel focused on strategic positioning and visibility rather than hands-on development work.\n\n## 2. FAQ\n\nNo meaningful technical questions with responses were present in this chat segment.\n\n## 3. Help Interactions\n\nNo direct help interactions were identified in this chat segment.\n\n## 4. Action Items\n\nType: Feature | Description: Generate organic promotional content similar to the OpenClaw/MoltBot AI LinkedIn post | Mentioned By: DorianD\n\nType: Feature | Description: Leverage Joe McCann's post to generate attention for Eliza project | Mentioned By: Broccolex",
+          "messageCount": 8,
+          "userCount": 4
+        },
+        {
+          "channelId": "1300025221834739744",
+          "channelName": "💬-coders",
+          "summary": "# Discord Channel Analysis: 💬-coders\n\n## 1. Summary\n\nThe channel discussion centered on several technical issues with ElizaOS/milaidy installations and plugin development. The most significant technical exchange involved **azsxdc** encountering multiple errors on a fresh VPS installation of milaidy, including a crash in the \"agent_skill_instructions\" provider where `skill.description.toLowerCase is not a function`. **Odilitime** confirmed this is a known bug requiring a fix. Two other errors were clarified as normal and ignorable: missing server ID for world and server ownership issues. A third warning about pluginRegistryService failing with 401 Unauthorized was identified as work-in-progress functionality.\n\n**kira** inquired about wallet management plugins for openclaw, specifically for game skill integration with security considerations, but received no response. **Vega** announced development of a plugin to use SillyTavern character cards, promising to release it later. **Wes** questioned the need for Cardano wallet integration in ElizaOS. **DorianD** asked about submission to clawhub without context. **ElizaBAO** promoted their Colosseum Agent Hackathon project combining ElizaBAO + Claw with Polymarket signal scanning, x402/SOL paywall, and Moltbook autoposters. **s** mentioned existing WebSocket functionality via plugin/server.\n\nThe channel also contained spam/scam content that moderators acknowledged needing better autoban systems for.\n\n## 2. FAQ\n\nQ: What's the best wallet management plugin for openclaw? (asked by kira) A: Unanswered\n\nQ: Are these errors normal on a fresh install on VPS for milaidy? (asked by azsxdc) A: Some are normal (server ID and ownership errors can be ignored), but the agent_skill_instructions crash is a bug that needs fixing, and the pluginRegistryService 401 error is WIP (answered by Odilitime)\n\nQ: Could the error be because I've configured skillsmp? (asked by azsxdc) A: Unanswered\n\nQ: Is there anyone looking for developer? (asked by C.C) A: Unanswered\n\nQ: Can I see the roadmap? (asked by solsunmoon) A: Unanswered\n\nQ: Do we need a way to integrate with Cardano with wallets in ElizaOS? (asked by Wes) A: Unanswered\n\nQ: Has this been submitted to clawhub? (asked by DorianD) A: Unanswered\n\n## 3. Help Interactions\n\nHelper: Odilitime | Helpee: azsxdc | Context: Multiple errors on fresh milaidy VPS installation including provider crash, server ID errors, and plugin registry failures | Resolution: Confirmed agent_skill_instructions crash is a known bug needing fix; clarified server ID and ownership errors are normal and ignorable; identified pluginRegistryService error as WIP feature\n\n## 4. Action Items\n\nType: Technical | Description: Fix agent_skill_instructions provider crash where skill.description.toLowerCase is not a function in @elizaos/plugin-agent-skills | Mentioned By: Odilitime\n\nType: Technical | Description: Implement autoban system for scam support tickets | Mentioned By: azsxdc\n\nType: Feature | Description: SillyTavern character cards plugin for openclaw | Mentioned By: Vega\n\nType: Feature | Description: Cardano wallet integration for ElizaOS | Mentioned By: Wes",
+          "messageCount": 23,
+          "userCount": 12
+        },
+        {
+          "channelId": "1377726087789940836",
+          "channelName": "core-devs",
+          "summary": "# Discord Chat Analysis - \"core-devs\" Channel\n\n## 1. Summary\n\nThis chat segment contains minimal technical discussion. The conversation consists primarily of greeting messages (\"gm\" - good morning) exchanged between community members sam, SYMBiEX, and Stan. The only substantive content is a link shared by jin to a YouTube video titled \"weekly roundup of elizaos updates.\" No technical problems were discussed, no solutions were proposed, and no development decisions were made during this time period. The chat represents casual community interaction rather than active development work.\n\n## 2. FAQ\n\nNo significant technical questions were asked or answered in this chat segment.\n\n## 3. Help Interactions\n\nNo help interactions occurred in this chat segment.\n\n## 4. Action Items\n\nType: Documentation | Description: Review weekly roundup of elizaos updates video for potential documentation updates | Mentioned By: jin",
+          "messageCount": 5,
+          "userCount": 4
+        },
+        {
+          "channelId": "1253563209462448241",
+          "channelName": "💬-discussion",
+          "summary": "# Discord Chat Analysis: 💬-discussion\n\n## 1. Summary\n\nThe discussion channel was dominated by community concerns about token price decline, exchange delistings, and perceived lack of team communication. The primary technical issue discussed was the Korean exchange delisting situation - there was significant confusion about whether ELIZAOS was being delisted from Bithumb, Coinone, and Korbit. User gby claimed the delisting was confirmed and scheduled, while davidhq and paolin later clarified that only the pre-rebrand AI16Z token was delisted, not the current ELIZAOS token.\n\nA critical migration issue emerged when user ufw discovered they had missed the ai16z to ELIZA token migration deadline, asking if their tokens were lost. This question went unanswered by team members.\n\nTechnical development updates were minimal but included: jin posting a weekly roundup video of ElizaOS updates, yojo providing feedback on elizacloud.ai UX optimization needs (suggesting prompt-only user features, visual generation optimization, plug-in marketplace, and crypto transfers without wallet connect), and Seppmos sharing a video covering Babylon and Hyperscape developments.\n\nCommunity sentiment was largely negative, with multiple users (averma, gby, Gem Hunter) expressing concerns about: lack of token utility, team selling tokens (specifically Shaw's wallet DScqtGwFoDTme2Rzdjpdb2w7CtuKc6Z8KF7hMhbx8ugQ being monitored), developers leaving the project (CJ and another unnamed dev), and absence of admin/team presence in the channel. User ovo defended the team, noting Shaw covered unexpected costs to recover the X account and that the team burned 22M tokens. The discussion revealed deep frustration from token holders who felt the open-source development work wasn't translating to token value or holder benefits.\n\n## 2. FAQ\n\nQ: Where can I bridge eliza token from solana to bsc? (asked by clutch) A: There is currently NO official or safe bridge for Eliza from Solana to BSC (answered by EMERSON3S)\n\nQ: Is $ELIZAOS going to be delisted from the 3 korean exchanges? (asked by avi_rajput563 | TABI 💢) A: Conflicting responses - gby claimed delisting was confirmed and scheduled in 2 hours on Bithumb, Coinone, and Korbit; davidhq and paolin later clarified only pre-rebrand AI16Z was delisted, not current ELIZAOS (answered by EMERSON3S initially saying \"ignore the lies\", then gby, davidhq, and paolin)\n\nQ: What happens if I didn't migrate my original a16z tokens in time? (asked by ufw) A: Unanswered\n\nQ: Is the support desk discord thing a scam? (asked by ufw) A: Yes it is (answered by Monsgroow.)\n\nQ: What is the CA of this new Elizacoin? (asked by Convex Bit) A: Unanswered\n\nQ: Is Shaw selling his elizaos tokens? (asked by gby) A: gby provided wallet address DScqtGwFoDTme2Rzdjpdb2w7CtuKc6Z8KF7hMhbx8ugQ claiming Shaw was selling; ovo and davidhq disputed this, asking for transaction IDs as proof (answered by ovo and davidhq)\n\nQ: Why was this rugged? (asked by thorionpartners) A: Unanswered\n\nQ: Where can we read about updates? (asked by Rainman) A: jin mentioned weekly roundup videos are posted, likely to a specific channel (answered by jin)\n\n## 3. Help Interactions\n\nHelper: EMERSON3S | Helpee: clutch | Context: User needed to bridge ELIZA from Solana to BSC | Resolution: Informed there is no official or safe bridge available\n\nHelper: Monsgroow. | Helpee: ufw | Context: User asked if support desk discord was legitimate | Resolution: Confirmed it was a scam\n\nHelper: gby | Helpee: avi_rajput563 | TABI 💢 | Context: User needed clarity on Korean exchange delisting rumors | Resolution: Provided information that delisting was scheduled on Bithumb, Coinone, and Korbit (though later disputed)\n\nHelper: davidhq | Helpee: gby | Context: Verification of delisting claims and Shaw's wallet activity | Resolution: Requested transaction IDs and links to verify claims, couldn't find selling transactions\n\nHelper: paolin | Helpee: Community | Context: Confusion about ELIZAOS delisting from Bithumb | Resolution: Clarified that Bithumb delisted AI16Z (pre-rebrand), not ELIZAOS\n\nHelper: jin | Helpee: Rainman | Context: User looking for project updates | Resolution: Directed to weekly roundup videos and mentioned jintern will post to dedicated channel\n\n## 4. Action Items\n\nType: Feature | Description: Optimize elizacloud.ai UX for prompt-only (zero coding) users including visual generation optimization, refer-to-friends offers, external agent interaction options, and crypto transfers without wallet connect | Mentioned By: yojo\n\nType: Feature | Description: Create certified/recommended plug-in-and-play section for elizacloud.ai to enable non-technical users to create use cases | Mentioned By: yojo\n\nType: Feature | Description: Implement different up-selling packages for elizacloud.ai users who prefer not to search for plugins themselves | Mentioned By: yojo\n\nType: Documentation | Description: Clarify official position on Korean exchange delisting situation (AI16Z vs ELIZAOS) | Mentioned By: davidhq, paolin\n\nType: Documentation | Description: Provide clear communication about token migration deadline and options for users who missed it | Mentioned By: ufw\n\nType: Documentation | Description: Establish regular team updates and communication channels for token holders | Mentioned By: Gem Hunter, averma, Rainman\n\nType: Technical | Description: Post weekly ElizaOS update videos to dedicated channel using jintern | Mentioned By: jin\n\nType: Documentation | Description: Clarify token utility and use cases for token holders beyond open-source development | Mentioned By: averma",
+          "messageCount": 144,
+          "userCount": 39
         }
       ]
     }
