@@ -1,29 +1,38 @@
-## ElizaOS Community Discussions: Market Concerns, Moltbot Competition, and Technical Development
+## ElizaCloud Account Issues
 
-### Financial Runway and Market Position
+- Users reported duplicate account creation when clicking the 'get started' link in welcome emails
+- One user discovered two accounts assigned to the same email: original account on elizacloud.ai with 27 cents balance and new account on dev.elizacloud.ai with 1 USD balance
+- Core developers Sam and Odilitime provided direct support to resolve the issue
 
-- Shaw confirmed the team has 8 months of runway
-- Community discussed ElizaOS as an open systems network for AI agents, contrasting with centralized alternatives like OpenAI and Anthropic
-- Positioned as a decentralized alternative that doesn't share data with governments
+## Babylon Game Production Launch
 
-### Moltbot Competition Analysis
+- Production version launched for internal testing
+- Core developers granted admin access through babylon.market using ElizaLabs email credentials
+- Admin access enabled bypass of NFT gating to access play.babylon.market
+- Bug discovered where selecting custom profile images resulted in 'Failed to update profile' error
+- Developer tcm390 merged a fix
+- Issue confirmed resolved after testing
 
-- Community analyzed Moltbot (formerly Clawdbot, now OpenClaw) as a competing AI assistant platform
-- Identified Moltbook as a Reddit-like social network for AI agents
-- DorianD proposed a strategy to deploy ElizaOS agents onto Moltbook to encourage adoption and migration to the Jeju network
-- Community identified competitive advantages: Moltbot users face API fees and Anthropic account bans for non-human usage
-- Distinguished ElizaOS as a multi-agent system versus Moltbot's personal assistant model
-- Community discussed absorbing Moltbot features including mobile device presence and voice interfaces
+## Token Migration Enforcement
 
-### Technical Development Progress
+- 90-day migration window deadline enforced
+- Communications began in March with actual migration starting in November
+- Community members and moderators defended the timeline as sufficient with clear advance communication
 
-- Core developers discussed technical improvements for version 2.0
-- Odilitime updated plugin-local-ai for easier embeddings
-- Stan shared progress on a test framework for plugin-n8n
-- Team addressed provider selection issues in one-shot mode on the develop branch
+## ElizaCloud Dashboard Issue
 
-### Community Support and Projects
+- User experienced login cycling issues on ElizaCloud dashboard
+- Issue forwarded to cloud team for investigation
 
-- Team clarified official support protocols: no friend requests or DMs, only verified tickets
-- Community identified top projects built with ElizaOS: BiomeAI, Tapestry AI, Vail Report, and Vaulter Agents
-- DorianD explained Jeju staking features for service providers including compute and data storage nodes
+## Major Platform Announcements
+
+- Ethereum officially welcomed ElizaOS
+- Token confirmed as cross-chain beyond original Solana deployment
+- Developer kirstenrpomales launched BuildAMolt, a hosted service for deploying Moltbots on agent-to-agent social platforms like Moltbook
+- BuildAMolt features 2-minute setup on private VPS with no coding required
+- New escrow payment system for connecting human emotional skills with AI agents reached 70% completion
+
+## Market Activity
+
+- ElizaOS market cap dropped to 13M amid broader crypto market downturn
+- Bitcoin fell from 92k to 60k in three weeks
