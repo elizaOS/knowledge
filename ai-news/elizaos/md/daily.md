@@ -1,38 +1,37 @@
-## ElizaCloud Account Issues
+# ElizaOS Development Updates and Community Discussion - February 10, 2026
 
-- Users reported duplicate account creation when clicking the 'get started' link in welcome emails
-- One user discovered two accounts assigned to the same email: original account on elizacloud.ai with 27 cents balance and new account on dev.elizacloud.ai with 1 USD balance
-- Core developers Sam and Odilitime provided direct support to resolve the issue
+## Core Development Activities
 
-## Babylon Game Production Launch
+- Core development team worked on fixing CI issues with a pull request addressing bootstrap cache memory leaks and test failures
+- A bug was reported regarding Babylon's share to Farcaster link displaying incorrectly
+- Team shared reverse-engineered Claude Code binary that revealed a hidden SDK URL flag, enabling WebSocket client functionality accessible from browsers and mobile devices
+- Team shared agent-tail, a new dev tool that makes logs accessible to agents by wrapping dev server commands and installing skills to provide full context of browser, server, and other logs
 
-- Production version launched for internal testing
-- Core developers granted admin access through babylon.market using ElizaLabs email credentials
-- Admin access enabled bypass of NFT gating to access play.babylon.market
-- Bug discovered where selecting custom profile images resulted in 'Failed to update profile' error
-- Developer tcm390 merged a fix
-- Issue confirmed resolved after testing
+## Developer Collaboration and Recruitment
 
-## Token Migration Enforcement
+- Multiple developers posted in the coders channel seeking opportunities and collaboration
+- One developer shared expertise in full-stack and AI development including React, Next.js, Python, LangChain, RAG, and AI Agents
+- An AI and automation engineer with 8 years of experience expressed interest in joining projects or building new startups
+- A team member posted looking for coders to join an agentic payment app development team
+- Discussion covered OpenClaw, an assistant that can take over computers and run system-level commands, with both consumer and highly technical versions in development
+- Users can select themes, avatars, and voice options for customization
 
-- 90-day migration window deadline enforced
-- Communications began in March with actual migration starting in November
-- Community members and moderators defended the timeline as sufficient with clear advance communication
+## Community Proposals
 
-## ElizaCloud Dashboard Issue
+- Community members proposed implementing optional weekly or topical updates inside ElizaCloud.ai account dashboards to improve customer retention, transparency, and expectation management
+- Proposed format would focus on presenting relevant information about project progress, bug fixes, objectives, and timings in simple text suitable for newbies and non-coders
+- Suggestion made to create an AI communications agent to automate customer service and updates across Discord, Twitter, GitHub, and user accounts, which could potentially be sold as a white-label B2B solution
 
-- User experienced login cycling issues on ElizaCloud dashboard
-- Issue forwarded to cloud team for investigation
+## Project Status and Communication
 
-## Major Platform Announcements
+- Migration is completed
+- ElizaOS is actively developed with framework updates, agents, ElizaCloud, and cross-chain work ongoing
+- Weekly video updates and a roadmap exist in designated channels
+- Team emphasized that updates occur regularly through X posts and designated Discord channels
+- Roadmap updates provided when key milestones are reached
 
-- Ethereum officially welcomed ElizaOS
-- Token confirmed as cross-chain beyond original Solana deployment
-- Developer kirstenrpomales launched BuildAMolt, a hosted service for deploying Moltbots on agent-to-agent social platforms like Moltbook
-- BuildAMolt features 2-minute setup on private VPS with no coding required
-- New escrow payment system for connecting human emotional skills with AI agents reached 70% completion
+## Industry Positioning
 
-## Market Activity
-
-- ElizaOS market cap dropped to 13M amid broader crypto market downturn
-- Bitcoin fell from 92k to 60k in three weeks
+- Community members noted that ElizaOS was ahead of its time as many are now creating agent worlds
+- Comparisons were made to OpenClaw regarding features like system command execution, startup wizards for quick setup, and WhatsApp or Telegram integration for mobile agent communication
+- External developments shared included an AI VTuber project that received lead funding from a16z
