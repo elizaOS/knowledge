@@ -9,10 +9,10 @@ This repository contains the comprehensive documentation for ElizaOS, including:
 - **Getting Started** - Quick setup guides and tutorials
 - **Core Concepts** - Understanding agents, plugins, and the architecture
 - **Deep Dive** - Advanced topics like memory systems, services, and event handling
-- **API Reference** - Complete API documentation for all modules
+- **REST Reference** - Complete REST API documentation for all modules
 - **Examples** - Real-world implementations and patterns
 
-## 🚀 Development
+## Development
 
 ### Prerequisites
 
@@ -41,7 +41,7 @@ This will start a local development server at `http://localhost:3000` where you 
 
 ```
 docs/
-├── api-reference/      # API documentation
+├── rest-reference/      # REST API documentation
 ├── core-concepts/      # Core concepts and architecture
 ├── deep-dive/         # Advanced topics
 ├── images/            # Documentation images
@@ -71,7 +71,7 @@ We welcome contributions to improve the ElizaOS documentation! Here's how you ca
 - Test all code snippets
 - Add images/diagrams for complex concepts
 
-## 🚢 Publishing Changes
+## Publishing Changes
 
 Changes are automatically deployed when merged to the main branch. The documentation is hosted using Mintlify's infrastructure.
 
