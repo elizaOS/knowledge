@@ -1,38 +1,29 @@
-## ElizaCloud Account Issues
+## ElizaOS Development Updates and Community Discussions
 
-- Users reported duplicate account creation when clicking the 'get started' link in welcome emails
-- One user discovered two accounts assigned to the same email: original account on elizacloud.ai with 27 cents balance and new account on dev.elizacloud.ai with 1 USD balance
-- Core developers Sam and Odilitime provided direct support to resolve the issue
+### Agent Skill Activation and Documentation Improvements
 
-## Babylon Game Production Launch
+- Core developers discussed improvements to agent skill activation and documentation strategies
+- Vercel blog post demonstrated AGENTS.md documentation format achieved 100% success on Next.js 16 API evaluations
+- AGENTS.md format outperformed traditional skills which maxed at 79% success rate
+- Identified that 56% of cases never invoked skills despite having access to documentation
+- Developers implemented a workaround using mandatory skill activation sequences in user prompts to force explicit skill evaluation
 
-- Production version launched for internal testing
-- Core developers granted admin access through babylon.market using ElizaLabs email credentials
-- Admin access enabled bypass of NFT gating to access play.babylon.market
-- Bug discovered where selecting custom profile images resulted in 'Failed to update profile' error
-- Developer tcm390 merged a fix
-- Issue confirmed resolved after testing
+### New Tools and Integrations
 
-## Token Migration Enforcement
+- Team explored GAP tool for giving AI agents secure account access without sharing credentials
+- Discussed OpenAI's new Codex desktop app as a command center for building with agents
 
-- 90-day migration window deadline enforced
-- Communications began in March with actual migration starting in November
-- Community members and moderators defended the timeline as sufficient with clear advance communication
+### User Adoption and Platform Issues
 
-## ElizaCloud Dashboard Issue
+- Developers discussed user adoption challenges in the coders channel
+- Identified installation effort as a barrier to adoption for some users
+- Users reported agent dashboard visibility problems on elizacloud.ai after login with different email formats
+- Visual generation capabilities showed limitations in maintaining consistent character features across multiple image generations
+- Feature requests were directed to be built as apps by agents or third-party developers
+- LORA models were recommended as potential solutions
 
-- User experienced login cycling issues on ElizaCloud dashboard
-- Issue forwarded to cloud team for investigation
+### Community Engagement
 
-## Major Platform Announcements
-
-- Ethereum officially welcomed ElizaOS
-- Token confirmed as cross-chain beyond original Solana deployment
-- Developer kirstenrpomales launched BuildAMolt, a hosted service for deploying Moltbots on agent-to-agent social platforms like Moltbook
-- BuildAMolt features 2-minute setup on private VPS with no coding required
-- New escrow payment system for connecting human emotional skills with AI agents reached 70% completion
-
-## Market Activity
-
-- ElizaOS market cap dropped to 13M amid broader crypto market downturn
-- Bitcoin fell from 92k to 60k in three weeks
+- Community members discussed AI16Z token migration issues and bridge functionality
+- Positive sentiment expressed about Eliza's positioning to lead AI development on Base with Babylon
+- Shaw and Eliza participated in an Ethereum Foundation space with Austin Griffith
