@@ -1,0 +1,132 @@
+You are analyzing monthly help interactions for the ElizaOS project objectively.
+
+**Mission & Strategy Context**:
+$north_star
+
+**Analysis Period**: $month_name
+
+**Strategic Priorities** (from annual summary):
+1. Gold Path Reliability - "Hello Agent" in 30 minutes (onboarding)
+2. Social Integrations as Brand SLO - Twitter/Discord reliability
+3. Docs and Comms as Infrastructure - documentation quality
+4. RAG/Knowledge Pipeline reliability
+
+**Input Data**:
+
+Top 20 Contributors (by weighted_helps):
+```json
+$profiles_json
+```
+
+Network Statistics:
+```json
+$network_stats_json
+```
+
+---
+
+**Your Task**: Analyze these help interactions OBJECTIVELY to produce actionable intelligence. Focus on patterns, not rankings. This analysis helps improve the project and trains AI community interns.
+
+**Analysis Areas** (adapt structure to what the data actually shows):
+
+1. **Problem Patterns**: What recurring issues appeared this month?
+   - Identify the actual categories from the data (don't force-fit)
+   - Note which problems map to strategic priorities above
+   - Signal what needs fixing upstream (docs, code, tooling)
+
+2. **Expertise Map**: Who demonstrated knowledge in which areas?
+   - Not a ranking - just a map of who knows what
+   - Useful for routing questions and AI learning
+
+3. **Resolution Patterns**: What approaches resolved issues?
+   - Docs links, code examples, debugging guidance, workarounds
+   - What worked for what problem types?
+
+4. **Documentation Gaps**: What questions reveal missing/unclear docs?
+   - Repeated questions = improvement opportunities
+   - Prioritize by frequency and friction
+
+5. **AI Learning Notes**: Communication patterns for AI interns
+   - How effective helpers greet, diagnose, follow-through
+   - Tone and de-escalation patterns worth emulating
+   - **Channel culture**: Note different vibes per channel (e.g., core-devs may be terse/technical, discussion more welcoming to newcomers, coders expects some baseline knowledge)
+
+6. **Helper Highlights**: Notable examples of good community help (if data supports it)
+   - Not a ranking - specific examples of helpful behavior worth acknowledging
+   - Can include: patient explanations, thorough debugging, good follow-through, welcoming newcomers
+   - Each highlight should cite a specific person + what they did well (based on their examples in the data)
+   - Variety matters: don't just highlight volume, notice quality/tone/patience too
+   - Keep minimal or omit if the example data doesn't show enough specifics
+
+**Council Commentary** (react to patterns AND acknowledge helpers):
+- **eliza**: Host/synthesizer - connect the perspectives, reference specific community helpers, frame what we learned (curious, thoughtful, asks "what can we take away from this?")
+- **aimarc**: Technical observations + who demonstrated deep architectural knowledge
+- **aishaw**: Onboarding friction patterns + who helped newcomers ship (lowercase, practical)
+- **spartan**: Operational metrics + who showed consistent reliability (ALL CAPS emphasis, numbers)
+- **peepo**: Community health + who brought good vibes and welcoming energy (yo, fam, vibes)
+
+---
+
+**Output JSON Format** (structure is a guide - adapt to what's actually in the data):
+
+{
+  "problem_patterns": [
+    {
+      "category": "string - the pattern name (emerge from data)",
+      "count": "number - approximate frequency",
+      "examples": ["brief example descriptions"],
+      "strategic_priority": "which priority this maps to, if any",
+      "upstream_signal": "what this tells us needs fixing"
+    }
+  ],
+  "expertise_map": {
+    "area_name": ["username1", "username2"]
+  },
+  "resolution_patterns": {
+    "approach_name": {
+      "effectiveness": "description of when/how this works",
+      "example": "brief example if notable"
+    }
+  },
+  "documentation_gaps": [
+    {
+      "topic": "string",
+      "signal": "why this gap matters",
+      "suggested_action": "what to do about it"
+    }
+  ],
+  "ai_learning_notes": {
+    "diagnosis": "how good helpers investigate problems",
+    "tone": "communication patterns worth emulating",
+    "follow_through": "how they close loops",
+    "channel_culture": {
+      "discussion": "vibe/norms for this channel",
+      "coders": "vibe/norms for this channel",
+      "core-devs": "vibe/norms for this channel"
+    }
+  },
+  "helper_highlights": [
+    {
+      "helper": "username",
+      "quality": "what they did well (e.g., 'patient debugging', 'thorough follow-through')",
+      "example": "brief specific example from their interactions, if available"
+    }
+  ],
+  "council_commentary": {
+    "eliza": "Synthesize perspectives, reference specific helpers by name, frame what we learned...",
+    "aimarc": "technical patterns + shoutout to whoever showed deep architectural knowledge...",
+    "aishaw": "onboarding friction + who helped newcomers get unstuck and ship...",
+    "spartan": "OPERATIONAL METRICS + WHO SHOWED CONSISTENT RELIABILITY THIS MONTH...",
+    "peepo": "community vibes + who brought welcoming energy, know what i'm sayin'..."
+  }
+}
+
+**Guidelines**:
+- Be OBJECTIVE - describe patterns, not rank individuals
+- Let categories EMERGE from data - don't force-fit
+- Map insights to strategic priorities where genuine connections exist
+- Extract learnable patterns for AI interns
+- Council commentary reacts to PATTERNS, not individuals
+- Empty/minimal sections are fine if data doesn't support them
+
+Generate the analysis now.

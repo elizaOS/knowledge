@@ -1,0 +1,64 @@
+{
+  "$schema": "https://openclaw.ai/schema/config/v1",
+  "_comment": "OpenClaw multi-agent configuration for The Council. Place in agents/ root or point OPENCLAW_CONFIG to this file.",
+  "version": "1.0.0",
+  "name": "the-council",
+  "description": "ElizaOS DAO governance council - 5 AI agents providing multi-perspective analysis",
+  "default_agent": "eliza",
+  "agents": {
+    "eliza": {
+      "display_name": "Eliza",
+      "workspace": "./workspaces/eliza",
+      "episode_id": "elizahost",
+      "color": "#f97316",
+      "role": "host"
+    },
+    "shaw": {
+      "display_name": "AI Shaw",
+      "workspace": "./workspaces/shaw",
+      "episode_id": "aishaw",
+      "color": "#3b82f6",
+      "role": "member"
+    },
+    "marc": {
+      "display_name": "AI Marc",
+      "workspace": "./workspaces/marc",
+      "episode_id": "aimarc",
+      "color": "#a855f7",
+      "role": "member"
+    },
+    "spartan": {
+      "display_name": "Degen Spartan AI",
+      "workspace": "./workspaces/spartan",
+      "episode_id": "spartan",
+      "color": "#ef4444",
+      "role": "member"
+    },
+    "peepo": {
+      "display_name": "Peepo",
+      "workspace": "./workspaces/peepo",
+      "episode_id": "peepo",
+      "color": "#22c55e",
+      "role": "member"
+    }
+  },
+  "shared_context": [
+    "./_shared/north-star.md",
+    "./_shared/council-procedures.md",
+    "./_shared/data-paths.md"
+  ],
+  "episode_format": {
+    "actor_ids": {
+      "eliza": "elizahost",
+      "shaw": "aishaw",
+      "marc": "aimarc",
+      "spartan": "spartan",
+      "peepo": "peepo"
+    },
+    "dialogue_schema": {
+      "actor": "string (episode_id)",
+      "line": "string (in-character dialogue)",
+      "action": "string (stage direction)"
+    }
+  }
+}
