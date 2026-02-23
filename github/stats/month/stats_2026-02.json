@@ -5,7 +5,7 @@
     "intervalType": "month"
   },
   "repository": "elizaos/eliza",
-  "overview": "From 2026-02-01 to 2026-03-01, elizaos/eliza had 31 new PRs (18 merged), 38 new issues, and 29 active contributors.",
+  "overview": "From 2026-02-01 to 2026-03-01, elizaos/eliza had 35 new PRs (18 merged), 41 new issues, and 34 active contributors.",
   "topIssues": [
     {
       "id": "I_kwDOMT5cIs7FcGAc",
@@ -106,6 +106,18 @@
       "deletions": 302354
     },
     {
+      "id": "PR_kwDOMT5cIs7FPjL6",
+      "title": "refactor(core): strict typing for logger runtime",
+      "author": "Fankouzu",
+      "number": 6519,
+      "body": "This PR improves code quality by replacing  type usage in the logger module with proper  typing. This helps in maintaining type safety across the core package.",
+      "repository": "elizaos/eliza",
+      "createdAt": "2026-02-20T19:25:50Z",
+      "mergedAt": null,
+      "additions": 648170,
+      "deletions": 302354
+    },
+    {
       "id": "PR_kwDOMT5cIs7CJoKo",
       "title": "next",
       "author": "lalalune",
@@ -116,25 +128,13 @@
       "mergedAt": null,
       "additions": 591239,
       "deletions": 282388
-    },
-    {
-      "id": "PR_kwDOMT5cIs7ESCAW",
-      "title": "chore: the great database refactor",
-      "author": "odilitime",
-      "number": 6509,
-      "body": "built on #6496\r\n\r\ndb go zoom zoom\r\n\r\n- move out anything drizzle out of core (separation of concerns)\r\n- make plugin-sql actual plugin-drizzle (merge plugin-mysql into plugin-sql)\r\n- generic non-pgTable/non-MysqlTable schema definitions for core & plugins\r\n- finish db api rework that started in 1.x (general 14x speed improvements when more than one item)\r\n- audit 60 plugins and assess what functionality is missing and add it\r\n\r\nnot done\r\n- rust/python checks\r\n- plugin checks\r\n\r\n<!-- This is an auto-generated comment: release notes by coderabbit.ai -->\r\n\r\n## Summary by CodeRabbit\r\n\r\n* **New Features**\r\n  * Database upsert operations for agents, entities, rooms, and worlds.\r\n  * Pagination support in query methods (limit/offset parameters).\r\n  * Plugin storage system for custom data without Drizzle coupling.\r\n  * Messaging adapter interface for decoupled messaging concerns.\r\n\r\n* **Bug Fixes**\r\n  * Improved leaderboard numbering in BFCL benchmark when inserting results mid-table.\r\n\r\n* **Documentation**\r\n  * Benchmark results documentation with performance analysis.\r\n\r\n* **Refactor**\r\n  * Batch-first CRUD API redesign with improved return types.\r\n  * Single-item method wrappers moved to AgentRuntime for consistency.\r\n  * Plugin system modernization with unified SQL interface across databases.\r\n\r\n* **Chores**\r\n  * Brand standardization across codebase (ElizaOS → elizaOS).\r\n\r\n<!-- end of auto-generated comment: release notes by coderabbit.ai -->",
-      "repository": "elizaos/eliza",
-      "createdAt": "2026-02-17T07:27:26Z",
-      "mergedAt": null,
-      "additions": 32068,
-      "deletions": 8391
     }
   ],
   "codeChanges": {
     "additions": 18576,
     "deletions": 3807,
     "files": 160,
-    "commitCount": 125
+    "commitCount": 136
   },
   "completedItems": [
     {
@@ -449,12 +449,22 @@
     {
       "username": "standujar",
       "avatarUrl": "https://avatars.githubusercontent.com/u/16385918?u=718bdcd1585be8447bdfffb8c11ce249baa7532d&v=4",
-      "totalScore": 395.83507627540456,
-      "prScore": 390.4350762754045,
+      "totalScore": 439.178585524873,
+      "prScore": 433.778585524873,
       "issueScore": 0,
       "reviewScore": 5,
       "commentScore": 0.4,
       "summary": "standujar: Focused on enhancing the stability and functionality of the n8n-workflow plugin, notably improving multi-step loop control by introducing the awaitingUserInput flag in PR #13. They addressed critical integration issues by ensuring cloud compatibility through state management updates in PR #12 and standardizing success status reporting across all action callbacks in PR #11 (+388/-40 lines). Additionally, they streamlined the development lifecycle by automating node crawling in the publish workflow (PR #10) and integrating the plugin into the project's tracked repositories. Their work this month primarily centered on bug fixes and feature development for workflow automation, with a strong emphasis on code reliability and CI/CD improvements."
+    },
+    {
+      "username": "odilitime",
+      "avatarUrl": "https://avatars.githubusercontent.com/u/16395496?u=c9bac48e632aae594a0d85aaf9e9c9c69b674d8b&v=4",
+      "totalScore": 348.29516101795406,
+      "prScore": 348.29516101795406,
+      "issueScore": 0,
+      "reviewScore": 0,
+      "commentScore": 0,
+      "summary": "odilitime: Focused on enhancing core system stability and performance within the elizaos/eliza repository, most notably through a comprehensive optimization of the bootstrap plugin in PR #6476 (+2,119/-823 lines). This significant contribution involved modifying 30 files to implement robust architectural improvements and feature enhancements. Additionally, they addressed critical resource management by submitting a fix for a memory leak in the bootstrap cache via PR #6477. Their work this month demonstrates a balanced focus on large-scale feature optimization and essential bug fixing to ensure long-term system reliability."
     },
     {
       "username": "lalalune",
@@ -467,23 +477,13 @@
       "summary": "lalalune: Focused on expanding core infrastructure and cross-chain capabilities, notably implementing a multi-provider RPC system in elizaos-plugins/plugin-evm (#25) and cloud proxy routing for Solana services (#26). They delivered a significant architectural enhancement with the ActionFilterService in elizaos/eliza (#6475), which introduced vector search and BM25 reranking to improve action selection. Their work involved a massive scale of code modifications across over 4,500 files, signaling a deep involvement in systemic refactors and next-generation multi-language support. Overall, their contributions centered on infrastructure scalability, authentication frameworks, and enhancing the developer experience through CLI and documentation improvements."
     },
     {
-      "username": "odilitime",
-      "avatarUrl": "https://avatars.githubusercontent.com/u/16395496?u=c9bac48e632aae594a0d85aaf9e9c9c69b674d8b&v=4",
-      "totalScore": 304.75138712137795,
-      "prScore": 304.75138712137795,
-      "issueScore": 0,
-      "reviewScore": 0,
-      "commentScore": 0,
-      "summary": "odilitime: Focused on enhancing core system stability and performance within the elizaos/eliza repository, most notably through a comprehensive optimization of the bootstrap plugin in PR #6476 (+2,119/-823 lines). This significant contribution involved modifying 30 files to implement robust architectural improvements and feature enhancements. Additionally, they addressed critical resource management by submitting a fix for a memory leak in the bootstrap cache via PR #6477. Their work this month demonstrates a balanced focus on large-scale feature optimization and essential bug fixing to ensure long-term system reliability."
-    },
-    {
       "username": "greptile-apps",
       "avatarUrl": "https://avatars.githubusercontent.com/in/867647?v=4",
-      "totalScore": 209.14,
+      "totalScore": 231.84,
       "prScore": 0,
       "issueScore": 0,
-      "reviewScore": 207,
-      "commentScore": 2.14,
+      "reviewScore": 229.5,
+      "commentScore": 2.34,
       "summary": "greptile-apps: Focused exclusively on providing feedback and technical oversight through 28 reviews and 5 pull request comments. Despite no direct code changes or merged pull requests this month, they maintained a high level of engagement in the review process to ensure code quality across the codebase. Their primary impact was centered on collaborative peer review and providing detailed commentary on open contributions."
     },
     {
@@ -547,6 +547,26 @@
       "summary": null
     },
     {
+      "username": "yaooooooooooooooo",
+      "avatarUrl": "https://avatars.githubusercontent.com/u/62118705?v=4",
+      "totalScore": 43.5437738965761,
+      "prScore": 43.5437738965761,
+      "issueScore": 0,
+      "reviewScore": 0,
+      "commentScore": 0,
+      "summary": null
+    },
+    {
+      "username": "decentralize-dfw",
+      "avatarUrl": "https://avatars.githubusercontent.com/u/115695363?u=858e729376e39f7d94ec1907637812ec3b9ca575&v=4",
+      "totalScore": 43.5437738965761,
+      "prScore": 43.5437738965761,
+      "issueScore": 0,
+      "reviewScore": 0,
+      "commentScore": 0,
+      "summary": null
+    },
+    {
       "username": "2-A-M",
       "avatarUrl": "https://avatars.githubusercontent.com/u/96268540?u=b7d92c0e2a91af580d09eeae862eef576955ab8a&v=4",
       "totalScore": 36.63501911726088,
@@ -565,6 +585,16 @@
       "reviewScore": 0,
       "commentScore": 0,
       "summary": "hanzlamateen: Focused on infrastructure and dependency management within the elizaos/eliza repository, notably executing a significant update to the v2 dependencies and training pipeline in PR #6461. This extensive effort involved modifying over 7,000 files, signaling a major synchronization of the project's codebase and build environment. Their work demonstrated a balanced technical approach, incorporating bug fixes, refactoring, and test updates to ensure system stability. Overall, their contributions this month centered on large-scale maintenance and foundational improvements to the project's examples and training architecture."
+    },
+    {
+      "username": "Fankouzu",
+      "avatarUrl": "https://avatars.githubusercontent.com/u/8297296?u=bfe40f2d2a88d01f2092e44db726b11c0608b657&v=4",
+      "totalScore": 34.0207738965761,
+      "prScore": 34.0207738965761,
+      "issueScore": 0,
+      "reviewScore": 0,
+      "commentScore": 0,
+      "summary": null
     },
     {
       "username": "bytes0xcr6",
@@ -637,6 +667,16 @@
       "summary": "ATHLSolutions: No activity this month."
     },
     {
+      "username": "dontonon",
+      "avatarUrl": "https://avatars.githubusercontent.com/u/22495678?v=4",
+      "totalScore": 13.234147180559946,
+      "prScore": 13.234147180559946,
+      "issueScore": 0,
+      "reviewScore": 0,
+      "commentScore": 0,
+      "summary": null
+    },
+    {
       "username": "10inchdev",
       "avatarUrl": "https://avatars.githubusercontent.com/u/226776904?u=f8556423cfa0bd4464d64395c6c0d526050ba553&v=4",
       "totalScore": 12.874147180559946,
@@ -677,6 +717,26 @@
       "summary": "puncar-dev: Focused on architectural planning and feature proposals for the elizaos/eliza repository by opening four strategic issues. They outlined a comprehensive whitelisting and leaderboard system (#6469), a community-driven news injection system (#6466), and a feedback mechanism for NPC prompts (#6465). Additionally, they proposed optimizations for AI model usage during the coding process (#6467), demonstrating a primary focus on system design and community engagement features."
     },
     {
+      "username": "jasonxkensei",
+      "avatarUrl": "https://avatars.githubusercontent.com/u/260305565?u=b17387a9077530191e297ff256d49d9a14c47194&v=4",
+      "totalScore": 6.557573590279973,
+      "prScore": 6.557573590279973,
+      "issueScore": 0,
+      "reviewScore": 0,
+      "commentScore": 0,
+      "summary": null
+    },
+    {
+      "username": "samarth30",
+      "avatarUrl": "https://avatars.githubusercontent.com/u/48334430?u=1fc119a6c2deb8cf60448b4c8961cb21dc69baeb&v=4",
+      "totalScore": 4,
+      "prScore": 0,
+      "issueScore": 4,
+      "reviewScore": 0,
+      "commentScore": 0,
+      "summary": null
+    },
+    {
       "username": "aite550659-max",
       "avatarUrl": "https://avatars.githubusercontent.com/u/258900948?v=4",
       "totalScore": 4,
@@ -705,6 +765,16 @@
       "reviewScore": 0,
       "commentScore": 0,
       "summary": "saoirse102345-blip: Focused on expanding the ecosystem's capabilities by proposing a new architectural direction for financial transactions. They initiated a feature request for a Payment Infrastructure Plugin to enable agent-to-agent and agent-to-user payments within the elizaos/eliza repository (#6443). This contribution highlights a strategic focus on developing core utility and financial interoperability for the platform."
+    },
+    {
+      "username": "rookdaemon",
+      "avatarUrl": "https://avatars.githubusercontent.com/u/258400181?u=f806b5798e056f9384e53da900fdcd3d7bc24c14&v=4",
+      "totalScore": 2,
+      "prScore": 0,
+      "issueScore": 2,
+      "reviewScore": 0,
+      "commentScore": 0,
+      "summary": null
     },
     {
       "username": "mbatini",
@@ -767,9 +837,9 @@
       "summary": null
     }
   ],
-  "newPRs": 31,
+  "newPRs": 35,
   "mergedPRs": 18,
-  "newIssues": 38,
-  "closedIssues": 63,
-  "activeContributors": 29
+  "newIssues": 41,
+  "closedIssues": 65,
+  "activeContributors": 34
 }
