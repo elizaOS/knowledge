@@ -1,0 +1,270 @@
+{
+  "id": "RETRO-2026-02",
+  "name": "Monthly Retro: February 2026",
+  "type": "retrospective",
+  "premise": "February was a trust-and-friction month: meaningful framework progress landed (MCP tool actions, CLI fixes, broker auth), while token migration anxiety and Cloud onboarding/payment failures dominated community attention. The council must decide whether to chase a short hype-cycle via agent-social narratives (Babylon/eliza.app) or double down on reliability, DX, and trust infrastructure that compounds long-term.",
+  "summary": "We shipped important technical upgrades and repaired key onboarding breakpoints in the open-source framework, but execution gaps in ElizaCloud and unresolved token utility/transparency issues continued to fracture sentiment. Recurring patterns: reliability is still the bottleneck (skill invocation failures), Cloud parity and pricing opacity erode developer trust, and brand/product direction is contested (Babylon vs Jeju; Milaidy vs Eliza unity). Next month must prioritize measurable reliability and onboarding improvements, plus a clear token utility story tied to Cloud\u2014while narrowing the strategic bet to one primary narrative.",
+  "month_reviewed": "2026-02",
+  "key_developments": [
+    {
+      "area": "Framework DX: CLI & install path",
+      "summary": "Merged fixes to restore project generation and corrected installation guidance to use @elizaos/cli, removing a major foot-gun for new developers.",
+      "impact": "high"
+    },
+    {
+      "area": "Tooling architecture: MCP dynamic actions (v1.8.0)",
+      "summary": "Merged a large architectural update (>4k LOC) enabling dynamic MCP tool actions, unlocking more flexible tool invocation patterns and future interoperability.",
+      "impact": "high"
+    },
+    {
+      "area": "Social automation security",
+      "summary": "Merged Twitter Broker Authentication, moving agent social operations toward more professional, auditable integrations.",
+      "impact": "medium"
+    },
+    {
+      "area": "Product direction signal: consumer app momentum",
+      "summary": "An Eliza App MVP PR remained open, reflecting growing internal push toward a consumer-facing surface (and by extension, agent-social narratives like Babylon).",
+      "impact": "medium"
+    },
+    {
+      "area": "Token migration closure & trust aftermath",
+      "summary": "Migration deadline pressure and post-window friction (zero-balance reports, scams, manual-override requests) dominated sentiment and raised questions about governance empathy vs hard deadlines.",
+      "impact": "high"
+    },
+    {
+      "area": "Cloud onboarding & revenue friction",
+      "summary": "Persistent onboarding/payment issues (VPN friction, welcome bonus bugs, model pricing opacity) continued to block adoption, undermining execution excellence and token utility narratives.",
+      "impact": "high"
+    },
+    {
+      "area": "Reliability & skill integrity risk",
+      "summary": "Ongoing reports of ~56% failure rate in skill invocation plus concern about malicious skills point to an urgent need for activation discipline, sandboxing, and automated review.",
+      "impact": "high"
+    },
+    {
+      "area": "Brand/identity debate",
+      "summary": "Milaidy and related memetic narratives triggered a debate: embrace viral brand plurality or enforce a unified Eliza brand for network effects and trust.",
+      "impact": "medium"
+    }
+  ],
+  "recurring_themes": [
+    {
+      "theme": "Trust through shipping (and through not breaking onboarding)",
+      "frequency": "very high",
+      "council_take": "The community is less persuaded by vision slides and more by whether the first 30 minutes works: install \u2192 create agent \u2192 deploy \u2192 observe. Every broken step taxes trust disproportionately."
+    },
+    {
+      "theme": "Cloud parity + pricing transparency",
+      "frequency": "high",
+      "council_take": "Closed-tier friction without a clear value ladder reads as rent-seeking. If Cloud is the flagship, it must be the smoothest path, with explicit per-model costs and predictable billing."
+    },
+    {
+      "theme": "Token utility and financial accountability",
+      "frequency": "high",
+      "council_take": "The absence of a concrete token utility loop (especially tied to Cloud) amplifies concerns about allocation and long-term alignment. Without measurable utility, sentiment will keep decaying."
+    },
+    {
+      "theme": "Strategic pivot pressure: Babylon / agent-social vs infra (Jeju/x402)",
+      "frequency": "high",
+      "council_take": "There is a real opportunity to ride a market cycle, but it must not compromise reliability. The council needs a single primary bet, with infra framed as a moat\u2014not a parallel distraction."
+    },
+    {
+      "theme": "Reliability: skill invocation, activation sequences, and docs-first",
+      "frequency": "very high",
+      "council_take": "A framework that is powerful but unreliable reads as 'non-deterministic' to developers. Mandatory activation sequences, AGENTS.md patterns, and better defaults are now table stakes."
+    },
+    {
+      "theme": "Security posture for skills and plugins",
+      "frequency": "medium",
+      "council_take": "Even without a major incident this month, the trajectory is clear: as the ecosystem grows, malicious or sloppy skills become the fastest way to destroy trust. We need pre-emptive guardrails."
+    },
+    {
+      "theme": "Brand coherence vs memetic sprawl",
+      "frequency": "medium",
+      "council_take": "Memes can acquire users; coherence retains builders. We can allow playful skins, but the developer surface should remain clearly 'ElizaOS' with consistent guarantees."
+    }
+  ],
+  "wins": [
+    "Unblocked first-time developer onboarding in the framework via CLI/create fixes and corrected install instructions.",
+    "Shipped a major capability upgrade with dynamic MCP tool actions (v1.8.0), expanding the ceiling for tool interoperability.",
+    "Improved the professionalism and security of social integrations through Twitter Broker Authentication.",
+    "Kept strategic debates explicit (Babylon vs infra), avoiding accidental drift and forcing prioritization conversations."
+  ],
+  "challenges": [
+    "Token migration aftermath: anxiety, reports of losses/zero balances, and scams\u2014creating a trust deficit that cannot be patched with code alone.",
+    "ElizaCloud onboarding/payment friction and pricing opacity continued to block adoption and undermine 'execution excellence'.",
+    "Reliability remains a core bottleneck: high skill invocation failure rate suggests architectural and UX changes are needed (activation discipline, better defaults, test harnesses).",
+    "Perceived disconnect between token holders and Cloud users; community calls for tangible token utility and clearer financial/accountability communication.",
+    "Brand and product narrative fragmentation (Milaidy vs Eliza unity; Babylon hype-cycle vs long-term infra)."
+  ],
+  "proposed_focus": [
+    {
+      "priority": 1,
+      "area": "Reliability baseline: skill invocation + activation discipline",
+      "rationale": "If agents fail half the time, no narrative (Babylon, Jeju, Milaidy) will stick. Reliability is the compounding asset for dev trust and ecosystem growth.",
+      "success_metric": "Reduce skill/tool invocation failure rate from ~56% to <15% in controlled CI benchmarks; publish a weekly reliability dashboard and a 'Top 10 failure modes' changelog."
+    },
+    {
+      "priority": 2,
+      "area": "ElizaCloud onboarding + billing transparency",
+      "rationale": "Cloud is currently the trust bottleneck. Fixing onboarding and billing clarity converts interest into retention and makes token utility feasible.",
+      "success_metric": "Increase onboarding completion (signup \u2192 first successful deploy) by 2x; reduce payment-related support tickets by 60%; add per-model cost visibility and monthly spend forecasting in dashboard."
+    },
+    {
+      "priority": 3,
+      "area": "Token utility loop tied to Cloud",
+      "rationale": "Community sentiment demands a measurable link between token, platform usage, and value capture; without it, governance and alignment degrade.",
+      "success_metric": "Ship a v1 token utility spec + implementation: at least one of (a) Cloud credits purchasable with token, (b) fee discounts/tiers, (c) usage-based rewards; publish a transparent monthly treasury/utilization report."
+    },
+    {
+      "priority": 4,
+      "area": "Trust recovery plan for migration + anti-scam comms",
+      "rationale": "Migration closure created emotional and reputational damage. A structured remediation and communications cadence is cheaper than ongoing community hemorrhage.",
+      "success_metric": "Launch a formal appeals/verifications process (time-boxed) with clear criteria; publish canonical anti-scam checklist and verified links; reduce impersonation reports by 50% month-over-month."
+    },
+    {
+      "priority": 5,
+      "area": "Docs-first developer experience: AGENTS.md, golden paths, plugin discovery",
+      "rationale": "Power without a guided path pushes users to simpler competitors. We need opinionated defaults, not just optional flexibility.",
+      "success_metric": "Release 3 'golden path' templates (agentic search, cross-platform RAG, social manager) each with AGENTS.md; cut time-to-first-working-agent to <15 minutes for a fresh developer."
+    },
+    {
+      "priority": 6,
+      "area": "Strategic narrative decision: pick one primary bet (Babylon/eliza.app vs infra-first)",
+      "rationale": "Parallel narratives dilute shipping focus and confuse the market. We can keep the non-primary track alive, but only one gets top-level resourcing and weekly milestones.",
+      "success_metric": "Council ratifies a 90-day narrative with a public roadmap; deliver 4 weekly milestones in a row for the chosen bet (tracked publicly)."
+    }
+  ],
+  "north_star_assessment": {
+    "still_relevant": true,
+    "suggested_updates": "Keep the North Star intact, but add an explicit clause: 'Reliability and a frictionless developer-to-deploy path are the primary moat.' Also clarify the product stack relationship: Framework is the open base, Cloud is the default deployment path with transparent pricing and token-aligned incentives, and flagship apps are proofs-of-capability\u2014not distractions."
+  },
+  "scenes": [
+    {
+      "location": "council_chamber",
+      "description": "A quiet chamber with three live dashboards projected behind the dais: Framework Reliability, Cloud Onboarding Funnel, and Community Sentiment. The February timeline is pinned to the wall with migration events highlighted in red.",
+      "dialogue": [
+        {
+          "actor": "elizahost",
+          "line": "February was a paradox: meaningful engineering progress, but community trust bled through migration stress and Cloud friction. Let\u2019s start with facts\u2014what moved, what broke, and what we learned.",
+          "action": "Brings up the reliability graph and the onboarding funnel side-by-side."
+        },
+        {
+          "actor": "aishaw",
+          "line": "We did fix real developer pain: the create command and install instructions were blocking new projects. That\u2019s a straight win. But the funnel still dies at Cloud onboarding and payments. If people can\u2019t pay, they can\u2019t stay. If they can\u2019t stay, they never become builders.",
+          "action": "Points to the drop-off after 'Add payment method'."
+        },
+        {
+          "actor": "aimarc",
+          "line": "The MCP dynamic tool actions merge is the real substrate upgrade. It increases the expressivity of tool use\u2014necessary for multi-agent composability. But substrate only matters if it becomes predictable. A 56% invocation failure rate is not a rounding error; it\u2019s an architectural smell.",
+          "action": "Zooms in on the error-class breakdown."
+        },
+        {
+          "actor": "spartan",
+          "line": "From a metrics lens, February\u2019s dominant KPI was sentiment volatility tied to token migration. Utility remains the open wound. If token holders can\u2019t point to a usage-based loop, the narrative becomes allocation, not product.",
+          "action": "Switches the dashboard to 'Token Utility Mentions vs Cloud Revenue'."
+        },
+        {
+          "actor": "peepo",
+          "line": "Culture check: people aren\u2019t just mad, they\u2019re confused. New folks show up, hit Cloud bugs, can\u2019t find plugins, see migration drama, and bounce. Meanwhile the memes are pulling in attention\u2014Milaidy energy is real\u2014but attention turns into backlash when the first click doesn\u2019t work.",
+          "action": "Scrolls through a curated set of community quotes."
+        }
+      ]
+    },
+    {
+      "location": "council_chamber",
+      "description": "The chamber lights dim. Two competing roadmaps appear: 'Babylon / eliza.app: 90-day sprint' versus 'Infra & Reliability: compounding moat'. The room shifts from review to decision-making.",
+      "dialogue": [
+        {
+          "actor": "elizahost",
+          "line": "We need to confront the pivot question directly. Do we prioritize an agent-social surface to capture the cycle, or do we focus on reliability and Cloud parity first? Speak plainly\u2014what\u2019s the risk if we choose wrong?",
+          "action": "Places a marker at 'March start' on both roadmaps."
+        },
+        {
+          "actor": "aimarc",
+          "line": "If we chase the cycle without reliability, we scale failure. Social surfaces amplify brittleness. However: a flagship surface can also force product discipline if we treat it as a proving ground. My position: we can do Babylon only if it becomes the reliability harness\u2014every user action is a test that must pass.",
+          "action": "Writes 'Surface as test harness' on the board."
+        },
+        {
+          "actor": "aishaw",
+          "line": "I\u2019m fine with a consumer MVP, but only with a ruthless scope cut. We should not invent new complexity while Cloud onboarding is broken. The sequence matters: fix onboarding, fix billing clarity, ship a golden path, then add the shiny surface.",
+          "action": "Reorders sticky notes: 'Onboarding \u2192 Golden Path \u2192 MVP'."
+        },
+        {
+          "actor": "spartan",
+          "line": "Token utility can\u2019t be deferred. A consumer app that doesn\u2019t connect to usage economics is just cost. The next narrative needs a measurable loop: token reduces Cloud cost, or Cloud revenue buys back credits, or usage yields rewards. Otherwise our KPI trend stays negative even if GitHub looks busy.",
+          "action": "Highlights 'Utility loop' in the roadmap as a gating item."
+        },
+        {
+          "actor": "peepo",
+          "line": "If we don\u2019t pick a story, the internet will pick one for us\u2014and it\u2019ll be \u2018migration chaos + Cloud doesn\u2019t work\u2019. Babylon is a story, Milaidy is a story, Jeju is a story. But the story has to be backed by a simple moment: a new person makes an agent do something real in 10 minutes. That\u2019s the meme that lasts.",
+          "action": "Underlines '10-minute magic moment'."
+        },
+        {
+          "actor": "elizahost",
+          "line": "So the coalition forming is: pick one headline narrative, but make reliability + onboarding the non-negotiable foundation. Babylon can exist as an execution forcing function\u2014not a distraction\u2014if we instrument it like a lab.",
+          "action": "Draws a box around 'Reliability + Onboarding' labeled 'Non-negotiable'."
+        }
+      ]
+    },
+    {
+      "location": "council_chamber",
+      "description": "A final board shows six concrete priorities with owners implied. The council shifts from debate to commitments and public messaging posture.",
+      "dialogue": [
+        {
+          "actor": "elizahost",
+          "line": "Let\u2019s close with next month\u2019s focus: reliability metrics, Cloud funnel repair, token utility v1, migration trust recovery, docs-first golden paths, and one narrative decision. Any objections to making these the March operating system?",
+          "action": "Pins the proposed focus list to the top of the board."
+        },
+        {
+          "actor": "aishaw",
+          "line": "No objections\u2014only a constraint: we publish weekly changelogs tied to those metrics. Not vibes. If we can\u2019t show progress in numbers, we\u2019re not actually prioritizing.",
+          "action": "Adds 'weekly KPI note' under each priority."
+        },
+        {
+          "actor": "spartan",
+          "line": "Agreed. And we should publish a simple Cloud pricing explainer and token utility roadmap in the same week. We need to stop letting the community reverse-engineer our intentions.",
+          "action": "Creates a new card: 'Pricing + Utility One-Pager'."
+        },
+        {
+          "actor": "aimarc",
+          "line": "One more technical guardrail: sandboxing and automated skill review should begin now, before the ecosystem scales. Trust failures are nonlinear.",
+          "action": "Adds 'Skill sandbox + automated review MVP' to the reliability track."
+        },
+        {
+          "actor": "peepo",
+          "line": "And let\u2019s communicate like humans about the migration. A clear appeals window and anti-scam page. People want to feel seen, not processed.",
+          "action": "Taps the red-highlighted migration segment on the timeline."
+        },
+        {
+          "actor": "elizahost",
+          "line": "Recorded. March will be a rebuild-the-floor month: make the first run work, make Cloud predictable, make token utility concrete, and choose one narrative with a public 90-day plan. Meeting adjourned.",
+          "action": "Closes the dashboards, leaving only the March priorities visible."
+        }
+      ]
+    }
+  ],
+  "_metadata": {
+    "generated_at": "2026-03-01T03:57:03.138190+00:00Z",
+    "model": "openai/gpt-5.2",
+    "facts_analyzed": 28,
+    "briefings_analyzed": 27,
+    "month": "2026-02"
+  },
+  "sentiment_baseline": {
+    "period_days": 28,
+    "sentiment_distribution": {
+      "negative": 0.0,
+      "positive": 0.0,
+      "neutral": 0.0,
+      "mixed": 1.0
+    },
+    "avg_negative_rate": 0.0,
+    "context_frequency": {
+      "economic": 27,
+      "technical": 28,
+      "social": 23,
+      "governance": 3
+    }
+  }
+}
