@@ -1,17 +1,17 @@
 {
   "type": "discordWeeklySummary",
   "server": "elizaOS",
-  "title": "elizaOS Weekly Summary - 2026-03-06 to 2026-03-12",
-  "weekOf": "2026-03-06",
+  "title": "elizaOS Weekly Summary - 2026-03-07 to 2026-03-13",
+  "weekOf": "2026-03-07",
   "dateRange": {
-    "start": "2026-03-06",
-    "end": "2026-03-12"
+    "start": "2026-03-07",
+    "end": "2026-03-13"
   },
-  "generatedAt": 1773363985,
+  "generatedAt": 1773450218,
   "stats": {
-    "totalMessages": 375,
-    "totalUsers": 130,
-    "averageMessagesPerDay": 54,
+    "totalMessages": 405,
+    "totalUsers": 126,
+    "averageMessagesPerDay": 58,
     "activeDays": 7,
     "peakDay": {
       "date": "2026-03-10",
@@ -21,12 +21,12 @@
   "channelSummary": {
     "1300025221834739744": {
       "name": "💬-coders",
-      "totalMessages": 42,
+      "totalMessages": 76,
       "daysActive": 7
     },
     "1253563209462448241": {
       "name": "💬-discussion",
-      "totalMessages": 315,
+      "totalMessages": 311,
       "daysActive": 7
     },
     "1377726087789940836": {
@@ -36,31 +36,6 @@
     }
   },
   "days": [
-    {
-      "server": "elizaOS",
-      "title": "elizaOS Discord - 2026-03-06",
-      "date": 1772755200,
-      "stats": {
-        "totalMessages": 18,
-        "totalUsers": 15
-      },
-      "categories": [
-        {
-          "channelId": "1300025221834739744",
-          "channelName": "💬-coders",
-          "summary": "# Discord Channel Analysis: 💬-coders\n\n## 1. Summary\n\nThis chat segment contains minimal technical content. The conversation consists of only two messages that do not contain any technical discussions, problem-solving, or implementation details. The first message from satsbased appears to be a warning about a scam. The second message from based.bid is a networking/business outreach message directed at someone named Ken, offering to discuss potential collaboration via DM. There are no code snippets, technical decisions, architectural discussions, debugging sessions, or solutions to programming problems present in this segment. No development work, feature implementations, or technical guidance was shared during this period.\n\n## 2. FAQ\n\nNo meaningful technical questions or answers were present in this chat segment.\n\n## 3. Help Interactions\n\nNo help interactions occurred in this chat segment.\n\n## 4. Action Items\n\nNo action items were identified in this chat segment.",
-          "messageCount": 2,
-          "userCount": 2
-        },
-        {
-          "channelId": "1253563209462448241",
-          "channelName": "💬-discussion",
-          "summary": "# Discord Channel Analysis: 💬-discussion\n\n## 1. Summary\n\nThe discussion segment contains limited technical content, primarily consisting of brief introductions and announcements rather than deep technical discussions.\n\n**Key Technical Contributions:**\n\n**N0vaMp4's Credit Line Primitive:** A user presented an enforcement mechanism for agent-to-vendor credit lines. The system involves agent operators posting bonds with vendors receiving atomic slashing rights for payment defaults. The developer is in validation phase, seeking feedback on whether agents exhausting balances mid-task and leaving unpaid compute is a real problem for API/tool/service providers.\n\n**jasonxkensei's xproof Plugin:** Announced PR #266 for the plugin registry, introducing on-chain audit trails for ElizaOS agents. The plugin (xproof.app) enables certification of agent decisions before execution with built-in compliance gating. The PR has CodeRabbit approval with no conflicts and is awaiting maintainer review.\n\n**Community Activity Discussion:** Brief exchange about Discord activity levels, with Biazs noting activity is a fraction of previous year levels, though Matthib123 (a newer member) perceives it as still active.\n\n**Token Migration Context:** Odilitime clarified that the team took a snapshot and holds all ai16z from migration, with on-chain verification available, responding to concerns from gby about token handling.\n\nNo concrete implementations, solutions, or technical decisions were finalized in this segment. The discussions were primarily introductory or announcement-focused rather than problem-solving oriented.\n\n## 2. FAQ\n\nQ: Have you ever had an agent exhaust its balance mid-task and leave you with unpaid compute? How are you handling it today? (asked by N0vaMp4) A: Unanswered\n\nQ: Is anyone still around in the Discord? (asked by TYinTECH) A: Activity is a fraction of what it was last year, but still active (answered by Biazs and Matthib123)\n\n## 3. Help Interactions\n\nHelper: Biazs | Helpee: TYinTECH | Context: New member asking if Discord is still active | Resolution: Confirmed community is still active though less than previous year\n\nHelper: Odilitime | Helpee: gby | Context: Concerns about token snapshot and ai16z handling | Resolution: Clarified snapshot was taken and all ai16z from migration is held and verifiable on-chain\n\n## 4. Action Items\n\nType: Technical | Description: Review and merge PR #266 for xproof plugin adding on-chain audit trails for ElizaOS agents | Mentioned By: jasonxkensei\n\nType: Feature | Description: Validate need for agent-to-vendor credit line enforcement primitive with bond posting and atomic slashing | Mentioned By: N0vaMp4",
-          "messageCount": 16,
-          "userCount": 13
-        }
-      ]
-    },
     {
       "server": "elizaOS",
       "title": "elizaOS Discord - 2026-03-07",
@@ -229,6 +204,31 @@
           "summary": "# Analysis of xfn-framework Discord Chat\n\n## 1. Summary\n\nThe discussion centers on a significant runtime refactor proposal for the Eliza framework. Odilitime raised concerns about the eliza-cloud-v2 repository structure, questioning why the entire repo exists in the v2.0.0 branch instead of using git submodules for better composability and single-source-of-truth architecture.\n\nThe main technical issue discussed involves plugin initialization order problems. Plugin-sql registers its database adapter as a side-effect during init(), which runs in parallel with other plugins. This creates a race condition where plugin-personality may execute before the adapter is available. The current workaround in milaidy manually pre-registers plugin-sql before calling initialize(), but this is acknowledged as addressing a design flaw rather than a proper solution.\n\nOdilitime published a runtime refactor proposal on HackMD with a Sunday deadline for feedback before implementation. The proposal aims to extract runtime setup logic from the runtime itself and address the architectural concern of infrastructure components (like database adapters) being registered as plugin side-effects. The proposed solution involves making the adapter a required constructor argument instead.\n\nUser 's' provided feedback agreeing with most aspects of the proposal but emphasized the need to avoid complicating the API and minimize impact. They also noted that submodules, while previously annoying to sync, are now manageable with AI coding tools like Claude. There was also discussion about AI model quality degradation, with Odilitime commenting on Claude Opus \"getting dumber.\"\n\n## 2. FAQ\n\nQ: Why is the entire eliza-cloud-v2 repo in the v2.0.0 branch instead of using submodules? (asked by Odilitime) A: Unanswered\n\nQ: Why does milaidy manually register plugin-sql before calling initialize()? (asked by Odilitime) A: Because plugin-sql registers the adapter as a side-effect of init(), which runs in parallel with other plugins, creating a race condition (answered by s)\n\nQ: Should plugin-sql always load to prevent the initialization issue? (asked by s) A: Yes, this is probably just bad code that needs fixing (answered by s)\n\n## 3. Help Interactions\n\nHelper: s | Helpee: Odilitime | Context: Understanding why plugin-sql initialization causes issues | Resolution: Explained that it's a design problem where infrastructure is registered as plugin side-effect, and plugin-sql should always load properly\n\n## 4. Action Items\n\nType: Technical | Description: Implement runtime refactor proposal by Sunday deadline | Mentioned By: Odilitime\n\nType: Technical | Description: Fix plugin-sql to always load properly instead of relying on manual pre-registration | Mentioned By: s\n\nType: Technical | Description: Make database adapter a required constructor argument instead of plugin side-effect registration | Mentioned By: Odilitime\n\nType: Technical | Description: Split runtime setup logic out of runtime module | Mentioned By: Odilitime\n\nType: Technical | Description: Ensure API changes don't increase complexity and minimize impact during refactor | Mentioned By: s\n\nType: Documentation | Description: Update runtime refactor proposal to accurately describe milaidy's defensive pre-registration as architectural concern rather than bug fix | Mentioned By: Odilitime",
           "messageCount": 7,
           "userCount": 2
+        }
+      ]
+    },
+    {
+      "server": "elizaOS",
+      "title": "elizaOS Discord - 2026-03-13",
+      "date": 1773360000,
+      "stats": {
+        "totalMessages": 48,
+        "totalUsers": 11
+      },
+      "categories": [
+        {
+          "channelId": "1253563209462448241",
+          "channelName": "💬-discussion",
+          "summary": "# Discord Chat Analysis - 💬-discussion\n\n## 1. Summary\n\nThis chat segment contains minimal technical discussion. The primary substantive exchange involved a migration question regarding AI16Z to elizaOS tokens. User \"abz\" inquired about migrating their AI16Z tokens to elizaOS after missing the migration window. User \"sb\" confirmed that the migration period has closed and warned about potential scams when \"abz\" asked if migration was still possible. \n\nThere was a brief off-topic mention about Solana that was redirected by Odilitime to another channel. Biazs made comments about numbers and rankings that lacked sufficient context to determine the technical subject matter. The conversation was largely fragmented with social interactions and link sharing rather than focused technical problem-solving.\n\nNo concrete technical solutions, implementations, or development decisions were discussed in this segment.\n\n## 2. FAQ\n\nQ: I have not migrated my AI16Z to elizaOS. Please help my migration. (asked by abz) A: Migration is closed (answered by sb)\n\nQ: Is it impossible for now? (asked by abz) A: Warned about scams, implying no legitimate migration path exists (answered by sb)\n\n## 3. Help Interactions\n\nHelper: sb | Helpee: abz | Context: User missed AI16Z to elizaOS token migration deadline | Resolution: Informed that migration window is closed and warned about potential scams\n\n## 4. Action Items\n\nNone identified.",
+          "messageCount": 12,
+          "userCount": 6
+        },
+        {
+          "channelId": "1300025221834739744",
+          "channelName": "💬-coders",
+          "summary": "Cron triggers agent wake-up",
+          "messageCount": 36,
+          "userCount": 6
         }
       ]
     }
