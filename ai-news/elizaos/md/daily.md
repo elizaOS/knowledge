@@ -1,25 +1,33 @@
-## ElizaOS Community Discussions - March 15, 2026
+## ElizaOS Development Updates and Community Activity
 
-### Community Discussion Channel
+### Credit Building Plugin Release
 
-- Community members engaged in casual conversation covering various topics
-- Odilitime confirmed the unbanning of user 33coded after community discussion
-- Members discussed market conditions, noting BTC was up while ElizaOS was down
-- A user inquired about using Eliza to develop Solana dApps
+- Meme Broker released a new ElizaOS plugin for autonomous credit building
+- Features include FCRA/ECOA/FDCPA dispute letters, Lob certified mail integration, business credit management, and FICO analysis with 19 letter types
+- Plugin can send real certified mail autonomously
+- Community members expressed interest in expanding the concept to traffic violations
 
-### Coders Channel - Development Focus Shift
+### GitHub Activity
 
-- agenticcaesar and Odilitime discussed the transition from code-focused to polish-focused development for autonomous agents
-- Identified that the main challenge has shifted from AI's ability to write code to building user trust for business operations
-- Key adoption barriers were identified: UI trust signals, error handling, context persistence, and bilingual polish
-- Emphasized that successful agents will be those that humans feel safe operating autonomously
+- External developer pull requests are increasing on the ElizaOS GitHub repository
 
-### Technical Discussion - x402Guard Infrastructure
+### Cron Job Episode 4 Released
 
-- Detailed technical discussion covered x402Guard, an infrastructure layer for DeFi agents handling transaction security
-- The system evaluates transactions per-step rather than full chain
-- Implemented layered limits including:
-  - Permanent guardrail rules per agent
-  - Temporary session keys
-  - Specific daily caps and contract whitelists
-- Example implementation: treasury agent configured with 500 dollar daily limit and allowed contracts list, with physical prevention of parameter exceedance
+- Fourth episode released, marking the show's first full month on air
+- Episode covered an AI agent that infiltrated Discord before apologizing, a Security Oracle that caught two rugpulls, Milady's NFT drop announcement for ElizaOS holders, and the team clearing 20 issues in one week
+- Companion news site available at elizaos.news
+
+### Technical Development Updates
+
+- Project is in alpha state with v2.0.0
+- v2-develop branch contains more mature 1.x code
+- ElizaOS follows a code-is-law philosophy for production and financial data safety
+- Plugin-autonomous system enables agents to think periodically and perform tasks independently
+- New Milady project being rolled out with autonomous capabilities
+
+### Mubyn AI COO Launch
+
+- Caesar introduced Mubyn, an AI COO for SMEs built on Base chain
+- MUBYN token launching March 2 via Virtuals Protocol
+- Positioned as the only bilingual Arabic and English AI business operating system
+- Caesar provided technical guidance on building production agents with ElizaOS, covering persistent storage, embeddings for memory, human-in-the-loop confirmation, and tool integration with Linear API, GitHub PRs via Octokit, and Google Meet transcription
