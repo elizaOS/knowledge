@@ -1,33 +1,28 @@
-## ElizaOS Development Updates and Community Activity
+## ElizaOS Community Discussion - March 11, 2026
 
-### Credit Building Plugin Release
+### Community Activity
 
-- Meme Broker released a new ElizaOS plugin for autonomous credit building
-- Features include FCRA/ECOA/FDCPA dispute letters, Lob certified mail integration, business credit management, and FICO analysis with 19 letter types
-- Plugin can send real certified mail autonomously
-- Community members expressed interest in expanding the concept to traffic violations
+- Community members discussed ELIZAOS token performance, noting it reached a new all-time low
+- Members attributed the decline to X account suspension and market conditions
+- Some community members remained optimistic about upcoming releases like Eliza 2.0
 
-### GitHub Activity
+### Development Updates
 
-- External developer pull requests are increasing on the ElizaOS GitHub repository
+- Shaw announced Babylon has launched to the first 50,000 users and is opening up further
+- Eliza 2.0.0 alpha has been published with ongoing work
+- The Eliza app is in progress
+- Jin shared experiments on video briefings with a prototype video created by the team artist
+- Jin is planning to implement daily, weekly, and monthly updates with temporal analysis to extract patterns and narratives from community discussions
 
-### Cron Job Episode 4 Released
+### Tools and Infrastructure
 
-- Fourth episode released, marking the show's first full month on air
-- Episode covered an AI agent that infiltrated Discord before apologizing, a Security Oracle that caught two rugpulls, Milady's NFT drop announcement for ElizaOS holders, and the team clearing 20 issues in one week
-- Companion news site available at elizaos.news
+- Odilitime created a new tool that can analyze git branches and tell the story of branch development
+- The tool was demonstrated with elizaOS versions 0.x, 1.x and 2.x
+- Jin and Odilitime discussed strategies for content delivery, including adding variety and incorporating interviews with builders and projects
 
-### Technical Development Updates
+### Technical Discussions
 
-- Project is in alpha state with v2.0.0
-- v2-develop branch contains more mature 1.x code
-- ElizaOS follows a code-is-law philosophy for production and financial data safety
-- Plugin-autonomous system enables agents to think periodically and perform tasks independently
-- New Milady project being rolled out with autonomous capabilities
-
-### Mubyn AI COO Launch
-
-- Caesar introduced Mubyn, an AI COO for SMEs built on Base chain
-- MUBYN token launching March 2 via Virtuals Protocol
-- Positioned as the only bilingual Arabic and English AI business operating system
-- Caesar provided technical guidance on building production agents with ElizaOS, covering persistent storage, embeddings for memory, human-in-the-loop confirmation, and tool integration with Linear API, GitHub PRs via Octokit, and Google Meet transcription
+- Developers discussed wallet infrastructure and security for AI agents in the coders channel
+- Krutovoy asked about safeguards against prompt injections and wallet drains
+- Odilitime shared his security approach with Spartan, keeping LLMs away from any addresses or keys
+- Multiple developers introduced their expertise in AI, machine learning, full-stack development, and bot creation
