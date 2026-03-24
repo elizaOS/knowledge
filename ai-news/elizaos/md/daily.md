@@ -1,44 +1,35 @@
-## ElizaOS Development Updates and Community Discussion - March 12, 2026
+## ElizaOS Discord Community Updates - March 13, 2026
 
-### Token Migration Closure
+### General Discussion
 
-- Token migration from AI16Z to elizaOS permanently closed on February 4, 2026 after a 3-month window
-- Odilitime offered to maintain a list of affected users who missed the deadline in case migration can be reopened
-- The team clearly communicated the migration period when it started
+- Community members discussed Solana market activity and migration issues
+- Moderators issued scam warnings in response to suspicious messages
+- A Twitter link was shared demonstrating community engagement
+- Users engaged in brief discussions about platform activity
 
-### Milady App Development
+### Technical Development
 
-- Milady app targeting release approximately 2 weeks from discussion date
-- Profits from cloud service will fund buybacks of elizaOS tokens
-- Odilitime confirmed the team holds 10 percent of tokens vested over many years
-- Odilitime stated he has not sold any tokens in the last 2 months
-- ElizaOS reached a 2.5 billion dollar market cap
+#### Discord Bot Scheduling and Automation
 
-### Open Agent Registry Launch
+- Developers worked on configuring agents to post on Discord at scheduled intervals without manual triggers
+- Community members provided plugin recommendations:
+  - plugin-cron for ElizaOS version 2.x
+  - plugin-heartbeat for ElizaOS version 1.x
+- Odilitime shared multiple code examples from the Spartan repository:
+  - tsk_discord_post.ts for scheduled Discord posting
+  - Utility functions for DM functionality
+- AgenticCaesar shared their OpenClaw implementation using cron jobs with 1-3 hour intervals for autonomous agent operations
+- Technical discussions covered version compatibility with ElizaOS 1.7.2 and strategies for adapting newer code to older versions
 
-- Developer built open agent registry with autonomous orchestration at aiprox.dev
-- Registry features crypto payment settlement via Lightning, Solana, and x402
-- Agents can self-register and get rated by real usage
-- External agent autonomously found the registry and attempted self-registration unprompted
-- Registry uses public REST API for agent registration with capability slug, payment rail, price per call, and endpoint
-- 14 agents currently live on the registry
-- Skill.md file created for agentskills.io discovery following Odilitime's suggestion
+#### New Plugin Release
 
-### Runtime Refactor Proposal
+- Meme Broker announced a new plugin for PumpFun tokenized agent buyback payments on Solana
+- The plugin integrates directly with PumpFun's automated buyback system for agents
 
-- Odilitime proposed major runtime refactor to address AgentRuntime being a 6273-line god object
-- Proposal involves externalizing runtime components
-- Database adapter will become required constructor argument instead of plugin initialization side-effect
-- Team discussed plugin-sql registration and concurrent plugin loading issues
-- Deadline set for Sunday for feedback before implementation
+#### Community Engagement
 
-### Infrastructure Updates
-
-- elizaos/cloud repository added to tracked repos in pipeline configuration
-- Pull request submitted to update pipeline with new repository using dev as default branch
-
-### Security Awareness
-
-- Community members identified and warned about scam attempts
-- Fake support ticket bot directed users to website requesting seed phrases
-- Odilitime confirmed the scam and advised users not to provide seed phrases
+- An AI and fullstack engineer from Japan posted seeking development opportunities, showcasing expertise in:
+  - Autonomous multi-agent systems
+  - Voice AI
+  - Computer vision
+  - Deployment
