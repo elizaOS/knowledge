@@ -1,29 +1,28 @@
-## ElizaOS Community Discussion - March 17, 2026
+## ElizaOS Community Discussion - March 11, 2026
 
-### Community Updates and Content
+### Community Activity
 
-- Jin posted a weekly roundup trailer in the announcements channel showcasing recent developments and updates for the ElizaOS ecosystem
-- The video received positive feedback from the community
+- Community members discussed ELIZAOS token performance, noting it reached a new all-time low
+- Members attributed the decline to X account suspension and market conditions
+- Some community members remained optimistic about upcoming releases like Eliza 2.0
 
-### Technical Developments
+### Development Updates
 
-- Developer lekt9 introduced unbrowse, a browser for agents that operates at 100x speed by traversing APIs instead of DOM while passively indexing web APIs for other agents
-- Odilitime provided guidance on creating an ElizaOS plugin integration, directing to the plugin registry documentation and suggesting cursor for plugin code generation
+- Shaw announced Babylon has launched to the first 50,000 users and is opening up further
+- Eliza 2.0.0 alpha has been published with ongoing work
+- The Eliza app is in progress
+- Jin shared experiments on video briefings with a prototype video created by the team artist
+- Jin is planning to implement daily, weekly, and monthly updates with temporal analysis to extract patterns and narratives from community discussions
 
-### Project Strategy and Product Launch
+### Tools and Infrastructure
 
-- Odilitime clarified the project strategy: Shaw promotes the Milady product which creates distribution for elizacloud, generating revenue to power the ElizaOS flywheel
-- Product launch targeted for end of week or early next week
+- Odilitime created a new tool that can analyze git branches and tell the story of branch development
+- The tool was demonstrated with elizaOS versions 0.x, 1.x and 2.x
+- Jin and Odilitime discussed strategies for content delivery, including adding variety and incorporating interviews with builders and projects
 
-### Industry News Shared
+### Technical Discussions
 
-- World added an identity toolkit for AI bots on Coinbase's X402 protocol
-- SEC announced new token taxonomy classifying most crypto assets into 4 non-security categories
-- Competition announced where agents can win 100,000 dollars in the next 5 days
-- Jin shared an article about building Claude Code and how Anthropic uses skills
-
-### Development Discussions
-
-- Community members discussed creating a directory or registry similar to Clawhub that could include skills and plugins
-- Stan agreed with the proposal for building a solid directory and registry system
-- A senior full-stack and AI developer posted credentials offering development services, specializing in LLM integration, autonomous agents, workflow automation, and blockchain systems with expertise in React, Next.js, Node.js, Python, and various AI/ML frameworks
+- Developers discussed wallet infrastructure and security for AI agents in the coders channel
+- Krutovoy asked about safeguards against prompt injections and wallet drains
+- Odilitime shared his security approach with Spartan, keeping LLMs away from any addresses or keys
+- Multiple developers introduced their expertise in AI, machine learning, full-stack development, and bot creation
