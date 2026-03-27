@@ -1,28 +1,33 @@
-## ElizaOS Community Discussion - March 11, 2026
+## ElizaOS Community Discussion and Development Updates - March 19, 2026
 
-### Community Activity
+### Token Performance and Community Response
 
-- Community members discussed ELIZAOS token performance, noting it reached a new all-time low
-- Members attributed the decline to X account suspension and market conditions
-- Some community members remained optimistic about upcoming releases like Eliza 2.0
+- ElizaOS token reached new all-time lows on March 19, 2026
+- Token dropped to position 1019 on CoinMarketCap
+- Price fell below $10, approaching $9
+- Token experienced a 99% decline from previous highs
+- Community members expressed frustration over price performance
+- Team member Odilitime actively engaged with the community during this period
 
-### Development Updates
+### Development Activities
 
-- Shaw announced Babylon has launched to the first 50,000 users and is opening up further
-- Eliza 2.0.0 alpha has been published with ongoing work
-- The Eliza app is in progress
-- Jin shared experiments on video briefings with a prototype video created by the team artist
-- Jin is planning to implement daily, weekly, and monthly updates with temporal analysis to extract patterns and narratives from community discussions
+#### Moltraffle.fun Plugin Release
 
-### Tools and Infrastructure
+- New ElizaOS plugin published for moltraffle.fun
+- Enables permissionless on-chain raffles on Base using USDC and Chainlink VRF
+- Plugin includes 5 actions: LIST_RAFFLES, GET_RAFFLE, JOIN_RAFFLE, CREATE_RAFFLE, and DRAW_WINNER
+- Agents can create raffles with up to 10% creator commission
+- Plugin made available on npm
+- Developers encouraged to submit to elizaOS plugin registry on GitHub
 
-- Odilitime created a new tool that can analyze git branches and tell the story of branch development
-- The tool was demonstrated with elizaOS versions 0.x, 1.x and 2.x
-- Jin and Odilitime discussed strategies for content delivery, including adding variety and incorporating interviews with builders and projects
+#### Eliza Cloud Deployment
 
-### Technical Discussions
+- Team member dankvr deployed an agent to Eliza Cloud
+- Deployment utilized AWS ECS infrastructure
+- Billing model established at $1.17 per day or $20 per month
+- Docker image building and Discord plugin configuration completed during deployment process
 
-- Developers discussed wallet infrastructure and security for AI agents in the coders channel
-- Krutovoy asked about safeguards against prompt injections and wallet drains
-- Odilitime shared his security approach with Spartan, keeping LLMs away from any addresses or keys
-- Multiple developers introduced their expertise in AI, machine learning, full-stack development, and bot creation
+#### User Feedback Analysis
+
+- User feedback analysis conducted covering January through March 2026
+- Plans established to transition feedback reviews to weekly intervals
