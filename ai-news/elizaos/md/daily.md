@@ -1,25 +1,30 @@
-## ElizaOS Community Discussion - March 27, 2026
+## ElizaOS Community Discussion and Development Updates - March 26, 2026
 
-## Hyperscape Project Clarification
+## Industry and Ecosystem Highlights
 
-- A community debate occurred regarding Hyperscape's relationship to ElizaOS
-- Moderator Odilitime and member satsbased clarified that Hyperscape is not an official Eliza Labs project
-- Hyperscape was described as a project being incubated by Eliza, positioned between a joint venture and a personal Shaw project
-- Moderators stepped in to resolve the heated disagreement
+- The Solana Foundation Chief Product Officer stated that 99.99% of all onchain transactions within two years will be driven by agents, bots, and LLM-based wallets and trading products
+- A debate between Vitalik Buterin and Beff Jezos on E/ACC versus D/ACC was shared, moderated by Eddy Lazzarin and Shaw, covering thermodynamics, acceleration and entropy, open source AI, autonomous agents, and crypto as a trust layer between humans and AI
 
-## Plugin Repository Inquiry
+## ElizaOS Ecosystem Clarifications
 
-- Developer meowww404 contacted Odilitime regarding the process for including an ElizaOS plugin in the main plugin repository
-- The developer is building a trading flow for agents with plug-and-play functionality for their trading system
-- Odilitime responded by requesting the registry pull request or plugin name to follow up
+- Odilitime confirmed ElizaOS is intended to power the Jeju chain upon launch and is not a memecoin
+- ElizaOS and DegenAI are confirmed as the only two tokens minted and supported by Labs
+- ElizaOS operates as an open-source framework with a SaaS platform for easier deployment
 
-## Babylon Demo Day Broadcast
+## Projects Building on ElizaOS
 
-- Odilitime shared a live Babylon Demo Day broadcast across the general discussion and partners channels
-- The demo day was streamed in real time on X (formerly Twitter)
+- Babylon - an AI training ground and game where agents participate in prediction markets and autonomous trading
+- Hyperscape - a game built on the ElizaOS framework
+- Milady - a project pushing the elizacloud SaaS platform
+- DegenAI is planned to integrate with Babylon's prediction market and autonomous trading features
+- Work is ongoing to make DegenAI the host of the server, with production and dev being consolidated into a single staging environment
 
-## Developer Introduction in Coders Channel
+## Developer Tools and Announcements
 
-- Developer trace introduced themselves as an AI and Full Stack Engineer
-- Areas of specialization include LLM orchestration, RAG systems, multi-step agent workflows, multimodal chat and voice workflows, backend APIs, and business process automation
-- The developer indicated openness to new opportunities and interest in connecting with startups, product teams, and founders building AI systems
+- HatcherLabs announced hatcher.host, a hosting platform supporting ElizaOS and Milady deployments, available for free trial
+- xProof.app was shared as a plugin that anchors every ElizaOS agent decision on the MultiversX blockchain before execution, providing on-chain decision provenance, available via npm with a pull request open on the official ElizaOS plugin registry
+- Adaptive-Liquidity Labs posted that they are actively recruiting one or two additional developers to join their team
+
+## Token Migration
+
+- Odilitime addressed ai16z token holders who missed the migration window and offered to add interested users to a waitlist via DM
