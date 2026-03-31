@@ -1,30 +1,33 @@
-## ElizaOS Community Discussion and Development Updates - March 26, 2026
+## ElizaOS Community Discussion and Development Updates - March 19, 2026
 
-## Industry and Ecosystem Highlights
+### Token Performance and Community Response
 
-- The Solana Foundation Chief Product Officer stated that 99.99% of all onchain transactions within two years will be driven by agents, bots, and LLM-based wallets and trading products
-- A debate between Vitalik Buterin and Beff Jezos on E/ACC versus D/ACC was shared, moderated by Eddy Lazzarin and Shaw, covering thermodynamics, acceleration and entropy, open source AI, autonomous agents, and crypto as a trust layer between humans and AI
+- ElizaOS token reached new all-time lows on March 19, 2026
+- Token dropped to position 1019 on CoinMarketCap
+- Price fell below $10, approaching $9
+- Token experienced a 99% decline from previous highs
+- Community members expressed frustration over price performance
+- Team member Odilitime actively engaged with the community during this period
 
-## ElizaOS Ecosystem Clarifications
+### Development Activities
 
-- Odilitime confirmed ElizaOS is intended to power the Jeju chain upon launch and is not a memecoin
-- ElizaOS and DegenAI are confirmed as the only two tokens minted and supported by Labs
-- ElizaOS operates as an open-source framework with a SaaS platform for easier deployment
+#### Moltraffle.fun Plugin Release
 
-## Projects Building on ElizaOS
+- New ElizaOS plugin published for moltraffle.fun
+- Enables permissionless on-chain raffles on Base using USDC and Chainlink VRF
+- Plugin includes 5 actions: LIST_RAFFLES, GET_RAFFLE, JOIN_RAFFLE, CREATE_RAFFLE, and DRAW_WINNER
+- Agents can create raffles with up to 10% creator commission
+- Plugin made available on npm
+- Developers encouraged to submit to elizaOS plugin registry on GitHub
 
-- Babylon - an AI training ground and game where agents participate in prediction markets and autonomous trading
-- Hyperscape - a game built on the ElizaOS framework
-- Milady - a project pushing the elizacloud SaaS platform
-- DegenAI is planned to integrate with Babylon's prediction market and autonomous trading features
-- Work is ongoing to make DegenAI the host of the server, with production and dev being consolidated into a single staging environment
+#### Eliza Cloud Deployment
 
-## Developer Tools and Announcements
+- Team member dankvr deployed an agent to Eliza Cloud
+- Deployment utilized AWS ECS infrastructure
+- Billing model established at $1.17 per day or $20 per month
+- Docker image building and Discord plugin configuration completed during deployment process
 
-- HatcherLabs announced hatcher.host, a hosting platform supporting ElizaOS and Milady deployments, available for free trial
-- xProof.app was shared as a plugin that anchors every ElizaOS agent decision on the MultiversX blockchain before execution, providing on-chain decision provenance, available via npm with a pull request open on the official ElizaOS plugin registry
-- Adaptive-Liquidity Labs posted that they are actively recruiting one or two additional developers to join their team
+#### User Feedback Analysis
 
-## Token Migration
-
-- Odilitime addressed ai16z token holders who missed the migration window and offered to add interested users to a waitlist via DM
+- User feedback analysis conducted covering January through March 2026
+- Plans established to transition feedback reviews to weekly intervals
