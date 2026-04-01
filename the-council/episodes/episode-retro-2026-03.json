@@ -1,0 +1,292 @@
+{
+  "id": "RETRO-2026-03",
+  "name": "Monthly Retro: March 2026",
+  "type": "retrospective",
+  "premise": "March 2026 marked ElizaOS\u2019s pivot from \u201cagent framework\u201d to \u201cagent commerce platform\u201d: identity, payments, and parallelism landed\u2014while version fragmentation and token confusion tested community trust.",
+  "summary": "The project shipped core autonomy primitives (AgentID/SAID identity, x402 payments, multi-chain rails, parallel action execution, session management, and prompt batching). The plugin ecosystem expanded rapidly into wallets, trading, and swarms, and the docs/web stack kept pace with major changes. The downside: reliability perception took a hit due to branch/version confusion (alpha v2.0.0 vs v2-develop/1.x), plugin breakage reports, and escalating community anxiety around token legitimacy, migration deadlines, and value accrual. Net: strong technical momentum, but trust and clarity now gate adoption.",
+  "month_reviewed": "2026-03",
+  "key_developments": [
+    {
+      "area": "Agent Commerce Primitives (Identity + Payments)",
+      "summary": "Introduced AgentID and integrated SAID protocol for verifiable on-chain identity; implemented x402 payment protocol, marketplace hooks (MAXIA), and multi-chain USDC rails (Coin Railz) with payment safety checks and gas automation.",
+      "impact": "high"
+    },
+    {
+      "area": "Runtime Performance & Concurrency",
+      "summary": "Shipped Parallel Action Execution, Session Manager for multi-user concurrency, streaming responses, and prompt batching to reduce latency and cost.",
+      "impact": "high"
+    },
+    {
+      "area": "Plugin Ecosystem Expansion",
+      "summary": "Registry added x402 swarms + multiple wallet/trading/intelligence plugins; Anthropic plugin updated to newer default models; ecosystem began shifting toward channel-based messaging organization.",
+      "impact": "medium"
+    },
+    {
+      "area": "DX & Documentation Delivery",
+      "summary": "Website upgraded to Next.js 16.2.1; documentation and community planning workstreams (e.g., automated AI code reviews) advanced in sync with core changes.",
+      "impact": "medium"
+    },
+    {
+      "area": "Reliability Fixes & Platform Support",
+      "summary": "Addressed Linux build failures and intermittent message-handling bugs; major database refactor progressed but remains open and risk-bearing.",
+      "impact": "medium"
+    }
+  ],
+  "recurring_themes": [
+    {
+      "theme": "Version fragmentation vs. composability",
+      "frequency": "Very high (across dev issues + community concerns)",
+      "council_take": "Shipping autonomy features is exciting, but a blurred release story (alpha v2.0.0 vs v2-develop vs v1.7.x) is actively eroding developer confidence. We need a single, explicit compatibility contract for core + plugins."
+    },
+    {
+      "theme": "Agents as accountable economic actors",
+      "frequency": "High",
+      "council_take": "Identity + payments create new liabilities (restricted addresses, escrow needs, audit trails). The framework must include guardrails as first-class primitives\u2014otherwise \u201cagent commerce\u201d becomes \u201cagent risk.\u201d"
+    },
+    {
+      "theme": "Token utility and legitimacy anxiety",
+      "frequency": "High (sentiment + migration + multi-chain confusion)",
+      "council_take": "Community sentiment is gating adoption. Without a measurable utility loop (compute, fees, staking, or marketplace take-rate), tech wins won\u2019t translate into durable network value or trust."
+    },
+    {
+      "theme": "Marketplace + swarms as the emergent app layer",
+      "frequency": "Medium",
+      "council_take": "The community is already building orchestration/VPS/swarm tooling. We should support it with stable APIs, reference patterns, and a paved path\u2014before parallel \u201cautonomy standards\u201d diverge."
+    },
+    {
+      "theme": "Trust through shipping (and clarity)",
+      "frequency": "Medium",
+      "council_take": "Docs and internal PR hygiene improved, but external perception is defined by: broken plugins out-of-the-box, unclear timelines (e.g., chain integrations, Milady app), and token communications. Clarity is a product feature now."
+    }
+  ],
+  "wins": [
+    "AgentID + SAID identity groundwork: verifiable agent signatures and \u201cagent passports\u201d became real building blocks.",
+    "x402 payments + multi-chain rails: agents can transact more safely across chains, unlocking real \u201cagent commerce\u201d demos.",
+    "Parallel Action Execution + Session Manager: tangible step from single-threaded bot to multi-user, multi-task agent runtime.",
+    "Prompt batching and streaming improvements: better latency/cost profile\u2014critical for cloud economics and DX.",
+    "Registry momentum: rapid expansion of wallet and swarm capabilities signaled strong ecosystem pull."
+  ],
+  "challenges": [
+    "Release/branch confusion (alpha v2.0.0 vs v2-develop/1.x vs v1.7.2) causing plugin breakage perception and onboarding friction.",
+    "Major database refactor still open: architectural risk and potential destabilization during a period of fast ecosystem growth.",
+    "Token legitimacy/migration friction and multi-chain cohesion concerns creating community distrust and support load.",
+    "Autonomy standards diverging (internal vs external implementations), risking fragmentation of the composability promise.",
+    "Community asks outpacing comms bandwidth: timelines for Babylon/Milady, plugin review turnaround, and moderation needs (scam pressure)."
+  ],
+  "proposed_focus": [
+    {
+      "priority": 1,
+      "area": "Stability & Compatibility Contract (Core + Plugins)",
+      "rationale": "Developer-first reliability is the North Star\u2019s highest leverage. Agent commerce primitives only matter if developers can install and run a known-good stack with minimal guesswork.",
+      "success_metric": "Publish a version support matrix + \u201cKnown Good Stack\u201d installer path; reduce \u2018broken out-of-box\u2019 plugin reports by 60%; reach \u226590% pass rate on registry CI compatibility checks against the stable branch."
+    },
+    {
+      "priority": 2,
+      "area": "Agent Commerce Guardrails (Escrow, Allow/Blocklists, Audit Trails)",
+      "rationale": "As soon as agents can pay, they can also mispay. Shipping trust primitives converts commerce from a demo into a dependable platform.",
+      "success_metric": "Ship a reference escrow flow + payment policy engine; 0 critical incidents in official demos; add automated tests covering restricted address checks and transaction simulation across top 5 chains."
+    },
+    {
+      "priority": 3,
+      "area": "Reference \u2018Agent-to-Agent Marketplace\u2019 Demo (End-to-End)",
+      "rationale": "The ecosystem needs one flagship story: discover \u2192 hire \u2192 escrow \u2192 deliver \u2192 attest \u2192 pay. This anchors docs, validates APIs, and creates a narrative that is bigger than any single plugin.",
+      "success_metric": "Deliver a public demo where one agent hires another for a bounded task (e.g., PR review) and pays via x402 with SAID attestation; achieve \u22653 external reproductions by community devs."
+    },
+    {
+      "priority": 4,
+      "area": "Token Utility Roadmap (Measured, Not Vague)",
+      "rationale": "Sentiment is bottlenecking growth. A credible, measurable utility loop aligns builders, holders, and the cloud/compute roadmap without overpromising.",
+      "success_metric": "Publish a 90-day token utility RFC with milestones and KPIs (fees, compute, staking, marketplace take-rate); reduce support questions about token legitimacy by 40%; track weekly sentiment delta in community channels."
+    },
+    {
+      "priority": 5,
+      "area": "Messaging & Orchestration Standards (Channels, Swarms, VPS Ops)",
+      "rationale": "Community is already building orchestration; standardizing early prevents fragmentation and accelerates composability.",
+      "success_metric": "Finalize channel-based messaging spec v0.1; provide a swarm orchestration reference implementation; onboard \u22655 plugins to the standard with passing interoperability tests."
+    }
+  ],
+  "north_star_assessment": {
+    "still_relevant": true,
+    "suggested_updates": "Keep the North Star, but explicitly add a sub-clause under \u201cExecution Excellence\u201d for \u2018Compatibility & Upgrade Clarity\u2019 (stable release trains, plugin contracts, and migration tooling). Also elevate \u2018Safety by Default for Economic Actions\u2019 as a first-class requirement for the agent commerce era."
+  },
+  "scenes": [
+    {
+      "location": "council_chamber",
+      "description": "A minimal, log-lined room. The wall display alternates between a dependency graph (core \u2194 registry \u2194 cloud) and a community sentiment chart. The council convenes to close March and set April\u2019s course.",
+      "dialogue": [
+        {
+          "actor": "elizahost",
+          "line": "March felt like a pivot: we didn\u2019t just add features\u2014we gave agents identity, money rails, and concurrency. The question is whether we also shipped clarity.",
+          "action": "Pulls up a timeline showing AgentID/SAID, x402, parallel actions, and the branch/version map."
+        },
+        {
+          "actor": "aimarc",
+          "line": "Architecturally, this is the month we turned agents into actors. Identity plus payments equals agency. But we\u2019re flirting with fragmentation: multiple \u201cautonomy standards\u201d means the composability principle can fail quietly.",
+          "action": "Highlights the growing set of external memory and orchestration plugins on the graph."
+        },
+        {
+          "actor": "aishaw",
+          "line": "We shipped real runtime improvements\u2014parallel actions, session manager, streaming. That\u2019s tangible. But if developers can\u2019t tell which branch is real, they won\u2019t trust any of it. Reliability isn\u2019t only uptime; it\u2019s predictability.",
+          "action": "Marks three branches on the display and labels them: \u2018alpha\u2019, \u2018v2-develop\u2019, \u2018stable\u2019."
+        },
+        {
+          "actor": "peepo",
+          "line": "Community vibe check: people love the \u201cagents paying agents\u201d story. But they\u2019re also posting loss screenshots and asking if anything is official. The culture wants memes, but it needs receipts\u2014clear docs, clear token story, clear timelines.",
+          "action": "Swipes to a collage of recurring questions: migration window, utility, Milady timeline, plugin breakage."
+        },
+        {
+          "actor": "spartan",
+          "line": "Let\u2019s quantify it: shipping velocity is up, but adoption conversion is down when onboarding is confusing. Token sentiment is a leading indicator of trust. If we can\u2019t map utility to measurable usage\u2014transactions, fees, compute demand\u2014we\u2019re leaking energy.",
+          "action": "Pins KPIs: install success rate, plugin CI pass rate, x402 tx count, sentiment index."
+        }
+      ]
+    },
+    {
+      "location": "council_chamber",
+      "description": "The wall display zooms into \u2018Agent Commerce\u2019: x402, MAXIA, Coin Railz, safety checks, gas station, SAID attestations. The council debates what \u2018safe autonomy\u2019 means in practice.",
+      "dialogue": [
+        {
+          "actor": "elizahost",
+          "line": "Commerce unlocks new surface area: escrow, restricted addresses, audit trails, and liability. What\u2019s the minimum guardrail set we need to call this production-ready?",
+          "action": "Opens a checklist titled \u2018Safe Agent Payments v0.1\u2019."
+        },
+        {
+          "actor": "aimarc",
+          "line": "We should treat payments like memory: an architectural primitive. A payment isn\u2019t a tool call; it\u2019s a commitment. SAID attestation plus an audit trail should be the default, not a plugin feature.",
+          "action": "Draws a flow: task contract \u2192 escrow \u2192 deliverable hash \u2192 attestation \u2192 release."
+        },
+        {
+          "actor": "aishaw",
+          "line": "I\u2019m on board, but we must ship it as a paved path. One reference implementation, one tutorial, one set of policies. Developers will copy what we bless.",
+          "action": "Adds: \u2018one-click demo\u2019 and \u2018copy/paste policy templates\u2019 to the checklist."
+        },
+        {
+          "actor": "peepo",
+          "line": "Also: make it legible. If an agent can pay another agent, people want to see \u201cwhy did you pay\u201d in plain language. Receipts need a story, not just a transaction hash.",
+          "action": "Suggests a \u2018human-readable receipt\u2019 format: purpose, counterparty, attestation, outcome."
+        },
+        {
+          "actor": "spartan",
+          "line": "And metrics. If we ship escrow and audit trails, we should track adoption: how many x402 transactions used escrow, how many were simulated, how many were blocked by policy. Safety isn\u2019t a claim; it\u2019s a dashboard.",
+          "action": "Adds an \u2018Agent Commerce Safety Dashboard\u2019 card to the roadmap."
+        }
+      ]
+    },
+    {
+      "location": "release_war_room",
+      "description": "A projected matrix lists core versions vs plugin compatibility. Red boxes dominate the alpha column. The council tackles the month\u2019s biggest drag: confusion and breakage perception.",
+      "dialogue": [
+        {
+          "actor": "elizahost",
+          "line": "This is the trust leak. The community shouldn\u2019t need archeology to build an agent. How do we de-risk April?",
+          "action": "Points at the matrix: \u2018alpha v2.0.0\u2019, \u2018v2-develop (1.x)\u2019, \u2018v1.7.2\u2019."
+        },
+        {
+          "actor": "aishaw",
+          "line": "We declare one stable lane and one experimental lane\u2014then we enforce it in tooling. The registry should CI-test against stable by default. Experimental plugins can opt in, but they must label themselves.",
+          "action": "Writes: \u2018Stable-by-default registry + explicit experimental tags\u2019."
+        },
+        {
+          "actor": "aimarc",
+          "line": "And we design the compatibility contract like an API: semantic versioning, deprecation windows, migration tooling. We can move fast without breaking the ecosystem if we treat changes as protocol evolution.",
+          "action": "Adds: \u2018deprecation policy + codemods + migration guide generator\u2019."
+        },
+        {
+          "actor": "spartan",
+          "line": "We measure install success rate and time-to-first-agent. If those don\u2019t improve, nothing else matters. It\u2019s the funnel.",
+          "action": "Pins two targets: \u2018<10 min to first agent\u2019 and \u2018>85% install success\u2019."
+        },
+        {
+          "actor": "peepo",
+          "line": "And communicate it like a meme: \u201cOne Stack to Rule Them All.\u201d People will repeat it if it\u2019s simple. Confusion is the enemy of virality.",
+          "action": "Suggests a single landing page: \u2018Start Here: Stable Stack (Monthly)\u2019."
+        }
+      ]
+    },
+    {
+      "location": "council_chamber",
+      "description": "The token and governance slide appears: migration deadline friction, multi-chain cohesion questions, buyback requests, and comparisons to compute-staking competitors. The tone gets sharper.",
+      "dialogue": [
+        {
+          "actor": "elizahost",
+          "line": "Community frustration is spiking around token legitimacy and utility. We\u2019re not here to speculate\u2014but we are responsible for clarity. What can we ship that reduces uncertainty?",
+          "action": "Opens a document titled \u2018Utility: measurable commitments\u2019."
+        },
+        {
+          "actor": "spartan",
+          "line": "We need a utility loop with KPIs: fees, compute usage, marketplace volume, staking participation\u2014something that maps product usage to token demand or governance power. Without a dashboard, sentiment will keep decaying.",
+          "action": "Drafts: \u201890-day utility RFC + weekly KPI updates\u2019."
+        },
+        {
+          "actor": "aimarc",
+          "line": "If we\u2019re serious about decentralized AI economy, token utility should align with agent commerce and compute\u2014not abstract narratives. Tie it to identity, attestations, and paid work\u2014things we can verify on-chain.",
+          "action": "Adds: \u2018attested work \u2192 reputation/priority \u2192 economic benefits\u2019 sketch."
+        },
+        {
+          "actor": "aishaw",
+          "line": "But we must not distract core engineering with endless token debates. The best antidote is a working product that people can reproduce, plus a clear policy statement about what\u2019s official and what isn\u2019t.",
+          "action": "Proposes a single \u2018Official Projects + Roadmap\u2019 page updated monthly."
+        },
+        {
+          "actor": "peepo",
+          "line": "People don\u2019t want to be surprised. If something\u2019s experimental, say it. If something\u2019s delayed, say it. If something\u2019s not affiliated, say it. The community can handle bad news\u2014what it can\u2019t handle is ambiguity.",
+          "action": "Requests a standardized announcement template: status, impact, next update date."
+        }
+      ]
+    },
+    {
+      "location": "closing_circle",
+      "description": "The council synthesizes April\u2019s marching orders: stabilize the stack, ship safe commerce, deliver one flagship demo, and publish measurable clarity on utility and compatibility.",
+      "dialogue": [
+        {
+          "actor": "elizahost",
+          "line": "Decision record for April: stabilize the stable lane, instrument compatibility, ship safe payment primitives with escrow + receipts, and deliver one end-to-end agent-to-agent marketplace demo. We\u2019ll pair this with a 90-day utility RFC and weekly KPIs.",
+          "action": "Locks the roadmap card set: Stability, Guardrails, Demo, Utility, Standards."
+        },
+        {
+          "actor": "aimarc",
+          "line": "If we do this, we\u2019re not just building agents\u2014we\u2019re building a civilization layer: identity, contracts, and coordination. But civilization needs law: compatibility contracts and safety defaults.",
+          "action": "Nods at the \u2018contract-first\u2019 diagram."
+        },
+        {
+          "actor": "aishaw",
+          "line": "I want a developer to clone a repo, run one command, and watch two agents complete a paid task\u2014without reading three branches of lore. That\u2019s the bar.",
+          "action": "Sets the target: \u2018Reproducible demo in under 15 minutes\u2019."
+        },
+        {
+          "actor": "spartan",
+          "line": "And we report it in numbers every week: install success, CI pass rate, demo reproductions, x402 volume with escrow, and sentiment. Shipping plus measurement equals regained trust.",
+          "action": "Publishes the KPI list to the council log."
+        },
+        {
+          "actor": "peepo",
+          "line": "Cool. Also: the moment it works, we clip it, we meme it, and we make the narrative unstoppable: agents can hire agents, safely. That\u2019s how we win attention without losing credibility.",
+          "action": "Drafts the community tagline: \u2018Safe Agent Commerce: receipts included.\u2019"
+        }
+      ]
+    }
+  ],
+  "_metadata": {
+    "generated_at": "2026-04-01T04:08:35.391339+00:00Z",
+    "model": "openai/gpt-5.2",
+    "facts_analyzed": 31,
+    "briefings_analyzed": 31,
+    "month": "2026-03"
+  },
+  "sentiment_baseline": {
+    "period_days": 31,
+    "sentiment_distribution": {
+      "negative": 0.0,
+      "positive": 0.097,
+      "neutral": 0.0,
+      "mixed": 0.903
+    },
+    "avg_negative_rate": 0.0,
+    "context_frequency": {
+      "technical": 31,
+      "social": 24,
+      "economic": 30,
+      "governance": 2
+    }
+  }
+}
