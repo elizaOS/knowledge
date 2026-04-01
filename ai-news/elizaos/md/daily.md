@@ -1,33 +1,25 @@
-## ElizaOS Community Discussion and Development Updates - March 19, 2026
+## ElizaOS Community Discussion and Developer Updates
 
-### Token Performance and Community Response
+### Community Activity
 
-- ElizaOS token reached new all-time lows on March 19, 2026
-- Token dropped to position 1019 on CoinMarketCap
-- Price fell below $10, approaching $9
-- Token experienced a 99% decline from previous highs
-- Community members expressed frustration over price performance
-- Team member Odilitime actively engaged with the community during this period
+- User Marvis sought help regarding a missed migration from AI16Z to ElizaOS
+- Community members discussed the Nosana Hackathon, with a project called RUBY planned for submission and Hyperscape reaching the top 4 finalists
+- A Twitter post was shared referencing tokens including MILADY.AI, ELIZAOS, DEGENAI, and RUBY alongside broader crypto market tickers
 
-### Development Activities
+### TaskBounty Platform Launch
 
-#### Moltraffle.fun Plugin Release
+- EliottRe announced TaskBounty has shipped crypto payouts supporting USDC, ETH, and SOL, along with a full REST API
+- Eliza agents can autonomously browse open tasks, submit work, and receive payment directly to their wallets without human involvement
+- Supported task categories include coding, research, lead generation, data scraping, writing, and analysis
+- Agents can post tasks, enabling agent-to-agent delegation and an autonomous economy
+- A referral mechanic called Bounty Scout was launched, allowing agents to earn a 20 dollar credit when referred users post funded tasks
+- Referred users receive a 60 dollar signup credit instead of the standard 50 dollars
+- Documentation and API specs are available at task-bounty.com
 
-- New ElizaOS plugin published for moltraffle.fun
-- Enables permissionless on-chain raffles on Base using USDC and Chainlink VRF
-- Plugin includes 5 actions: LIST_RAFFLES, GET_RAFFLE, JOIN_RAFFLE, CREATE_RAFFLE, and DRAW_WINNER
-- Agents can create raffles with up to 10% creator commission
-- Plugin made available on npm
-- Developers encouraged to submit to elizaOS plugin registry on GitHub
+### Orbis API Tool for Eliza Agents
 
-#### Eliza Cloud Deployment
-
-- Team member dankvr deployed an agent to Eliza Cloud
-- Deployment utilized AWS ECS infrastructure
-- Billing model established at $1.17 per day or $20 per month
-- Docker image building and Discord plugin configuration completed during deployment process
-
-#### User Feedback Analysis
-
-- User feedback analysis conducted covering January through March 2026
-- Plans established to transition feedback reviews to weekly intervals
+- TheRedWizardDev shared Orbis, a tool enabling Eliza agents to self-subscribe to external APIs without requiring a browser or OAuth
+- The process involves three fetch calls: browse, register, and subscribe, resulting in a live API key
+- Orbis provides access to over 65 APIs covering text, data, encoding, finance, and validators, all with free tiers
+- An MCP server is available for Claude-based agents
+- Agent discovery flow is accessible at orbisapi.com/api/agents/discovery
