@@ -1,25 +1,29 @@
-## ElizaOS Community Discussion and Developer Updates
+## ElizaOS Community Discussion - March 17, 2026
 
-### Community Activity
+### Community Updates and Content
 
-- User Marvis sought help regarding a missed migration from AI16Z to ElizaOS
-- Community members discussed the Nosana Hackathon, with a project called RUBY planned for submission and Hyperscape reaching the top 4 finalists
-- A Twitter post was shared referencing tokens including MILADY.AI, ELIZAOS, DEGENAI, and RUBY alongside broader crypto market tickers
+- Jin posted a weekly roundup trailer in the announcements channel showcasing recent developments and updates for the ElizaOS ecosystem
+- The video received positive feedback from the community
 
-### TaskBounty Platform Launch
+### Technical Developments
 
-- EliottRe announced TaskBounty has shipped crypto payouts supporting USDC, ETH, and SOL, along with a full REST API
-- Eliza agents can autonomously browse open tasks, submit work, and receive payment directly to their wallets without human involvement
-- Supported task categories include coding, research, lead generation, data scraping, writing, and analysis
-- Agents can post tasks, enabling agent-to-agent delegation and an autonomous economy
-- A referral mechanic called Bounty Scout was launched, allowing agents to earn a 20 dollar credit when referred users post funded tasks
-- Referred users receive a 60 dollar signup credit instead of the standard 50 dollars
-- Documentation and API specs are available at task-bounty.com
+- Developer lekt9 introduced unbrowse, a browser for agents that operates at 100x speed by traversing APIs instead of DOM while passively indexing web APIs for other agents
+- Odilitime provided guidance on creating an ElizaOS plugin integration, directing to the plugin registry documentation and suggesting cursor for plugin code generation
 
-### Orbis API Tool for Eliza Agents
+### Project Strategy and Product Launch
 
-- TheRedWizardDev shared Orbis, a tool enabling Eliza agents to self-subscribe to external APIs without requiring a browser or OAuth
-- The process involves three fetch calls: browse, register, and subscribe, resulting in a live API key
-- Orbis provides access to over 65 APIs covering text, data, encoding, finance, and validators, all with free tiers
-- An MCP server is available for Claude-based agents
-- Agent discovery flow is accessible at orbisapi.com/api/agents/discovery
+- Odilitime clarified the project strategy: Shaw promotes the Milady product which creates distribution for elizacloud, generating revenue to power the ElizaOS flywheel
+- Product launch targeted for end of week or early next week
+
+### Industry News Shared
+
+- World added an identity toolkit for AI bots on Coinbase's X402 protocol
+- SEC announced new token taxonomy classifying most crypto assets into 4 non-security categories
+- Competition announced where agents can win 100,000 dollars in the next 5 days
+- Jin shared an article about building Claude Code and how Anthropic uses skills
+
+### Development Discussions
+
+- Community members discussed creating a directory or registry similar to Clawhub that could include skills and plugins
+- Stan agreed with the proposal for building a solid directory and registry system
+- A senior full-stack and AI developer posted credentials offering development services, specializing in LLM integration, autonomous agents, workflow automation, and blockchain systems with expertise in React, Next.js, Node.js, Python, and various AI/ML frameworks
