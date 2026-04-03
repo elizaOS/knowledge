@@ -1,29 +1,30 @@
-## ElizaOS Community Discussion - March 17, 2026
+## ElizaOS Community Discussion and Development Updates - March 26, 2026
 
-### Community Updates and Content
+## Industry and Ecosystem Highlights
 
-- Jin posted a weekly roundup trailer in the announcements channel showcasing recent developments and updates for the ElizaOS ecosystem
-- The video received positive feedback from the community
+- The Solana Foundation Chief Product Officer stated that 99.99% of all onchain transactions within two years will be driven by agents, bots, and LLM-based wallets and trading products
+- A debate between Vitalik Buterin and Beff Jezos on E/ACC versus D/ACC was shared, moderated by Eddy Lazzarin and Shaw, covering thermodynamics, acceleration and entropy, open source AI, autonomous agents, and crypto as a trust layer between humans and AI
 
-### Technical Developments
+## ElizaOS Ecosystem Clarifications
 
-- Developer lekt9 introduced unbrowse, a browser for agents that operates at 100x speed by traversing APIs instead of DOM while passively indexing web APIs for other agents
-- Odilitime provided guidance on creating an ElizaOS plugin integration, directing to the plugin registry documentation and suggesting cursor for plugin code generation
+- Odilitime confirmed ElizaOS is intended to power the Jeju chain upon launch and is not a memecoin
+- ElizaOS and DegenAI are confirmed as the only two tokens minted and supported by Labs
+- ElizaOS operates as an open-source framework with a SaaS platform for easier deployment
 
-### Project Strategy and Product Launch
+## Projects Building on ElizaOS
 
-- Odilitime clarified the project strategy: Shaw promotes the Milady product which creates distribution for elizacloud, generating revenue to power the ElizaOS flywheel
-- Product launch targeted for end of week or early next week
+- Babylon - an AI training ground and game where agents participate in prediction markets and autonomous trading
+- Hyperscape - a game built on the ElizaOS framework
+- Milady - a project pushing the elizacloud SaaS platform
+- DegenAI is planned to integrate with Babylon's prediction market and autonomous trading features
+- Work is ongoing to make DegenAI the host of the server, with production and dev being consolidated into a single staging environment
 
-### Industry News Shared
+## Developer Tools and Announcements
 
-- World added an identity toolkit for AI bots on Coinbase's X402 protocol
-- SEC announced new token taxonomy classifying most crypto assets into 4 non-security categories
-- Competition announced where agents can win 100,000 dollars in the next 5 days
-- Jin shared an article about building Claude Code and how Anthropic uses skills
+- HatcherLabs announced hatcher.host, a hosting platform supporting ElizaOS and Milady deployments, available for free trial
+- xProof.app was shared as a plugin that anchors every ElizaOS agent decision on the MultiversX blockchain before execution, providing on-chain decision provenance, available via npm with a pull request open on the official ElizaOS plugin registry
+- Adaptive-Liquidity Labs posted that they are actively recruiting one or two additional developers to join their team
 
-### Development Discussions
+## Token Migration
 
-- Community members discussed creating a directory or registry similar to Clawhub that could include skills and plugins
-- Stan agreed with the proposal for building a solid directory and registry system
-- A senior full-stack and AI developer posted credentials offering development services, specializing in LLM integration, autonomous agents, workflow automation, and blockchain systems with expertise in React, Next.js, Node.js, Python, and various AI/ML frameworks
+- Odilitime addressed ai16z token holders who missed the migration window and offered to add interested users to a waitlist via DM
