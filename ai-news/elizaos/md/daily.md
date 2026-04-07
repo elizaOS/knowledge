@@ -1,30 +1,35 @@
-## ElizaOS Community Discussion - March 20, 2026
+## ElizaOS Community Updates - March 24, 2026
 
-### Babylon Game Launch
+### Community Contests and Events
 
-- Babylon game launched as a new market simulation platform
-- Players can command AI agents to conduct research, share information, and make trades and predictions
-- Launch includes an airdrop for the community
-- Game will drive ElizaCloud buybacks of the token
-- Shaw shared game mechanics details on Twitter
+- dEXploarer announced a contest with $150 in prizes and $150 in Milady BSC tokens for the best MiladyAI short video submissions
+- Videos must be minimum 10 seconds in length and preferably feature community characters
+- Contest aims to promote both community engagement and app promotion
 
-### Milady App Development
+### Hackathons and Partnerships
 
-- Development continues with progress tracked on GitHub
-- Releases available for testing
-- System uses ElizaOS 1.x CLI plus ElizaCloud infrastructure
+- ElizaBAO announced an AI Sprint hackathon in collaboration with BNBChain, Unibase AI, pieverse, dgrid ai, MYX Finance, and TagAIDAO
+- Global online hackathon scheduled for April 1-30, 2026
+- $50,000 prize pool available for developers and AI enthusiasts
+- Denis from Nosana introduced himself as ecosystem and community representative
+- Nosana partnership with ElizaOS confirmed for the Nosana Builders Challenge starting March 25
+- Workshops scheduled for March 26 and April 2 to help participants build AI agents efficiently
 
-### Technical Work
+### Technical Developments
 
-- Addressed disk image upload issues on server side
-- Worked on GPG key and SHA256 sum problems in the Milady repository
-- Addressed questions about building trading agents
+- Ivan Jeremic announced development of a Pythia MCP server
+- Server enables AI agents to query live on-chain market indicators including EMA, RSI, VWAP, Bollinger Bands, and volatility
+- System operates without requiring API keys or off-chain data pipelines
+- Data sourced from Chainlink oracle on Polygon covering 13 tokens across 4 timeframes
+- Free testnet available for testing
 
-### Community Engagement
+### Security Alerts
 
-- A developer offered collaboration opportunities with expertise in:
-  - Full stack web3 and AI development
-  - DeFi and NFT contracts
-  - Wallet-ready dapps
-  - AI integration across EVM, Sui, and Solana
-  - Rust, Solidity, Python, React, Next.js, and modern AI stacks
+- DorianD shared critical security alert about supply chain attack in litellm version 1.82.8 on PyPI
+- Malicious package contains .pth file that harvests SSH keys, cloud credentials, and secrets on every Python startup
+- Attack attempts lateral movement across Kubernetes clusters
+- Odilitime confirmed awareness of the security issue
+
+### Community Management
+
+- Odilitime clarified that a person responding to a crypto media network collaboration proposal does not represent the project
