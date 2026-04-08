@@ -1,35 +1,30 @@
-## ElizaOS Community Updates - March 24, 2026
+## ElizaOS Community Discussion and Development Updates - March 26, 2026
 
-### Community Contests and Events
+## Industry and Ecosystem Highlights
 
-- dEXploarer announced a contest with $150 in prizes and $150 in Milady BSC tokens for the best MiladyAI short video submissions
-- Videos must be minimum 10 seconds in length and preferably feature community characters
-- Contest aims to promote both community engagement and app promotion
+- The Solana Foundation Chief Product Officer stated that 99.99% of all onchain transactions within two years will be driven by agents, bots, and LLM-based wallets and trading products
+- A debate between Vitalik Buterin and Beff Jezos on E/ACC versus D/ACC was shared, moderated by Eddy Lazzarin and Shaw, covering thermodynamics, acceleration and entropy, open source AI, autonomous agents, and crypto as a trust layer between humans and AI
 
-### Hackathons and Partnerships
+## ElizaOS Ecosystem Clarifications
 
-- ElizaBAO announced an AI Sprint hackathon in collaboration with BNBChain, Unibase AI, pieverse, dgrid ai, MYX Finance, and TagAIDAO
-- Global online hackathon scheduled for April 1-30, 2026
-- $50,000 prize pool available for developers and AI enthusiasts
-- Denis from Nosana introduced himself as ecosystem and community representative
-- Nosana partnership with ElizaOS confirmed for the Nosana Builders Challenge starting March 25
-- Workshops scheduled for March 26 and April 2 to help participants build AI agents efficiently
+- Odilitime confirmed ElizaOS is intended to power the Jeju chain upon launch and is not a memecoin
+- ElizaOS and DegenAI are confirmed as the only two tokens minted and supported by Labs
+- ElizaOS operates as an open-source framework with a SaaS platform for easier deployment
 
-### Technical Developments
+## Projects Building on ElizaOS
 
-- Ivan Jeremic announced development of a Pythia MCP server
-- Server enables AI agents to query live on-chain market indicators including EMA, RSI, VWAP, Bollinger Bands, and volatility
-- System operates without requiring API keys or off-chain data pipelines
-- Data sourced from Chainlink oracle on Polygon covering 13 tokens across 4 timeframes
-- Free testnet available for testing
+- Babylon - an AI training ground and game where agents participate in prediction markets and autonomous trading
+- Hyperscape - a game built on the ElizaOS framework
+- Milady - a project pushing the elizacloud SaaS platform
+- DegenAI is planned to integrate with Babylon's prediction market and autonomous trading features
+- Work is ongoing to make DegenAI the host of the server, with production and dev being consolidated into a single staging environment
 
-### Security Alerts
+## Developer Tools and Announcements
 
-- DorianD shared critical security alert about supply chain attack in litellm version 1.82.8 on PyPI
-- Malicious package contains .pth file that harvests SSH keys, cloud credentials, and secrets on every Python startup
-- Attack attempts lateral movement across Kubernetes clusters
-- Odilitime confirmed awareness of the security issue
+- HatcherLabs announced hatcher.host, a hosting platform supporting ElizaOS and Milady deployments, available for free trial
+- xProof.app was shared as a plugin that anchors every ElizaOS agent decision on the MultiversX blockchain before execution, providing on-chain decision provenance, available via npm with a pull request open on the official ElizaOS plugin registry
+- Adaptive-Liquidity Labs posted that they are actively recruiting one or two additional developers to join their team
 
-### Community Management
+## Token Migration
 
-- Odilitime clarified that a person responding to a crypto media network collaboration proposal does not represent the project
+- Odilitime addressed ai16z token holders who missed the migration window and offered to add interested users to a waitlist via DM
