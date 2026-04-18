@@ -6,6 +6,9 @@ on:
     - cron: '30 10 * * *'
   workflow_dispatch: # Allows manual triggering
 
+env:
+  DISCORD_FACTS_CHANNEL_ID: ${{ vars.DISCORD_FACTS_CHANNEL_ID || '1377401701081944144' }}
+
 jobs:
   send-daily-briefing:
     runs-on: ubuntu-latest
@@ -44,4 +47,4 @@ jobs:
           fi
 
           echo "Sending briefing using: $FACTS_FILE"
-          python scripts/integrations/discord/webhook.py "$FACTS_FILE" -d -c "1377401701081944144" -s
+          python scripts/integrations/discord/webhook.py "$FACTS_FILE" -d -c "$DISCORD_FACTS_CHANNEL_ID" -s

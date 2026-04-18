@@ -68,10 +68,6 @@ jobs:
         if: steps.council_gen.outputs.council_json_file
         run: cp "${{ steps.council_gen.outputs.council_json_file }}" the-council/council_briefing/daily.json
 
-      - name: Generate RSS feeds
-        run: |
-          python scripts/etl/generate-rss.py
-
       - name: Commit updated files
         uses: stefanzweifel/git-auto-commit-action@v5
       - name: Alert on failure

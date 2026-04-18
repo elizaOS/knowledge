@@ -64,7 +64,7 @@ jobs:
       - name: Pull latest changes before commit
         run: |
           git fetch origin main
-          git rebase origin/main || git rebase --abort
+          git rebase origin/main || { git rebase --abort; exit 1; }
 
       - name: Commit updated files
         uses: stefanzweifel/git-auto-commit-action@v5
