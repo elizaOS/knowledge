@@ -4,6 +4,11 @@ on:
   push:
     branches:
       - main # Or your primary development branch
+  schedule:
+    # Daily at 11:00 UTC — 30 min after the last daily data workflow (daily_discord_briefing at 10:30).
+    # Ensures deployment even when upstream commits are made via default GITHUB_TOKEN
+    # (which doesn't trigger push-event workflows).
+    - cron: '0 11 * * *'
   workflow_dispatch:
 
 permissions:
