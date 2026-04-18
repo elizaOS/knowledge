@@ -20,11 +20,15 @@ class Logger:
     @staticmethod
     def info(msg): print(f"\033[94m{msg}\033[0m")
     @staticmethod
-    def success(msg): print(f"\033[92m{msg}\033[0m") 
+    def success(msg): print(f"\033[92m{msg}\033[0m")
     @staticmethod
     def warn(msg): print(f"\033[93m{msg}\033[0m")
     @staticmethod
     def error(msg): print(f"\033[91m{msg}\033[0m")
+
+def dig(obj, *keys):
+    for k in keys: obj = obj.get(k) if isinstance(obj, dict) else None
+    return obj
 
 class TextProcessor:
     @staticmethod
@@ -209,11 +213,10 @@ class BriefingProcessor:
         # Removed separate PR/Issues sections to avoid redundancy
         # GitHub overall_focus already contains the important activity summary
 
-        # Add poster from CDN if available in facts
-        # Try multiple locations: images.overall (enrich-facts.py), overall_media.poster_url, legacy media.posters.overall
-        poster_url = data.get('images', {}).get('overall') or \
-                     data.get('overall_media', {}).get('poster_url') or \
-                     data.get('media', {}).get('posters', {}).get('overall')
+        poster_url = (dig(data, 'overall_poster')
+                      or dig(data, 'images', 'overall')
+                      or dig(data, 'overall_media', 'poster_url')
+                      or dig(data, 'media', 'posters', 'overall'))
         if poster_url:
             poster_embed = EmbedFactory.create_poster(poster_url, data['briefing_date'])
             if poster_embed:
