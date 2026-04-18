@@ -24,15 +24,24 @@ jobs:
           OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
           DISCORD_BOT_TOKEN: ${{ secrets.DISCORD_BOT_TOKEN }}
         run: |
-          # Find latest facts file
-          FACTS_FILE=$(ls -t the-council/facts/????-??-??.json 2>/dev/null | head -1)
+          FACTS_FILE=$(ls the-council/facts/????-??-??.json 2>/dev/null | sort | tail -1)
 
           if [ -z "$FACTS_FILE" ]; then
             echo "No facts files found. Skipping Discord briefing."
             exit 0
           fi
 
-          echo "Sending briefing using: $FACTS_FILE"
+          FACTS_DATE=$(basename "$FACTS_FILE" .json)
+          PAYLOAD_DATE=$(python3 -c "import json, sys; print(json.load(open(sys.argv[1]))['briefing_date'])" "$FACTS_FILE")
+          if [ "$PAYLOAD_DATE" != "$FACTS_DATE" ]; then
+            echo "::error::Facts filename date ($FACTS_DATE) does not match briefing_date ($PAYLOAD_DATE). Refusing to post."
+            exit 1
+          fi
+          YESTERDAY=$(date -u -d 'yesterday' +%Y-%m-%d)
+          if [ "$PAYLOAD_DATE" \< "$YESTERDAY" ]; then
+            echo "::error::Latest facts payload ($PAYLOAD_DATE) is older than yesterday ($YESTERDAY). Upstream pipeline is stale — refusing to post."
+            exit 1
+          fi
 
-          # Poster URL is now read from facts.media.posters.overall (CDN)
+          echo "Sending briefing using: $FACTS_FILE"
           python scripts/integrations/discord/webhook.py "$FACTS_FILE" -d -c "1377401701081944144" -s

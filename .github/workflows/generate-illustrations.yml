@@ -71,7 +71,7 @@ jobs:
           REPO_ROOT="${{ github.workspace }}"
 
           if [ "${{ inputs.facts_date }}" = "today" ]; then
-            FACTS_FILE=$(ls -t "${REPO_ROOT}/the-council/facts/"????-??-??.json 2>/dev/null | head -1)
+            FACTS_FILE=$(ls "${REPO_ROOT}/the-council/facts/"????-??-??.json 2>/dev/null | sort | tail -1)
             if [ -z "$FACTS_FILE" ]; then
               echo "::error::No facts files found"
               exit 1
