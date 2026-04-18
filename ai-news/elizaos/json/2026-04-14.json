@@ -1,0 +1,434 @@
+{
+  "type": "elizaosDailySummary",
+  "title": "Daily Report - 2026-04-14",
+  "categories": [
+    {
+      "title": "ElizaOS Community Discussion: Labs Shutdown, Project Status, and Development Updates",
+      "content": [
+        {
+          "text": "A significant discussion unfolded in the general channel on April 14, 2026, centered around leaked internal messages from Shaw (the lead developer) indicating that Eliza Labs was being shut down. A community member shared screenshots from a Telegram group containing two messages attributed to Shaw. The first, dated April 12, stated that Eliza Labs was ceasing all development and operations due to a deteriorating market, a treasury trending toward zero, and an inability to reach revenue targets. The second message, dated April 8, was described as a vent in which Shaw expressed frustration with former team members for failing to ship finished products despite significant spending, and outlined a new focused approach going forward. Odilitime (a core developer and moderator) confirmed the April 12 message was a legitimate internal communication, while characterizing the April 8 message as a vent that was not entirely accurate in his opinion.",
+          "sources": "https://discord.com/channels/1253563208833433701/1253563209462448241",
+          "images": "https://cdn.elizaos.news/elizaos-media/img_3675_2fcb301c.jpg"
+        },
+        {
+          "text": "Community members expressed confusion and concern about whether ElizaOS as a project was shutting down entirely. Odilitime and other contributors clarified that while Eliza Labs as a funded organization was scaling back and stopping payments to some dedicated developers, the ElizaOS open source project itself was continuing. Odilitime noted that contributions were actually rising, that an agent had been deployed to help merge and clean up issues, that version 1.x had been stable for some time, and that version 2.x was in active development. Shaw himself had stated in the internal message that he intended to continue working on Eliza as an open source community project. Community members were encouraged to stay on ElizaOS rather than switching to alternatives. Odilitime also mentioned ongoing work on token marketing using ElizaOS v3, plans for Spartan to create content for marketing, and discussions with Shaw about agentic business demos. A suggestion was raised about converting the project to a DAO structure.",
+          "sources": "https://discord.com/channels/1253563208833433701/1253563209462448241",
+          "posters": "https://cdn.elizaos.news/posters/1776216063434-rbc7x.png"
+        },
+        {
+          "text": "A separate concern arose in the coders channel when a community member reported being tagged in what appeared to be an airdrop message. Odilitime identified this as scammer activity, noting that scammers were attempting to impersonate him, and asked to be informed of any such instances so they could be cleaned up. In the general discussion channel, Odilitime also mentioned that a bot called migrate-helper was running a security check on his behalf and warned community members to stay alert to impersonation attempts.",
+          "sources": [
+            "https://discord.com/channels/1253563208833433701/1300025221834739744",
+            "https://discord.com/channels/1253563208833433701/1253563209462448241"
+          ],
+          "posters": "https://cdn.elizaos.news/posters/1776216093772-vxrdj.png"
+        },
+        {
+          "text": "In the framework development channel, Stan submitted a pull request to the plugin-anthropic repository adding two features: OAuth authentication allowing LLM calls to be routed through a Claude Max subscription instead of API keys, and missing TEXT_REASONING model type handlers. Odilitime reviewed the PR, left comments on two issues found in the code, and ultimately merged it. During the publish process, a build error was encountered related to a missing workspace dependency for elizaos/core and a browser build failure involving an unresolved jsonrepair module. Stan acknowledged missing something and pushed a follow-up PR to address it. Stan also mentioned plans to add streaming support, noting that the claude -p command handles streaming JSON.",
+          "sources": "https://discord.com/channels/1253563208833433701/1377726087789940836",
+          "images": "https://cdn.elizaos.news/elizaos-media/17_f7c7468f.jpg"
+        },
+        {
+          "text": "A separate technical discussion in the general channel touched on payment infrastructure for agents built on Solana using the x402 protocol. One developer asked whether to support USDC-SPL on Solana via the PayAI facilitator or to keep settlements in Base USDC only. Stan suggested supporting both and letting the client choose the chain to minimize friction for agents. The developer agreed and indicated they would add USDC-SPL via PayAI alongside Base USDC.",
+          "sources": "https://discord.com/channels/1253563208833433701/1253563209462448241",
+          "posters": "https://cdn.elizaos.news/posters/1776216114998-v0uner.jpg"
+        }
+      ],
+      "topic": "discordrawdata"
+    },
+    {
+      "title": "Overall Project Summary: April 14, 2026",
+      "content": [
+        {
+          "text": "The primary focus of the April 14, 2026 project period was stabilizing the CI/CD pipeline across multiple repositories. The team resolved widespread release workflow failures and race conditions caused by concurrent jobs and non-fast-forward push conflicts. This was accomplished by implementing serialization, retry logic, and build fixes across the elizaos/eliza, elizaos-plugins/plugin-anthropic, and elizaos-plugins/registry repositories. Release reliability was further improved by ignoring dirty plugin submodules during the publishing process.",
+          "sources": "https://elizaos.github.io/api/summaries/overall/day/2026-04-14.json",
+          "posters": "https://cdn.elizaos.news/posters/1776216212103-hy75wl.png"
+        },
+        {
+          "text": "On the feature side, the Anthropic plugin received notable enhancements, including the addition of OAuth support for Claude Max subscriptions and a new CLI-based headless authentication mode. Core stability improvements were also made, including a legacy fallback for agent restarts and new diagnostics for monitoring plugin state drift.",
+          "sources": "https://elizaos.github.io/api/summaries/overall/day/2026-04-14.json",
+          "posters": "https://cdn.elizaos.news/posters/1776216249245-fiedbn.png"
+        },
+        {
+          "text": "Several items remain in progress, including pipeline hooks, multiple dependency bumps for npm, yarn, cargo, and uv groups, and three pending pull requests to add the blueprint.xyz plugin-solentic to the plugin registry. On the issue front, two new release failures were reported for versions v2.0.0-alpha.160 and v2.0.0-alpha.162, while the bulk of previously reported concurrency and release workflow issues across all three repositories were successfully closed.",
+          "sources": "https://elizaos.github.io/api/summaries/overall/day/2026-04-14.json",
+          "posters": "https://cdn.elizaos.news/posters/1776216281906-lvqh2i.png"
+        }
+      ],
+      "topic": "miscellaneous"
+    }
+  ],
+  "date": 1776124800,
+  "nicknameMap": {
+    "Stan ⚡": {
+      "id": "177801706963337216",
+      "username": "stan0473",
+      "roles": [
+        "platform - self assign",
+        "events - self-assign",
+        "Announcements",
+        "Server Booster",
+        "Core Dev",
+        "VIP",
+        "Contributor",
+        "workgroups - write perms",
+        "Verified",
+        "Fr",
+        "utility",
+        "Coder",
+        "Labs"
+      ],
+      "totalMessages": 29
+    },
+    "Odilitime": {
+      "id": "580487826420793364",
+      "username": "odilitime",
+      "roles": [
+        "platform - self assign",
+        "partner portal - self assign",
+        "Community Ops",
+        "Creator",
+        "Moderator",
+        "[WG] degenspartan",
+        "pmairca - self assign",
+        "Verified",
+        "Booster",
+        "Hoplite",
+        "Migration Support",
+        "Helper",
+        "Github - Contributor",
+        "Labs",
+        "Trader",
+        "Contributor",
+        "merch - self assign",
+        "events - self-assign",
+        "[WG] Elizacon - granted",
+        "Spartan Dev",
+        "Core Dev",
+        "Coder"
+      ],
+      "totalMessages": 354
+    },
+    "Tem": {
+      "id": "272098393873055755",
+      "username": "semipai.",
+      "roles": [
+        "Trader",
+        "Verified",
+        "Coder",
+        "Dev School Student",
+        "Poker"
+      ],
+      "totalMessages": 2
+    },
+    "SOLOMON VANDY": {
+      "id": "1394421865363279943",
+      "username": "sarmttech.",
+      "roles": [
+        "Helper",
+        "Verified",
+        "utility",
+        "Coder",
+        "eliza"
+      ],
+      "totalMessages": 1
+    },
+    "Kite": {
+      "id": "1140786070095671297",
+      "username": "flykite",
+      "roles": [
+        "Verified",
+        "Coder",
+        "utility",
+        "eliza"
+      ],
+      "totalMessages": 26
+    },
+    "ElizaBAO": {
+      "id": "555035784378318875",
+      "username": "baogerbao",
+      "roles": [
+        "a-hack",
+        "Creator",
+        "Contributor",
+        "Verified",
+        "Booster",
+        "Designer",
+        "Coder",
+        "Github - Contributor"
+      ],
+      "totalMessages": 68
+    },
+    "Dr. Neuro": {
+      "id": "403574677164916746",
+      "username": "neuro023",
+      "roles": [
+        "platform - self assign",
+        "trust - self assign",
+        "partner portal - self assign",
+        "Creator",
+        "Moderator",
+        "nfts - self assign",
+        "pmairca - self assign",
+        "King",
+        "Verified",
+        "Dev School Student",
+        "Booster",
+        "Contributor",
+        "NFT",
+        "merch - self assign",
+        "events - self-assign",
+        "boom chad",
+        "Coder",
+        "swarms - self assign",
+        "VIP",
+        "Designer"
+      ],
+      "totalMessages": 5
+    },
+    "Cyber_Shai": {
+      "id": "1155015781826969601",
+      "username": "cyber_shai",
+      "roles": "Verified",
+      "totalMessages": 3
+    },
+    "Seree": {
+      "id": "831422482422431754",
+      "username": "lalanotia",
+      "roles": [
+        "Verified",
+        "utility",
+        "eliza"
+      ],
+      "totalMessages": 6
+    },
+    "Cael | Adaptive-Liquidity Labs": {
+      "id": "589629301784051759",
+      "username": "bussynfrfr",
+      "roles": [
+        "Helper",
+        "Trader",
+        "[WG] degenspartan",
+        "Verified",
+        "utility",
+        "Coder",
+        "eliza"
+      ],
+      "totalMessages": 4
+    },
+    "joshisgood77": {
+      "id": "1486743497519399044",
+      "username": "joshisgood77",
+      "roles": [
+        "Trader",
+        "[WG] degenspartan",
+        "It",
+        "Verified",
+        "Fr",
+        "utility",
+        "Coder",
+        "eliza"
+      ],
+      "totalMessages": 43
+    },
+    "Ame": {
+      "id": "1484588964315660500",
+      "username": "ame05230523",
+      "roles": [
+        "Trader",
+        "Creator",
+        "Designer",
+        "utility",
+        "Coder",
+        "eliza"
+      ],
+      "totalMessages": 34
+    },
+    "NativeSatoshi  (✧ᴗ✧)": {
+      "id": "893149983556112454",
+      "username": "nativesatoshi",
+      "roles": [
+        "Verified",
+        "Coder",
+        "utility"
+      ],
+      "totalMessages": 7
+    },
+    "satsbased": {
+      "id": "1184466248520699967",
+      "username": "satsbased",
+      "roles": [
+        "King",
+        "Server Booster",
+        "Mini Mod",
+        "VIP",
+        "Contributor",
+        "Verified",
+        "utility"
+      ],
+      "totalMessages": 110
+    },
+    "𝚗𝚎𝚝𝗡𝗮𝘂𝘁𝗲.𝚂𝚝𝚎𝚕𝚕𝚊𝚛": {
+      "id": "1282311505253236778",
+      "username": "stellarbased",
+      "roles": [
+        "Verified",
+        "Designer",
+        "utility",
+        "Coder",
+        "eliza"
+      ],
+      "totalMessages": 2
+    },
+    "s": {
+      "id": "498273781589213185",
+      "username": "shawmakesmagic",
+      "roles": [
+        "Moderator",
+        "Labs",
+        "Verified",
+        "utility",
+        "Coder",
+        "eliza"
+      ],
+      "totalMessages": 9
+    },
+    "33coded": {
+      "id": "1422240545660600562",
+      "username": "33.coded",
+      "roles": [
+        "Trader",
+        "[WG] degenspartan",
+        "It",
+        "utility",
+        "Coder",
+        "eliza"
+      ],
+      "totalMessages": 18
+    },
+    "oceanrun": {
+      "id": "1315095193665409086",
+      "username": "huhuhu0621_67650",
+      "roles": [
+        "Verified",
+        "Coder",
+        "utility",
+        "eliza"
+      ],
+      "totalMessages": 3
+    },
+    "Rue": {
+      "id": "1435655324454621297",
+      "username": "sweet.rue",
+      "roles": [
+        "Trader",
+        "It",
+        "Fr",
+        "utility",
+        "eliza"
+      ],
+      "totalMessages": 1
+    },
+    "FROSTBYTE.": {
+      "id": "1452785112205885682",
+      "username": "dmatt0497",
+      "roles": [
+        "Helper",
+        "Trader",
+        "Creator",
+        "[WG] degenspartan",
+        "It",
+        "Verified",
+        "Designer",
+        "Fr",
+        "utility",
+        "Coder",
+        "eliza"
+      ],
+      "totalMessages": 2
+    },
+    "fleo-thyphon": {
+      "id": "1468346793485140078",
+      "username": "fleothyphon",
+      "roles": [
+        "Helper",
+        "Trader",
+        "[WG] degenspartan",
+        "Verified",
+        "Fr",
+        "utility",
+        "Coder",
+        "eliza"
+      ],
+      "totalMessages": 4
+    },
+    "jin": {
+      "id": "213767993153290250",
+      "username": "dankvr",
+      "roles": [
+        "God",
+        "a-hack",
+        "regen",
+        "Trader",
+        "Creator",
+        "Moderator",
+        "Vanguard",
+        "Contributor",
+        "Verified",
+        "Dev School Student",
+        "Booster",
+        "Designer",
+        "Core Dev",
+        "Coder"
+      ],
+      "totalMessages": 83
+    },
+    "Mooncake": {
+      "id": "242666870438756352",
+      "username": "mooncake1988",
+      "roles": [
+        "utility",
+        "Coder",
+        "eliza"
+      ],
+      "totalMessages": 6
+    },
+    "Inhuman Resources": {
+      "id": "807727820355797062",
+      "username": "magicyte",
+      "roles": [
+        "Verified",
+        "utility",
+        "eliza"
+      ],
+      "totalMessages": 78
+    },
+    "Toni": {
+      "id": "1251520087186477170",
+      "username": "toni007342",
+      "roles": [
+        "Trader",
+        "Creator",
+        "Moderator",
+        "Vanguard",
+        "VIP",
+        "Verified",
+        "Booster",
+        "Coder",
+        "Hoplite"
+      ],
+      "totalMessages": 1
+    },
+    "sailorpepe.eth": {
+      "id": "920440808509931560",
+      "username": "thegreatluna8713",
+      "roles": [
+        "Verified",
+        "Coder",
+        "utility",
+        "eliza"
+      ],
+      "totalMessages": 8
+    }
+  }
+}
