@@ -1,41 +1,28 @@
-## ElizaOS Community Sentiment and Developer Activity - March 31, 2026
+## ElizaOS Community Discussion and Project Updates - April 9, 2026
 
-### Community Discussion
+## Community Highlights
 
-- Token price decline of approximately 99.5 percent from peak was a major point of discussion among community members
-- Community members raised concerns about insider token selling to fund operations
-- Past commitment from Shaw regarding token buybacks from cloud, games, and app fee revenue was cited as unfulfilled
-- Odilitime was acknowledged as a consistent source of team updates
-- Shaw's attention toward other projects including Milady AI was noted by community members
-- GitHub development activity was recognized as remaining active
-- A warning was circulated about Magic Eden wallet being moved to deprecated export-only mode and removed from app stores, with users advised to act before losing wallet access
+- Community members expressed frustration about individuals who discuss plans but fail to follow through
+- Growing interest and questions emerged around the elizabao_ai project, with users asking about its purpose and current capabilities
+- The elizabao project creator noted rising hype due to increased inquiries
+- Community members shared optimistic sentiments about breakthroughs and the potential of an "eliza effect" becoming real
+- Hatcher.host was highlighted as a major project currently in free beta, described as a platform for deploying Eliza agents without writing code, managing servers, or acquiring hardware
+- Hatcher.host was characterized as a cloud computing alternative allowing users to manage and control their own agents and learn how elizaOS functions
 
-### Developer Activity
+## Framework and Core Improvements
 
-- A critical security alert was shared regarding a supply chain attack on axios version 1.14.1, which pulls in malware via a package called plain-crypto-js version 4.2.1
-- Developers were advised to pin their axios version to avoid exposure
-- The Orbis API platform reported growth to over 300 APIs listed, 15 registered users, and 13 active paid subscriptions
-- Orbis providers retain 90 percent of transaction revenue
-- Orbis announced a hackathon contest in partnership with Bags offering 1,700 USDC in prizes for top API providers and subscribers
-- An inquiry was raised regarding Instagram Story scrapers, with Apify noted at approximately 0.30 dollars per story
+- A new agent workspace was introduced to streamline startup processes
+- Multi-language support for Python and Rust was added to the core framework
+- Core runtime-composition APIs were refactored to support flexible character loading via file paths and configuration options
 
----
+## Plugin Updates
 
-## ElizaOS Plugins Project Summary - March 31, 2026
+- Critical compatibility issues for Opus 4.x were resolved in the Anthropic plugin by migrating to ai-sdk v6 parameter naming conventions
+- The Anthropic plugin update included renaming maxTokens to maxOutputTokens and stabilizing model performance with adjusted temperature settings
 
-### Security Updates
+## Work in Progress
 
-- Axios dependency pinned to version 1.7.8 across plugin-autocoder and plugin-coingecko repositories to mitigate the supply chain attack
-
-### Dreamline x402 Policy Facilitator Proposal
-
-- Active discussions ongoing across multiple repositories covering autonomous agent spend governance
-- Topics under discussion include spend governance patterns, pre-authorization layers, and on-chain registry target chain selection
-- Integration considerations raised for MAXIA's AIP Protocol and on-chain escrow logic
-- Operator visibility of payments before execution is an active discussion point
-- A minimal pre-authorization layer was proposed distinguishing machine-driven policy checks from explicit human operator authorization
-
-### Plugin Contributions and Proposals
-
-- New plugin proposal submitted to the elizaos-plugins registry for wallet reputation scoring and DeFi TVL verification
-- Key contributors include up2itnow0822 on governance patterns, majorelalexis-stack on agent security and protocol integrations, and hermesnousagent on pre-authorization layer design
+- Group addressee routing and anti-loop prompt guidance for the core
+- Event payload compatibility fix for the Anthropic plugin
+- Discord plugin feature parity improvements covering typing indicators, reactions, streaming, and slash commands
+- Telegram plugin UI refinements to narrow chat display names for improved visual layout
