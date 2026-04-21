@@ -139,7 +139,7 @@ Standardized Python environment setup:
 #### `alert-failure`
 Standardized failure alerting to Discord:
 ```yaml
-- uses: ./.github/actions/alert-failure
+- uses: elizaOS/knowledge/.github/actions/alert-failure@main
   with:
     webhook-url: ${{ secrets.ALERT_WEBHOOK_URL }}
     workflow-name: 'Workflow Name'
