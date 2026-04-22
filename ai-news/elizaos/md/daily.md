@@ -1,28 +1,36 @@
-## ElizaOS Community Discussion and Project Updates - April 9, 2026
+## ElizaOS Community Discussion: April 13, 2026
 
-## Community Highlights
+## Agent Commerce Initiatives
 
-- Community members expressed frustration about individuals who discuss plans but fail to follow through
-- Growing interest and questions emerged around the elizabao_ai project, with users asking about its purpose and current capabilities
-- The elizabao project creator noted rising hype due to increased inquiries
-- Community members shared optimistic sentiments about breakthroughs and the potential of an "eliza effect" becoming real
-- Hatcher.host was highlighted as a major project currently in free beta, described as a platform for deploying Eliza agents without writing code, managing servers, or acquiring hardware
-- Hatcher.host was characterized as a cloud computing alternative allowing users to manage and control their own agents and learn how elizaOS functions
+- CROO Network V1 Pioneers Program launched targeting ElizaOS developers, offering a CLI-based SDK that auto-generates ERC-4337 account abstraction wallets
+- The program enables agent registration, service listing, and automated on-chain payment settlement between agents
+- First 100 participating developers can earn USDT rewards from $10 base up to $50 for top agents per category
+- Metaplex announced Agent Tokens on Solana with instant global trading, hundreds of integrated agents, and $50,000 in MPLX rewards as part of their Agentic Capital Markets initiative
 
-## Framework and Core Improvements
+## Technical Discussions
 
-- A new agent workspace was introduced to streamline startup processes
-- Multi-language support for Python and Rust was added to the core framework
-- Core runtime-composition APIs were refactored to support flexible character loading via file paths and configuration options
+- A developer raised a question in the coders channel about configuring the OpenAI provider plugin to use the /v1/chat/completions endpoint in the context of a Nosana model bounty
 
-## Plugin Updates
+## Security Alerts
 
-- Critical compatibility issues for Opus 4.x were resolved in the Anthropic plugin by migrating to ai-sdk v6 parameter naming conventions
-- The Anthropic plugin update included renaming maxTokens to maxOutputTokens and stabilizing model performance with adjusted temperature settings
+- A community member in the partners channel flagged a user named ben sending airdrop or bulk SOL messages
+- A moderator confirmed the account was not the legitimate ben, identifying a likely impersonation attempt
 
-## Work in Progress
+## Development Activity
 
-- Group addressee routing and anti-loop prompt guidance for the core
-- Event payload compatibility fix for the Anthropic plugin
-- Discord plugin feature parity improvements covering typing indicators, reactions, streaming, and slash commands
-- Telegram plugin UI refinements to narrow chat display names for improved visual layout
+### Core Infrastructure
+
+- Implemented a new utils/batch-queue system centralizing concurrency, retry logic, and task storage
+- The batch-queue system supports embedding drains, action-filter index builds, and knowledge embedding paths
+
+### Dependency Maintenance
+
+- Completed cargo group updates across 21 directories covering packages including bytes, quinn-proto, and rustls-webpki
+- Completed npm_and_yarn group updates across 11 directories including drizzle-orm in the agent package
+
+### Pull Requests in Progress
+
+- Addition of MiniMax-AI/cli as a bundled skill
+- Bump to langchain-text-splitters from version 0.3.8 to 0.3.9
+- uv group dependency updates across 2 directories covering 20 updates
+- Minor-and-patch dependency updates to the elizaos.github.io repository awaiting review
