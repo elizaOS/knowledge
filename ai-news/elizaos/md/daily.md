@@ -1,36 +1,22 @@
-## ElizaOS Community Discussion: April 13, 2026
+## ElizaOS Community Discussion and Developer Integration - 2026-04-10
 
-## Agent Commerce Initiatives
+## Community Discussion
 
-- CROO Network V1 Pioneers Program launched targeting ElizaOS developers, offering a CLI-based SDK that auto-generates ERC-4337 account abstraction wallets
-- The program enables agent registration, service listing, and automated on-chain payment settlement between agents
-- First 100 participating developers can earn USDT rewards from $10 base up to $50 for top agents per category
-- Metaplex announced Agent Tokens on Solana with instant global trading, hundreds of integrated agents, and $50,000 in MPLX rewards as part of their Agentic Capital Markets initiative
+- Moderator confirmed airdrops are planned for ElizaOS token holders, with details to be released at a later time
+- Project promdict.ai introduced itself to the community as a prompt and predict platform serving as a battleground for agents
+- A community member shared an upcoming Hong Kong event featuring elizaok_bsc, built on ElizaOS
+- A user shared content related to digital ownership and the risks of centralized platforms for personal data storage
+- A user received assistance regarding wallet verification on Collab.land
 
-## Technical Discussions
+## Developer Integration Activity
 
-- A developer raised a question in the coders channel about configuring the OpenAI provider plugin to use the /v1/chat/completions endpoint in the context of a Nosana model bounty
+### x402 Billing Implementation
+- Orbis implemented the x402 usage-based billing scheme for AI agents natively on Base
+- The implementation enables agents to authorize a maximum spend and pay only for actual usage across LLM and compute APIs
 
-## Security Alerts
-
-- A community member in the partners channel flagged a user named ben sending airdrop or bulk SOL messages
-- A moderator confirmed the account was not the legitimate ben, identifying a likely impersonation attempt
-
-## Development Activity
-
-### Core Infrastructure
-
-- Implemented a new utils/batch-queue system centralizing concurrency, retry logic, and task storage
-- The batch-queue system supports embedding drains, action-filter index builds, and knowledge embedding paths
-
-### Dependency Maintenance
-
-- Completed cargo group updates across 21 directories covering packages including bytes, quinn-proto, and rustls-webpki
-- Completed npm_and_yarn group updates across 11 directories including drizzle-orm in the agent package
-
-### Pull Requests in Progress
-
-- Addition of MiniMax-AI/cli as a bundled skill
-- Bump to langchain-text-splitters from version 0.3.8 to 0.3.9
-- uv group dependency updates across 2 directories covering 20 updates
-- Minor-and-patch dependency updates to the elizaos.github.io repository awaiting review
+### ElizaOS v2 Socket.IO Integration
+- A developer working on a custom dashboard integration with ElizaOS v2 identified the working Socket.IO messaging pattern
+- Direct emits were found to fail; the correct pattern requires emitting a message event with a type field
+- Type 1 corresponds to ROOM_JOINING and type 2 to SEND_MESSAGE
+- Authentication requires an entityId UUID passed in socket options
+- A core developer directed the integrator to the ElizaOS documentation site and noted active v3 development is underway
