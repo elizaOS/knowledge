@@ -1,22 +1,28 @@
-## ElizaOS Community Discussion and Developer Integration - 2026-04-10
+## ElizaOS Community Discussion and Project Updates - April 9, 2026
 
-## Community Discussion
+## Community Highlights
 
-- Moderator confirmed airdrops are planned for ElizaOS token holders, with details to be released at a later time
-- Project promdict.ai introduced itself to the community as a prompt and predict platform serving as a battleground for agents
-- A community member shared an upcoming Hong Kong event featuring elizaok_bsc, built on ElizaOS
-- A user shared content related to digital ownership and the risks of centralized platforms for personal data storage
-- A user received assistance regarding wallet verification on Collab.land
+- Community members expressed frustration about individuals who discuss plans but fail to follow through
+- Growing interest and questions emerged around the elizabao_ai project, with users asking about its purpose and current capabilities
+- The elizabao project creator noted rising hype due to increased inquiries
+- Community members shared optimistic sentiments about breakthroughs and the potential of an "eliza effect" becoming real
+- Hatcher.host was highlighted as a major project currently in free beta, described as a platform for deploying Eliza agents without writing code, managing servers, or acquiring hardware
+- Hatcher.host was characterized as a cloud computing alternative allowing users to manage and control their own agents and learn how elizaOS functions
 
-## Developer Integration Activity
+## Framework and Core Improvements
 
-### x402 Billing Implementation
-- Orbis implemented the x402 usage-based billing scheme for AI agents natively on Base
-- The implementation enables agents to authorize a maximum spend and pay only for actual usage across LLM and compute APIs
+- A new agent workspace was introduced to streamline startup processes
+- Multi-language support for Python and Rust was added to the core framework
+- Core runtime-composition APIs were refactored to support flexible character loading via file paths and configuration options
 
-### ElizaOS v2 Socket.IO Integration
-- A developer working on a custom dashboard integration with ElizaOS v2 identified the working Socket.IO messaging pattern
-- Direct emits were found to fail; the correct pattern requires emitting a message event with a type field
-- Type 1 corresponds to ROOM_JOINING and type 2 to SEND_MESSAGE
-- Authentication requires an entityId UUID passed in socket options
-- A core developer directed the integrator to the ElizaOS documentation site and noted active v3 development is underway
+## Plugin Updates
+
+- Critical compatibility issues for Opus 4.x were resolved in the Anthropic plugin by migrating to ai-sdk v6 parameter naming conventions
+- The Anthropic plugin update included renaming maxTokens to maxOutputTokens and stabilizing model performance with adjusted temperature settings
+
+## Work in Progress
+
+- Group addressee routing and anti-loop prompt guidance for the core
+- Event payload compatibility fix for the Anthropic plugin
+- Discord plugin feature parity improvements covering typing indicators, reactions, streaming, and slash commands
+- Telegram plugin UI refinements to narrow chat display names for improved visual layout
