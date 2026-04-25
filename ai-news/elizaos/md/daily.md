@@ -1,28 +1,41 @@
-## ElizaOS Community Discussion and Project Updates - April 9, 2026
+## ElizaOS Community and Repository Update - April 12, 2026
 
-## Community Highlights
+## Eliza Labs Shutdown Announcement
 
-- Community members expressed frustration about individuals who discuss plans but fail to follow through
-- Growing interest and questions emerged around the elizabao_ai project, with users asking about its purpose and current capabilities
-- The elizabao project creator noted rising hype due to increased inquiries
-- Community members shared optimistic sentiments about breakthroughs and the potential of an "eliza effect" becoming real
-- Hatcher.host was highlighted as a major project currently in free beta, described as a platform for deploying Eliza agents without writing code, managing servers, or acquiring hardware
-- Hatcher.host was characterized as a cloud computing alternative allowing users to manage and control their own agents and learn how elizaOS functions
+- Shaw (shawmakesmagic) announced Eliza Labs is shutting down due to deteriorating market conditions, treasury trending toward zero, and failure to reach revenue targets
+- Shaw committed to continuing Eliza as an open source community project and offered to assist displaced team members
+- Odilitime expressed willingness to contribute in a personal capacity to keep the project moving forward
 
-## Framework and Core Improvements
+## Community and Token Discussions
 
-- A new agent workspace was introduced to streamline startup processes
-- Multi-language support for Python and Rust was added to the core framework
-- Core runtime-composition APIs were refactored to support flexible character loading via file paths and configuration options
+- Community members raised concerns about the disconnect between ElizaOS development and token value
+- Odilitime acknowledged failures in project communications and indicated plans to discuss restructuring Discord and social media presence with Shaw
+- A community member proposed allowing a trusted community member to manage social media administration for more consistent updates
+- The token delisting from Bitget CEX was attributed to low trading volume, as market makers require sufficient activity to justify listings
+- The migration window from ai16z to elizaOS tokens has closed
 
-## Plugin Updates
+## Technical Updates
 
-- Critical compatibility issues for Opus 4.x were resolved in the Anthropic plugin by migrating to ai-sdk v6 parameter naming conventions
-- The Anthropic plugin update included renaming maxTokens to maxOutputTokens and stabilizing model performance with adjusted temperature settings
+- A developer reported recurring Ollama local model integration errors, including invalid JSON responses and XML parsing failures
+- Odilitime recommended Gemma, gptoss, and Qwen as working local model options and noted ongoing work to improve local model support
+- Bao created elizaOK-branded merchandise built using elizacloud
 
-## Work in Progress
+## Repository Cleanup
 
-- Group addressee routing and anti-loop prompt guidance for the core
-- Event payload compatibility fix for the Anthropic plugin
-- Discord plugin feature parity improvements covering typing indicators, reactions, streaming, and slash commands
-- Telegram plugin UI refinements to narrow chat display names for improved visual layout
+- Completed a major repository-wide cleanup, closing stale issues 8 or more months old
+- Retired V3 planning goals and removed deprecated milestones across all repositories
+- Standardized policy directing third-party plugin contributors to independently host integrations under the elizaOS-plugins organization
+
+## Core Framework Improvements
+
+- Integrated task-completion assessment into the reflection evaluator pipeline to improve runtime accuracy
+- Removed duplicate action result formatting from the RECENT_MESSAGES provider to reduce unnecessary token usage in LLM context management
+- Resolved a TypeScript build error (TS2769) in the Anthropic plugin for compatibility with the latest core alpha updates
+- Bumped the cryptography Python package to version 46.0.6 to address security requirements
+
+## Active Development Areas
+
+- Multi-agent coordination patterns under discussion, covering persistent peer relationships and on-chain credential verification
+- Payment infrastructure design for AI agents in progress, including identity verification and trust-based spend limits
+- Work ongoing to address custom plugin callback interference in the Discord plugin, separating provider state composition from action callback processing
+- New registry entry for the hashlock plugin under review
