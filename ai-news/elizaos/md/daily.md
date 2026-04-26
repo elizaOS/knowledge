@@ -1,41 +1,51 @@
-## ElizaOS Community and Repository Update - April 12, 2026
+## ElizaOS Project Report: April 14, 2026
 
-## Eliza Labs Shutdown Announcement
+## Project Status and Organizational Updates
 
-- Shaw (shawmakesmagic) announced Eliza Labs is shutting down due to deteriorating market conditions, treasury trending toward zero, and failure to reach revenue targets
-- Shaw committed to continuing Eliza as an open source community project and offered to assist displaced team members
-- Odilitime expressed willingness to contribute in a personal capacity to keep the project moving forward
+- Leaked internal messages from Shaw (lead developer) confirmed that Eliza Labs as a funded organization was scaling back operations and stopping payments to some dedicated developers
+- Odilitime (core developer and moderator) confirmed the April 12 internal message was legitimate
+- ElizaOS open source project confirmed as continuing, with contributions rising
+- An agent was deployed to help merge and clean up issues
+- Version 1.x confirmed as stable; version 2.x is in active development
+- Shaw stated his intention to continue working on Eliza as an open source community project
+- Ongoing work on token marketing using ElizaOS v3 was noted
+- Plans for Spartan to create marketing content were discussed
+- Discussions with Shaw regarding agentic business demos are underway
+- A DAO structure conversion was raised as a topic for consideration
 
-## Community and Token Discussions
+## Security Activity
 
-- Community members raised concerns about the disconnect between ElizaOS development and token value
-- Odilitime acknowledged failures in project communications and indicated plans to discuss restructuring Discord and social media presence with Shaw
-- A community member proposed allowing a trusted community member to manage social media administration for more consistent updates
-- The token delisting from Bitget CEX was attributed to low trading volume, as market makers require sufficient activity to justify listings
-- The migration window from ai16z to elizaOS tokens has closed
+- Odilitime identified and flagged scammer activity involving impersonation attempts in community channels
+- A bot called migrate-helper was deployed to run security checks on Odilitime's behalf
+- Community members were alerted to stay vigilant against impersonation attempts
 
-## Technical Updates
+## CI/CD Pipeline Stabilization
 
-- A developer reported recurring Ollama local model integration errors, including invalid JSON responses and XML parsing failures
-- Odilitime recommended Gemma, gptoss, and Qwen as working local model options and noted ongoing work to improve local model support
-- Bao created elizaOK-branded merchandise built using elizacloud
+- Resolved widespread release workflow failures and race conditions across multiple repositories
+- Addressed concurrent job conflicts and non-fast-forward push issues
+- Implemented serialization, retry logic, and build fixes across the following repositories:
+  - elizaos/eliza
+  - elizaos-plugins/plugin-anthropic
+  - elizaos-plugins/registry
+- Release reliability improved by ignoring dirty plugin submodules during publishing
+- Previously reported concurrency and release workflow issues across all three repositories were successfully closed
 
-## Repository Cleanup
+## Anthropic Plugin Enhancements
 
-- Completed a major repository-wide cleanup, closing stale issues 8 or more months old
-- Retired V3 planning goals and removed deprecated milestones across all repositories
-- Standardized policy directing third-party plugin contributors to independently host integrations under the elizaOS-plugins organization
+- Stan submitted and merged a pull request to the plugin-anthropic repository adding:
+  - OAuth authentication allowing LLM calls to be routed through a Claude Max subscription instead of API keys
+  - Missing TEXT_REASONING model type handlers
+  - CLI-based headless authentication mode
+- Odilitime reviewed the PR, provided comments, and merged it
+- A follow-up PR was submitted to address a build error related to a missing workspace dependency and an unresolved jsonrepair module
+- Plans to add streaming support were noted, referencing the claude -p command for streaming JSON
 
-## Core Framework Improvements
+## Core Stability Improvements
 
-- Integrated task-completion assessment into the reflection evaluator pipeline to improve runtime accuracy
-- Removed duplicate action result formatting from the RECENT_MESSAGES provider to reduce unnecessary token usage in LLM context management
-- Resolved a TypeScript build error (TS2769) in the Anthropic plugin for compatibility with the latest core alpha updates
-- Bumped the cryptography Python package to version 46.0.6 to address security requirements
+- Legacy fallback for agent restarts was added
+- New diagnostics for monitoring plugin state drift were introduced
 
-## Active Development Areas
+## Payment Infrastructure
 
-- Multi-agent coordination patterns under discussion, covering persistent peer relationships and on-chain credential verification
-- Payment infrastructure design for AI agents in progress, including identity verification and trust-based spend limits
-- Work ongoing to address custom plugin callback interference in the Discord plugin, separating provider state composition from action callback processing
-- New registry entry for the hashlock plugin under review
+- Discussion held on supporting USDC-SPL on Solana via the PayAI facilitator alongside Base USDC
+- Decision made to support both chains, allowing clients to choose in order to minimize friction for agents
