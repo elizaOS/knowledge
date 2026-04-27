@@ -1,51 +1,58 @@
-## ElizaOS Project Report: April 14, 2026
+## ElizaOS Community Discussion: Transition, Governance, and Developer Activity
 
-## Project Status and Organizational Updates
+### Cron Job Series Update
 
-- Leaked internal messages from Shaw (lead developer) confirmed that Eliza Labs as a funded organization was scaling back operations and stopping payments to some dedicated developers
-- Odilitime (core developer and moderator) confirmed the April 12 internal message was legitimate
-- ElizaOS open source project confirmed as continuing, with contributions rising
-- An agent was deployed to help merge and clean up issues
-- Version 1.x confirmed as stable; version 2.x is in active development
-- Shaw stated his intention to continue working on Eliza as an open source community project
-- Ongoing work on token marketing using ElizaOS v3 was noted
-- Plans for Spartan to create marketing content were discussed
-- Discussions with Shaw regarding agentic business demos are underway
-- A DAO structure conversion was raised as a topic for consideration
+- A new episode titled "The 4/20 Miracle" (S1E12) was published on elizaos.news
+- The episode documents a pivotal week covering:
+  - A leaked shutdown message that became official
+  - Community division between those mourning the project and those continuing to build
+  - A DAO conversion proposal
+  - CI/CD pipeline issues
+  - Addition of a prediction markets plugin
+  - Continued strong development pace throughout the turmoil
 
-## Security Activity
+### Community and Governance
 
-- Odilitime identified and flagged scammer activity involving impersonation attempts in community channels
-- A bot called migrate-helper was deployed to run security checks on Odilitime's behalf
-- Community members were alerted to stay vigilant against impersonation attempts
+- shawmakesmagic posted on X alleging financial crimes, market manipulation, and false promises by Baoskee, citing these as factors behind the token migration
+- Community discussion raised questions about the status of Eliza Labs
+- Odilitime clarified that the foundation remains funded and is responsible for the token
+- Odilitime extended invitations to a steering group focused on organizing marketing efforts and governance
+- Multiple community members expressed interest in joining the steering group
 
-## CI/CD Pipeline Stabilization
+### Developer Activity
 
-- Resolved widespread release workflow failures and race conditions across multiple repositories
-- Addressed concurrent job conflicts and non-fast-forward push issues
-- Implemented serialization, retry logic, and build fixes across the following repositories:
-  - elizaos/eliza
-  - elizaos-plugins/plugin-anthropic
-  - elizaos-plugins/registry
-- Release reliability improved by ignoring dirty plugin submodules during publishing
-- Previously reported concurrency and release workflow issues across all three repositories were successfully closed
+- Discussion in the developer channel addressed alternatives to USDC for cross-border agent payments and contexts where USDC freezing is a concern
+- A developer shared a payment solution built for agent machine-to-machine payments featuring spend-capped JWTs and a kill switch, with interest in shipping an Eliza plugin integration
+- A full stack AI and ML engineer joined the community, bringing experience in:
+  - Autonomous and multi-agent systems
+  - RAG pipelines and voice AI
+  - Workflow automation and computer vision
+  - React, Node.js, Python, and various AI and cloud infrastructure tools
 
-## Anthropic Plugin Enhancements
+---
 
-- Stan submitted and merged a pull request to the plugin-anthropic repository adding:
-  - OAuth authentication allowing LLM calls to be routed through a Claude Max subscription instead of API keys
-  - Missing TEXT_REASONING model type handlers
-  - CLI-based headless authentication mode
-- Odilitime reviewed the PR, provided comments, and merged it
-- A follow-up PR was submitted to address a build error related to a missing workspace dependency and an unresolved jsonrepair module
-- Plans to add streaming support were noted, referencing the claude -p command for streaming JSON
+## ElizaOS Project Development Summary - April 23, 2026
 
-## Core Stability Improvements
+### Framework and Stability
 
-- Legacy fallback for agent restarts was added
-- New diagnostics for monitoring plugin state drift were introduced
+- Reduced prompt bloat in the action-planner and reflection pipeline to improve context window efficiency
+- Performed comprehensive dependency updates including:
+  - TypeScript v6
+  - gymnasium v1.3.0
+  - commander v14
+  - uuid v14
+  - vitest v4
+  - Various Cargo, npm, and yarn group updates
+- Eleven additional dependency update pull requests are currently open
 
-## Payment Infrastructure
+### UI and Platform Improvements
 
-- Discussion held on supporting USDC-SPL on Solana via the PayAI facilitator alongside Base USDC
-- Decision made to support both chains, allowing clients to choose in order to minimize friction for agents
+- Settings interface received polish including dropdown sizing fixes, model picker updates, and header drag-strip corrections
+- Default role wiring for the Android mobile application was finalized
+
+### Work in Progress
+
+- Multi-calendar Google feed support in the eliza repository
+- Calendar management features in the cloud repository
+- Addition of a new flipcoin plugin to the elizaos plugin registry
+- Agent interoperability issue raised around decentralized private state verification using local zero-knowledge proofs
