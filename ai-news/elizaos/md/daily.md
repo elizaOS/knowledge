@@ -1,58 +1,29 @@
-## ElizaOS Community Discussion: Transition, Governance, and Developer Activity
+## ElizaOS Community Discussion - April 17, 2026
 
-### Cron Job Series Update
+### Team and Project Direction
 
-- A new episode titled "The 4/20 Miracle" (S1E12) was published on elizaos.news
-- The episode documents a pivotal week covering:
-  - A leaked shutdown message that became official
-  - Community division between those mourning the project and those continuing to build
-  - A DAO conversion proposal
-  - CI/CD pipeline issues
-  - Addition of a prediction markets plugin
-  - Continued strong development pace throughout the turmoil
+- Shaw confirmed he will continue building ElizaOS full time, with v3 nearing beta and several teams already building on it
+- Eliza Labs is winding down, with the project refocusing on its core framework
+- Core contributor Stan clarified that Labs was an experimental organization for sub-projects, and that GitHub activity continues from both remaining developers and community contributors
+- Other Labs projects are described as on hold
+- The new v3 version is designed to allow anyone to build their own fully branded autonomous agent
+- Community members discussed the project's history and its relationship to the ai16z branding
 
-### Community and Governance
+### Community Activity
 
-- shawmakesmagic posted on X alleging financial crimes, market manipulation, and false promises by Baoskee, citing these as factors behind the token migration
-- Community discussion raised questions about the status of Eliza Labs
-- Odilitime clarified that the foundation remains funded and is responsible for the token
-- Odilitime extended invitations to a steering group focused on organizing marketing efforts and governance
-- Multiple community members expressed interest in joining the steering group
+- A Twitter Space titled "Limits of LLMs" hosted by Odilitime was shared in the general discussion channel
+- Multiple moderators issued a warning about a bulk airdrop scam circulating in the community
 
-### Developer Activity
+### Developer Tools
 
-- Discussion in the developer channel addressed alternatives to USDC for cross-border agent payments and contexts where USDC freezing is a concern
-- A developer shared a payment solution built for agent machine-to-machine payments featuring spend-capped JWTs and a kill switch, with interest in shipping an Eliza plugin integration
-- A full stack AI and ML engineer joined the community, bringing experience in:
-  - Autonomous and multi-agent systems
-  - RAG pipelines and voice AI
-  - Workflow automation and computer vision
-  - React, Node.js, Python, and various AI and cloud infrastructure tools
+- A developer shared information about the Orbis API, including its AI Agent Memory API, which provides persistent memory for AI agents across sessions
+- The API uses four endpoints for storing, retrieving, and listing key-value data with TTL support
+- The Orbis Referral Program was introduced, allowing developers to earn 25 percent of payments from referred developers through subscriptions and per-call micropayments, paid in USDC
 
----
+## ElizaOS Development Activity
 
-## ElizaOS Project Development Summary - April 23, 2026
+### Open Pull Requests
 
-### Framework and Stability
-
-- Reduced prompt bloat in the action-planner and reflection pipeline to improve context window efficiency
-- Performed comprehensive dependency updates including:
-  - TypeScript v6
-  - gymnasium v1.3.0
-  - commander v14
-  - uuid v14
-  - vitest v4
-  - Various Cargo, npm, and yarn group updates
-- Eleven additional dependency update pull requests are currently open
-
-### UI and Platform Improvements
-
-- Settings interface received polish including dropdown sizing fixes, model picker updates, and header drag-strip corrections
-- Default role wiring for the Android mobile application was finalized
-
-### Work in Progress
-
-- Multi-calendar Google feed support in the eliza repository
-- Calendar management features in the cloud repository
-- Addition of a new flipcoin plugin to the elizaos plugin registry
-- Agent interoperability issue raised around decentralized private state verification using local zero-knowledge proofs
+- plugin-evm repository: pull request submitted to add Radius Network support with chain identifier eip155:723487
+- plugin registry: submission pending to add the @thecolony/elizaos-plugin
+- plugin registry: submission pending to add the megalaunch-elizaos-plugin
