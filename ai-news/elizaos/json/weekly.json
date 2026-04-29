@@ -1,32 +1,7 @@
 {
   "type": "elizaosWeeklySummary",
-  "title": "Weekly Report - 2026-04-21 to 2026-04-27",
+  "title": "Weekly Report - 2026-04-22 to 2026-04-28",
   "categories": [
-    {
-      "title": "ElizaOS Community Updates: Lawsuit Response and Plugin Registry CI Issue",
-      "content": [
-        {
-          "text": "A federal class action lawsuit was filed in the Southern District of New York (Case 1:26-cv-3238) by Burwick Law against the creators of AI16Z and ElizaOS, alleging consumer protection claims. Community members reacted with a mix of concern and skepticism, with some noting the company may lack funds to pay out any settlement. When asked how the team plans to respond, Odilitime (Core Dev) stated the team is working with lawyers and has the code to prove they built everything they committed to building. Odilitime described the lawsuit as being without merit and commented that Burwick Law's business model of filing such suits is notable. Stan also mentioned plans to build a plugin to address scammer activity that was occurring in the discussion channel around the same time.",
-          "sources": "https://discord.com/channels/1253563208833433701/1253563209462448241",
-          "images": "https://cdn.elizaos.news/elizaos-media/embed-image-1496140921111187656_96ece701.jpg"
-        },
-        {
-          "text": "In the coders channel, developer igor reported that the CI pipeline on a pull request to the ElizaOS plugin registry is failing due to a workflow configuration issue unrelated to his code changes. Specifically, the claude-code-action is unable to fetch an OIDC token because of a missing id-token write permission or github_token in the workflow config. Igor requested that someone with access fix the configuration so the pull request, which adds the elisym/plugin-elizaos-elisym package to the registry, can be properly reviewed. Odilitime asked which repository was affected, and Stan provided the link to the pull request at elizaos-plugins/registry/pull/346.",
-          "sources": "https://discord.com/channels/1253563208833433701/1300025221834739744",
-          "images": "https://cdn.elizaos.news/elizaos-media/346_e9726b88.jpg"
-        }
-      ],
-      "topic": "discordrawdata"
-    },
-    {
-      "title": "LifeOps Ecosystem Expansion and Authentication Workflow Refinements (April 21, 2026)",
-      "content": {
-        "text": "Development on April 21, 2026 centered on expanding the LifeOps ecosystem and strengthening authentication workflows across the cloud and core frameworks. On the authentication and cloud infrastructure front, a unified authentication workflow was implemented supporting both wallet and GitHub logins, with server-side Steward token refresh added to resolve silent-logout issues. UI styling inconsistencies and text wrapping problems for EVM and Solana wallet providers were addressed in an update to the React package. The elizaos/cloud repository was also integrated into the project pipeline to enable automated contributor tracking. For LifeOps and agent core enhancements, the app-lifeops application was expanded with new calendar management, travel booking, and cross-platform gateway support. Agent reliability was improved by restoring scenario final-check handlers and integrating task heartbeat functionality into swarm synthesis. A new environment variable, PROMPT_OUTPUT_FORMAT, was added to improve compatibility with models such as Gemini 2.5 Pro and Llama. Database consistency was also improved by updating the in-memory database adapter to sort memories in descending order. Comprehensive dependency updates were performed across the eliza repository, covering tools such as vitest, bun, and various Rust crates including tokio and reqwest. Work in progress includes migrating the app-auth authorize flow to Steward, UI styling alignment for Ethereum and Solana buttons, and a broad set of dependency updates spanning TypeScript, Python, Rust, and Android. A new issue was raised requesting a PII sanitization layer, while issues related to Merxex integration and PII sanitization were closed across multiple repositories.",
-        "sources": "https://elizaos.github.io/api/summaries/overall/day/2026-04-21.json",
-        "posters": "https://cdn.elizaos.news/posters/1776820832483-jr4urq.png"
-      },
-      "topic": "miscellaneous"
-    },
     {
       "title": "ElizaOS Community Discussion: Lawsuit Concerns, Token Migration, and Developer Updates",
       "content": [
@@ -252,7 +227,93 @@
         "sources": "https://elizaos.github.io/api/summaries/overall/day/2026-04-27.json"
       },
       "topic": "miscellaneous"
+    },
+    {
+      "title": "ElizaOS Community Discussion - April 28, 2026",
+      "content": [
+        {
+          "text": "Shaw (shawmakesmagic) announced that the team is nearly finished with Eliza v3 and Milady, describing the coming weeks as exciting and promising to post more updates in the main discussion channel. He noted that he typically works in a quieter server to avoid conversations drifting toward token price speculation rather than technical discussion.",
+          "sources": [
+            "https://discord.com/channels/1253563208833433701/1253563209462448241"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "Community members responded positively to the Eliza v3 and Milady announcement, with several offering strategic suggestions including connecting the coin to infrastructure utility, increasing communication frequency in the community server, and focusing public messaging on technical progress. One member asked specifically about Milady news, while another inquired about expected updates for the degenAI project this month.",
+          "sources": [
+            "https://discord.com/channels/1253563208833433701/1253563209462448241"
+          ],
+          "images": [],
+          "videos": [],
+          "posters": [
+            "https://cdn.elizaos.news/posters/1777427469390-ck7gad.jpg"
+          ]
+        },
+        {
+          "text": "Odilitime clarified that the $elizaOS token is now the default payment method in x402 for the elizaOS and Milady integration, confirming that the token has been connected to infrastructure utility. When asked whether this means users can bill x402 services with $ELIZA, Odilitime confirmed this is the case.",
+          "sources": [
+            "https://discord.com/channels/1253563208833433701/1253563209462448241"
+          ],
+          "images": [],
+          "videos": [],
+          "posters": [
+            "https://cdn.elizaos.news/posters/1777427492134-amyox.jpg"
+          ]
+        },
+        {
+          "text": "Activity in the coders channel on April 28 was minimal, consisting only of brief greetings between Odilitime and danoski, along with Odilitime removing a scammer from the channel earlier in the day.",
+          "sources": [
+            "https://discord.com/channels/1253563208833433701/1300025221834739744"
+          ],
+          "images": [],
+          "videos": [],
+          "posters": [
+            "https://cdn.elizaos.news/posters/1777427529581-3oyzrr.png"
+          ]
+        }
+      ],
+      "topic": "discordrawdata"
+    },
+    {
+      "title": "Overall Project Summary - April 28, 2026",
+      "content": [
+        {
+          "text": "The project is currently undergoing a major infrastructure and dependency modernization effort targeting Node.js 24, TypeScript 6, Bun 1.3.13, and React 19.2.5. However, progress is critically blocked by a missing transitive dependency that causes bun install failures. The primary blocker is PR elizaos/eliza#7146, which must be merged before the broader dependency update stack can proceed. As a result, dependency updates across all repositories are stalled, and CI/CD workflows in elizaos/cloud and elizaos-plugins/registry are failing to invoke bun install and tsc, allowing regressions to go undetected.",
+          "sources": [
+            "https://elizaos.github.io/api/summaries/overall/day/2026-04-28.json"
+          ],
+          "images": [],
+          "videos": [],
+          "posters": [
+            "https://cdn.elizaos.news/posters/1777427550116-m7v4o.jpg"
+          ]
+        },
+        {
+          "text": "Despite the build blocker, several areas of completed work stand out. On the AI provider and authentication front, the cloud infrastructure was modernized by replacing Vercel AI Gateway with OpenRouter, using OpenAI and Anthropic as failovers. CLI authentication hangs were also resolved by implementing auto-clearing for stale Steward and Privy tokens. For the n8n plugin, capabilities were expanded with the addition of TriggerContext for conversation routing and RuntimeContextProvider for improved data handling. Security and credential management were also hardened through disconnect-purge functionality and stricter runtime-fact rules.",
+          "sources": [
+            "https://elizaos.github.io/api/summaries/overall/day/2026-04-28.json"
+          ],
+          "images": [],
+          "videos": [],
+          "posters": [
+            "https://cdn.elizaos.news/posters/1777427568841-3e06.jpg"
+          ]
+        },
+        {
+          "text": "A large number of pull requests are currently in progress across multiple repositories. In elizaos/eliza, active work includes a credential mediation layer, a runtime operations manager and widget host refresh, conversation routing propagation to the n8n workflow generator, n8n runtime-context support for Discord and Gmail, credential cache purging on disconnect, a deep-link banner for connector settings, bundling of the build-monetized-app skill, fixes for action formatting and cloud provider model drift, and the addition of CREATE_TASK to explicit intent actions. In elizaos/cloud, work is ongoing to push develop to production and to design a Claude and Codex sub-agent bridge specification.",
+          "sources": [
+            "https://elizaos.github.io/api/summaries/overall/day/2026-04-28.json"
+          ],
+          "images": [],
+          "videos": [],
+          "posters": [
+            "https://cdn.elizaos.news/posters/1777427709891-j9xzkh.jpg"
+          ]
+        }
+      ],
+      "topic": "miscellaneous"
     }
   ],
-  "date": 1777341053
+  "date": 1777427722
 }

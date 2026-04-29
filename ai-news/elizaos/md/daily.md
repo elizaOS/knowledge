@@ -1,29 +1,38 @@
-## ElizaOS Community Discussion - April 17, 2026
+## ElizaOS Community Updates: Lawsuit Response and Plugin Registry CI Issue
 
-### Team and Project Direction
+### Lawsuit Response
 
-- Shaw confirmed he will continue building ElizaOS full time, with v3 nearing beta and several teams already building on it
-- Eliza Labs is winding down, with the project refocusing on its core framework
-- Core contributor Stan clarified that Labs was an experimental organization for sub-projects, and that GitHub activity continues from both remaining developers and community contributors
-- Other Labs projects are described as on hold
-- The new v3 version is designed to allow anyone to build their own fully branded autonomous agent
-- Community members discussed the project's history and its relationship to the ai16z branding
+- A federal class action lawsuit (Case 1:26-cv-3238) was filed by Burwick Law in the Southern District of New York against the creators of AI16Z and ElizaOS, alleging consumer protection claims
+- Odilitime (Core Dev) confirmed the team is working with lawyers and has code to prove they built everything they committed to building
+- Odilitime characterized the lawsuit as without merit and noted Burwick Law's pattern of filing such suits
+- Stan outlined plans to build a plugin to address scammer activity occurring in the discussion channel
 
-### Community Activity
+### Plugin Registry CI Issue
 
-- A Twitter Space titled "Limits of LLMs" hosted by Odilitime was shared in the general discussion channel
-- Multiple moderators issued a warning about a bulk airdrop scam circulating in the community
+- Developer igor identified a failing CI pipeline on a pull request to the ElizaOS plugin registry
+- The failure stems from a workflow configuration issue where the claude-code-action cannot fetch an OIDC token due to a missing id-token write permission or github_token
+- The affected pull request (elizaos-plugins/registry/pull/346) adds the elisym/plugin-elizaos-elisym package to the registry
+- Odilitime and Stan engaged to identify the affected repository and locate the pull request
 
-### Developer Tools
+---
 
-- A developer shared information about the Orbis API, including its AI Agent Memory API, which provides persistent memory for AI agents across sessions
-- The API uses four endpoints for storing, retrieving, and listing key-value data with TTL support
-- The Orbis Referral Program was introduced, allowing developers to earn 25 percent of payments from referred developers through subscriptions and per-call micropayments, paid in USDC
+## LifeOps Ecosystem Expansion and Authentication Workflow Refinements
 
-## ElizaOS Development Activity
+### Authentication and Cloud Infrastructure
 
-### Open Pull Requests
+- A unified authentication workflow was implemented supporting both wallet and GitHub logins
+- Server-side Steward token refresh was added to resolve silent-logout issues
+- UI styling inconsistencies and text wrapping problems for EVM and Solana wallet providers were addressed in the React package
+- The elizaos/cloud repository was integrated into the project pipeline to enable automated contributor tracking
 
-- plugin-evm repository: pull request submitted to add Radius Network support with chain identifier eip155:723487
-- plugin registry: submission pending to add the @thecolony/elizaos-plugin
-- plugin registry: submission pending to add the megalaunch-elizaos-plugin
+### LifeOps and Agent Core Enhancements
+
+- The app-lifeops application was expanded with new calendar management, travel booking, and cross-platform gateway support
+- Agent reliability was improved by restoring scenario final-check handlers and integrating task heartbeat functionality into swarm synthesis
+- A new environment variable, PROMPT_OUTPUT_FORMAT, was added to improve compatibility with models including Gemini 2.5 Pro and Llama
+- In-memory database adapter was updated to sort memories in descending order for improved database consistency
+
+### Dependency and Repository Updates
+
+- Comprehensive dependency updates were performed across the eliza repository, covering vitest, bun, and Rust crates including tokio and reqwest
+- Issues related to Merxex integration and PII sanitization were closed across multiple repositories
