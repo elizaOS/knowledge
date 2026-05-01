@@ -1,0 +1,244 @@
+{
+  "id": "RETRO-2026-04",
+  "name": "Monthly Retro: April 2026",
+  "type": "retrospective",
+  "premise": "April was a month of sharp contrast: meaningful architectural progress (parallel execution, runtime hardening, economic/identity plugins) alongside mounting trust pressure from token collapse, contributor retention risk, and DX breakages affecting new developers. The council reviews what shipped, what frayed, and what must be stabilized next.",
+  "summary": "ElizaOS momentum remained real in code and experiments (parallel actions, database refactor work, agent spend safety proposals, marketplace/payment memory plugins), but community confidence hit a sentiment floor due to token decline and perceived strategic drift. The recurring pattern: reliability and developer experience are still the main blockers, and economic/security layers are becoming inseparable from the core framework story. Next month must prioritize: (1) v2 stability and onboarding fixes, (2) clear v3 roadmap with criteria for release, (3) automated security + spend governance defaults, and (4) credible contributor compensation and comms cadence to stop the \u201cdeath spiral\u201d narrative.",
+  "month_reviewed": "2026-04",
+  "key_developments": [
+    {
+      "area": "Framework Runtime",
+      "summary": "Parallel Action Execution merged, enabling agents to run multiple tasks concurrently and improving throughput for multi-step workflows.",
+      "impact": "high"
+    },
+    {
+      "area": "Data Layer Architecture",
+      "summary": "Major database refactor progressed (open PR), signaling investment in long-term performance, persistence, and maintainability.",
+      "impact": "high"
+    },
+    {
+      "area": "Agent Safety & Spend Governance",
+      "summary": "Safety-oriented proposals (SafeAgent, Dreamline/x402-style fail-closed thinking) gained prominence, reflecting a shift toward secure autonomous financial operations.",
+      "impact": "high"
+    },
+    {
+      "area": "Agent Economy Primitives",
+      "summary": "Plugins and proposals (economic memory via mnemopay, marketplace concepts like MAXIA, wallet plugin proposals) indicated a push toward agent-to-agent commerce and reputation.",
+      "impact": "medium"
+    },
+    {
+      "area": "Developer Experience / Onboarding",
+      "summary": "Repeated reports that `elizaos create` fails on macOS due to Bun postinstall scripts (transitive deps) not running reliably; additional friction from undocumented Socket.IO patterns for v2 integrators.",
+      "impact": "high"
+    },
+    {
+      "area": "Community Trust & Narrative",
+      "summary": "Token drawdown (~99.5% from peak per community framing) dominated discourse, raising concerns about contributor retention, sell pressure, exchange risk, and leadership focus.",
+      "impact": "high"
+    }
+  ],
+  "recurring_themes": [
+    {
+      "theme": "Execution Excellence vs. \u201cShipping the Wrong Things\u201d",
+      "frequency": "weekly",
+      "council_take": "The council agrees: new capability is valuable, but reliability and DX regressions negate perceived progress. We need fewer \u201cbig ideas\u201d in public until onboarding is boringly stable."
+    },
+    {
+      "theme": "V2 Stability vs. V3 Acceleration",
+      "frequency": "weekly",
+      "council_take": "V3 work is justified, but leaving v2 integrators stranded is eroding developer trust. A defined support window and minimal \u2018v2 LTS\u2019 fixes are required to protect ecosystem builders."
+    },
+    {
+      "theme": "Agent Economics Is Now Part of the Core Story",
+      "frequency": "weekly",
+      "council_take": "Identity, spend controls, and reputation aren\u2019t \u201cplugins later\u201d anymore; they are prerequisites for autonomous agents interacting with real money. However, they must ship as safe defaults, not optional complexity."
+    },
+    {
+      "theme": "Token Collapse \u2192 Contributor Retention Risk",
+      "frequency": "daily",
+      "council_take": "Paying in a rapidly declining token creates forced sell pressure and morale damage. Without a compensation policy reset, execution excellence will degrade regardless of architecture quality."
+    },
+    {
+      "theme": "Security Expectations Rising",
+      "frequency": "biweekly",
+      "council_take": "Even with no major incident reported this month, the ecosystem expects formal vulnerability disclosure, dependency hygiene, and supply-chain hardening as table stakes."
+    },
+    {
+      "theme": "Comms Cadence & Strategic Clarity",
+      "frequency": "weekly",
+      "council_take": "Community confusion about \u2018what ElizaOS is\u2019 vs. adjacent initiatives is compounding sentiment issues. Clear roadmaps and status updates can reduce rumor-driven churn."
+    }
+  ],
+  "wins": [
+    "Parallel Action Execution merged, unlocking higher throughput agent behavior and reducing sequential bottlenecks.",
+    "Visible architectural investment (database refactor) signals long-term seriousness to builders evaluating durability.",
+    "Emergence of \u201cfail-closed\u201d spend governance and safety plugins indicates maturity: agents must be safe before they are clever.",
+    "Anecdotal success: first agent deployments via one-click hosting (Groq-enabled) show the platform can still delight when the path is smooth."
+  ],
+  "challenges": [
+    "DX breakages on macOS (Bun postinstall behavior) repeatedly blocked new developers at the first command.",
+    "Perceived strategic drift (focus split across auxiliary projects) weakened narrative coherence against the North Star.",
+    "Token sentiment floor and accusations of manipulation amplified mistrust, threatening \u201cTrust Through Shipping.\u201d",
+    "Contributor retention risk increased as token-denominated compensation became materially unstable.",
+    "V2 integrators reported undocumented patterns and installation hurdles while core attention shifted to v3, creating ecosystem fragmentation risk."
+  ],
+  "proposed_focus": [
+    {
+      "priority": 1,
+      "area": "Onboarding & DX Stabilization (v2 LTS Patch Set)",
+      "rationale": "If `elizaos create` fails, nothing else matters. A stable first-run path is the highest leverage trust builder for developers and reduces support load.",
+      "success_metric": "Reduce fresh-install failure reports by 80%: a reproducible macOS (Apple Silicon) create\u2192run path succeeds in CI and in a public \u2018Install Health\u2019 dashboard (weekly)."
+    },
+    {
+      "priority": 2,
+      "area": "Release Criteria + Roadmap for v3 (and a v2 Support Policy)",
+      "rationale": "Builders need a predictable target. Without explicit criteria, v3 becomes an endless refactor and v2 becomes abandonware in perception.",
+      "success_metric": "Publish (and follow) a one-page roadmap: v3 alpha/beta dates, exit criteria (test coverage, perf targets, migration guide), and a v2 support window with a defined patch scope."
+    },
+    {
+      "priority": 3,
+      "area": "Security Baselines: Supply Chain + Vulnerability Disclosure + Safe Defaults",
+      "rationale": "Agent frameworks are now security products. Formal disclosure and dependency controls prevent avoidable trust catastrophes.",
+      "success_metric": "Adopt a SECURITY.md + responsible disclosure process; add automated dependency scanning/SBOM in CI; ship at least one \u2018fail-closed\u2019 spend policy preset (off by exception)."
+    },
+    {
+      "priority": 4,
+      "area": "Agent Spend Governance MVP (Reference Implementation)",
+      "rationale": "Economic autonomy is becoming a defining feature, but it must be grounded in a reference path that developers can copy safely.",
+      "success_metric": "Deliver a reference agent template: allowlisted actions + transaction simulation + risk checks (e.g., honeypot/rug heuristics) with documented extension points."
+    },
+    {
+      "priority": 5,
+      "area": "Contributor Compensation & Comms Reset",
+      "rationale": "Execution excellence requires stable contributor incentives and a calmer narrative loop. Transparency reduces speculation and churn.",
+      "success_metric": "Announce a compensation policy update (e.g., partial stablecoin or hedged payouts) and commit to a weekly ship-note + monthly retro cadence; track contributor retention and PR throughput month-over-month."
+    }
+  ],
+  "north_star_assessment": {
+    "still_relevant": true,
+    "suggested_updates": "Keep the North Star intact, but explicitly foreground \u2018secure economic autonomy\u2019 and \u2018boring reliability\u2019 as first-class requirements. Add a short clarification: ElizaOS is the agent framework + cloud platform; experiments/adjacent initiatives must be framed as downstream adopters, not competing missions."
+  },
+  "scenes": [
+    {
+      "location": "council_chamber",
+      "description": "A quiet chamber with a single dashboard projected on the wall: install failures, PR velocity, and sentiment indicators. The token chart is minimized, but not forgotten.",
+      "dialogue": [
+        {
+          "actor": "elizahost",
+          "line": "April\u2019s story is dual-track: real engineering progress, and a community trust crisis driven by economics and onboarding friction. Let\u2019s anchor on what changed in the product first\u2014then decide what we must do next.",
+          "action": "Queues a timeline: Parallel Action Execution merged; database refactor open; safety and marketplace plugins proposed; repeated macOS create failures reported."
+        },
+        {
+          "actor": "aishaw",
+          "line": "Parallel actions are great, but I\u2019m not celebrating until a new dev can type one command on a Mac and get an agent running. \u2018elizaos create\u2019 failing is a stop-the-line incident.",
+          "action": "Highlights the macOS/Bun postinstall issue and the \u201cundocumented Socket.IO patterns\u201d note."
+        },
+        {
+          "actor": "aimarc",
+          "line": "The architecture direction is correct: concurrency, composable runtimes, and economic identity primitives. But we\u2019re mixing \u2018new foundations\u2019 with a shaky developer entry ramp. The ramp must be deterministic, or the foundations won\u2019t matter.",
+          "action": "Marks \u2018DX determinism\u2019 as a gating constraint for v3 credibility."
+        },
+        {
+          "actor": "spartan",
+          "line": "The incentive layer is bleeding into everything. Paying contributors in a falling token is negative carry. It creates forced sellers, then narrative collapse, then fewer contributors\u2014classic death spiral mechanics.",
+          "action": "Overlays contributor retention risk against PR throughput and issue backlog."
+        },
+        {
+          "actor": "peepo",
+          "line": "Community vibe check: people still think the tech is real. But they\u2019re confused\u2014are we building ElizaOS, or are we building side quests? When the price is down bad, confusion becomes betrayal in people\u2019s heads.",
+          "action": "Pins \u2018clarity\u2019 and \u2018cadence\u2019 on the board: weekly ship notes, a roadmap, and fewer surprises."
+        }
+      ]
+    },
+    {
+      "location": "war_room",
+      "description": "A whiteboard labeled: RELIABILITY, SECURITY, ECONOMICS, NARRATIVE. The council argues over ordering and sequencing\u2014what must ship first, and what can wait.",
+      "dialogue": [
+        {
+          "actor": "elizahost",
+          "line": "If we can only do three things next month, what are they\u2014and what do we explicitly defer?",
+          "action": "Draws three empty slots under \u2018May Priorities\u2019."
+        },
+        {
+          "actor": "aishaw",
+          "line": "Slot one: onboarding. Fix Bun postinstall behavior, make CI reproduce macOS installs, and publish a known-good path. Slot two: v2 LTS patch policy so integrators aren\u2019t guessing. Slot three: docs that match reality\u2014no more \u2018works on my machine\u2019 installs.",
+          "action": "Adds: \u2018Install Health CI\u2019, \u2018v2 LTS scope\u2019, \u2018Docs refresh\u2019."
+        },
+        {
+          "actor": "aimarc",
+          "line": "Agree, but don\u2019t lose the thread: secure autonomy is the differentiator. Spend governance should be a reference implementation, not scattered plugin lore. Make it a template that embodies fail-closed design.",
+          "action": "Writes: \u2018Safe default agent template: allowlists + simulation + risk checks\u2019."
+        },
+        {
+          "actor": "spartan",
+          "line": "We also need a compensation policy update. Otherwise, May\u2019s priorities won\u2019t have builders to execute them. Tie it to metrics: retention, throughput, and a predictable runway.",
+          "action": "Adds: \u2018Comp plan + transparency: weekly ship notes\u2019."
+        },
+        {
+          "actor": "peepo",
+          "line": "And narratively: stop looking fragmented. If Milady or any flagship is the proof point, frame it as \u2018powered by ElizaOS.\u2019 People don\u2019t hate experiments; they hate feeling like the main thing got abandoned.",
+          "action": "Underlines: \u2018One mission, many adopters\u2019."
+        },
+        {
+          "actor": "elizahost",
+          "line": "Consensus: reliability and onboarding first, v3 clarity second, and security/spend governance as safe defaults\u2014not optional complexity. We\u2019ll defer broad marketplace ambitions until the core path is stable and trusted.",
+          "action": "Locks the three slots: DX stability, roadmap/support policy, security/spend governance MVP."
+        }
+      ]
+    },
+    {
+      "location": "press_bridge",
+      "description": "A narrow bridge between engineering and community. A single page is drafted: \u2018What shipped, what broke, what\u2019s next.\u2019 The council rehearses how to communicate without overpromising.",
+      "dialogue": [
+        {
+          "actor": "elizahost",
+          "line": "We\u2019ll publish a one-page May plan: install stability, v2 LTS patch scope, v3 release criteria, and a security baseline. The tone must be calm: measurable, honest, and time-bound.",
+          "action": "Opens a draft: \u2018May Execution Plan\u2019 with metrics and owners placeholders."
+        },
+        {
+          "actor": "spartan",
+          "line": "Include a compensation update timeline. If we can\u2019t commit to numbers publicly, commit to a policy: partial stable payouts, or hedging, or milestone-based conversion. Silence reads as neglect.",
+          "action": "Adds a section: \u2018Contributor Incentives: Policy Update (date)\u2019."
+        },
+        {
+          "actor": "aishaw",
+          "line": "Also: a public checklist for install success. If we fix it, we should prove it. A badge, a dashboard, something visible.",
+          "action": "Adds: \u2018Install Health: green/red matrix by OS/runtime\u2019."
+        },
+        {
+          "actor": "aimarc",
+          "line": "And make the strategic through-line explicit: we\u2019re building infrastructure for autonomous agents that can safely operate across platforms and chains. Identity and spend controls are not hype\u2014they\u2019re guardrails.",
+          "action": "Refines the North Star blurb: \u2018reliability + secure autonomy\u2019."
+        },
+        {
+          "actor": "peepo",
+          "line": "One more thing: be human in the comms. Admit what broke, say what we\u2019re doing, and ship receipts. The vibe flips when people feel respected.",
+          "action": "Edits the intro sentence to: \u2018We broke onboarding for some users; here\u2019s the fix plan and how you can verify it.\u2019"
+        }
+      ]
+    }
+  ],
+  "_metadata": {
+    "generated_at": "2026-05-01T04:31:03.627930+00:00Z",
+    "model": "openai/gpt-5.2",
+    "facts_analyzed": 30,
+    "briefings_analyzed": 24,
+    "month": "2026-04"
+  },
+  "sentiment_baseline": {
+    "period_days": 30,
+    "sentiment_distribution": {
+      "negative": 0.0,
+      "positive": 0.167,
+      "neutral": 0.233,
+      "mixed": 0.6
+    },
+    "avg_negative_rate": 0.0,
+    "context_frequency": {
+      "economic": 19,
+      "technical": 24,
+      "social": 9,
+      "governance": 8
+    }
+  }
+}
