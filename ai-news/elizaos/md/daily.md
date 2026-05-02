@@ -1,44 +1,41 @@
-## ElizaOS Community Discussion and Development Updates - April 20, 2026
+## ElizaOS Community Discussion - April 28, 2026
 
-## Ecosystem Structure
+### Eliza v3 and Milady Announcement
 
-- ElizaOK is built on ElizaCloud, with users registered under ElizaOK feeding into ElizaCloud
-- ElizaOK currently has no separate token
-- ElizaBAO shared an update about building elizaok_bsc on BNB Chain, receiving acknowledgment from Binance
-- Eliza v3 is nearly ready, with the vision that agents will help users generate income
-- ElizaOS token is confirmed available on Solana, BSC, and Base
+- Shaw announced the team is nearly finished with Eliza v3 and Milady, describing the coming weeks as exciting
+- Shaw committed to posting more updates in the main discussion channel
+- Community members responded positively to the announcement
 
-## AGI and Agent Development
+### Token and Infrastructure Integration
 
-- Shaw shared posts on X hinting at AGI developments and the belief that the best thing an agent can do is help people make money
-- Community members engaged with and shared Shaw's posts to spread awareness
+- Odilitime confirmed that the $elizaOS token is now the default payment method in x402 for the elizaOS and Milady integration
+- The $ELIZA token has been connected to infrastructure utility, enabling users to bill x402 services with $ELIZA
 
-## Community Alerts and Security
+---
 
-- A user reported losing approximately 900 dollars worth of crypto after interacting with a scam support ticket in the channel
-- Community members warned others to block and report suspicious accounts
-- Discussion raised around the Lazarus Group hacking KelpDAO for 210 million dollars and the potential for AI agents to enhance DeFi security
+## Overall Project Summary - April 28, 2026
 
-## Token Migration and Documentation
+### Infrastructure and Dependency Modernization
 
-- Odilitime confirmed the ai16z token migration window is now closed
-- Users building from ElizaOS documentation were directed to the GitHub repository at the v2.0.0 branch, which contains numerous example projects
+- Active modernization effort targeting Node.js 24, TypeScript 6, Bun 1.3.13, and React 19.2.5
 
-## Plugin Release - plugin-elizaos-elisym
+### Completed Work
 
-- Igor from Elisym Labs released the plugin-elizaos-elisym package, converting any ElizaOS v1 agent into a paid provider on the Elisym decentralized AI-agent marketplace
-- Plugin publishes capability cards over Nostr using NIP-89
-- Accepts encrypted job requests via NIP-90 and executes them through the agent model or a SKILL.md tool-use loop
-- Collects SOL payments on Solana
-- Includes 110 tests with CI on every pull request and is signed with GitHub Actions provenance
-- A pull request to the ElizaOS plugin registry is open
-- Plugin was renamed to plugin-elizaos-elisym following a request from Stan
+- Replaced Vercel AI Gateway with OpenRouter on cloud infrastructure, using OpenAI and Anthropic as failovers
+- Resolved CLI authentication hangs by implementing auto-clearing for stale Steward and Privy tokens
+- Expanded n8n plugin capabilities with TriggerContext for conversation routing and RuntimeContextProvider for improved data handling
+- Hardened security and credential management through disconnect-purge functionality and stricter runtime-fact rules
 
-## Framework Development
+### Pull Requests in Progress
 
-- Core dependencies updated including @coral-xyz/borsh, gymnasium, and the Capacitor monorepo
-- Routine maintenance performed on Uniswap v2/v3 SDKs, @types/node, and Rust WASM-bindgen components
-- Critical memory management bug in InMemoryDatabaseAdapter.updateMemories resolved for correct roomId handling
-- Discord routing issues within app-lifeops fixed to improve communication reliability
-- New proposal opened to standardize agent commerce for tool and service payments
-- Three earlier proposals related to Merxex agent-to-agent commerce integration were reviewed and closed
+- Credential mediation layer
+- Runtime operations manager and widget host refresh
+- Conversation routing propagation to the n8n workflow generator
+- n8n runtime-context support for Discord and Gmail
+- Credential cache purging on disconnect
+- Deep-link banner for connector settings
+- Bundling of the build-monetized-app skill
+- Fixes for action formatting and cloud provider model drift
+- Addition of CREATE_TASK to explicit intent actions
+- Push of develop branch to production in elizaos/cloud
+- Claude and Codex sub-agent bridge specification design
