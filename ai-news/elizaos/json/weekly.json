@@ -1,33 +1,7 @@
 {
   "type": "elizaosWeeklySummary",
-  "title": "Weekly Report - 2026-04-25 to 2026-05-01",
+  "title": "Weekly Report - 2026-04-26 to 2026-05-02",
   "categories": [
-    {
-      "title": "ElizaOS Community Discussion and Development Updates",
-      "content": [
-        {
-          "text": "In the general discussion channel, community members exchanged greetings and checked in with one another throughout the day. A notable question was raised about whether any active development work was being done for the degenai project. Odilitime confirmed that work was in progress, specifically mentioning a framework update being worked on. A video was shared in the channel as part of a reply to a community member. There was also a role check performed by Odilitime directed at community member Baoger.",
-          "sources": "https://discord.com/channels/1253563208833433701/1253563209462448241",
-          "videos": "https://cdn.elizaos.news/elizaos-media/lv_0_20251104003508_b80a1647.mp4",
-          "posters": "https://cdn.elizaos.news/posters/1777166894652-1l4cgp.png"
-        },
-        {
-          "text": "In the coders channel, a technical discussion emerged around Hierarchical Task Networks (HTN) and their potential use in ElizaOS. Community member Thirtieth shared a suggestion from Claude that ElizaOS v2 could upgrade an HTN-lite implementation to a full HTN system by replacing hand-coded decomposition with LLM-based planning when the beta releases. Thirtieth explained that HTN is an AI planning technique originating from the 1970s, used in game AI such as F.E.A.R. and Total War as well as robotics, and claimed ElizaOS v2 added it for agent goal decomposition. Odilitime responded by characterizing it as multistep planning. Community member uplink2501 asked whether HTN bears any similarity to Hierarchical Temporal Memory or LISP. The validity of the HTN claim about ElizaOS v2 was questioned by Thirtieth themselves. Additionally, a suspicious message was posted by user ramson813 offering $400 in Solana to anyone in need, which appears to be a scam solicitation.",
-          "sources": "https://discord.com/channels/1253563208833433701/1300025221834739744",
-          "posters": "https://cdn.elizaos.news/posters/1777166914599-mgedh5.jpg"
-        }
-      ],
-      "topic": "discordrawdata"
-    },
-    {
-      "title": "ElizaOS Development Summary: April 25, 2026",
-      "content": {
-        "text": "Development on April 25, 2026 focused on enhancing system stability and agent communication logic across the core framework, alongside expanding network and plugin ecosystem support. Key completed work in the core framework included improvements to Electrobun desktop window management, prevention of internal mechanism leaks in agent replies, and enhanced planner action handling to ensure reliable swarm synthesis. System reliability was also addressed through resolving credential conflicts between CLI and OAuth, fixing scheduler task leaks, and enabling proper character rename propagation. On the plugin and network side, the Telegram plugin received robust poller tracking to prevent duplicate instances and ensure clean resource deregistration. EVM network support was expanded with the integration of Radius Network mainnet and testnet into both Rust and Python implementations. Repository maintenance work included cleanup of accidental PGlite database artifacts and updates to the gitignore file to prevent future environment conflicts. Work still in progress includes a feature for x402 paid plugin routes and test harness hardening in the core eliza repository, as well as the addition of new plugins to the registry including plugin-tcg-oracle, plugin-undesirables, and plugin-elizaos.",
-        "sources": "https://elizaos.github.io/api/summaries/overall/day/2026-04-25.json",
-        "posters": "https://cdn.elizaos.news/posters/1777166935742-vopopl.jpg"
-      },
-      "topic": "miscellaneous"
-    },
     {
       "title": "ElizaOS Community Discussion: Token Utility, Project Updates, and Technical Notes",
       "content": [
@@ -325,7 +299,85 @@
         "posters": "https://cdn.elizaos.news/posters/1777685489150-r0pac.png"
       },
       "topic": "miscellaneous"
+    },
+    {
+      "title": "ElizaOS Community Discussion and Partner Updates - May 2, 2026",
+      "content": [
+        {
+          "text": "The general discussion channel saw light social activity throughout the day, with community members exchanging greetings across various time zones. A notable highlight was a community member named marianodim sharing progress on a spot trader agent built on ElizaOS, incorporating SOL, SUI, and five other tokens with multiple trading strategies and contextual data. The project is expected to generate one to two trading signals per week during testing in the coming weeks, with the developer expressing strong optimism about ElizaOS's potential returns.",
+          "sources": [
+            "https://discord.com/channels/1253563208833433701/1253563209462448241"
+          ],
+          "images": [],
+          "videos": [],
+          "posters": [
+            "https://cdn.elizaos.news/posters/1777772765752-evdvw.png"
+          ]
+        },
+        {
+          "text": "In the partners channel, community members expressed continued commitment to the ElizaOS ecosystem. Rabbidfly affirmed ongoing support, while Odilitime acknowledged efforts to keep things moving forward. Odilitime also mentioned the existence of an Eliza Army Steering group and invited interested partners to reach out to join.",
+          "sources": [
+            "https://discord.com/channels/1253563208833433701/1301363808421543988"
+          ],
+          "images": [],
+          "videos": [],
+          "posters": [
+            "https://cdn.elizaos.news/posters/1777772803606-assdbv.png"
+          ]
+        }
+      ],
+      "topic": "discordrawdata"
+    },
+    {
+      "title": "ElizaOS Project Summary - May 2, 2026",
+      "content": [
+        {
+          "text": "The project on May 2, 2026 focused heavily on infrastructure stabilization, resolving critical build compatibility issues across multiple plugins to ensure alignment with the ESM-only @elizaos/core framework, while also addressing runtime stability for headless environments and initiating fixes for Telegram integration and environment variable configuration.",
+          "sources": [
+            "https://elizaos.github.io/api/summaries/overall/day/2026-05-02.json"
+          ],
+          "images": [],
+          "videos": [],
+          "posters": [
+            "https://cdn.elizaos.news/posters/1777772836462-u59b6.png"
+          ]
+        },
+        {
+          "text": "Several areas require immediate attention. Telegram integration is experiencing multiple bugs including token passing failures, Bun runtime errors on bot.launch(), and dual-polling race conditions across issues #7240, #7241, and #7245. Authentication and architecture bugs are also present, with prototype fragmentation in MiladyClient (#7233, #7244) and outdated auth.json schema expectations causing hasCodexCliSubscriptionAuth failures (#7238, #7243). Additionally, a Discord configuration discrepancy between voice.ts and messages.ts regarding environment variable handling (#49) requires a decision on the standard implementation path.",
+          "sources": [
+            "https://elizaos.github.io/api/summaries/overall/day/2026-05-02.json"
+          ],
+          "images": [],
+          "videos": [],
+          "posters": [
+            "https://cdn.elizaos.news/posters/1777772908230-a4c4a.png"
+          ]
+        },
+        {
+          "text": "Completed work includes resolving critical build failures across plugin-ollama, plugin-openai, plugin-openrouter, and plugin-pdf by removing incompatible CJS bundles to align with ESM standards. The plugin-jupiter was successfully migrated to the api.jup.ag endpoint with mandatory API key authentication. A process-level segfault on headless Linux servers was resolved by bypassing the OS keychain when D-Bus is unavailable (#7230). CI/CD improvements were made to handle non-zero exit codes on Windows Server 2025 (#7232). Routine dependency maintenance was also completed, including upgrading viem to v2.48.8, tsdown to version 0.21.0, and Node.js to v24.",
+          "sources": [
+            "https://elizaos.github.io/api/summaries/overall/day/2026-05-02.json"
+          ],
+          "images": [],
+          "videos": [],
+          "posters": [
+            "https://cdn.elizaos.news/posters/1777773047560-khvxbf.jpg"
+          ]
+        },
+        {
+          "text": "Work currently in progress includes pull requests for cloud and plugin structure updates in the main eliza repository (#7235), standardizing the DISCORD_AUTO_REPLY environment variable in plugin-discord (#50), and applying the Telegram setup token at runtime in plugin-telegram (#29).",
+          "sources": [
+            "https://elizaos.github.io/api/summaries/overall/day/2026-05-02.json"
+          ],
+          "images": [],
+          "videos": [],
+          "posters": [
+            "https://cdn.elizaos.news/posters/1777773084080-hg01n.png"
+          ]
+        }
+      ],
+      "topic": "miscellaneous"
     }
   ],
-  "date": 1777685502
+  "date": 1777773097
 }
