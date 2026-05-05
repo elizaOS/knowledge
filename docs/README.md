@@ -29,28 +29,25 @@ bun install -g mint
 
 ### Running Locally
 
-Navigate to the root of your documentation (where `docs.json` is located) and run:
+This package is the canonical doc root. From the repository root:
 
 ```bash
-mint dev
+cd packages/docs && mint dev
 ```
 
-This will start a local development server at `http://localhost:3000` where you can preview your changes in real-time.
+This starts a local preview (default `http://localhost:3000`). The repository root also has a `docs` symlink → `packages/docs` so existing `docs/...` paths keep resolving.
 
-### Project Structure
+### Project structure
 
 ```
-docs/
-├── rest-reference/      # REST API documentation
-├── core-concepts/      # Core concepts and architecture
-├── deep-dive/         # Advanced topics
-├── images/            # Documentation images
-├── logo/              # Logo assets
-├── snippets/          # Reusable code snippets
-├── docs.json          # Mintlify configuration
-├── index.mdx          # Landing page
-├── quickstart.mdx     # Quick start guide
-└── development.mdx    # Development guide
+packages/docs/
+├── docs.json              # Mintlify configuration
+├── rest-reference/        # REST API reference (Mintlify pages)
+├── rest/                  # Product REST guides (markdown)
+├── guides/, plugins/, …   # Guides and reference content
+├── images/, logo/
+├── index.mdx
+└── quickstart.mdx
 ```
 
 ## 📝 Contributing to Documentation

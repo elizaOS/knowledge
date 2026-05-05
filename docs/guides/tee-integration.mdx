@@ -35,11 +35,12 @@ enum TEEMode {
 
 ## Quick Start
 
-### 1. Use the TEE Starter Project
+### 1. Create a Project
 
 ```bash
-elizaos create --type project --template tee my-tee-agent
+elizaos create my-tee-agent --template project
 cd my-tee-agent
+bun install
 ```
 
 ### 2. Configure TEE Settings
@@ -53,7 +54,7 @@ WALLET_SECRET_SALT=your-secret-salt-min-8-chars
 ### 3. Start in TEE Mode
 
 ```bash
-elizaos start
+bun run dev
 ```
 
 ## Configuration
@@ -128,7 +129,7 @@ interface DeriveKeyAttestationData {
 
 ## TEE Providers
 
-ElizaOS supports multiple TEE providers. See the [TEE CLI Reference](/cli-reference/tee) for complete deployment commands.
+ElizaOS supports multiple TEE providers. Keep provider-specific deployment commands in your generated project scripts or deployment automation.
 
 ### Phala Network
 
@@ -226,8 +227,8 @@ Keys derived in TEE:
 ## See Also
 
 <CardGroup cols={2}>
-  <Card title="TEE CLI Reference" icon="terminal" href="/cli-reference/tee">
-    Complete TEE deployment commands
+  <Card title="CLI Reference" icon="terminal" href="/cli-reference/overview">
+    Simplified workspace CLI commands
   </Card>
   <Card title="Deploy a Project" icon="rocket" href="/guides/deploy-a-project">
     General deployment guide
