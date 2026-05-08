@@ -1,43 +1,53 @@
-## ElizaOS Development Update: April 30, 2026
+## ElizaOS Community Discussion and Development Progress - May 3, 2026
 
-## Community and Leadership
+## Community Discussion
 
-- Shaw (shawmakesmagic), lead developer, addressed community frustrations and reaffirmed the team's focus on building
-- Shaw called for maximal alignment among community members and emphasized the server's purpose as a space for contributors
-- An AMA event was held at 9PM PST featuring Shaw, binkyfishai, and baogerbao to discuss Botdick and ElizaOS V3
+### Token Price Debate
 
-## ElizaOS V3 Overview
+- Community members expressed frustration over ELIZAOS token price decline, citing communication concerns and unfulfilled promises including a Babylon airdrop
+- Shaw responded directly, stating token holders are not traditional investors and that the project prioritizes building revenue-generating products over token price management
+- Shaw confirmed buybacks require revenue first, and announced Eliza V3 is launching soon
+- Odilitime shared a visual roadmap image and coordinated with Shaw to post it in the announcements channel, with plans to update the GitHub text version
+- Community member satsbased noted recent improvements in communications and confirmed the Milady app is nearly ready alongside other products in development
 
-- V3 described as a full application runtime operating across all devices and platforms
-- Key features include:
-  - Integration with social platforms and iMessage
-  - Ability to issue tasks and control tools including Codex and Claude
-  - Workflow creation capabilities
-  - Runtime application building and monetization via Eliza Cloud
-- Architecture is fundamentally distinct from other agent frameworks
-- Team has been in continuous development for approximately six months
-- An Eliza agent called botdick independently created its own video game, demonstrating agent capabilities
+### Project Updates from Shaw
 
-## Token and Project History
+- Team is prepared for another major push with a new app in good shape
+- Several partners lined up to whitelabel and support the project for their own agents
+- Cloud infrastructure configured to be profitable
+- A model is being trained intended for users at quality comparable to Sonnet 4.5, with harness-tuned DeepSeek planned after cloud onboarding
+- Shadow is launching waifu.fun launchpad with four.meme and flap contracts, powered by the new Eliza
 
-- Shaw disclosed personal funding of V3 development from personal savings
-- Token utility framed around running the agent and building applications, monetized through Eliza Cloud
-- Claude Security entered public beta for Claude Enterprise customers, offering codebase vulnerability scanning, false positive reduction, and patch suggestions
+### Trading Repositories Shared
 
-## Technical Development
+- Shaw shared plugin-auto-trader, plugin-social-alpha, and the Spartan project
+- The social alpha plugin analyzes trenches channels to evaluate profitability of shilled tokens, with potential for a social copy trader
 
-### AI SDK Updates
-- Anthropic AI SDK updated to version 0.92.0
-- AI dependency updated to v6.0.172
-- Provider-utils updated to v4.0.25
-- Provider updated to v3.0.10
-- OpenAI provider updated to v3.0.55
+### Coders Channel
 
-### Infrastructure Improvements
-- Self-hosted deployment enhanced with CORS support and bearer authentication
-- Cross-platform build fixes applied
-- Supabase and Postgres Docker tag updated to v17.6.1.113
+- Odilitime shared a Twitter poll for a book he is writing on converting vibe-coded projects into durable real projects, currently at 150 pages
+- A backtick-wrapped URL workaround was identified for server spam filters blocking certain links
 
-## Strategic Proposals in Discussion
-- Hive Civilization integration on Base mainnet to expand the agent ecosystem
-- SwarmScore integration to provide agent reputation ratings
+## Development Progress
+
+### Runtime and Infrastructure
+
+- Resolved process-level segfaults on headless Linux via D-Bus detection fallback for the keyring library
+- Fixed Telegram bot launch errors and message loss caused by polling race conditions and non-writable error messages in Bun
+- Removed legacy components and updated CI workflows to improve repository maintainability
+
+### Authentication and Client Architecture
+
+- Merged duplicate MiladyClient definitions into a canonical ElizaClient to standardize client architecture
+- Fixed SIWE domain resolution and updated Codex CLI token recognition to improve authentication reliability
+
+### Automation and User Experience
+
+- Enhanced n8n workflow capabilities with structured clarification rules and ID-based directives
+- Restored the NL-first hero centerpiece in the Automations Overview
+- Added ConnectorTargetCatalog to surface Discord context
+
+### Pull Requests and Issue Closures
+
+- Pull requests in progress include Clarification UI, trigger deletion fix, SIWE typing fix, Clean Architecture migration, multiple ExergyNet plugin additions, and dependency updates
+- Several issues closed across the main eliza repository and the plugin-n8n-workflow repository
