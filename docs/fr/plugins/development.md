@@ -303,7 +303,7 @@ Les paramètres permettent au LLM d'extraire des données structurées de la con
 
 ```typescript
 const sendMessageAction: Action = {
-  name: "SEND_MESSAGE",
+  name: "MESSAGE",
   description: "Send a message to a specific user on a platform",
 
   parameters: [
@@ -1095,10 +1095,6 @@ const ModelType = {
   TEXT_TO_SPEECH: "TEXT_TO_SPEECH",        // TTS
   AUDIO: "AUDIO",                          // Audio processing
   VIDEO: "VIDEO",                          // Video processing
-
-  // Structured output
-  OBJECT_SMALL: "OBJECT_SMALL",
-  OBJECT_LARGE: "OBJECT_LARGE",
 
   // Research
   RESEARCH: "RESEARCH",

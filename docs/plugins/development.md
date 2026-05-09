@@ -259,7 +259,7 @@ Parameters allow the LLM to extract structured data from the conversation:
 
 ```typescript
 const sendMessageAction: Action = {
-  name: "SEND_MESSAGE",
+  name: "MESSAGE",
   description: "Send a message to a specific user on a platform",
 
   parameters: [
@@ -935,10 +935,6 @@ const ModelType = {
   TEXT_TO_SPEECH: "TEXT_TO_SPEECH",        // TTS
   AUDIO: "AUDIO",                          // Audio processing
   VIDEO: "VIDEO",                          // Video processing
-
-  // Structured output
-  OBJECT_SMALL: "OBJECT_SMALL",
-  OBJECT_LARGE: "OBJECT_LARGE",
 
   // Research
   RESEARCH: "RESEARCH",
