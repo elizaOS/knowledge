@@ -7,7 +7,7 @@ Last updated: 2026-04-17
 
 This PRD is grounded in a real Discord working relationship between Shaw and a human executive assistant:
 
-- Raw export: `/Users/shawwalters/Desktop/chat-exports/discord/Direct Messages - ice bambam 🧊🍣 [1323980531141972083].json`
+- Raw export: a Discord direct-message export covering January 2025 through April 2026 (path local to the original author's workspace; not checked into the tree).
 - Derived readable log: `.tmp/lifeops-research/ice-bambam-conversation-log.md`
 
 The transcript spans **1,925 messages** from **January 1, 2025** through **April 15, 2026**. The readable log redacts inline secrets.

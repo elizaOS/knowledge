@@ -1,41 +1,19 @@
-## ElizaOS Community Discussion - April 28, 2026
+## ElizaOS Community Discussion and Development Updates
 
-### Eliza v3 and Milady Announcement
+### Active Development
 
-- Shaw announced the team is nearly finished with Eliza v3 and Milady, describing the coming weeks as exciting
-- Shaw committed to posting more updates in the main discussion channel
-- Community members responded positively to the announcement
+- Shaw confirmed active development work including housekeeping tasks and progress on training a model called eliza-1
+- eliza-1 is described as a general purpose model based on qwen, trained within the Eliza harness
+- Optimization techniques being applied include dflash speculative decoding, caveman compression on thinking, and turboquant
+- Beta release v2.0.0-beta.0 was pushed to GitHub
 
-### Token and Infrastructure Integration
+### Community Highlights
 
-- Odilitime confirmed that the $elizaOS token is now the default payment method in x402 for the elizaOS and Milady integration
-- The $ELIZA token has been connected to infrastructure utility, enabling users to bill x402 services with $ELIZA
+- Community member Baoger shared that their project elizaOK was selected as a Top 20 entry in the Fourmeme Hackathon AI Sprint, placed in Group 3
+- Community voting on Binance Square was requested ahead of the May 8th deadline
 
----
+### Security and Scam Warnings
 
-## Overall Project Summary - April 28, 2026
-
-### Infrastructure and Dependency Modernization
-
-- Active modernization effort targeting Node.js 24, TypeScript 6, Bun 1.3.13, and React 19.2.5
-
-### Completed Work
-
-- Replaced Vercel AI Gateway with OpenRouter on cloud infrastructure, using OpenAI and Anthropic as failovers
-- Resolved CLI authentication hangs by implementing auto-clearing for stale Steward and Privy tokens
-- Expanded n8n plugin capabilities with TriggerContext for conversation routing and RuntimeContextProvider for improved data handling
-- Hardened security and credential management through disconnect-purge functionality and stricter runtime-fact rules
-
-### Pull Requests in Progress
-
-- Credential mediation layer
-- Runtime operations manager and widget host refresh
-- Conversation routing propagation to the n8n workflow generator
-- n8n runtime-context support for Discord and Gmail
-- Credential cache purging on disconnect
-- Deep-link banner for connector settings
-- Bundling of the build-monetized-app skill
-- Fixes for action formatting and cloud provider model drift
-- Addition of CREATE_TASK to explicit intent actions
-- Push of develop branch to production in elizaos/cloud
-- Claude and Codex sub-agent bridge specification design
+- Community members issued warnings about scam links related to ai16z to ElizaOS migration and bridging ElizaOS from BSC to Solana
+- A scammer was flagged in the coders channel by user Jacob, with a ban request submitted to moderator Odilitime
+- Legitimate bridging guidance was provided by satsbased, recommending Wormhole or deBridge for BSC to Solana bridging
