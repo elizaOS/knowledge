@@ -6,6 +6,11 @@ description: REST API endpoints for managing autonomous coding agent tasks and s
 
 These endpoints manage coding agent tasks exposed by `@elizaos/plugin-agent-orchestrator`. When the plugin does not export its own route handler, Eliza falls back to the plugin's `CODE_TASK` compatibility service for task metadata.
 
+On iOS, Google Play Android, desktop store builds, and any local device without
+validated Claude/Codex/OpenCode binaries, full coding-agent work should run in
+Eliza Cloud coding containers. The local app can promote a Workbench VFS bundle
+to Cloud, start a container with a selected agent, and sync changes back.
+
 For setup, architecture, auth, and debug/benchmark guidance, see:
 
 - [Coding Swarms (Orchestrator)](/guides/coding-swarms)
@@ -71,3 +76,169 @@ Cancels a specific coding agent task by its session ID.
 ```
 
 **Errors:** `503` if the orchestrator service is unavailable; `500` on cancellation failure.
+
+## Cloud Coding Containers
+
+These routes are exposed by `@elizaos/plugin-elizacloud`. The local plugin
+requires a configured Eliza Cloud account and a deployed Cloud coding-container
+control plane. It fails closed: when Cloud auth is disconnected, the
+`CLOUD_CONTAINER` service is unavailable, or the backend endpoint is not
+deployed, these routes return an error such as `503` instead of a fake
+successful stub.
+
+Container `status` values are `requested`, `pending`, `building`, `running`,
+`failed`, or `stopped`. File encodings are `utf-8` or `base64`.
+
+Workbench VFS callers can use the shortcut route documented in
+[Workbench VFS](/rest/workbench#promote-to-cloud):
+
+```text
+POST /api/workbench/vfs/projects/:id/promote-to-cloud
+```
+
+### Promote VFS Bundle
+
+```
+POST /api/cloud/coding-containers/promotions
+```
+
+```json
+{
+  "source": {
+    "sourceKind": "project",
+    "projectId": "demo-app",
+    "snapshotId": "snapshot-id",
+    "files": [
+      {
+        "path": "src/plugin.ts",
+        "contents": "export default { name: 'demo' };",
+        "encoding": "utf-8"
+      }
+    ]
+  },
+  "preferredAgent": "codex"
+}
+```
+
+**Response** (200)
+
+```json
+{
+  "success": true,
+  "data": {
+    "promotionId": "promotion-id",
+    "status": "accepted",
+    "source": {
+      "sourceKind": "project",
+      "projectId": "demo-app"
+    },
+    "workspacePath": "/workspace/demo-app",
+    "createdAt": "2026-05-11T16:00:00.000Z"
+  }
+}
+```
+
+### Start Coding Container
+
+```
+POST /api/cloud/coding-containers
+```
+
+```json
+{
+  "agent": "codex",
+  "promotionId": "promotion-id",
+  "source": {
+    "sourceKind": "project",
+    "projectId": "demo-app",
+    "snapshotId": "snapshot-id",
+    "files": [
+      {
+        "path": "src/plugin.ts",
+        "contents": "export default { name: 'demo' };",
+        "encoding": "utf-8"
+      }
+    ]
+  },
+  "prompt": "Implement the app and return patches"
+}
+```
+
+`agent` must be `claude`, `codex`, or `opencode`. When `source.files` is
+present, the Cloud control plane writes the bundle into the persistent
+workspace volume before the container starts and mounts that volume at
+`workspacePath`.
+
+**Response** (200)
+
+```json
+{
+  "success": true,
+  "data": {
+    "containerId": "container-id",
+    "status": "requested",
+    "agent": "codex",
+    "promotionId": "promotion-id",
+    "workspacePath": "/workspace/demo-app",
+    "url": "https://cloud.elizaos.ai/coding/container-id",
+    "createdAt": "2026-05-11T16:00:00.000Z",
+    "metadata": {
+      "sourceFileCount": 1,
+      "sourceTotalBytes": 31,
+      "volumeMountPath": "/workspace/demo-app"
+    }
+  }
+}
+```
+
+### Sync Changes
+
+```
+POST /api/cloud/coding-containers/:containerId/sync
+```
+
+```json
+{
+  "direction": "roundtrip",
+  "target": {
+    "sourceKind": "project",
+    "projectId": "demo-app",
+    "baseRevision": "snapshot-id"
+  },
+  "changedFiles": [
+    { "path": "src/index.ts", "contents": "export {};\n", "encoding": "utf-8" }
+  ],
+  "deletedFiles": [],
+  "patches": []
+}
+```
+
+`changedFiles` and `deletedFiles` are applied by the Cloud container control
+plane. `pull` and `roundtrip` responses include exported workspace files with
+`encoding=base64`. Patch application is intentionally rejected until the Cloud
+runtime has a real patch applier; callers should send full changed files.
+
+**Response** (202)
+
+```json
+{
+  "success": true,
+  "data": {
+    "syncId": "sync-id",
+    "containerId": "container-id",
+    "status": "ready",
+    "direction": "roundtrip",
+    "target": {
+      "sourceKind": "project",
+      "projectId": "demo-app",
+      "baseRevision": "snapshot-id"
+    },
+    "changedFiles": [
+      { "path": "src/index.ts", "contents": "ZXhwb3J0IHt9Owo=", "encoding": "base64" }
+    ],
+    "deletedFiles": [],
+    "patches": [],
+    "createdAt": "2026-05-11T16:00:00.000Z"
+  }
+}
+```

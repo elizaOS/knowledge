@@ -11,21 +11,58 @@ The Eliza mobile app brings the full dashboard experience to iOS and Android dev
 iOS App Store and Google Play builds are Cloud-backed mobile clients. They do
 not run a local Bun backend, local shell, PTY-spawned Claude/Codex/OpenCode, or
 the privileged AOSP agent service in-app. Local generated applets run through
-the mobile-safe runtime and virtual file system only: `javascriptcore`,
-`quickjs`, or `wasm` on iOS, and `android-isolated-process`, `quickjs`, or
-`wasm` on Google Play Android.
+the mobile-safe runtime and virtual file system only. JSCore, QuickJS,
+Android isolated-process, and AVF providers are advertised only when an actual
+native boundary is attached; otherwise the app falls back to VFS/WASM-safe
+surfaces and Cloud containers.
+
+iOS local development and sideload builds are a separate target, not an
+enterprise distribution path. Use `bun run build:ios:local` from
+`packages/app` to bake `runtimeMode=local`, build
+`packages/agent/dist-mobile-ios/agent-bundle.js`, stage it under
+`App/public/agent/`, and include the native llama bridge. The default local
+target is the iOS simulator; use `bun run build:ios:local:device` or set
+`ELIZA_IOS_BUILD_DESTINATION='generic/platform=iOS'` plus normal Xcode signing
+when you want a sideload/device build.
+That target still does not imply a host shell or downloaded native code. The
+full Bun engine path is gated by `ELIZA_IOS_FULL_BUN_ENGINE=1` and requires
+`packages/bun-ios-runtime/artifacts/ElizaBunEngine.xcframework` (or
+`ELIZA_IOS_BUN_ENGINE_XCFRAMEWORK`). If that artifact is missing, the build
+fails instead of falling back to the JSContext compatibility host. When the
+framework is present, the React app routes local-agent requests through
+Capacitor `ElizaBunRuntime.call("http_request")`, the native C ABI, and the
+agent bundle's `ios-bridge --stdio` command. The WebView does not open a TCP
+connection to the backend. Until the Bun fork emits that framework and passes
+simulator boot, the foreground local-agent URL can still be routed through the
+in-process ITTP compatibility kernel. The kernel exposes
+`GET /api/local-agent/capabilities` so the app can show the truth about what is
+local today: foreground chat/model-management routes are ITTP,
+native `Agent.request` / `Agent.chat` can bridge into that WebView kernel while
+the app is foregrounded, plugin/app managers are not mounted, and the
+`ScheduledTask` service is unavailable in background runner JSContexts.
+Background wakes in this mode are recorded as an explicit
+`ios_ittp_route_kernel_unavailable_in_background_jscontext` skip instead of
+probing a fake TCP endpoint.
 
 The AOSP / ElizaOS Android build is a separate privileged system target. It can
 stage the on-device Bun agent, `/system/bin/sh`, shell plugin, coding-tools
 plugin, agent orchestrator, and optional AVF/Microdroid boundary when the
-device image exposes those APIs. Claims about AOSP terminal behavior remain
-tracked as TODO-AOSP-PTY and TODO-AOSP-TOOLCHAIN in
+device image exposes those APIs. The Android template includes a reflection-only
+AVF probe, but the Microdroid payload/RPC lifecycle is still AOSP-only follow-up
+work. Claims about AOSP terminal behavior remain tracked as TODO-AOSP-PTY and
+TODO-AOSP-TOOLCHAIN in
 [`docs/mobile-agentic-ide-platform-plan.md`](../../../docs/mobile-agentic-ide-platform-plan.md).
 
 Use `bun run build:android:cloud` from the repository root for a Play-store
-style thin client. Use `bun run build:android:system` for the privileged AOSP
-APK. The legacy `packages/app` `build:android` script is sideload-only and
-embeds the on-device agent runtime.
+style release AAB thin client; `android-cloud-debug` is only for debug APK
+iteration. Use `bun run build:android:system` for the privileged AOSP APK. The
+legacy `packages/app` `build:android` script is sideload-only and embeds the
+on-device agent runtime. The cloud target strips the local agent, privileged
+default-role surfaces, staged runtime assets, native runtime plugin references,
+`ElizaAgentService`, `assets/agent`, disguised `libeliza_` native runtime
+libraries, `MANAGE_APP_OPS_MODES`, `PACKAGE_USAGE_STATS`,
+`MANAGE_VIRTUAL_MACHINE`, and other system-only permissions, then audits the
+source tree and artifact.
 
 ## Platform Support
 
@@ -44,7 +81,9 @@ embeds the on-device agent runtime.
 
 - **macOS** (required for iOS development)
 - **Xcode 15+** with iOS platform tools installed
-- **CocoaPods** (Capacitor uses it for native dependencies): `sudo gem install cocoapods`
+- **CocoaPods** (Capacitor uses it for native dependencies): prefer
+  `brew install cocoapods`; `gem install --user-install cocoapods` also works
+  when Ruby's user gem bin directory is on `PATH`
 - An Apple Developer account for device testing and distribution
 - For simulator testing, no signing is required
 
@@ -251,7 +290,10 @@ Canvas rendering and web view management. Available on all platforms (HTML Canva
 
 Agent lifecycle management.
 
-- **Cross-platform:** Uses IPC to the main-process AgentManager on Electrobun, and HTTP calls to the API server on iOS/Android/Web.
+- **Cross-platform:** Uses IPC to the main-process AgentManager on Electrobun.
+  Android/Web use HTTP calls to the API server or bundled loopback agent. iOS
+  uses HTTP for remote/cloud endpoints; local dev/sideload mode reports local
+  lifecycle status while app requests route through the in-process ITTP kernel.
 - **Lifecycle:** Start, stop, and query agent status (`not_started`, `starting`, `running`, `stopped`, `error`).
 - **Chat:** Send text messages and receive agent responses.
 
