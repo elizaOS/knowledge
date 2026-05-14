@@ -1,53 +1,54 @@
-## ElizaOS Community Discussion and Development Progress - May 3, 2026
+## ElizaOS Community Discussion: April 22, 2026
 
-## Community Discussion
+### Community Concerns and Team Response
 
-### Token Price Debate
+- Community members raised allegations related to the AI16Z token launch and migration, including claims of token dumping and misappropriation during migration
+- Odilitime, core developer and moderator, defended the project and Shaw personally, citing tools like OpenClaw and Hermes as evidence of real market demand for ElizaOS
+- Odilitime speculated that legal counsel had advised the team against public statements regarding the ongoing lawsuit
+- A community member identified the law firm filing the lawsuit as also pursuing a class action against pump.fun
 
-- Community members expressed frustration over ELIZAOS token price decline, citing communication concerns and unfulfilled promises including a Babylon airdrop
-- Shaw responded directly, stating token holders are not traditional investors and that the project prioritizes building revenue-generating products over token price management
-- Shaw confirmed buybacks require revenue first, and announced Eliza V3 is launching soon
-- Odilitime shared a visual roadmap image and coordinated with Shaw to post it in the announcements channel, with plans to update the GitHub text version
-- Community member satsbased noted recent improvements in communications and confirmed the Milady app is nearly ready alongside other products in development
+### Token Migration
 
-### Project Updates from Shaw
+- Odilitime confirmed the AI16Z to ELIZAOS migration window has closed
+- A waitlist option was offered to users who missed the migration window, described as a longshot for potential future reopening
 
-- Team is prepared for another major push with a new app in good shape
-- Several partners lined up to whitelabel and support the project for their own agents
-- Cloud infrastructure configured to be profitable
-- A model is being trained intended for users at quality comparable to Sonnet 4.5, with harness-tuned DeepSeek planned after cloud onboarding
-- Shadow is launching waifu.fun launchpad with four.meme and flap contracts, powered by the new Eliza
+### Developer Activity
 
-### Trading Repositories Shared
+- Stan confirmed ElizaOS v2.x is stable enough for active development
+- Stan clarified versioning: 0.x was the first version, 1.x the second, and 2.x the third
+- A scam warning was issued after a user lost 100,000 AI16Z tokens via a fraudulent site at bulkdao.co/allocation; moderators were alerted
 
-- Shaw shared plugin-auto-trader, plugin-social-alpha, and the Spartan project
-- The social alpha plugin analyzes trenches channels to evaluate profitability of shilled tokens, with potential for a social copy trader
+### New Plugins and Projects
 
-### Coders Channel
+- LemonCake plugin introduced for ElizaOS v2, MIT-licensed, enabling autonomous agents to pay for API services using spend-capped, time-boxed, revocable pay tokens
+  - Supports USDC and JPYC on Polygon
+  - Integrates with 32 paid APIs including search, scraping, LLM, and image services
+  - Auto-journals transactions to QuickBooks and Xero
+- DailyBite mental health app shared, developed with two licensed psychologists, offering CBT-based daily tasks targeting anxiety and stress
+  - Available free on iOS and Android during beta
+  - Developer built the app using skills gained from running an ElizaOS-powered AI agent on Twitter
 
-- Odilitime shared a Twitter poll for a book he is writing on converting vibe-coded projects into durable real projects, currently at 150 pages
-- A backtick-wrapped URL workaround was identified for server spam filters blocking certain links
+---
 
-## Development Progress
+## ElizaOS Development Digest: April 22, 2026
 
-### Runtime and Infrastructure
+### Completed Work
 
-- Resolved process-level segfaults on headless Linux via D-Bus detection fallback for the keyring library
-- Fixed Telegram bot launch errors and message loss caused by polling race conditions and non-writable error messages in Bun
-- Removed legacy components and updated CI workflows to improve repository maintainability
+- Milady CI pipeline restored, recovering website blocker and Telegram export functionality
+- Method collisions in the LifeOps signal client resolved
+- Broad dependency hardening completed across Rust crates, Python benchmarks, and JavaScript/TypeScript packages
+- Infrastructure updates applied to mobile and Supabase Postgres components
+- Cloud platform authorization flows migrated to Steward
+- Native Ethereum and Solana login buttons introduced for identity management
+- Billing classification error for image-generation model pricing resolved
+- Plugin registry expanded with addition of the @elisym/plugin-elizaos package
 
-### Authentication and Client Architecture
+### Work in Progress
 
-- Merged duplicate MiladyClient definitions into a canonical ElizaClient to standardize client architecture
-- Fixed SIWE domain resolution and updated Codex CLI token recognition to improve authentication reliability
-
-### Automation and User Experience
-
-- Enhanced n8n workflow capabilities with structured clarification rules and ID-based directives
-- Restored the NL-first hero centerpiece in the Automations Overview
-- Added ConnectorTargetCatalog to surface Discord context
-
-### Pull Requests and Issue Closures
-
-- Pull requests in progress include Clarification UI, trigger deletion fix, SIWE typing fix, Clean Architecture migration, multiple ExergyNet plugin additions, and dependency updates
-- Several issues closed across the main eliza repository and the plugin-n8n-workflow repository
+- Local inference hub with provider switcher and agent local probes
+- 2.x/v3 codebase cleanup and prompt bloat reduction
+- Ongoing dependency maintenance
+- Fixes for tenant ID formatting and session expiry handling in the cloud platform
+- Journal drift repair
+- Solana escrow and reputation plugin from Holdfast Protocol pending registry addition
+- Follow-up required on Telegram read receipt optimization for message ID fetching
