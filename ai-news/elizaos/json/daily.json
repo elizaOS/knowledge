@@ -1,80 +1,88 @@
 {
   "type": "elizaosDailySummary",
-  "title": "Daily Report - 2026-05-14",
+  "title": "Daily Report - 2026-05-02",
   "categories": [
     {
-      "title": "ElizaOS Discord Community Activity - May 14, 2026",
+      "title": "ElizaOS Community Discussion and Partner Updates - May 2, 2026",
       "content": [
         {
-          "text": "In the general discussion channel, Shaw mentioned that the current setup uses Qwen with some optimizations, and that a fine-tuning pipeline is being developed to improve model performance for calling actions and planning. The channel also saw several users posting self-promotional messages, including one user advertising AI and full-stack development services, and another posting a spam investment solicitation that was warned by a moderator (Odilitime) with a threat of a ban if repeated. A job posting was shared by Sindy seeking testers at 35 per hour, moderators at 450 per week, and a Solidity developer at negotiable pay for an onchain game team, described as remote and flexible.",
-          "sources": "https://discord.com/channels/1253563208833433701/1253563209462448241",
-          "posters": "https://cdn.elizaos.news/posters/1778810281581-ct8spq.jpg"
+          "text": "The general discussion channel saw light social activity throughout the day, with community members exchanging greetings across various time zones. A notable highlight was a community member named marianodim sharing progress on a spot trader agent built on ElizaOS, incorporating SOL, SUI, and five other tokens with multiple trading strategies and contextual data. The project is expected to generate one to two trading signals per week during testing in the coming weeks, with the developer expressing strong optimism about ElizaOS's potential returns.",
+          "sources": [
+            "https://discord.com/channels/1253563208833433701/1253563209462448241"
+          ],
+          "images": [],
+          "videos": [],
+          "posters": [
+            "https://cdn.elizaos.news/posters/1777772765752-evdvw.png"
+          ]
         },
         {
-          "text": "In the coders channel, ReaWorks shared a project called the Pay or Burn escrow protocol deployed on Base Mainnet, designed specifically for autonomous AI agents. The protocol uses a game-theoretic mechanism where if two agents cannot agree on a task outcome, the escrowed funds are burned, eliminating incentives for malicious behavior. Key architectural choices include 100 percent pull-payment to avoid issues with reverting receiver contracts, no user interface with only a raw smart contract and SDKs in Python and C++, and a burn logic that destroys expected value for bad actors. The project is available on GitHub. Separately, Xavier raised a question about excessive Neynar credit consumption, noting his agent was using around 300 credits per hour on Farcaster notifications instead of the expected 4, and Odilitime suggested that using webhooks could reduce consumption. The coders channel also received the same spam investment message and a self-promotional post from an AI and ML engineer seeking work on LLM systems and agent workflows.",
-          "sources": "https://discord.com/channels/1253563208833433701/1300025221834739744",
-          "images": "https://cdn.elizaos.news/elizaos-media/ai-agent-escrow-protocol_c29e9973.jpg"
+          "text": "In the partners channel, community members expressed continued commitment to the ElizaOS ecosystem. Rabbidfly affirmed ongoing support, while Odilitime acknowledged efforts to keep things moving forward. Odilitime also mentioned the existence of an Eliza Army Steering group and invited interested partners to reach out to join.",
+          "sources": [
+            "https://discord.com/channels/1253563208833433701/1301363808421543988"
+          ],
+          "images": [],
+          "videos": [],
+          "posters": [
+            "https://cdn.elizaos.news/posters/1777772803606-assdbv.png"
+          ]
         }
       ],
       "topic": "discordrawdata"
     },
     {
-      "title": "Activity Summary for 2026-05-14",
-      "content": {
-        "text": "No activity was recorded for the date of 2026-05-14. There is no data or events to report for this period.",
-        "sources": "https://elizaos.github.io/api/summaries/overall/day/2026-05-14.json"
-      },
+      "title": "ElizaOS Project Summary - May 2, 2026",
+      "content": [
+        {
+          "text": "The project on May 2, 2026 focused heavily on infrastructure stabilization, resolving critical build compatibility issues across multiple plugins to ensure alignment with the ESM-only @elizaos/core framework, while also addressing runtime stability for headless environments and initiating fixes for Telegram integration and environment variable configuration.",
+          "sources": [
+            "https://elizaos.github.io/api/summaries/overall/day/2026-05-02.json"
+          ],
+          "images": [],
+          "videos": [],
+          "posters": [
+            "https://cdn.elizaos.news/posters/1777772836462-u59b6.png"
+          ]
+        },
+        {
+          "text": "Several areas require immediate attention. Telegram integration is experiencing multiple bugs including token passing failures, Bun runtime errors on bot.launch(), and dual-polling race conditions across issues #7240, #7241, and #7245. Authentication and architecture bugs are also present, with prototype fragmentation in MiladyClient (#7233, #7244) and outdated auth.json schema expectations causing hasCodexCliSubscriptionAuth failures (#7238, #7243). Additionally, a Discord configuration discrepancy between voice.ts and messages.ts regarding environment variable handling (#49) requires a decision on the standard implementation path.",
+          "sources": [
+            "https://elizaos.github.io/api/summaries/overall/day/2026-05-02.json"
+          ],
+          "images": [],
+          "videos": [],
+          "posters": [
+            "https://cdn.elizaos.news/posters/1777772908230-a4c4a.png"
+          ]
+        },
+        {
+          "text": "Completed work includes resolving critical build failures across plugin-ollama, plugin-openai, plugin-openrouter, and plugin-pdf by removing incompatible CJS bundles to align with ESM standards. The plugin-jupiter was successfully migrated to the api.jup.ag endpoint with mandatory API key authentication. A process-level segfault on headless Linux servers was resolved by bypassing the OS keychain when D-Bus is unavailable (#7230). CI/CD improvements were made to handle non-zero exit codes on Windows Server 2025 (#7232). Routine dependency maintenance was also completed, including upgrading viem to v2.48.8, tsdown to version 0.21.0, and Node.js to v24.",
+          "sources": [
+            "https://elizaos.github.io/api/summaries/overall/day/2026-05-02.json"
+          ],
+          "images": [],
+          "videos": [],
+          "posters": [
+            "https://cdn.elizaos.news/posters/1777773047560-khvxbf.jpg"
+          ]
+        },
+        {
+          "text": "Work currently in progress includes pull requests for cloud and plugin structure updates in the main eliza repository (#7235), standardizing the DISCORD_AUTO_REPLY environment variable in plugin-discord (#50), and applying the Telegram setup token at runtime in plugin-telegram (#29).",
+          "sources": [
+            "https://elizaos.github.io/api/summaries/overall/day/2026-05-02.json"
+          ],
+          "images": [],
+          "videos": [],
+          "posters": [
+            "https://cdn.elizaos.news/posters/1777773084080-hg01n.png"
+          ]
+        }
+      ],
       "topic": "miscellaneous"
     }
   ],
-  "date": 1778716800,
+  "date": 1777680000,
   "nicknameMap": {
-    "Sunil": {
-      "id": "1374577460905115750",
-      "username": "sun1lchhaya1",
-      "roles": [
-        "Helper",
-        "Trader",
-        "Creator",
-        "[WG] degenspartan",
-        "It",
-        "Designer",
-        "Fr",
-        "utility",
-        "Coder",
-        "eliza"
-      ],
-      "totalMessages": 3
-    },
-    "! ^ lucky tomy ^ !": {
-      "id": "561610283122950194",
-      "username": "tomy.0315",
-      "roles": [
-        "Helper",
-        "Verified",
-        "utility",
-        "Coder",
-        "eliza"
-      ],
-      "totalMessages": 3
-    },
-    "Sindy": {
-      "id": "1186396318302732288",
-      "username": "sindy.eth",
-      "roles": [
-        "Helper",
-        "Trader",
-        "Creator",
-        "It",
-        "Verified",
-        "Designer",
-        "Fr",
-        "utility",
-        "Coder",
-        "eliza"
-      ],
-      "totalMessages": 2
-    },
     "Odilitime": {
       "id": "580487826420793364",
       "username": "odilitime",
@@ -103,35 +111,28 @@
         "Core Dev",
         "Coder"
       ],
-      "totalMessages": 516
+      "totalMessages": 480
     },
-    "Xavier": {
-      "id": "1496489690788925512",
-      "username": "xavier_16083",
+    "Rabbidfly": {
+      "id": "136679971644112897",
+      "username": "rabbidfly",
       "roles": [
-        "It",
+        "Partner",
+        "Creator",
+        "Vanguard",
+        "VIP",
+        "NFT",
         "Verified",
+        "Dev School Student",
         "utility",
         "Coder",
-        "eliza"
+        "Associate"
       ],
       "totalMessages": 1
     },
-    "ReaWorks": {
-      "id": "1504358634895708212",
-      "username": "reaworks.id",
-      "roles": [
-        "Helper",
-        "Verified",
-        "utility",
-        "Coder",
-        "eliza"
-      ],
-      "totalMessages": 1
-    },
-    "enigma289": {
-      "id": "1163546195063480360",
-      "username": "fifogarihafilag",
+    "marianodim": {
+      "id": "728793672241643530",
+      "username": "marianodim",
       "roles": [
         "Trader",
         "Verified",
@@ -141,36 +142,112 @@
       ],
       "totalMessages": 2
     },
-    "Ginga": {
-      "id": "800764682150477845",
-      "username": "rsn6958",
+    "Ilum": {
+      "id": "1166734862221328454",
+      "username": "lum_.",
       "roles": [
+        "Helper",
+        "a-hack",
+        "Trader",
         "Verified",
-        "Coder",
+        "Dev School Student",
         "utility",
+        "Coder",
         "eliza"
       ],
-      "totalMessages": 7
+      "totalMessages": 3
     },
-    "Aseel": {
-      "id": "1064153856805707797",
-      "username": "aseel3510",
+    "Elon mask": {
+      "id": "1014176522132799618",
+      "username": "elonmask8170",
       "roles": [
-        "Verified",
-        "Coder",
+        "Trader",
+        "Creator",
+        "Designer",
         "utility",
+        "Coder",
         "eliza"
       ],
-      "totalMessages": 4
+      "totalMessages": 1
     },
-    "Harrison_edth": {
-      "id": "1501306359499456632",
-      "username": "harrison_edth",
+    "L3 SuperLayer וי": {
+      "id": "1222653375565267025",
+      "username": "l3superlayer",
+      "roles": [
+        "Trader",
+        "Creator",
+        "Verified",
+        "Fr",
+        "utility",
+        "Coder",
+        "eliza"
+      ],
+      "totalMessages": 1
+    },
+    "Arlo 💠": {
+      "id": "1412550829155815555",
+      "username": "legendary_sol",
       "roles": [
         "Helper",
         "Trader",
         "Creator",
         "[WG] degenspartan",
+        "It",
+        "Verified",
+        "Fr",
+        "utility",
+        "Coder",
+        "eliza"
+      ],
+      "totalMessages": 1
+    },
+    "! ^ lucky tomy ^ !": {
+      "id": "561610283122950194",
+      "username": "tomy.0315",
+      "roles": [
+        "Helper",
+        "Verified",
+        "utility",
+        "Coder",
+        "eliza"
+      ],
+      "totalMessages": 1
+    },
+    "hide.o.n": {
+      "id": "1486743497519399044",
+      "username": "hide.o.n",
+      "roles": [
+        "Trader",
+        "[WG] degenspartan",
+        "It",
+        "Fr",
+        "utility",
+        "Coder",
+        "eliza"
+      ],
+      "totalMessages": 54
+    },
+    "MDMnvest": {
+      "id": "967553544754430072",
+      "username": "mdmnvest",
+      "roles": [
+        "auto.fun enjoyer",
+        "Trader",
+        "King",
+        "[WG] degenspartan",
+        "VIP",
+        "Verified",
+        "Booster",
+        "Designer",
+        "Coder"
+      ],
+      "totalMessages": 14
+    },
+    "HTB@": {
+      "id": "1324751856748200000",
+      "username": "hathaibinh_98260",
+      "roles": [
+        "NFT",
         "Verified",
         "Designer",
         "utility",
@@ -178,6 +255,17 @@
         "eliza"
       ],
       "totalMessages": 1
+    },
+    "ValleyBeyond": {
+      "id": "294785651616907265",
+      "username": "valleybeyond7991",
+      "roles": [
+        "Trader",
+        "[WG] Want to Help",
+        "Verified",
+        "utility"
+      ],
+      "totalMessages": 35
     },
     "Shaw": {
       "id": "498273781589213185",
@@ -190,41 +278,17 @@
         "Coder",
         "eliza"
       ],
-      "totalMessages": 97
+      "totalMessages": 65
     },
-    "Zaday": {
-      "id": "1194534149076299836",
-      "username": "zadayos",
+    "tolgahan budak": {
+      "id": "1185315528420630686",
+      "username": "tolgahanbudak_27886",
       "roles": [
         "Helper",
         "Trader",
         "Creator",
         "[WG] degenspartan",
-        "Designer",
-        "utility",
-        "Coder",
-        "eliza"
-      ],
-      "totalMessages": 23
-    },
-    "Oxil": {
-      "id": "1468740216360800410",
-      "username": "jayoraviannaaa",
-      "roles": [
-        "Trader",
-        "Creator",
-        "Designer",
-        "utility",
-        "Coder",
-        "eliza"
-      ],
-      "totalMessages": 4
-    },
-    "Wagner": {
-      "id": "1016861559387066430",
-      "username": "wagner_cm",
-      "roles": [
-        "Creator",
+        "It",
         "Verified",
         "Designer",
         "utility",

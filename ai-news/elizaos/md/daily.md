@@ -1,13 +1,19 @@
-## ElizaOS Discord Community Activity - May 10, 2026
+## ElizaOS Community Activity - May 12, 2026
 
 ## General Discussion
 
-- Community members exchanged greetings across multiple time zones throughout the day
-- A user shared a Mother's Day message for the occasion
-- A developer named Ginga posted a professional introduction describing their background in AI and full-stack systems, with a focus on practical, production-ready software built on clean, maintainable, and secure principles, and invited community members to connect for collaboration
+- Developer Ginga introduced themselves as a builder of AI and full-stack systems, with a focus on practical software delivery, clean, maintainable, and secure production-ready systems
+- The introduction received a positive response from the community
 
-## Coders Channel
+## Developer Activity
 
-- A user inquired about the daily cost of running an Eliza agent as a Twitter bot
-- Odilitime provided cost context, noting prices dropped from approximately 100 dollars per month to around 10 dollars per month, with actual costs varying based on configuration such as reply volume and other usage factors
-- Community members demonstrated security awareness by flagging a scam message and raising questions about a potential compromise
+### Plugin Registry Infrastructure
+
+- Developer sailorpepe.eth reported that the v2 plugin registry infrastructure is returning 404 errors, affecting both the elizaos-plugins/registry repo and plugins.elizacloud.ai
+- A third-party plugin was prepared and ready for submission
+- Core developer Odilitime acknowledged the issue and indicated the team may revert to accepting pull requests directly to the elizaOS/eliza repository
+
+### Security
+
+- Community members flagged suspicious activity in the Discord server
+- Odilitime clarified that the project has no admins and attributed the activity to scammers
