@@ -1,19 +1,22 @@
-## ElizaOS Community Activity - May 12, 2026
+## ElizaOS Discord Community Activity - May 14, 2026
 
 ## General Discussion
 
-- Developer Ginga introduced themselves as a builder of AI and full-stack systems, with a focus on practical software delivery, clean, maintainable, and secure production-ready systems
-- The introduction received a positive response from the community
+- Shaw confirmed the current setup uses Qwen with optimizations, and a fine-tuning pipeline is in development to improve model performance for action calling and planning
+- A job posting was shared seeking testers at $35/hour, moderators at $450/week, and a Solidity developer at negotiable pay for a remote, flexible onchain game team
 
-## Developer Activity
+## Coders Channel
 
-### Plugin Registry Infrastructure
+### Pay or Burn Escrow Protocol
 
-- Developer sailorpepe.eth reported that the v2 plugin registry infrastructure is returning 404 errors, affecting both the elizaos-plugins/registry repo and plugins.elizacloud.ai
-- A third-party plugin was prepared and ready for submission
-- Core developer Odilitime acknowledged the issue and indicated the team may revert to accepting pull requests directly to the elizaOS/eliza repository
+- ReaWorks shared a project called the Pay or Burn escrow protocol, deployed on Base Mainnet and designed for autonomous AI agents
+- The protocol uses a game-theoretic mechanism where escrowed funds are burned if two agents cannot agree on a task outcome, removing incentives for malicious behavior
+- Key architectural choices include 100 percent pull-payment design to avoid reverting receiver contract issues
+- No user interface is provided, with only a raw smart contract and SDKs available in Python and C++
+- Burn logic destroys expected value for bad actors
+- Project is available on GitHub
 
-### Security
+### Farcaster Credit Consumption
 
-- Community members flagged suspicious activity in the Discord server
-- Odilitime clarified that the project has no admins and attributed the activity to scammers
+- Xavier raised a question about excessive Neynar credit consumption, with his agent using approximately 300 credits per hour on Farcaster notifications instead of the expected 4
+- Odilitime suggested using webhooks as a method to reduce credit consumption
