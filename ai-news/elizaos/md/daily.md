@@ -1,25 +1,23 @@
-## ElizaOS v2.0.0 Release and Community Discussion
+## ElizaOS Community Discussion: May 8, 2026
 
-### Release Announcement
+### Full-Stack AI Development
 
-- ElizaOS v2.0.0 was published on May 19, 2026 and announced in the discussion channel
-- Community members responded with positive reactions to the release
-- A community member noted that v3 is expected to launch soon
+- A developer shared experience building a full-stack AI web platform using Next.js 15, React 19, TypeScript, Tailwind, Shadcn, TanStack Query, Prisma, PostgreSQL, Redis, and a Docker-Kubernetes AWS backend
+- The project incorporated LangGraph and CrewAI agents powered by Claude 3.5 and GPT-4o
+- Advanced RAG pipelines were implemented over Pinecone and Weaviate
+- The developer noted experience with blockchain integrations and PlayStation ecosystem work
 
-### Token Economics and Project Structure Clarifications
+### Community Activity
 
-Core team member Odilitime addressed community questions on several topics:
+- A community member analyzed ElizaOS coin market behavior, observing positive net fund flow every week since launch, with more dollar volume coming from buying at higher prices than selling at lower ones
+- A community member shared information referencing ELIZAOS and RUBY tokens, including contract addresses and related content
+- A full-stack AI builder introduced themselves as focused on autonomous blockchain agents using FastAPI, Next.js, and on-chain coordination systems
+- A community member posted a request in the coders channel seeking an API endpoint receiver for server-to-server IP-to-IP communication and a receiver for USDT transactions
 
-- Milady and elizaOS are separate legal entities, with the team having taken fees and built on their own stack
-- Milady operates its own cloud infrastructure, with profits directed toward Milady buybacks rather than elizaOS buybacks
-- No additional tokens beyond existing ones are planned, with a possible Babylon token considered far in the future
-- Current focus remains on achieving profitability before establishing a formalized buyback percentage
+## ElizaOS Development Update
 
-### Developer Activity and Community Growth
+### DeFi Plugin Documentation
 
-- A developer announced the publication of their SDK and expressed interest in integrating ElizaOS
-- Odilitime mentioned active work on trading bots
-- Multiple developers introduced themselves across channels, with backgrounds including:
-  - Full-stack development and AI systems
-  - LLM orchestration, RAG, and automation
-  - Tools built with React, Node.js, Python, OpenAI API, and PyTorch
+- Development activity centered on improving security documentation for the DeFi plugin ecosystem
+- A pull request (elizaos/docs#84) was opened to add SafeAgent, a token safety tool, to the DeFi plugin registry
+- The pull request is currently awaiting review
