@@ -1,16 +1,20 @@
-## ElizaOS Community Discussion and Developer Activity - May 11, 2026
+## ElizaOS Community Discussion and Development Updates
 
-## General Discussion
+### Platform and Infrastructure Updates
 
-- Multiple AI and full-stack engineers introduced themselves, highlighting expertise in autonomous agents, LLMs, RAG pipelines, voice AI, computer vision, and multimodal systems
-- Frameworks referenced included LangChain, AutoGen, CrewAI, LangGraph, and various orchestration tools
-- Community members shared market commentary expressing optimism about current conditions
-- A question was raised regarding active support for the ElizaOS token, referencing Shaw's removal of ElizaOS from his X bio
+- elizaOS and DegenAI added as the default payment method in elizaOS for x402 routes
+- ElizaCloud consolidated into the main eliza repository on GitHub
+- ElizaCloud migrated away from Vercel and updated to support cheaper container infrastructure
+- Platform enables users to build and monetize their own apps on top of it
 
-## Developer Activity
+### Project Structure Clarification
 
-- A developer presented a multi-agent orchestrator built in Python using the claude-agent-sdk
-- The orchestrator features an A2A-protocol read-only research agent with integrated tools including Tavily, DuckDuckGo, fetch, and arXiv via MCP
-- The developer submitted a request to test the agent in a sandbox channel, with constraints specifying read-only operation, no DMs, and responses limited to direct mentions
-- The developer contacted inquiries@elizalabs.ai and inquired about OAuth invite or whitelist access
-- Odilitime, a core moderator and developer, directed the developer to initiate a DM to proceed with the OAuth process
+- Shaw confirmed elizaOS operates as a fair launch with no VC backing and no formal team structure
+- Project transitioned away from a team model and now consists of builders using and building the technology
+
+### Community Activity
+
+- Community members raised questions about deployment costs for running Eliza on cloud for a Twitter bot and Mac mini compatibility
+- Community interest expressed around elizaOS integration with Hyperfy
+- A developer offered development services to community members covering LLM systems, agents, RAG, multimodal, and automation work
+- RubyHighAI, an AI-focused learning platform, was shared in the discussion channel
