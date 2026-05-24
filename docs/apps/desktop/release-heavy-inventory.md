@@ -1,16 +1,13 @@
-# Desktop Release Heavy Inventory
+# Desktop Release Regression Inventory
 
-This inventory tracks the remaining desktop-heavy manual checks referenced by regression-matrix enforcement.
+This inventory records desktop regression coverage that is intentionally outside
+the deterministic PR gate. The release matrix validator keeps these entries
+visible so they are reviewed before a production desktop release.
+
+## Packaged and E2E Coverage
 
 - gameOpenWindow — full round-trip with openGameWindow mock (needs canvas mock update)
 - Abnormal window position (off-screen) is corrected to safe defaults (e2e)
-- Microphone input works after permission is granted (hardware)
-- Swabble fires 'wakeWordDetected' event when wake word is spoken (hardware)
-- Audio transcription produces non-empty text for clear speech (hardware)
-- Camera preview renders in the UI when stream is started (hardware)
-- Switching between front/rear camera works (hardware)
-- takeScreenshot returns a non-empty base64 PNG (hardware)
-- Frame capture mode streams frames at configured interval (hardware)
 - Deep link received while app is closed causes app to launch (e2e)
 - Deep link received while app is open does not launch second instance (e2e)
 - Shortcuts survive window focus changes (e2e)
@@ -31,6 +28,16 @@ This inventory tracks the remaining desktop-heavy manual checks referenced by re
 - Tray icon persists after main window is closed (e2e)
 - Main window has native vibrancy effect on macOS (e2e)
 - Context menu closes when clicking elsewhere (e2e)
+
+## Hardware and Manual Coverage
+
+- Microphone input works after permission is granted (hardware)
+- Swabble fires 'wakeWordDetected' event when wake word is spoken (hardware)
+- Audio transcription produces non-empty text for clear speech (hardware)
+- Camera preview renders in the UI when stream is started (hardware)
+- Switching between front/rear camera works (hardware)
+- takeScreenshot returns a non-empty base64 PNG (hardware)
+- Frame capture mode streams frames at configured interval (hardware)
 - Left-clicking the tray icon opens the companion window (visual)
 - Right-clicking the tray icon shows the tray context menu (visual)
 - Window can be dragged by clicking the header region (visual)
