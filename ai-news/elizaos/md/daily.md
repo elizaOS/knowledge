@@ -1,34 +1,29 @@
-## ElizaOS Community Updates - May 17, 2026
+## ElizaOS Community Discussion - 2026-05-13
 
-### Community Activity
+## V3 Development
 
-- User samuel1 raised concerns in the discussion channel regarding the migration deadline from ai16z to ElizaOS, noting an unanswered email and requesting admin assistance
-- Full-stack developer Keil introduced themselves across the discussion and coders channels, bringing experience in React, Node.js, Python, OpenAI API, and PyTorch, with a focus on web platforms, internal tools, automation systems, and AI-integrated applications
-- A concept described as FIFA for AI Agents was shared in the coders channel, presenting a Football Fantasy league designed for AI Agents
-- In the partners channel, DannyNOR NoFapArc noted several AI-related coins gaining traction on the Base blockchain, expressing cautious optimism about a potential market turnaround
+- Community members raised questions in the general channel regarding v3 development progress, specifically around infrastructure stabilization and the autonomous agent workflow stack
+- Questions were also raised about the integration status of the new identity and AgentID system in the upcoming architecture
 
----
+## Eliza-1 Model Series
 
-## ElizaOS Development Summary - May 17, 2026
+- The Eliza-1 model series is based exclusively on Qwen3.5
+- Model lineup spans from 0.6B to 27B parameters
+  - 0.6B model is capable of running offline on any phone
+  - 27B model includes a 1 million token context window
+- A new 0.8B model is currently in training on H200 hardware
+- The series is designed to cover hardware targets ranging from mobile phones to servers and workstations
 
-### Infrastructure and Platform Work
+## auto.fun AI Sprint Competition Results
 
-- Advanced Live USB architecture with production-ready update manifests, systemd-based health checks, refined branded launcher labels, UDisks configurations, and validated root-mode boot configurations and live demo paths
-- Stabilized native loader integration for stock Android APKs, enabled native TTS playback, improved voice hint forwarding for streaming plugins, and added long-generation support for Android direct paths
-- Resolved Docker build failures by consolidating workflows and merging image configuration files
-- Improved cloud reliability by integrating node health checks into the provisioning-worker daemon
+- Competition concluded after weeks of building, community voting, and live demos
+- First place awarded to Build4
+- Second place awarded to Clawdyland
+- A third place winner was also announced
 
-### Resolved Issues
+## GODL Integration Discussion
 
-- M-RoPE position validation and speculative decoding compatibility on Lunar Lake/Vulkan were resolved
-- Investigation into Qwen2.5-14B bandwidth performance concluded with no persistent kernel regression found
-
-### Active Work in Progress
-
-- Fixes for circular symlink issues in the app-core pruner
-- Connector capability detection and sub-agent UX redesign
-- First-party satellites and dynamic view host bridge development
-- Shell foundation improvements with accessibility and contrast enhancements
-- Swift runtime RPC bridge development
-- Ongoing validation of a new fallback patch for Speculative Decoding SWA Gate across 27B-class models
-- OpenVINO Runtime RFC under team review to finalize recommender logic and prevent accidental LLM routing
+- A business development representative for GODL, a gamified on-chain mining protocol on Solana, reached out in the coders channel to explore integration with elizaOS
+- GODL exposes its system through SDKs, websocket streams, automation hooks, and a public skill.md file designed for agent and tool integrations
+- Highlighted use cases include autonomous mining and staking strategies, agent-managed wallets, competing mining behaviors, and public leaderboards
+- Odilitime responded positively, confirming the skill.md file could be used as-is and agreed to continue the conversation via direct message to share further documentation
