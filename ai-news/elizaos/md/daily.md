@@ -1,20 +1,22 @@
-## Developer Introductions and AI Workflow Discussions
+## ElizaOS Discord Community Activity - May 14, 2026
 
-### Developer Backgrounds and Project Completions
+## General Discussion
 
-- Ginga introduced himself as an AI and full stack developer with experience across AI assistants, RAG-powered knowledge systems, workflow automation, SaaS platforms, and real-time applications
-- Ginga highlighted a focus on building secure, scalable, and maintainable systems oriented toward practical business value
+- Shaw confirmed the current setup uses Qwen with optimizations, and a fine-tuning pipeline is in development to improve model performance for action calling and planning
+- A job posting was shared seeking testers at $35/hour, moderators at $450/week, and a Solidity developer at negotiable pay for a remote, flexible onchain game team
 
-- Waily announced the completion of Resilience Bridge, a predictive platform built for an Australian client
-- The platform is designed to detect early financial or wellbeing stress and deliver actionable plans to users
-- Key components include a predictive engine and an AI Coach module
-- The project spanned three months and has entered the handover phase
+## Coders Channel
 
-### AI Workflow and MCP Integration Testing
+### Pay or Burn Escrow Protocol
 
-- Xpes conducted experiments with AgentKey MCP inside an OpenClaw setup as part of an AI workflow project
-- The integration enabled an AI agent to pull live Twitter and Reddit discussions for real-time sentiment analysis and trend monitoring
-- The agent performed comparisons of real-time community narratives around topics and tokens, producing dynamic outputs rather than static summaries
-- Xpes explored autonomous research workflows and live search tasks using the tooling
-- Windows-specific setup challenges were encountered and resolved, with the overall integration performing smoothly once configured
-- Testing of additional workflows using MCP tooling is ongoing
+- ReaWorks shared a project called the Pay or Burn escrow protocol, deployed on Base Mainnet and designed for autonomous AI agents
+- The protocol uses a game-theoretic mechanism where escrowed funds are burned if two agents cannot agree on a task outcome, removing incentives for malicious behavior
+- Key architectural choices include 100 percent pull-payment design to avoid reverting receiver contract issues
+- No user interface is provided, with only a raw smart contract and SDKs available in Python and C++
+- Burn logic destroys expected value for bad actors
+- Project is available on GitHub
+
+### Farcaster Credit Consumption
+
+- Xavier raised a question about excessive Neynar credit consumption, with his agent using approximately 300 credits per hour on Farcaster notifications instead of the expected 4
+- Odilitime suggested using webhooks as a method to reduce credit consumption
