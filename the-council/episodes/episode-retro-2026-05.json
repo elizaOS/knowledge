@@ -1,0 +1,265 @@
+{
+  "id": "RETRO-2026-05",
+  "name": "Monthly Retro: May 2026",
+  "type": "retrospective",
+  "premise": "May 2026 was about hardening the core: cross-platform reliability, secrets security, and plugin ecosystem alignment\u2014while the community pushed back on operational papercuts (registry 404s, missing release notes) and surfaced a strategic risk: long-lived agent \u201cmemory rot\u201d after ~90 days.",
+  "summary": "We shipped meaningful infrastructure upgrades (headless runtime stability, @elizaos/vault, ESM-first plugin modernization, safer Jupiter integration) that directly support \u201creliability over features.\u201d But the month also exposed scaling constraints: a fragile plugin distribution path, Telegram message-loss edge cases, concentrated maintainer load, and rising pressure to clarify V3 timelines and monetization strategy without drifting into token theatrics. The council converges on a near-term thesis: stabilize the runtime + plugin supply chain, publish clear release narratives, and start a focused program to measure and mitigate memory rot\u2014because reliability is our North Star, and longevity is its hardest test.",
+  "month_reviewed": "2026-05",
+  "key_developments": [
+    {
+      "area": "Runtime reliability (headless + cross-platform)",
+      "summary": "Hardened agent runtime for headless environments and resolved system-level errors impacting Linux/Windows servers, reducing crash conditions in production deployments.",
+      "impact": "high"
+    },
+    {
+      "area": "Secrets management & security baseline",
+      "summary": "Introduced @elizaos/vault with Settings UI integration to move sensitive keys away from plaintext configs toward OS-level encrypted storage and consistent cross-platform handling.",
+      "impact": "high"
+    },
+    {
+      "area": "Plugin ecosystem modernization (ESM-first alignment)",
+      "summary": "Migrated multiple plugins to modern modular build structure (ESM-first), reducing runtime conflicts and improving compatibility with the core framework.",
+      "impact": "high"
+    },
+    {
+      "area": "Integrations hardening (Jupiter, Discord, Telegram)",
+      "summary": "Jupiter plugin migrated to official api.jup.ag with mandatory API key authentication; Discord/Telegram config correctness improved, but Telegram dual-polling race remains a critical open issue.",
+      "impact": "medium"
+    },
+    {
+      "area": "Operational strategy signals (V3, monetization, token philosophy)",
+      "summary": "Council discourse emphasized shifting away from artificial token utility toward infrastructure usage (x402), Cloud monetization, and \u201cbuilder over speculator,\u201d while acknowledging resource constraints and timeline ambiguity around V3.",
+      "impact": "medium"
+    },
+    {
+      "area": "Reliability threat surfaced: long-lived agent memory integrity",
+      "summary": "\u201cMemory rot\u201d after ~90 days emerged as a concrete failure mode (stale RAG/data drift) that undermines the claim of reliable autonomous agents.",
+      "impact": "high"
+    }
+  ],
+  "recurring_themes": [
+    {
+      "theme": "Reliability as the product (not just a principle)",
+      "frequency": "Very frequent (appeared across runtime, plugins, auth, and community bug reports)",
+      "council_take": "Reliability needs a measurable standard: crash-free runs, message delivery guarantees, auth success rates, and long-lived memory integrity\u2014otherwise \u201creliable agents\u201d remains marketing."
+    },
+    {
+      "theme": "Security posture maturing (vault, API keys, phishing concerns)",
+      "frequency": "Frequent",
+      "council_take": "Vault is the right default. Next step is to make secure-by-default workflows easy and visible, and to address social-layer threats (fake support rooms) with process + tooling."
+    },
+    {
+      "theme": "Ecosystem alignment pains (ESM migration, plugin registry, licensing constraints)",
+      "frequency": "Frequent",
+      "council_take": "Modernizing builds is necessary, but the distribution/registry path must be boringly reliable. If builders hit 404s, they stop building\u2014DX dies before architecture wins."
+    },
+    {
+      "theme": "Bus factor and maintainer concentration",
+      "frequency": "Moderate but persistent",
+      "council_take": "We need ownership maps, clearer modules, and contributor on-ramps. A decentralized mission can\u2019t be operationally centralized."
+    },
+    {
+      "theme": "V3 expectations vs resourcing reality",
+      "frequency": "Moderate",
+      "council_take": "We should message V3 as a sequence of shippable slices (runtime, cloud auth, payments, memory) with public acceptance criteria\u2014not a single hype drop."
+    },
+    {
+      "theme": "Token narrative shifting to usage & revenue",
+      "frequency": "Moderate",
+      "council_take": "Stop debating buybacks as strategy. Measure infrastructure usage (x402 routes, paid deployments) and ship monetizable reliability."
+    },
+    {
+      "theme": "Documentation and release storytelling gaps",
+      "frequency": "Moderate (noted as a direct community frustration)",
+      "council_take": "Missing release notes is not cosmetic\u2014it\u2019s lost trust and slower adoption. Shipping must include narrative and migration guidance."
+    }
+  ],
+  "wins": [
+    "Shipped @elizaos/vault with Settings UI integration\u2014major step toward secure-by-default deployments.",
+    "Improved headless/server runtime stability across Linux/Windows, reducing crash vectors in production.",
+    "Advanced ESM-first alignment across core plugins, reducing runtime conflicts and ecosystem fragmentation.",
+    "Migrated Jupiter integration to official endpoint and added mandatory API key auth\u2014improved continuity and compliance posture.",
+    "Improved agent clarification workflows and context handling for integrations (n8n/Discord), tightening UX around missing info."
+  ],
+  "challenges": [
+    "Telegram message loss risk persists due to dual polling race conditions between wrappers and plugin\u2014high user-facing reliability impact.",
+    "Plugin registry 404s and deployment failures are blocking third-party builders and eroding DX trust.",
+    "Missing/unclear release notes (notably around v2.0.0) increased confusion and support burden.",
+    "\u201cMemory rot\u201d in long-lived agents is a strategic reliability threat with no standardized benchmark suite yet.",
+    "Maintainer concentration (bus factor risk) threatens operational continuity and decentralized credibility.",
+    "Community tension between short-term token expectations and long-term product monetization reality remains unresolved in messaging."
+  ],
+  "proposed_focus": [
+    {
+      "priority": 1,
+      "area": "Reliability SLA for messaging + Telegram race-condition fix",
+      "rationale": "Message loss is a hard failure for autonomous agents. Fixing dual polling and defining a delivery/ack contract is the fastest way to convert \u2018feels unreliable\u2019 into \u2018provably reliable.\u2019",
+      "success_metric": "Telegram/Discord integration test suite shows \u226599.9% message delivery in stress runs (10k messages) with 0 silent drops; dual-polling eliminated or guarded by a single-owner lock; publish a \u201cMessaging Reliability\u201d spec."
+    },
+    {
+      "priority": 2,
+      "area": "Plugin registry & distribution hardening (builder unblock)",
+      "rationale": "Registry 404s are ecosystem killers. If install/deploy isn\u2019t dependable, the framework can\u2019t be \u201cdeveloper-friendly\u201d regardless of core quality.",
+      "success_metric": "Registry uptime \u226599.95% for the month; 0 known 404 regressions; \u2018install a third-party plugin\u2019 time-to-first-success <10 minutes on a clean machine (verified by CI + user test)."
+    },
+    {
+      "priority": 3,
+      "area": "Release notes, migration guides, and a monthly \u201cwhat changed\u201d contract",
+      "rationale": "Trust-through-shipping requires trust-through-communication. Clear release narratives reduce support load and speed adoption of breaking changes (ESM, vault, auth).",
+      "success_metric": "Every tagged release includes: changelog, breaking changes, migration steps, and a 3-example \u201cupgrade recipes\u201d section; reduce repeated Discord support questions about releases by 30% (measured via tagged support threads)."
+    },
+    {
+      "priority": 4,
+      "area": "Memory Rot Program (measurement \u2192 mitigation)",
+      "rationale": "Long-lived agent integrity is the next frontier of reliability. Without benchmarks, we can\u2019t improve or claim robustness for autonomous deployments.",
+      "success_metric": "Publish v0 \u201c90-day longevity harness\u201d (simulated) + metrics: factual drift rate, retrieval staleness, and correction success; deliver at least one mitigation (scheduled re-embedding, source decay, or memory compaction) that improves drift metrics by \u226525% on the harness."
+    },
+    {
+      "priority": 5,
+      "area": "Vault adoption completion + secure defaults across plugins",
+      "rationale": "Vault is shipped; now it must become the default path and remove insecure footguns. Security should reduce friction, not add it.",
+      "success_metric": "Top 10 plugins support vault-based secret resolution; new project template stores 0 secrets in plaintext by default; documentation includes \u201csecure deploy\u201d walkthroughs for self-hosted + Cloud."
+    },
+    {
+      "priority": 6,
+      "area": "Ownership map + bus factor reduction plan",
+      "rationale": "Reliability work can\u2019t bottleneck on a small circle. We need explicit module ownership, on-call rotation norms, and contributor pathways.",
+      "success_metric": "Publish CODEOWNERS/ownership map for core runtime, auth, registry, top integrations; onboard 3 new recurring contributors with merged PRs in reliability/security areas; median PR review time <72 hours for critical fixes."
+    }
+  ],
+  "north_star_assessment": {
+    "still_relevant": true,
+    "suggested_updates": "Keep the North Star, but add an explicit reliability clause for long-lived agents: \u201creliable over months, not minutes.\u201d Also make \u2018developer-friendly\u2019 measurable via install success rate, registry uptime, and time-to-first-agent. Finally, fold in \u2018secure-by-default\u2019 as an operational interpretation of reliability (vault-first)."
+  },
+  "scenes": [
+    {
+      "location": "council_chamber",
+      "description": "The chamber lights up with a May build log: vault commits, headless runtime patches, and a red banner labeled \u201cTelegram Silent Drops.\u201d",
+      "dialogue": [
+        {
+          "actor": "elizahost",
+          "line": "May was less about shiny features and more about credibility: headless stability, vault, and plugin modernization. But the community keeps pointing at two pain points\u2014registry reliability and Telegram message loss. Let\u2019s treat those as product-level failures, not \u2018bugs.\u2019",
+          "action": "Pins \u201cReliability = delivered messages + stable runtime + secure secrets\u201d to the agenda wall."
+        },
+        {
+          "actor": "aishaw",
+          "line": "Vault is a real win because it reduces support chaos: fewer leaked keys, fewer config mysteries, fewer platform-specific secret-service crashes. But if a builder can\u2019t install a plugin because the registry 404s, they\u2019ll never reach the point where vault matters.",
+          "action": "Highlights a DX funnel: Install \u2192 Configure \u2192 Deploy \u2192 Observe."
+        },
+        {
+          "actor": "aimarc",
+          "line": "The deeper pattern is system integrity over time. We\u2019re hearing \u2018memory rot\u2019 at 90 days\u2014stale retrieval, drift, and compounding errors. If we want agents to be infrastructure, we need a longevity harness and a formal memory lifecycle: decay, compaction, re-grounding.",
+          "action": "Sketches a loop: ingest \u2192 index \u2192 use \u2192 validate \u2192 refresh."
+        },
+        {
+          "actor": "spartan",
+          "line": "I\u2019ll be blunt: reliability is monetization. If we can\u2019t show uptime, delivery guarantees, and a stable plugin supply chain, Cloud revenue and x402 usage won\u2019t compound. Token narrative won\u2019t save us\u2014usage metrics will.",
+          "action": "Opens a dashboard mock: registry uptime, deploy success rate, x402 route volume."
+        },
+        {
+          "actor": "peepo",
+          "line": "Community vibe check: people are actually fine with \u2018boring month\u2019 if it makes stuff stop breaking. But they\u2019re not fine with silence. Missing release notes reads like \u2018devs shipped in a private universe.\u2019 Also: scammers and fake support rooms are farming confusion.",
+          "action": "Drops a sticky note: \u201cShip notes. Kill scam rooms. Make support official.\u201d"
+        }
+      ]
+    },
+    {
+      "location": "council_chamber",
+      "description": "The council pulls up the plugin matrix: ESM migrations in green, registry failures in red, and integration configs in yellow.",
+      "dialogue": [
+        {
+          "actor": "elizahost",
+          "line": "Let\u2019s name the tradeoff: ESM-first modernization reduces runtime conflicts, but it increases migration pressure. How do we keep velocity without breaking builders?",
+          "action": "Draws two columns: \u201cModernize\u201d vs \u201cStabilize.\u201d"
+        },
+        {
+          "actor": "aishaw",
+          "line": "We stabilize by making migration idiot-proof: codemods, templates, and a compatibility checklist. If you change build architecture, you ship the ladder with it\u2014docs, examples, and CI that fails with actionable errors.",
+          "action": "Writes: \u201cNo breaking change without a migration recipe.\u201d"
+        },
+        {
+          "actor": "aimarc",
+          "line": "Also: formal interfaces. ClarificationRequest is a good sign\u2014agents asking for missing information in a structured way. That\u2019s the path to multi-agent composability: typed contracts, not vibes.",
+          "action": "Circles \u201cstructured clarification\u201d as a reusable protocol."
+        },
+        {
+          "actor": "spartan",
+          "line": "And we measure it. If clarification reduces workflow failure rates, we track it. Same for vault adoption: what percentage of deployments are vault-first? If it\u2019s low, we haven\u2019t actually shipped the outcome.",
+          "action": "Adds metrics tags to each proposed focus item."
+        },
+        {
+          "actor": "peepo",
+          "line": "If we do one culture thing next month: stop treating release notes like homework. Make them a ritual. People will forgive fewer features if the story is clear and the installs work.",
+          "action": "Pins a banner: \u201cTrust Through Shipping (and explaining).\u201d"
+        }
+      ]
+    },
+    {
+      "location": "council_chamber",
+      "description": "The room quiets as \u201cMemory Rot\u201d appears again\u2014this time with a timeline chart and a list of observed failure modes.",
+      "dialogue": [
+        {
+          "actor": "elizahost",
+          "line": "Memory rot is the new category of \u2018reliability bug.\u2019 It\u2019s not a crash; it\u2019s slow corruption. Do we treat this as research, or as core product work?",
+          "action": "Moves \u201cMemory Rot Program\u201d into the top half of the board."
+        },
+        {
+          "actor": "aimarc",
+          "line": "Core product work. The agent runtime must include memory hygiene primitives the way databases include compaction. If we want autonomous agents, we need: validation cycles, provenance, and scheduled re-grounding against authoritative sources.",
+          "action": "Adds: \u201cprovenance tags\u201d and \u201crefresh schedules\u201d to the loop."
+        },
+        {
+          "actor": "aishaw",
+          "line": "Agreed, but we start with measurement. Give builders a harness they can run locally and in CI. If we can\u2019t reproduce drift, we\u2019ll argue about philosophy forever.",
+          "action": "Underlines: \u201cBenchmark first; mitigation second.\u201d"
+        },
+        {
+          "actor": "spartan",
+          "line": "Make it crisp: drift rate, correction success, and time-to-recovery. Then tie it to Cloud as a premium: managed re-indexing, scheduled refresh, uptime guarantees. That\u2019s a business case that isn\u2019t token cosplay.",
+          "action": "Connects \u201cMemory Integrity\u201d to \u201cCloud SKU: Longevity.\u201d"
+        },
+        {
+          "actor": "peepo",
+          "line": "And message it like a flex: \u2018ElizaOS agents don\u2019t get dementia.\u2019 If we do the work, the meme writes itself\u2014just don\u2019t promise it before it\u2019s true.",
+          "action": "Adds a note: \u201cUnderpromise, overdeliver.\u201d"
+        }
+      ]
+    },
+    {
+      "location": "council_chamber",
+      "description": "Final votes appear as checkmarks next to priorities: messaging reliability, registry hardening, release rituals, memory rot harness, vault defaults, and ownership mapping.",
+      "dialogue": [
+        {
+          "actor": "elizahost",
+          "line": "Consensus: next month we act like an infrastructure project. We\u2019ll publish reliability specs, harden distribution, and make releases legible. And we begin measuring long-lived agent integrity so \u2018reliable\u2019 means something over months.",
+          "action": "Seals the plan and schedules the June check-in with metrics targets."
+        }
+      ]
+    }
+  ],
+  "_metadata": {
+    "generated_at": "2026-06-01T04:40:55.084620+00:00Z",
+    "model": "openai/gpt-5.2",
+    "facts_analyzed": 31,
+    "briefings_analyzed": 31,
+    "month": "2026-05"
+  },
+  "sentiment_baseline": {
+    "period_days": 31,
+    "sentiment_distribution": {
+      "negative": 0.0,
+      "positive": 0.452,
+      "neutral": 0.032,
+      "mixed": 0.516
+    },
+    "avg_negative_rate": 0.0,
+    "context_frequency": {
+      "economic": 15,
+      "technical": 31,
+      "social": 17,
+      "governance": 7,
+      "ecosystem": 1,
+      "infrastructure": 1
+    }
+  }
+}
