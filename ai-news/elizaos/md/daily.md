@@ -1,19 +1,15 @@
-## ElizaOS Community Discussion: 2026-05-20
+## elizaOS Community Discussion and Development Updates
 
-## Technical Milestones
+### Platform Release and Community Engagement
 
-- Shaw shared Eliza v3 running on ElizaOS (Linux) on an emulated RISC-V chip referred to as the Eliza E1
-- Community member Zaday confirmed ElizaOS Debian RISC-V 64-bit ISO successfully booted on the QEMU chip emulator in 35 seconds
+- elizaOS v2.0 was released with a focus on native apps, confirmed by community moderator Odilitime
+- An Agent Dev Talk Twitter Space was announced, hosted by Odilitime and cozydev, providing a live audio venue for developer discussions on agents
+- A community member shared a link referencing upcoming agent activity related to a Spaces event featuring Clawville World
 
-## Token Strategy
+### Developer Activity in Coders Channel
 
-- Shaw clarified that the Babylon airdrop did not proceed due to funding constraints
-- Shaw confirmed the team is fully focused on ElizaOS
-- Zaday advocated for the core team to concentrate on the ElizaOS token and build multiple utility use cases for it, similar to ETH or SOL
-- Odilitime confirmed the BNB version of the Milady token receives buybacks from Milady app revenue
-
-## Developer Activity
-
-- A full stack and AI developer introduced themselves in the coders channel, with interests spanning AI integrations, workflow automation, SaaS platforms, backend systems and APIs, AI agents and assistants, dashboards and analytics tools, and productivity and business-focused applications
-- A developer released an Eliza plugin for DeFi agents on Base and Aave, published to NPM under the package name centinel-risk-protocol/eliza-plugin-centinel
-- The released plugin offers real-time solvency scoring and flash-crash simulations
+- A founder of a top VoiceAI white label agency platform discussed progress on dockerizing their platform for local deployment
+- Progress was made in reducing the system to two containers, with work underway toward a single container solution for mass deployment
+- A full stack and AI developer provided technical context on local deployment challenges, including real-time voice dependencies, GPU access, networking, persistent storage, and low latency requirements
+- The developer shared an approach of separating services such as inference, API, database, and queue or worker, then containerizing them incrementally
+- The same developer introduced themselves to the community, sharing interests in AI integrations, workflow automation, SaaS platforms, backend systems, AI agents, dashboards, and productivity tools
