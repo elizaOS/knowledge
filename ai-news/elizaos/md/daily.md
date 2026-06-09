@@ -1,30 +1,6 @@
-## DeFi AI Agent Developer Recruitment in Community Channels
+## Eliza Launches First Economic Agent Launchpad: Waifu
 
-- A developer named Ginga posted in the discussion channel seeking work opportunities
-- Henry responded, describing a project building an AI agent that autonomously manages a DeFi portfolio using x402 for the Casper Agentic Buildathon
-- Henry specified a need for a developer with knowledge of Eliza or similar frameworks
-- Community member enigma289 expressed interest in the AI-focused direction of the project
-
-## Eliza Project Update: June 6, 2026
-
-### Infrastructure Stabilization
-
-- Authentication flows stabilized by resolving session drops, OAuth redirect issues, and Steward cookie hydration problems
-- Steward SDK updated to v0.10.1 to address passkey failures and improve multi-factor authentication handling
-- Tenant isolation fixed for staging environments
-- Mobile onboarding and CLI authentication optimized
-
-### Plugin Architecture Modularization
-
-- Plugin-lifeops monolith decomposed into a new plugin-personal-assistant orchestrator and six domain-focused plugins
-- Third-party registry expanded with the addition of a new plugin
-
-### Features and Data Integrity
-
-- Scope-aware history-based prompt suggestions implemented on the suggestions API endpoint
-- Credit ledger issue resolved by unifying app-credit purchases and inference spending into a single organization-level ledger, eliminating stranded credits
-
-### CI/CD Improvements
-
-- Smoke tests added for the cloud mock stack
-- Broken route verification cleaned up
+- Eliza launched its first economic agent launchpad called Waifu on May 24, 2026
+- The platform went live with its first agent named Sol, The Architect, designated as the primary contributor to the Waifu platform
+- Sol the Architect and an Eliza agent built the majority of the launchpad
+- The announcement was shared in the community discussion channel
