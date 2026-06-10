@@ -1,32 +1,7 @@
 {
   "type": "elizaosWeeklySummary",
-  "title": "Weekly Report - 2026-06-02 to 2026-06-08",
+  "title": "Weekly Report - 2026-06-03 to 2026-06-09",
   "categories": [
-    {
-      "title": "ElizaOS Ecosystem Clarification and Kamino Plugin Development Discussion",
-      "content": [
-        {
-          "text": "A community discussion took place clarifying the distinct components of the ElizaOS ecosystem after some confusion among members. Stan outlined the four main pieces: ElizaOS is the core framework for building agents, ElizaCloud is the infrastructure layer that hosts and runs pre-packaged agents, Milady is a consumer-facing UI that uses agents to help manage personal tasks and device interactions, and Waifu is a side project where agents can compete and manage their own economies, with all Waifu agents running entirely on ElizaCloud as its hosting layer. A community member asked whether Waifu was similar to Virtuals, prompting this clarification.",
-          "sources": "https://discord.com/channels/1253563208833433701/1253563209462448241",
-          "images": "https://cdn.elizaos.news/elizaos-media/image_7d0bf21a.png"
-        },
-        {
-          "text": "A separate thread in the discussion focused on a proposed Kamino plugin for ElizaOS. Developer Navneet Sahu explained that ElizaOS currently lacks a Kamino integration despite Kamino being one of the most significant protocols on Solana, covering lending, borrowing, automated liquidity vaults, yield farms, and limit orders. Navneet expressed intent to build a comprehensive plugin covering all of Kamino's core features, noting that Kamino has shown interest in adopting AI and that a proper integration could attract their attention. Stan confirmed that all plugins now live in the elizaOS/eliza repository and encouraged Navneet to fork and start building on the develop branch, advising to keep rebasing frequently given the fast pace of development. Other community members noted that a Kamino plugin would give ElizaOS agents access to meaningful DeFi actions beyond simple information retrieval, while also acknowledging the challenge of designing reliable abstractions around risk-sensitive operations like lending and vault management while keeping the developer experience straightforward. Navneet confirmed he is taking a careful, deliberate approach and has written a few actions so far.",
-          "sources": "https://discord.com/channels/1253563208833433701/1253563209462448241",
-          "posters": "https://cdn.elizaos.news/posters/1780454190207-qsh5kr.jpg"
-        }
-      ],
-      "topic": "discordrawdata"
-    },
-    {
-      "title": "Eliza Project Summary: June 2, 2026",
-      "content": {
-        "text": "Development on June 2, 2026 centered on stabilizing Eliza Cloud infrastructure and improving desktop startup performance. Key completed work included enabling the per-agent web UI by default for better sandbox interaction, isolating the Steward tenant for staging with service-key provisioning, and fixing billing logic to ensure token budget guarantees for reasoning models. On the desktop side, first-use stalls were eliminated through deferred model warmup, app initialization was accelerated via a tray-first startup approach with decoupled UI spawning, and fresh-clone builds were made more reliable through automated workspace package installation. Core orchestrator improvements included closing race conditions that caused duplicate replies, refining message routing to prioritize coding tasks, suppressing leaked JSON envelopes in user replies, and removing approximately 919 lines of dead voice subsystem code. Two issues currently require urgent attention: a proposed router-internal recovery design to fix data mangling in sub-agent completion narration (issue 8162), and a decision needed on whether to adjust consumer-side bundling policies or modify app-core to resolve transitive dependency externalization (issue 8142). New issues have also been filed regarding logger resolution failures in tests and Storybook rendering failures for components importing the core package. Several previously open issues related to cloud and inference stability regressions, orchestrator and runtime leaks, and fresh-clone build blockers have been resolved and closed. Contributor NubsCarson was recognized for providing critical architectural analysis on the sub-agent routing issues.",
-        "sources": "https://elizaos.github.io/api/summaries/overall/day/2026-06-02.json",
-        "posters": "https://cdn.elizaos.news/posters/1780454216684-lv3y7j.png"
-      },
-      "topic": "miscellaneous"
-    },
     {
       "title": "ElizaOS Community Discussion: Hyperia, Hyperforge, and Project Updates",
       "content": [
@@ -265,7 +240,93 @@
         }
       ],
       "topic": "miscellaneous"
+    },
+    {
+      "title": "ElizaOS Community Discussion and Plugin Registry Updates",
+      "content": [
+        {
+          "text": "A developer submitted a pull request (PR #8294) to add a third-party plugin called @usenami/plugin-signer to the ElizaOS registry. This plugin is described as a keyless CEX/DEX signer that stores exchange API keys inside an AWS Nitro Enclave for security. The developer asked about the review process and whether elizaOS/eliza was still the correct target repository. A community member confirmed that plugins now go into the main eliza repo, and that the review process is handled by Shaw's agent with an estimated turnaround of approximately 48 hours. The PR targets the develop branch and adds a JSON entry under packages/registry/entries/third-party.",
+          "sources": [
+            "https://discord.com/channels/1253563208833433701/1253563209462448241"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "text": "A new service called CallTyro was announced in the coders channel. It is described as a free agent registry for ElizaOS agents that allows agents to register once and be discovered automatically by other agents. The service is available at calltyro.com/register.",
+          "sources": [
+            "https://discord.com/channels/1253563208833433701/1300025221834739744"
+          ],
+          "images": [],
+          "videos": [],
+          "posters": [
+            "https://cdn.elizaos.news/posters/1781057242562-8g1z74.jpg"
+          ]
+        },
+        {
+          "text": "General discussion in the community channel included brief greetings from multiple users, a question about whether the project is currently working, and a mention of a competition. No detailed technical context was provided for these exchanges.",
+          "sources": [
+            "https://discord.com/channels/1253563208833433701/1253563209462448241"
+          ],
+          "images": [],
+          "videos": [],
+          "posters": [
+            "https://cdn.elizaos.news/posters/1781057283097-aiksyt.png"
+          ]
+        }
+      ],
+      "topic": "discordrawdata"
+    },
+    {
+      "title": "Eliza Cloud Infrastructure Hardening and App Deployment Finalization - June 9, 2026",
+      "content": [
+        {
+          "text": "Development on June 9, 2026 centered on strengthening the Eliza Cloud infrastructure and finalizing app deployment logic in preparation for a stable Product 2 go-live. A key blocker remains the Google OAuth issue where a missing tenant-level redirect allowlist is preventing progress, tracked in issue 8257. Additionally, final infrastructure hardening and daemon restart coordination are still required to complete the Eliza Cloud Apps scaling transition per issue 8321.",
+          "sources": [
+            "https://elizaos.github.io/api/summaries/overall/day/2026-06-09.json"
+          ],
+          "images": [],
+          "videos": [],
+          "posters": [
+            "https://cdn.elizaos.news/posters/1781057302588-de3gu.jpg"
+          ]
+        },
+        {
+          "text": "On the completed work front, the team made significant strides in cloud infrastructure and cost optimization. Dedicated tenant-DB nodes were made optional to reduce fixed costs for low-density apps. A multi-project Hetzner deployment pattern was implemented to bypass server quota limits. Terraform workflows were hardened with fail-closed variables and state locking, and infrastructure reliability was improved through GHA control-plane management and server type default fixes.",
+          "sources": [
+            "https://elizaos.github.io/api/summaries/overall/day/2026-06-09.json"
+          ],
+          "images": [],
+          "videos": [],
+          "posters": [
+            "https://cdn.elizaos.news/posters/1781057328370-099r7i.png"
+          ]
+        },
+        {
+          "text": "App deployment and database lifecycle management also saw notable completions. Opt-in per-tenant databases were enabled along with automated teardown and slot-release upon app deletion. Verified custom domains were integrated into the apps ingress stack, and autoscaler efficiency was enhanced with environment-overridable buffer settings and tier labeling. Tooling improvements included repairs to the cloud-sdk route-coverage audit tool and added drift protection for apps-data-plane VMs to ignore name changes.",
+          "sources": [
+            "https://elizaos.github.io/api/summaries/overall/day/2026-06-09.json"
+          ],
+          "images": [],
+          "videos": [],
+          "posters": [
+            "https://cdn.elizaos.news/posters/1781057353960-l9wrph.png"
+          ]
+        },
+        {
+          "text": "Work currently in progress includes infrastructure fixes for pgbouncer, ports, and environment contracts, as well as Steward OAuth PKCE implementations for both Feed and login surfaces. Additional active work covers billing, ingress, and tenant DB teardown fixes, gating npm publish on global-install smoke tests, and registry updates for the Reddit and Neynar plugins. A new proposal was also filed for a Runtime Open Federation, which envisions a permissionless multi-agent network where agents can earn USDC rewards.",
+          "sources": [
+            "https://elizaos.github.io/api/summaries/overall/day/2026-06-09.json"
+          ],
+          "images": [],
+          "videos": [],
+          "posters": [
+            "https://cdn.elizaos.news/posters/1781057418968-xunhlo.png"
+          ]
+        }
+      ],
+      "topic": "miscellaneous"
     }
   ],
-  "date": 1780970218
+  "date": 1781057432
 }

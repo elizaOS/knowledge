@@ -1,82 +1,89 @@
 {
   "type": "elizaosDailySummary",
-  "title": "Daily Report - 2026-05-31",
+  "title": "Daily Report - 2026-06-07",
   "categories": [
     {
-      "title": "ElizaOS Community Discussion and Builder Activity - May 31, 2026",
+      "title": "ElizaOS Community Discussion: AI Companions, Agent Benchmarking, and On-Chain Tools",
       "content": [
         {
-          "text": "Community members exchanged greetings throughout the day in the general discussion channel. A notable introduction came from Faouzi, founder of Arsenal Quant, who is building the Arsenal Decision Engine, described as a high-performance decision oracle for DeFi agents. The project integrates with elizaOS via MCP and uses L402 Lightning for payments. Faouzi expressed enthusiasm about connecting with other builders in the DeFAI space.",
-          "sources": [
-            "https://discord.com/channels/1253563208833433701/1253563209462448241"
-          ],
-          "images": [],
-          "videos": [],
-          "posters": [
-            "https://cdn.elizaos.news/posters/1780280233949-s87f.jpg"
-          ]
+          "text": "In the general discussion channel, a new member named Thaoryel introduced herself as someone experienced with AI companions and expressed interest in building a conversational AI companion using ElizaOS, rather than a business or automation agent. She asked whether ElizaOS supports Discord integration, voice generation via ElevenLabs, image generation, and long-term relationship development features. Odilitime confirmed that most of these capabilities are supported, noting that the platform primarily uses plugin-discord, and shared a link to a dedicated ElizaOS developer Discord for further assistance. He also mentioned that Ruby, an ElizaOS-based agent, can generate videos and images when the appropriate model is downloaded. A link to RubyTrivia on X was shared as an example of an ElizaOS-built agent.",
+          "sources": "https://discord.com/channels/1253563208833433701/1253563209462448241",
+          "images": "https://cdn.elizaos.news/elizaos-media/embed-image-1513206848038375595_65f395bc.jpg"
         },
         {
-          "text": "In the coders channel, Odilitime flagged an issue for Stan to investigate, and Stan acknowledged it and indicated he would look into it. Separately, a community member posted a paid opportunity seeking a reliable partner for simple operational tasks and business relationship management. The role requires a native English speaker with clear communication skills, the ability to participate in client meetings, and a preference for stable income. The position is listed as remote and is open only to residents of the US, Canada, and UAE, with no technical experience or degree required.",
-          "sources": [
-            "https://discord.com/channels/1253563208833433701/1300025221834739744"
-          ],
-          "images": [],
-          "videos": []
+          "text": "Also in the general channel, a user asked about the possibility of a manual migration review for AI16Z tokens held in a self-custody wallet before the February 2025 snapshot. Odilitime confirmed that the migration window has closed and no further conversions are possible. Separately, ross asked about inviting developer friends to the server and was told that was fine, and that a separate developer-focused Discord also exists. The server was noted to have ongoing issues with scam bots despite efforts to remove them. Shaw posted a request for community members with spare compute to run an agent task analyzing the ArkLib GitHub repository for code quality and potential LLM-generated content, though the bot Rick returned a failure response to the request.",
+          "sources": "https://discord.com/channels/1253563208833433701/1253563209462448241"
+        },
+        {
+          "text": "In the coders channel, builderr_guru raised the question of how to benchmark agent quality versus luck, particularly for trading agents. He described a testing harness he built using a single decide() function with identical data and fills, forward-tested on hidden periods, with top performers re-evaluated on additional hidden periods to distinguish skill from luck. He noted that simple risk-off logic consistently outperformed leveraged momentum strategies during real market downturns. Separately, Cabal_hunter introduced a tool called Cabal-Hunter, a live on-chain funding tracer designed to detect coordinated wallet activity before a bot executes a trade. He described a case where a token with a clean audit had six wallets all funded from the same source 47 seconds before the first trade, which later resulted in a rug pull. The tool is available as a pay-per-query MCP server at 0.05 USDC per query with no API key required, and integrates with Claude, Cursor, and ElizaOS via the plugin-x402-solana package. A GitHub template for Python and ElizaOS integration was also shared.",
+          "sources": "https://discord.com/channels/1253563208833433701/1300025221834739744",
+          "posters": "https://cdn.elizaos.news/posters/1780885952110-sgns9j.png"
         }
       ],
       "topic": "discordrawdata"
+    },
+    {
+      "title": "Eliza Cloud Apps Launch and Infrastructure Development - June 7, 2026",
+      "content": [
+        {
+          "text": "Development on June 7, 2026 was centered on the launch of Eliza Cloud Apps, with the team implementing per-tenant isolated container hosting that includes database isolation, custom URLs, and metered billing. Terraform modules were deployed for the apps data-plane, and CI workflows were established for both staging and production environments. Container lifecycle management capabilities including PATCH, DELETE, and scale operations were added to the Cloud API, and an encryption-free path for tenant cluster admin DSNs was enabled to streamline provisioning workflows.",
+          "sources": "https://elizaos.github.io/api/summaries/overall/day/2026-06-07.json",
+          "posters": "https://cdn.elizaos.news/posters/1780885982963-x66jar.png"
+        },
+        {
+          "text": "On the Cloud API and SDK side, the ElizaCloudClient was expanded with a transcribeAudio function to support voice and speech-to-text capabilities. Billing accuracy was improved by fixing cron logic related to earnings conversion failures, and authentication issues affecting WebSocket and EventSource connections were resolved by enabling token passing via query parameters.",
+          "sources": "https://elizaos.github.io/api/summaries/overall/day/2026-06-07.json",
+          "posters": "https://cdn.elizaos.news/posters/1780886014271-uhf3x8.png"
+        },
+        {
+          "text": "Several platform stability and bug fixes were completed, including resolving UI 404 and 500 errors by mounting missing routes and bundling the LiFi SDK. Domain registration logic was corrected to prevent erroneous charges for failed stub registrations, and provisioning daemon issues were addressed including Steward platform-key path integration and agent token expiration limits. One outstanding issue requires attention: an audit of scaling and ingress gaps is needed to finalize the Eliza Cloud Apps go-live, specifically regarding database and container isolation. Multiple pull requests across infrastructure, cloud, plugins, and core areas remain in progress.",
+          "sources": "https://elizaos.github.io/api/summaries/overall/day/2026-06-07.json",
+          "posters": "https://cdn.elizaos.news/posters/1780886034889-u5wg6d.jpg"
+        }
+      ],
+      "topic": "miscellaneous"
     }
   ],
-  "date": 1780185600,
+  "date": 1780790400,
   "nicknameMap": {
-    "so": {
-      "id": "488766383836889111",
-      "username": "sososo7997",
+    "Cabal_hunter": {
+      "id": "1513212079727972443",
+      "username": "paulf76",
       "roles": [
+        "Verified",
+        "Coder",
+        "utility",
+        "eliza"
+      ],
+      "totalMessages": 5
+    },
+    "builderr_guru": {
+      "id": "1511654649000890478",
+      "username": "builderradmin",
+      "roles": [
+        "Helper",
+        "a-hack",
+        "Trader",
+        "Creator",
+        "[WG] degenspartan",
+        "utility",
+        "Coder",
+        "eliza"
+      ],
+      "totalMessages": 2
+    },
+    "anton_0413": {
+      "id": "401193241967460362",
+      "username": "anton_0413",
+      "roles": [
+        "Helper",
         "Verified",
         "Designer",
         "utility",
         "Coder",
         "eliza"
       ],
-      "totalMessages": 4
-    },
-    "Stan ⚡": {
-      "id": "177801706963337216",
-      "username": "stan0473",
-      "roles": [
-        "Helper",
-        "platform - self assign",
-        "events - self-assign",
-        "Announcements",
-        "Moderator",
-        "Server Booster",
-        "King",
-        "Core Dev",
-        "VIP",
-        "Contributor",
-        "workgroups - write perms",
-        "Verified",
-        "Cloud",
-        "Fr",
-        "utility",
-        "Coder",
-        "Github - Contributor",
-        "Labs Alumni"
-      ],
-      "totalMessages": 54
-    },
-    "lordsedano": {
-      "id": "648943156334821395",
-      "username": "johnsedanonft",
-      "roles": [
-        "Designer",
-        "Verified",
-        "Poker",
-        "Coder"
-      ],
-      "totalMessages": 1
+      "totalMessages": 11
     },
     "Odilitime": {
       "id": "580487826420793364",
@@ -106,58 +113,36 @@
         "Core Dev",
         "Coder"
       ],
-      "totalMessages": 538
+      "totalMessages": 570
     },
-    "DON DADA": {
-      "id": "1386045358768918679",
-      "username": "dondada0420",
-      "roles": [
-        "Trader",
-        "Designer",
-        "utility",
-        "eliza"
-      ],
-      "totalMessages": 5
-    },
-    "Navneet Sahu": {
-      "id": "1271118644650311823",
-      "username": "n4vnt",
+    "💛🐎🌸🌐 ɆӾ₱ł₳₮ⱤłӾ 🍀 🌐 𝚿🖤": {
+      "id": "1411979573398081677",
+      "username": "thaoryel",
       "roles": [
         "Helper",
         "Trader",
+        "Creator",
         "[WG] degenspartan",
         "Verified",
-        "Dev School Student",
-        "utility",
-        "Coder",
-        "eliza"
-      ],
-      "totalMessages": 10
-    },
-    "Faouzi122": {
-      "id": "1509802771002687571",
-      "username": "faouzi_122",
-      "roles": [
-        "Helper",
+        "Designer",
         "Fr",
         "utility",
         "Coder",
         "eliza"
       ],
-      "totalMessages": 1
+      "totalMessages": 5
     },
-    "waily": {
-      "id": "401193241967460362",
-      "username": "anton_0413",
+    "miguelsui": {
+      "id": "1005657118185115689",
+      "username": "miguelsui",
       "roles": [
-        "Helper",
+        "Trader",
         "Verified",
-        "Designer",
         "utility",
-        "Coder",
+        "Associate",
         "eliza"
       ],
-      "totalMessages": 2
+      "totalMessages": 1
     },
     "enigma289": {
       "id": "1163546195063480360",
@@ -169,7 +154,106 @@
         "Coder",
         "eliza"
       ],
-      "totalMessages": 12
+      "totalMessages": 23
+    },
+    "magicaluvr": {
+      "id": "1102702944882794558",
+      "username": "magicaluvr",
+      "roles": [
+        "Helper",
+        "Trader",
+        "Creator",
+        "[WG] degenspartan",
+        "Designer",
+        "Fr",
+        "utility",
+        "Coder",
+        "eliza"
+      ],
+      "totalMessages": 1
+    },
+    "Ginga": {
+      "id": "800764682150477845",
+      "username": "rsn6958",
+      "roles": [
+        "Verified",
+        "Coder",
+        "utility",
+        "eliza"
+      ],
+      "totalMessages": 14
+    },
+    "Inhuman Resources": {
+      "id": "807727820355797062",
+      "username": "magicyte",
+      "roles": [
+        "[WG] Want to Help",
+        "Verified",
+        "utility",
+        "eliza"
+      ],
+      "totalMessages": 96
+    },
+    "ross": {
+      "id": "906787451438260236",
+      "username": "ross.ross.ross",
+      "roles": [
+        "Helper",
+        "a-hack",
+        "Trader",
+        "Creator",
+        "Server Booster",
+        "[WG] degenspartan",
+        "Verified",
+        "Dev School Student",
+        "Booster",
+        "Designer",
+        "utility",
+        "Coder",
+        "eliza"
+      ],
+      "totalMessages": 23
+    },
+    "Shaw": {
+      "id": "498273781589213185",
+      "username": "shawmakesmagic",
+      "roles": [
+        "Moderator",
+        "Labs Alumni",
+        "Verified",
+        "utility",
+        "Coder",
+        "eliza"
+      ],
+      "totalMessages": 106
+    },
+    "!ce 01 | Fable Friends Co": {
+      "id": "1454510795252695082",
+      "username": "messiguy3454323",
+      "roles": [
+        "Verified",
+        "Coder",
+        "utility",
+        "eliza"
+      ]
+    },
+    "Turbo🌙": {
+      "id": "1490251059439079484",
+      "username": "turbo067858",
+      "roles": [
+        "Helper",
+        "Trader",
+        "Creator",
+        "[WG] degenspartan",
+        "It",
+        "Verified",
+        "Designer",
+        "Fr",
+        "utility",
+        "Coder",
+        "eliza"
+      ],
+      "totalMessages": 1
     }
   }
 }

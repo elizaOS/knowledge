@@ -1,6 +1,20 @@
-## Eliza Launches First Economic Agent Launchpad: Waifu
+## ElizaOS Community Discussion and Builder Activity - May 31, 2026
 
-- Eliza launched its first economic agent launchpad called Waifu on May 24, 2026
-- The platform went live with its first agent named Sol, The Architect, designated as the primary contributor to the Waifu platform
-- Sol the Architect and an Eliza agent built the majority of the launchpad
-- The announcement was shared in the community discussion channel
+## Community Introductions
+
+- Faouzi, founder of Arsenal Quant, introduced himself and his project, the Arsenal Decision Engine
+- The Arsenal Decision Engine is described as a high-performance decision oracle for DeFi agents
+- The project integrates with elizaOS via MCP and uses L402 Lightning for payments
+- Faouzi connected with other builders in the DeFAI space
+
+## Builder and Coder Activity
+
+- Odilitime flagged an issue in the coders channel for Stan to investigate
+- Stan acknowledged the issue and committed to looking into it
+
+## Community Opportunities
+
+- A paid remote opportunity was posted seeking a partner for operational tasks and business relationship management
+- The role targets native English speakers with clear communication skills
+- Requirements include the ability to participate in client meetings and a preference for stable income
+- The position is open to residents of the US, Canada, and UAE
