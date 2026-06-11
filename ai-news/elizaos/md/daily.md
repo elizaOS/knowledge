@@ -1,20 +1,10 @@
-## ElizaOS Community Discussion and Builder Activity - May 31, 2026
+## ElizaOS Community Discussion - May 26, 2026
 
-## Community Introductions
+## General Discussion
 
-- Faouzi, founder of Arsenal Quant, introduced himself and his project, the Arsenal Decision Engine
-- The Arsenal Decision Engine is described as a high-performance decision oracle for DeFi agents
-- The project integrates with elizaOS via MCP and uses L402 Lightning for payments
-- Faouzi connected with other builders in the DeFAI space
-
-## Builder and Coder Activity
-
-- Odilitime flagged an issue in the coders channel for Stan to investigate
-- Stan acknowledged the issue and committed to looking into it
-
-## Community Opportunities
-
-- A paid remote opportunity was posted seeking a partner for operational tasks and business relationship management
-- The role targets native English speakers with clear communication skills
-- Requirements include the ability to participate in client meetings and a preference for stable income
-- The position is open to residents of the US, Canada, and UAE
+- Developer Thomas Ken posted seeking collaboration opportunities or full-time hiring, sharing their portfolio link
+- User attic mel returned to the community after a break and inquired about the status of the Eliza project
+- Odilitime (core developer and moderator) clarified that the labs company is no longer operating while the open source project remains active
+- Attic mel noted they had switched back to Linux and are unable to run JavaScript on their host, with plans to revisit the project in approximately four months
+- Attic mel flagged a spam issue involving bots inviting users to fake support ticket rooms and requested moderator countermeasures
+- MDMnvest shared a link to an ElizaOS ecosystem fund announcement promoting a predictions game for ElizaOS token holders, described as offering utility for the community
