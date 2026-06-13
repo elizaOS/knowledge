@@ -1,49 +1,7 @@
 {
   "type": "elizaosWeeklySummary",
-  "title": "Weekly Report - 2026-06-05 to 2026-06-11",
+  "title": "Weekly Report - 2026-06-06 to 2026-06-12",
   "categories": [
-    {
-      "title": "Community Discussion: Market Conditions, Ecosystem Learning, and AI Shift",
-      "content": [
-        {
-          "text": "In the general discussion channel, community members reflected on the current difficult market conditions, with one user noting the market is in a rough state and that survival is the priority. A newer member named ross shared his personal journey of discovering the AI and crypto ecosystem after concerns about job security due to AI, leading him to explore investments and eventually land in this community. He expressed feeling both early and late to the space, and was overwhelmed by how much has been happening without his awareness. He asked if there were ways he could contribute and help the community. Odilitime encouraged him to just participate and offered to boost any relevant tweets. The conversation had a lighthearted and welcoming tone, with several members expressing solidarity.",
-          "sources": [
-            "https://discord.com/channels/1253563208833433701/1253563209462448241"
-          ],
-          "images": [],
-          "videos": [],
-          "posters": [
-            "https://cdn.elizaos.news/posters/1780711126542-20rf83.jpg"
-          ]
-        },
-        {
-          "text": "In the coders channel, ross continued his conversation about feeling overwhelmed by the volume of information available in the ecosystem. Odilitime offered reassurance, noting there is no real time pressure and that curiosity is a better driver than urgency. Odilitime also pointed out that LLMs are a great tool for breaking down complex questions, and encouraged ross that now is a great time to start learning. Ross acknowledged that his sense of urgency comes from a mix of personal and altruistic motivations, and that every new piece of content he encounters raises more questions.",
-          "sources": [
-            "https://discord.com/channels/1253563208833433701/1300025221834739744"
-          ],
-          "images": [],
-          "videos": []
-        }
-      ],
-      "topic": "discordrawdata"
-    },
-    {
-      "title": "Eliza Cloud Infrastructure and Agent Autonomy Update - June 5, 2026",
-      "content": [
-        {
-          "text": "Development on June 5, 2026 centered on hardening Eliza Cloud infrastructure and advancing agent autonomy features. A production outage is currently active, with login failures caused by OAuth 400 errors affecting the Sign in with Eliza Cloud flow. This requires immediate coordination to deploy signing secrets and update tenant redirect allowlists. Additionally, a ledger mismatch between app-credits and org-balance is blocking seamless spending and awaiting an architectural resolution.\n\nOn the security front, the team implemented PKCE for Steward OAuth, added request signing for Steward proxy calls, and introduced scoped token minting with specific trade:order permissions. API reliability was improved through new container management routes and updated CORS policies for third-party app integrations.\n\nAgent autonomy saw meaningful progress, with autonomous goal-driven loops now enabled for monetized applications, allowing agents to self-manage spending caps. Agent management was also improved by exposing execution modes such as Shared versus Dedicated and integrating recovery controls into the app surface.\n\nOn the developer experience side, the UI received a liquid-glass motion styling pass, Cloud SDK affordances were refined, and environment-specific issues blocking Windows E2E test execution were resolved. A previously reported voice-to-entity binding failure was closed after correctly registering routes for the plugin-local-inference pipeline.\n\nWork still in progress includes keeping local first-run selection local, adding a third-party plugin registry entry for plugin-madeonsol, and building out smoke tests for the monetized-app loop on the cloud mock environment.",
-          "sources": [
-            "https://elizaos.github.io/api/summaries/overall/day/2026-06-05.json"
-          ],
-          "images": [],
-          "videos": [],
-          "posters": [
-            "https://cdn.elizaos.news/posters/1780711170618-tdan6i.jpg"
-          ]
-        }
-      ],
-      "topic": "miscellaneous"
-    },
     {
       "title": "DeFi AI Agent Developer Recruitment in Community Channels",
       "content": [
@@ -318,7 +276,41 @@
         "posters": "https://cdn.elizaos.news/posters/1781230555200-z27qg.jpg"
       },
       "topic": "miscellaneous"
+    },
+    {
+      "title": "ElizaCloud Sign-Up Issue and Ecosystem Integration Suggestion",
+      "content": [
+        {
+          "text": "A user reported being unable to sign up for ElizaCloud, receiving an error message stating that the ElizaCloud tenant requires an invitation to join. The user expressed interest in using the platform to build projects but was blocked from accessing it. Another community member tagged Odilitime to bring attention to the issue. Odilitime confirmed awareness of the problem, noting that it had already been passed to the team and that someone was actively looking into it, with a fix expected once resolved. Separately, a community member proposed an ecosystem integration idea involving connecting the elizaOS modular agent framework with peaq's machine operating system layer, referencing peaqOS and a robotics platform. The suggestion highlighted that peaq has over 3 million devices onboarding using decentralized micro-services on a pay-per-task basis. The user proposed building a native elizaOS plugin for peaq so that real-world robots, fleets, and devices could use elizaOS as their primary AI backend for autonomous reasoning and decision making, reducing dependence on centralized AI providers and expanding elizaOS into the hardware and physical robotics space.",
+          "sources": [
+            "https://discord.com/channels/1253563208833433701/1253563209462448241"
+          ],
+          "images": [],
+          "videos": [],
+          "posters": [
+            "https://cdn.elizaos.news/posters/1781316396130-uzj078.jpg"
+          ]
+        }
+      ],
+      "topic": "discordrawdata"
+    },
+    {
+      "title": "Eliza Cloud Apps Infrastructure Update (Jun 12, 2026)",
+      "content": [
+        {
+          "text": "Development on June 12, 2026 centered on stabilizing the Eliza Cloud Apps infrastructure, with a focus on the control-plane and ingress configurations. Two key items were completed: ingress for the staging app node was enabled by implementing the Caddy front door in the app-node cloud-init (PR #8394), and the production migration process was streamlined by automating Headscale installation in the control-plane cloud-init (PR #8393). A significant blocker remains in issue #8321, where progress on the apps-data-plane go-live is stalled due to a state-provider mismatch involving an orphaned random_password resource. To address this and reduce manual intervention, several new pull requests are in progress: a one-shot workflow to remove orphaned apps-data-plane state entries (#8400), a dispatchable workflow to arm the apps daemon without manual SSH (#8398), and an idempotent script for arming the apps-daemon (#8397). Additional in-progress work includes a dependency update for esbuild from 0.28.0 to 0.28.1 (#8399), a dependency update for pypdf from 6.10.2 to 6.12.0 (#8396), and added EvoLink support to plugin-openai (#8395). Active discussions around issue #8321 continue to focus on resolving scaling and ingress gaps, with staging verification and node replacement planned before any production deployment.",
+          "sources": [
+            "https://elizaos.github.io/api/summaries/overall/day/2026-06-12.json"
+          ],
+          "images": [],
+          "videos": [],
+          "posters": [
+            "https://cdn.elizaos.news/posters/1781316415056-0pltdm.jpg"
+          ]
+        }
+      ],
+      "topic": "miscellaneous"
     }
   ],
-  "date": 1781230569
+  "date": 1781316428
 }
