@@ -1,36 +1,7 @@
 {
   "type": "elizaosWeeklySummary",
-  "title": "Weekly Report - 2026-06-06 to 2026-06-12",
+  "title": "Weekly Report - 2026-06-07 to 2026-06-13",
   "categories": [
-    {
-      "title": "DeFi AI Agent Developer Recruitment in Community Channels",
-      "content": [
-        {
-          "text": "In the discussion channel, a developer named Ginga posted looking for work opportunities. Henry responded, introducing himself as someone building an AI agent that autonomously manages a DeFi portfolio using x402 for the Casper Agentic Buildathon. Henry specified he needs a developer with knowledge of Eliza or similar frameworks. Another community member, enigma289, expressed interest in the AI-focused direction of the project. The coders channel, which directs users to the ElizaOS documentation for getting started, had no activity recorded on the same date.",
-          "sources": [
-            "https://discord.com/channels/1253563208833433701/1253563209462448241",
-            "https://discord.com/channels/1253563208833433701/1300025221834739744"
-          ],
-          "images": [],
-          "videos": []
-        }
-      ],
-      "topic": "discordrawdata"
-    },
-    {
-      "title": "Eliza Project Update: June 6, 2026",
-      "content": [
-        {
-          "text": "Development on June 6, 2026 centered on two major themes: stabilizing the Eliza Cloud infrastructure and modularizing the core plugin architecture. On the infrastructure side, authentication flows were stabilized by resolving session drops, OAuth redirect issues, and Steward cookie hydration problems. The Steward SDK was updated to v0.10.1 to address passkey failures and improve multi-factor authentication handling. Additional fixes addressed tenant isolation for staging environments and optimized mobile onboarding and CLI authentication. For plugin architecture, the plugin-lifeops monolith was decomposed into a new plugin-personal-assistant orchestrator and six domain-focused plugins, representing a significant step toward a more modular system. The third-party registry was also expanded with the addition of a new plugin. On the feature and data integrity side, scope-aware history-based prompt suggestions were implemented on the suggestions API endpoint, and a long-standing credit ledger issue was resolved by unifying app-credit purchases and inference spending into a single organization-level ledger, eliminating stranded credits. CI/CD reliability was improved through the addition of smoke tests for the cloud mock stack and cleanup of broken route verification. Several pull requests across cloud and API, orchestrator and plugins, and UI and dependencies areas remain in progress.",
-          "sources": [
-            "https://elizaos.github.io/api/summaries/overall/day/2026-06-06.json"
-          ],
-          "images": [],
-          "videos": []
-        }
-      ],
-      "topic": "miscellaneous"
-    },
     {
       "title": "ElizaOS Community Discussion: AI Companions, Agent Benchmarking, and On-Chain Tools",
       "content": [
@@ -310,7 +281,45 @@
         }
       ],
       "topic": "miscellaneous"
+    },
+    {
+      "title": "ElizaOS Community Discussion: Project Updates, Scam Concerns, and Developer Activity",
+      "content": [
+        {
+          "text": "Community members raised questions about the health of the ElizaOS project, including whether lead developer Shaw is still active and whether bugs on Eliza Cloud are close to being resolved. One member noted that daily progress can be tracked in dedicated channels, suggesting development is ongoing. A separate concern was raised about the high volume of scam bots and bad actors in the discussion channel, which was acknowledged by multiple members including a core moderator.",
+          "sources": "https://discord.com/channels/1253563208833433701/1253563209462448241"
+        },
+        {
+          "text": "A detailed fact-check post was shared regarding ElizaOS and a company called SecureBlockchain Dev Corp. According to the post, a Canadian micro-cap company rebranded into SecureBlockchain Dev Corp in October 2025, then acquired AgenticSolutions in February 2026. In April 2026, the company raised 1.5 million CAD, with the Eliza Foundation reportedly allocating 750k CAD of holder funds into this placement. An official B2B joint development contract announcement followed in May 2026. The post warned that the structure resembles a circular fund flow, with insiders potentially using the stock market as an exit strategy, and urged community members not to act as passive exit liquidity.",
+          "sources": "https://discord.com/channels/1253563208833433701/1253563209462448241",
+          "posters": "https://cdn.elizaos.news/posters/1781403513125-pqa1o.jpg"
+        },
+        {
+          "text": "An AI trivia and gaming project called Ruby shared updates in the discussion channel, announcing new practice categories including Film, Comics, Cartoons, and World Geography as part of its v0.1.1 release on June 13, 2026. The project also posted daily trivia challenges and indicated more categories and features are planned.",
+          "sources": "https://discord.com/channels/1253563208833433701/1253563209462448241",
+          "images": [
+            "https://cdn.elizaos.news/elizaos-media/embed-image-1515201190072287284_680d54a9.jpg",
+            "https://cdn.elizaos.news/elizaos-media/embed-image-1515205292810309683_83b9a067.jpg",
+            "https://cdn.elizaos.news/elizaos-media/embed-image-1515389564452339874_1efc92ee.jpg"
+          ]
+        },
+        {
+          "text": "In the coders channel, a developer named Omid Sa reported being stuck on ElizaOS version 1.7.2 and unable to update to the version 2 branch despite reinstalling. Core developer Odilitime advised using the develop branch, noting that most active developers are already working from it for the 2.x line. A separate discussion touched on using world models for agent development, with one contributor mentioning tooling being built on ElizaOS for this purpose, expected to be ready in about a month, and pointing to Google Vertex with the Genie model as a current alternative.",
+          "sources": "https://discord.com/channels/1253563208833433701/1300025221834739744",
+          "posters": "https://cdn.elizaos.news/posters/1781403532541-e3kxdb.jpg"
+        }
+      ],
+      "topic": "discordrawdata"
+    },
+    {
+      "title": "Eliza Cloud Apps Infrastructure Progress - June 13, 2026",
+      "content": {
+        "text": "Development on June 13, 2026 centered on finalizing the Eliza Cloud Apps infrastructure, with the team successfully arming the apps daemon and stabilizing the staging environment through modular infrastructure-as-code driven deployments. A key achievement was enabling APPS_DEPLOY_ENABLED on staging and implementing an idempotent workflow to arm the apps daemon, eliminating the need for manual SSH intervention. Security was also enhanced by configuring the daemon to fetch tenant DSNs from shared terraform outputs and routing file operations through sudo. On the database side, a critical resource leak was resolved where deleted apps failed to drop Postgres instances or release cluster slots. Terraform lockfile and dependency errors were also addressed by adding missing provider hashes and creating a workflow to remove orphaned state entries. For testing and stability, 50 characterization tests were added for the warm-pool decision engine, and local runtime state management was refined to prevent stale data issues while reducing debug log noise. Authentication was confirmed stable, with production verification showing OAuth and magic-link logins functioning correctly. Work still in progress includes CI optimization to gate expensive test lanes and a feature to arm build-from-repo functionality on the daemon. The Cloud Apps Scaling and Ingress effort is near completion, pending final administrative configuration of the staging tenant and registry settings before end-to-end testing can begin.",
+        "sources": "https://elizaos.github.io/api/summaries/overall/day/2026-06-13.json",
+        "posters": "https://cdn.elizaos.news/posters/1781403551789-9ixul.jpg"
+      },
+      "topic": "miscellaneous"
     }
   ],
-  "date": 1781316428
+  "date": 1781403565
 }
