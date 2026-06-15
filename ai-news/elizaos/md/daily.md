@@ -1,48 +1,53 @@
-## ElizaOS Community Discussion: June 7, 2026
+## ElizaOS Community Discussion - June 11, 2026
 
-### AI Companion Development
+## General Discussion
 
-- New community member Thaoryel introduced herself with a focus on building conversational AI companions using ElizaOS
-- Odilitime confirmed ElizaOS supports Discord integration (via plugin-discord), ElevenLabs voice generation, image generation, and long-term relationship development features
-- Ruby, an ElizaOS-based agent, was highlighted as capable of generating videos and images with the appropriate model downloaded
-- RubyTrivia on X was shared as a working example of an ElizaOS-built agent
+### Member Introductions and Collaboration
+- Developers introduced themselves with backgrounds in AI, ML, and full-stack development
+- Areas of expertise shared included AI chatbots, RAG-powered knowledge systems, voice AI assistants, workflow automation, and SaaS platforms
+- Tools and frameworks mentioned: OpenAI, Claude, LangChain, LangGraph, Python, FastAPI, and Next.js
+- Members expressed interest in collaborating on AI projects
 
-### Token Migration and Community
+### Technical: High-Volume Blockchain Data Processing
+- A developer presented a solution for handling blockchain data at scale during volatility spikes
+- Approach involved building a local gRPC pipeline to filter data before it reaches the AI layer
+- Fast data is kept in RAM to avoid token usage, with MCP reserved for deeper analysis
+- Architecture achieves sub-millisecond latency
+- Developer announced plans to spin up cloud nodes and recruited five developers for stress testing
 
-- Odilitime confirmed the AI16Z token migration window has closed
-- A separate developer-focused Discord server was noted as available for technical assistance
-- Shaw posted a community request for spare compute to run an agent task analyzing the ArkLib GitHub repository for code quality and potential LLM-generated content
+### Community Activity
+- A leaderboard competition was active, with one member surpassing one million points
+- Members competed through science trivia participation
+- Ruby Labs AI was shared as a Web3 project aimed at bridging traditional web users and onchain users
 
-### Agent Benchmarking and On-Chain Tools
-
-- builderr_guru described a testing harness for benchmarking agent quality versus luck, using a single decide() function with identical data and fills, forward-tested on hidden periods
-- Top performers in the harness were re-evaluated on additional hidden periods to distinguish skill from luck
-- Simple risk-off logic was found to consistently outperform leveraged momentum strategies during real market downturns
-- Cabal_hunter introduced Cabal-Hunter, a live on-chain funding tracer for detecting coordinated wallet activity before trade execution
-- The tool identified a case where six wallets were funded from the same source 47 seconds before a first trade, preceding a rug pull
-- Cabal-Hunter is available as a pay-per-query MCP server at 0.05 USDC per query, integrating with Claude, Cursor, and ElizaOS via the plugin-x402-solana package
-- A GitHub template for Python and ElizaOS integration was shared
+## Partners Channel
+- DEMIAN from DAPPCRAFT initiated a collaboration inquiry with the ElizaOS team
+- A moderator confirmed willingness to review the proposal
+- DEMIAN followed up with specifics via direct message
 
 ---
 
-## Eliza Cloud Apps Launch and Infrastructure Development
+## Overall Project Summary - June 11, 2026
 
-### Cloud Apps Launch
+### Agent Orchestrator and Cloud Infrastructure
+- Enabled autonomous sub-agent dispatching via the USE_SKILL broker to support monetized-app loops
+- Managed data-plane private networks via Terraform
+- Decoupled control-plane DNS from VM creation
+- Fixed affiliate revenue-share tracking for embeddings and voice inference
 
-- Eliza Cloud Apps launched with per-tenant isolated container hosting including database isolation, custom URLs, and metered billing
-- Terraform modules deployed for the apps data-plane
-- CI workflows established for both staging and production environments
-- Container lifecycle management capabilities added to the Cloud API, including PATCH, DELETE, and scale operations
-- Encryption-free path enabled for tenant cluster admin DSNs to streamline provisioning workflows
+### Plugin Ecosystem
+- Registered elizaos-plugin-neynar-search and elizaos-plugin-coinrailz
+- Integrated plugin-signer for secure order signing via AWS Nitro Enclaves
 
-### Cloud API and SDK Enhancements
+### Bug Fixes
+- Resolved orchestrator session timeout handling
+- Fixed Windows environment variable forwarding
+- Addressed cloud-frontend environment variable passthrough
+- Removed stale dependencies
 
-- ElizaCloudClient expanded with a transcribeAudio function supporting voice and speech-to-text capabilities
-- Billing accuracy improved by fixing cron logic related to earnings conversion failures
-- Authentication issues resolved for WebSocket and EventSource connections by enabling token passing via query parameters
+### CLI Stability
+- Resolved global installation crashes for elizaos and the elizaos CLI
+- Fixed bin shim imports and removed incompatible dependencies
 
-### Platform Stability and Bug Fixes
-
-- UI 404 and 500 errors resolved by mounting missing routes and bundling the LiFi SDK
-- Domain registration logic corrected to prevent erroneous charges for failed stub registrations
-- Provisioning daemon issues addressed including Steward platform-key path integration and agent token expiration limits
+### Active Work
+- Team is working on Android build synchronization involving web-less APK builds, Capacitor plugin registration, capacitor.plugins.json synchronization, and asset server path resolution
