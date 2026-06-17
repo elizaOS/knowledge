@@ -1,93 +1,7 @@
 {
   "type": "elizaosWeeklySummary",
-  "title": "Weekly Report - 2026-06-09 to 2026-06-15",
+  "title": "Weekly Report - 2026-06-10 to 2026-06-16",
   "categories": [
-    {
-      "title": "ElizaOS Community Discussion and Plugin Registry Updates",
-      "content": [
-        {
-          "text": "A developer submitted a pull request (PR #8294) to add a third-party plugin called @usenami/plugin-signer to the ElizaOS registry. This plugin is described as a keyless CEX/DEX signer that stores exchange API keys inside an AWS Nitro Enclave for security. The developer asked about the review process and whether elizaOS/eliza was still the correct target repository. A community member confirmed that plugins now go into the main eliza repo, and that the review process is handled by Shaw's agent with an estimated turnaround of approximately 48 hours. The PR targets the develop branch and adds a JSON entry under packages/registry/entries/third-party.",
-          "sources": [
-            "https://discord.com/channels/1253563208833433701/1253563209462448241"
-          ],
-          "images": [],
-          "videos": []
-        },
-        {
-          "text": "A new service called CallTyro was announced in the coders channel. It is described as a free agent registry for ElizaOS agents that allows agents to register once and be discovered automatically by other agents. The service is available at calltyro.com/register.",
-          "sources": [
-            "https://discord.com/channels/1253563208833433701/1300025221834739744"
-          ],
-          "images": [],
-          "videos": [],
-          "posters": [
-            "https://cdn.elizaos.news/posters/1781057242562-8g1z74.jpg"
-          ]
-        },
-        {
-          "text": "General discussion in the community channel included brief greetings from multiple users, a question about whether the project is currently working, and a mention of a competition. No detailed technical context was provided for these exchanges.",
-          "sources": [
-            "https://discord.com/channels/1253563208833433701/1253563209462448241"
-          ],
-          "images": [],
-          "videos": [],
-          "posters": [
-            "https://cdn.elizaos.news/posters/1781057283097-aiksyt.png"
-          ]
-        }
-      ],
-      "topic": "discordrawdata"
-    },
-    {
-      "title": "Eliza Cloud Infrastructure Hardening and App Deployment Finalization - June 9, 2026",
-      "content": [
-        {
-          "text": "Development on June 9, 2026 centered on strengthening the Eliza Cloud infrastructure and finalizing app deployment logic in preparation for a stable Product 2 go-live. A key blocker remains the Google OAuth issue where a missing tenant-level redirect allowlist is preventing progress, tracked in issue 8257. Additionally, final infrastructure hardening and daemon restart coordination are still required to complete the Eliza Cloud Apps scaling transition per issue 8321.",
-          "sources": [
-            "https://elizaos.github.io/api/summaries/overall/day/2026-06-09.json"
-          ],
-          "images": [],
-          "videos": [],
-          "posters": [
-            "https://cdn.elizaos.news/posters/1781057302588-de3gu.jpg"
-          ]
-        },
-        {
-          "text": "On the completed work front, the team made significant strides in cloud infrastructure and cost optimization. Dedicated tenant-DB nodes were made optional to reduce fixed costs for low-density apps. A multi-project Hetzner deployment pattern was implemented to bypass server quota limits. Terraform workflows were hardened with fail-closed variables and state locking, and infrastructure reliability was improved through GHA control-plane management and server type default fixes.",
-          "sources": [
-            "https://elizaos.github.io/api/summaries/overall/day/2026-06-09.json"
-          ],
-          "images": [],
-          "videos": [],
-          "posters": [
-            "https://cdn.elizaos.news/posters/1781057328370-099r7i.png"
-          ]
-        },
-        {
-          "text": "App deployment and database lifecycle management also saw notable completions. Opt-in per-tenant databases were enabled along with automated teardown and slot-release upon app deletion. Verified custom domains were integrated into the apps ingress stack, and autoscaler efficiency was enhanced with environment-overridable buffer settings and tier labeling. Tooling improvements included repairs to the cloud-sdk route-coverage audit tool and added drift protection for apps-data-plane VMs to ignore name changes.",
-          "sources": [
-            "https://elizaos.github.io/api/summaries/overall/day/2026-06-09.json"
-          ],
-          "images": [],
-          "videos": [],
-          "posters": [
-            "https://cdn.elizaos.news/posters/1781057353960-l9wrph.png"
-          ]
-        },
-        {
-          "text": "Work currently in progress includes infrastructure fixes for pgbouncer, ports, and environment contracts, as well as Steward OAuth PKCE implementations for both Feed and login surfaces. Additional active work covers billing, ingress, and tenant DB teardown fixes, gating npm publish on global-install smoke tests, and registry updates for the Reddit and Neynar plugins. A new proposal was also filed for a Runtime Open Federation, which envisions a permissionless multi-agent network where agents can earn USDC rewards.",
-          "sources": [
-            "https://elizaos.github.io/api/summaries/overall/day/2026-06-09.json"
-          ],
-          "images": [],
-          "videos": [],
-          "posters": [
-            "https://cdn.elizaos.news/posters/1781057418968-xunhlo.png"
-          ]
-        }
-      ],
-      "topic": "miscellaneous"
-    },
     {
       "title": "Community Introductions and Collaboration Opportunities",
       "content": [
@@ -297,7 +211,27 @@
         "posters": "https://cdn.elizaos.news/posters/1781577456015-j498gt.png"
       },
       "topic": "miscellaneous"
+    },
+    {
+      "title": "ElizaOS Community Discussion and Development Updates",
+      "content": [
+        {
+          "text": "In the general discussion channel, community members exchanged casual greetings throughout the day. A user named ross inquired about whether orders were still being taken for humanoid robots, referencing a news article with a dead link mentioning an amount of 420,000. Odilitime responded that the idea had been started but fell apart. A developer named Ginga asked if anyone was looking to hire a developer. Inhuman Resources shared a Web3 trivia game post promoting an online learning platform with multiple categories, describing it as a safe and fun space for everyone. Ross also shared an episode of the Cron Job series titled The Orchestrator Awakens covering the week of May 31 to June 6, 2026, which highlighted ElizaOS launching a coding workbench achieving parity with Claude Code and Codex, a production outage affecting Eliza Cloud login, the decomposition of the monolithic plugin-lifeops into seven modular plugins, and a surge of DeFAI builders joining the ecosystem.",
+          "sources": "https://discord.com/channels/1253563208833433701/1253563209462448241",
+          "images": [
+            "https://cdn.elizaos.news/elizaos-media/2066698024126951893_2156c3b5.jpg",
+            "https://cdn.elizaos.news/elizaos-media/embed-thumbnail-1516311446135378023_eb12b438.jpg"
+          ],
+          "videos": "https://cdn.elizaos.news/elizaos-media/snmysusiqq0-start-69_df8dd4fd.mp4"
+        },
+        {
+          "text": "In the coders channel, activity was minimal with community members Solify and bobjonesgood exchanging brief greetings. The channel topic directs users to the official ElizaOS documentation at docs.elizaos.ai to get started with building agents.",
+          "sources": "https://discord.com/channels/1253563208833433701/1300025221834739744",
+          "posters": "https://cdn.elizaos.news/posters/1781663578880-fr89l3.jpg"
+        }
+      ],
+      "topic": "discordrawdata"
     }
   ],
-  "date": 1781577469
+  "date": 1781663592
 }
