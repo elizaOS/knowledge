@@ -1,42 +1,53 @@
-## ElizaOS Community Discussion and Plugin Registry Updates
+## ElizaOS Community Discussion - June 11, 2026
 
-### Plugin Registry
+## General Discussion
 
-- PR #8294 submitted to add third-party plugin @usenami/plugin-signer to the ElizaOS registry
-- Plugin described as a keyless CEX/DEX signer that stores exchange API keys inside an AWS Nitro Enclave
-- PR targets the develop branch and adds a JSON entry under packages/registry/entries/third-party
-- Community confirmed plugins now go into the main eliza repo with review handled by Shaw's agent at approximately 48-hour turnaround
+### Member Introductions and Collaboration
+- Developers introduced themselves with backgrounds in AI, ML, and full-stack development
+- Areas of expertise shared included AI chatbots, RAG-powered knowledge systems, voice AI assistants, workflow automation, and SaaS platforms
+- Tools and frameworks mentioned: OpenAI, Claude, LangChain, LangGraph, Python, FastAPI, and Next.js
+- Members expressed interest in collaborating on AI projects
 
-### New Services
+### Technical: High-Volume Blockchain Data Processing
+- A developer presented a solution for handling blockchain data at scale during volatility spikes
+- Approach involved building a local gRPC pipeline to filter data before it reaches the AI layer
+- Fast data is kept in RAM to avoid token usage, with MCP reserved for deeper analysis
+- Architecture achieves sub-millisecond latency
+- Developer announced plans to spin up cloud nodes and recruited five developers for stress testing
 
-- CallTyro announced as a free agent registry for ElizaOS agents
-- Allows agents to register once and be discovered automatically by other agents
-- Available at calltyro.com/register
+### Community Activity
+- A leaderboard competition was active, with one member surpassing one million points
+- Members competed through science trivia participation
+- Ruby Labs AI was shared as a Web3 project aimed at bridging traditional web users and onchain users
+
+## Partners Channel
+- DEMIAN from DAPPCRAFT initiated a collaboration inquiry with the ElizaOS team
+- A moderator confirmed willingness to review the proposal
+- DEMIAN followed up with specifics via direct message
 
 ---
 
-## Eliza Cloud Infrastructure Hardening and App Deployment - June 9, 2026
+## Overall Project Summary - June 11, 2026
 
-### Completed Cloud Infrastructure Work
+### Agent Orchestrator and Cloud Infrastructure
+- Enabled autonomous sub-agent dispatching via the USE_SKILL broker to support monetized-app loops
+- Managed data-plane private networks via Terraform
+- Decoupled control-plane DNS from VM creation
+- Fixed affiliate revenue-share tracking for embeddings and voice inference
 
-- Dedicated tenant-DB nodes made optional to reduce fixed costs for low-density apps
-- Multi-project Hetzner deployment pattern implemented to bypass server quota limits
-- Terraform workflows hardened with fail-closed variables and state locking
-- Infrastructure reliability improved through GHA control-plane management and server type default fixes
+### Plugin Ecosystem
+- Registered elizaos-plugin-neynar-search and elizaos-plugin-coinrailz
+- Integrated plugin-signer for secure order signing via AWS Nitro Enclaves
 
-### Completed App Deployment and Database Lifecycle Work
+### Bug Fixes
+- Resolved orchestrator session timeout handling
+- Fixed Windows environment variable forwarding
+- Addressed cloud-frontend environment variable passthrough
+- Removed stale dependencies
 
-- Opt-in per-tenant databases enabled with automated teardown and slot-release upon app deletion
-- Verified custom domains integrated into the apps ingress stack
-- Autoscaler efficiency enhanced with environment-overridable buffer settings and tier labeling
-- Cloud-sdk route-coverage audit tool repaired
-- Drift protection added for apps-data-plane VMs to ignore name changes
+### CLI Stability
+- Resolved global installation crashes for elizaos and the elizaos CLI
+- Fixed bin shim imports and removed incompatible dependencies
 
-### Work in Progress
-
-- Infrastructure fixes for pgbouncer, ports, and environment contracts
-- Steward OAuth PKCE implementations for Feed and login surfaces
-- Billing, ingress, and tenant DB teardown fixes
-- npm publish gating on global-install smoke tests
-- Registry updates for Reddit and Neynar plugins
-- Runtime Open Federation proposal filed, envisioning a permissionless multi-agent network with USDC rewards for agents
+### Active Work
+- Team is working on Android build synchronization involving web-less APK builds, Capacitor plugin registration, capacitor.plugins.json synchronization, and asset server path resolution
