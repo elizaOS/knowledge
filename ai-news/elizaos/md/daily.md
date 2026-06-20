@@ -1,53 +1,28 @@
-## ElizaOS Community Discussion - June 11, 2026
+## ElizaOS Community and Development Summary: June 3, 2026
 
-## General Discussion
+## Community Discussion
 
-### Member Introductions and Collaboration
-- Developers introduced themselves with backgrounds in AI, ML, and full-stack development
-- Areas of expertise shared included AI chatbots, RAG-powered knowledge systems, voice AI assistants, workflow automation, and SaaS platforms
-- Tools and frameworks mentioned: OpenAI, Claude, LangChain, LangGraph, Python, FastAPI, and Next.js
-- Members expressed interest in collaborating on AI projects
+- Odilitime clarified that Hyperforge is the world-building component of a project called Hyperia, which is a separate team from ElizaOS and not a joint venture like Babylon
+- Both Hyperia and ElizaOS were started by Shaw, with Shaw currently serving in an advisory capacity to Hyperia while focusing primarily on ElizaOS, milady, wafiu, and cloud initiatives
+- A call for testers was posted for an early-stage project called Neverbell, which explores AI agents interacting with financial systems through user-defined permissions and controls, with the team funding accounts for experimentation
+- A developer offered assistance to community members needing development help
 
-### Technical: High-Volume Blockchain Data Processing
-- A developer presented a solution for handling blockchain data at scale during volatility spikes
-- Approach involved building a local gRPC pipeline to filter data before it reaches the AI layer
-- Fast data is kept in RAM to avoid token usage, with MCP reserved for deeper analysis
-- Architecture achieves sub-millisecond latency
-- Developer announced plans to spin up cloud nodes and recruited five developers for stress testing
+## Development Activity
 
-### Community Activity
-- A leaderboard competition was active, with one member surpassing one million points
-- Members competed through science trivia participation
-- Ruby Labs AI was shared as a Web3 project aimed at bridging traditional web users and onchain users
+### Cloud Authentication
+- Resolved magic-link sign-in failures on the staging environment by updating CSP, CORS, and app-auth context handling across multiple pull requests
 
-## Partners Channel
-- DEMIAN from DAPPCRAFT initiated a collaboration inquiry with the ElizaOS team
-- A moderator confirmed willingness to review the proposal
-- DEMIAN followed up with specifics via direct message
+### UI and Documentation
+- Added a new prompt-suggestion strip to the ContinuousChatOverlay to improve user onboarding
+- Expanded Storybook documentation to cover nine core UI primitives
 
----
+### System Stability
+- Aligned smoke tests and workspace dependencies for consistency across Bun and Vite canary builds
+- Added typed error signaling for missing native bindings to improve local inference reliability
 
-## Overall Project Summary - June 11, 2026
+### Ecosystem Expansion
+- Integrated the @1claw/plugin-elizaos plugin into the curated registry, bringing support for HSM-backed secrets and multi-chain signing
 
-### Agent Orchestrator and Cloud Infrastructure
-- Enabled autonomous sub-agent dispatching via the USE_SKILL broker to support monetized-app loops
-- Managed data-plane private networks via Terraform
-- Decoupled control-plane DNS from VM creation
-- Fixed affiliate revenue-share tracking for embeddings and voice inference
-
-### Plugin Ecosystem
-- Registered elizaos-plugin-neynar-search and elizaos-plugin-coinrailz
-- Integrated plugin-signer for secure order signing via AWS Nitro Enclaves
-
-### Bug Fixes
-- Resolved orchestrator session timeout handling
-- Fixed Windows environment variable forwarding
-- Addressed cloud-frontend environment variable passthrough
-- Removed stale dependencies
-
-### CLI Stability
-- Resolved global installation crashes for elizaos and the elizaos CLI
-- Fixed bin shim imports and removed incompatible dependencies
-
-### Active Work
-- Team is working on Android build synchronization involving web-less APK builds, Capacitor plugin registration, capacitor.plugins.json synchronization, and asset server path resolution
+### Work in Progress
+- Cloud SSO pairing handler for a dashboard popup flow
+- Syncing the Odysseus UI to the latest upstream changes in the plugin-task-coordinator
