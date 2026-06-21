@@ -1,28 +1,50 @@
-## ElizaOS Community and Development Summary: June 3, 2026
+## ElizaOS Ecosystem Clarification
 
-## Community Discussion
+### Ecosystem Components
 
-- Odilitime clarified that Hyperforge is the world-building component of a project called Hyperia, which is a separate team from ElizaOS and not a joint venture like Babylon
-- Both Hyperia and ElizaOS were started by Shaw, with Shaw currently serving in an advisory capacity to Hyperia while focusing primarily on ElizaOS, milady, wafiu, and cloud initiatives
-- A call for testers was posted for an early-stage project called Neverbell, which explores AI agents interacting with financial systems through user-defined permissions and controls, with the team funding accounts for experimentation
-- A developer offered assistance to community members needing development help
+Stan outlined the four main components of the ElizaOS ecosystem:
 
-## Development Activity
+- **ElizaOS** - The core framework for building agents
+- **ElizaCloud** - The infrastructure layer that hosts and runs pre-packaged agents
+- **Milady** - A consumer-facing UI that uses agents to help manage personal tasks and device interactions
+- **Waifu** - A side project where agents can compete and manage their own economies, running entirely on ElizaCloud as its hosting layer
 
-### Cloud Authentication
-- Resolved magic-link sign-in failures on the staging environment by updating CSP, CORS, and app-auth context handling across multiple pull requests
+### Kamino Plugin Development
 
-### UI and Documentation
-- Added a new prompt-suggestion strip to the ContinuousChatOverlay to improve user onboarding
-- Expanded Storybook documentation to cover nine core UI primitives
+- Developer Navneet Sahu proposed a comprehensive Kamino plugin for ElizaOS covering lending, borrowing, automated liquidity vaults, yield farms, and limit orders
+- Stan confirmed all plugins now live in the elizaOS/eliza repository and directed Navneet to fork and build on the develop branch
+- Community members noted the plugin would give ElizaOS agents access to meaningful DeFi actions beyond simple information retrieval
+- Navneet confirmed a careful, deliberate approach and has written initial actions
 
-### System Stability
-- Aligned smoke tests and workspace dependencies for consistency across Bun and Vite canary builds
-- Added typed error signaling for missing native bindings to improve local inference reliability
+---
 
-### Ecosystem Expansion
-- Integrated the @1claw/plugin-elizaos plugin into the curated registry, bringing support for HSM-backed secrets and multi-chain signing
+## Eliza Project Development: June 2, 2026
 
-### Work in Progress
-- Cloud SSO pairing handler for a dashboard popup flow
-- Syncing the Odysseus UI to the latest upstream changes in the plugin-task-coordinator
+### Cloud and Infrastructure
+
+- Enabled per-agent web UI by default for improved sandbox interaction
+- Isolated the Steward tenant for staging with service-key provisioning
+- Fixed billing logic to ensure token budget guarantees for reasoning models
+
+### Desktop Performance
+
+- Eliminated first-use stalls through deferred model warmup
+- Accelerated app initialization via a tray-first startup approach with decoupled UI spawning
+- Made fresh-clone builds more reliable through automated workspace package installation
+
+### Core Orchestrator Improvements
+
+- Closed race conditions that caused duplicate replies
+- Refined message routing to prioritize coding tasks
+- Suppressed leaked JSON envelopes in user replies
+- Removed approximately 919 lines of dead voice subsystem code
+
+### Resolved Issues
+
+- Cloud and inference stability regressions closed
+- Orchestrator and runtime leak issues resolved
+- Fresh-clone build blockers addressed and closed
+
+### Contributors
+
+- NubsCarson recognized for providing critical architectural analysis on sub-agent routing issues
