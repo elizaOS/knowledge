@@ -1,50 +1,53 @@
-## ElizaOS Ecosystem Clarification
+## ElizaOS Community Discussion - June 15, 2026
 
-### Ecosystem Components
+### Development Update
+- Odilitime confirmed all work has been moved to the Eliza repository
+- Community members expressed interest in testing current builds
 
-Stan outlined the four main components of the ElizaOS ecosystem:
+### Scam Warning
+- A suspicious message circulated instructing users to connect wallets via a third-party dApp using a so-called Blockchain Diagnostics Tool
+- Community members identified and flagged the message as a scam
+- The user confirmed no official migration link was found and that the migration window had closed
 
-- **ElizaOS** - The core framework for building agents
-- **ElizaCloud** - The infrastructure layer that hosts and runs pre-packaged agents
-- **Milady** - A consumer-facing UI that uses agents to help manage personal tasks and device interactions
-- **Waifu** - A side project where agents can compete and manage their own economies, running entirely on ElizaCloud as its hosting layer
+### Developer Opportunity - Intuition x MetaMask Bounty Missions
+- Collaboration announced between Intuition and MetaMask using the ERC-7710 Delegation Framework and Intuition Knowledge Graph
+- Five bounty missions totaling 7500 USDC:
+  - M09: Tutorial mission - 1000 USDC
+  - M10: Liquid Democracy proof of concept - 1000 USDC
+  - M11: Production-ready Liquid Democracy implementation - 3000 USDC (gated on M10 completion)
+  - M12: Intuition Skill Delegation - 500 USDC
+  - M13: Caveat Enforcers Registry - 2000 USDC
+- Applications open at intuition.box/missions with screening beginning June 22
+- Joint Twitter Space scheduled for June 16 at 11am ET with MetaMask Dev
+- Poster expressed interest in collaborating with elizaOS
 
-### Kamino Plugin Development
-
-- Developer Navneet Sahu proposed a comprehensive Kamino plugin for ElizaOS covering lending, borrowing, automated liquidity vaults, yield farms, and limit orders
-- Stan confirmed all plugins now live in the elizaOS/eliza repository and directed Navneet to fork and build on the develop branch
-- Community members noted the plugin would give ElizaOS agents access to meaningful DeFi actions beyond simple information retrieval
-- Navneet confirmed a careful, deliberate approach and has written initial actions
+### Community Activity
+- A project bridging crypto and non-crypto users was shared with a Telegram reservation link
+- Ruby Trivia game results shared, with scores of 9/10 and 5/10 reported by community members
 
 ---
 
-## Eliza Project Development: June 2, 2026
+## Eliza Cloud Apps Platform - Launch Stabilization Update
 
-### Cloud and Infrastructure
+### Completed Work
+- Enabled build-from-repo functionality allowing the platform to build user repositories directly
+- Activated APPS_DEPLOY_ENABLED on the arm deployment path
+- Automated CI/CD for the headscale cloud service
+- Standardized Steward OAuth PKCE across all login surfaces, resolving production login failures
+- Updated model catalog to use healthy Cerebras defaults for improved gateway stability
+- Implemented idempotent container-billing cron job to prevent double-debiting
+- Adjusted organization credit balance defaults to $0 to stop unintended free credit allocation
+- Improved CI efficiency with label-gated path classifiers for expensive test lanes
 
-- Enabled per-agent web UI by default for improved sandbox interaction
-- Isolated the Steward tenant for staging with service-key provisioning
-- Fixed billing logic to ensure token budget guarantees for reasoning models
+### Pull Requests in Progress
+- Enabling APPS_DEPLOY_ENABLED for production
+- Fixing staging frontend proxy alias
+- Configuring HEADSCALE_PUBLIC_URL via CI
+- Wiring apps deployment and tenant-DB end-to-end tests into CI
+- Adding optional per-tenant database support to the edad example app
 
-### Desktop Performance
-
-- Eliminated first-use stalls through deferred model warmup
-- Accelerated app initialization via a tray-first startup approach with decoupled UI spawning
-- Made fresh-clone builds more reliable through automated workspace package installation
-
-### Core Orchestrator Improvements
-
-- Closed race conditions that caused duplicate replies
-- Refined message routing to prioritize coding tasks
-- Suppressed leaked JSON envelopes in user replies
-- Removed approximately 919 lines of dead voice subsystem code
-
-### Resolved Issues
-
-- Cloud and inference stability regressions closed
-- Orchestrator and runtime leak issues resolved
-- Fresh-clone build blockers addressed and closed
-
-### Contributors
-
-- NubsCarson recognized for providing critical architectural analysis on sub-agent routing issues
+### Platform Status
+- Team is in final stages of staging-to-production cutover
+- Core platform features verified and ready for deployment
+- edad app serving as primary test subject for Cloud Apps scaling and ingress discussions
+- Two critical blockers identified: NPM_TOKEN permissions issue (#8428) and Cloud 10-user launch tracking issue (#8434)
