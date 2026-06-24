@@ -1,53 +1,48 @@
-## ElizaOS Community Discussion - June 15, 2026
+## ElizaOS Community Discussion: June 7, 2026
 
-### Development Update
-- Odilitime confirmed all work has been moved to the Eliza repository
-- Community members expressed interest in testing current builds
+### AI Companion Development
 
-### Scam Warning
-- A suspicious message circulated instructing users to connect wallets via a third-party dApp using a so-called Blockchain Diagnostics Tool
-- Community members identified and flagged the message as a scam
-- The user confirmed no official migration link was found and that the migration window had closed
+- New community member Thaoryel introduced herself with a focus on building conversational AI companions using ElizaOS
+- Odilitime confirmed ElizaOS supports Discord integration (via plugin-discord), ElevenLabs voice generation, image generation, and long-term relationship development features
+- Ruby, an ElizaOS-based agent, was highlighted as capable of generating videos and images with the appropriate model downloaded
+- RubyTrivia on X was shared as a working example of an ElizaOS-built agent
 
-### Developer Opportunity - Intuition x MetaMask Bounty Missions
-- Collaboration announced between Intuition and MetaMask using the ERC-7710 Delegation Framework and Intuition Knowledge Graph
-- Five bounty missions totaling 7500 USDC:
-  - M09: Tutorial mission - 1000 USDC
-  - M10: Liquid Democracy proof of concept - 1000 USDC
-  - M11: Production-ready Liquid Democracy implementation - 3000 USDC (gated on M10 completion)
-  - M12: Intuition Skill Delegation - 500 USDC
-  - M13: Caveat Enforcers Registry - 2000 USDC
-- Applications open at intuition.box/missions with screening beginning June 22
-- Joint Twitter Space scheduled for June 16 at 11am ET with MetaMask Dev
-- Poster expressed interest in collaborating with elizaOS
+### Token Migration and Community
 
-### Community Activity
-- A project bridging crypto and non-crypto users was shared with a Telegram reservation link
-- Ruby Trivia game results shared, with scores of 9/10 and 5/10 reported by community members
+- Odilitime confirmed the AI16Z token migration window has closed
+- A separate developer-focused Discord server was noted as available for technical assistance
+- Shaw posted a community request for spare compute to run an agent task analyzing the ArkLib GitHub repository for code quality and potential LLM-generated content
+
+### Agent Benchmarking and On-Chain Tools
+
+- builderr_guru described a testing harness for benchmarking agent quality versus luck, using a single decide() function with identical data and fills, forward-tested on hidden periods
+- Top performers in the harness were re-evaluated on additional hidden periods to distinguish skill from luck
+- Simple risk-off logic was found to consistently outperform leveraged momentum strategies during real market downturns
+- Cabal_hunter introduced Cabal-Hunter, a live on-chain funding tracer for detecting coordinated wallet activity before trade execution
+- The tool identified a case where six wallets were funded from the same source 47 seconds before a first trade, preceding a rug pull
+- Cabal-Hunter is available as a pay-per-query MCP server at 0.05 USDC per query, integrating with Claude, Cursor, and ElizaOS via the plugin-x402-solana package
+- A GitHub template for Python and ElizaOS integration was shared
 
 ---
 
-## Eliza Cloud Apps Platform - Launch Stabilization Update
+## Eliza Cloud Apps Launch and Infrastructure Development
 
-### Completed Work
-- Enabled build-from-repo functionality allowing the platform to build user repositories directly
-- Activated APPS_DEPLOY_ENABLED on the arm deployment path
-- Automated CI/CD for the headscale cloud service
-- Standardized Steward OAuth PKCE across all login surfaces, resolving production login failures
-- Updated model catalog to use healthy Cerebras defaults for improved gateway stability
-- Implemented idempotent container-billing cron job to prevent double-debiting
-- Adjusted organization credit balance defaults to $0 to stop unintended free credit allocation
-- Improved CI efficiency with label-gated path classifiers for expensive test lanes
+### Cloud Apps Launch
 
-### Pull Requests in Progress
-- Enabling APPS_DEPLOY_ENABLED for production
-- Fixing staging frontend proxy alias
-- Configuring HEADSCALE_PUBLIC_URL via CI
-- Wiring apps deployment and tenant-DB end-to-end tests into CI
-- Adding optional per-tenant database support to the edad example app
+- Eliza Cloud Apps launched with per-tenant isolated container hosting including database isolation, custom URLs, and metered billing
+- Terraform modules deployed for the apps data-plane
+- CI workflows established for both staging and production environments
+- Container lifecycle management capabilities added to the Cloud API, including PATCH, DELETE, and scale operations
+- Encryption-free path enabled for tenant cluster admin DSNs to streamline provisioning workflows
 
-### Platform Status
-- Team is in final stages of staging-to-production cutover
-- Core platform features verified and ready for deployment
-- edad app serving as primary test subject for Cloud Apps scaling and ingress discussions
-- Two critical blockers identified: NPM_TOKEN permissions issue (#8428) and Cloud 10-user launch tracking issue (#8434)
+### Cloud API and SDK Enhancements
+
+- ElizaCloudClient expanded with a transcribeAudio function supporting voice and speech-to-text capabilities
+- Billing accuracy improved by fixing cron logic related to earnings conversion failures
+- Authentication issues resolved for WebSocket and EventSource connections by enabling token passing via query parameters
+
+### Platform Stability and Bug Fixes
+
+- UI 404 and 500 errors resolved by mounting missing routes and bundling the LiFi SDK
+- Domain registration logic corrected to prevent erroneous charges for failed stub registrations
+- Provisioning daemon issues addressed including Steward platform-key path integration and agent token expiration limits
