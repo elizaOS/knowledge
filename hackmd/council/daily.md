@@ -1,4 +1,4 @@
-# Council Briefing: 2026-06-21
+# Council Briefing: 2026-06-23
 
 ## Monthly Goal
 
@@ -6,75 +6,80 @@ December 2025: Execution excellence—complete token migration with high success
 
 ## Daily Focus
 
-- The project faces a critical juncture between engineering breakthroughs in Cloud scalability and a growing community trust deficit regarding token fragmentation and financial transparency.
+- Transitioning from staging-green to full production for Eliza Cloud while simultaneously navigating community skepticism regarding token dilution and foundation transparency.
 
 ## Key Points for Deliberation
 
-### 1. Topic: Ecosystem Fragmentation vs. Consolidation
+### 1. Topic: Cloud Production Hardening
 
-**Summary of Topic:** Community members have raised alarms regarding waifu.fun utilizing a separate token, potentially diluting the value of $ELIZAOS and confusing the project's core value proposition.
+**Summary of Topic:** Recent logs indicate a successful push of Eliza Cloud apps to production, but significant scaling gaps and infrastructure vulnerabilities require immediate attention to reach the 1000-app ceiling.
 
 #### Deliberation Items (Questions):
 
-**Question 1:** How should the Council address the emergence of secondary tokens within the elizaOS ecosystem?
+**Question 1:** How should we prioritize the remaining 'Product 2' infrastructure gaps given our North Star of Execution Excellence?
 
   **Context:**
-  - `zadayos raised concerns about waifu.fun using a separate token instead of $ELIZAOS, creating market dilution.`
-  - `ghss44 questioned the fundamental purpose and target users of waifu.fun.`
+  - `NubsCarson: The current code's realistic ceiling is ~dozens of apps, not ~1000 (#8321).`
+  - `Logs indicate ingress not installed and Postgres connection ceilings are P0 blockers.`
 
   **Multiple Choice Answers:**
-    a) Mandate $ELIZAOS as the exclusive utility token for all official ecosystem sub-platforms.
-        *Implication:* Maximizes value accrual to the main token but may stifle experimental R&D sub-projects.
-    b) Allow secondary tokens but require a percentage of their value to be backed by or swappable for $ELIZAOS.
-        *Implication:* Creates a federated economic model while maintaining a unified value floor.
-    c) Adopt a multi-token strategy while increasing documentation to clarify the niche of each platform.
-        *Implication:* Reduces immediate community skepticism but risks permanent market fragmentation.
+    a) Halt all feature adds to fix P0 scaling blockers immediately.
+        *Implication:* Ensures reliability but may delay the rollout of flagship agents.
+    b) Continue the 10-user launch while hotfixing scaling issues as they arise.
+        *Implication:* Allows for real-world testing but risks 'Trust Through Shipping' if failures occur.
+    c) Delegate infrastructure hardening exclusively to the core dev team (standujar/NubsCarson).
+        *Implication:* Concentrates technical risk on a small number of contributors.
+    d) Other / More discussion needed / None of the above.
+
+**Question 2:** Should we move to self-hosted runners to increase developer productivity as suggested by recent migrations?
+
+  **Context:**
+  - `PR #8501: Migrated to self-hosted runners to improve speed and reliability of dev processes.`
+  - `Review dependency: 78% of runtime PRs reviewed by odilitime.`
+
+  **Multiple Choice Answers:**
+    a) Standardize all CI/CD on self-hosted Hetzner runners.
+        *Implication:* Reduces costs and build times but introduces hardware maintenance overhead.
+    b) Maintain a hybrid model using GitHub-hosted runners for sensitive fork PRs.
+        *Implication:* Balances build performance with high security isolation for open-source contributors.
+    c) Reject further infrastructure complexity and stick to standard GitHub runners.
+        *Implication:* Prioritizes simplicity over DX speed until cloud revenue stabilizes.
     d) Other / More discussion needed / None of the above.
 
 ---
 
 
-### 2. Topic: Managed Infrastructure and PGlite Migration
+### 2. Topic: Ecosystem and Token Strategic Alignment
 
-**Summary of Topic:** Engineering has successfully resolved major scaling bottlenecks by transitioning managed agents to an in-container PGlite database architecture.
+**Summary of Topic:** Community members are raising concerns about market dilution from side-projects using separate tokens and are calling for clearer branding between 'Eliza Cloud' and 'Eliza OS'.
 
 #### Deliberation Items (Questions):
 
-**Question 1:** Does the shift to in-container PGlite architectures compromise our 'Open & Composable' core principle?
+**Question 1:** How shall the Council address the perceived market dilution from platforms like waifu.fun using separate tokens?
 
   **Context:**
-  - `Resolution of 'too many clients' error by transitioning to local PGlite architecture for managed agents (June 20, 2026).`
-  - `NubsCarson drove significant architectural advancements for the Eliza Cloud platform.`
+  - `Community member zadayos: Argued that separate tokens create market dilution and skepticism (#2026-06-20).`
+  - `odilitime clarified that the foundation manages the main token independently (#2026-06-22).`
 
   **Multiple Choice Answers:**
-    a) Fully embrace the decentralized local-first DB model for all agent deployments.
-        *Implication:* Increases per-agent reliability and privacy but may complicate cross-chain state synchronization.
-    b) Maintain PGlite for performance but offer a 'Global Sync' option for high-interoperability agents.
-        *Implication:* Balances the Monthly Goal of 'Execution Excellence' with long-term interoperability goals.
-    c) Revert to centralized pooling if cross-agent collaboration latency exceeds established thresholds.
-        *Implication:* Prioritizes the 'intelligent internet' vision over immediate infrastructure stability.
+    a) Mandate that all official ElizaOS ecosystem tools must use $ELIZAOS natively.
+        *Implication:* Unifies the economy but restricts the autonomy of sub-platforms.
+    b) Allow sub-platforms to innovate with their own tokens while maintaining a token-backfill to $ELIZAOS.
+        *Implication:* Facilitates R&D while ensuring the main token holds long-term value.
+    c) Release clear documentation explaining the separation between core infrastructure and lab experiments.
+        *Implication:* Maintains transparency but may not satisfy investors concerned about price action.
     d) Other / More discussion needed / None of the above.
 
----
-
-
-### 3. Topic: Strategic Branding and Consumer Accessibility
-
-**Summary of Topic:** There is a strong push to pivot branding from 'Eliza Cloud' to 'Eliza OS' to better reflect its status as an operating system for everyday consumers.
-
-#### Deliberation Items (Questions):
-
-**Question 1:** Should the project pivot its primary identity toward a consumer-facing 'OS' rather than developer-facing 'Cloud'?
+**Question 2:** Should the project officially pivot branding to 'ElizaOS' over 'Eliza Cloud' to align with its vision as an operating system?
 
   **Context:**
-  - `ghss44 advocated for a shift from 'Eliza Cloud' to 'Eliza OS' to target everyday consumers.`
-  - `Feedback emphasized building for ease of use and social media automation (Instagram/Social AI).`
+  - `ghss44: Advocated for positioning as an operating system for agents rather than a cloud service (#2026-06-22).`
 
   **Multiple Choice Answers:**
-    a) Execute a full rebrand to 'Eliza OS' with a focus on no-code, button-based interfaces.
-        *Implication:* Accelerates consumer adoption but risks alienating the core-contributor developer base.
-    b) Maintain 'ElizaOS' as the framework and 'Eliza Cloud' as the managed service for technical users.
-        *Implication:* Defers target-market risks but continues existing brand confusion reported by community users.
-    c) Pilot the 'OS' branding specifically for social media automation flagship agents (Eli5/Otaku).
-        *Implication:* Tests consumer demand without committing to a total platform identity shift.
+    a) Adopt 'ElizaOS' as the primary brand for all components.
+        *Implication:* Clarity of vision as a foundational layer for AI agents.
+    b) Keep 'ElizaOS Cloud' as the commercial product name while keeping 'ElizaOS' for the open-source framework.
+        *Implication:* Maintains marketing separation between the SaaS and the SDK.
+    c) Rebrand to a more neutral 'Eliza Labs' identity for 2026.
+        *Implication:* Reflects the R2D nature of the work but loses the 'Operating System' narrative hook.
     d) Other / More discussion needed / None of the above.
