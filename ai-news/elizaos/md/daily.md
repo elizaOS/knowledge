@@ -1,30 +1,57 @@
-## ElizaCloud Sign-Up Issue and Ecosystem Integration
+## ElizaOS Community and Development Report: June 19, 2026
 
-### Access Issue
-- A user reported being unable to sign up for ElizaCloud due to an invitation-required error on the tenant
-- Odilitime confirmed awareness of the issue, noting it had been passed to the team with someone actively working on a fix
+## Community Discussion
 
-### Ecosystem Integration Proposal
-- A community member proposed connecting the elizaOS modular agent framework with peaq's machine operating system layer (peaqOS)
-- The proposal referenced peaq's network of over 3 million devices using decentralized micro-services on a pay-per-task basis
-- The suggestion involved building a native elizaOS plugin for peaq to enable real-world robots, fleets, and devices to use elizaOS as their primary AI backend for autonomous reasoning and decision making
+### Marketing and Branding
 
----
+- A community member proposed positioning ElizaOS as "the operating system for AI agents" under the branding "Eliza OS" rather than "Eliza Cloud," citing consumer-friendly branding as critical for mainstream adoption
+- The existing Eliza mascot was highlighted as strong visual marketing
+- Other members noted the full product has not yet launched and the team is actively building and upgrading the project
 
-## Eliza Cloud Apps Infrastructure Update
+### SecureBlockchain Dev Corp Fact-Check
 
-### Completed Work
-- Ingress for the staging app node was enabled by implementing the Caddy front door in the app-node cloud-init (PR #8394)
-- Production migration was streamlined by automating Headscale installation in the control-plane cloud-init (PR #8393)
+- A community member posted a detailed fact-check linking ElizaOS to SecureBlockchain Dev Corp, a Canadian micro-cap company that rebranded in October 2025
+- The company acquired Agentric Solutions in February 2026, co-founded by Sebastian Quinn Watson, named as a defendant in a current New York legal case
+- In April 2026, the company raised 1.5 million CAD, with the Eliza Foundation reportedly allocating 750,000 CAD of holder funds into the placement
+- A B2B joint development contract was announced in May 2026
+- Community members raised concerns about circular fund flows and insider involvement
 
-### In-Progress Work
-- One-shot workflow to remove orphaned apps-data-plane state entries (PR #8400)
-- Dispatchable workflow to arm the apps daemon without manual SSH (PR #8398)
-- Idempotent script for arming the apps-daemon (PR #8397)
-- Dependency update for esbuild from 0.28.0 to 0.28.1 (PR #8399)
-- Dependency update for pypdf from 6.10.2 to 6.12.0 (PR #8396)
-- EvoLink support added to plugin-openai (PR #8395)
+### Project and Community Updates
 
-### Active Discussions
-- Ongoing discussions around issue #8321 focus on resolving scaling and ingress gaps
-- Staging verification and node replacement are planned before production deployment
+- RubyTriviaAI, an educational app built on the ElizaOS platform, was shared as an early-stage alpha project with additional features in development
+- The Hyperforge project was reported as actively worked on approximately three weeks prior, with current status uncertain
+- A scam warning was issued in the general channel, with multiple users flagging a certain entity as fraudulent
+- A job opportunity was posted in the coders channel for a communication support role within a small international development team, offering light weekly hours with profit-based pay
+
+## Development Summary
+
+### Cloud Infrastructure
+
+- Decommissioned BitRouter and transitioned the Cloudflare Worker to serve as the primary model gateway
+- Implemented round-robin load balancing for Cerebras API keys
+- Added Cloudflare KV cache support to improve reliability
+- Hardened provisioning workflows with atomic failure write-backs and self-healing mechanisms
+- Stabilized infrastructure following the Neon-to-Railway migration
+
+### Agent Performance and Orchestration
+
+- Reduced cold-boot times and latency through introduction of LEAN_CHAT_PLUGINS and optimized background task handling
+- Enhanced the orchestrator with sub-agent nesting and MCP auto-inheritance capabilities
+- Resolved a vision plugin issue by replacing TensorFlow.js with a native ggml YOLOv8n detector, eliminating build warnings
+
+### UI and Mobile
+
+- Fixed Android and iOS build regressions
+- Correctly excluded web-only cloud dashboards from Capacitor builds
+- Streamlined user onboarding with auto-skipping of runtime pickers on cloud hosts
+- Introduced new agent management controls
+
+### Items in Progress
+
+- Fixes underway for orchestrator narration of missing ACP methods
+- Bounding redundant planner loops
+- SSRF protection for empty addresses
+- Honoring memory limits in the embedding branch
+- Preserving tool-call content in transcripts
+- Transitioning the app to the unified proxy and repointing the provisioning worker's KV store
+- Gathering input on transition to PgBouncer or Supavisor and database sharding strategies following connection pooling going live

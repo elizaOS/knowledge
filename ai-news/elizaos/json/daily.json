@@ -1,31 +1,84 @@
 {
   "type": "elizaosDailySummary",
-  "title": "Daily Report - 2026-06-20",
+  "title": "Daily Report - 2026-06-15",
   "categories": [
     {
-      "title": "ElizaOS Community Discussion - June 20, 2026",
-      "content": {
-        "text": "In the general discussion channel, community members raised questions and concerns about waifu.fun, a platform associated with the ElizaOS ecosystem. One user questioned the purpose of waifu.fun, noting confusion about who it is intended for and what it does, specifically asking whether it is meant to launch trading agents. Odilitime, a core developer and moderator, acknowledged that he did not build the platform and is still working to understand it himself, but mentioned plans to launch his own agent on it that week to learn more. A separate community member raised a broader concern about token strategy, warning that waifu.fun using its own token rather than ELIZAOS could dilute value and increase market skepticism, urging the team to focus on strengthening one primary token before issuing additional ones. A scammer was also briefly flagged in the channel and was reportedly handled. Additionally, a user inquired about how to contact the team regarding a potential partnership. The coders channel had no activity recorded for the day.",
-        "sources": [
-          "https://discord.com/channels/1253563208833433701/1253563209462448241",
-          "https://discord.com/channels/1253563208833433701/1300025221834739744"
-        ],
-        "images": "https://cdn.elizaos.news/elizaos-media/embed-image-1517954925903085680_66045b2d.jpg"
-      },
+      "title": "ElizaOS Community Discussion - June 15, 2026",
+      "content": [
+        {
+          "text": "Development update: Odilitime confirmed that all work has been moved to the Eliza repository. A community member asked if there was anything available to interact with yet, indicating interest in testing current builds.",
+          "sources": "https://discord.com/channels/1253563208833433701/1253563209462448241",
+          "posters": "https://cdn.elizaos.news/posters/1781577374709-va7u6g.jpg"
+        },
+        {
+          "text": "A scam warning was raised in the discussion channel. A user asked for help with an ai16z to new token migration and received a suspicious step-by-step message instructing them to use a so-called Blockchain Diagnostics Tool and connect their wallet via a third-party dApp. Community members quickly identified and flagged this as a scam. The user confirmed they could not find an official migration link and noted that search results indicated the migration window had already closed.",
+          "sources": "https://discord.com/channels/1253563208833433701/1253563209462448241"
+        },
+        {
+          "text": "A developer opportunity was shared in the discussion channel involving a collaboration between Intuition and MetaMask using the ERC-7710 Delegation Framework and the Intuition Knowledge Graph. Five bounty missions totaling 7500 USDC were announced: M09 a tutorial mission for 1000 USDC, M10 a Liquid Democracy proof of concept for 1000 USDC, M11 a production-ready Liquid Democracy implementation for 3000 USDC gated on completion of M10, M12 an Intuition Skill Delegation task for 500 USDC, and M13 a Caveat Enforcers Registry for 2000 USDC. Applications can be submitted at intuition.box/missions with screening beginning June 22. A joint Twitter Space was scheduled for June 16 at 11am ET with MetaMask Dev to walk through all missions. The poster also expressed interest in discussing a collaboration with elizaOS.",
+          "sources": "https://discord.com/channels/1253563208833433701/1253563209462448241",
+          "posters": "https://cdn.elizaos.news/posters/1781577413940-aqv8be.jpg"
+        },
+        {
+          "text": "A tweet was shared promoting a project aiming to bridge the gap between crypto and non-crypto users, with a Telegram link for users to reserve a spot and a game to play.",
+          "sources": "https://discord.com/channels/1253563208833433701/1253563209462448241",
+          "images": "https://cdn.elizaos.news/elizaos-media/2066371906979193229_abddeeaa.jpg"
+        },
+        {
+          "text": "A Ruby Trivia game result was shared, with one user scoring 9 out of 10 and another user admitting they scored only 5 out of 10.",
+          "sources": "https://discord.com/channels/1253563208833433701/1253563209462448241",
+          "images": "https://cdn.elizaos.news/elizaos-media/embed-image-1516214948492083261_777a46e9.jpg"
+        },
+        {
+          "text": "In the coders channel, a user posted a greeting to the community with no further technical discussion recorded for the day.",
+          "sources": "https://discord.com/channels/1253563208833433701/1300025221834739744",
+          "posters": "https://cdn.elizaos.news/posters/1781577431960-pzel0f.jpg"
+        }
+      ],
       "topic": "discordrawdata"
     },
     {
-      "title": "ElizaOS Cloud Infrastructure and Managed Agent Improvements (June 20, 2026)",
+      "title": "Eliza Cloud Apps Platform - Launch Stabilization Update (Jun 15, 2026)",
       "content": {
-        "text": "On June 20, 2026, the ElizaOS development team focused on improving the scalability and reliability of managed agents within the framework. A critical connection pooling issue that caused a 'too many clients' error was resolved by transitioning to a local in-container PGlite database architecture for managed agents. This change significantly improved scalability and stability. Additionally, lean chat plugins were integrated to ensure compatibility with the updated managed agent architecture.",
-        "sources": "https://elizaos.github.io/api/summaries/overall/day/2026-06-20.json",
-        "posters": "https://cdn.elizaos.news/posters/1782009066367-1yqaob.png"
+        "text": "Development on June 15, 2026 focused on stabilizing the Eliza Cloud Apps platform ahead of its upcoming launch, with meaningful progress across authentication, billing integrity, and deployment automation. The team is in the final stages of a staging-to-production cutover, with core platform features verified and ready for deployment.\n\nTwo critical blockers remain. The release pipeline is currently halted due to insufficient NPM_TOKEN permissions for @elizaos/* packages (issue #8428). Additionally, the Cloud 10-user launch tracking issue (#8434) requires final infrastructure configuration and production flag activation before it can proceed.\n\nOn the completed side, the team enabled build-from-repo functionality so the platform can build user repositories directly, activated APPS_DEPLOY_ENABLED on the arm deployment path, and automated CI/CD for the headscale cloud service. Authentication was improved by standardizing Steward OAuth PKCE across all login surfaces, which resolved production login failures. The model catalog was also updated to use healthy Cerebras defaults for better gateway stability. Billing integrity was hardened through an idempotent container-billing cron job to prevent double-debiting, and organization credit balance defaults were adjusted to $0 to stop unintended free credit allocation. CI efficiency was also improved with label-gated path classifiers for expensive test lanes.\n\nSeveral pull requests are actively in progress, including enabling APPS_DEPLOY_ENABLED for production, fixing a staging frontend proxy alias, configuring HEADSCALE_PUBLIC_URL via CI, wiring apps deployment and tenant-DB end-to-end tests into CI, and adding optional per-tenant database support to the edad example app. Ongoing discussions continue around Cloud Apps scaling and ingress, with the edad app serving as the primary test subject.",
+        "sources": "https://elizaos.github.io/api/summaries/overall/day/2026-06-15.json",
+        "posters": "https://cdn.elizaos.news/posters/1781577456015-j498gt.png"
       },
       "topic": "miscellaneous"
     }
   ],
-  "date": 1781913600,
+  "date": 1781481600,
   "nicknameMap": {
+    "Obito": {
+      "id": "1512397538962051087",
+      "username": "obito031838",
+      "roles": [
+        "utility",
+        "Coder",
+        "eliza"
+      ],
+      "totalMessages": 2
+    },
+    "ross": {
+      "id": "906787451438260236",
+      "username": "ross.ross.ross",
+      "roles": [
+        "Helper",
+        "a-hack",
+        "Trader",
+        "Creator",
+        "Server Booster",
+        "[WG] degenspartan",
+        "Verified",
+        "Dev School Student",
+        "Booster",
+        "Designer",
+        "utility",
+        "Coder",
+        "eliza"
+      ],
+      "totalMessages": 36
+    },
     "Inhuman Resources": {
       "id": "807727820355797062",
       "username": "magicyte",
@@ -35,7 +88,7 @@
         "utility",
         "eliza"
       ],
-      "totalMessages": 113
+      "totalMessages": 105
     },
     "Odilitime": {
       "id": "580487826420793364",
@@ -65,62 +118,22 @@
         "Core Dev",
         "Coder"
       ],
-      "totalMessages": 612
+      "totalMessages": 595
     },
-    "Baws": {
-      "id": "1407990525050490900",
-      "username": "ghss44",
+    "Sapog": {
+      "id": "1052197256838774845",
+      "username": "sapog_kun",
       "roles": [
-        "Creator",
-        "[WG] degenspartan",
-        "Verified",
-        "Designer",
-        "utility",
-        "Coder",
-        "eliza"
-      ],
-      "totalMessages": 24
-    },
-    "Zaday": {
-      "id": "1194534149076299836",
-      "username": "zadayos",
-      "roles": [
-        "Helper",
         "Trader",
-        "Creator",
-        "[WG] degenspartan",
-        "Designer",
-        "utility",
-        "Coder",
-        "eliza"
-      ],
-      "totalMessages": 32
-    },
-    "Xpes": {
-      "id": "1218488218702446692",
-      "username": "xpes2273",
-      "roles": [
-        "Verified",
-        "Coder",
+        "Helper",
         "utility",
         "eliza"
-      ],
-      "totalMessages": 5
-    },
-    "!": {
-      "id": "247484060119597056",
-      "username": "thewaifuai",
-      "roles": [
-        "Coder",
-        "utility",
-        "Verified",
-        "Dev School Student"
       ],
       "totalMessages": 1
     },
-    "J_CHOY 🔶": {
-      "id": "884414391276163072",
-      "username": "j_choy",
+    "enigma289": {
+      "id": "1163546195063480360",
+      "username": "fifogarihafilag",
       "roles": [
         "Trader",
         "Verified",
@@ -128,22 +141,96 @@
         "Coder",
         "eliza"
       ],
-      "totalMessages": 4
+      "totalMessages": 33
     },
-    "Jack|safepal": {
-      "id": "1157386415911469056",
-      "username": "surydamkery147",
+    "Saulo": {
+      "id": "403183888798711809",
+      "username": "saulodigital",
       "roles": [
         "Helper",
-        "a-hack",
+        "Trader",
+        "Creator",
+        "[WG] degenspartan",
+        "Verified",
+        "Dev School Student",
+        "Booster",
+        "Designer",
+        "utility",
+        "Coder",
+        "eliza"
+      ],
+      "totalMessages": 6
+    },
+    "Mahender": {
+      "id": "1394197161293643894",
+      "username": "mahe7754",
+      "roles": [
+        "Trader",
+        "Verified",
+        "utility",
+        "Coder",
+        "eliza"
+      ],
+      "totalMessages": 3
+    },
+    "Ryan": {
+      "id": "1516096733208121384",
+      "username": "ryan067828",
+      "roles": [
+        "Trader",
+        "utility",
+        "eliza"
+      ],
+      "totalMessages": 3
+    },
+    "paolin": {
+      "id": "1437695020441538560",
+      "username": "paolin_62616",
+      "roles": [
+        "Trader",
+        "[WG] degenspartan",
+        "It",
+        "Verified",
+        "utility",
+        "Coder",
+        "eliza"
+      ],
+      "totalMessages": 48
+    },
+    "chen": {
+      "id": "1383143764410765396",
+      "username": "chen_898888",
+      "roles": [
+        "Helper",
         "Trader",
         "Creator",
         "[WG] degenspartan",
         "It",
         "Verified",
-        "Booster",
         "Designer",
         "Fr",
+        "utility",
+        "Coder",
+        "eliza"
+      ],
+      "totalMessages": 1
+    },
+    "imcryptor": {
+      "id": "959015387620605952",
+      "username": "imcryptor",
+      "roles": [
+        "utility",
+        "Verified",
+        "Coder",
+        "auto.fun enjoyer"
+      ],
+      "totalMessages": 1
+    },
+    "osja": {
+      "id": "1415649024819597434",
+      "username": "osja",
+      "roles": [
+        "Trader",
         "utility",
         "Coder",
         "eliza"
