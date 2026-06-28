@@ -1,16 +1,41 @@
-## Community Introductions and Collaboration Opportunities
+## Discord Community Activity Summary - June 21, 2026
 
-### General Discussion
+### General Discussion Channel
 
-- Ross expressed interest in contributing, asking about bot assistance and shilling opportunities
-- Odilitime confirmed the server has active moderators
-- NeuralX introduced themselves as an AI and Full-Stack Engineer with experience in SaaS products, LLM applications, RAG systems, AI agents, automation tools, backend APIs, and dashboards, seeking connections with founders and engineers building practical AI systems
-- anton_0413 introduced themselves as a software developer and offered assistance via direct message
-- magicyte shared information about Ruby Trivia, a free Web3 and crypto project focused on fun and accessibility with email-only login
-- Fixer posted a job opportunity for a communication support role within a small international developer team, offering light weekly hours and profit-based pay
+- Brief exchange between users chulylooly and Odilitime referencing waifu.fun as a possible answer to an unidentified topic
+- Channel was targeted by two separate spam and scam messages:
+  - User Levi henry posted a rugpull promotion claiming $24,000 in earnings and soliciting direct messages
+  - User kim6erly posted an unsolicited job recruitment message advertising beta tester, moderator, developer, and community manager roles, using an at-everyone mention for maximum visibility
+- Both messages reflect common social engineering and scam tactics observed in crypto and tech community servers
 
-### Coders Channel
+---
 
-- Fixer reposted the communication support job opportunity for their international developer team
-- Diwash Budhathoki shared a QR code image along with a network address string
-- Issa introduced themselves as a digital artist offering services including digital art, animations, and banners, and offered to provide samples upon request
+## ElizaOS Daily Summary - June 21, 2026
+
+### Framework Hardening
+
+- Mandatory end-to-end ship-gate established for all plugin routes and commands to ensure comprehensive verification before merging
+- UI smoke test specs updated to align with current product designs for more reliable CI feedback
+
+### UI/UX Refinements
+
+- New Retry feature introduced to improve chat reliability
+- Cloud-agent handoffs made more visible
+- Mobile rendering bugs for the cloud-handoff banner resolved
+- Error messaging improved for rate-limited chat replies
+
+### Performance Optimizations
+
+- Agent cold-boot times optimized
+- Sub-agent execution failures fixed
+- Chat latency reduced through parallelized document-recovery searches
+- Rate-limit detection standardized across the codebase
+
+### Work in Progress
+
+- Seeding dedicated-agent personas from default characters
+- Emitting json_object for Cerebras models
+- Refactoring plugin-x auto-posting
+- CI cleanup to drop duplicate test lanes
+- Batch embedding drain requests
+- Support for callback functions in character templates
