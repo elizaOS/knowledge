@@ -32,7 +32,6 @@ _Catalog snapshot from 2026-04-16. Total actions: 147._
 | `plugin-shopify` | 5 | PLUGIN |
 | `core/basic-capabilities` | 4 | CORE |
 | `plugin-signal` | 4 | PLUGIN |
-| `app-app-steward` | 3 | APP |
 | `core/plugin-manager` | 3 | CORE |
 | `core/secrets` | 3 | CORE |
 | `core/advanced-planning` | 2 | CORE |
@@ -840,35 +839,6 @@ _Catalog snapshot from 2026-04-16. Total actions: 147._
 - **Handler:** ✅ yes
 - **Examples:** ✅ yes
 
-## App / app-steward
-
-### CHECK_BALANCE
-
-- **File:** `eliza/plugins/plugin-steward-app/src/actions/check-balance.ts`
-- **Description:** Check wallet balances across chains. Use this when a user asks about
-- **Similes:** `GET_BALANCE`, `WALLET_BALANCE`, `CHECK_WALLET`, `MY_BALANCE`, `PORTFOLIO`, `HOLDINGS`
-- **Validate:** ✅ yes
-- **Handler:** ✅ yes
-- **Examples:** ❌ no
-
-### EXECUTE_TRADE
-
-- **File:** `eliza/plugins/plugin-steward-app/src/actions/execute-trade.ts`
-- **Description:** Execute a BSC token trade (buy or sell). Use this when a user asks to
-- **Similes:** `BUY_TOKEN`, `SELL_TOKEN`, `SWAP`, `TRADE`, `BUY`, `SELL`
-- **Validate:** ✅ yes
-- **Handler:** ✅ yes
-- **Examples:** ❌ no
-
-### TRANSFER_TOKEN
-
-- **File:** `eliza/plugins/plugin-steward-app/src/actions/transfer-token.ts`
-- **Description:** Transfer tokens or native BNB to another address. Use this when a user
-- **Similes:** `SEND_TOKEN`, `TRANSFER`, `SEND`, `SEND_BNB`, `SEND_CRYPTO`, `PAY`
-- **Validate:** ✅ yes
-- **Handler:** ✅ yes
-- **Examples:** ❌ no
-
 ## Core / @elizaos/core / plugin-manager
 
 ### CORE_STATUS
@@ -970,19 +940,16 @@ _Catalog snapshot from 2026-04-16. Total actions: 147._
 ## Gap Findings
 
 ### Actions Without Tests/Examples
-- **Count:** 11
+- **Count:** 8
 
 Notable actions without examples (first 10):
 
   - `ANALYZE_INPUT` (core/advanced-planning)
   - `BROWSER_ACTION` (plugin-computeruse)
-  - `CHECK_BALANCE` (app-app-steward)
-  - `EXECUTE_TRADE` (app-app-steward)
   - `FILE_ACTION` (plugin-computeruse)
   - `MANAGE_WINDOW` (plugin-computeruse)
   - `PLAY_EMOTE` (app-app-companion)
   - `TERMINAL_ACTION` (plugin-computeruse)
-  - `TRANSFER_TOKEN` (app-app-steward)
   - `UPDATE_OWNER_PROFILE` (app-app-lifeops)
 
 ### Actions Without Validate Function
