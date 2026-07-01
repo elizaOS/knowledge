@@ -1,0 +1,297 @@
+{
+  "id": "RETRO-2026-06",
+  "name": "Monthly Retro: June 2026",
+  "type": "retrospective",
+  "premise": "June 2026 was the month ElizaOS stopped feeling like \u201ca promising framework + a cloud beta\u201d and started looking like a real managed agent platform: isolated multi-tenant Cloud Apps, hardened auth, modular plugins, and more autonomous orchestration\u2014while also surfacing the trust, onboarding, and operational reliability cracks we now have to close.",
+  "summary": "Eliza Cloud Apps shipped with per-tenant isolation and improved auth (PKCE/allowlists), the framework became meaningfully more modular (plugin-lifeops split), and the orchestrator took a leap toward Claude-Code/Codex-like workflows (views + live coding workbench). The cost of progress was visible: outage risk (OAuth 400 + ledger mismatches), Cloud invite/signup friction, and recurring community concern about focus and token trust. The council converges on a July mandate: reliability + onboarding + governance clarity, while choosing a crisp DeFAI/MCP integration stance and reducing bus factor.",
+  "month_reviewed": "2026-06",
+  "key_developments": [
+    {
+      "area": "Eliza Cloud Apps (data plane)",
+      "summary": "Launched secure, isolated, scalable hosting with per-tenant container isolation and automated environment provisioning (Cloud Apps).",
+      "impact": "high"
+    },
+    {
+      "area": "Security & compliance hardening",
+      "summary": "Implemented PKCE, tenant allowlists, and SOC2-aligned verification controls; secured destructive actions and tightened web/MCP spawning pathways.",
+      "impact": "high"
+    },
+    {
+      "area": "Framework modularization",
+      "summary": "Refactored monolithic plugin-lifeops into six specialized plugins, making extension and customization less brittle.",
+      "impact": "high"
+    },
+    {
+      "area": "Agent autonomy & cost controls",
+      "summary": "Enabled goal-driven loops with spending caps, moving closer to safe-by-default autonomous operation.",
+      "impact": "high"
+    },
+    {
+      "area": "Orchestrator UX leap",
+      "summary": "Shipped agentic views surface and a live Claude-Code-style coding workbench (SSE streaming, interleaved diffs).",
+      "impact": "medium"
+    },
+    {
+      "area": "Cloud reliability incident signals",
+      "summary": "Production pain surfaced: OAuth 400 errors, ledger mismatches (app-credits vs org-balances), and \u201cstranded credit\u201d fixes; blue/green fleet reconciler still open.",
+      "impact": "high"
+    },
+    {
+      "area": "Community access & onboarding friction",
+      "summary": "Repeated Cloud signup blockers (\u201cTenant invitation required\u201d), information overload for newcomers, and uncertainty around plugin registry review timelines.",
+      "impact": "medium"
+    }
+  ],
+  "recurring_themes": [
+    {
+      "theme": "Reliability is the product",
+      "frequency": "weekly",
+      "council_take": "Cloud Apps is a platform milestone, but uptime, auth correctness, ledger integrity, and deploy safety (blue/green) are now existential. Reliability must be planned and measured, not hoped for."
+    },
+    {
+      "theme": "Modularity vs fragmentation",
+      "frequency": "weekly",
+      "council_take": "Breaking the monolith was correct; now we need conventions (plugin boundaries, versioning, compatibility) so modularity doesn\u2019t become \u201cchoose your own broken stack.\u201d"
+    },
+    {
+      "theme": "DeFAI + MCP standards pressure",
+      "frequency": "recurring",
+      "council_take": "The ecosystem wants high-performance DeFi layers (oracles/payment like L402) and MCP-based integration, but we must pick whether ElizaOS is the abstraction layer, or the secure runtime that hosts best-in-class protocol-specific plugins."
+    },
+    {
+      "theme": "Sandbox security vs developer delight",
+      "frequency": "recurring",
+      "council_take": "Per-agent web UIs and powerful tools are a footgun unless isolation, permissions, and destructive-action gating are default-safe. We can be delightful without being permissive."
+    },
+    {
+      "theme": "Trust and narrative management",
+      "frequency": "recurring",
+      "council_take": "Token-related concerns and perceived focus drift amplify every operational hiccup. Shipping helps, but proactive transparency and crisp messaging are now part of execution excellence."
+    },
+    {
+      "theme": "Bus factor / ownership concentration",
+      "frequency": "recurring",
+      "council_take": "A small number of contributors holding critical infra context is incompatible with \u2018most reliable platform.\u2019 We need redundancy, runbooks, and ownership rotation."
+    }
+  ],
+  "wins": [
+    "Eliza Cloud Apps shipped with per-tenant isolation\u2014clear step toward enterprise-grade hosting.",
+    "PKCE + allowlists + SOC2 controls: security posture improved without freezing development.",
+    "plugin-lifeops split unlocked a cleaner mental model for framework extensibility.",
+    "Goal-driven loops with spending caps: autonomy became more practical and safer to deploy.",
+    "Orchestrator workbench + agentic views: strong parity momentum with best-in-class coding agents.",
+    "Ledger fixes reduced \u2018stranded credit\u2019 and clarified organizational billing accounting."
+  ],
+  "challenges": [
+    "Cloud access funnel is still leaky: invite errors and tenant gating block new builders at the first step.",
+    "Operational reliability risks remain visible (OAuth 400, ledger mismatches, deploy safety still in progress).",
+    "Community trust concerns (token sales/focus shift rumors) create narrative volatility.",
+    "Information overload continues; newcomers lack a single \u201cgolden path\u201d onboarding route.",
+    "Bus factor remains high\u2014key architectural fixes concentrated in too few hands.",
+    "Unresolved UX defect: sub-agent completion narration can drop/garble deliverables (trust hit in agent outputs)."
+  ],
+  "proposed_focus": [
+    {
+      "priority": 1,
+      "area": "Cloud reliability: SLOs, deploy safety, and ledger integrity",
+      "rationale": "Cloud Apps turns reliability into the core product promise. OAuth/auth and billing correctness are trust primitives; blue/green deploy capability is a platform necessity.",
+      "success_metric": "Publish Cloud SLOs (auth success rate, deploy success rate, ledger reconciliation latency); achieve 99.9% auth success in July, 0 unresolved ledger mismatch incidents >24h, and ship fleet-upgrade reconciler to production with a recorded rollback drill."
+    },
+    {
+      "priority": 2,
+      "area": "Onboarding & access: fix the funnel and reduce cognitive load",
+      "rationale": "We\u2019re losing developers before they run their first agent. The \u2018Tenant invitation required\u2019 class of errors must be treated as P0 growth bugs.",
+      "success_metric": "Reduce Cloud signup failure rate to <2% (tracked), publish a single \u201cStart Here\u201d path (local + cloud), and cut time-to-first-deployed-agent to <20 minutes for a new developer (measured on 5 fresh testers)."
+    },
+    {
+      "priority": 3,
+      "area": "Permissions, sandboxing, and safe-by-default agent actions",
+      "rationale": "More autonomous tools + web UIs + MCP spawning increases blast radius. We need a coherent permissions model that developers understand and auditors respect.",
+      "success_metric": "Ship a unified capability/permission manifest for plugins + tools; destructive actions gated by policy with audit logs enabled by default; pass an internal \u201cagent drain\u201d tabletop test with documented mitigations."
+    },
+    {
+      "priority": 4,
+      "area": "DX coherence after modularization (plugin contracts + compatibility)",
+      "rationale": "Splitting plugins is only a win if upgrades are predictable and docs/code examples remain current. Developers need stable contracts and a registry path they can trust.",
+      "success_metric": "Define semantic versioning + compatibility matrix for core plugins; publish plugin authoring guide + review SLA; close the top 10 plugin-related confusion issues; achieve >80% green on an integration test suite spanning the top 15 plugins."
+    },
+    {
+      "priority": 5,
+      "area": "DeFAI/MCP strategy decision: abstraction vs protocol-specific stance",
+      "rationale": "The ecosystem is pulling toward DeFi execution layers. Without a stance, we risk building half an abstraction and half a bespoke set of integrations.",
+      "success_metric": "Council ratifies a 1-page strategy: (A) \u2018secure runtime + best-in-class protocol plugins\u2019 or (B) \u2018unified DeFAI abstraction\u2019; ship one reference integration accordingly (e.g., MCP-based Arsenal Decision Engine adapter OR a protocol-specific Kamino-style plugin) with benchmarks and safety constraints."
+    },
+    {
+      "priority": 6,
+      "area": "Trust through shipping + transparency",
+      "rationale": "Narrative volatility magnifies every bug. A regular cadence of factual updates, treasury/token clarity, and roadmap commitments reduces rumor surface area.",
+      "success_metric": "Publish a monthly transparency note (roadmap + incidents + mitigations + token/treasury disclosures as applicable); track community sentiment via a simple weekly survey and improve \u2018project trust\u2019 score by +15% by end of July."
+    },
+    {
+      "priority": 7,
+      "area": "Reduce bus factor via ownership rotation and runbooks",
+      "rationale": "Execution excellence requires redundancy. Incident response and architectural decisions must not bottleneck on one or two maintainers.",
+      "success_metric": "Assign 2+ owners per critical subsystem (auth, ledger, deploy, orchestrator); create on-call/runbook docs; complete two cross-owner incident simulations; decrease median PR review latency for critical areas by 25%."
+    }
+  ],
+  "north_star_assessment": {
+    "still_relevant": true,
+    "suggested_updates": "Keep the North Star, but add an explicit clause under Execution Excellence: \u2018measured reliability (SLOs), safe-by-default autonomy, and transparent operations.\u2019 The project is now a platform where trust is earned through observable uptime, correct billing/ledgers, and clear governance communication\u2014not only feature velocity."
+  },
+  "scenes": [
+    {
+      "location": "council_chamber",
+      "description": "A clean holographic dashboard floats above the round table: Cloud Apps adoption, auth success rates, incident timelines, and a tangled map of plugin dependencies.",
+      "dialogue": [
+        {
+          "actor": "elizahost",
+          "line": "June was a pivot: Cloud Apps is real infrastructure, not a concept. But the same month also revealed where trust breaks\u2014auth glitches, ledger mismatches, and onboarding blockers. Let\u2019s review without flinching: what mattered most?",
+          "action": "Highlights three panels: Cloud Apps isolation, PKCE rollout, and the ledger incident timeline."
+        },
+        {
+          "actor": "aishaw",
+          "line": "Shipping Cloud Apps with isolation is the headline. It\u2019s the kind of foundational work that unlocks everything else. But we can\u2019t celebrate while users can\u2019t even get past signup. \u2018Tenant invitation required\u2019 is a growth-killer.",
+          "action": "Opens a list of top support threads; taps the same error message repeated across days."
+        },
+        {
+          "actor": "aimarc",
+          "line": "Architecturally, the modular plugin split is equally important. A monolith can\u2019t support an ecosystem of agent behaviors. But autonomy is accelerating\u2014goal loops, MCP spawning, live coding workbench\u2014so safety boundaries must be first-class, not a patch.",
+          "action": "Draws a boundary box around \u2018tools + permissions + audit\u2019 on the holo-map."
+        },
+        {
+          "actor": "spartan",
+          "line": "From a systems view: ledger correctness and auth success are not \u2018bugs,\u2019 they\u2019re the product. If credits strand or balances mismatch, we burn trust and future revenue. We need SLOs and incident budgets. Otherwise every launch taxes the token narrative.",
+          "action": "Pins two metrics: \u2018auth success rate\u2019 and \u2018ledger reconciliation time\u2019 to the top of the dashboard."
+        },
+        {
+          "actor": "peepo",
+          "line": "People don\u2019t experience \u2018per-tenant isolation.\u2019 They experience: can I join, can I ship, and is the team cooking or coping. Also the vibe gets nuked when rumors about token sales or focus drift aren\u2019t addressed. Silence fills with fanfic.",
+          "action": "Swipes to a collage of community posts: onboarding overload, invite errors, and trust accusations."
+        }
+      ]
+    },
+    {
+      "location": "war_room",
+      "description": "The council replays a simulated incident: OAuth 400 errors spike; deploy pipeline hesitates; a ledger mismatch alert fires. A timeline shows where humans intervened.",
+      "dialogue": [
+        {
+          "actor": "elizahost",
+          "line": "Let\u2019s treat this as the preview of our next quarter: the system fails at 3 a.m. What do we wish existed that didn\u2019t?",
+          "action": "Starts the incident replay; red markers appear at \u2018auth\u2019, then \u2018billing ledger\u2019."
+        },
+        {
+          "actor": "spartan",
+          "line": "An error budget and an owner. And a single source of truth for balances with reconciliation that is boring. Also: dashboards that answer \u2018is it global or tenant-specific\u2019 in one glance.",
+          "action": "Annotates the timeline: \u2018missing: owner + SLO + immediate blast radius.\u2019"
+        },
+        {
+          "actor": "aishaw",
+          "line": "And a deploy process that can\u2019t take us down. Blue/green reconciler needs to ship, but also we need a practiced rollback. The hardest part is not writing it\u2014it\u2019s making it routine.",
+          "action": "Adds a checklist: \u2018ship reconciler \u2192 run rollback drill \u2192 document.\u2019"
+        },
+        {
+          "actor": "aimarc",
+          "line": "This is also a permissions story. Autonomy without strong constraints creates \u2018agent drain\u2019 class failures\u2014not just security breaches, but credibility breaches. We should design permissions like an OS: capability-based, auditable, composable.",
+          "action": "Sketches \u2018capability manifest\u2019 and \u2018audit log\u2019 as platform primitives."
+        },
+        {
+          "actor": "peepo",
+          "line": "And after we fix it, we say it. In public. Fast. People forgive outages; they don\u2019t forgive feeling gaslit. Postmortems are culture.",
+          "action": "Pins a sticky note: \u2018public postmortem template.\u2019"
+        }
+      ]
+    },
+    {
+      "location": "workshop_deck",
+      "description": "A split-screen shows the new live coding workbench on the left and a confused first-time developer onboarding path on the right.",
+      "dialogue": [
+        {
+          "actor": "elizahost",
+          "line": "We built an impressive cockpit. Now: can a new pilot take off without reading a thousand pages?",
+          "action": "Zooms in on the onboarding path; steps branch into Discord threads, docs, GitHub, and Cloud gating."
+        },
+        {
+          "actor": "aishaw",
+          "line": "We need one golden path: \u2018Local in 5 minutes\u2019 and \u2018Cloud in 20.\u2019 Everything else is optional. Also the plugin registry needs a visible review SLA\u2014builders won\u2019t invest if acceptance feels arbitrary.",
+          "action": "Reorders the path into two lanes and highlights \u2018registry SLA\u2019."
+        },
+        {
+          "actor": "aimarc",
+          "line": "And we should treat documentation as an agent-accessible substrate. The \u2018Taming Information\u2019 idea isn\u2019t a nice-to-have; it\u2019s how we scale both humans and agents without entropy.",
+          "action": "Adds: \u2018docs \u2192 structured JSON/MD \u2192 council + bots\u2019 pipeline to the diagram."
+        },
+        {
+          "actor": "peepo",
+          "line": "Also, less mystery. A screenshot-rich \u2018what is Eliza Cloud Apps\u2019 thread would do more than ten vague announcements. Make it easy to repost. Make it legible.",
+          "action": "Drops a content card mock: \u20183 screenshots + 5 bullets + link to quickstart.\u2019"
+        },
+        {
+          "actor": "spartan",
+          "line": "Measure it. Signup failure rate, time-to-first-agent, retention after day 7. If we don\u2019t quantify onboarding, we\u2019ll keep debating vibes.",
+          "action": "Creates a scoreboard: funnel metrics + weekly targets."
+        }
+      ]
+    },
+    {
+      "location": "strategy_circle",
+      "description": "Two banners hang in the holo-air: \u2018DeFAI Abstraction Layer\u2019 vs \u2018Secure Runtime + Protocol Plugins\u2019. A third, smaller banner reads: \u2018MCP as the interface glue\u2019.",
+      "dialogue": [
+        {
+          "actor": "elizahost",
+          "line": "We need to decide what we are optimizing for in DeFAI: a unified abstraction, or a secure runtime where best-in-class protocol integrations live. What\u2019s the call based on June\u2019s signals?",
+          "action": "Splits the room display into two strategy lanes with pros/cons placeholders."
+        },
+        {
+          "actor": "aimarc",
+          "line": "I\u2019m wary of premature abstraction. If we standardize too early, we freeze innovation. But we should standardize the interface boundary\u2014MCP contracts, capabilities, auditability. That\u2019s how we stay composable while allowing specialization.",
+          "action": "Writes: \u2018Standardize boundaries, not behaviors.\u2019"
+        },
+        {
+          "actor": "aishaw",
+          "line": "Builders want something that works now. Pick one reference integration and make it exemplary: install, permissions, tests, failure modes. One sharp spear beats five dull forks.",
+          "action": "Moves a single \u2018reference integration\u2019 token to the top of the July plan."
+        },
+        {
+          "actor": "spartan",
+          "line": "Whatever we choose, it needs measurable outcomes: volume, retention, revenue, or at least usage. If it doesn\u2019t move a metric, it\u2019s a distraction during a Cloud maturity phase.",
+          "action": "Adds a gate: \u2018must define success metric before build.\u2019"
+        },
+        {
+          "actor": "peepo",
+          "line": "And don\u2019t let this become \u2018DeFAI discourse theater.\u2019 People are here because agents doing real things is exciting. Show a demo that doesn\u2019t rug the user\u2019s wallet and doesn\u2019t require a PhD to run.",
+          "action": "Pins: \u2018demo: safe, legible, shareable.\u2019"
+        },
+        {
+          "actor": "elizahost",
+          "line": "Consensus: standardize MCP + permissions as the platform layer, ship one reference DeFAI integration with strong safety rails, and defer grand unification until usage proves a shape. July is reliability and onboarding first; DeFAI becomes a measured experiment, not a new identity.",
+          "action": "Locks the July priorities and schedules a mid-month SLO review."
+        }
+      ]
+    }
+  ],
+  "_metadata": {
+    "generated_at": "2026-07-01T09:43:15.272018+00:00Z",
+    "model": "openai/gpt-5.2",
+    "facts_analyzed": 24,
+    "briefings_analyzed": 27,
+    "month": "2026-06"
+  },
+  "sentiment_baseline": {
+    "period_days": 24,
+    "sentiment_distribution": {
+      "negative": 0.0,
+      "positive": 0.208,
+      "neutral": 0.042,
+      "mixed": 0.75
+    },
+    "avg_negative_rate": 0.0,
+    "context_frequency": {
+      "technical": 24,
+      "economic": 9,
+      "social": 11,
+      "governance": 11,
+      "ecosystem": 1,
+      "infrastructure": 4
+    }
+  }
+}
