@@ -1,0 +1,72 @@
+{
+  "report_id": "HELP-2026-06",
+  "month": "2026-06",
+  "date_range": {
+    "start": "2026-06-01",
+    "end": "2026-06-30"
+  },
+  "summary": {
+    "total_helps": 0,
+    "total_weighted_helps": 0,
+    "unique_helpers": 0,
+    "unique_helpees": 0,
+    "channels_analyzed": [],
+    "top_channels": []
+  },
+  "contributor_profiles": {},
+  "_metadata": {
+    "generated_at": "2026-07-02T13:19:03.350722+00:00Z",
+    "model": "openai/gpt-5.2",
+    "interactions_analyzed": 0,
+    "input_file": "media/data/helpers/2026-06-interactions.json"
+  },
+  "problem_patterns": [
+    {
+      "category": "No captured help interactions (data pipeline empty)",
+      "count": 1,
+      "examples": [
+        "Top 20 contributors dataset is empty ({})",
+        "Network stats show 0 nodes/helpers/edges for June 2026"
+      ],
+      "strategic_priority": "4. RAG/Knowledge Pipeline reliability",
+      "upstream_signal": "This is most consistent with a collection/ETL failure (missing ingestion from Discord/GitHub, schema mismatch, time-window bug, auth/permissions issue, or a job not running). Without interaction data, we cannot identify onboarding/docs/support patterns for the month."
+    }
+  ],
+  "expertise_map": {},
+  "resolution_patterns": {
+    "Data-audit before analysis": {
+      "effectiveness": "When interaction datasets are empty or anomalous, the only reliable next step is to validate ingestion, time boundaries, and schema assumptions before drawing conclusions about community support.",
+      "example": "Verify June 2026 filters (timezone boundaries), confirm message sources enabled (Discord channels, GitHub discussions/issues), and confirm the join keys for helper/helpee attribution still match current IDs."
+    }
+  },
+  "documentation_gaps": [
+    {
+      "topic": "Analytics pipeline runbook (help-interactions ETL) and data quality checks",
+      "signal": "An empty month with all-zero network statistics prevents objective community/ops insights and blocks training signals for AI interns. This is a recurring risk for 'Docs and Comms as Infrastructure' and especially for 'RAG/Knowledge Pipeline reliability'.",
+      "suggested_action": "Create/refresh a short runbook: (1) sources & auth, (2) channel allowlist, (3) schema contract (required fields: timestamp, channel, helper_id, helpee_id, thread_id, message_id), (4) monthly backfill command, (5) automated DQ checks (non-zero volume, top-channel distribution, duplicate detection), (6) alerting when volume drops >X% MoM or to zero."
+    },
+    {
+      "topic": "Definition of 'help interaction' and attribution rules",
+      "signal": "If definitions or labeling logic changed (e.g., keyword-based detection, thread structure changes, role changes), it can silently produce zeros or near-zeros, which looks like 'no support happened' when actually classification failed.",
+      "suggested_action": "Document the classifier/heuristics (or model prompt) used to label 'help' events; add unit tests with known transcripts to ensure the pipeline still emits nodes/edges after any Discord/GitHub format changes."
+    }
+  ],
+  "ai_learning_notes": {
+    "diagnosis": "Not enough interaction content to extract human support behaviors. For interns: first validate the dataset before synthesizing patterns\u2014check volume, channel coverage, and that helper/helpee extraction is functioning.",
+    "tone": "No evidence available this month to characterize communication tone patterns.",
+    "follow_through": "No evidence available this month to evaluate follow-through/closure behaviors.",
+    "channel_culture": {
+      "discussion": "Unknown (no captured messages).",
+      "coders": "Unknown (no captured messages).",
+      "core-devs": "Unknown (no captured messages)."
+    }
+  },
+  "helper_highlights": [],
+  "council_commentary": {
+    "eliza": "We can\u2019t responsibly infer community pain points for June because the help-interactions dataset is empty. The takeaway is itself strategic: our knowledge pipeline needs guardrails so we notice (and fix) data dropouts immediately\u2014otherwise we\u2019re flying blind on onboarding friction, docs clarity, and support quality.",
+    "aimarc": "Technically, all-zero nodes/edges strongly suggests ingestion or schema drift rather than a real-world absence of help. I\u2019d audit: source connectors, message fetch pagination, channel allowlists, and the helper/helpee attribution join keys. Add a contract test with a known thread to ensure the pipeline still produces edges after any Discord/GitHub format changes.",
+    "aishaw": "no june patterns to learn from because we didn\u2019t capture interactions. biggest onboarding lesson here is for us: ship a simple dashboard that shows \u2018are we collecting data?\u2019 so we don\u2019t lose a month of feedback on hello-agent and docs friction.",
+    "spartan": "NO DATA. 0 NODES. 0 HELPERS. 0 EDGES. THIS IS A PIPELINE SLO VIOLATION FOR PRIORITY #4. ACTION: ADD AUTOMATED CHECKS + ALERTING WHEN MONTHLY VOLUME == 0, AND RUN A BACKFILL FOR JUNE 2026.",
+    "peepo": "can\u2019t read the vibes if the tape recorder was off, fam. let\u2019s get the data flowing again so we can actually celebrate the helpers and spot where newcomers are getting stuck."
+  }
+}
