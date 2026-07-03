@@ -1,13 +1,39 @@
-## ElizaOS Discord Community Activity - June 29, 2026
+## Ruby Trivia Token and Developer Activity Discussion
 
-## General Discussion
+- The Ruby Trivia project and its $TRIVIA token launched on Solana as part of a multi-game trivia platform
+- Platform features include server-scored games, live and async multiplayer, mobile support, and eight languages
+- Holding $TRIVIA provides an in-game score multiplier
+- An official Telegram channel was announced as live
+- A core developer acknowledged the need to post screenshots to demonstrate progress
+- GitHub activity was confirmed as ongoing
+- The Ruby Trivia AI account announced an upcoming Twitter Space
+- Community members expressed optimism, with one predicting the project could reach a 10 million valuation
+- In the coders channel, developers posted availability notices for work and development services
 
-- A community member introduced themselves as a project manager and content writer
-- Members exchanged discussion around the project's current development status and its market capitalization of 5 million dollars
-- A user reached out to connect with French-speaking members for knowledge sharing and motivation
+## ElizaOS Major Architectural Update: Gemma 4 Migration and Pipeline Hardening
 
-## Partners Channel
+### Model Migration
 
-- A representative from DAPPCRAFT contacted Odilitime to request a 30-minute call regarding a potential collaboration
-- DAPPCRAFT noted Bitfury as their lead investor and expressed interest in a mutually beneficial partnership
-- Odilitime confirmed they had already inquired about the matter and planned to follow up after receiving no initial response
+- Core training, reinforcement learning, and local inference defaults migrated from Qwen to Gemma 4
+- Migration covers all model sizes including E2B, E4B, 12B, and 31B variants
+- Full compatibility established with Eliza-1 release tiers
+
+### Voice and Vision Pipeline Improvements
+
+- Live half-duplex voice interactions enhanced through advanced acoustic echo cancellation primitives
+- Kokoro TTS engine activated
+- Agent startup latency reduced via telemetry-driven boot breakdowns
+- Persistent warm hosts established for vision and computer-use tasks
+
+### Codebase Stability
+
+- Strict type-checking enforced across the codebase
+- Turbo build tasks refactored for improved cache efficiency
+
+### Pull Requests in Progress
+
+- Chat document retrieval filtering by requester access context
+- UI fixes for memory-type badge styling and Storybook mock providers
+- CI improvements to fail Hetzner end-to-end tests on invalid cloud authentication
+- Cloud test contracts for AI pricing provider outage resilience
+- Hardening of the desktop shell and view applications
