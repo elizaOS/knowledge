@@ -102,7 +102,7 @@ On startup, the Electrobun shell and `AgentManager` coordinate these steps:
 
 1. **Resolve the runtime bundle** -- In dev mode, Electrobun finds the repository root `dist/` bundle. In packaged builds, the runtime is copied into `Resources/app/eliza-dist/`.
 2. **Resolve desktop runtime mode** -- Environment variables decide whether the shell should use `local`, `external`, or `disabled` runtime mode.
-3. **Bootstrap the renderer with an API base** -- The static renderer server injects `window.__ELIZA_API_BASE__` into `index.html` before React mounts so the UI never falls back to the static server for `/api/*` requests.
+3. **Bootstrap the renderer with an API base** -- The static renderer server injects the boot-config `apiBase` (`window.__ELIZAOS_APP_BOOT_CONFIG__`) into `index.html` before React mounts so the UI never falls back to the static server for `/api/*` requests.
 4. **If mode is `local`, spawn the canonical runtime** -- Electrobun launches `bun run entry.js start` as a child process, waits for `/api/health`, and then pushes the actual bound port to the renderer.
 5. **If mode is `external`, connect only** -- Electrobun does not start a child runtime. The renderer uses the normalized external API base and optional API token.
 6. **If mode is `disabled`, wait for a manually managed local runtime** -- Electrobun does not auto-start the child runtime, but the renderer still targets the expected local API base so a separately managed server can satisfy requests.
@@ -124,7 +124,7 @@ On startup, the Electrobun shell and `AgentManager` coordinate these steps:
 
 ### Native application menu (e.g. macOS **Eliza** menu)
 
-The OS menu bar template is built in **`apps/app/electrobun/src/application-menu.ts`** and wired in **`index.ts`** (`application-menu-clicked`). **Why a data file:** the same structure is validated by tests and stays free of platform branches scattered through the main process.
+The OS menu bar template is built in **`packages/app-core/platforms/electrobun/src/application-menu.ts`** and wired in **`index.ts`** (`application-menu-clicked`). **Why a data file:** the same structure is validated by tests and stays free of platform branches scattered through the main process.
 
 | Item (example) | Action id | Behavior |
 |----------------|-----------|----------|
@@ -390,4 +390,4 @@ The desktop app runs with full system access. Be cautious with plugins and custo
 - **Content Security Policy** -- Applied to all windows. The policy is intentionally permissive to support third-party embedded apps that may require WebAssembly and external scripts.
 - **Window navigation** -- External URLs are blocked from the main window and opened in the default browser. Only the custom scheme and localhost origins are allowed.
 - **Context isolation** -- All `BrowserWindow` instances use `contextIsolation: true` and `nodeIntegration: false`.
-- **SSRF protection** -- Custom action HTTP handlers block requests to private/internal network addresses. See [Custom Actions](/guides/custom-actions).
+- **SSRF protection** -- Custom action HTTP handlers block requests to private/internal network addresses. See [Custom Actions](/tracks/framework/actions-providers-evaluators#action).
