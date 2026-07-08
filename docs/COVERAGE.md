@@ -17,7 +17,6 @@ This file maps every package under `packages/` to its docs-site coverage. Mainta
 | `packages/app/`                  | App       | `tracks/agent-app/*.mdx`, `apps/*.md`                                |
 | `packages/app-core/`             | App       | `tracks/agent-app/*.mdx`, `apps/dashboard/*`, `guides/first-run-*`  |
 | `packages/ui/`                   | App       | `apps/ui-library.md`                                                 |
-| `packages/tui/`                  | App       | (terminal UI; folded into `apps/*` desktop coverage)                 |
 | `packages/homepage/`             | App       | (marketing site; no in-docs coverage by design)                      |
 | `packages/os/homepage/`          | App       | (marketing site; no in-docs coverage by design)                      |
 | `packages/cloud/api/`            | Cloud     | `tracks/cloud/*.mdx`                                                 |

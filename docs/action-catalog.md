@@ -15,7 +15,7 @@ This catalog is generated from `packages/prompts/specs/**` by `bun run --cwd pac
 - **Plugin overlay actions:** 9
 - **Canonical providers:** 23
 - **Core providers:** 23
-- **Registered runtime actions:** 191
+- **Registered runtime actions:** 184
 
 ## Actions
 
@@ -473,7 +473,6 @@ section drifts from source.
 - `SET_AD_CAMPAIGN_DAYPARTING` — `plugins/plugin-cloud-apps/src/actions/ad-campaigns.ts`
 - `SET_FOLLOWUP_THRESHOLD` — `plugins/plugin-personal-assistant/src/followup/actions/setFollowupThreshold.ts`
 - `SETTINGS` — `packages/agent/src/actions/settings-actions.ts`, `plugins/plugin-app-control/src/actions/settings.ts`
-- `SETUP_XR_RUNTIME` — `plugins/plugin-facewear/src/actions/xr-runtime-setup.ts`
 - `SHELL` — `plugins/plugin-coding-tools/src/actions/bash.ts`
 - `SKILL` — `plugins/plugin-agent-skills/src/actions/skill.ts`
 - `SMARTGLASSES_CONTROL` — `plugins/plugin-facewear/src/actions/facewear-control.ts`
@@ -509,12 +508,6 @@ section drifts from source.
 - `WITHDRAW_APP_EARNINGS` — `plugins/plugin-cloud-apps/src/actions/withdraw-app-earnings.ts`
 - `WORK_THREAD` — `plugins/plugin-personal-assistant/src/actions/work-thread.ts`
 - `WORKTREE` — `plugins/plugin-coding-tools/src/actions/worktree.ts`
-- `XR_CLOSE_VIEW` — `plugins/plugin-facewear/src/actions/view-actions.ts`
-- `XR_LIST_VIEWS` — `plugins/plugin-facewear/src/actions/view-actions.ts`
-- `XR_OPEN_VIEW` — `plugins/plugin-facewear/src/actions/view-actions.ts`
-- `XR_QUERY_VISION` — `plugins/plugin-facewear/src/actions/vision-query.ts`
-- `XR_RESIZE_VIEW` — `plugins/plugin-facewear/src/actions/view-actions.ts`
-- `XR_SWITCH_VIEW` — `plugins/plugin-facewear/src/actions/view-actions.ts`
 
 ## Providers
 

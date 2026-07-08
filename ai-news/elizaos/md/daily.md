@@ -1,39 +1,37 @@
-## Ruby Trivia Token and Developer Activity Discussion
+## ElizaOS Community Discussion - June 30, 2026
 
-- The Ruby Trivia project and its $TRIVIA token launched on Solana as part of a multi-game trivia platform
-- Platform features include server-scored games, live and async multiplayer, mobile support, and eight languages
-- Holding $TRIVIA provides an in-game score multiplier
-- An official Telegram channel was announced as live
-- A core developer acknowledged the need to post screenshots to demonstrate progress
-- GitHub activity was confirmed as ongoing
-- The Ruby Trivia AI account announced an upcoming Twitter Space
-- Community members expressed optimism, with one predicting the project could reach a 10 million valuation
-- In the coders channel, developers posted availability notices for work and development services
+### General Community Activity
 
-## ElizaOS Major Architectural Update: Gemma 4 Migration and Pipeline Hardening
+- Ruby, an AI agent project, expanded into Telegram and Discord with new features including a Trivia bot highlighted as a notable advancement in agentic systems
+- RangerKeith inquired about potential AMA collaboration opportunities with the ElizaOS team
+- Odilitime directed a user to the GitHub repository for admin status information
+- Community member groggs noted AI development is accelerating while observing the community appears to be in a building phase
 
-### Model Migration
+---
 
-- Core training, reinforcement learning, and local inference defaults migrated from Qwen to Gemma 4
-- Migration covers all model sizes including E2B, E4B, 12B, and 31B variants
-- Full compatibility established with Eliza-1 release tiers
+## Overall Project Summary - June 30, 2026
 
-### Voice and Vision Pipeline Improvements
+### Voice and Desktop
 
-- Live half-duplex voice interactions enhanced through advanced acoustic echo cancellation primitives
-- Kokoro TTS engine activated
-- Agent startup latency reduced via telemetry-driven boot breakdowns
-- Persistent warm hosts established for vision and computer-use tasks
+- Real-time wake-word detection enabled via OpenWakeWordDetector
+- Desktop UI streamlined by removing legacy stacks
+- Voice end-to-end testing advanced with new Apple Stage-B STT benchmarks and real-device evidence
 
-### Codebase Stability
+### Agent Orchestration and Security
 
-- Strict type-checking enforced across the codebase
-- Turbo build tasks refactored for improved cache efficiency
+- Agent security hardened with read-only verifiers
+- Sub-agent spend-cap warnings introduced
+- Prompt-injection protections improved
 
-### Pull Requests in Progress
+### Infrastructure and Build Systems
 
-- Chat document retrieval filtering by requester access context
-- UI fixes for memory-type badge styling and Storybook mock providers
-- CI improvements to fail Hetzner end-to-end tests on invalid cloud authentication
-- Cloud test contracts for AI pricing provider outage resilience
-- Hardening of the desktop shell and view applications
+- Plugin builds consolidated onto a shared driver for improved type-safety
+- CI/CD pipelines optimized for cloud reliability
+- Plugin registry expanded with the addition of elizaos-plugin-quantumscan and eliza-plugin-klymax402
+
+### Work in Progress
+
+- Real-Chromium benchmark engine lane and CI gate for the browser plugin
+- MiniWoB++ benchmark test lane
+- Memory watchdog with crash-recovery and soak harness featuring iOS watchdog parity
+- UI test to record a chat-sheet transition as an animated GIF
