@@ -4,12 +4,10 @@ Parallel worktrees should not all bind the default app UI port (`2138`). The app
 
 ## Commands
 
-Run from `packages/app`:
-
 ```bash
-bun run dev:shared   # long-lived Vite server on this worktree's deterministic port
-bun run dev:status   # list running shared dev servers from the registry
-bun run dev:rebuild  # explicit Vite full-reload trigger for this worktree
+bun run --cwd packages/app dev:shared   # long-lived Vite server on this worktree's deterministic port
+bun run --cwd packages/app dev:status   # list running shared dev servers from the registry
+bun run --cwd packages/app dev:rebuild  # explicit Vite full-reload trigger for this worktree
 ```
 
 `bun run dev` is unchanged for single-lane local development.
@@ -30,21 +28,20 @@ The script exports `ELIZA_UI_PORT` and `ELIZA_API_PORT` before starting Vite, th
 2. Start one long-lived server:
 
    ```bash
-   cd packages/app
-   bun run dev:shared
+   bun run --cwd packages/app dev:shared
    ```
 
 3. In another shell, discover the URL:
 
    ```bash
-   bun run dev:status
+   bun run --cwd packages/app dev:status
    ```
 
 4. Point the Cloudflare tunnel, browser, or installed PWA live-reload URL at that lane's UI port.
 5. After source/build state changes that need a visible refresh, run:
 
    ```bash
-   bun run dev:rebuild
+   bun run --cwd packages/app dev:rebuild
    ```
 
-If a stale process dies, `dev:status` hides it by default; use `bun run dev:status -- --all` to inspect stopped registry entries.
+If a stale process dies, `dev:status` hides it by default; use `bun run --cwd packages/app dev:status -- --all` to inspect stopped registry entries.
