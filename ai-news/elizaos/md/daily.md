@@ -1,31 +1,22 @@
-## ElizaOS Community Update: July 9, 2026
+## ElizaOS Community Discussion and Developer Activity - July 4, 2026
 
-## Legal Resolution
+## General Community Activity
 
-- Federal Judge Jed S. Rakoff signed a Stipulation and Order of Dismissal on July 8, 2026
-- The case of Pikabea v. Walters et al. has been formally resolved
-- Plaintiff's individual claims dismissed with prejudice against all defendants
-- No costs or attorneys' fees awarded to any party
-- Proposed class claims dismissed without prejudice
-- Court retains jurisdiction for 30 days solely to enforce the settlement agreement
-- Community members recognized this as the conclusion of legal issues surrounding Shaw (Walters) and the elizaOS ecosystem
-
-## Project Status
-
-- The foundation and Shaw remain involved with the project
-- Cloud has been identified as the current strategic focus
-- Active community members continue to serve as an operational presence
+- Community members confirmed that development is ongoing daily, with GitHub activity cited as evidence
+- A community member directed others to GitHub to verify active development progress
 
 ## Developer Activity
 
-- A senior AI and full-stack engineer posted availability for white-label technical partnership services targeting US agencies, covering AI, backend, automation, and voice-agent projects
-- An AI and ML engineer listed capabilities including RAG systems, AI agents with memory and task automation, voice AI using STT and TTS tools, OCR, visual search, and full-stack SaaS platforms
-- Tools referenced include OpenAI, Claude, LangChain, LangGraph, Python, FastAPI, Next.js, and Node.js
-- A separate post sought a non-technical person for a part-time flexible opportunity
+### LMStudio Integration
+- A developer identified and resolved a connection issue with LMStudio by referencing the official ElizaOS plugin at github.com/elizaOS/eliza/tree/develop/plugins/plugin-lmstudio
 
-## Community Events
-
-- MOI Builders session 5 was promoted, focused on combining AI and Web3 development
-- The session covers using Claude to generate logic and deploying a live application on the MOI platform
-- The format walks participants from idea to deployment in a single session
-- Builder bounties were scheduled to be announced live at the event
+### New Plugin Release: cabal-hunter
+- A developer released a new plugin called cabal-hunter, available via npm as elizaos-plugin-cabal-hunter
+- The plugin addresses a gap in trading agents by incorporating on-chain wallet data analysis
+- Key capabilities include:
+  - Tracing holder clusters and funding sources
+  - Flagging bundled buys
+  - Identifying serial rug deployers
+  - Detecting honeypot liquidity pools
+- First 100 scans are available free of charge
+- Developer solicited feedback from trading agent operators on additional signals useful before buy decisions
