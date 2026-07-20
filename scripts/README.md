@@ -167,11 +167,16 @@ FORCE=1 ./scripts/etl/backfill/backfill-facts.sh 2026-01-09 2026-01-12
 
 ### `backfill/backfill-council.sh`
 
-**Purpose**: Backfills missing council briefings for a date range.
+**Purpose**: Backfills missing council briefings for a date range. Existing valid
+briefings are skipped; malformed V2 briefings are detected and regenerated.
 
 **Usage**:
 ```bash
 ./scripts/etl/backfill/backfill-council.sh 2026-01-09 2026-01-12
+
+# Audit historical files without making API calls
+python scripts/etl/validate-council-briefing.py --allow-legacy \
+  the-council/council_briefing/20*.json
 
 # Force overwrite
 FORCE=1 ./scripts/etl/backfill/backfill-council.sh 2026-01-09 2026-01-12

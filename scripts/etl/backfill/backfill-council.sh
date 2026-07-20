@@ -13,6 +13,7 @@
 # Each date takes ~30-60 seconds depending on API response time.
 
 set -e
+set -o pipefail
 
 if [ -z "$OPENROUTER_API_KEY" ]; then
     echo "ERROR: OPENROUTER_API_KEY environment variable is not set"
@@ -84,18 +85,23 @@ for DATE in "${DATES[@]}"; do
         continue
     fi
 
-    # Check if output already exists (skip unless FORCE=1)
+    # Skip healthy existing output unless FORCE=1. Invalid V2 output is
+    # regenerated automatically, making this command safe for repair backfills.
     if [ -f "$OUTPUT_JSON" ] && [ "$FORCE" != "1" ]; then
-        echo "SKIP (already exists)"
-        SKIPPED=$((SKIPPED + 1))
-        continue
+        if python scripts/etl/validate-council-briefing.py --allow-legacy "$OUTPUT_JSON" >/dev/null 2>&1; then
+            echo "SKIP (already exists and is valid)"
+            SKIPPED=$((SKIPPED + 1))
+            continue
+        fi
+        echo -n "REPAIR (existing file is invalid)... "
     fi
 
     # Ensure output directory exists
     mkdir -p "the-council/council_briefing"
 
     # Run the generation
-    if python scripts/etl/generate-council-context.py "$INPUT_FILE" "$OUTPUT_JSON" 2>&1 | tail -1; then
+    if python scripts/etl/generate-council-context.py "$INPUT_FILE" "$OUTPUT_JSON" 2>&1 | tail -1 && \
+       python scripts/etl/validate-council-briefing.py "$OUTPUT_JSON" >/dev/null; then
         SUCCESS=$((SUCCESS + 1))
     else
         echo "FAILED"
@@ -117,6 +123,15 @@ echo "========================================"
 # Update daily.json permalink to latest date
 LATEST=$(ls -1 the-council/council_briefing/20*.json 2>/dev/null | grep -v daily | sort | tail -1)
 if [ -n "$LATEST" ]; then
-    cp "$LATEST" "the-council/council_briefing/daily.json"
-    echo "Updated daily.json to: $(basename "$LATEST")"
+    if python scripts/etl/validate-council-briefing.py --allow-legacy "$LATEST" >/dev/null; then
+        cp "$LATEST" "the-council/council_briefing/daily.json"
+        echo "Updated daily.json to: $(basename "$LATEST")"
+    else
+        echo "WARNING: Latest briefing is invalid; daily.json was preserved"
+        FAILED=$((FAILED + 1))
+    fi
+fi
+
+if [ "$FAILED" -gt 0 ]; then
+    exit 1
 fi

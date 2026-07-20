@@ -5,8 +5,11 @@ import sys
 import json
 import requests
 import argparse
+import tempfile
 from pathlib import Path
 from datetime import datetime, timezone
+
+from council_schema import validate_council_briefing
 
 # --- Configuration ---
 MODEL = "google/gemini-3-flash-preview"
@@ -28,6 +31,22 @@ MONTHLY_GOAL = os.environ.get(
     "December 2025: Execution excellence—complete token migration with high success rate, launch ElizaOS Cloud, stabilize flagship agents, and build developer trust through reliability and clear documentation."
 )
 # --- End Configuration ---
+
+
+def atomic_write(path: Path, content: str) -> None:
+    """Write content without exposing a partial or failed generation."""
+    path.parent.mkdir(parents=True, exist_ok=True)
+    temporary_path = None
+    try:
+        with tempfile.NamedTemporaryFile(
+            mode="w", dir=path.parent, prefix=f".{path.name}.", delete=False
+        ) as temporary_file:
+            temporary_file.write(content)
+            temporary_path = Path(temporary_file.name)
+        os.replace(temporary_path, path)
+    finally:
+        if temporary_path is not None and temporary_path.exists():
+            temporary_path.unlink()
 
 def format_json_to_markdown(council_data):
     """Formats the council context JSON (Final V2 schema) into a Markdown string."""
@@ -236,7 +255,7 @@ def main():
     # --- Add Markdown output path ---
     output_markdown_dir = WORKSPACE_ROOT / "hackmd" / "council"
     output_markdown_dir.mkdir(parents=True, exist_ok=True)
-    markdown_filename = input_path.stem + ".md"
+    markdown_filename = output_path.stem + ".md"
     output_markdown_path = output_markdown_dir / markdown_filename
 
     # --- Validations ---
@@ -276,33 +295,39 @@ def main():
     content_list = [text_val for path, text_val in extracted_text_tuples]
     aggregated_content = "\n\n---\n\n".join(content_list)
 
+    # daily.json is a supported input fallback, so prefer its embedded date. This
+    # also prevents stale daily data from being published under today's filename.
+    source_date = lean_data.get("date_generated_for")
     try:
-        date_str = datetime.strptime(input_path.stem, "%Y-%m-%d").strftime("%Y-%m-%d")
+        date_str = datetime.strptime(
+            source_date if isinstance(source_date, str) else input_path.stem,
+            "%Y-%m-%d",
+        ).strftime("%Y-%m-%d")
     except ValueError:
-        print(f"Warning: Could not parse date from filename '{input_path.stem}'. Using placeholder.")
-        date_str = "unknown-date"
+        print(
+            f"Error: Could not determine a date from '{input_path}' or date_generated_for.",
+            file=sys.stderr,
+        )
+        sys.exit(1)
+
+    try:
+        output_date = datetime.strptime(output_path.stem, "%Y-%m-%d").strftime("%Y-%m-%d")
+    except ValueError:
+        output_date = None
+    if output_date is not None and output_date != date_str:
+        print(
+            f"Error: Input data is for {date_str}, but output path is for {output_date}; "
+            "refusing to publish stale data.",
+            file=sys.stderr,
+        )
+        sys.exit(1)
 
     if not aggregated_content:
-        print("Warning: No content found in the input JSON file. Creating empty V2 output.", file=sys.stderr)
-        empty_output_json = {
-            "date": date_str,
-            "strategic_context_summary": "N/A - No operational data processed.",
-            "monthly_goal": MONTHLY_GOAL,
-            "daily_focus_theme": "No operational data processed.",
-            "key_strategic_points": []
-        }
-        empty_output_md = f"# Council Briefing (V2): {date_str}\n\nNo operational data processed."
-        try:
-            with open(output_path, 'w') as f:
-                json.dump(empty_output_json, f, indent=2, ensure_ascii=True)
-            with open(output_markdown_path, 'w') as f:
-                f.write(empty_output_md)
-            print(f"Saved empty V2 council context JSON to: {output_path}")
-            print(f"Saved empty V2 council context Markdown to: {output_markdown_path}")
-            sys.exit(0)
-        except Exception as e:
-            print(f"Error writing empty V2 output files: {e}", file=sys.stderr)
-            sys.exit(1)
+        print(
+            "Error: No content found in the input JSON; existing outputs were preserved.",
+            file=sys.stderr,
+        )
+        sys.exit(1)
 
     prompt = construct_prompt(strategic_context, MONTHLY_GOAL, date_str, aggregated_content)
 
@@ -323,6 +348,7 @@ def main():
     council_context_md = None
     error_output_json = None
     error_output_md = None
+    generation_succeeded = False
 
     # Metadata for observability
     council_metadata = {
@@ -351,40 +377,10 @@ def main():
 
         council_context_json = json.loads(council_context_str)
 
-        # FINAL Schema Validation
-        if not isinstance(council_context_json, dict) or \
-           "date" not in council_context_json or \
-           "meeting_context" not in council_context_json or \
-           "monthly_goal" not in council_context_json or \
-           "daily_focus" not in council_context_json or \
-           "key_points" not in council_context_json or \
-           not isinstance(council_context_json["key_points"], list):
-            raise ValueError("LLM response JSON is missing top-level V2 keys or key_points is not a list.")
-
-        for point in council_context_json["key_points"]:
-            if not isinstance(point, dict) or \
-               "topic" not in point or \
-               "summary" not in point or \
-               "deliberation_items" not in point or \
-               not isinstance(point["deliberation_items"], list):
-                raise ValueError("A key_point is missing keys (topic, summary, deliberation_items) or deliberation_items is not a list.")
-            
-            for item_val_loop in point["deliberation_items"]:
-                if not isinstance(item_val_loop, dict) or \
-                   "question_id" not in item_val_loop or \
-                   "text" not in item_val_loop or \
-                   "multiple_choice_answers" not in item_val_loop or \
-                   not isinstance(item_val_loop["multiple_choice_answers"], dict): # Check if it's a dictionary
-                    if "context" in item_val_loop and not isinstance(item_val_loop["context"], list):
-                        raise ValueError("A deliberation_item has an invalid context (must be a list if present).")
-                    raise ValueError("A deliberation_item is missing keys (question_id, text, multiple_choice_answers) or multiple_choice_answers is not a dict.")
-                
-                for answer_key, answer_obj in item_val_loop["multiple_choice_answers"].items():
-                    if not isinstance(answer_obj, dict) or \
-                       "text" not in answer_obj: # 'implication' is optional
-                        raise ValueError(f"A multiple_choice_answer ('{answer_key}') is missing 'text'.")
-                    if "implication" in answer_obj and not isinstance(answer_obj["implication"], str):
-                         raise ValueError(f"A multiple_choice_answer ('{answer_key}') has an invalid 'implication' (must be a string if present).")
+        # Validate the complete consumer contract, not just top-level JSON syntax.
+        validate_council_briefing(
+            council_context_json, expected_date=date_str, generated=True
+        )
 
         # Programmatically add the "Other" option to multiple_choice_answers
         for point in council_context_json["key_points"]:
@@ -408,6 +404,8 @@ def main():
         )
         council_metadata["total_deliberation_questions"] = total_questions
         council_context_json["_metadata"] = council_metadata
+        validate_council_briefing(council_context_json, expected_date=date_str)
+        generation_succeeded = True
 
     except requests.exceptions.RequestException as e:
         print(f"Error calling OpenRouter API for V2: {e}", file=sys.stderr)
@@ -433,6 +431,12 @@ def main():
          error_output_json = {"date": date_str, "monthly_goal": MONTHLY_GOAL, "daily_focus_theme": f"Error V2: Unexpected error ({e})", "key_strategic_points": [], "_metadata": council_metadata}
          error_output_md = f"# Council Briefing (V2): {date_str}\n\nError: Unexpected error ({e})"
     finally:
+        # Never replace a healthy dated briefing with an invalid model response or
+        # an error placeholder. The workflow will fail and can retry/backfill it.
+        if not generation_succeeded:
+            print("Generation failed; existing output files were preserved.", file=sys.stderr)
+            sys.exit(1)
+
         final_json_to_save = council_context_json if council_context_json else error_output_json
         final_md_to_save = council_context_md if council_context_md else error_output_md
         
@@ -451,12 +455,13 @@ def main():
             sys.exit(1)
 
         try:
-            with open(output_path, 'w') as f:
-                json.dump(final_json_to_save, f, indent=2, ensure_ascii=True)
+            atomic_write(
+                output_path,
+                json.dumps(final_json_to_save, indent=2, ensure_ascii=True) + "\n",
+            )
             print(f"Saved V2 council context JSON to: {output_path}")
 
-            with open(output_markdown_path, 'w') as f:
-                f.write(final_md_to_save)
+            atomic_write(output_markdown_path, final_md_to_save)
             print(f"Saved V2 council context Markdown to: {output_markdown_path}")
 
             if not council_context_json:

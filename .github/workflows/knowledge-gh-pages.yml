@@ -28,6 +28,9 @@ jobs:
         with:
           ref: main
 
+      - name: Validate council briefing consumer contract
+        run: python scripts/etl/validate-council-briefing.py --consumer-only the-council/council_briefing/*.json
+
       - name: Prepare Staging Directory
         run: |
           mkdir -p ./gh-pages-staging
