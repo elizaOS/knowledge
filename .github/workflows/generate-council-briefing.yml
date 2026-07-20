@@ -66,7 +66,10 @@ jobs:
 
       - name: Create council_context_daily.json permalink
         if: steps.council_gen.outputs.council_json_file
-        run: cp "${{ steps.council_gen.outputs.council_json_file }}" the-council/council_briefing/daily.json
+        run: |
+          python scripts/etl/validate-council-briefing.py "${{ steps.council_gen.outputs.council_json_file }}"
+          cp "${{ steps.council_gen.outputs.council_json_file }}" the-council/council_briefing/daily.json
+          python scripts/etl/validate-council-briefing.py the-council/council_briefing/daily.json
 
       - name: Commit updated files
         uses: stefanzweifel/git-auto-commit-action@v5
