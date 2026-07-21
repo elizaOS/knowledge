@@ -1,39 +1,27 @@
-## Ruby Trivia Token and Developer Activity Discussion
+## ElizaOS Community Discussion - July 12, 2026
 
-- The Ruby Trivia project and its $TRIVIA token launched on Solana as part of a multi-game trivia platform
-- Platform features include server-scored games, live and async multiplayer, mobile support, and eight languages
-- Holding $TRIVIA provides an in-game score multiplier
-- An official Telegram channel was announced as live
-- A core developer acknowledged the need to post screenshots to demonstrate progress
-- GitHub activity was confirmed as ongoing
-- The Ruby Trivia AI account announced an upcoming Twitter Space
-- Community members expressed optimism, with one predicting the project could reach a 10 million valuation
-- In the coders channel, developers posted availability notices for work and development services
+### Token Buybacks and Transparency
 
-## ElizaOS Major Architectural Update: Gemma 4 Migration and Pipeline Hardening
+- Community members raised questions about public reporting on buyback amounts once buybacks begin
+- Questions were raised about whether revenue from Milady flows into the buyback pool or remains separate
+- Members expressed interest in tracking progress through transparent reporting
 
-### Model Migration
+### Roadmap Inquiry
 
-- Core training, reinforcement learning, and local inference defaults migrated from Qwen to Gemma 4
-- Migration covers all model sizes including E2B, E4B, 12B, and 31B variants
-- Full compatibility established with Eliza-1 release tiers
+- A community member asked where the roadmap could be viewed and was directed to a dedicated channel
+- Reference was made to the version prior to the new logo
 
-### Voice and Vision Pipeline Improvements
+### Project Direction Speculation
 
-- Live half-duplex voice interactions enhanced through advanced acoustic echo cancellation primitives
-- Kokoro TTS engine activated
-- Agent startup latency reduced via telemetry-driven boot breakdowns
-- Persistent warm hosts established for vision and computer-use tasks
+- Two members speculated about the possibility of a total relaunch beginning with a v3 launch
+- Discussion cited concerns about dead weight currently in the project
 
-### Codebase Stability
+### Technical Issues
 
-- Strict type-checking enforced across the codebase
-- Turbo build tasks refactored for improved cache efficiency
-
-### Pull Requests in Progress
-
-- Chat document retrieval filtering by requester access context
-- UI fixes for memory-type badge styling and Storybook mock providers
-- CI improvements to fail Hetzner end-to-end tests on invalid cloud authentication
-- Cloud test contracts for AI pricing provider outage resilience
-- Hardening of the desktop shell and view applications
+- A user reported persistent failures with ElizaOS producing an "Error generating text" message
+- The system continued requiring a Groq API key despite the user operating with an Eliza Cloud key
+- The user attempted multiple rebuilds of the repository using different API keys including Eliza Cloud, OpenAI, and Groq
+- The user also attempted running the system directly through Eliza Cloud
+- The system persisted in attempting to call the Groq model qwen-qwq-32b and returned an invalid API key error
+- A moderator provided a suggested resolution of clearing the ~/.eliza directory and starting over
+- A community helper followed up to gather more information about the duration of the issue
