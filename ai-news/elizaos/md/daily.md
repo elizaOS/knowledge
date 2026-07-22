@@ -1,27 +1,15 @@
-## ElizaOS Community Discussion - July 12, 2026
+## ElizaOS Discord Community Activity - July 13, 2026
 
-### Token Buybacks and Transparency
+## General Discussion
 
-- Community members raised questions about public reporting on buyback amounts once buybacks begin
-- Questions were raised about whether revenue from Milady flows into the buyback pool or remains separate
-- Members expressed interest in tracking progress through transparent reporting
+- A recruitment message was posted advertising multiple paid roles including Beta Tester at $20/hour, Moderator at $350-400/week, Developer at negotiable rates for Rust, Python, or C++ skills, and Community Manager at $800/week
+- A user shared an X post link and noted the elizaOS project warrants attention, also identifying another project attempting to attract the elizaOS team
+- A proposal was submitted pitching a nightlife and cultural event concept called Love Train Bronx targeting The Bronx, New York, framed as a web3 community market opportunity and requesting seed funding or a micro-grant
+- Odilitime commented on a 0.x plugin appearing in 2026
 
-### Roadmap Inquiry
+## Coders Channel
 
-- A community member asked where the roadmap could be viewed and was directed to a dedicated channel
-- Reference was made to the version prior to the new logo
-
-### Project Direction Speculation
-
-- Two members speculated about the possibility of a total relaunch beginning with a v3 launch
-- Discussion cited concerns about dead weight currently in the project
-
-### Technical Issues
-
-- A user reported persistent failures with ElizaOS producing an "Error generating text" message
-- The system continued requiring a Groq API key despite the user operating with an Eliza Cloud key
-- The user attempted multiple rebuilds of the repository using different API keys including Eliza Cloud, OpenAI, and Groq
-- The user also attempted running the system directly through Eliza Cloud
-- The system persisted in attempting to call the Groq model qwen-qwq-32b and returned an invalid API key error
-- A moderator provided a suggested resolution of clearing the ~/.eliza directory and starting over
-- A community helper followed up to gather more information about the duration of the issue
+- A developer introduced paralens.ai, described as a structured transaction understanding engine for onchain activity, and raised questions about data sources and APIs agents use for wallet and transaction understanding
+- Odilitime confirmed elizaOS currently supports Helius, Birdeye, CoinMarketCap, CoinGecko, and additional integrations
+- Discussion continued around whether existing integrations cover complex DeFi transaction interpretation and wallet-level behavioral analysis, with Odilitime indicating room exists for further development
+- A software engineer with background in healthcare, finance, education, SaaS, and game development posted an introduction seeking collaborators for business expansion and long-term partnership
