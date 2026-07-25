@@ -1,22 +1,31 @@
-## ElizaOS Community Discussion: AI Agents, Market Outlook, and Builder Activity
+## ElizaOS Community Update: July 9, 2026
 
-### General Discussion
+## Legal Resolution
 
-- Community members discussed the feasibility of multiplayer AI agents
-- Market sentiment shared: large investors expected to return from vacations in Autumn, potentially influencing market conditions
-- Members expressed confidence in Eliza's longevity, with commentary on market maker behavior relative to holder activity
-- The ai16z DAO, potentially rebranded as Eliza DAO, was noted as a candidate for operating on the Robinhood chain
+- Federal Judge Jed S. Rakoff signed a Stipulation and Order of Dismissal on July 8, 2026
+- The case of Pikabea v. Walters et al. has been formally resolved
+- Plaintiff's individual claims dismissed with prejudice against all defendants
+- No costs or attorneys' fees awarded to any party
+- Proposed class claims dismissed without prejudice
+- Court retains jurisdiction for 30 days solely to enforce the settlement agreement
+- Community members recognized this as the conclusion of legal issues surrounding Shaw (Walters) and the elizaOS ecosystem
 
-### Builder and Coder Activity
+## Project Status
 
-- Multiple AI engineers introduced themselves and expressed interest in collaborating on projects spanning:
-  - AI agents and agentic workflows
-  - LLM integrations and multi-agent systems
-  - RAG, MCP, and full-stack development
-  - Robotics and game development
-- A new skill called Neverbell was released, giving AI agents market access, with community feedback invited
-- Cipher Vault was shared as a browser-based GameFi demo running on Solana Devnet, featuring:
-  - An Eliza AI Oracle agent generating daily riddles
-  - Gameplay involving harvesting in-game currency, paying tributes, and solving puzzles
-  - All activity settled as on-chain SPL token transfers on Devnet
-- Community members encouraged builders to develop a trading agent on the Robinhood chain
+- The foundation and Shaw remain involved with the project
+- Cloud has been identified as the current strategic focus
+- Active community members continue to serve as an operational presence
+
+## Developer Activity
+
+- A senior AI and full-stack engineer posted availability for white-label technical partnership services targeting US agencies, covering AI, backend, automation, and voice-agent projects
+- An AI and ML engineer listed capabilities including RAG systems, AI agents with memory and task automation, voice AI using STT and TTS tools, OCR, visual search, and full-stack SaaS platforms
+- Tools referenced include OpenAI, Claude, LangChain, LangGraph, Python, FastAPI, Next.js, and Node.js
+- A separate post sought a non-technical person for a part-time flexible opportunity
+
+## Community Events
+
+- MOI Builders session 5 was promoted, focused on combining AI and Web3 development
+- The session covers using Claude to generate logic and deploying a live application on the MOI platform
+- The format walks participants from idea to deployment in a single session
+- Builder bounties were scheduled to be announced live at the event
