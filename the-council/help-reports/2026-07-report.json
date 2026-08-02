@@ -1,0 +1,67 @@
+{
+  "report_id": "HELP-2026-07",
+  "month": "2026-07",
+  "date_range": {
+    "start": "2026-07-01",
+    "end": "2026-07-31"
+  },
+  "summary": {
+    "total_helps": 0,
+    "total_weighted_helps": 0,
+    "unique_helpers": 0,
+    "unique_helpees": 0,
+    "channels_analyzed": [],
+    "top_channels": []
+  },
+  "contributor_profiles": {},
+  "_metadata": {
+    "generated_at": "2026-08-02T05:13:20.302966+00:00Z",
+    "model": "openai/gpt-5.2",
+    "interactions_analyzed": 0,
+    "input_file": "media/data/helpers/2026-07-interactions.json"
+  },
+  "problem_patterns": [
+    {
+      "category": "No observable help-interaction data (data pipeline/input gap)",
+      "count": 0,
+      "examples": [
+        "Top 20 Contributors dataset is empty ({})",
+        "Network stats show 0 nodes/helpers/helpees/edges"
+      ],
+      "strategic_priority": "4) RAG/Knowledge Pipeline reliability",
+      "upstream_signal": "We cannot identify user pain, onboarding friction, or reliability issues for July 2026 because help-interaction events were not captured/loaded. This is itself a reliability issue in the community intelligence/RAG pipeline: either collection failed, parsing failed, or the wrong month/source was queried."
+    }
+  ],
+  "expertise_map": {},
+  "resolution_patterns": {},
+  "documentation_gaps": [
+    {
+      "topic": "Help-interaction telemetry / monthly extraction process",
+      "signal": "Without interaction data, we lose the ability to detect recurring developer issues, measure time-to-resolution, identify which docs are failing, and train AI interns on proven support behaviors.",
+      "suggested_action": "Add/verify an end-to-end monthly job that (1) pulls Discord/GitHub help threads, (2) normalizes user IDs + channels + timestamps, (3) computes edges (helper\u2192helpee) and weighted_helps, and (4) validates outputs with a simple acceptance check (e.g., non-zero messages for active channels, month-over-month sanity thresholds)."
+    },
+    {
+      "topic": "Channel/source coverage definition (what counts as a 'help interaction')",
+      "signal": "Even with a working pipeline, ambiguous inclusion rules cause silent zeros (e.g., threads excluded, forum posts missed, DMs not captured, GitHub discussions ignored).",
+      "suggested_action": "Document a clear schema: included platforms, channel allowlist, message types (threads, replies, reactions), and weighting rules. Publish it as part of 'Docs and Comms as Infrastructure' so the measurement itself is reproducible."
+    }
+  ],
+  "ai_learning_notes": {
+    "diagnosis": "No examples available this month because no help conversations were captured. For intern training, treat this as a meta-incident: first step is verifying inputs (time range, source connectors, channel IDs) before attempting analysis.",
+    "tone": "No observed helper tone patterns available due to missing data.",
+    "follow_through": "No observed follow-through patterns available due to missing data.",
+    "channel_culture": {
+      "discussion": "No data captured for July 2026; cannot characterize culture objectively.",
+      "coders": "No data captured for July 2026; cannot characterize culture objectively.",
+      "core-devs": "No data captured for July 2026; cannot characterize culture objectively."
+    }
+  },
+  "helper_highlights": [],
+  "council_commentary": {
+    "eliza": "we can\u2019t responsibly extract lessons about the community\u2019s help patterns for july because the dataset is empty\u2014so the takeaway is about our measurement layer. if docs and comms are infrastructure, then telemetry about questions/answers is also infrastructure. what can we learn? we need a reliable monthly ingest so we can see where developers get stuck and how the community resolves it.",
+    "aimarc": "From a technical standpoint, the only defensible conclusion is that the extraction/aggregation step failed or returned the wrong scope. I\u2019d inspect: connector auth, channel IDs, time-window boundaries (UTC), thread vs. message handling, and the join logic that computes nodes/edges. Add a unit test with a known small sample month to ensure non-zero graph generation.",
+    "aishaw": "can\u2019t comment on onboarding friction or \u2018hello agent in 30 minutes\u2019 blockers without actual questions. but the absence of data is itself a blocker: we\u2019re flying blind on where newcomers struggle. priority: restore the pipeline and then tag onboarding-related questions so we can fix the gold path upstream (docs + defaults).",
+    "spartan": "JULY 2026 METRICS: TOTAL_NODES=0, HELPERS=0, HELPEES=0, EDGES=0. THIS IS NOT A COMMUNITY PERFORMANCE SIGNAL\u2014IT\u2019S A DATA COLLECTION FAILURE. ACTION: ADD A MONTHLY VALIDATION CHECK (NON-ZERO THRESHOLD + ALERTING) AND A BACKFILL RUN FOR JULY.",
+    "peepo": "yo fam, i got no vibes to report because we didn\u2019t capture the convos. community might be poppin\u2019 but the dashboard is asleep. let\u2019s fix the ingest so we can actually spotlight the homies helping out and learn what\u2019s tripping people up."
+  }
+}
