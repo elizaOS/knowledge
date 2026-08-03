@@ -1,16 +1,12 @@
-## Discord Discussion Channel Activity - August 1, 2026
+## ElizaOS Community Activity - July 28, 2026
 
-### Project Announcements
+## Token Discussion
 
-- User Selcuk introduced Coopa v4.0, deployed on the Sepolia testnet
-- Described as a zero-trust Digital Sanctuary with full client-side encryption
-- Files and messages are stored permanently on Irys and Arweave
-- Architecture ensures project servers cannot access stored data
-- Live app available at coopaassistant.com
-- Sepolia ETH for testing available at sepoliafaucet.com
-- Selcuk invited power users to stress-test the architecture and submit bug reports or feature ideas via reply or direct message
-
-### User Interactions
-
-- A user raised a question about bridging funds from Base to Solana
-- Two users exchanged accusations of being scammers toward one another
+- Community members discussed the Eliza token's price decline from a peak market cap of approximately 2.4 billion dollars to around 4 million dollars
+- At least one user disclosed a speculative purchase at the current low price point
+- Another user reported having profited from a short trade on the token
+- Community members confirmed the token is listed on Kraken
+- GitHub commits were identified as visible evidence of ongoing development activity
+- Lead developer Shaw was noted as active on GitHub
+- Community members noted an app appeared to be in a ready state
+- Discussion referenced the token's history connecting back to the earlier ai16z era
