@@ -1,12 +1,15 @@
-## ElizaOS Community Activity - July 28, 2026
+## Builder Announcements and Project Updates
 
-## Token Discussion
+### agentshare.dev - Solana DeFi Intelligence Platform
 
-- Community members discussed the Eliza token's price decline from a peak market cap of approximately 2.4 billion dollars to around 4 million dollars
-- At least one user disclosed a speculative purchase at the current low price point
-- Another user reported having profited from a short trade on the token
-- Community members confirmed the token is listed on Kraken
-- GitHub commits were identified as visible evidence of ongoing development activity
-- Lead developer Shaw was noted as active on GitHub
-- Community members noted an app appeared to be in a ready state
-- Discussion referenced the token's history connecting back to the earlier ai16z era
+- Solo builder developing an API-first data platform focused on real-time Solana DeFi intelligence
+- Platform provides Meteora DLMM pool briefs, bin depth data, and DEX scouting capabilities
+- Designed as fully x402-ready to support autonomous agents and micro-billing use cases
+
+### Coopa v4.0 Launch
+
+- NativeSatoshi announced the launch of Coopa v4.0, a data sovereignty platform built on Irys for permanent and immutable data storage
+- Positioned as a zero-trust Digital Sanctuary targeting professional users
+- Features include wallet-based identity, closed-source cryptographic protection, and Eternal Whispers for sovereign data interaction and messaging
+- Platform temporarily opened to the Irys community for stress-testing after operating as invite-only
+- Accessible at coopaassistant.com
