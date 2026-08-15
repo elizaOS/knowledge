@@ -1,15 +1,20 @@
-## ElizaOS Discord Community Activity - July 13, 2026
+## ElizaOS Discord Activity - July 31, 2026
 
-## General Discussion
+## Discussion Channel
 
-- A recruitment message was posted advertising multiple paid roles including Beta Tester at $20/hour, Moderator at $350-400/week, Developer at negotiable rates for Rust, Python, or C++ skills, and Community Manager at $800/week
-- A user shared an X post link and noted the elizaOS project warrants attention, also identifying another project attempting to attract the elizaOS team
-- A proposal was submitted pitching a nightlife and cultural event concept called Love Train Bronx targeting The Bronx, New York, framed as a web3 community market opportunity and requesting seed funding or a micro-grant
-- Odilitime commented on a 0.x plugin appearing in 2026
+- A user inquiry was confirmed as unofficial by D0CT0R
+- User Thehuuhs posted a recruitment message advertising job openings for the Shape3 ecosystem, including Community Manager roles at 20-40 dollars per hour and Growth and Marketing Manager roles at 40-140 dollars per hour, with remote work and upfront payment offered
+- The same recruitment message was cross-posted in the coders channel with an attached image, indicating coordinated activity across multiple channels
 
 ## Coders Channel
 
-- A developer introduced paralens.ai, described as a structured transaction understanding engine for onchain activity, and raised questions about data sources and APIs agents use for wallet and transaction understanding
-- Odilitime confirmed elizaOS currently supports Helius, Birdeye, CoinMarketCap, CoinGecko, and additional integrations
-- Discussion continued around whether existing integrations cover complex DeFi transaction interpretation and wallet-level behavioral analysis, with Odilitime indicating room exists for further development
-- A software engineer with background in healthcare, finance, education, SaaS, and game development posted an introduction seeking collaborators for business expansion and long-term partnership
+- PnL Labs announced the release of plugin-pnllabs, a new plugin for Solana traders
+- The plugin enables agents to verify information before acting, with the following capabilities:
+  - Wallet trust verification based on realized on-chain profit and loss data
+  - Token safety checks
+  - Real trade cost analysis
+  - Funding forensics
+- The team audited 30 tracked smart money wallets and found approximately half were losing money
+- The plugin is available via npm install with a free tier requiring no API key
+- A pay-per-call model through x402 is available after the free tier is exhausted
+- The developer opened the floor to community feedback
