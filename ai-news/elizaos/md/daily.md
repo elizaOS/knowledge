@@ -1,46 +1,33 @@
-## ElizaOS Project Retrospective and Web3 Pivot
+## ElizaOS Token Collapse and Community Fallout - August 5, 2026
 
-### Shaw's Announcements and Project Direction
+## Project Leadership Announcements
 
-- ElizaOS is leaving web3 entirely
-- No relaunch of Eliza on MetaDAO planned
-- Token discussion banned from the server
-- ai16z token declared effectively dead, with treasury fully drained by legal fees and lawsuits from ex-holders
-- Shaw confirmed he has no remaining token allocation and received no significant compensation
-- Shaw is continuing to build Eliza as the sole remaining team member without pay
-- A pivot to web2 is underway, with an app store submission planned within 4 to 6 weeks
+- Shaw (shawmakesmagic) announced in the main discussion channel that ElizaOS had been sued by token holders in a class-action lawsuit filed by Burwick
+- The Eliza fund, including both cash and tokens, was fully depleted to settle the lawsuit
+- Shaw confirmed no treasury remains, he no longer holds any token, and foundation support has ended
+- Shaw stated the token is not coming back and expressed intent to potentially shut down or replace the Discord server
+- Shaw characterized remaining holders as having been left behind by smarter traders who rotated into other assets
 
-### Project History and Failures
+## Community Response
 
-- Shaw described the project as originally a solo experiment targeting a $75,000 raise that grew beyond control
-- The token reached a $2.5 billion valuation with only $5 million in liquidity
-- daos.fun created a mintable token structure that blocked CEX listings and generated unrealistic expectations
-- Hiring was identified as the primary source of project failures
+- User paolin issued a detailed critique accusing Shaw of ten months of silence, lack of community engagement, and deflecting responsibility onto holders
+- User Kai alleged Shaw ran a coordinated scheme involving a token migration that increased supply, a Binance Alpha airdrop used to generate artificial trading volume, and repeated deflection of utility questions until the price had already fallen over 90 percent
+- Multiple community members expressed anger and described feeling misled after staying through the migration and subsequent price crashes
+- The elizaos token market cap dropped to approximately 2 million dollars
 
-Key hiring and team outcomes:
-- Milady project team abandoned the work after losing interest following a hack of the new Eliza codebase
-- Eliza Cloud was built by a hired team whose lead developer proved unreliable
-- Skilled engineers departed to launch their own tokens during the bull market
-- auto.fun developers used the paid project code to launch a competing launchpad after receiving payment
-- A frontend rewrite ordered by a new lead developer was never completed
+## Measured Community Perspectives
 
-### Community Response
+- User satsbased acknowledged Shaw's frustration while distinguishing between the few who filed suit and the broader holder base
+- The same user outlined a structure in which Shaw could focus on open-source development while a separate commercial entity managed token operations
+- Community members noted existing infrastructure including DEX and CEX listings, CCIP integration, brand recognition, and tokenomics allocations as representing substantial prior work
+- Discussion included the potential fate of the DEGENAI coin under similar circumstances
 
-- Community member davidhq offered analysis attributing some project difficulties to Shaw's inexperience with social complexity and its role in attracting bad actors
-- davidhq reported being unable to log in to ElizaCloud for extended periods, citing it as a signal of deeper readiness issues
-- Other community members defended Shaw and encouraged him to take a break
-- Token holders expressed feeling blindsided by the project distancing itself from the token without clearer prior communication
+## Partners Channel Activity
 
-## x402 Data Hub MCP Server Launch
+- User Rabbidfly characterized Shaw's public statements as sacrificing market value for many in order to clear a personal conscience
+- The user expressed continued appreciation for the original project vision
 
-- User x402 announced the launch of a zero-setup Model Context Protocol server at x402datahub.io
-- Compatible with Claude, Cursor, and custom clients
-- Provides live data tools for AI agents and workflows
+## Additional Channel Activity
 
-Available datasets:
-- Live AI model pricing and context window data sourced from OpenRouter
-- Trending developer discussions from V2EX
-- Real-time gas fees for Base and Arbitrum networks pulled directly from on-chain RPC nodes
-
-- A free open beta is active with no transaction verification required for local testing
-- Claude Desktop configuration takes approximately ten seconds
+- Unsolicited promotional posts appeared in the discussion channel advertising job openings and a CheesePad presale on BNB Chain
+- Activity in the coders channel was limited to brief greetings and a short exchange between two users
