@@ -1,18 +1,19 @@
-## ElizaOS Community Discussion - July 11, 2026
+## ElizaOS Community Discussion - August 21, 2026
 
-## Product Launches
+### Community Call
 
-- The Ruby Trivia app is now live on Amazon, categorized under web3, gaming, elizaos, crypto, and memecoin
-- The launch was announced via a Farcaster post by user Magicyte
+- Sam announced a live community call for the zeroclaw project
+- Members were invited to share ideas in an open-source collaborative context
 
-## Technical Developments
+### Token Discussion
 
-- ERC-8004, a standard for agent verification and reputation, was implemented approximately one month ago
-- A Solana-based port of the ERC-8004 structure has been identified in a project called HANKO by hanko-labs
-- HANKO is described as a Solana agent trust registry featuring bond and slash mechanics
-- The project repository is available at https://github.com/hanko-labs/hanko
+- Community members raised questions about ElizaOS token utility
+- The token is listed on several exchanges
+- A community member suggested contacting the team directly for answers
+- Commentary indicated that statements made by Shaw regarding the token affected community sentiment
 
-## Community Activity
+### Community Interactions
 
-- Discussion took place across the general and coders channels on Discord
-- Community members engaged in identifying cross-chain implementations of agent standards
+- Interpersonal hostility occurred between users in the channel
+- Brief reactions from other members followed the exchange
+- Overall tone reflected underlying frustrations around token performance and internal disputes
