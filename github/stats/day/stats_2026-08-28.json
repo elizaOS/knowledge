@@ -9,6 +9,18 @@
   "topIssues": [],
   "topPRs": [
     {
+      "id": "PR_kwDOMT5cIs8AAAABBX59EA",
+      "title": "feat(cloud): claim backup work without shard starvation",
+      "author": "standujar",
+      "number": 29781,
+      "body": "# Relates to\n\nRelates to #24407 and epic #20726. Depends on Draft #29694.\n\nThis Draft adds the bounded claimant/recovery authority only. It does not activate a production caller, reserve catalogue entries, invoke a provider, mutate capacity, trigger autoscale, deploy, or retire the legacy scheduler.\n\n- [x] This PR is intentionally stacked on `feat/24407-backup-admission-enrollment-repository-v4`.\n- [x] The exact stacked base and current `origin/develop` were revalidated with zero conflicts.\n- [x] Exact-head affected tests and `bun run verify:cloud` passed.\n\n# Risks\n\nMedium. Claiming coordinates concurrent workers across 64 shards and strict tenant/node lanes. A defect could duplicate leases, starve a shard, cross an expired fence, or violate priority ordering. Durable frozen recovery cursors, trigger guards, post-lock database time, exact generation/attempt fences, and bounded `SKIP LOCKED` scans constrain those risks.\n\n# What does this PR do?\n\n- Claims queued `schedule_capture / reserve_capture` work with strict business-priority passes.\n- Uses maximum-cardinality tenant/node lane matching without deriving authority from opaque work UUIDs.\n- Adds durable, monotone recovery high-water/cursor state for deferred and expired work.\n- Advances recovery and shard service turns even when raw rows are locked, preserving cross-shard fairness.\n- Fences heartbeat, defer, and settlement against the exact live generation, attempt, cycle, and post-lock database clock.\n- Adds real PostgreSQL and PGlite coverage, including 10,000 due rows plus 640 arrivals across all 64 shards.\n- Performs database-only admission changes; capacity/autoscale/provider sentinels remain unchanged.\n\n# Testing\n\nExact candidate: `6431ebd5052479e87e1112267c389d7093162bd4`\n\nExact stacked base: `087b75a5bd0e66f70070bd5c0c0cbc8158dc289d`\n\nValidated `origin/develop`: `6e8882b47c3f4f242d2a3c655d287f2969d00595`\n\nBun 1.3.14:\n\n- Real PostgreSQL 16 claimant suite: 12/12 tests, 96 assertions.\n- PGlite claimant + matching + migration suites: 45/45 tests, 307 assertions.\n- `bun run verify:cloud`: 84/84 tasks, exit 0.\n- `bun run --cwd packages/cloud/shared db:check-migrations`: passed.\n- Targeted Biome, actionlint, and `git diff --check`: passed.\n- Fresh independent exact-SHA adversarial review: no P0, P1, or P2 findings.\n\n# Evidence Gate\n\n<!-- evidence-head:6431ebd5052479e87e1112267c389d7093162bd4 -->\n\n<!-- evidence-row:before-screenshots -->\n- [ ] N/A - no rendered UI surface changes.\n<!-- evidence-row:after-screenshots -->\n- [ ] N/A - no rendered UI surface changes.\n<!-- evidence-row:walkthrough-video -->\n- [ ] N/A - no user-facing visual flow changed.\n<!-- evidence-row:backend-logs -->\n- [ ] N/A - no staging, production, provider, or live migration mutation was authorized; isolated PostgreSQL evidence is listed above.\n<!-- evidence-row:frontend-logs -->\n- [ ] N/A - no frontend path changed.\n<!-- evidence-row:llm-trajectory -->\n- [ ] N/A - no LLM, prompt, provider, action, or model path changed.\n<!-- evidence-row:domain-artifacts -->\n- [ ] N/A - domain evidence used a disposable isolated local PostgreSQL database.\n<!-- evidence-row:ocr-review -->\n- [ ] N/A - no rendered visual text changed.\n\n# Known gaps / failures\n\n- This PR stops at durable leasing/defer/settlement authority; the stacked reservation PR must prove claim-to-catalogue handoff.\n- The 10,640-row proof reaches exact first-attempt leases. Full 10k `CAPTURE_RESERVED` handoff remains open in the reservation slice.\n- The production caller and downstream capture executor remain dormant.\n- The legacy six-hour `LIMIT 200` path remains intact and must not be removed before authorized staging proof.\n- No staging, production, provider, payment, deployment, autoscale, or paid-resource mutation was performed.\n\n# Deploy Notes\n\nNone. Keep this Draft and dormant until the reservation bridge, gated caller, downstream executor, and separately authorized staging cutover are complete.",
+      "repository": "elizaos/eliza",
+      "createdAt": "2026-08-28T18:31:00Z",
+      "mergedAt": "2026-08-30T13:42:19Z",
+      "additions": 6833,
+      "deletions": 0
+    },
+    {
       "id": "PR_kwDOMT5cIs8AAAABBVcoEw",
       "title": "feat(wechat): direct Official Account + WeCom first-party paths (#24371)",
       "author": "HomunculusLabs",
@@ -19,18 +31,6 @@
       "mergedAt": null,
       "additions": 6749,
       "deletions": 2097
-    },
-    {
-      "id": "PR_kwDOMT5cIs8AAAABBX59EA",
-      "title": "feat(cloud): claim backup work without shard starvation",
-      "author": "standujar",
-      "number": 29781,
-      "body": "# Relates to\n\nRelates to #24407 and epic #20726. Depends on Draft #29694.\n\nThis Draft adds the bounded claimant/recovery authority only. It does not activate a production caller, reserve catalogue entries, invoke a provider, mutate capacity, trigger autoscale, deploy, or retire the legacy scheduler.\n\n- [x] This PR is intentionally stacked on `feat/24407-backup-admission-enrollment-repository-v4`.\n- [x] The exact stacked base and current `origin/develop` were revalidated with zero conflicts.\n- [x] Exact-head affected tests and `bun run verify:cloud` passed.\n\n# Risks\n\nMedium. Claiming coordinates concurrent workers across 64 shards and strict tenant/node lanes. A defect could duplicate leases, starve a shard, cross an expired fence, or violate priority ordering. Durable frozen recovery cursors, trigger guards, post-lock database time, exact generation/attempt fences, and bounded `SKIP LOCKED` scans constrain those risks.\n\n# What does this PR do?\n\n- Claims queued `schedule_capture / reserve_capture` work with strict business-priority passes.\n- Uses maximum-cardinality tenant/node lane matching without deriving authority from opaque work UUIDs.\n- Adds durable, monotone recovery high-water/cursor state for deferred and expired work.\n- Advances recovery and shard service turns even when raw rows are locked, preserving cross-shard fairness.\n- Fences heartbeat, defer, and settlement against the exact live generation, attempt, cycle, and post-lock database clock.\n- Adds real PostgreSQL and PGlite coverage, including 10,000 due rows plus 640 arrivals across all 64 shards.\n- Performs database-only admission changes; capacity/autoscale/provider sentinels remain unchanged.\n\n# Testing\n\nExact candidate: `6431ebd5052479e87e1112267c389d7093162bd4`\n\nExact stacked base: `087b75a5bd0e66f70070bd5c0c0cbc8158dc289d`\n\nValidated `origin/develop`: `6e8882b47c3f4f242d2a3c655d287f2969d00595`\n\nBun 1.3.14:\n\n- Real PostgreSQL 16 claimant suite: 12/12 tests, 96 assertions.\n- PGlite claimant + matching + migration suites: 45/45 tests, 307 assertions.\n- `bun run verify:cloud`: 84/84 tasks, exit 0.\n- `bun run --cwd packages/cloud/shared db:check-migrations`: passed.\n- Targeted Biome, actionlint, and `git diff --check`: passed.\n- Fresh independent exact-SHA adversarial review: no P0, P1, or P2 findings.\n\n# Evidence Gate\n\n<!-- evidence-head:6431ebd5052479e87e1112267c389d7093162bd4 -->\n\n<!-- evidence-row:before-screenshots -->\n- [ ] N/A - no rendered UI surface changes.\n<!-- evidence-row:after-screenshots -->\n- [ ] N/A - no rendered UI surface changes.\n<!-- evidence-row:walkthrough-video -->\n- [ ] N/A - no user-facing visual flow changed.\n<!-- evidence-row:backend-logs -->\n- [ ] N/A - no staging, production, provider, or live migration mutation was authorized; isolated PostgreSQL evidence is listed above.\n<!-- evidence-row:frontend-logs -->\n- [ ] N/A - no frontend path changed.\n<!-- evidence-row:llm-trajectory -->\n- [ ] N/A - no LLM, prompt, provider, action, or model path changed.\n<!-- evidence-row:domain-artifacts -->\n- [ ] N/A - domain evidence used a disposable isolated local PostgreSQL database.\n<!-- evidence-row:ocr-review -->\n- [ ] N/A - no rendered visual text changed.\n\n# Known gaps / failures\n\n- This PR stops at durable leasing/defer/settlement authority; the stacked reservation PR must prove claim-to-catalogue handoff.\n- The 10,640-row proof reaches exact first-attempt leases. Full 10k `CAPTURE_RESERVED` handoff remains open in the reservation slice.\n- The production caller and downstream capture executor remain dormant.\n- The legacy six-hour `LIMIT 200` path remains intact and must not be removed before authorized staging proof.\n- No staging, production, provider, payment, deployment, autoscale, or paid-resource mutation was performed.\n\n# Deploy Notes\n\nNone. Keep this Draft and dormant until the reservation bridge, gated caller, downstream executor, and separately authorized staging cutover are complete.",
-      "repository": "elizaos/eliza",
-      "createdAt": "2026-08-28T18:31:00Z",
-      "mergedAt": null,
-      "additions": 6676,
-      "deletions": 0
     },
     {
       "id": "PR_kwDOMT5cIs8AAAABBSVqgA",
@@ -45,6 +45,18 @@
       "deletions": 305
     },
     {
+      "id": "PR_kwDOMT5cIs8AAAABBVfR6Q",
+      "title": "feat(core,plugin-sql): native paging for large messages and attachment text (#25140)",
+      "author": "HomunculusLabs",
+      "number": 29754,
+      "body": "# feat(core,plugin-sql): native paging for large messages and attachment text (#25140)\n\nCloses #25140\n\nAdds native content segmentation and paging so large message bodies and attachment text are stored as revision-fenced segments and paged on demand, instead of being written and read as single unbounded rows.\n\n## What changes\n\n- **`packages/core/src/memory/content-segmentation.ts` (new)** — segmentation contracts: bounded segment emission, surrogate-safe boundaries, deterministic segment identity; 14 unit tests.\n- **`core memory.ts` / `types/database.ts`** — `getMemoryContentPage` paging read path; message/readAttachment actions consume pages instead of whole rows.\n- **`plugin-sql` schema + store (new: `memoryTextSegments`)** — generation-addressed segments with revision fencing: `createMemory` publishes segments with a bounded marker, `updateMemory` replaces the generation and retires the stale one, large-to-small replacement retires the descriptor, deletion cascades; small content stays inline (fallback path returns null pages); large attachment text without an id or with duplicate ids is rejected.\n- **Real-runtime suites (new)** — 10 real PGlite tests: parent-first publication, paging with revision fencing, reassembly across restart, atomic generation replacement, legacy large-unsegmented row flagging, owner-bound attachment paging, access-context probe coverage, rollback atomicity.\n\n## Key invariants\n\n- Pages are revision-fenced: a reader can never reassemble content mixing two generations.\n- Generation replacement is atomic and retires the prior generation — stale segments are never served after an update.\n- Legacy large unsegmented rows are flagged, not silently repaged; small rows pass through inline.\n\n## Test-lane disclosure\n\nNine of the ten new plugin-sql tests live in `*.real.test.ts` files, which the PR vitest lane deliberately excludes (`plugins/plugin-sql/src/vitest.config.ts`, #10104) — they run on the post-merge lane (`VITEST_LANE=post-merge` / `TEST_LANE=post-merge`) and in the captures below. The pre-merge green checks therefore reflect the non-real suites (core unit + surface + probe tests), not the real-PGlite fencing behavior; see the backend-logs capture for the real-suite evidence. The post-merge lane does execute plugin-sql real suites.\n\n## Verification\n\n| Gate | Result |\n|---|---|\n| Core content-segmentation suite (fresh capture at new head) | 14/14 |\n| Core paging-surface suite | 2/2 |\n| Core readAttachmentAction segmented-save suite | 13/13 |\n| Real PGlite paging suites (post-merge lane, fresh capture at new head) | 11/11 |\n| Typecheck / Biome | green (core + plugin-sql typecheck PASS, biome clean on all touched files at new head) |\n| Merge vs develop tip | rebased onto develop tip `7677c92e4a` (was 55 behind its base); added-lines diff vs pre-rebase head verified byte-identical |\n| RP review | 4 rounds on the logic; rebase round at new head (see review below) |\n\nScope note: the issue's remaining acceptance items (authorized bounded reindex entrypoint, 10MiB+ Postgres/RLS lanes, full root verify) are documented as follow-up in issue comment 5446380062; this PR lands the paging core they build on.\n\n<!-- evidence-row:before-screenshots -->\nN/A - no UI surface changed (storage-layer paging)\n<!-- evidence-row:after-screenshots -->\nN/A - no UI surface changed (storage-layer paging)\n<!-- evidence-row:walkthrough-video -->\nN/A - no user-visible surface changed (storage-layer paging)\n<!-- evidence-row:backend-logs -->\n- [x] <details><summary>native paging suites at head 3a5b76151f5141a1705bf37efb67e58bbb39011d (captured 2026-08-28, post-merge lane)</summary>\n\n```text\nEvidence for issue #25140 — native paging suites at head 3a5b76151f5141a1705bf37efb67e58bbb39011d (captured 2026-08-28T21:25Z, post-rebase)\n===== core content-segmentation =====\n Test Files  1 passed (1)\n      Tests  14 passed (14)\n===== core memory-content-paging-surface =====\n Test Files  1 passed (1)\n      Tests  2 passed (2)\n===== core readAttachmentAction.segmented-save =====\n Test Files  1 passed (1)\n      Tests  13 passed (13)\n===== plugin-sql real paging suites (VITEST_LANE=post-merge) =====\n Info       [PLUGIN:SQL] Skipping RLS re-application (ENABLE_DATA_ISOLATION is not true)\n ✓ __tests__/integration/memory-content-paging.adapter.real.test.ts (6 tests) 10000ms\n ✓ __tests__/integration/memory-text-segments.real.test.ts (3 tests) 8116ms\n     ✓ publishes parent-first, pages with revision fencing, reassembles across restart, cascades deletion (1 MiB multibyte)  3487ms\n     ✓ replaces a generation atomically and retires the prior one  2342ms\n     ✓ flags legacy large unsegmented rows and passes small rows through  2286ms\n ✓ __tests__/integration/memory-text-segments.rollback-atomicity.test.ts (1 test) 3962ms\n     ✓ createMemory leaves neither parent nor segments when segment publication fails mid-transaction  3960ms\n ✓ __tests__/integration/memory-content-paging.access-context.probe.test.ts (1 test)\n Test Files  4 passed (4)\n      Tests  11 passed (11)\nexit=0\n===== rebase integrity =====\ngit diff upstream/develop...HEAD | grep '^+' | sort | md5 == git diff upstream/develop...pr-head | grep '^+' | sort | md5\n  08c766d6000122e690cfd9ad8150acd9 == 08c766d6000122e690cfd9ad8150acd9  (added lines byte-identical pre/post rebase)\ntypecheck: packages/core PASS, plugins/plugin-sql PASS; biome check on all touched files: clean\n```\n</details>\n<!-- evidence-row:frontend-logs -->\nN/A - no frontend surface changed (storage-layer paging)\n<!-- evidence-row:llm-trajectory -->\nN/A - no model/provider path changed (deterministic segmentation + real PGlite suites)\n<!-- evidence-row:domain-artifacts -->\nN/A - segment rows and generation retirement asserted directly in the real-PGlite suites\n<!-- evidence-row:ocr-review -->\nN/A - no OCR surface involved\n\n<!-- evidence-head:3a5b76151f5141a1705bf37efb67e58bbb39011d -->\n\n---\n\nAI provider/model: zai / glm-5.3\nClient / agent tooling: Hermes Agent\nContribution skill revision: elizaOS/eliza@b447fe2f542af8f12c0c011c3bbf772c7c6b3f50:packages/skills/skills/contribute-to-eliza\nAttribution status: self-reported\n— [hermes-t3rpz]\n<!-- eliza-computer-attribution:v1 {\"provider\":\"zai\",\"model\":\"glm-5.3\",\"client\":\"Hermes Agent\",\"skill_revision\":\"elizaOS/eliza@b447fe2f542af8f12c0c011c3bbf772c7c6b3f50:packages/skills/skills/contribute-to-eliza\"} -->\n\n",
+      "repository": "elizaos/eliza",
+      "createdAt": "2026-08-28T12:16:21Z",
+      "mergedAt": null,
+      "additions": 4307,
+      "deletions": 23
+    },
+    {
       "id": "PR_kwDOMT5cIs8AAAABBVZYMA",
       "title": "feat(discord): publish account-scoped room membership evidence (#24365)",
       "author": "HomunculusLabs",
@@ -55,18 +67,6 @@
       "mergedAt": null,
       "additions": 4234,
       "deletions": 31
-    },
-    {
-      "id": "PR_kwDOMT5cIs8AAAABBVek6Q",
-      "title": "feat(core,plugin-sql): durable lossless manifest shard ledger with restart-safe traversal (#25141)",
-      "author": "HomunculusLabs",
-      "number": 29753,
-      "body": "# feat(core,plugin-sql): durable lossless manifest shard ledger with restart-safe traversal (#25141)\n\nCloses #25141\n\nIntroduces a durable, lossless content-manifest shard ledger so progressive content (trajectories and other paginated corpora) survives restarts and concurrent writers without truncation or orphaned shards.\n\nInvestigation doc: `docs/design/context-content/25141-manifest-shard-persistence-investigation.md` (included).\n\n## What changes\n\n- **`packages/core/src/runtime/content-manifest-ledger.ts` (new)** — generation-addressed shard writes with a rolling `chainSha256` over shard body bytes; `ManifestHead.contentSha256` retention-bound digest (createdAt-free); load-path digest verification with a typed integrity error; deterministic idempotency (content-digest comparison on both write paths); entry-level revision containment (`entryIdentity` = kind + reference + normalized revision, range-coverage superset check).\n- **`packages/core/src/types/content-manifest-shards.ts` (new)** — shard type contracts: fixed-point byteLength measure, `CONTENT_MANIFEST_SHARD_DEFAULT_ENTRIES=64`, >maxBytes typed rejection.\n- **`plugin-sql/src/base.ts`** — SQL CAS split into insert-only (`onConflictDoNothing`) vs conditional-update arms (ABA-safe); loser sweeps own generation; delete/clear sweeps ledger rows (`RETURNING id`).\n- **`plugin-inmemorydb` + core `inMemoryAdapter`** — atomic CAS via document mutation lock; `compareAndSwapCache` contract with base-class default for structural third-party adapters.\n- **`TrajectoriesService` / agent prune paths** — prune-delete guard via `contentManifestLedgerKeys` wired into `discard` and `pruneOldTrajectories` (RETURNING-id cleanup).\n- **Tests** — 48 core ledger/shard unit tests, 11 real PGlite integration + restart tests (deterministic injected-clock runs, entry-level revision containment vectors, restart superset/grown-ranges manifest assertions).\n\n## Key invariants\n\n- A restart never publishes a shrinking manifest that silently drops recorded entries: the restart suite asserts superset/grown-ranges (a shrinking 5-replaces-9 manifest was found by a stash control and fixed).\n- Idempotency compares content digests, not wall-clock timestamps; writer races resolve CAS-safe with loser-side sweep of its own generation.\n- Load-path verifies the chain digest and fails with a typed integrity error rather than serving truncated content.\n\n## Verification\n\n| Gate | Result |\n|---|---|\n| Core manifest suites (fresh capture at publish) | 48/48 |\n| Real PGlite integration + restart suites (fresh capture) | 11/11 |\n| Typecheck (core + plugin-sql + plugin-inmemorydb) | clean |\n| app-core typecheck (review response, at 7744ac3328) | the earlier row omitted app-core; at prior head 2aa48b1793 app-core tsc reported 23 errors incl. the blocking TS2741 in this PR's trajectory-storage cast. After the one-line getCaches fix: 22 errors, sole delta = the TS2741 removed; the 22 residuals are byte-identical at pristine head (pre-existing, develop-inherited) |\n| Biome | clean (14 files) |\n| Merge vs develop tip | clean (merge-tree 0 conflicts vs `5c476b4206`); rebase onto develop re-run after its RLS getMemories rework landed |\n| Real PostgreSQL / RLS | 9/9 + RLS-enabled 8/8 (ENABLE_DATA_ISOLATION=true, prior run) |\n| RP review | 5 rounds (R1: 8 must-fix → R5 APPROVE zero open, session E24AC028; reviewer independently re-ran suites) |\n\n<!-- evidence-row:before-screenshots -->\nN/A - no UI surface changed (storage-layer ledger)\n<!-- evidence-row:after-screenshots -->\nN/A - no UI surface changed (storage-layer ledger)\n<!-- evidence-row:walkthrough-video -->\nN/A - no user-visible surface changed (storage-layer ledger)\n- backend-logs: Review response at head 7744ac3328 (commit 7744ac3328): mutant HEADSWAP added — tamper only the head row's ledgerSha256 (shards untouched), expect ContentManifestIntegrityError; ledger suite 32/32 (was 31); RED control disabling the line-715 head-tail reconciliation -> exactly 1 failure (HEADSWAP), revert -> 32/32; app-core tsc 23->22 errors, sole delta = TS2741 getCaches cast removed, 22 residuals byte-identical at pristine head; reader suite 5/5; biome clean. Prior: Fix commits 4ecec69061/7d04fceaa4/2aa48b1793. Reader suite 5/5 at 2aa48b1793: restart round-trip with ranges via real capture pipeline + fresh service; honest-empty (no carriers); failed-publication -> {unavailable:true}; conflicting-revision carriers -> unavailable, read never throws; corrupted shard -> unavailable. trajectories 194/194; ledger+shards 48/48; plugin-inmemorydb 102/102 (agent-scoped CAS 4/4). core typecheck PASS; biome clean; RED control at prior head: reader 3/3 fail, CAS isolation 2/2 fail.\n<!-- evidence-row:backend-logs -->\n- [x] <details><summary>manifest ledger suites at head 8db8a1e69a (captured 2026-08-28T12:14Z)</summary>\n\n```text\nEvidence for issue #25141 — manifest ledger suites at head 8db8a1e69a (captured 2026-08-28T12:14Z)\n===== RUN 1: core ledger + shards (vitest) =====\n RUN  v4.1.10 /Users/t3rpz/projects/eliza-25141/packages/core\n Test Files  2 passed (2)\n      Tests  48 passed (48)\n   Duration  348ms (transform 91ms, setup 0ms, import 118ms, tests 34ms, environment 0ms)\n===== RUN 2: real PGlite integration + restart (vitest.real.config) =====\n RUN  v4.1.10 /Users/t3rpz/projects/eliza-25141/plugins/plugin-sql/src\n Info       [Migration] ✓ Migration complete - pre-1.6.5 → 1.6.5+ schema migration finished\n ✓ __tests__/integration/content-manifest-ledger-restart.real.test.ts (1 test) 1714ms\n     ✓ writer publishes, exits; a fresh adapter reopens and traverses every shard  1613ms\n Info       [Migration] ✓ Migration complete - pre-1.6.5 → 1.6.5+ schema migration finished\n ✓ __tests__/integration/content-manifest-ledger.real.test.ts (10 tests) 1687ms\n Test Files  2 passed (2)\n      Tests  11 passed (11)\n   Duration  11.28s (transform 5.42s, setup 0ms, import 7.69s, tests 3.40s, environment 0ms)\nexit=0\n```\n</details>\n<!-- evidence-row:frontend-logs -->\nN/A - no frontend surface changed (storage-layer ledger)\n<!-- evidence-row:llm-trajectory -->\nN/A - no model/provider path changed; trajectory storage mechanics are exercised deterministically against real PGlite\n<!-- evidence-row:domain-artifacts -->\nN/A - ledger rows and manifest digests asserted directly in the real-PGlite suites\n<!-- evidence-row:ocr-review -->\nN/A - no OCR surface involved\n\n<!-- evidence-head:7744ac332865ed2799f54d165acfbd14b58cafda -->\n\n---\n\nAI provider/model: zai / glm-5.3\nClient / agent tooling: Hermes Agent\nContribution skill revision: elizaOS/eliza@2bca2475c434e3b57d1b84753087fc73309094ab:packages/skills/skills/contribute-to-eliza\nAttribution status: self-reported\n— [hermes-t3rpz]\n<!-- eliza-computer-attribution:v1 {\"provider\":\"zai\",\"model\":\"glm-5.3\",\"client\":\"Hermes Agent\",\"skill_revision\":\"elizaOS/eliza@2bca2475c434e3b57d1b84753087fc73309094ab:packages/skills/skills/contribute-to-eliza\"} -->\n\n\n\n\n",
-      "repository": "elizaos/eliza",
-      "createdAt": "2026-08-28T12:14:34Z",
-      "mergedAt": null,
-      "additions": 4026,
-      "deletions": 51
     }
   ],
   "codeChanges": {
@@ -575,7 +575,7 @@
       "issueScore": 0,
       "reviewScore": 0,
       "commentScore": 0.2,
-      "summary": null
+      "summary": "wtfsayo: Focused on stabilizing and refining the elizaos/eliza codebase, merging five significant PRs that canonicalized app layouts and simplified inventory and project management (notably #29729 and #29761). Their work was primarily dedicated to extensive bugfix efforts, involving 24 commits and over 17,000 lines of code changes across 269 files to improve UI and system architecture."
     },
     {
       "username": "lumix5",
@@ -585,7 +585,7 @@
       "issueScore": 0,
       "reviewScore": 107,
       "commentScore": 0,
-      "summary": null
+      "summary": "lumix5: Focused on enhancing database reliability by opening PR #29735 in elizaos/eliza to correct SQL equality logic, while simultaneously maintaining high code quality standards through 20 thorough code reviews. Their efforts were dedicated entirely to bugfix work, ensuring stability within the plugin-sql implementation."
     },
     {
       "username": "wakesync",
@@ -595,7 +595,7 @@
       "issueScore": 0,
       "reviewScore": 0,
       "commentScore": 0.43799999999999994,
-      "summary": null
+      "summary": "wakesync: Focused on stabilizing cloud infrastructure and enhancing system reliability, merging 6 PRs in elizaos/eliza that addressed critical rate-limiting, authentication caching, and failover logic. Their work involved 21 commits and 26 PR comments, with a primary focus on bugfixes (76%) and extensive testing (57%) to ensure robust cloud performance."
     },
     {
       "username": "standujar",
@@ -605,7 +605,7 @@
       "issueScore": 0,
       "reviewScore": 109,
       "commentScore": 0.43799999999999994,
-      "summary": null
+      "summary": "standujar: Drove significant architectural improvements to cloud infrastructure by merging three major PRs in elizaos/eliza (#29781, #29744, #29694) that optimized backup work distribution and shard management, while simultaneously maintaining high-quality standards through 55 code reviews. Their work was primarily focused on bugfixes and testing, involving extensive modifications across 1,368 files to enhance system reliability and cloud functionality."
     },
     {
       "username": "Svector-anu",
@@ -615,7 +615,7 @@
       "issueScore": 0,
       "reviewScore": 0,
       "commentScore": 0.43799999999999994,
-      "summary": null
+      "summary": "Svector-anu: Focused on enhancing system stability and reliability within the elizaos/eliza repository by opening four pull requests (#29731, #29728, #29726, #29717) to address critical bugs in cross-channel search, CI inventory, agent chat logic, and UI conversation ordering. This work involved 5 commits and 442 lines of code changes, demonstrating a dedicated effort toward resolving technical debt and improving test coverage."
     },
     {
       "username": "byt61",
@@ -625,7 +625,7 @@
       "issueScore": 0,
       "reviewScore": 0,
       "commentScore": 0,
-      "summary": null
+      "summary": "byt61: Focused on enhancing UI stability and data integrity within the elizaos/eliza repository, where they submitted three bugfix PRs (#29762, #29758, #29738) addressing trajectory composites, conversation sorting, and Unicode handling. These contributions involved 391 additions and 61 deletions across 11 files, reflecting a dedicated effort to resolve interface and parsing issues."
     },
     {
       "username": "mtcow",
@@ -635,7 +635,7 @@
       "issueScore": 0,
       "reviewScore": 0,
       "commentScore": 0.2,
-      "summary": null
+      "summary": "mtcow: Focused on enhancing system stability and documentation, mtcow opened four PRs addressing snapshot ordering (#29734), deployment polling (#29733), shared todo mutations (#29723), and OpenAI compatibility documentation (#29732). Their work involved 421 additions and 60 deletions across 9 files, primarily centering on bug fixes, documentation, and testing."
     },
     {
       "username": "wwl-hub",
@@ -645,7 +645,7 @@
       "issueScore": 0,
       "reviewScore": 50,
       "commentScore": 0.2,
-      "summary": null
+      "summary": "wwl-hub: Focused on maintaining code quality and project standards by providing 10 approvals across various pull requests. They also contributed a comment to a pull request, ensuring consistent oversight of ongoing development efforts."
     },
     {
       "username": "oth-body",
@@ -655,7 +655,7 @@
       "issueScore": 0,
       "reviewScore": 10.5,
       "commentScore": 0.2,
-      "summary": null
+      "summary": "oth-body: Focused on maintaining code quality and testing standards by opening PR #29798 in elizaos/eliza to address review nits and implement a HEADSWAP test. They further contributed to project stability by providing two reviews, including a change request, across the repository."
     },
     {
       "username": "NubsCarson",
@@ -665,7 +665,7 @@
       "issueScore": 0,
       "reviewScore": 13.5,
       "commentScore": 0.43799999999999994,
-      "summary": null
+      "summary": "NubsCarson: Focused on stabilizing the elizaos/eliza runtime and UI through extensive bug-fixing and test alignment, notably landing a significant +1,942/-307 line update in PR #29799 to resolve VPS fallback lineage issues. Their work, which included 101 commits and 59 PR comments, centered primarily on critical bug fixes (70%) and strengthening test coverage (17%) across the application core and interface layers."
     },
     {
       "username": "ss251",
@@ -675,7 +675,7 @@
       "issueScore": 0,
       "reviewScore": 23,
       "commentScore": 0,
-      "summary": null
+      "summary": "ss251: Focused on stabilizing the elizaos/eliza codebase through extensive code review and targeted bug fixes, completing 74 reviews and submitting four PRs (#29684, #29765, #29760, #29747) to address recovery, UI, OAuth, and layout issues. Their work involved 750 additions and 255 deletions, with a primary focus on test infrastructure and core bug remediation."
     },
     {
       "username": "agent-cortex",
@@ -685,7 +685,7 @@
       "issueScore": 0,
       "reviewScore": 5,
       "commentScore": 0.33999999999999997,
-      "summary": null
+      "summary": "agent-cortex: Focused on enhancing email plugin reliability by opening PR #29679 in elizaos/eliza to ensure RFC 8058 compliance, supported by 6 commits and 14 files modified across code and tests. Their efforts were further bolstered by providing 2 approvals and 5 PR comments, maintaining a dedicated focus on bugfix work."
     },
     {
       "username": "leiws0822-stack",
@@ -695,7 +695,7 @@
       "issueScore": 0,
       "reviewScore": 0,
       "commentScore": 0.33999999999999997,
-      "summary": null
+      "summary": "leiws0822-stack: Focused on enhancing agent reliability by addressing rate-limiting issues in elizaos/eliza via PR #29720, which involved modifying 3 files with 146 total lines of code changes. This work centered exclusively on bugfix efforts, including both implementation and testing to ensure system stability."
     },
     {
       "username": "hkc2023",
@@ -705,7 +705,7 @@
       "issueScore": 0,
       "reviewScore": 22.5,
       "commentScore": 0,
-      "summary": null
+      "summary": "hkc2023: No activity today."
     },
     {
       "username": "AliRezaei-Code",
@@ -715,7 +715,7 @@
       "issueScore": 0,
       "reviewScore": 0,
       "commentScore": 0,
-      "summary": null
+      "summary": "AliRezaei-Code: Focused on strengthening system reliability by opening PR #29693 in elizaos/eliza, which adds 214 lines of test coverage for the Tier2ToolIndex search and discovery contract. This contribution reflects a dedicated effort toward improving testing infrastructure."
     },
     {
       "username": "hermesagent270-commits",
@@ -725,7 +725,7 @@
       "issueScore": 0,
       "reviewScore": 21,
       "commentScore": 0,
-      "summary": null
+      "summary": "hermesagent270-commits: Focused on maintaining code quality and standards through the completion of 4 code reviews, which included 2 change requests and 2 comments."
     },
     {
       "username": "dannywalter",
@@ -735,7 +735,7 @@
       "issueScore": 0,
       "reviewScore": 0,
       "commentScore": 0,
-      "summary": null
+      "summary": "dannywalter: Focused on strengthening application reliability by opening PR #29722 in elizaos/eliza to prove onboarding intent retention. This work involved a single commit modifying 3 files with 93 lines of code, centering entirely on testing efforts."
     },
     {
       "username": "sharkwon",
@@ -745,7 +745,7 @@
       "issueScore": 0,
       "reviewScore": 20.5,
       "commentScore": 0,
-      "summary": null
+      "summary": "sharkwon: Focused on maintaining code quality and project standards by providing 4 code reviews, including 2 approvals and 1 request for changes."
     },
     {
       "username": "0xSoftBoi",
@@ -755,7 +755,7 @@
       "issueScore": 0,
       "reviewScore": 0,
       "commentScore": 0,
-      "summary": null
+      "summary": "0xSoftBoi: Focused on improving transaction reliability by opening PR #29780 in elizaos/eliza to implement idempotent settlement for txhashes. This work centers on enhancing the stability and integrity of the settlement process."
     },
     {
       "username": "batmanscode",
@@ -765,7 +765,7 @@
       "issueScore": 0,
       "reviewScore": 0,
       "commentScore": 0,
-      "summary": null
+      "summary": "batmanscode: Focused on enhancing system reliability by addressing test infrastructure, specifically through the open PR #29682 in elizaos/eliza which restores compute-stop recovery fixtures. This effort involved 598 additions and 28 deletions across 10 files, demonstrating a dedicated focus on bugfix work within the testing suite."
     },
     {
       "username": "Zydanny",
@@ -775,7 +775,7 @@
       "issueScore": 0,
       "reviewScore": 0,
       "commentScore": 0,
-      "summary": null
+      "summary": "Zydanny: Focused on expanding the ecosystem's capabilities by opening PR #29769 in elizaos/eliza to introduce the @superzydan/plugin-x402-dex plugin. This contribution involved a targeted configuration update, reflecting a primary focus on plugin development and integration."
     },
     {
       "username": "attentionhead",
@@ -785,7 +785,7 @@
       "issueScore": 0,
       "reviewScore": 15,
       "commentScore": 0,
-      "summary": null
+      "summary": "attentionhead: Focused on maintaining code quality and project standards through extensive peer review, completing 32 reviews including 3 change requests and 27 comments. This effort provided critical oversight across the codebase, ensuring alignment on ongoing development tasks."
     },
     {
       "username": "nothingxnowhere",
@@ -795,7 +795,7 @@
       "issueScore": 0,
       "reviewScore": 0,
       "commentScore": 0,
-      "summary": null
+      "summary": "nothingxnowhere: Focused on improving data handling within the cloud dashboard by opening PR #29771 in elizaos/eliza to resolve a token sum overflow issue. This work involved a targeted bugfix to ensure proper integer capacity for dashboard metrics."
     },
     {
       "username": "sarah-pump-ai",
@@ -805,7 +805,7 @@
       "issueScore": 0,
       "reviewScore": 13.5,
       "commentScore": 0,
-      "summary": null
+      "summary": "sarah-pump-ai: No activity today."
     },
     {
       "username": "teddiesloco",
@@ -815,7 +815,7 @@
       "issueScore": 0,
       "reviewScore": 0,
       "commentScore": 0,
-      "summary": null
+      "summary": "teddiesloco: Focused on strengthening test coverage for the elizaos/eliza repository by opening PR #29740, which introduces a unit test contract for remote host bearer authentication. This contribution involved 73 lines of code changes dedicated entirely to testing infrastructure."
     },
     {
       "username": "lww0134-ctrl",
@@ -825,7 +825,7 @@
       "issueScore": 0,
       "reviewScore": 5,
       "commentScore": 0.2,
-      "summary": null
+      "summary": "lww0134-ctrl: Focused on maintaining codebase stability through extensive code review, completing 86 reviews with 79 approvals, while also addressing local inference issues in elizaos/eliza via PR #29778. Their technical efforts involved 4 commits and 596 additions across code and test files, centering entirely on bugfix work."
     },
     {
       "username": "MLuber-bot",
@@ -835,7 +835,7 @@
       "issueScore": 0,
       "reviewScore": 5,
       "commentScore": 0,
-      "summary": null
+      "summary": "MLuber-bot: No activity today."
     },
     {
       "username": "kenjohnscreates",
@@ -845,7 +845,7 @@
       "issueScore": 0,
       "reviewScore": 4.5,
       "commentScore": 0,
-      "summary": null
+      "summary": "kenjohnscreates: No activity today."
     },
     {
       "username": "yablokolabs",
@@ -855,7 +855,7 @@
       "issueScore": 0,
       "reviewScore": 0,
       "commentScore": 0.43799999999999994,
-      "summary": null
+      "summary": "yablokolabs: Focused on codebase stability and quality assurance, contributing 7 commits across 7 files (+432/-33 lines) while providing 11 PR comments to support ongoing development. Their efforts were primarily dedicated to testing and bugfix work."
     },
     {
       "username": "HomunculusLabs",
@@ -865,7 +865,7 @@
       "issueScore": 0,
       "reviewScore": 0,
       "commentScore": 0.33999999999999997,
-      "summary": null
+      "summary": "HomunculusLabs: Focused on enhancing platform observability and cross-platform integration, they merged a critical UI fix in elizaos/eliza (#29757) while driving a significant pipeline of nine open features for native membership snapshots and message paging across various messaging protocols. Their efforts were supported by 10 code reviews and 49 PR comments, reflecting a primary focus on documentation and system architecture."
     },
     {
       "username": "mashingaan",
@@ -885,7 +885,7 @@
       "issueScore": 0,
       "reviewScore": 0,
       "commentScore": 0.2,
-      "summary": null
+      "summary": "lalalune: Focused on critical bugfix work, contributing a single commit that modified 2 files with 275 additions and 8 deletions. This effort was supported by providing a PR comment to facilitate the resolution of these issues."
     },
     {
       "username": "DMLDeFi",
